@@ -11,7 +11,7 @@ export default function Footer() {
               <img 
                 src={logoImage} 
                 alt="CyberLockX Logo" 
-                className="h-24 w-auto mb-3"
+                className="h-36 w-auto mb-3"
               />
             </div>
             <p className="text-neutral-300 mb-4">The Ultimate SMB Application Security Hub for small and medium-sized businesses.</p>
