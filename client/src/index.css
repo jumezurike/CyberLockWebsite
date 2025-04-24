@@ -81,6 +81,29 @@
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    position: relative;
+  }
+  
+  /* Add a cybersecurity watermark to the main body */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      /* Lock shield background */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200' viewBox='0 0 200 200' fill='none'%3E%3Cpath d='M100 20C53.8 20 16.7 57.1 16.7 103.3c0 34.9 21.4 64.8 51.7 77.5v-27.5c0-7.7 4.2-14.8 11-18.5-14.8-4.4-25.6-18.2-25.6-34.6 0-19.9 16.1-36 36-36s36 16.1 36 36c0 16.4-10.8 30.2-25.6 34.6 6.8 3.7 11 10.8 11 18.5v27.5c30.3-12.7 51.7-42.6 51.7-77.5 0-46.2-37.1-83.3-83.3-83.3z' fill='%23692abb' opacity='0.02'/%3E%3C/svg%3E"),
+      /* Binary code pattern in background */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300' viewBox='0 0 300 300'%3E%3Ctext x='40' y='30' font-family='monospace' font-size='10' fill='%23692abb' opacity='0.01'%3E10110101%3C/text%3E%3Ctext x='160' y='60' font-family='monospace' font-size='10' fill='%23692abb' opacity='0.01'%3E01001001%3C/text%3E%3Ctext x='80' y='90' font-family='monospace' font-size='10' fill='%23692abb' opacity='0.01'%3E11001010%3C/text%3E%3Ctext x='200' y='120' font-family='monospace' font-size='10' fill='%23692abb' opacity='0.01'%3E00111100%3C/text%3E%3Ctext x='30' y='150' font-family='monospace' font-size='10' fill='%23692abb' opacity='0.01'%3E10101011%3C/text%3E%3Ctext x='170' y='180' font-family='monospace' font-size='10' fill='%23692abb' opacity='0.01'%3E01011001%3C/text%3E%3Ctext x='70' y='210' font-family='monospace' font-size='10' fill='%23692abb' opacity='0.01'%3E11100101%3C/text%3E%3Ctext x='190' y='240' font-family='monospace' font-size='10' fill='%23692abb' opacity='0.01'%3E00101100%3C/text%3E%3C/svg%3E"),
+      /* Circuit connection lines */
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Cpath d='M100 50 L300 250 M50 150 L350 150 M200 20 L200 380 M320 100 L80 300' stroke='%23692abb' stroke-width='1' opacity='0.01'/%3E%3C/svg%3E");
+    background-repeat: repeat, repeat, no-repeat;
+    background-size: 200px 200px, 300px 300px, 100% 100%;
+    background-position: center center, 0 0, center center;
+    z-index: -1;
+    pointer-events: none;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -109,19 +132,22 @@
   left: 0;
   right: 0;
   bottom: 0;
+  /* Advanced circuit board pattern with hexagon overlay */
   background-image: 
-    /* Binary code pattern - vertical lines */
+    /* Grid pattern */
     linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-    /* Circuit board nodes */
-    radial-gradient(rgba(255, 255, 255, 0.075) 2px, transparent 2px);
-  background-size: 30px 30px, 30px 30px, 90px 90px;
-  background-position: -1px -1px, -1px -1px, -1px -1px;
+    /* Circuit nodes */
+    radial-gradient(rgba(255, 255, 255, 0.075) 2px, transparent 2px),
+    /* Hexagonal overlay for security concept */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cpath d='M75 20.1L23.8 49.2v57.6L75 130l51.2-23.1V49.2L75 20.1z' stroke='rgba(255, 255, 255, 0.03)' fill='none' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 30px 30px, 30px 30px, 90px 90px, 150px 150px;
+  background-position: -1px -1px, -1px -1px, -1px -1px, center center;
   mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.85));
   z-index: -1;
 }
 
-/* Add cyber data nodes and connections */
+/* Add cyber data nodes, connections and security elements */
 .cyber-bg::after {
   content: '';
   position: absolute;
@@ -130,12 +156,18 @@
   right: 0;
   bottom: 0;
   background-image: 
-    /* Security nodes */
+    /* Lock icon overlay for security concept */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2zm-2-8H7a5 5 0 00-5 5v2h2V8a3 3 0 013-3h10a3 3 0 013 3v2h2V8a5 5 0 00-5-5zm-7 14a2 2 0 112-2 2 2 0 01-2 2z' fill='rgba(142, 255, 150, 0.02)' /%3E%3C/svg%3E"),
+    /* Shield icon for added security visuals */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z' fill='rgba(255, 255, 255, 0.01)' /%3E%3C/svg%3E"),
+    /* Security nodes with different colors */
     radial-gradient(circle at 30% 20%, rgba(142, 255, 150, 0.05) 1px, transparent 6px),
     radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.08) 1px, transparent 4px),
     radial-gradient(circle at 40% 80%, rgba(142, 255, 150, 0.05) 1px, transparent 5px),
     radial-gradient(circle at 80% 10%, rgba(255, 255, 255, 0.08) 1px, transparent 4px);
-  background-size: 100% 100%;
+  background-size: 50px 50px, 60px 60px, 100% 100%, 100% 100%, 100% 100%, 100% 100%;
+  background-position: 85% 15%, 15% 85%, 0 0, 0 0, 0 0, 0 0;
+  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat;
   z-index: -1;
   
   /* Subtle pulsing animation for cybersecurity theme */
@@ -152,4 +184,39 @@
   100% {
     opacity: 0.7;
   }
+}
+
+/* Enhanced cyber background for footer */
+.cyber-bg-enhanced::before {
+  /* Increase opacity for more visibility */
+  background-image: 
+    /* Grid pattern with more contrast */
+    linear-gradient(to right, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    /* Circuit nodes with higher opacity */
+    radial-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 2px),
+    /* Hexagonal overlay with higher contrast */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150' viewBox='0 0 150 150'%3E%3Cpath d='M75 20.1L23.8 49.2v57.6L75 130l51.2-23.1V49.2L75 20.1z' stroke='rgba(255, 255, 255, 0.06)' fill='none' stroke-width='1'/%3E%3C/svg%3E");
+  background-size: 20px 20px, 20px 20px, 60px 60px, 100px 100px;
+  /* More frequent grid pattern */
+  mask-image: none; /* Remove mask to show full pattern */
+}
+
+/* Add more visible security elements */
+.cyber-bg-enhanced::after {
+  background-image: 
+    /* Binary pattern overlay */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='80' viewBox='0 0 200 80'%3E%3Ctext x='10' y='20' font-family='monospace' font-size='12' fill='rgba(142, 255, 150, 0.05)'%3E10110101%3C/text%3E%3Ctext x='90' y='40' font-family='monospace' font-size='12' fill='rgba(142, 255, 150, 0.05)'%3E01101001%3C/text%3E%3Ctext x='30' y='60' font-family='monospace' font-size='12' fill='rgba(142, 255, 150, 0.05)'%3E11001010%3C/text%3E%3C/svg%3E"),
+    /* Lock icon with higher opacity */
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='50' height='50' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M19 11H5a2 2 0 00-2 2v7a2 2 0 002 2h14a2 2 0 002-2v-7a2 2 0 00-2-2zm-2-8H7a5 5 0 00-5 5v2h2V8a3 3 0 013-3h10a3 3 0 013 3v2h2V8a5 5 0 00-5-5zm-7 14a2 2 0 112-2 2 2 0 01-2 2z' fill='rgba(142, 255, 150, 0.05)' /%3E%3C/svg%3E"),
+    /* Security nodes with higher visibility */
+    radial-gradient(circle at 30% 20%, rgba(142, 255, 150, 0.08) 1px, transparent 6px),
+    radial-gradient(circle at 70% 60%, rgba(255, 255, 255, 0.08) 1px, transparent 4px),
+    radial-gradient(circle at 40% 80%, rgba(142, 255, 150, 0.08) 1px, transparent 5px);
+  background-size: 200px 80px, 50px 50px, 100% 100%, 100% 100%, 100% 100%;
+  background-position: center center, 85% 15%, 0 0, 0 0, 0 0;
+  background-repeat: repeat, repeat, no-repeat, no-repeat, no-repeat;
+  
+  /* More noticeable animation */
+  animation: cyber-pulse 5s infinite alternate;
 }

@@ -36,7 +36,7 @@ export default function Header() {
   const getHashLink = (hash: string) => isHomePage ? `#${hash}` : `/#${hash}`;
 
   return (
-    <nav className="bg-primary shadow-md sticky top-0 z-50 cyber-bg">
+    <nav className="bg-primary shadow-md sticky top-0 z-50 cyber-bg cyber-bg-enhanced">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-28">
           <div className="flex">
