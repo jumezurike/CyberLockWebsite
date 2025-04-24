@@ -127,82 +127,13 @@ export default function Dashboard() {
   const [reportType, setReportType] = useState<'executive' | 'technical' | 'compliance'>('executive');
 
   // Fetch security monitoring data
-  const { data, isLoading, error, refetch } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery<MonitoringData>({
     queryKey: ['/api/monitoring-data'],
     queryFn: async () => {
       try {
-        // Placeholder for actual API call
-        // const response = await apiRequest("GET", "/api/monitoring-data");
-        // return response.json();
-        
-        // Mock data for demonstration
-        return {
-          securityScore: 72,
-          lastUpdated: "2025-04-24T14:30:00",
-          issues: [
-            {
-              id: 1,
-              title: "Outdated SSL Certificate",
-              description: "The SSL certificate for the main domain is expiring within 14 days.",
-              severity: "High",
-              affectedSystems: "Web Server",
-              discovered: "2025-04-22",
-              status: "open"
-            },
-            {
-              id: 2,
-              title: "Vulnerable Dependency",
-              description: "Application uses a library with known security vulnerabilities (CVE-2025-1234).",
-              severity: "Critical",
-              affectedSystems: "Payment Processing",
-              discovered: "2025-04-20",
-              status: "open"
-            },
-            {
-              id: 3,
-              title: "Unsecured API Endpoint",
-              description: "The /api/user endpoint is accessible without proper authentication.",
-              severity: "High",
-              affectedSystems: "User Management API",
-              discovered: "2025-04-18",
-              status: "remediated"
-            },
-            {
-              id: 4,
-              title: "Excessive Login Attempts",
-              description: "Multiple failed login attempts detected from IP range 203.0.113.x",
-              severity: "Medium",
-              affectedSystems: "Authentication System",
-              discovered: "2025-04-23",
-              status: "open"
-            },
-            {
-              id: 5,
-              title: "Missing Content Security Policy",
-              description: "No Content-Security-Policy header is set on public pages",
-              severity: "Medium",
-              affectedSystems: "Web Application",
-              discovered: "2025-04-21",
-              status: "open"
-            }
-          ],
-          complianceStatus: [
-            { standard: "PCI DSS", status: "Partially Compliant", score: 78 },
-            { standard: "GDPR", status: "Compliant", score: 92 },
-            { standard: "HIPAA", status: "Non-Compliant", score: 65 },
-            { standard: "SOC 2", status: "Partially Compliant", score: 81 }
-          ],
-          systemHealth: {
-            servers: { status: "Healthy", uptime: "99.99%" },
-            databases: { status: "Warning", uptime: "99.87%" },
-            applications: { status: "Healthy", uptime: "99.95%" }
-          },
-          securityEvents: {
-            today: 23,
-            thisWeek: 142,
-            thisMonth: 587
-          }
-        };
+        // Fetch data from the API
+        const response = await apiRequest("GET", "/api/monitoring-data");
+        return await response.json();
       } catch (err) {
         console.error("Failed to fetch monitoring data:", err);
         toast({
@@ -230,16 +161,13 @@ export default function Dashboard() {
         description: `Preparing ${reportType} report for download...`,
       });
       
-      // In a real application, this would make an API call to generate a report
-      // await apiRequest("POST", "/api/generate-report", { type: reportType });
+      // Make API call to generate a report
+      await apiRequest("POST", "/api/generate-report", { type: reportType });
       
-      // Simulate a delay for report generation
-      setTimeout(() => {
-        toast({
-          title: "Report ready",
-          description: "Your report has been generated successfully.",
-        });
-      }, 2000);
+      toast({
+        title: "Report ready",
+        description: "Your report has been generated successfully.",
+      });
     } catch (err) {
       toast({
         title: "Error generating report",
@@ -249,6 +177,7 @@ export default function Dashboard() {
     }
   };
 
+  // Calculate security score
   const securityScore = data ? calculateSecurityScore(data) : 0;
 
   return (
@@ -282,7 +211,7 @@ export default function Dashboard() {
               <p className="text-red-600 mt-2">Please try refreshing the page</p>
               <Button variant="destructive" className="mt-4" onClick={() => refetch()}>Try Again</Button>
             </div>
-          ) : (
+          ) : data ? (
             <div className="space-y-6">
               {/* Security Score Overview */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -425,12 +354,12 @@ export default function Dashboard() {
                     <CardContent>
                       <div className="space-y-4">
                         {data.issues
-                          .filter((issue: any) => issue.status !== 'remediated')
-                          .map((issue: any) => (
+                          .filter(issue => issue.status !== 'remediated')
+                          .map(issue => (
                             <SecurityIssueCard key={issue.id} issue={issue} />
                           ))}
                           
-                        {data.issues.filter((issue: any) => issue.status !== 'remediated').length === 0 && (
+                        {data.issues.filter(issue => issue.status !== 'remediated').length === 0 && (
                           <div className="text-center py-10">
                             <ShieldCheck className="h-10 w-10 text-green-500 mx-auto mb-2" />
                             <h3 className="text-lg font-medium text-gray-900">All Clear!</h3>
@@ -453,7 +382,7 @@ export default function Dashboard() {
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-4">
-                        {data.complianceStatus.map((item: any, index: number) => (
+                        {data.complianceStatus.map((item, index) => (
                           <div key={index}>
                             <div className="flex justify-between mb-1">
                               <span className="text-sm font-medium">{item.standard}</span>
@@ -496,7 +425,7 @@ export default function Dashboard() {
                 </div>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </main>
       

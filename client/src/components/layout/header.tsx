@@ -76,7 +76,10 @@ export default function Header() {
               </a>
             </div>
           </div>
-          <div className="hidden sm:ml-6 sm:flex sm:items-center">
+          <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
+            <Link href="/dashboard" className="text-neutral-100 hover:text-secondary border-transparent flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              Dashboard
+            </Link>
             <Link href="/sos2a-tool" className="bg-secondary hover:bg-green-600 text-white py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out">
               Get Started
             </Link>
