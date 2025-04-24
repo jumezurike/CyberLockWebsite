@@ -1,6 +1,7 @@
 // Types for the SOS²A assessment tool
 export interface ContactInfo {
   name: string;
+  sameAsContact?: boolean;
   pointOfContact: string;
   email: string;
   contactEmail: string;
