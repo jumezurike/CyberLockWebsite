@@ -10,6 +10,7 @@ import Footer from "@/components/layout/footer";
 import Sos2aTool from "@/pages/sos2a-tool";
 import ColorDemo from "@/pages/color-demo";
 import EarlyAccess from "@/pages/early-access";
+import Dashboard from "@/pages/dashboard";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
           <Route path="/sos2a-tool" component={Sos2aTool} />
           <Route path="/color-demo" component={ColorDemo} />
           <Route path="/early-access" component={EarlyAccess} />
+          <Route path="/dashboard" component={Dashboard} />
           <Route component={NotFound} />
         </Switch>
       </main>

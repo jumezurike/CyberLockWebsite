@@ -197,6 +197,122 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to update early access submission status" });
     }
   });
+
+  // Dashboard Monitoring Data API
+  // -------------------------------------------------------------------------
+  
+  // Endpoint for monitoring data
+  app.get("/api/monitoring-data", async (req, res) => {
+    try {
+      // In a real application, this would fetch actual monitoring data from a database
+      // For now, we'll return mock data to demonstrate the dashboard functionality
+      
+      res.status(200).json({
+        securityScore: 72,
+        lastUpdated: new Date().toISOString(),
+        issues: [
+          {
+            id: 1,
+            title: "Outdated SSL Certificate",
+            description: "The SSL certificate for the main domain is expiring within 14 days.",
+            severity: "High",
+            affectedSystems: "Web Server",
+            discovered: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            status: "open"
+          },
+          {
+            id: 2,
+            title: "Vulnerable Dependency",
+            description: "Application uses a library with known security vulnerabilities (CVE-2025-1234).",
+            severity: "Critical",
+            affectedSystems: "Payment Processing",
+            discovered: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            status: "open"
+          },
+          {
+            id: 3,
+            title: "Unsecured API Endpoint",
+            description: "The /api/user endpoint is accessible without proper authentication.",
+            severity: "High",
+            affectedSystems: "User Management API",
+            discovered: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            status: "remediated"
+          },
+          {
+            id: 4,
+            title: "Excessive Login Attempts",
+            description: "Multiple failed login attempts detected from IP range 203.0.113.x",
+            severity: "Medium",
+            affectedSystems: "Authentication System",
+            discovered: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            status: "open"
+          },
+          {
+            id: 5,
+            title: "Missing Content Security Policy",
+            description: "No Content-Security-Policy header is set on public pages",
+            severity: "Medium",
+            affectedSystems: "Web Application",
+            discovered: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            status: "open"
+          }
+        ],
+        complianceStatus: [
+          { standard: "PCI DSS", status: "Partially Compliant", score: 78 },
+          { standard: "GDPR", status: "Compliant", score: 92 },
+          { standard: "HIPAA", status: "Non-Compliant", score: 65 },
+          { standard: "SOC 2", status: "Partially Compliant", score: 81 }
+        ],
+        systemHealth: {
+          servers: { status: "Healthy", uptime: "99.99%" },
+          databases: { status: "Warning", uptime: "99.87%" },
+          applications: { status: "Healthy", uptime: "99.95%" }
+        },
+        securityEvents: {
+          today: 23,
+          thisWeek: 142,
+          thisMonth: 587
+        }
+      });
+    } catch (error) {
+      console.error("Error fetching monitoring data:", error);
+      res.status(500).json({ 
+        error: "Failed to fetch monitoring data",
+        details: error instanceof Error ? error.message : "Unknown error" 
+      });
+    }
+  });
+
+  // Endpoint for generating reports
+  app.post("/api/generate-report", async (req, res) => {
+    try {
+      const { type } = req.body;
+      
+      if (!type || !['executive', 'technical', 'compliance'].includes(type)) {
+        return res.status(400).json({ error: "Valid report type is required" });
+      }
+      
+      // In a real application, this would generate an actual report based on real data
+      // For now, we'll simulate a report generation
+      
+      console.log(`Generating ${type} report`);
+      
+      // Simulate processing time
+      setTimeout(() => {
+        res.status(200).json({
+          success: true,
+          message: `${type.charAt(0).toUpperCase() + type.slice(1)} report generated successfully`,
+          reportUrl: `/reports/sample-${type}-report.pdf`
+        });
+      }, 1000);
+    } catch (error) {
+      console.error("Error generating report:", error);
+      res.status(500).json({ 
+        error: "Failed to generate report",
+        details: error instanceof Error ? error.message : "Unknown error" 
+      });
+    }
+  });
   
   const httpServer = createServer(app);
   return httpServer;
