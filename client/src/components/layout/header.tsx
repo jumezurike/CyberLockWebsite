@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
-import logoImage from "@/assets/cyberlockx-logo.jpg";
+import logoImage from "@/assets/cyberlockx-logo-transparent.png";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
