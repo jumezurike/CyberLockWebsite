@@ -7,12 +7,110 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
+// Sample scorecard data for testing
+const sampleScorecardData = [
+  { parameter: "Phishing screening", weight: 8.33, score: 65 },
+  { parameter: "Security awareness", weight: 8.33, score: 72 },
+  { parameter: "External footprints", weight: 8.33, score: 48 },
+  { parameter: "Dark web", weight: 8.33, score: 35 },
+  { parameter: "Endpoint security", weight: 8.33, score: 80 },
+  { parameter: "Cloud security", weight: 8.33, score: 58 },
+  { parameter: "Data security", weight: 8.33, score: 71 },
+  { parameter: "Browser security", weight: 8.33, score: 62 },
+  { parameter: "Email protection", weight: 8.33, score: 75 },
+  { parameter: "Compliances", weight: 8.33, score: 54 },
+  { parameter: "Regulatory requirements", weight: 8.33, score: 42 },
+  { parameter: "Frameworks", weight: 8.33, score: 65 },
+];
+
+// Sample report for testing purposes
+const sampleReport: AssessmentReport = {
+  id: 'sample-report-123',
+  businessId: 'sample-business-123',
+  reportType: 'preliminary',
+  createdAt: new Date().toISOString(),
+  securityScore: 68,
+  businessLocation: { state: "California", country: "USA" },
+  industry: "Technology",
+  businessServices: "Cloud Services Provider",
+  operationModes: ["Remote-First"],
+  internetPresence: ["E-commerce", "Marketing"],
+  findings: [
+    { severity: 'High', title: 'Unpatched Systems', description: 'Critical security patches missing on multiple systems.' },
+    { severity: 'Medium', title: 'Weak Password Policies', description: 'Password policies do not enforce complexity requirements.' }
+  ],
+  vulnerabilities: {
+    critical: ['Outdated SSL certificates', 'Default admin credentials'],
+    high: ['Weak encryption implementation', 'Insecure file upload'],
+    medium: ['Missing CSRF protections', 'Improper error handling'],
+    low: ['Verbose error messages', 'Insecure cookie settings']
+  },
+  recommendations: {
+    immediate: ['Implement patch management system', 'Update SSL certificates'],
+    shortTerm: ['Enforce password complexity requirements', 'Implement MFA for all admin accounts'],
+    longTerm: ['Conduct regular security training', 'Implement security monitoring solutions']
+  },
+  frameworkGaps: {
+    operations: ['Missing incident response procedures', 'Inadequate change management process'],
+    management: ['No defined security roles and responsibilities', 'Missing risk assessment process'],
+    technology: ['No endpoint protection solution', 'Missing network segmentation']
+  },
+  complianceStatus: {
+    standards: [
+      { standard: 'ISO 27001', status: 'Partially Compliant', gaps: [] },
+      { standard: 'NIST CSF', status: 'Non-Compliant', gaps: [] }
+    ],
+    regulations: [
+      { standard: 'GDPR', status: 'Partially Compliant', gaps: [] },
+      { standard: 'CCPA', status: 'Non-Compliant', gaps: [] }
+    ],
+    frameworks: [
+      { standard: 'CIS Controls', status: 'Partially Compliant', gaps: [] },
+      { standard: 'NIST 800-53', status: 'Non-Compliant', gaps: [] }
+    ]
+  },
+  policyDocumentStatus: {
+    existing: ['Acceptable Use Policy'],
+    missing: ['Incident Response Plan', 'Business Continuity Plan', 'Disaster Recovery Plan'],
+    recommendations: ['Develop missing policy documents']
+  },
+  osHardeningStatus: {
+    stig: {
+      compliant: false,
+      gaps: ['STIG not implemented for required systems']
+    },
+    scap: {
+      compliant: false,
+      gaps: ['SCAP not implemented for required systems']
+    }
+  },
+  mitreAttackCoverage: {
+    covered: [],
+    vulnerable: ['Initial Access', 'Execution', 'Persistence', 'Privilege Escalation'],
+    recommendations: ['Implement controls to mitigate Initial Access tactics']
+  },
+  matrixData: [],
+  scorecard: sampleScorecardData,
+  rasbitaScore: {
+    total: 68,
+    categories: {
+      risk: 65,
+      adversarialInsight: 55,
+      securityControls: 70,
+      businessImpact: 75,
+      informationAssurance: 60,
+      threatIntelligence: 58,
+      architecture: 62
+    }
+  }
+};
+
 export default function Sos2aTool() {
   // State for multi-step form
-  const [step, setStep] = useState<'questionnaire' | 'matrix' | 'report'>('questionnaire');
+  const [step, setStep] = useState<'questionnaire' | 'matrix' | 'report'>('report'); // Start at report for testing
   const [formData, setFormData] = useState<Sos2aFormData | null>(null);
   const [matrixData, setMatrixData] = useState<MatrixItem[] | null>(null);
-  const [report, setReport] = useState<AssessmentReport | null>(null);
+  const [report, setReport] = useState<AssessmentReport | null>(sampleReport); // Use sample report
   
   // Progress percentage based on current step and report type
   const isComprehensive = formData?.reportType === 'comprehensive';
