@@ -163,6 +163,13 @@ export interface MatrixItem {
   };
 }
 
+export interface ScorecardItem {
+  parameter: string;
+  weight: number;
+  score: number; // 0-100 score for this parameter
+  notes?: string; // Optional notes about this score
+}
+
 export interface AssessmentReport {
   id: string;
   businessId: string;
@@ -220,6 +227,7 @@ export interface AssessmentReport {
     recommendations: string[];
   };
   matrixData: MatrixItem[];
+  scorecard: ScorecardItem[]; // New scorecard items with specific parameters
   rasbitaScore: {
     total: number;
     categories: {

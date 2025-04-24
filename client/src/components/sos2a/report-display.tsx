@@ -6,6 +6,7 @@ import { AssessmentReport } from "@/lib/sos2a-types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, FileText, Download, Calendar, Clock } from "lucide-react";
+import Scorecard from "./scorecard";
 
 interface ReportDisplayProps {
   report: AssessmentReport;
@@ -242,13 +243,25 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             </div>
           </div>
           
-          <Tabs defaultValue="recommendations" className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full">
+          <Tabs defaultValue="scorecard" className="w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-5 w-full">
+              <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
               <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
               <TabsTrigger value="risks">Risks & Vulnerabilities</TabsTrigger>
               <TabsTrigger value="compliance">Compliance Status</TabsTrigger>
               <TabsTrigger value="frameworks">Framework Gaps</TabsTrigger>
             </TabsList>
+            
+            <TabsContent value="scorecard" className="space-y-4 pt-4">
+              {/* Only display scorecard if the report has it */}
+              {report.scorecard ? (
+                <Scorecard scorecard={report.scorecard} reportType={report.reportType} />
+              ) : (
+                <div className="p-4 text-center">
+                  <p className="text-muted-foreground">Scorecard data is not available for this report.</p>
+                </div>
+              )}
+            </TabsContent>
             
             <TabsContent value="recommendations" className="space-y-4 pt-4">
               <div>
