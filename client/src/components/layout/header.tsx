@@ -93,9 +93,6 @@ export default function Header() {
               <a href={getHashLink("sos2a")} onClick={navigateToSection("sos2a")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 SOS²A
               </a>
-              <a href={getHashLink("patents")} onClick={navigateToSection("patents")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                Patents
-              </a>
               <a href={getHashLink("afaai")} onClick={navigateToSection("afaai")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 AFAAI
               </a>
@@ -105,25 +102,32 @@ export default function Header() {
               <a href={getHashLink("pricing")} onClick={navigateToSection("pricing")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                 Pricing
               </a>
-              <a href={getHashLink("video-demo")} onClick={navigateToSection("video-demo")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                Video Demo
-              </a>
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
             <DropdownMenu>
               <DropdownMenuTrigger className="text-neutral-100 hover:text-secondary border-transparent flex items-center px-1 pt-1 text-sm font-medium">
-                Resources <ChevronDown className="h-4 w-4 ml-1" />
+                About Us <ChevronDown className="h-4 w-4 ml-1" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="bg-primary border border-neutral-700">
                 <DropdownMenuItem asChild>
-                  <Link href="/dashboard" className="text-neutral-100 hover:text-secondary cursor-pointer">
-                    Dashboard
+                  <Link href="/about-us" className="text-neutral-100 hover:text-secondary cursor-pointer">
+                    Company Info
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/about-us" className="text-neutral-100 hover:text-secondary cursor-pointer">
-                    About Us
+                  <a href={getHashLink("patents")} onClick={navigateToSection("patents")} className="text-neutral-100 hover:text-secondary cursor-pointer">
+                    Patents
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <a href={getHashLink("video-demo")} onClick={navigateToSection("video-demo")} className="text-neutral-100 hover:text-secondary cursor-pointer">
+                    Video Demo
+                  </a>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="text-neutral-100 hover:text-secondary cursor-pointer">
+                    Dashboard
                   </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -156,9 +160,6 @@ export default function Header() {
           <a href={getHashLink("sos2a")} onClick={(e) => { navigateToSection("sos2a")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
             SOS²A
           </a>
-          <a href={getHashLink("patents")} onClick={(e) => { navigateToSection("patents")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
-            Patents
-          </a>
           <a href={getHashLink("afaai")} onClick={(e) => { navigateToSection("afaai")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
             AFAAI
           </a>
@@ -168,14 +169,21 @@ export default function Header() {
           <a href={getHashLink("pricing")} onClick={(e) => { navigateToSection("pricing")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
             Pricing
           </a>
-          <a href={getHashLink("video-demo")} onClick={(e) => { navigateToSection("video-demo")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+          
+          <div className="mt-3 mb-1 px-3 text-xs uppercase text-neutral-400 font-semibold">
+            About Us
+          </div>
+          <Link href="/about-us" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium pl-6">
+            Company Info
+          </Link>
+          <a href={getHashLink("patents")} onClick={(e) => { navigateToSection("patents")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium pl-6">
+            Patents
+          </a>
+          <a href={getHashLink("video-demo")} onClick={(e) => { navigateToSection("video-demo")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium pl-6">
             Video Demo
           </a>
-          <Link href="/dashboard" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+          <Link href="/dashboard" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium pl-6">
             Dashboard
-          </Link>
-          <Link href="/about-us" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
-            About Us
           </Link>
           <Link href="/sos2a-tool" onClick={closeMobileMenu} className="bg-secondary hover:bg-green-600 text-white block text-center mt-3 px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out">
             Get Started
