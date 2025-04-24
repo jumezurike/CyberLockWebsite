@@ -8,6 +8,12 @@ export interface ContactInfo {
   sameAsContact?: boolean;
 }
 
+export interface FrameworkSelection {
+  operations: string[];
+  management: string[];
+  technology: string[];
+}
+
 export interface Sos2aFormData {
   businessName: string;
   businessAddress: string;
@@ -18,6 +24,7 @@ export interface Sos2aFormData {
   internetPresence: string[];
   securityMeasures: string[];
   primaryConcerns: string[];
+  frameworks: FrameworkSelection;
   contactInfo: ContactInfo;
   matrixData: any | null; // Using any here since matrix data can be complex and varied
   reportType: 'preliminary' | 'comprehensive';

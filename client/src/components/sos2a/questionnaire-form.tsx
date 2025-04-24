@@ -33,6 +33,11 @@ const formSchema = z.object({
   internetPresence: z.array(z.string()).min(1, "Please select at least one internet presence type"),
   securityMeasures: z.array(z.string()).min(1, "Please select at least one security measure"),
   primaryConcerns: z.array(z.string()).min(1, "Please select at least one primary concern"),
+  frameworks: z.object({
+    operations: z.array(z.string()).optional(),
+    management: z.array(z.string()).optional(),
+    technology: z.array(z.string()).optional(),
+  }),
   contactInfo: z.object({
     name: z.string().min(2, "Contact name is required"),
     pointOfContact: z.string().min(2, "Business point of contact is required"),
@@ -72,6 +77,11 @@ export default function QuestionnaireForm({
       internetPresence: formData.internetPresence || [],
       securityMeasures: formData.securityMeasures || [],
       primaryConcerns: formData.primaryConcerns || [],
+      frameworks: {
+        operations: formData.frameworks?.operations || [],
+        management: formData.frameworks?.management || [],
+        technology: formData.frameworks?.technology || [],
+      },
       contactInfo: {
         name: formData.contactInfo?.name || "",
         pointOfContact: formData.contactInfo?.pointOfContact || "",
@@ -128,6 +138,32 @@ export default function QuestionnaireForm({
     { id: "cloud-security", label: "Cloud Security" },
     { id: "remote-work", label: "Remote Work Security" },
   ];
+
+  const securityFrameworks = {
+    operations: [
+      { id: "nist-csf", label: "NIST CSF" },
+      { id: "cis-csc", label: "CIS CSC V8" },
+      { id: "cyber-ess-uk", label: "CYBER ESS UK" },
+      { id: "cmmc", label: "CMMC" },
+      { id: "mitre-attack", label: "MITRE ATT&CK" },
+      { id: "pci-dss", label: "PCI-DSS" },
+    ],
+    management: [
+      { id: "nist-csf", label: "NIST CSF" },
+      { id: "cis-csc", label: "CIS CSC V8" },
+      { id: "cyber-ess-uk", label: "CYBER ESS UK" },
+      { id: "cmmc", label: "CMMC" },
+      { id: "mitre-attack", label: "MITRE ATT&CK" },
+    ],
+    technology: [
+      { id: "nist-csf", label: "NIST CSF" },
+      { id: "cis-csc", label: "CIS CSC V8" },
+      { id: "cyber-ess-uk", label: "CYBER ESS UK" },
+      { id: "cmmc", label: "CMMC" },
+      { id: "mitre-attack", label: "MITRE ATT&CK" },
+      { id: "pci-dss", label: "PCI-DSS" },
+    ],
+  };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateFormData(values);
@@ -568,6 +604,158 @@ export default function QuestionnaireForm({
                   </FormItem>
                 )}
               />
+            </div>
+
+            <div className="md:col-span-2 mt-6 p-6 bg-slate-50 rounded-lg border border-slate-200">
+              <h3 className="text-lg font-medium mb-4 text-primary">Security Framework Controls</h3>
+              <p className="mb-4 text-slate-600">Select the security frameworks applicable to your business across these domains:</p>
+              
+              {/* Operations Frameworks */}
+              <div className="mb-8">
+                <h4 className="text-md font-semibold mb-3 text-slate-800">Operations Domain</h4>
+                <FormField
+                  control={form.control}
+                  name="frameworks.operations"
+                  render={() => (
+                    <FormItem>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        {securityFrameworks.operations.map((item) => (
+                          <FormField
+                            key={item.id}
+                            control={form.control}
+                            name="frameworks.operations"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={item.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(item.id)}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([...(field.value || []), item.id])
+                                          : field.onChange(
+                                              field.value?.filter(
+                                                (value) => value !== item.id
+                                              )
+                                            )
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal cursor-pointer">
+                                    {item.label}
+                                  </FormLabel>
+                                </FormItem>
+                              )
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              {/* Management Frameworks */}
+              <div className="mb-8">
+                <h4 className="text-md font-semibold mb-3 text-slate-800">Management Domain</h4>
+                <FormField
+                  control={form.control}
+                  name="frameworks.management"
+                  render={() => (
+                    <FormItem>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        {securityFrameworks.management.map((item) => (
+                          <FormField
+                            key={item.id}
+                            control={form.control}
+                            name="frameworks.management"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={item.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(item.id)}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([...(field.value || []), item.id])
+                                          : field.onChange(
+                                              field.value?.filter(
+                                                (value) => value !== item.id
+                                              )
+                                            )
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal cursor-pointer">
+                                    {item.label}
+                                  </FormLabel>
+                                </FormItem>
+                              )
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              {/* Technology Frameworks */}
+              <div>
+                <h4 className="text-md font-semibold mb-3 text-slate-800">Technology Domain</h4>
+                <FormField
+                  control={form.control}
+                  name="frameworks.technology"
+                  render={() => (
+                    <FormItem>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        {securityFrameworks.technology.map((item) => (
+                          <FormField
+                            key={item.id}
+                            control={form.control}
+                            name="frameworks.technology"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={item.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(item.id)}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([...(field.value || []), item.id])
+                                          : field.onChange(
+                                              field.value?.filter(
+                                                (value) => value !== item.id
+                                              )
+                                            )
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal cursor-pointer">
+                                    {item.label}
+                                  </FormLabel>
+                                </FormItem>
+                              )
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
             </div>
 
             <div className="md:col-span-2">
