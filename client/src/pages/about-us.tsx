@@ -14,6 +14,7 @@ import {
   Info,
   Lightbulb
 } from 'lucide-react';
+import mikePhoto from '@/assets/team/mike-ikonomou.png';
 
 const AboutUs = () => {
   return (
@@ -244,9 +245,13 @@ const AboutUs = () => {
 
             {/* Mike Ikonomou */}
             <Card className="border-primary/10 shadow-md overflow-hidden">
-              <div className="aspect-[4/3] bg-gray-100 relative">
-                <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
-                  <span className="text-4xl font-semibold text-primary/20">Photo</span>
+              <div className="aspect-[4/3] bg-primary/5 relative flex items-center justify-center">
+                <div className="w-40 h-40 rounded-full overflow-hidden mx-auto my-4">
+                  <img 
+                    src={mikePhoto} 
+                    alt="Mike Ikonomou" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
               <CardHeader className="pb-2">
