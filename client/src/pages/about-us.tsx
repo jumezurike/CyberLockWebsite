@@ -159,21 +159,21 @@ const AboutUs = () => {
 
           <div className="max-w-2xl mx-auto space-y-4">
             <div className="flex items-start">
-              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✓</div>
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✅</div>
               <p className="text-gray-700 text-lg">
-                <span className="font-medium">Proactive</span> (not just insurance payouts).
+                <span className="font-medium">Proactive</span> (stopping attacks before they happen)
               </p>
             </div>
             <div className="flex items-start">
-              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✓</div>
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✅</div>
               <p className="text-gray-700 text-lg">
-                <span className="font-medium">Simple</span> (no PhDs required).
+                <span className="font-medium">Simple</span> (no degree needed to operate)
               </p>
             </div>
             <div className="flex items-start">
-              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✓</div>
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✅</div>
               <p className="text-gray-700 text-lg">
-                <span className="font-medium">Cost-Effective</span> (fraction of enterprise solutions).
+                <span className="font-medium">Cost-effective</span> (priced for SMB budgets, not enterprises)
               </p>
             </div>
           </div>
