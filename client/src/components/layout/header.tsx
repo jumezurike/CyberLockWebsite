@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
+import logoImage from "@/assets/cyberlockx-logo.jpg";
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -40,8 +41,12 @@ export default function Header() {
         <div className="flex justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <Link href="/" className="text-white font-heading font-bold text-xl">
-                CyberLockX
+              <Link href="/" className="flex items-center">
+                <img 
+                  src={logoImage} 
+                  alt="CyberLockX Logo" 
+                  className="h-10 w-auto"
+                />
               </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
