@@ -370,85 +370,55 @@ export default function QuestionnaireForm({
               )}
             />
             
-            <FormField
-              control={form.control}
-              name="operationMode"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Mode of Operation</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your mode of operation" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="isp-modem">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "isp-modem" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          ISP Modem
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="mobile-hotspot">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "mobile-hotspot" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Mobile Hotspot
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="commercial-internet">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "commercial-internet" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Commercial Internet
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="dedicated-connection">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "dedicated-connection" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Dedicated Connection
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="satellite">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "satellite" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Satellite
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="other">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "other" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Other
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="md:col-span-2">
+              <FormField
+                control={form.control}
+                name="operationMode"
+                render={() => (
+                  <FormItem>
+                    <div className="mb-4">
+                      <FormLabel>Mode of Operation (select all that apply)</FormLabel>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {operationModeOptions.map((item) => (
+                        <FormField
+                          key={item.id}
+                          control={form.control}
+                          name="operationMode"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={item.id}
+                                className="flex flex-row items-start space-x-3 space-y-0"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(item.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, item.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== item.id
+                                            )
+                                          )
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal cursor-pointer">
+                                  {item.label}
+                                </FormLabel>
+                              </FormItem>
+                            )
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
             
             <div className="md:col-span-2">
               <FormField
