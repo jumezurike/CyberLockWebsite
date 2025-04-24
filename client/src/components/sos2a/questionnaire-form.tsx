@@ -176,15 +176,96 @@ export default function QuestionnaireForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="finance">Financial Services</SelectItem>
-                      <SelectItem value="healthcare">Healthcare</SelectItem>
-                      <SelectItem value="retail">Retail</SelectItem>
-                      <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                      <SelectItem value="technology">Technology</SelectItem>
-                      <SelectItem value="education">Education</SelectItem>
-                      <SelectItem value="government">Government</SelectItem>
-                      <SelectItem value="nonprofit">Non-Profit</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="finance">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "finance" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Financial Services
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="healthcare">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "healthcare" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Healthcare
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="retail">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "retail" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Retail
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="manufacturing">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "manufacturing" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Manufacturing
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="technology">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "technology" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Technology
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="education">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "education" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Education
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="government">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "government" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Government
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="nonprofit">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "nonprofit" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Non-Profit
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="other">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "other" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Other
+                        </div>
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -205,11 +286,56 @@ export default function QuestionnaireForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="1-10">1-10</SelectItem>
-                      <SelectItem value="11-50">11-50</SelectItem>
-                      <SelectItem value="51-200">51-200</SelectItem>
-                      <SelectItem value="201-500">201-500</SelectItem>
-                      <SelectItem value="500+">500+</SelectItem>
+                      <SelectItem value="1-10">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "1-10" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          1-10
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="11-50">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "11-50" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          11-50
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="51-200">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "51-200" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          51-200
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="201-500">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "201-500" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          201-500
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="500+">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "500+" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          500+
+                        </div>
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -248,12 +374,66 @@ export default function QuestionnaireForm({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="isp-modem">ISP Modem</SelectItem>
-                      <SelectItem value="mobile-hotspot">Mobile Hotspot</SelectItem>
-                      <SelectItem value="commercial-internet">Commercial Internet</SelectItem>
-                      <SelectItem value="dedicated-connection">Dedicated Connection</SelectItem>
-                      <SelectItem value="satellite">Satellite</SelectItem>
-                      <SelectItem value="other">Other</SelectItem>
+                      <SelectItem value="isp-modem">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "isp-modem" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          ISP Modem
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="mobile-hotspot">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "mobile-hotspot" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Mobile Hotspot
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="commercial-internet">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "commercial-internet" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Commercial Internet
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="dedicated-connection">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "dedicated-connection" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Dedicated Connection
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="satellite">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "satellite" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Satellite
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="other">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "other" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Other
+                        </div>
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
