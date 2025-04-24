@@ -14,16 +14,16 @@ export default function Footer() {
                 className="h-36 w-auto mb-3"
               />
             </div>
-            <p className="text-accent mb-1 font-bold text-xl">Securing every CLICK!!!</p>
+            <p className="text-secondary mb-1 font-bold text-xl">Securing every CLICK!!!</p>
             <p className="text-neutral-300 mb-4">The Ultimate SMB Application Security Hub</p>
             <div className="flex space-x-4">
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-accent">
+              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-secondary">
                 <i className="fab fa-twitter"></i>
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-accent">
+              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-secondary">
                 <i className="fab fa-linkedin"></i>
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-accent">
+              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-secondary">
                 <i className="fab fa-facebook"></i>
               </a>
             </div>

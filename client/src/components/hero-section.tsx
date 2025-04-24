@@ -9,7 +9,7 @@ export default function HeroSection() {
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold font-heading leading-tight mb-2">
               CyberLockX
             </h1>
-            <p className="text-xl md:text-2xl mb-6 text-accent font-bold">
+            <p className="text-xl md:text-2xl mb-6 text-secondary font-bold">
               Securing every CLICK!!!
             </p>
             <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight mb-4">
