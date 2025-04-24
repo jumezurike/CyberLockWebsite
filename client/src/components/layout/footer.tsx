@@ -1,5 +1,5 @@
 import { Link } from "wouter";
-import logoImage from "@/assets/cyberlockx-logo-new.png";
+import logoImage from "@/assets/cyberlockx-logo-resized.png";
 
 export default function Footer() {
   return (
