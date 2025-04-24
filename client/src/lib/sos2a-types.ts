@@ -5,6 +5,7 @@ export interface ContactInfo {
   email: string;
   contactEmail: string;
   phone: string;
+  sameAsContact?: boolean;
 }
 
 export interface Sos2aFormData {

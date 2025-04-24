@@ -39,6 +39,7 @@ const formSchema = z.object({
     email: z.string().email("Invalid email address"),
     contactEmail: z.string().email("Invalid point of contact email address"),
     phone: z.string().min(10, "Please enter a valid phone number"),
+    sameAsContact: z.boolean().optional(),
   }),
   availabilityConfirmation: z.boolean().refine(val => val === true, {
     message: "You must confirm your availability to participate in the assessment within 30 days"
@@ -77,6 +78,7 @@ export default function QuestionnaireForm({
         email: formData.contactInfo?.email || "",
         contactEmail: formData.contactInfo?.contactEmail || "",
         phone: formData.contactInfo?.phone || "",
+        sameAsContact: formData.contactInfo?.sameAsContact || false,
       },
       availabilityConfirmation: formData.availabilityConfirmation || false,
       referralPermission: formData.referralPermission || false,
@@ -426,22 +428,60 @@ export default function QuestionnaireForm({
                   )}
                 />
                 
-                <FormField
-                  control={form.control}
-                  name="contactInfo.pointOfContact"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Business Point of Contact</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Name of business point of contact" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="contactInfo.sameAsContact"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox 
+                            checked={field.value}
+                            onCheckedChange={(checked) => {
+                              field.onChange(checked);
+                              
+                              // If checked, copy the name to point of contact
+                              if (checked) {
+                                const yourName = form.getValues().contactInfo.name;
+                                const yourEmail = form.getValues().contactInfo.email;
+                                
+                                form.setValue("contactInfo.pointOfContact", yourName);
+                                form.setValue("contactInfo.contactEmail", yourEmail);
+                              }
+                            }}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="font-normal cursor-pointer">
+                            I am the business point of contact
+                          </FormLabel>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="contactInfo.pointOfContact"
+                    render={({ field }) => {
+                      const { sameAsContact } = form.getValues().contactInfo;
+                      
+                      return (
+                        <FormItem>
+                          <FormLabel>Business Point of Contact</FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder="Name of business point of contact" 
+                              {...field} 
+                              disabled={sameAsContact === true}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      );
+                    }}
+                  />
+                </div>
 
                 <FormField
                   control={form.control}
@@ -460,19 +500,24 @@ export default function QuestionnaireForm({
                 <FormField
                   control={form.control}
                   name="contactInfo.contactEmail"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Point of Contact Email</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Email for point of contact" 
-                          type="email" 
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  render={({ field }) => {
+                    const { sameAsContact } = form.getValues().contactInfo;
+                    
+                    return (
+                      <FormItem>
+                        <FormLabel>Point of Contact Email</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Email for point of contact" 
+                            type="email" 
+                            {...field} 
+                            disabled={sameAsContact === true}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    );
+                  }}
                 />
 
                 <FormField
