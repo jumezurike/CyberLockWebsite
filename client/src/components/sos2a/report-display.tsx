@@ -50,30 +50,149 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
         </CardHeader>
         <CardContent className="space-y-6">
           {report.reportType === 'preliminary' && (
-            <Alert className="bg-amber-50 border-amber-200">
-              <AlertCircle className="h-4 w-4 text-amber-600" />
-              <AlertTitle className="text-amber-800">Preliminary Assessment</AlertTitle>
-              <AlertDescription className="text-amber-700">
-                This is a <span className="font-medium">free preliminary assessment</span> for your first engagement, based on expert 
-                opinion and best practices. The comprehensive quantitative assessment requires implementation of 
-                these mitigation strategies, including SOC, incident response, and security monitoring, followed 
-                by 6 months of evidence collection to verify effectiveness and compliance.
-              </AlertDescription>
-            </Alert>
+            <div className="space-y-4">
+              <Alert className="bg-amber-50 border-amber-200">
+                <AlertCircle className="h-4 w-4 text-amber-600" />
+                <AlertTitle className="text-amber-800">Preliminary Assessment</AlertTitle>
+                <AlertDescription className="text-amber-700">
+                  This is a <span className="font-medium">free preliminary assessment</span> for your first engagement. 
+                  It provides a qualitative overview of your security posture based on expert opinion and industry standards. 
+                  This report establishes the foundation for building a resilient cybersecurity framework and sets the stage 
+                  for more detailed analysis. Moving forward with a comprehensive assessment requires implementing the 
+                  recommended mitigation strategies, including SOC monitoring, incident response, and security controls, 
+                  followed by 6 months of evidence collection.
+                </AlertDescription>
+              </Alert>
+              
+              <div className="bg-gray-50 p-4 border rounded-md">
+                <h3 className="text-sm font-medium mb-3">Assessment Progress</h3>
+                <div className="relative pt-1">
+                  <div className="flex mb-2 items-center justify-between">
+                    <div>
+                      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-primary text-white">
+                        Step 3 of 4
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-semibold inline-block text-primary">
+                        75% Complete
+                      </span>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                    <div style={{ width: "75%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2 text-xs text-center">
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">Questionnaire</p>
+                      <p className="text-xs text-green-600">Data Collection</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">Matrix Population</p>
+                      <p className="text-xs text-green-600">Gap Analysis</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mx-auto">3</div>
+                      <p className="font-medium">Preliminary Report</p>
+                      <p className="text-xs text-muted-foreground">Qualitative Assessment</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">4</div>
+                      <p className="text-muted-foreground">Comprehensive Report</p>
+                      <p className="text-xs text-muted-foreground">With Evidence Collection</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
           
           {report.reportType === 'comprehensive' && (
-            <Alert variant="default" className="bg-blue-50 border-blue-200">
-              <FileText className="h-4 w-4 text-blue-600" />
-              <AlertTitle className="text-blue-800">Comprehensive Assessment</AlertTitle>
-              <AlertDescription className="text-blue-700">
-                This comprehensive assessment includes quantitative analysis based on 6 months of evidence 
-                collection using industry tools (SIEM, network flow analyzers, event log analytics, vulnerability assessment).
-                It measures verifiable improvements and compliance across your network, infrastructure, and applications.
-              </AlertDescription>
-            </Alert>
+            <div className="space-y-4">
+              <Alert variant="default" className="bg-blue-50 border-blue-200">
+                <FileText className="h-4 w-4 text-blue-600" />
+                <AlertTitle className="text-blue-800">Comprehensive Assessment</AlertTitle>
+                <AlertDescription className="text-blue-700">
+                  This comprehensive assessment includes quantitative analysis based on 6 months of evidence 
+                  collection using industry tools (SIEM, network flow analyzers, event log analytics, vulnerability assessment).
+                  It measures verifiable improvements and compliance across your network, infrastructure, and applications.
+                </AlertDescription>
+              </Alert>
+              
+              <div className="bg-gray-50 p-4 border rounded-md">
+                <h3 className="text-sm font-medium mb-3">Assessment Progress</h3>
+                <div className="relative pt-1">
+                  <div className="flex mb-2 items-center justify-between">
+                    <div>
+                      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-green-500 text-white">
+                        Step 4 of 4
+                      </span>
+                    </div>
+                    <div className="text-right">
+                      <span className="text-xs font-semibold inline-block text-green-500">
+                        100% Complete
+                      </span>
+                    </div>
+                  </div>
+                  <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
+                    <div style={{ width: "100%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"></div>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2 text-xs text-center">
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">Questionnaire</p>
+                      <p className="text-xs text-green-600">Data Collection</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">Matrix Population</p>
+                      <p className="text-xs text-green-600">Gap Analysis</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">Preliminary Report</p>
+                      <p className="text-xs text-green-600">Remediation Plan</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mx-auto">4</div>
+                      <p className="font-medium">Comprehensive Report</p>
+                      <p className="text-xs text-muted-foreground">Evidence-Based</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           )}
           
+          {report.reportType === 'preliminary' && (
+            <div className="border-b pb-4 mb-4">
+              <h2 className="text-lg font-semibold mb-2">Executive Summary</h2>
+              <p className="text-sm text-muted-foreground">
+                This preliminary report highlights the current cybersecurity state of your organization, with an 
+                emphasis on assessing its organizational and system security posture. While this is an initial overview, 
+                it is part of a larger effort to align security controls with industry compliance standards, regulations, 
+                and best practices. The purpose of this report is to illustrate the need for comprehensive monitoring, 
+                threat detection, and an effective incident response system.
+              </p>
+            </div>
+          )}
+          
+          {report.reportType === 'comprehensive' && (
+            <div className="border-b pb-4 mb-4">
+              <h2 className="text-lg font-semibold mb-2">Executive Summary</h2>
+              <p className="text-sm text-muted-foreground">
+                This comprehensive report provides a detailed quantitative analysis of your organization's security posture
+                based on 6 months of evidence collection following the implementation of recommended mitigation strategies.
+                The assessment verifies compliance with industry standards and regulations, identifies remaining security
+                gaps, and provides a roadmap for continuous security improvement. The RASBITA scoring methodology offers
+                measurable metrics across risk, adversarial insight, security controls, business impact, information assurance,
+                threat intelligence, and architecture domains.
+              </p>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <h3 className="text-sm font-medium text-muted-foreground">Business Information</h3>
@@ -312,27 +431,36 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           </DialogHeader>
           
           <div className="space-y-4 py-4">
+            <div className="bg-blue-50 border border-blue-100 p-3 rounded-md mb-4">
+              <h4 className="text-blue-800 text-sm font-medium mb-2">SOC Framework: Monitoring, Detection, and Incident Response</h4>
+              <p className="text-sm text-blue-700">
+                Moving forward requires integrating continuous monitoring and detection into your cybersecurity framework,
+                with a robust incident response plan to manage potential threats efficiently.
+              </p>
+            </div>
+            
             <p className="text-sm font-medium">Step 1: Implement Mitigation Strategies</p>
             <ul className="list-disc pl-5 text-sm space-y-1">
-              <li>Establish Security Operations Center (SOC)</li>
-              <li>Implement incident response procedures</li>
-              <li>Deploy security monitoring tools</li>
-              <li>Apply recommended security controls</li>
-              <li>Address vulnerabilities and compliance gaps</li>
+              <li><span className="font-medium">Access Control Policies:</span> Implement strict access controls with multi-factor authentication</li>
+              <li><span className="font-medium">Regular Software Updates:</span> Continuously update all systems and patch vulnerabilities</li>
+              <li><span className="font-medium">Employee Training:</span> Security awareness for recognizing phishing and social engineering</li>
+              <li><span className="font-medium">Incident Response Plan:</span> Clear procedures for detecting and containing threats</li>
+              <li><span className="font-medium">SOC Monitoring:</span> Establish continuous monitoring using automated tools</li>
             </ul>
             
-            <p className="text-sm font-medium mt-4">Step 2: 6-Month Evidence Collection</p>
+            <p className="text-sm font-medium mt-4">Step 2: 6-Month Evidence Collection Using Industry Tools</p>
             <ul className="list-disc pl-5 text-sm space-y-1">
-              <li>Deploy SIEM (Security Information & Event Management)</li>
-              <li>Configure network flow analyzers</li>
-              <li>Implement event log collection and analysis</li>
-              <li>Perform regular vulnerability assessments</li>
-              <li>Document incident response activities</li>
+              <li><span className="font-medium">SIEM Implementation:</span> Security Information & Event Management for log correlation</li>
+              <li><span className="font-medium">Network Flow Analysis:</span> Track patterns and detect anomalies in network traffic</li>
+              <li><span className="font-medium">Vulnerability Management:</span> Regular assessments to identify new security gaps</li>
+              <li><span className="font-medium">Event Log Collection:</span> Centralized monitoring of system and application logs</li>
+              <li><span className="font-medium">Incident Documentation:</span> Record and analyze security events and responses</li>
             </ul>
             
             <p className="text-sm mt-4">
-              This process verifies the effectiveness of your security implementations through observable evidence,
-              enabling a comprehensive quantitative assessment with detailed RASBITA scoring.
+              This comprehensive approach verifies the effectiveness of your security implementations through 
+              observable evidence, enabling a quantitative assessment with detailed RASBITA scoring and 
+              compliance verification against industry standards such as PCI-DSS, HIPAA, GDPR, and SOC 2.
             </p>
           </div>
           
