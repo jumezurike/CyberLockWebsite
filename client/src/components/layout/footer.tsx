@@ -3,8 +3,57 @@ import logoImage from "@/assets/cyberlockx-logo-resized.png";
 
 export default function Footer() {
   return (
-    <footer className="bg-primary text-white py-12 cyber-bg cyber-bg-enhanced">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <footer className="bg-primary text-white py-12 relative overflow-hidden">
+      {/* Cyber grid overlay */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="w-full h-full" 
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(142, 255, 150, 0.5) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(142, 255, 150, 0.5) 1px, transparent 1px),
+              radial-gradient(rgba(255, 255, 255, 0.5) 2px, transparent 2px)
+            `,
+            backgroundSize: '22px 22px, 22px 22px, 50px 50px',
+            backgroundPosition: '0 0, 0 0, 0 0',
+            opacity: 0.7
+          }}
+        ></div>
+      </div>
+      
+      {/* Circuit connections */}
+      <div className="absolute inset-0 pointer-events-none">
+        <svg width="100%" height="100%" className="opacity-40">
+          <line x1="5%" y1="20%" x2="20%" y2="20%" stroke="rgba(142, 255, 150, 0.7)" strokeWidth="1" />
+          <line x1="20%" y1="20%" x2="20%" y2="80%" stroke="rgba(142, 255, 150, 0.7)" strokeWidth="1" />
+          <circle cx="20%" cy="20%" r="3" fill="rgba(255, 255, 255, 0.7)" />
+          
+          <line x1="80%" y1="15%" x2="95%" y2="15%" stroke="rgba(142, 255, 150, 0.7)" strokeWidth="1" />
+          <line x1="80%" y1="15%" x2="80%" y2="85%" stroke="rgba(142, 255, 150, 0.7)" strokeWidth="1" />
+          <circle cx="80%" cy="15%" r="3" fill="rgba(255, 255, 255, 0.7)" />
+          
+          <line x1="40%" y1="5%" x2="40%" y2="95%" stroke="rgba(142, 255, 150, 0.7)" strokeWidth="1" />
+          <line x1="40%" y1="50%" x2="60%" y2="50%" stroke="rgba(142, 255, 150, 0.7)" strokeWidth="1" />
+          <circle cx="40%" cy="50%" r="3" fill="rgba(255, 255, 255, 0.7)" />
+          <circle cx="60%" cy="50%" r="3" fill="rgba(255, 255, 255, 0.7)" />
+          
+          <line x1="25%" y1="85%" x2="75%" y2="85%" stroke="rgba(142, 255, 150, 0.7)" strokeWidth="1" />
+        </svg>
+      </div>
+      
+      {/* Binary code */}
+      <div className="absolute inset-0 pointer-events-none opacity-30">
+        <div className="absolute top-1/4 left-1/5 text-secondary text-opacity-70 font-mono text-sm">
+          10110101
+        </div>
+        <div className="absolute top-2/3 left-3/4 text-secondary text-opacity-70 font-mono text-sm">
+          01101001
+        </div>
+        <div className="absolute top-3/4 left-1/4 text-secondary text-opacity-70 font-mono text-sm">
+          11001010
+        </div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <div className="mb-4">
