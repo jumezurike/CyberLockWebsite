@@ -26,6 +26,10 @@ import {
 const formSchema = z.object({
   businessName: z.string().min(2, "Business name is required"),
   businessAddress: z.string().min(5, "Business address is required"),
+  businessLocation: z.object({
+    state: z.string().min(2, "State or province is required"),
+    country: z.string().min(2, "Country is required"),
+  }),
   industry: z.string().min(1, "Please select your industry"),
   employeeCount: z.string().min(1, "Please select employee count"),
   businessServices: z.string().min(5, "Please describe the business services you offer"),
@@ -70,6 +74,10 @@ export default function QuestionnaireForm({
     defaultValues: {
       businessName: formData.businessName || "",
       businessAddress: formData.businessAddress || "",
+      businessLocation: formData.businessLocation || {
+        state: "",
+        country: "",
+      },
       industry: formData.industry || "",
       employeeCount: formData.employeeCount || "",
       businessServices: formData.businessServices || "",
@@ -164,6 +172,82 @@ export default function QuestionnaireForm({
       { id: "pci-dss", label: "PCI-DSS" },
     ],
   };
+  
+  const complianceRequirements = {
+    frameworks: [
+      { id: "nist", label: "NIST" },
+      { id: "cis", label: "CIS" },
+      { id: "iso", label: "ISO" },
+      { id: "cobit", label: "COBIT" },
+      { id: "cmmc", label: "CMMC" },
+    ],
+    standards: [
+      { id: "iso-27001", label: "ISO 27001" },
+      { id: "iso-27002", label: "ISO 27002" },
+      { id: "iso-27017", label: "ISO 27017 (Cloud)" },
+      { id: "iso-27018", label: "ISO 27018 (PII)" },
+      { id: "ansi", label: "ANSI" },
+      { id: "ieee", label: "IEEE" },
+    ],
+    compliance: [
+      { id: "hipaa", label: "HIPAA (Healthcare)" },
+      { id: "pci-dss", label: "PCI-DSS (Payment Card)" },
+      { id: "sox", label: "SOX (Financial)" },
+      { id: "fedramp", label: "FedRAMP (Government)" },
+      { id: "fisma", label: "FISMA (Federal)" },
+      { id: "ferpa", label: "FERPA (Education)" },
+    ],
+    regulations: [
+      { id: "ccpa", label: "CCPA (California)" },
+      { id: "gdpr", label: "GDPR (EU)" },
+      { id: "pipeda", label: "PIPEDA (Canada)" },
+      { id: "lgpd", label: "LGPD (Brazil)" },
+      { id: "coppa", label: "COPPA (Children's Privacy)" },
+      { id: "shield", label: "Privacy Shield" },
+    ],
+  };
+  
+  const policyDocuments = {
+    policies: [
+      { id: "acceptable-use", label: "Acceptable Use Policy" },
+      { id: "information-security", label: "Information Security Policy" },
+      { id: "data-classification", label: "Data Classification Policy" },
+      { id: "password", label: "Password Policy" },
+      { id: "byod", label: "BYOD Policy" },
+      { id: "remote-work", label: "Remote Work Policy" },
+    ],
+    procedures: [
+      { id: "incident-response", label: "Incident Response Procedures" },
+      { id: "backup-restore", label: "Backup and Restore Procedures" },
+      { id: "access-control", label: "Access Control Procedures" },
+      { id: "change-management", label: "Change Management Procedures" },
+      { id: "vulnerability-mgmt", label: "Vulnerability Management Procedures" },
+      { id: "patching", label: "Patching Procedures" },
+    ],
+    plans: [
+      { id: "disaster-recovery", label: "Disaster Recovery Plan" },
+      { id: "business-continuity", label: "Business Continuity Plan" },
+      { id: "incident-response-plan", label: "Incident Response Plan" },
+      { id: "security-awareness", label: "Security Awareness Training Plan" },
+      { id: "data-breach", label: "Data Breach Response Plan" },
+    ],
+    guides: [
+      { id: "security-baseline", label: "Security Baseline Guides" },
+      { id: "hardening", label: "System Hardening Guides" },
+      { id: "configuration", label: "Secure Configuration Guides" },
+      { id: "admin", label: "Admin Procedure Guides" },
+      { id: "user", label: "End User Security Guides" },
+    ],
+  };
+  
+  const osHardeningOptions = [
+    { id: "stig", label: "Security Technical Implementation Guides (STIG)" },
+    { id: "scap", label: "Security Content Automation Protocol (SCAP)" },
+    { id: "cis-benchmarks", label: "CIS Benchmarks" },
+    { id: "ms-security-baseline", label: "Microsoft Security Baseline" },
+    { id: "nist-800-53", label: "NIST 800-53 Controls" },
+    { id: "nist-800-171", label: "NIST 800-171 Controls" },
+  ];
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     updateFormData(values);
@@ -203,6 +287,90 @@ export default function QuestionnaireForm({
                   <FormControl>
                     <Input placeholder="Enter your business address" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="businessLocation.state"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>State/Province</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Enter your state or province" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="businessLocation.country"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Country</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select your country" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="usa">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "usa" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          United States
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="canada">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "canada" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Canada
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="uk">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "uk" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          United Kingdom
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="eu">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "eu" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          European Union
+                        </div>
+                      </SelectItem>
+                      <SelectItem value="other">
+                        <div className="flex items-center gap-2">
+                          <div className={`${field.value === "other" ? "visible" : "invisible"} text-primary`}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </div>
+                          Other
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
