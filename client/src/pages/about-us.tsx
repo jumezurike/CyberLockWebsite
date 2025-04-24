@@ -9,7 +9,10 @@ import {
 import { 
   Shield, 
   Target, 
-  Users
+  Users,
+  AlertTriangle,
+  Info,
+  Lightbulb
 } from 'lucide-react';
 
 const AboutUs = () => {
@@ -17,50 +20,158 @@ const AboutUs = () => {
     <div className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">About CyberLockX</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Securing the digital future for small and medium-sized businesses with innovative, 
-            accessible cybersecurity solutions.
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Democratizing Enterprise-Grade Cybersecurity for SMBs</h1>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+            Founded in 2022, CyberLockX was born from a stark realization: 99% of businesses are SMBs,
+            yet they receive less than 1% of actionable cybersecurity solutions while facing 43% of all cyberattacks 
+            <a href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(Verizon 2023 DBIR)</a>.
           </p>
         </div>
 
-        {/* Mission & Vision */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-          <Card className="border-primary/10 shadow-md">
-            <CardHeader className="pb-3">
-              <div className="flex items-center mb-2">
-                <Target className="h-6 w-6 text-primary mr-2" />
-                <CardTitle className="text-2xl">Our Mission</CardTitle>
-              </div>
-              <CardDescription>Driving our daily actions</CardDescription>
-            </CardHeader>
-            <CardContent className="pt-3">
-              <p className="text-gray-700">
-                Our mission at CyberLockX is to democratize enterprise-grade cybersecurity for small 
-                and medium-sized businesses by providing accessible, affordable, and comprehensive 
-                security solutions that protect digital assets, ensure compliance, and promote 
-                business continuity in an increasingly complex threat landscape.
-              </p>
-            </CardContent>
-          </Card>
+        {/* The Problem */}
+        <div className="mb-16">
+          <div className="text-center mb-10">
+            <div className="flex items-center justify-center mb-3">
+              <AlertTriangle className="h-7 w-7 text-red-500 mr-2" />
+              <h2 className="text-3xl font-bold text-gray-900">The Problem</h2>
+            </div>
+          </div>
 
-          <Card className="border-primary/10 shadow-md">
-            <CardHeader className="pb-3">
-              <div className="flex items-center mb-2">
-                <Shield className="h-6 w-6 text-primary mr-2" />
-                <CardTitle className="text-2xl">Our Vision</CardTitle>
-              </div>
-              <CardDescription>Where we're headed</CardDescription>
-            </CardHeader>
-            <CardContent className="pt-3">
-              <p className="text-gray-700">
-                We envision a future where every organization, regardless of size, has access to the 
-                security tools they need to thrive in the digital economy. CyberLockX aims to be the 
-                trusted security partner that empowers businesses through our innovative triple-patented 
-                technology, ensuring cyber resilience and digital trust across all business operations.
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="border-red-200 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Insurance Isn't Protection</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  SMBs are forced to rely on cyber insurance (which pays after breaches) rather than prevention.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-red-200 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Enterprise Bias</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  Solutions priced for Fortune 500 leave SMBs defenseless—50% fold within 6 months of an attack 
+                  <a href="https://www.sba.gov/blog/cybersecurity-small-businesses" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(U.S. SBA)</a>.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-red-200 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">$12.75B in Losses</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  The 2023 cost of SMB cyberattacks 
+                  <a href="https://www.accenture.com/us-en/insights/security/cost-cybercrime-study" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(Accenture)</a>.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Our Mission */}
+        <div className="mb-16">
+          <div className="text-center mb-10">
+            <div className="flex items-center justify-center mb-3">
+              <Target className="h-7 w-7 text-primary mr-2" />
+              <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
+            </div>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
+              We're building accessible, all-in-one cybersecurity for SMBs through four pillars:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="border-primary/10 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">AFAAI Safe Browser</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  Real-time threat blocking with AI-driven encryption.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/10 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">SOS²A AI Agent</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  Instant breach detection and response.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/10 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Integrated Apps</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  Secure versions of Google Docs/Sheets with zero-trust sharing.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/10 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Hybrid SOC</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  Affordable 24/7 monitoring without enterprise pricing.
+                </p>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Why Now? */}
+        <div className="mb-16">
+          <div className="text-center mb-10">
+            <div className="flex items-center justify-center mb-3">
+              <Lightbulb className="h-7 w-7 text-yellow-500 mr-2" />
+              <h2 className="text-3xl font-bold text-gray-900">Why Now?</h2>
+            </div>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              The market is ripe for disruption. SMBs need protection that's:
+            </p>
+          </div>
+
+          <div className="max-w-2xl mx-auto space-y-4">
+            <div className="flex items-start">
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✓</div>
+              <p className="text-gray-700 text-lg">
+                <span className="font-medium">Proactive</span> (not just insurance payouts).
               </p>
-            </CardContent>
-          </Card>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✓</div>
+              <p className="text-gray-700 text-lg">
+                <span className="font-medium">Simple</span> (no PhDs required).
+              </p>
+            </div>
+            <div className="flex items-start">
+              <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✓</div>
+              <p className="text-gray-700 text-lg">
+                <span className="font-medium">Cost-Effective</span> (fraction of enterprise solutions).
+              </p>
+            </div>
+          </div>
+
+          <div className="text-center mt-12">
+            <p className="text-xl text-gray-800 font-medium">
+              Join us in rewriting the rules of SMB cybersecurity.
+            </p>
+          </div>
         </div>
 
         {/* Leadership Section */}
