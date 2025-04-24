@@ -82,6 +82,8 @@ export interface MatrixItem {
   infraType: string;
   risks: string[];
   vulnerabilities: string[];
+  educationAwareness: boolean;
+  relevantQuestionnaires: string[]; // SAQ A, SAQ B, SAQ C, etc.
   operationControls: {
     frameworks: string[];
     applicable: boolean;
@@ -105,12 +107,58 @@ export interface MatrixItem {
       implemented: boolean;
     };
   };
-  complianceRequirements: {
-    standards: Record<string, boolean>;
-    regulations: Record<string, boolean>;
-    frameworks: Record<string, boolean>;
+  complianceStandards: {
+    pciDss: boolean;
+    hipaa: boolean;
+    cmmc: boolean;
+    gdpr: boolean;
+    ccpa: boolean;
+    soc2: boolean;
+    iso27001: boolean;
+    cyberEssentialsUk: boolean;
+    ferpa: boolean;
+    glba: boolean;
+    pipeda: boolean;
+    ftcSafeguardRules: boolean;
+    sbaCsg: boolean;
   };
-  mitreTechniques: string[]; // MITRE ATT&CK IDs
+  regulatoryRequirements: {
+    pciDss: boolean;
+    coppa: boolean;
+    hipaa: boolean;
+    gdpr: boolean;
+    ccpa: boolean;
+    glba: boolean;
+    ferpa: boolean;
+    pipeda: boolean;
+    ftcSafeguardRules: boolean;
+    fisma: boolean;
+    dfars: boolean;
+  };
+  standards: {
+    iso27001: boolean;
+    iso27002: boolean;
+    nistCsf: boolean;
+    nist80053: boolean;
+    iso27018: boolean;
+    iso27005: boolean;
+    cisCsc: boolean;
+    nist800171: boolean;
+    itil: boolean;
+    cobit: boolean;
+  };
+  mitreTactics: string[]; // MITRE ATT&CK Tactics
+  mitreTechniques: string[]; // MITRE ATT&CK Techniques
+  policyDocuments: {
+    policies: string[];
+    procedures: string[];
+    plans: string[];
+    processes: string[];
+  };
+  osHardening: {
+    stigScap: boolean;
+    guidelines: string[];
+  };
 }
 
 export interface AssessmentReport {
