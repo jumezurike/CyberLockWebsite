@@ -107,6 +107,9 @@ export default function Header() {
             <Link href="/dashboard" className="text-neutral-100 hover:text-secondary border-transparent flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
               Dashboard
             </Link>
+            <Link href="/about-us" className="text-neutral-100 hover:text-secondary border-transparent flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+              About Us
+            </Link>
             <Link href="/sos2a-tool" className="bg-secondary hover:bg-green-600 text-white py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out">
               Get Started
             </Link>
@@ -152,6 +155,9 @@ export default function Header() {
           </a>
           <Link href="/dashboard" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
             Dashboard
+          </Link>
+          <Link href="/about-us" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+            About Us
           </Link>
           <Link href="/sos2a-tool" onClick={closeMobileMenu} className="bg-secondary hover:bg-green-600 text-white block text-center mt-3 px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out">
             Get Started
