@@ -95,9 +95,9 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <p className="text-xs text-green-600">Gap Analysis</p>
                     </div>
                     <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mx-auto">3</div>
-                      <p className="font-medium">Preliminary Report</p>
-                      <p className="text-xs text-muted-foreground">Qualitative Assessment</p>
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">Preliminary Report</p>
+                      <p className="text-xs text-green-600">Qualitative Assessment</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">4</div>

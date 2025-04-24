@@ -160,9 +160,12 @@ export default function Sos2aTool() {
       item.educationAwareness
     ) ? 65 : 35);
     
+    // Check if any infrastructure types are related to external/internet presence
+    const internetRelatedInfra = ['E-commerce', 'Marketing Website', 'Web Application', 'Cloud Services'];
     const externalFootprintScore = generateScore(data.some(item => 
       item.technologyControls.implemented && 
-      item.internetPresence
+      (item.technologyControls.frameworks.includes('External Scanning') || 
+       internetRelatedInfra.some(infraType => item.infraType.includes(infraType)))
     ) ? 60 : 30);
     
     const darkWebScore = generateScore(data.some(item => 
