@@ -83,11 +83,11 @@ const AboutUs = () => {
               <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
             </div>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
-              We're building accessible, all-in-one cybersecurity for SMBs through four pillars:
+              We're building accessible, all-in-one cybersecurity for SMBs through five pillars:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="border-primary/10 shadow-md">
               <CardHeader className="pb-2">
                 <CardTitle className="text-xl">AFAAI Safe Browser</CardTitle>
@@ -116,7 +116,18 @@ const AboutUs = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700">
-                  Secure versions of Google Docs/Sheets with zero-trust sharing.
+                  Secure business applications with zero-trust sharing.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/10 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Secure Cloud</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  Protected versions of Google Docs/Sheets for business collaboration.
                 </p>
               </CardContent>
             </Card>
@@ -298,6 +309,30 @@ const AboutUs = () => {
                 <p className="text-gray-700">
                   We maintain the highest standards of honesty, transparency, and ethical 
                   conduct in all our business practices and customer relationships.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/10 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Simplicity</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  We design our solutions to be user-friendly and straightforward, focusing on 
+                  practical security without unnecessary complexity.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/10 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Proactivity</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  We believe in anticipating and preventing security threats before they occur,
+                  rather than just responding to breaches after the damage is done.
                 </p>
               </CardContent>
             </Card>
