@@ -36,8 +36,35 @@ export default function Header() {
   const getHashLink = (hash: string) => isHomePage ? `#${hash}` : `/#${hash}`;
 
   return (
-    <nav className="bg-primary shadow-md sticky top-0 z-50 cyber-bg">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <nav className="bg-primary shadow-md sticky top-0 z-50 relative overflow-hidden">
+      {/* Cyber grid overlay - similar to footer but subtle */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="w-full h-full" 
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, rgba(142, 255, 150, 0.15) 1px, transparent 1px),
+              linear-gradient(to bottom, rgba(142, 255, 150, 0.15) 1px, transparent 1px),
+              radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px)
+            `,
+            backgroundSize: '30px 30px, 30px 30px, 60px 60px',
+            backgroundPosition: '0 0, 0 0, 0 0',
+            opacity: 0.5
+          }}
+        ></div>
+      </div>
+      
+      {/* Circuit connections - subtle for header */}
+      <div className="absolute inset-0 pointer-events-none">
+        <svg width="100%" height="100%" className="opacity-20">
+          <line x1="10%" y1="50%" x2="30%" y2="50%" stroke="rgba(142, 255, 150, 0.5)" strokeWidth="0.5" />
+          <circle cx="30%" cy="50%" r="2" fill="rgba(255, 255, 255, 0.5)" />
+          
+          <line x1="70%" y1="50%" x2="90%" y2="50%" stroke="rgba(142, 255, 150, 0.5)" strokeWidth="0.5" />
+          <circle cx="70%" cy="50%" r="2" fill="rgba(255, 255, 255, 0.5)" />
+        </svg>
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex justify-between h-28">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
