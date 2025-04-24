@@ -123,6 +123,9 @@ export default function Header() {
           <a href={getHashLink("video-demo")} onClick={(e) => { navigateToSection("video-demo")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
             Video Demo
           </a>
+          <Link href="/dashboard" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+            Dashboard
+          </Link>
           <Link href="/sos2a-tool" onClick={closeMobileMenu} className="bg-secondary hover:bg-green-600 text-white block text-center mt-3 px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out">
             Get Started
           </Link>
