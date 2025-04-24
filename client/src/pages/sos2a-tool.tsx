@@ -30,15 +30,118 @@ export default function Sos2aTool() {
     setStep('matrix');
   };
   
+  // Generate scorecard data with the 12 standard parameters
+  const generateScorecardData = (data: MatrixItem[], reportType: 'preliminary' | 'comprehensive') => {
+    // Each parameter has equal weight of 8.33%
+    const standardWeight = 8.33;
+    
+    // Function to generate a score based on reportType and implementation status
+    const generateScore = (baseScore: number): number => {
+      // Comprehensive reports have more accurate scores based on evidence
+      // Preliminary reports are more estimate-based and tend to be more optimistic
+      const randomFactor = reportType === 'comprehensive' 
+        ? Math.floor(Math.random() * 20) - 10 // +/- 10% for comprehensive (more accurate)
+        : Math.floor(Math.random() * 10)      // 0-10% uplift for preliminary (more optimistic)
+      
+      const finalScore = reportType === 'comprehensive'
+        ? baseScore + randomFactor
+        : baseScore + randomFactor;
+        
+      // Ensure score is between 0-100
+      return Math.max(0, Math.min(100, finalScore));
+    };
+    
+    // Start with base scores for each parameter
+    const phishingScore = generateScore(data.some(item => 
+      item.operationControls.implemented && 
+      item.operationControls.frameworks.includes('Security Awareness Training')
+    ) ? 70 : 40);
+    
+    const securityAwarenessScore = generateScore(data.some(item => 
+      item.operationControls.implemented && 
+      item.educationAwareness
+    ) ? 65 : 35);
+    
+    const externalFootprintScore = generateScore(data.some(item => 
+      item.technologyControls.implemented && 
+      item.internetPresence
+    ) ? 60 : 30);
+    
+    const darkWebScore = generateScore(data.some(item => 
+      item.operationControls.implemented && 
+      item.mitreTactics.includes('Intelligence Gathering')
+    ) ? 55 : 25);
+    
+    const endpointSecurityScore = generateScore(data.some(item => 
+      item.technologyControls.implemented && 
+      item.technologyControls.frameworks.includes('Endpoint Protection')
+    ) ? 75 : 45);
+    
+    const cloudSecurityScore = generateScore(data.some(item => 
+      item.technologyControls.implemented && 
+      item.technologyControls.frameworks.includes('Cloud Security')
+    ) ? 65 : 40);
+    
+    const dataSecurityScore = generateScore(data.some(item => 
+      item.managementControls.implemented && 
+      item.managementControls.frameworks.includes('Data Protection')
+    ) ? 70 : 45);
+    
+    const browserSecurityScore = generateScore(data.some(item => 
+      item.technologyControls.implemented && 
+      item.technologyControls.frameworks.includes('Browser Security')
+    ) ? 60 : 35);
+    
+    const emailProtectionScore = generateScore(data.some(item => 
+      item.technologyControls.implemented && 
+      item.technologyControls.frameworks.includes('Email Security')
+    ) ? 70 : 40);
+    
+    const compliancesScore = generateScore(data.some(item => 
+      item.complianceStandards.pciDss || 
+      item.complianceStandards.hipaa || 
+      item.complianceStandards.gdpr
+    ) ? 65 : 30);
+    
+    const regulatoryScore = generateScore(data.some(item => 
+      item.regulatoryRequirements.pciDss || 
+      item.regulatoryRequirements.hipaa || 
+      item.regulatoryRequirements.gdpr
+    ) ? 60 : 25);
+    
+    const frameworksScore = generateScore(data.some(item => 
+      item.standards.nistCsf || 
+      item.standards.iso27001 || 
+      item.standards.cisCsc
+    ) ? 70 : 35);
+    
+    return [
+      { parameter: "Phishing screening", weight: standardWeight, score: phishingScore },
+      { parameter: "Security awareness", weight: standardWeight, score: securityAwarenessScore },
+      { parameter: "External footprints", weight: standardWeight, score: externalFootprintScore },
+      { parameter: "Dark web", weight: standardWeight, score: darkWebScore },
+      { parameter: "Endpoint security", weight: standardWeight, score: endpointSecurityScore },
+      { parameter: "Cloud security", weight: standardWeight, score: cloudSecurityScore },
+      { parameter: "Data security", weight: standardWeight, score: dataSecurityScore },
+      { parameter: "Browser security", weight: standardWeight, score: browserSecurityScore },
+      { parameter: "Email protection", weight: standardWeight, score: emailProtectionScore },
+      { parameter: "Compliances", weight: standardWeight, score: compliancesScore },
+      { parameter: "Regulatory requirements", weight: standardWeight, score: regulatoryScore },
+      { parameter: "Frameworks", weight: standardWeight, score: frameworksScore },
+    ];
+  };
+
   // Handle matrix submission
   const handleMatrixSubmit = (data: MatrixItem[]) => {
     setMatrixData(data);
+    
+    const reportType = formData?.reportType || 'preliminary';
     
     // Generate the report based on the form and matrix data
     const generatedReport: AssessmentReport = {
       id: 'report-' + Date.now(),
       businessId: data[0].infraType + '-' + Date.now(),
-      reportType: formData?.reportType || 'preliminary',
+      reportType: reportType,
       createdAt: new Date().toISOString(),
       securityScore: calculateSecurityScore(data),
       businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown" },
@@ -55,6 +158,7 @@ export default function Sos2aTool() {
       osHardeningStatus: evaluateOsHardeningStatus(data),
       mitreAttackCoverage: evaluateMitreAttackCoverage(data),
       matrixData: data,
+      scorecard: generateScorecardData(data, reportType),
       rasbitaScore: calculateRasbitaScore(data),
     };
     
