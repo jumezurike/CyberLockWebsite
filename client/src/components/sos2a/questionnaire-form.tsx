@@ -35,7 +35,6 @@ const formSchema = z.object({
   primaryConcerns: z.array(z.string()).min(1, "Please select at least one primary concern"),
   contactInfo: z.object({
     name: z.string().min(2, "Contact name is required"),
-    sameAsContact: z.boolean().optional(),
     pointOfContact: z.string().min(2, "Business point of contact is required"),
     email: z.string().email("Invalid email address"),
     contactEmail: z.string().email("Invalid point of contact email address"),
@@ -74,7 +73,6 @@ export default function QuestionnaireForm({
       primaryConcerns: formData.primaryConcerns || [],
       contactInfo: {
         name: formData.contactInfo?.name || "",
-        sameAsContact: formData.contactInfo?.sameAsContact || false,
         pointOfContact: formData.contactInfo?.pointOfContact || "",
         email: formData.contactInfo?.email || "",
         contactEmail: formData.contactInfo?.contactEmail || "",
@@ -428,57 +426,22 @@ export default function QuestionnaireForm({
                   )}
                 />
                 
-                <div className="space-y-4">
-                  <FormField
-                    control={form.control}
-                    name="contactInfo.sameAsContact"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                        <FormControl>
-                          <Checkbox 
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel className="font-normal cursor-pointer">
-                            I am the business point of contact
-                          </FormLabel>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="contactInfo.pointOfContact"
-                    render={({ field }) => {
-                      const { sameAsContact } = form.getValues().contactInfo;
-                      const yourName = form.getValues().contactInfo.name;
-                      
-                      // If sameAsContact is checked, auto-fill with your name
-                      useEffect(() => {
-                        if (sameAsContact && yourName) {
-                          field.onChange(yourName);
-                        }
-                      }, [sameAsContact, yourName]);
-                      
-                      return (
-                        <FormItem>
-                          <FormLabel>Business Point of Contact</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Enter business point of contact if different" 
-                              {...field} 
-                              disabled={sameAsContact}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      );
-                    }}
-                  />
-                </div>
+                <FormField
+                  control={form.control}
+                  name="contactInfo.pointOfContact"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Business Point of Contact</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="Name of business point of contact" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
                 <FormField
                   control={form.control}
@@ -497,32 +460,19 @@ export default function QuestionnaireForm({
                 <FormField
                   control={form.control}
                   name="contactInfo.contactEmail"
-                  render={({ field }) => {
-                    const { sameAsContact } = form.getValues().contactInfo;
-                    const yourEmail = form.getValues().contactInfo.email;
-                    
-                    // If sameAsContact is checked, auto-fill with your email
-                    useEffect(() => {
-                      if (sameAsContact && yourEmail) {
-                        field.onChange(yourEmail);
-                      }
-                    }, [sameAsContact, yourEmail]);
-                    
-                    return (
-                      <FormItem>
-                        <FormLabel>Point of Contact Email</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Enter point of contact email if different" 
-                            type="email" 
-                            {...field} 
-                            disabled={sameAsContact}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Point of Contact Email</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="Email for point of contact" 
+                          type="email" 
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
 
                 <FormField
