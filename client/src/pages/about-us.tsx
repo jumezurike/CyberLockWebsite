@@ -83,7 +83,7 @@ const AboutUs = () => {
               <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
             </div>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
-              We're building accessible, all-in-one cybersecurity for SMBs through five pillars:
+              We're building accessible, all-in-one cybersecurity for SMBs through six pillars:
             </p>
           </div>
 
@@ -139,6 +139,17 @@ const AboutUs = () => {
               <CardContent>
                 <p className="text-gray-700">
                   Affordable 24/7 monitoring without enterprise pricing.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/10 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">ECSMID + DatashieldAI</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  Patented quantum resistance encryption for unbreakable data security.
                 </p>
               </CardContent>
             </Card>
@@ -333,6 +344,18 @@ const AboutUs = () => {
                 <p className="text-gray-700">
                   We believe in anticipating and preventing security threats before they occur,
                   rather than just responding to breaches after the damage is done.
+                </p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/10 shadow-md">
+              <CardHeader className="pb-2">
+                <CardTitle className="text-xl">Security-First</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-gray-700">
+                  We prioritize robust security as the foundation of everything we build, 
+                  ensuring our solutions provide protection against both current and future threats.
                 </p>
               </CardContent>
             </Card>
