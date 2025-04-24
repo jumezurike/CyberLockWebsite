@@ -232,6 +232,23 @@ export const policyDocuments = {
   },
 };
 
+// Define which infrastructure types typically require education and awareness training
+export const educationAwarenessNeeded = {
+  "isp-modem": false,
+  "mobile-hotspot": true, // Mobile hotspots require user education about secure usage
+  "commercial-internet": false,
+  "dedicated-connection": false,
+  "satellite": true, // Satellite connections require special awareness for limitations
+  "other": false,
+  "website": false,
+  "social-media": true, // Social media requires education about safe usage and policies
+  "cloud-servers": true, // Cloud services require education on secure access
+  "office-servers": true, // Local servers require education on physical security
+  "hybrid": true, // Hybrid environments require education on both cloud and on-prem
+  "minimal": false,
+  "none": false,
+};
+
 // Helper function to initialize a matrix item based on infrastructure mode
 export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
   // Default false values for boolean fields
@@ -242,7 +259,7 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
     infraType,
     risks: commonRisks[infraType as keyof typeof commonRisks] || [],
     vulnerabilities: commonVulnerabilities[infraType as keyof typeof commonVulnerabilities] || [],
-    educationAwareness: false,
+    educationAwareness: educationAwarenessNeeded[infraType as keyof typeof educationAwarenessNeeded] || false,
     relevantQuestionnaires: relevantQuestionnaires[infraType as keyof typeof relevantQuestionnaires] || [],
     operationControls: {
       frameworks: commonFrameworks.operations[infraType as keyof typeof commonFrameworks.operations] || [],
