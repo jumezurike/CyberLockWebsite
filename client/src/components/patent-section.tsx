@@ -58,7 +58,7 @@ export default function PatentSection() {
                   <td className="py-4 px-6 font-medium text-primary">Integrated Apps</td>
                   <td className="py-4 px-6">
                     <ul className="list-disc list-inside text-neutral-700">
-                      <li>ECSMID (End-point to end-point cryptographic system) + DsTC (Decentralized secure true digital ID): Unified quantum-safe surface for:
+                      <li>ECSMID (End-point to end-point Cryptographic System for Cloud, Mobile and IoT Devices) + DsTC (Decentralized Secure True digital ID for Communications): Unified quantum-safe surface for:
                         <ul className="list-disc list-inside ml-4">
                           <li>Google Docs/Sheets (cell-level encryption)</li>
                           <li>Cloud (AWS/Azure/GCP)</li>
@@ -82,8 +82,8 @@ export default function PatentSection() {
               <i className="fas fa-shield-alt text-3xl text-primary"></i>
             </div>
             <h3 className="text-lg font-semibold mb-2">U.S. Patent 10,911,217</h3>
-            <p className="text-neutral-600 mb-3">ECSMID: End-point to end-point cryptographic system for mobile and IoT Devices</p>
-            <span className="text-xs bg-accent/20 text-accent px-3 py-1 rounded-full">Quantum-Resistant Encryption</span>
+            <p className="text-neutral-600 mb-3">ECSMID: End-point to end-point Cryptographic System for Cloud, Mobile and IoT Devices</p>
+            <span className="text-xs bg-secondary/20 text-secondary px-3 py-1 rounded-full">Quantum-Resistant Encryption</span>
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
@@ -91,8 +91,8 @@ export default function PatentSection() {
               <i className="fas fa-link text-3xl text-primary"></i>
             </div>
             <h3 className="text-lg font-semibold mb-2">U.S. Patent 10,999,276</h3>
-            <p className="text-neutral-600 mb-3">DsTC: Decentralized secure true digital ID for communications</p>
-            <span className="text-xs bg-accent/20 text-accent px-3 py-1 rounded-full">Court-Ready Compliance</span>
+            <p className="text-neutral-600 mb-3">DsTC: Decentralized Secure True digital ID for Communications</p>
+            <span className="text-xs bg-secondary/20 text-secondary px-3 py-1 rounded-full">Court-Ready Compliance</span>
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center">
@@ -101,7 +101,7 @@ export default function PatentSection() {
             </div>
             <h3 className="text-lg font-semibold mb-2">U.S. Patent 11,367,065</h3>
             <p className="text-neutral-600 mb-3">DLSeT: Distributed Ledger System for Electronic Transaction</p>
-            <span className="text-xs bg-accent/20 text-accent px-3 py-1 rounded-full">Blockchain-Based Transaction Security</span>
+            <span className="text-xs bg-secondary/20 text-secondary px-3 py-1 rounded-full">Blockchain-Based Transaction Security</span>
           </div>
           
           <div className="bg-white p-6 rounded-lg shadow-md flex flex-col items-center text-center border-2 border-dashed border-secondary">
