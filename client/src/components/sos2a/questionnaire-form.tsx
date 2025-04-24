@@ -42,6 +42,26 @@ const formSchema = z.object({
     management: z.array(z.string()).optional(),
     technology: z.array(z.string()).optional(),
   }),
+  complianceRequirements: z.object({
+    frameworks: z.array(z.string()).optional(),
+    standards: z.array(z.string()).optional(),
+    compliance: z.array(z.string()).optional(),
+    regulations: z.array(z.string()).optional(),
+  }),
+  policyDocuments: z.object({
+    policies: z.array(z.string()).optional(),
+    procedures: z.array(z.string()).optional(),
+    plans: z.array(z.string()).optional(),
+    guides: z.array(z.string()).optional(),
+  }),
+  osHardening: z.object({
+    stig: z.boolean().optional(),
+    scap: z.boolean().optional(),
+    guidelines: z.array(z.string()).optional(),
+  }),
+  adversarialInsights: z.object({
+    mitreAttackIds: z.array(z.string()).optional(),
+  }),
   contactInfo: z.object({
     name: z.string().min(2, "Contact name is required"),
     pointOfContact: z.string().min(2, "Business point of contact is required"),
@@ -89,6 +109,26 @@ export default function QuestionnaireForm({
         operations: formData.frameworks?.operations || [],
         management: formData.frameworks?.management || [],
         technology: formData.frameworks?.technology || [],
+      },
+      complianceRequirements: {
+        frameworks: formData.complianceRequirements?.frameworks || [],
+        standards: formData.complianceRequirements?.standards || [],
+        compliance: formData.complianceRequirements?.compliance || [],
+        regulations: formData.complianceRequirements?.regulations || [],
+      },
+      policyDocuments: {
+        policies: formData.policyDocuments?.policies || [],
+        procedures: formData.policyDocuments?.procedures || [],
+        plans: formData.policyDocuments?.plans || [],
+        guides: formData.policyDocuments?.guides || [],
+      },
+      osHardening: {
+        stig: formData.osHardening?.stig || false,
+        scap: formData.osHardening?.scap || false,
+        guidelines: formData.osHardening?.guidelines || [],
+      },
+      adversarialInsights: {
+        mitreAttackIds: formData.adversarialInsights?.mitreAttackIds || [],
       },
       contactInfo: {
         name: formData.contactInfo?.name || "",
@@ -890,6 +930,527 @@ export default function QuestionnaireForm({
                             key={item.id}
                             control={form.control}
                             name="frameworks.technology"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={item.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(item.id)}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([...(field.value || []), item.id])
+                                          : field.onChange(
+                                              field.value?.filter(
+                                                (value) => value !== item.id
+                                              )
+                                            )
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal cursor-pointer">
+                                    {item.label}
+                                  </FormLabel>
+                                </FormItem>
+                              )
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+
+            <div className="md:col-span-2 mt-6 p-6 bg-slate-50 rounded-lg border border-slate-200">
+              <h3 className="text-lg font-medium mb-4 text-primary">Compliance Requirements</h3>
+              <p className="mb-4 text-slate-600">Select the compliance requirements applicable to your business:</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Compliance Frameworks */}
+                <div className="mb-6">
+                  <h4 className="text-md font-semibold mb-3 text-slate-800">Frameworks</h4>
+                  <FormField
+                    control={form.control}
+                    name="complianceRequirements.frameworks"
+                    render={() => (
+                      <FormItem>
+                        <div className="space-y-2">
+                          {complianceRequirements.frameworks.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="complianceRequirements.frameworks"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(item.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...(field.value || []), item.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal cursor-pointer">
+                                      {item.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                {/* Compliance Standards */}
+                <div className="mb-6">
+                  <h4 className="text-md font-semibold mb-3 text-slate-800">Standards</h4>
+                  <FormField
+                    control={form.control}
+                    name="complianceRequirements.standards"
+                    render={() => (
+                      <FormItem>
+                        <div className="space-y-2">
+                          {complianceRequirements.standards.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="complianceRequirements.standards"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(item.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...(field.value || []), item.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal cursor-pointer">
+                                      {item.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                {/* Compliance Regulations */}
+                <div className="mb-6">
+                  <h4 className="text-md font-semibold mb-3 text-slate-800">Compliance</h4>
+                  <FormField
+                    control={form.control}
+                    name="complianceRequirements.compliance"
+                    render={() => (
+                      <FormItem>
+                        <div className="space-y-2">
+                          {complianceRequirements.compliance.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="complianceRequirements.compliance"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(item.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...(field.value || []), item.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal cursor-pointer">
+                                      {item.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                {/* Regulations */}
+                <div className="mb-6">
+                  <h4 className="text-md font-semibold mb-3 text-slate-800">Regulations</h4>
+                  <p className="text-xs text-slate-500 mb-2">Location-based regulations will be automatically suggested based on your business location</p>
+                  <FormField
+                    control={form.control}
+                    name="complianceRequirements.regulations"
+                    render={() => (
+                      <FormItem>
+                        <div className="space-y-2">
+                          {complianceRequirements.regulations.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="complianceRequirements.regulations"
+                              render={({ field }) => {
+                                // Highlight California regulations if state is California
+                                const isHighlighted = 
+                                  (item.id === "ccpa" && form.getValues("businessLocation")?.state?.toLowerCase().includes("california"));
+                                
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(item.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...(field.value || []), item.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <div>
+                                      <FormLabel className={`font-normal cursor-pointer ${isHighlighted ? 'text-primary font-medium' : ''}`}>
+                                        {item.label} {isHighlighted && '(Recommended)'}
+                                      </FormLabel>
+                                      {isHighlighted && (
+                                        <p className="text-xs text-primary">Required for businesses in California</p>
+                                      )}
+                                    </div>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div className="md:col-span-2 mt-6 p-6 bg-slate-50 rounded-lg border border-slate-200">
+              <h3 className="text-lg font-medium mb-4 text-primary">Policy Documents</h3>
+              <p className="mb-4 text-slate-600">Select the policy documents you currently have in place:</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Policies */}
+                <div className="mb-6">
+                  <h4 className="text-md font-semibold mb-3 text-slate-800">Policies</h4>
+                  <FormField
+                    control={form.control}
+                    name="policyDocuments.policies"
+                    render={() => (
+                      <FormItem>
+                        <div className="space-y-2">
+                          {policyDocuments.policies.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="policyDocuments.policies"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(item.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...(field.value || []), item.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal cursor-pointer">
+                                      {item.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                {/* Procedures */}
+                <div className="mb-6">
+                  <h4 className="text-md font-semibold mb-3 text-slate-800">Procedures</h4>
+                  <FormField
+                    control={form.control}
+                    name="policyDocuments.procedures"
+                    render={() => (
+                      <FormItem>
+                        <div className="space-y-2">
+                          {policyDocuments.procedures.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="policyDocuments.procedures"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(item.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...(field.value || []), item.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal cursor-pointer">
+                                      {item.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                {/* Plans */}
+                <div className="mb-6">
+                  <h4 className="text-md font-semibold mb-3 text-slate-800">Plans</h4>
+                  <FormField
+                    control={form.control}
+                    name="policyDocuments.plans"
+                    render={() => (
+                      <FormItem>
+                        <div className="space-y-2">
+                          {policyDocuments.plans.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="policyDocuments.plans"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(item.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...(field.value || []), item.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal cursor-pointer">
+                                      {item.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                {/* Guides */}
+                <div className="mb-6">
+                  <h4 className="text-md font-semibold mb-3 text-slate-800">Guides</h4>
+                  <FormField
+                    control={form.control}
+                    name="policyDocuments.guides"
+                    render={() => (
+                      <FormItem>
+                        <div className="space-y-2">
+                          {policyDocuments.guides.map((item) => (
+                            <FormField
+                              key={item.id}
+                              control={form.control}
+                              name="policyDocuments.guides"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={item.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(item.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...(field.value || []), item.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== item.id
+                                                )
+                                              )
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal cursor-pointer">
+                                      {item.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div className="md:col-span-2 mt-6 p-6 bg-slate-50 rounded-lg border border-slate-200">
+              <h3 className="text-lg font-medium mb-4 text-primary">OS Hardening</h3>
+              <p className="mb-4 text-slate-600">Select the OS hardening standards you currently implement:</p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="osHardening.stig"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-4">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="text-md font-medium cursor-pointer">
+                            Security Technical Implementation Guides (STIG)
+                          </FormLabel>
+                          <p className="text-sm text-muted-foreground">
+                            Department of Defense standards for secure installations
+                          </p>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="osHardening.scap"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-4">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel className="text-md font-medium cursor-pointer">
+                            Security Content Automation Protocol (SCAP)
+                          </FormLabel>
+                          <p className="text-sm text-muted-foreground">
+                            Automated vulnerability management, measurement, and policy compliance
+                          </p>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              
+              <div className="mt-4">
+                <h4 className="text-md font-semibold mb-3 text-slate-800">Additional Guidelines</h4>
+                <FormField
+                  control={form.control}
+                  name="osHardening.guidelines"
+                  render={() => (
+                    <FormItem>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {osHardeningOptions.slice(2).map((item) => (
+                          <FormField
+                            key={item.id}
+                            control={form.control}
+                            name="osHardening.guidelines"
                             render={({ field }) => {
                               return (
                                 <FormItem
