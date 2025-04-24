@@ -1,162 +1,139 @@
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import { Sos2aFormData } from "@/lib/sos2a-types";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Sos2aFormData } from "@/lib/sos2a-types";
 
 const formSchema = z.object({
   businessName: z.string().min(2, "Business name is required"),
   businessAddress: z.string().min(5, "Business address is required"),
   businessLocation: z.object({
-    state: z.string().min(2, "State or province is required"),
+    state: z.string().min(2, "State is required"),
     country: z.string().min(2, "Country is required"),
   }),
-  industry: z.string().min(1, "Please select your industry"),
-  employeeCount: z.string().min(1, "Please select employee count"),
-  businessServices: z.string().min(5, "Please describe the business services you offer"),
-  operationMode: z.array(z.string()).min(1, "Please select at least one mode of operation"),
-  internetPresence: z.array(z.string()).min(1, "Please select at least one internet presence type"),
-  securityMeasures: z.array(z.string()).min(1, "Please select at least one security measure"),
-  primaryConcerns: z.array(z.string()).min(1, "Please select at least one primary concern"),
+  industry: z.string().min(2, "Industry is required"),
+  employeeCount: z.string().min(1, "Employee count is required"),
+  businessServices: z.string().min(5, "Business services description is required"),
+  operationMode: z.array(z.string()).min(1, "At least one operation mode is required"),
+  internetPresence: z.array(z.string()).min(1, "At least one internet presence is required"),
+  securityMeasures: z.array(z.string()),
+  primaryConcerns: z.array(z.string()),
   frameworks: z.object({
-    operations: z.array(z.string()).optional(),
-    management: z.array(z.string()).optional(),
-    technology: z.array(z.string()).optional(),
+    operations: z.array(z.string()),
+    management: z.array(z.string()),
+    technology: z.array(z.string()),
   }),
   complianceRequirements: z.object({
-    frameworks: z.array(z.string()).optional(),
-    standards: z.array(z.string()).optional(),
-    compliance: z.array(z.string()).optional(),
-    regulations: z.array(z.string()).optional(),
+    frameworks: z.array(z.string()),
+    standards: z.array(z.string()),
+    compliance: z.array(z.string()),
+    regulations: z.array(z.string()),
   }),
   policyDocuments: z.object({
-    policies: z.array(z.string()).optional(),
-    procedures: z.array(z.string()).optional(),
-    plans: z.array(z.string()).optional(),
-    guides: z.array(z.string()).optional(),
+    policies: z.array(z.string()),
+    procedures: z.array(z.string()),
+    plans: z.array(z.string()),
+    guides: z.array(z.string()),
   }),
   osHardening: z.object({
-    stig: z.boolean().optional(),
-    scap: z.boolean().optional(),
-    guidelines: z.array(z.string()).optional(),
+    stig: z.boolean(),
+    scap: z.boolean(),
+    guidelines: z.array(z.string()),
   }),
   adversarialInsights: z.object({
-    mitreAttackIds: z.array(z.string()).optional(),
+    mitreAttackIds: z.array(z.string()),
   }),
   contactInfo: z.object({
-    name: z.string().min(2, "Contact name is required"),
-    pointOfContact: z.string().min(2, "Business point of contact is required"),
+    name: z.string().min(2, "Name is required"),
+    pointOfContact: z.string().min(2, "Point of contact is required"),
     email: z.string().email("Invalid email address"),
-    contactEmail: z.string().email("Invalid point of contact email address"),
-    phone: z.string().min(10, "Please enter a valid phone number"),
+    contactEmail: z.string().email("Invalid contact email address"),
+    phone: z.string().min(10, "Valid phone number is required"),
     sameAsContact: z.boolean().optional(),
   }),
+  matrixData: z.any().nullable(),
+  reportType: z.enum(['preliminary', 'comprehensive']),
   availabilityConfirmation: z.boolean().refine(val => val === true, {
-    message: "You must confirm your availability to participate in the assessment within 30 days"
+    message: "You must confirm your availability for the interview",
   }),
-  referralPermission: z.boolean().refine(val => val === true, {
-    message: "You must provide referral permission to proceed with the free assessment"
-  }),
+  referralPermission: z.boolean(),
 });
 
 interface QuestionnaireFormProps {
-  formData: Sos2aFormData;
-  updateFormData: (data: Partial<Sos2aFormData>) => void;
-  onNext: () => void;
+  onSubmit: (data: Sos2aFormData) => void;
 }
 
-export default function QuestionnaireForm({ 
-  formData, 
-  updateFormData, 
-  onNext 
-}: QuestionnaireFormProps) {
-  const form = useForm<z.infer<typeof formSchema>>({
+export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
+  const form = useForm<Sos2aFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      businessName: formData.businessName || "",
-      businessAddress: formData.businessAddress || "",
-      businessLocation: formData.businessLocation || {
+      businessName: "",
+      businessAddress: "",
+      businessLocation: {
         state: "",
         country: "",
       },
-      industry: formData.industry || "",
-      employeeCount: formData.employeeCount || "",
-      businessServices: formData.businessServices || "",
-      operationMode: formData.operationMode || [],
-      internetPresence: formData.internetPresence || [],
-      securityMeasures: formData.securityMeasures || [],
-      primaryConcerns: formData.primaryConcerns || [],
+      industry: "",
+      employeeCount: "",
+      businessServices: "",
+      operationMode: [],
+      internetPresence: [],
+      securityMeasures: [],
+      primaryConcerns: [],
       frameworks: {
-        operations: formData.frameworks?.operations || [],
-        management: formData.frameworks?.management || [],
-        technology: formData.frameworks?.technology || [],
+        operations: [],
+        management: [],
+        technology: [],
       },
       complianceRequirements: {
-        frameworks: formData.complianceRequirements?.frameworks || [],
-        standards: formData.complianceRequirements?.standards || [],
-        compliance: formData.complianceRequirements?.compliance || [],
-        regulations: formData.complianceRequirements?.regulations || [],
+        frameworks: [],
+        standards: [],
+        compliance: [],
+        regulations: [],
       },
       policyDocuments: {
-        policies: formData.policyDocuments?.policies || [],
-        procedures: formData.policyDocuments?.procedures || [],
-        plans: formData.policyDocuments?.plans || [],
-        guides: formData.policyDocuments?.guides || [],
+        policies: [],
+        procedures: [],
+        plans: [],
+        guides: [],
       },
       osHardening: {
-        stig: formData.osHardening?.stig || false,
-        scap: formData.osHardening?.scap || false,
-        guidelines: formData.osHardening?.guidelines || [],
+        stig: false,
+        scap: false,
+        guidelines: [],
       },
       adversarialInsights: {
-        mitreAttackIds: formData.adversarialInsights?.mitreAttackIds || [],
+        mitreAttackIds: [],
       },
       contactInfo: {
-        name: formData.contactInfo?.name || "",
-        pointOfContact: formData.contactInfo?.pointOfContact || "",
-        email: formData.contactInfo?.email || "",
-        contactEmail: formData.contactInfo?.contactEmail || "",
-        phone: formData.contactInfo?.phone || "",
-        sameAsContact: formData.contactInfo?.sameAsContact || false,
+        name: "",
+        pointOfContact: "",
+        email: "",
+        contactEmail: "",
+        phone: "",
       },
-      availabilityConfirmation: formData.availabilityConfirmation || false,
-      referralPermission: formData.referralPermission || false,
+      matrixData: null,
+      reportType: 'preliminary',
+      availabilityConfirmation: false,
+      referralPermission: false,
     },
   });
-
-  const securityMeasures = [
-    { id: "firewall", label: "Firewall and VPN Solutions" },
-    { id: "endpoint", label: "Endpoint and Device Security (EDR, MDM)" },
-    { id: "mfa", label: "Multi-Factor Authentication (MFA)" },
-    { id: "backup", label: "Backup and Disaster Recovery" },
-    { id: "training", label: "Employee Training on Cybersecurity" },
-    { id: "encryption", label: "Data Encryption and DLP Tools" },
-    { id: "network", label: "Network Segmentation" },
-    { id: "email", label: "Email Filtering and Anti-Phishing Tools" },
-    { id: "dns", label: "DNS Filtering and Secure DNS" },
-    { id: "cloud", label: "Cloud Security Tools (CASB, WAF)" },
-  ];
-
-  const operationModeOptions = [
+  
+  const handleSubmit = form.handleSubmit((data) => {
+    onSubmit(data);
+  });
+  
+  const operationModes = [
     { id: "isp-modem", label: "ISP Modem" },
     { id: "mobile-hotspot", label: "Mobile Hotspot" },
     { id: "commercial-internet", label: "Commercial Internet" },
@@ -164,1509 +141,1235 @@ export default function QuestionnaireForm({
     { id: "satellite", label: "Satellite" },
     { id: "other", label: "Other" },
   ];
-
+  
   const internetPresenceOptions = [
     { id: "website", label: "Website" },
-    { id: "cloud-servers", label: "Servers in the Cloud" },
-    { id: "office-servers", label: "Servers in the Office" },
-    { id: "hybrid", label: "Hybrid (Cloud & On-Premises)" },
-    { id: "minimal", label: "Minimal Presence" },
-    { id: "none", label: "No Internet Presence" },
+    { id: "social-media", label: "Social Media" },
+    { id: "cloud-servers", label: "Cloud Servers" },
+    { id: "office-servers", label: "Office Servers" },
+    { id: "hybrid", label: "Hybrid" },
+    { id: "minimal", label: "Minimal" },
+    { id: "none", label: "None" },
   ];
   
-  const primaryConcerns = [
-    { id: "data-breach", label: "Data Breaches" },
-    { id: "ransomware", label: "Ransomware Attacks" },
+  const securityMeasureOptions = [
+    { id: "firewall", label: "Firewall" },
+    { id: "antivirus", label: "Antivirus" },
+    { id: "endpoint-protection", label: "Endpoint Protection" },
+    { id: "vpn", label: "VPN" },
+    { id: "mfa", label: "Multi-Factor Authentication" },
+    { id: "ids-ips", label: "Intrusion Detection/Prevention" },
+    { id: "encryption", label: "Encryption" },
+    { id: "backup", label: "Regular Backups" },
+    { id: "security-training", label: "Security Awareness Training" },
+    { id: "none", label: "None" },
+  ];
+  
+  const primaryConcernOptions = [
+    { id: "data-breach", label: "Data Breach" },
+    { id: "ransomware", label: "Ransomware" },
+    { id: "phishing", label: "Phishing" },
+    { id: "insider-threats", label: "Insider Threats" },
     { id: "compliance", label: "Regulatory Compliance" },
-    { id: "phishing", label: "Phishing & Social Engineering" },
-    { id: "insider", label: "Insider Threats" },
-    { id: "malware", label: "Malware & Viruses" },
-    { id: "ddos", label: "DDoS Attacks" },
-    { id: "third-party", label: "Third-Party/Vendor Risks" },
-    { id: "cloud-security", label: "Cloud Security" },
-    { id: "remote-work", label: "Remote Work Security" },
+    { id: "business-continuity", label: "Business Continuity" },
+    { id: "remote-work", label: "Secure Remote Work" },
+    { id: "byod", label: "BYOD Security" },
+    { id: "third-party", label: "Third-Party/Vendor Risk" },
+    { id: "iot", label: "IoT Device Security" },
   ];
-
-  const securityFrameworks = {
-    operations: [
-      { id: "nist-csf", label: "NIST CSF" },
-      { id: "cis-csc", label: "CIS CSC V8" },
-      { id: "cyber-ess-uk", label: "CYBER ESS UK" },
-      { id: "cmmc", label: "CMMC" },
-      { id: "mitre-attack", label: "MITRE ATT&CK" },
-      { id: "pci-dss", label: "PCI-DSS" },
-    ],
-    management: [
-      { id: "nist-csf", label: "NIST CSF" },
-      { id: "cis-csc", label: "CIS CSC V8" },
-      { id: "cyber-ess-uk", label: "CYBER ESS UK" },
-      { id: "cmmc", label: "CMMC" },
-      { id: "mitre-attack", label: "MITRE ATT&CK" },
-    ],
-    technology: [
-      { id: "nist-csf", label: "NIST CSF" },
-      { id: "cis-csc", label: "CIS CSC V8" },
-      { id: "cyber-ess-uk", label: "CYBER ESS UK" },
-      { id: "cmmc", label: "CMMC" },
-      { id: "mitre-attack", label: "MITRE ATT&CK" },
-      { id: "pci-dss", label: "PCI-DSS" },
-    ],
-  };
   
-  const complianceRequirements = {
-    frameworks: [
-      { id: "nist", label: "NIST" },
-      { id: "cis", label: "CIS" },
-      { id: "iso", label: "ISO" },
-      { id: "cobit", label: "COBIT" },
-      { id: "cmmc", label: "CMMC" },
-    ],
-    standards: [
-      { id: "iso-27001", label: "ISO 27001" },
-      { id: "iso-27002", label: "ISO 27002" },
-      { id: "iso-27017", label: "ISO 27017 (Cloud)" },
-      { id: "iso-27018", label: "ISO 27018 (PII)" },
-      { id: "ansi", label: "ANSI" },
-      { id: "ieee", label: "IEEE" },
-    ],
-    compliance: [
-      { id: "hipaa", label: "HIPAA (Healthcare)" },
-      { id: "pci-dss", label: "PCI-DSS (Payment Card)" },
-      { id: "sox", label: "SOX (Financial)" },
-      { id: "fedramp", label: "FedRAMP (Government)" },
-      { id: "fisma", label: "FISMA (Federal)" },
-      { id: "ferpa", label: "FERPA (Education)" },
-    ],
-    regulations: [
-      { id: "ccpa", label: "CCPA (California)" },
-      { id: "gdpr", label: "GDPR (EU)" },
-      { id: "pipeda", label: "PIPEDA (Canada)" },
-      { id: "lgpd", label: "LGPD (Brazil)" },
-      { id: "coppa", label: "COPPA (Children's Privacy)" },
-      { id: "shield", label: "Privacy Shield" },
-    ],
-  };
-  
-  const policyDocuments = {
-    policies: [
-      { id: "acceptable-use", label: "Acceptable Use Policy" },
-      { id: "information-security", label: "Information Security Policy" },
-      { id: "data-classification", label: "Data Classification Policy" },
-      { id: "password", label: "Password Policy" },
-      { id: "byod", label: "BYOD Policy" },
-      { id: "remote-work", label: "Remote Work Policy" },
-    ],
-    procedures: [
-      { id: "incident-response", label: "Incident Response Procedures" },
-      { id: "backup-restore", label: "Backup and Restore Procedures" },
-      { id: "access-control", label: "Access Control Procedures" },
-      { id: "change-management", label: "Change Management Procedures" },
-      { id: "vulnerability-mgmt", label: "Vulnerability Management Procedures" },
-      { id: "patching", label: "Patching Procedures" },
-    ],
-    plans: [
-      { id: "disaster-recovery", label: "Disaster Recovery Plan" },
-      { id: "business-continuity", label: "Business Continuity Plan" },
-      { id: "incident-response-plan", label: "Incident Response Plan" },
-      { id: "security-awareness", label: "Security Awareness Training Plan" },
-      { id: "data-breach", label: "Data Breach Response Plan" },
-    ],
-    guides: [
-      { id: "security-baseline", label: "Security Baseline Guides" },
-      { id: "hardening", label: "System Hardening Guides" },
-      { id: "configuration", label: "Secure Configuration Guides" },
-      { id: "admin", label: "Admin Procedure Guides" },
-      { id: "user", label: "End User Security Guides" },
-    ],
-  };
-  
-  const osHardeningOptions = [
-    { id: "stig", label: "Security Technical Implementation Guides (STIG)" },
-    { id: "scap", label: "Security Content Automation Protocol (SCAP)" },
-    { id: "cis-benchmarks", label: "CIS Benchmarks" },
-    { id: "ms-security-baseline", label: "Microsoft Security Baseline" },
-    { id: "nist-800-53", label: "NIST 800-53 Controls" },
-    { id: "nist-800-171", label: "NIST 800-171 Controls" },
+  // Security Frameworks by domain
+  const operationalFrameworks = [
+    { id: "nist-csf", label: "NIST CSF" },
+    { id: "cis-csc", label: "CIS CSC" },
+    { id: "cyber-ess-uk", label: "Cyber Essentials (UK)" },
+    { id: "cmmc", label: "CMMC" },
+    { id: "mitre-attack", label: "MITRE ATT&CK" },
+    { id: "pci-dss", label: "PCI-DSS" },
   ];
-
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    updateFormData(values);
-    onNext();
-  }
-
+  
+  const managementFrameworks = [
+    { id: "nist-csf", label: "NIST CSF" },
+    { id: "cis-csc", label: "CIS CSC" },
+    { id: "iso-27001", label: "ISO 27001" },
+    { id: "cobit", label: "COBIT" },
+    { id: "cmmc", label: "CMMC" },
+    { id: "itil", label: "ITIL" },
+  ];
+  
+  const technologyFrameworks = [
+    { id: "nist-csf", label: "NIST CSF" },
+    { id: "cis-csc", label: "CIS CSC" },
+    { id: "cyber-ess-uk", label: "Cyber Essentials (UK)" },
+    { id: "cmmc", label: "CMMC" },
+    { id: "soc2", label: "SOC 2" },
+    { id: "nist-800-53", label: "NIST 800-53" },
+  ];
+  
+  // Compliance, standards, frameworks
+  const complianceFrameworkOptions = [
+    { id: "iso-27001", label: "ISO 27001" },
+    { id: "nist-csf", label: "NIST CSF" },
+    { id: "cis-csc", label: "CIS CSC" },
+    { id: "cmmc", label: "CMMC" },
+    { id: "cyber-ess-uk", label: "Cyber Essentials (UK)" },
+  ];
+  
+  const standardsOptions = [
+    { id: "iso-27001", label: "ISO 27001" },
+    { id: "iso-27002", label: "ISO 27002" },
+    { id: "iso-27005", label: "ISO 27005" },
+    { id: "iso-27018", label: "ISO 27018" },
+    { id: "nist-800-53", label: "NIST 800-53" },
+    { id: "nist-800-171", label: "NIST 800-171" },
+  ];
+  
+  const complianceOptions = [
+    { id: "pci-dss", label: "PCI DSS" },
+    { id: "hipaa", label: "HIPAA" },
+    { id: "soc2", label: "SOC 2" },
+    { id: "fedramp", label: "FedRAMP" },
+    { id: "ferpa", label: "FERPA" },
+    { id: "glba", label: "GLBA" },
+  ];
+  
+  const regulationOptions = [
+    { id: "gdpr", label: "GDPR" },
+    { id: "ccpa", label: "CCPA" },
+    { id: "pipeda", label: "PIPEDA" },
+    { id: "shield-act", label: "NY SHIELD Act" },
+    { id: "cpra", label: "CPRA" },
+    { id: "ftc-safeguards", label: "FTC Safeguard Rules" },
+  ];
+  
+  // Policy Documents
+  const policyOptions = [
+    { id: "acceptable-use", label: "Acceptable Use Policy" },
+    { id: "information-security", label: "Information Security Policy" },
+    { id: "password", label: "Password Policy" },
+    { id: "data-classification", label: "Data Classification Policy" },
+    { id: "remote-work", label: "Remote Work Policy" },
+    { id: "byod", label: "BYOD Policy" },
+  ];
+  
+  const procedureOptions = [
+    { id: "incident-response", label: "Incident Response Procedures" },
+    { id: "access-control", label: "Access Control Procedures" },
+    { id: "patching", label: "Patching Procedures" },
+    { id: "backup-restore", label: "Backup and Restore Procedures" },
+    { id: "vulnerability-mgmt", label: "Vulnerability Management Procedures" },
+    { id: "change-management", label: "Change Management Procedures" },
+  ];
+  
+  const planOptions = [
+    { id: "incident-response-plan", label: "Incident Response Plan" },
+    { id: "business-continuity", label: "Business Continuity Plan" },
+    { id: "disaster-recovery", label: "Disaster Recovery Plan" },
+    { id: "security-awareness", label: "Security Awareness Training Plan" },
+    { id: "data-breach", label: "Data Breach Response Plan" },
+  ];
+  
+  const guideOptions = [
+    { id: "password-guide", label: "Password Management Guide" },
+    { id: "email-security", label: "Email Security Guide" },
+    { id: "secure-remote-work", label: "Secure Remote Work Guide" },
+    { id: "social-engineering", label: "Social Engineering Awareness Guide" },
+    { id: "byod-guide", label: "BYOD Best Practices Guide" },
+  ];
+  
+  // Function to update Contact Email when "Same as above" is checked
+  const handleSameAsContactChange = (checked: boolean) => {
+    if (checked) {
+      const currentEmail = form.getValues("contactInfo.email");
+      form.setValue("contactInfo.contactEmail", currentEmail);
+    }
+  };
+  
   return (
-    <div>
-      <h2 className="text-2xl font-semibold mb-6 text-primary">Step 1: Questionnaire</h2>
-      <p className="mb-6 text-neutral-600">
-        Please complete this initial questionnaire to help us understand your business and cybersecurity needs.
-      </p>
-
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <FormField
-              control={form.control}
-              name="businessName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Business Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your business name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="businessAddress"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Business Address</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your business address" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="businessLocation.state"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>State/Province</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Enter your state or province" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="businessLocation.country"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Country</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your country" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="usa">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "usa" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          United States
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="canada">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "canada" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Canada
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="uk">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "uk" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          United Kingdom
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="eu">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "eu" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          European Union
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="other">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "other" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Other
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="industry"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Industry</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your industry" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="finance">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "finance" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Financial Services
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="healthcare">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "healthcare" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Healthcare
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="retail">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "retail" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Retail
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="manufacturing">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "manufacturing" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Manufacturing
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="technology">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "technology" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Technology
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="education">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "education" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Education
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="government">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "government" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Government
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="nonprofit">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "nonprofit" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Non-Profit
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="other">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "other" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          Other
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="employeeCount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Number of Employees</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select range" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1-10">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "1-10" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          1-10
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="11-50">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "11-50" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          11-50
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="51-200">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "51-200" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          51-200
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="201-500">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "201-500" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          201-500
-                        </div>
-                      </SelectItem>
-                      <SelectItem value="500+">
-                        <div className="flex items-center gap-2">
-                          <div className={`${field.value === "500+" ? "visible" : "invisible"} text-primary`}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          </div>
-                          500+
-                        </div>
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="businessServices"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Business Services</FormLabel>
-                  <FormControl>
-                    <Textarea 
-                      placeholder="What type of business services do you offer?"
-                      className="min-h-[100px]"
-                      {...field} 
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
-            <div className="md:col-span-2">
-              <FormField
-                control={form.control}
-                name="operationMode"
-                render={() => (
-                  <FormItem>
-                    <div className="mb-4">
-                      <FormLabel>Mode of Operation (select all that apply)</FormLabel>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {operationModeOptions.map((item) => (
-                        <FormField
-                          key={item.id}
-                          control={form.control}
-                          name="operationMode"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={item.id}
-                                className="flex flex-row items-start space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(item.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...field.value, item.id])
-                                        : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== item.id
-                                            )
-                                          )
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal cursor-pointer">
-                                  {item.label}
-                                </FormLabel>
-                              </FormItem>
-                            )
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
-            <div className="md:col-span-2">
-              <FormField
-                control={form.control}
-                name="internetPresence"
-                render={() => (
-                  <FormItem>
-                    <div className="mb-4">
-                      <FormLabel>Internet Presence (select all that apply)</FormLabel>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {internetPresenceOptions.map((item) => (
-                        <FormField
-                          key={item.id}
-                          control={form.control}
-                          name="internetPresence"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={item.id}
-                                className="flex flex-row items-start space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(item.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...field.value, item.id])
-                                        : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== item.id
-                                            )
-                                          )
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal cursor-pointer">
-                                  {item.label}
-                                </FormLabel>
-                              </FormItem>
-                            )
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <FormField
-                control={form.control}
-                name="securityMeasures"
-                render={() => (
-                  <FormItem>
-                    <div className="mb-4">
-                      <FormLabel>Current Security Measures (select all that apply)</FormLabel>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {securityMeasures.map((item) => (
-                        <FormField
-                          key={item.id}
-                          control={form.control}
-                          name="securityMeasures"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={item.id}
-                                className="flex flex-row items-start space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(item.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...field.value, item.id])
-                                        : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== item.id
-                                            )
-                                          )
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal cursor-pointer">
-                                  {item.label}
-                                </FormLabel>
-                              </FormItem>
-                            )
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="md:col-span-2">
-              <FormField
-                control={form.control}
-                name="primaryConcerns"
-                render={() => (
-                  <FormItem>
-                    <div className="mb-4">
-                      <FormLabel>Primary Concerns (select all that apply)</FormLabel>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {primaryConcerns.map((item) => (
-                        <FormField
-                          key={item.id}
-                          control={form.control}
-                          name="primaryConcerns"
-                          render={({ field }) => {
-                            return (
-                              <FormItem
-                                key={item.id}
-                                className="flex flex-row items-start space-x-3 space-y-0"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(item.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...field.value, item.id])
-                                        : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== item.id
-                                            )
-                                          )
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal cursor-pointer">
-                                  {item.label}
-                                </FormLabel>
-                              </FormItem>
-                            )
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="md:col-span-2 mt-6 p-6 bg-slate-50 rounded-lg border border-slate-200">
-              <h3 className="text-lg font-medium mb-4 text-primary">Security Framework Controls</h3>
-              <p className="mb-4 text-slate-600">Select the security frameworks applicable to your business across these domains:</p>
+    <Card className="w-full">
+      <CardHeader className="text-center">
+        <CardTitle className="text-2xl font-bold">SMB Organizational and System Security Analysis (SOS²A)</CardTitle>
+        <CardDescription>
+          Complete this questionnaire to begin your security assessment
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <Tabs defaultValue="business" className="w-full">
+              <TabsList className="grid grid-cols-5 mb-4">
+                <TabsTrigger value="business">Business Information</TabsTrigger>
+                <TabsTrigger value="infrastructure">Infrastructure</TabsTrigger>
+                <TabsTrigger value="security">Security Profile</TabsTrigger>
+                <TabsTrigger value="compliance">Compliance</TabsTrigger>
+                <TabsTrigger value="contact">Contact & Confirmation</TabsTrigger>
+              </TabsList>
               
-              {/* Operations Frameworks */}
-              <div className="mb-8">
-                <h4 className="text-md font-semibold mb-3 text-slate-800">Operations Domain</h4>
+              {/* Business Information Tab */}
+              <TabsContent value="business" className="space-y-6">
                 <FormField
                   control={form.control}
-                  name="frameworks.operations"
-                  render={() => (
-                    <FormItem>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        {securityFrameworks.operations.map((item) => (
-                          <FormField
-                            key={item.id}
-                            control={form.control}
-                            name="frameworks.operations"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={item.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([...(field.value || []), item.id])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== item.id
-                                              )
-                                            )
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal cursor-pointer">
-                                    {item.label}
-                                  </FormLabel>
-                                </FormItem>
-                              )
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              
-              {/* Management Frameworks */}
-              <div className="mb-8">
-                <h4 className="text-md font-semibold mb-3 text-slate-800">Management Domain</h4>
-                <FormField
-                  control={form.control}
-                  name="frameworks.management"
-                  render={() => (
-                    <FormItem>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        {securityFrameworks.management.map((item) => (
-                          <FormField
-                            key={item.id}
-                            control={form.control}
-                            name="frameworks.management"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={item.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([...(field.value || []), item.id])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== item.id
-                                              )
-                                            )
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal cursor-pointer">
-                                    {item.label}
-                                  </FormLabel>
-                                </FormItem>
-                              )
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-              
-              {/* Technology Frameworks */}
-              <div>
-                <h4 className="text-md font-semibold mb-3 text-slate-800">Technology Domain</h4>
-                <FormField
-                  control={form.control}
-                  name="frameworks.technology"
-                  render={() => (
-                    <FormItem>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                        {securityFrameworks.technology.map((item) => (
-                          <FormField
-                            key={item.id}
-                            control={form.control}
-                            name="frameworks.technology"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={item.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([...(field.value || []), item.id])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== item.id
-                                              )
-                                            )
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal cursor-pointer">
-                                    {item.label}
-                                  </FormLabel>
-                                </FormItem>
-                              )
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            <div className="md:col-span-2 mt-6 p-6 bg-slate-50 rounded-lg border border-slate-200">
-              <h3 className="text-lg font-medium mb-4 text-primary">Compliance Requirements</h3>
-              <p className="mb-4 text-slate-600">Select the compliance requirements applicable to your business:</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Compliance Frameworks */}
-                <div className="mb-6">
-                  <h4 className="text-md font-semibold mb-3 text-slate-800">Frameworks</h4>
-                  <FormField
-                    control={form.control}
-                    name="complianceRequirements.frameworks"
-                    render={() => (
-                      <FormItem>
-                        <div className="space-y-2">
-                          {complianceRequirements.frameworks.map((item) => (
-                            <FormField
-                              key={item.id}
-                              control={form.control}
-                              name="complianceRequirements.frameworks"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={item.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(item.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...(field.value || []), item.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== item.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal cursor-pointer">
-                                      {item.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                {/* Compliance Standards */}
-                <div className="mb-6">
-                  <h4 className="text-md font-semibold mb-3 text-slate-800">Standards</h4>
-                  <FormField
-                    control={form.control}
-                    name="complianceRequirements.standards"
-                    render={() => (
-                      <FormItem>
-                        <div className="space-y-2">
-                          {complianceRequirements.standards.map((item) => (
-                            <FormField
-                              key={item.id}
-                              control={form.control}
-                              name="complianceRequirements.standards"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={item.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(item.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...(field.value || []), item.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== item.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal cursor-pointer">
-                                      {item.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                {/* Compliance Regulations */}
-                <div className="mb-6">
-                  <h4 className="text-md font-semibold mb-3 text-slate-800">Compliance</h4>
-                  <FormField
-                    control={form.control}
-                    name="complianceRequirements.compliance"
-                    render={() => (
-                      <FormItem>
-                        <div className="space-y-2">
-                          {complianceRequirements.compliance.map((item) => (
-                            <FormField
-                              key={item.id}
-                              control={form.control}
-                              name="complianceRequirements.compliance"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={item.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(item.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...(field.value || []), item.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== item.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal cursor-pointer">
-                                      {item.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                {/* Regulations */}
-                <div className="mb-6">
-                  <h4 className="text-md font-semibold mb-3 text-slate-800">Regulations</h4>
-                  <p className="text-xs text-slate-500 mb-2">Location-based regulations will be automatically suggested based on your business location</p>
-                  <FormField
-                    control={form.control}
-                    name="complianceRequirements.regulations"
-                    render={() => (
-                      <FormItem>
-                        <div className="space-y-2">
-                          {complianceRequirements.regulations.map((item) => (
-                            <FormField
-                              key={item.id}
-                              control={form.control}
-                              name="complianceRequirements.regulations"
-                              render={({ field }) => {
-                                // Highlight California regulations if state is California
-                                const isHighlighted = 
-                                  (item.id === "ccpa" && form.getValues("businessLocation")?.state?.toLowerCase().includes("california"));
-                                
-                                return (
-                                  <FormItem
-                                    key={item.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(item.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...(field.value || []), item.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== item.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <div>
-                                      <FormLabel className={`font-normal cursor-pointer ${isHighlighted ? 'text-primary font-medium' : ''}`}>
-                                        {item.label} {isHighlighted && '(Recommended)'}
-                                      </FormLabel>
-                                      {isHighlighted && (
-                                        <p className="text-xs text-primary">Required for businesses in California</p>
-                                      )}
-                                    </div>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <div className="md:col-span-2 mt-6 p-6 bg-slate-50 rounded-lg border border-slate-200">
-              <h3 className="text-lg font-medium mb-4 text-primary">Policy Documents</h3>
-              <p className="mb-4 text-slate-600">Select the policy documents you currently have in place:</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Policies */}
-                <div className="mb-6">
-                  <h4 className="text-md font-semibold mb-3 text-slate-800">Policies</h4>
-                  <FormField
-                    control={form.control}
-                    name="policyDocuments.policies"
-                    render={() => (
-                      <FormItem>
-                        <div className="space-y-2">
-                          {policyDocuments.policies.map((item) => (
-                            <FormField
-                              key={item.id}
-                              control={form.control}
-                              name="policyDocuments.policies"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={item.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(item.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...(field.value || []), item.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== item.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal cursor-pointer">
-                                      {item.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                {/* Procedures */}
-                <div className="mb-6">
-                  <h4 className="text-md font-semibold mb-3 text-slate-800">Procedures</h4>
-                  <FormField
-                    control={form.control}
-                    name="policyDocuments.procedures"
-                    render={() => (
-                      <FormItem>
-                        <div className="space-y-2">
-                          {policyDocuments.procedures.map((item) => (
-                            <FormField
-                              key={item.id}
-                              control={form.control}
-                              name="policyDocuments.procedures"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={item.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(item.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...(field.value || []), item.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== item.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal cursor-pointer">
-                                      {item.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                {/* Plans */}
-                <div className="mb-6">
-                  <h4 className="text-md font-semibold mb-3 text-slate-800">Plans</h4>
-                  <FormField
-                    control={form.control}
-                    name="policyDocuments.plans"
-                    render={() => (
-                      <FormItem>
-                        <div className="space-y-2">
-                          {policyDocuments.plans.map((item) => (
-                            <FormField
-                              key={item.id}
-                              control={form.control}
-                              name="policyDocuments.plans"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={item.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(item.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...(field.value || []), item.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== item.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal cursor-pointer">
-                                      {item.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                {/* Guides */}
-                <div className="mb-6">
-                  <h4 className="text-md font-semibold mb-3 text-slate-800">Guides</h4>
-                  <FormField
-                    control={form.control}
-                    name="policyDocuments.guides"
-                    render={() => (
-                      <FormItem>
-                        <div className="space-y-2">
-                          {policyDocuments.guides.map((item) => (
-                            <FormField
-                              key={item.id}
-                              control={form.control}
-                              name="policyDocuments.guides"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={item.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(item.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...(field.value || []), item.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== item.id
-                                                )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal cursor-pointer">
-                                      {item.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-            </div>
-            
-            <div className="md:col-span-2 mt-6 p-6 bg-slate-50 rounded-lg border border-slate-200">
-              <h3 className="text-lg font-medium mb-4 text-primary">OS Hardening</h3>
-              <p className="mb-4 text-slate-600">Select the OS hardening standards you currently implement:</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                  <FormField
-                    control={form.control}
-                    name="osHardening.stig"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-4">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel className="text-md font-medium cursor-pointer">
-                            Security Technical Implementation Guides (STIG)
-                          </FormLabel>
-                          <p className="text-sm text-muted-foreground">
-                            Department of Defense standards for secure installations
-                          </p>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                
-                <div>
-                  <FormField
-                    control={form.control}
-                    name="osHardening.scap"
-                    render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-4">
-                        <FormControl>
-                          <Checkbox
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel className="text-md font-medium cursor-pointer">
-                            Security Content Automation Protocol (SCAP)
-                          </FormLabel>
-                          <p className="text-sm text-muted-foreground">
-                            Automated vulnerability management, measurement, and policy compliance
-                          </p>
-                        </div>
-                      </FormItem>
-                    )}
-                  />
-                </div>
-              </div>
-              
-              <div className="mt-4">
-                <h4 className="text-md font-semibold mb-3 text-slate-800">Additional Guidelines</h4>
-                <FormField
-                  control={form.control}
-                  name="osHardening.guidelines"
-                  render={() => (
-                    <FormItem>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {osHardeningOptions.slice(2).map((item) => (
-                          <FormField
-                            key={item.id}
-                            control={form.control}
-                            name="osHardening.guidelines"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={item.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(item.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([...(field.value || []), item.id])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== item.id
-                                              )
-                                            )
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal cursor-pointer">
-                                    {item.label}
-                                  </FormLabel>
-                                </FormItem>
-                              )
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-
-            <div className="md:col-span-2">
-              <h3 className="text-lg font-medium mb-4 text-primary">Contact Information</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="contactInfo.name"
+                  name="businessName"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Your Name</FormLabel>
+                      <FormLabel>Business Name</FormLabel>
                       <FormControl>
-                        <Input placeholder="Enter your name" {...field} />
+                        <Input placeholder="Enter your business name" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
                 
-                <div className="space-y-4">
+                <FormField
+                  control={form.control}
+                  name="businessAddress"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Business Address</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter your business address" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
-                    name="contactInfo.sameAsContact"
+                    name="businessLocation.state"
                     render={({ field }) => (
-                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                      <FormItem>
+                        <FormLabel>State/Province</FormLabel>
                         <FormControl>
-                          <Checkbox 
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(checked);
-                              
-                              // If checked, copy the name to point of contact
-                              if (checked) {
-                                const yourName = form.getValues().contactInfo.name;
-                                const yourEmail = form.getValues().contactInfo.email;
-                                
-                                form.setValue("contactInfo.pointOfContact", yourName);
-                                form.setValue("contactInfo.contactEmail", yourEmail);
-                              }
-                            }}
-                          />
+                          <Input placeholder="Enter state or province" {...field} />
                         </FormControl>
-                        <div className="space-y-1 leading-none">
-                          <FormLabel className="font-normal cursor-pointer">
-                            I am the business point of contact
-                          </FormLabel>
-                        </div>
+                        <FormMessage />
                       </FormItem>
                     )}
                   />
                   
                   <FormField
                     control={form.control}
-                    name="contactInfo.pointOfContact"
-                    render={({ field }) => {
-                      const { sameAsContact } = form.getValues().contactInfo;
-                      
-                      return (
+                    name="businessLocation.country"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Country</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter country" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <FormField
+                  control={form.control}
+                  name="industry"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Industry</FormLabel>
+                      <FormControl>
+                        <Input placeholder="e.g., Healthcare, Finance, Retail" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="employeeCount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Number of Employees</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select employee count range" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="1-10">1-10</SelectItem>
+                          <SelectItem value="11-50">11-50</SelectItem>
+                          <SelectItem value="51-200">51-200</SelectItem>
+                          <SelectItem value="201-500">201-500</SelectItem>
+                          <SelectItem value="501-1000">501-1000</SelectItem>
+                          <SelectItem value="1001+">1001+</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="businessServices"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Business Services Description</FormLabel>
+                      <FormControl>
+                        <Textarea 
+                          placeholder="Briefly describe your business services and offerings"
+                          className="h-24"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </TabsContent>
+              
+              {/* Infrastructure Tab */}
+              <TabsContent value="infrastructure" className="space-y-6">
+                <FormField
+                  control={form.control}
+                  name="operationMode"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Mode of Operation (select all that apply)</FormLabel>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        {operationModes.map((mode) => (
+                          <FormField
+                            key={mode.id}
+                            control={form.control}
+                            name="operationMode"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={mode.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(mode.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...field.value, mode.id]
+                                          : field.value?.filter(
+                                              (value) => value !== mode.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    {mode.label}
+                                  </FormLabel>
+                                </FormItem>
+                              );
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="internetPresence"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Internet Presence (select all that apply)</FormLabel>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        {internetPresenceOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="internetPresence"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={option.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(option.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...field.value, option.id]
+                                          : field.value?.filter(
+                                              (value) => value !== option.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    {option.label}
+                                  </FormLabel>
+                                </FormItem>
+                              );
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="securityMeasures"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Current Security Measures (select all that apply)</FormLabel>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        {securityMeasureOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="securityMeasures"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={option.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(option.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...field.value, option.id]
+                                          : field.value?.filter(
+                                              (value) => value !== option.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    {option.label}
+                                  </FormLabel>
+                                </FormItem>
+                              );
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="primaryConcerns"
+                  render={() => (
+                    <FormItem>
+                      <FormLabel>Primary Security Concerns (select all that apply)</FormLabel>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                        {primaryConcernOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="primaryConcerns"
+                            render={({ field }) => {
+                              return (
+                                <FormItem
+                                  key={option.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(option.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...field.value, option.id]
+                                          : field.value?.filter(
+                                              (value) => value !== option.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    {option.label}
+                                  </FormLabel>
+                                </FormItem>
+                              );
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </TabsContent>
+              
+              {/* Security Profile Tab */}
+              <TabsContent value="security" className="space-y-6">
+                <div className="border rounded-md p-4 mb-6">
+                  <h3 className="font-medium mb-4">Security Frameworks by Domain</h3>
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="frameworks.operations"
+                      render={() => (
                         <FormItem>
-                          <FormLabel>Business Point of Contact</FormLabel>
+                          <FormLabel>Operational Controls Frameworks</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {operationalFrameworks.map((framework) => (
+                              <FormField
+                                key={framework.id}
+                                control={form.control}
+                                name="frameworks.operations"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={framework.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(framework.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), framework.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== framework.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {framework.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="frameworks.management"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Management Controls Frameworks</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {managementFrameworks.map((framework) => (
+                              <FormField
+                                key={framework.id}
+                                control={form.control}
+                                name="frameworks.management"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={framework.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(framework.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), framework.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== framework.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {framework.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="frameworks.technology"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Technology Controls Frameworks</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {technologyFrameworks.map((framework) => (
+                              <FormField
+                                key={framework.id}
+                                control={form.control}
+                                name="frameworks.technology"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={framework.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(framework.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), framework.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== framework.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {framework.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">OS Hardening</h3>
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="osHardening.stig"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              STIG (Security Technical Implementation Guides)
+                            </FormLabel>
+                            <FormDescription>
+                              Standard security configurations for different operating systems
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="osHardening.scap"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              SCAP (Security Content Automation Protocol)
+                            </FormLabel>
+                            <FormDescription>
+                              Automated vulnerability checking and policy compliance
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+              
+              {/* Compliance Tab */}
+              <TabsContent value="compliance" className="space-y-6">
+                <div className="border rounded-md p-4 mb-6">
+                  <h3 className="font-medium mb-4">Compliance Requirements</h3>
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="complianceRequirements.frameworks"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Security Frameworks</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {complianceFrameworkOptions.map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="complianceRequirements.frameworks"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), option.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== option.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="complianceRequirements.standards"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Standards</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {standardsOptions.map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="complianceRequirements.standards"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), option.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== option.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="complianceRequirements.compliance"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Compliance</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {complianceOptions.map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="complianceRequirements.compliance"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), option.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== option.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="complianceRequirements.regulations"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Regulations</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {regulationOptions.map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="complianceRequirements.regulations"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), option.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== option.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Policy Documents</h3>
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="policyDocuments.policies"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Policies</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {policyOptions.map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="policyDocuments.policies"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), option.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== option.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="policyDocuments.procedures"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Procedures</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {procedureOptions.map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="policyDocuments.procedures"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), option.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== option.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="policyDocuments.plans"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Plans</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {planOptions.map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="policyDocuments.plans"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), option.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== option.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="policyDocuments.guides"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Guides</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {guideOptions.map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="policyDocuments.guides"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), option.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== option.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+              
+              {/* Contact & Confirmation Tab */}
+              <TabsContent value="contact" className="space-y-6">
+                <div className="border rounded-md p-4 mb-6">
+                  <h3 className="font-medium mb-4">Contact Information</h3>
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="contactInfo.name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Full Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter your full name" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="contactInfo.pointOfContact"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Role / Point of Contact</FormLabel>
+                          <FormControl>
+                            <Input placeholder="E.g., IT Manager, Security Officer" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="contactInfo.email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Email</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter your email address" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <div className="flex items-center space-x-2 mb-4">
+                      <Checkbox 
+                        id="same-as-contact" 
+                        onCheckedChange={(checked) => {
+                          form.setValue("contactInfo.sameAsContact", checked === true);
+                          handleSameAsContactChange(checked === true);
+                        }}
+                      />
+                      <label
+                        htmlFor="same-as-contact"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                      >
+                        Use same email as above for contact email
+                      </label>
+                    </div>
+                    
+                    <FormField
+                      control={form.control}
+                      name="contactInfo.contactEmail"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Contact Email (for assessment communications)</FormLabel>
                           <FormControl>
                             <Input 
-                              placeholder="Name of business point of contact" 
+                              placeholder="Enter contact email address" 
                               {...field} 
-                              disabled={sameAsContact === true}
+                              disabled={form.watch("contactInfo.sameAsContact")}
                             />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
-                      );
-                    }}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="contactInfo.email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Your Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Enter your email address" type="email" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="contactInfo.contactEmail"
-                  render={({ field }) => {
-                    const { sameAsContact } = form.getValues().contactInfo;
+                      )}
+                    />
                     
-                    return (
-                      <FormItem>
-                        <FormLabel>Point of Contact Email</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Email for point of contact" 
-                            type="email" 
-                            {...field} 
-                            disabled={sameAsContact === true}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="contactInfo.phone"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Phone</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Business phone number (with area code)" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
+                    <FormField
+                      control={form.control}
+                      name="contactInfo.phone"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Phone Number</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter your phone number" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                
+                <div className="border rounded-md p-4 mb-6">
+                  <h3 className="font-medium mb-4">Assessment Details</h3>
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="reportType"
+                      render={({ field }) => (
+                        <FormItem className="space-y-3">
+                          <FormLabel>Assessment Type</FormLabel>
+                          <FormControl>
+                            <RadioGroup
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                              className="flex flex-col space-y-1"
+                            >
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="preliminary" />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  Preliminary Assessment (Basic evaluation with key findings)
+                                </FormLabel>
+                              </FormItem>
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <RadioGroupItem value="comprehensive" />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  Comprehensive Assessment (Detailed analysis with complete recommendations)
+                                </FormLabel>
+                              </FormItem>
+                            </RadioGroup>
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Confirmation</h3>
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="availabilityConfirmation"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              I confirm my availability for a follow-up interview to populate the assessment matrix
+                            </FormLabel>
+                            <FormDescription>
+                              This is required to complete the SOS²A assessment process
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="referralPermission"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              I give permission to use this assessment for referral purposes
+                            </FormLabel>
+                            <FormDescription>
+                              Your information will be anonymized if used for referrals
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
             
-            <div className="md:col-span-2">
-              <h3 className="text-lg font-medium mb-4 text-primary">Participation Agreements</h3>
-              
-              <FormField
-                control={form.control}
-                name="availabilityConfirmation"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 mb-4">
-                    <FormControl>
-                      <Checkbox 
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="font-normal cursor-pointer">
-                        I confirm that I would be available to complete this assessment within 30 days if chosen.
-                      </FormLabel>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="referralPermission"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox 
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <div className="space-y-1 leading-none">
-                      <FormLabel className="font-normal cursor-pointer">
-                        As part of the free SOS²A assessment, I agree that my organization will remain accessible 
-                        to those who may inquire about the program based on our participation.
-                      </FormLabel>
-                      <FormMessage />
-                    </div>
-                  </FormItem>
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="flex justify-end mt-8">
-            <Button type="submit" className="bg-secondary hover:bg-orange-600">
-              Continue to Interview & Matrix Population
+            <Button type="submit" className="w-full">
+              Submit Questionnaire
             </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+          </form>
+        </Form>
+      </CardContent>
+    </Card>
   );
 }
