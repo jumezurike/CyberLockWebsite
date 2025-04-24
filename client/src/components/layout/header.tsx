@@ -1,6 +1,13 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import logoImage from "@/assets/cyberlockx-logo-resized.png";
+import { 
+  DropdownMenu, 
+  DropdownMenuContent, 
+  DropdownMenuItem, 
+  DropdownMenuTrigger 
+} from "@/components/ui/dropdown-menu";
+import { ChevronDown } from 'lucide-react';
 
 export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -104,12 +111,23 @@ export default function Header() {
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
-            <Link href="/dashboard" className="text-neutral-100 hover:text-secondary border-transparent flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              Dashboard
-            </Link>
-            <Link href="/about-us" className="text-neutral-100 hover:text-secondary border-transparent flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-              About Us
-            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger className="text-neutral-100 hover:text-secondary border-transparent flex items-center px-1 pt-1 text-sm font-medium">
+                Resources <ChevronDown className="h-4 w-4 ml-1" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="bg-primary border border-neutral-700">
+                <DropdownMenuItem asChild>
+                  <Link href="/dashboard" className="text-neutral-100 hover:text-secondary cursor-pointer">
+                    Dashboard
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/about-us" className="text-neutral-100 hover:text-secondary cursor-pointer">
+                    About Us
+                  </Link>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Link href="/sos2a-tool" className="bg-secondary hover:bg-green-600 text-white py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out">
               Get Started
             </Link>
