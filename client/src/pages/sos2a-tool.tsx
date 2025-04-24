@@ -14,8 +14,15 @@ export default function Sos2aTool() {
   const [matrixData, setMatrixData] = useState<MatrixItem[] | null>(null);
   const [report, setReport] = useState<AssessmentReport | null>(null);
   
-  // Progress percentage based on current step
-  const progressPercentage = step === 'questionnaire' ? 33 : step === 'matrix' ? 66 : 100;
+  // Progress percentage based on current step and report type
+  const isComprehensive = formData?.reportType === 'comprehensive';
+  const progressPercentage = step === 'questionnaire' 
+    ? 25 
+    : step === 'matrix' 
+      ? 50 
+      : (step === 'report' && !isComprehensive)
+        ? 75  // Preliminary report (75% complete)
+        : 100; // Comprehensive report (100% complete)
   
   // Handle form submission
   const handleQuestionnaireSubmit = (data: Sos2aFormData) => {
@@ -511,10 +518,23 @@ export default function Sos2aTool() {
               <div className={`${step === 'matrix' ? 'text-primary font-medium' : ''}`}>
                 2. Interview & Matrix Population (Gap Analysis)
               </div>
-              <div className={`${step === 'report' ? 'text-primary font-medium' : ''}`}>
-                3. {formData?.reportType === 'comprehensive' ? 'Comprehensive' : 'Preliminary'} Report
-              </div>
+              {isComprehensive ? (
+                <div className={`${step === 'report' ? 'text-primary font-medium' : ''}`}>
+                  3. Preliminary Report → 4. Comprehensive Report
+                </div>
+              ) : (
+                <div className={`${step === 'report' ? 'text-primary font-medium' : ''}`}>
+                  3. Preliminary Report
+                </div>
+              )}
             </div>
+            
+            {/* Add extra info about report progression if comprehensive is selected */}
+            {isComprehensive && (
+              <div className="mt-2 bg-blue-50 p-3 rounded-md border border-blue-100 text-sm text-blue-700">
+                <p><span className="font-medium">Note:</span> Comprehensive reports require completion of the preliminary report followed by 6 months of evidence collection using SOC monitoring, incident response tracking, and security tools.</p>
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>

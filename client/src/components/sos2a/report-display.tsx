@@ -407,9 +407,13 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
         
         <div className="flex flex-col md:flex-row gap-2">
           {report.reportType === 'preliminary' && (
-            <Button variant="default" onClick={() => setEvidenceDialog(true)}>
+            <Button 
+              variant="default" 
+              onClick={() => setEvidenceDialog(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white shadow-md"
+            >
               <Calendar className="mr-2 h-4 w-4" />
-              Schedule Evidence Collection
+              Schedule Comprehensive Assessment
             </Button>
           )}
           
@@ -424,9 +428,9 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
       <Dialog open={evidenceDialog} onOpenChange={setEvidenceDialog}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Schedule Evidence Collection</DialogTitle>
+            <DialogTitle>Upgrade to Comprehensive Assessment</DialogTitle>
             <DialogDescription>
-              Following your <span className="text-primary font-medium">free preliminary assessment</span>, the comprehensive (quantitative) assessment monitors the implementation of your mitigation strategies.
+              Following your <span className="text-primary font-medium">free preliminary assessment</span>, the comprehensive (quantitative) assessment monitors the implementation of your mitigation strategies and provides verifiable evidence of compliance for regulators and stakeholders.
             </DialogDescription>
           </DialogHeader>
           
@@ -468,7 +472,15 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <Button variant="ghost" onClick={() => setEvidenceDialog(false)}>
               Maybe Later
             </Button>
-            <Button type="button" onClick={() => setEvidenceDialog(false)}>
+            <Button 
+              type="button" 
+              onClick={() => {
+                // In a real application, this would open a calendar/scheduler
+                // or send data to a backend to initiate the comprehensive assessment process
+                alert("Your evidence collection schedule has been set! We'll contact you to begin the 6-month SOC monitoring period.");
+                setEvidenceDialog(false);
+              }}
+            >
               <Calendar className="mr-2 h-4 w-4" />
               Schedule Now
             </Button>
