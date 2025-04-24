@@ -7,7 +7,13 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <h3 className="text-xl font-bold font-heading mb-4">CyberLockX</h3>
+            <div className="mb-4">
+              <img 
+                src={logoImage} 
+                alt="CyberLockX Logo" 
+                className="h-24 w-auto mb-3"
+              />
+            </div>
             <p className="text-neutral-300 mb-4">The Ultimate SMB Application Security Hub for small and medium-sized businesses.</p>
             <div className="flex space-x-4">
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-accent">

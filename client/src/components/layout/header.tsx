@@ -38,14 +38,14 @@ export default function Header() {
   return (
     <nav className="bg-primary shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16">
+        <div className="flex justify-between h-20">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
               <Link href="/" className="flex items-center">
                 <img 
                   src={logoImage} 
                   alt="CyberLockX Logo" 
-                  className="h-10 w-auto"
+                  className="h-16 w-auto"
                 />
               </Link>
             </div>
