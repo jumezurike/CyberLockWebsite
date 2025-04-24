@@ -509,10 +509,10 @@ export default function Sos2aTool() {
                 1. Questionnaire
               </div>
               <div className={`${step === 'matrix' ? 'text-primary font-medium' : ''}`}>
-                2. Interview & Matrix Population
+                2. Interview & Matrix Population (Gap Analysis)
               </div>
               <div className={`${step === 'report' ? 'text-primary font-medium' : ''}`}>
-                3. Comprehensive Report
+                3. {formData?.reportType === 'comprehensive' ? 'Comprehensive' : 'Preliminary'} Report
               </div>
             </div>
           </div>
