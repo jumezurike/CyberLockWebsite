@@ -15,6 +15,7 @@ import {
   Lightbulb
 } from 'lucide-react';
 import mikePhoto from '@/assets/team/mike-ikonomou.png';
+import josiahPhoto from '@/assets/team/josiah-umezurike.png';
 
 const AboutUs = () => {
   return (
@@ -212,9 +213,13 @@ const AboutUs = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Josiah Umezurike */}
             <Card className="border-primary/10 shadow-md overflow-hidden">
-              <div className="aspect-[4/3] bg-gray-100 relative">
-                <div className="absolute inset-0 bg-primary/10 flex items-center justify-center">
-                  <span className="text-4xl font-semibold text-primary/20">Photo</span>
+              <div className="h-64 bg-primary/5 relative flex items-center justify-center">
+                <div className="w-36 h-36 rounded-full overflow-hidden mx-auto">
+                  <img 
+                    src={josiahPhoto} 
+                    alt="Josiah Umezurike" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               </div>
               <CardHeader className="pb-2">
@@ -245,8 +250,8 @@ const AboutUs = () => {
 
             {/* Mike Ikonomou */}
             <Card className="border-primary/10 shadow-md overflow-hidden">
-              <div className="aspect-[4/3] bg-primary/5 relative flex items-center justify-center">
-                <div className="w-40 h-40 rounded-full overflow-hidden mx-auto my-4">
+              <div className="h-64 bg-primary/5 relative flex items-center justify-center">
+                <div className="w-36 h-36 rounded-full overflow-hidden mx-auto">
                   <img 
                     src={mikePhoto} 
                     alt="Mike Ikonomou" 
