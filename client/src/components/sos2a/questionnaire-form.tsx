@@ -29,7 +29,7 @@ const formSchema = z.object({
   industry: z.string().min(1, "Please select your industry"),
   employeeCount: z.string().min(1, "Please select employee count"),
   businessServices: z.string().min(5, "Please describe the business services you offer"),
-  operationMode: z.string().min(1, "Please select your mode of operation"),
+  operationMode: z.array(z.string()).min(1, "Please select at least one mode of operation"),
   internetPresence: z.array(z.string()).min(1, "Please select at least one internet presence type"),
   securityMeasures: z.array(z.string()).min(1, "Please select at least one security measure"),
   primaryConcerns: z.array(z.string()).min(1, "Please select at least one primary concern"),
@@ -68,7 +68,7 @@ export default function QuestionnaireForm({
       industry: formData.industry || "",
       employeeCount: formData.employeeCount || "",
       businessServices: formData.businessServices || "",
-      operationMode: formData.operationMode || "",
+      operationMode: formData.operationMode || [],
       internetPresence: formData.internetPresence || [],
       securityMeasures: formData.securityMeasures || [],
       primaryConcerns: formData.primaryConcerns || [],
@@ -96,6 +96,15 @@ export default function QuestionnaireForm({
     { id: "email", label: "Email Filtering and Anti-Phishing Tools" },
     { id: "dns", label: "DNS Filtering and Secure DNS" },
     { id: "cloud", label: "Cloud Security Tools (CASB, WAF)" },
+  ];
+
+  const operationModeOptions = [
+    { id: "isp-modem", label: "ISP Modem" },
+    { id: "mobile-hotspot", label: "Mobile Hotspot" },
+    { id: "commercial-internet", label: "Commercial Internet" },
+    { id: "dedicated-connection", label: "Dedicated Connection" },
+    { id: "satellite", label: "Satellite" },
+    { id: "other", label: "Other" },
   ];
 
   const internetPresenceOptions = [
