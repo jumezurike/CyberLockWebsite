@@ -29,7 +29,7 @@ const formSchema = z.object({
   employeeCount: z.string().min(1, "Please select employee count"),
   businessServices: z.string().min(5, "Please describe the business services you offer"),
   operationMode: z.string().min(1, "Please select your mode of operation"),
-  internetPresence: z.string().min(1, "Please select your internet presence type"),
+  internetPresence: z.array(z.string()).min(1, "Please select at least one internet presence type"),
   securityMeasures: z.array(z.string()).min(1, "Please select at least one security measure"),
   primaryConcerns: z.array(z.string()).min(1, "Please select at least one primary concern"),
   contactInfo: z.object({
@@ -67,7 +67,7 @@ export default function QuestionnaireForm({
       employeeCount: formData.employeeCount || "",
       businessServices: formData.businessServices || "",
       operationMode: formData.operationMode || "",
-      internetPresence: formData.internetPresence || "",
+      internetPresence: formData.internetPresence || [],
       securityMeasures: formData.securityMeasures || [],
       primaryConcerns: formData.primaryConcerns || [],
       contactInfo: {
@@ -95,6 +95,15 @@ export default function QuestionnaireForm({
     { id: "cloud", label: "Cloud Security Tools (CASB, WAF)" },
   ];
 
+  const internetPresenceOptions = [
+    { id: "website", label: "Website" },
+    { id: "cloud-servers", label: "Servers in the Cloud" },
+    { id: "office-servers", label: "Servers in the Office" },
+    { id: "hybrid", label: "Hybrid (Cloud & On-Premises)" },
+    { id: "minimal", label: "Minimal Presence" },
+    { id: "none", label: "No Internet Presence" },
+  ];
+  
   const primaryConcerns = [
     { id: "data-breach", label: "Data Breaches" },
     { id: "ransomware", label: "Ransomware Attacks" },
@@ -249,31 +258,55 @@ export default function QuestionnaireForm({
               )}
             />
             
-            <FormField
-              control={form.control}
-              name="internetPresence"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Internet Presence</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your internet presence" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="website">Website</SelectItem>
-                      <SelectItem value="cloud-servers">Servers in the Cloud</SelectItem>
-                      <SelectItem value="office-servers">Servers in the Office</SelectItem>
-                      <SelectItem value="hybrid">Hybrid (Cloud & On-Premises)</SelectItem>
-                      <SelectItem value="minimal">Minimal Presence</SelectItem>
-                      <SelectItem value="none">No Internet Presence</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <div className="md:col-span-2">
+              <FormField
+                control={form.control}
+                name="internetPresence"
+                render={() => (
+                  <FormItem>
+                    <div className="mb-4">
+                      <FormLabel>Internet Presence (select all that apply)</FormLabel>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {internetPresenceOptions.map((item) => (
+                        <FormField
+                          key={item.id}
+                          control={form.control}
+                          name="internetPresence"
+                          render={({ field }) => {
+                            return (
+                              <FormItem
+                                key={item.id}
+                                className="flex flex-row items-start space-x-3 space-y-0"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(item.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, item.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== item.id
+                                            )
+                                          )
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal cursor-pointer">
+                                  {item.label}
+                                </FormLabel>
+                              </FormItem>
+                            )
+                          }}
+                        />
+                      ))}
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
 
             <div className="md:col-span-2">
               <FormField

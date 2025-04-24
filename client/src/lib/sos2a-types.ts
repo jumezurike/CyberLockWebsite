@@ -14,7 +14,7 @@ export interface Sos2aFormData {
   employeeCount: string;
   businessServices: string;
   operationMode: string;
-  internetPresence: string;
+  internetPresence: string[];
   securityMeasures: string[];
   primaryConcerns: string[];
   contactInfo: ContactInfo;
