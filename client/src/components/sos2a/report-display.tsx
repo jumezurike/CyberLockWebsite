@@ -50,13 +50,14 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
         </CardHeader>
         <CardContent className="space-y-6">
           {report.reportType === 'preliminary' && (
-            <Alert variant="warning" className="bg-amber-50 border-amber-200">
+            <Alert className="bg-amber-50 border-amber-200">
               <AlertCircle className="h-4 w-4 text-amber-600" />
               <AlertTitle className="text-amber-800">Preliminary Assessment</AlertTitle>
               <AlertDescription className="text-amber-700">
-                This is a qualitative assessment based on expert opinion and best practices. To receive a comprehensive 
-                quantitative assessment, 6 months of evidence collection is required following the implementation of the 
-                recommendations in this report.
+                This is a <span className="font-medium">free preliminary assessment</span> for your first engagement, based on expert 
+                opinion and best practices. The comprehensive quantitative assessment requires implementation of 
+                these mitigation strategies, including SOC, incident response, and security monitoring, followed 
+                by 6 months of evidence collection to verify effectiveness and compliance.
               </AlertDescription>
             </Alert>
           )}
@@ -67,7 +68,8 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <AlertTitle className="text-blue-800">Comprehensive Assessment</AlertTitle>
               <AlertDescription className="text-blue-700">
                 This comprehensive assessment includes quantitative analysis based on 6 months of evidence 
-                collection. It measures improvements and compliance across your network, infrastructure, and applications.
+                collection using industry tools (SIEM, network flow analyzers, event log analytics, vulnerability assessment).
+                It measures verifiable improvements and compliance across your network, infrastructure, and applications.
               </AlertDescription>
             </Alert>
           )}
@@ -305,24 +307,32 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           <DialogHeader>
             <DialogTitle>Schedule Evidence Collection</DialogTitle>
             <DialogDescription>
-              To receive a comprehensive (quantitative) assessment, 6 months of evidence collection is required.
+              Following your <span className="text-primary font-medium">free preliminary assessment</span>, the comprehensive (quantitative) assessment monitors the implementation of your mitigation strategies.
             </DialogDescription>
           </DialogHeader>
           
           <div className="space-y-4 py-4">
-            <p className="text-sm">
-              Our team will work with you to implement a secure evidence collection process that monitors:
-            </p>
+            <p className="text-sm font-medium">Step 1: Implement Mitigation Strategies</p>
             <ul className="list-disc pl-5 text-sm space-y-1">
-              <li>Network traffic patterns and anomalies</li>
-              <li>System and application logs</li>
-              <li>Security control implementations</li>
-              <li>User activity and behavior</li>
-              <li>Security incident responses</li>
+              <li>Establish Security Operations Center (SOC)</li>
+              <li>Implement incident response procedures</li>
+              <li>Deploy security monitoring tools</li>
+              <li>Apply recommended security controls</li>
+              <li>Address vulnerabilities and compliance gaps</li>
             </ul>
-            <p className="text-sm">
-              This data will be used to generate a comprehensive quantitative assessment with detailed 
-              RASBITA scoring and security maturity metrics.
+            
+            <p className="text-sm font-medium mt-4">Step 2: 6-Month Evidence Collection</p>
+            <ul className="list-disc pl-5 text-sm space-y-1">
+              <li>Deploy SIEM (Security Information & Event Management)</li>
+              <li>Configure network flow analyzers</li>
+              <li>Implement event log collection and analysis</li>
+              <li>Perform regular vulnerability assessments</li>
+              <li>Document incident response activities</li>
+            </ul>
+            
+            <p className="text-sm mt-4">
+              This process verifies the effectiveness of your security implementations through observable evidence,
+              enabling a comprehensive quantitative assessment with detailed RASBITA scoring.
             </p>
           </div>
           
