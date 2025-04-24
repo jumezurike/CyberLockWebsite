@@ -36,6 +36,8 @@ export interface Sos2aFormData {
     country: string;
   };
   industry: string;
+  customIndustry?: string;
+  showCustomIndustry?: boolean;
   employeeCount: string;
   businessServices: string;
   operationMode: string[];

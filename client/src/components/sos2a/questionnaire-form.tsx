@@ -22,6 +22,8 @@ const formSchema = z.object({
     country: z.string().min(2, "Country is required"),
   }),
   industry: z.string().min(2, "Industry is required"),
+  customIndustry: z.string().optional(),
+  showCustomIndustry: z.boolean().optional(),
   employeeCount: z.string().min(1, "Employee count is required"),
   businessServices: z.string().min(5, "Business services description is required"),
   operationMode: z.array(z.string()).min(1, "At least one operation mode is required"),
@@ -84,6 +86,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         country: "",
       },
       industry: "",
+      customIndustry: "",
+      showCustomIndustry: false,
       employeeCount: "",
       businessServices: "",
       operationMode: [],
@@ -371,13 +375,68 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Industry</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g., Healthcare, Finance, Retail" {...field} />
-                      </FormControl>
+                      <Select 
+                        onValueChange={(value) => {
+                          if (value === "other") {
+                            // Show custom industry input
+                            form.setValue("showCustomIndustry", true);
+                            // Don't set industry field yet - it will be set via the custom input
+                          } else {
+                            form.setValue("showCustomIndustry", false);
+                            field.onChange(value);
+                          }
+                        }} 
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select your industry" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="healthcare">Healthcare</SelectItem>
+                          <SelectItem value="finance">Finance & Banking</SelectItem>
+                          <SelectItem value="retail">Retail</SelectItem>
+                          <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                          <SelectItem value="education">Education</SelectItem>
+                          <SelectItem value="government">Government</SelectItem>
+                          <SelectItem value="technology">Technology</SelectItem>
+                          <SelectItem value="professional-services">Professional Services</SelectItem>
+                          <SelectItem value="hospitality">Hospitality</SelectItem>
+                          <SelectItem value="energy">Energy & Utilities</SelectItem>
+                          <SelectItem value="transportation">Transportation & Logistics</SelectItem>
+                          <SelectItem value="nonprofit">Non-Profit</SelectItem>
+                          <SelectItem value="other">Other (Please specify)</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
+                
+                {form.watch("showCustomIndustry") && (
+                  <FormField
+                    control={form.control}
+                    name="customIndustry"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Please specify your industry</FormLabel>
+                        <FormControl>
+                          <Input 
+                            placeholder="Enter your industry" 
+                            {...field} 
+                            onChange={(e) => {
+                              field.onChange(e);
+                              // Also update the main industry field
+                              form.setValue("industry", e.target.value);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )}
                 
                 <FormField
                   control={form.control}
@@ -1286,21 +1345,32 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               defaultValue={field.value}
                               className="flex flex-col space-y-1"
                             >
-                              <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormItem className="flex items-start space-x-3 space-y-0">
                                 <FormControl>
-                                  <RadioGroupItem value="preliminary" />
+                                  <RadioGroupItem value="preliminary" className="mt-1" />
                                 </FormControl>
-                                <FormLabel className="font-normal">
-                                  Preliminary Assessment (Basic evaluation with key findings)
-                                </FormLabel>
+                                <div className="space-y-1">
+                                  <FormLabel className="font-medium">Preliminary Assessment</FormLabel>
+                                  <p className="text-sm text-muted-foreground">
+                                    Qualitative assessment focusing on expert opinions and observational analysis 
+                                    to identify security gaps based on industry best practices. Includes immediate 
+                                    mitigation recommendations.
+                                  </p>
+                                </div>
                               </FormItem>
-                              <FormItem className="flex items-center space-x-3 space-y-0">
+                              <FormItem className="flex items-start space-x-3 space-y-0 mt-4">
                                 <FormControl>
-                                  <RadioGroupItem value="comprehensive" />
+                                  <RadioGroupItem value="comprehensive" className="mt-1" />
                                 </FormControl>
-                                <FormLabel className="font-normal">
-                                  Comprehensive Assessment (Detailed analysis with complete recommendations)
-                                </FormLabel>
+                                <div className="space-y-1">
+                                  <FormLabel className="font-medium">Comprehensive Assessment</FormLabel>
+                                  <p className="text-sm text-muted-foreground">
+                                    Quantitative assessment requiring 6 months of evidence collection following 
+                                    the preliminary assessment. Tracks all observable events in your network, 
+                                    infrastructure, and applications to measure improvement and compliance.
+                                    Includes detailed security maturity metrics and RASBITA scoring.
+                                  </p>
+                                </div>
                               </FormItem>
                             </RadioGroup>
                           </FormControl>
