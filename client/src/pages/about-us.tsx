@@ -14,7 +14,7 @@ import {
   Info,
   Lightbulb
 } from 'lucide-react';
-import mikePhoto from '@/assets/team/mike-ikonomou-new.png';
+import mikePhoto from '@/assets/team/mike-ikonomou-final.png';
 import josiahPhoto from '@/assets/team/josiah-umezurike.png';
 
 const AboutUs = () => {
