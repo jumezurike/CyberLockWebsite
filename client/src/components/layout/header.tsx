@@ -41,16 +41,13 @@ export default function Header() {
         <div className="flex justify-between h-28">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <div className="flex flex-col items-start">
-                <Link href="/" className="flex items-center">
-                  <img 
-                    src={logoImage} 
-                    alt="CyberLockX Logo" 
-                    className="h-24 w-auto"
-                  />
-                </Link>
-                <p className="text-accent font-bold text-md ml-2 -mt-2">Securing every CLICK!!!</p>
-              </div>
+              <Link href="/" className="flex items-center">
+                <img 
+                  src={logoImage} 
+                  alt="CyberLockX Logo" 
+                  className="h-24 w-auto"
+                />
+              </Link>
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               <a href={getHashLink("features")} onClick={navigateToSection("features")} className="text-white hover:text-accent border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
