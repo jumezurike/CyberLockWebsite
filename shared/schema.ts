@@ -52,7 +52,7 @@ export const rasbitaReports = pgTable("rasbita_reports", {
   businessId: text("business_id"),
   title: text("title").notNull(),
   incidentCategory: text("incident_category").notNull(),
-  overallRiskScore: integer("overall_risk_score").notNull(),
+  overallRiskScore: text("overall_risk_score").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
   company: jsonb("company").notNull(),

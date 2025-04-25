@@ -247,7 +247,7 @@ export class DatabaseStorage implements IStorage {
         businessId: report.businessId || `business-${Date.now()}`,
         title: report.title,
         incidentCategory: report.incidentCategory,
-        overallRiskScore: report.overallRiskScore,
+        overallRiskScore: report.overallRiskScore.toString(),
         company: report.company,
         incident: report.incident,
         riskItems: report.riskItems,
@@ -273,7 +273,7 @@ export class DatabaseStorage implements IStorage {
       .set({
         title: updatedReport.title,
         incidentCategory: updatedReport.incidentCategory,
-        overallRiskScore: updatedReport.overallRiskScore,
+        overallRiskScore: updatedReport.overallRiskScore.toString(),
         company: updatedReport.company,
         incident: updatedReport.incident,
         riskItems: updatedReport.riskItems,
