@@ -75,7 +75,7 @@ export default function Scorecard({ scorecard, reportType }: ScorecardProps) {
             </Table>
           </div>
           
-          <div className="h-[400px]">
+          <div className="h-[450px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -94,7 +94,17 @@ export default function Scorecard({ scorecard, reportType }: ScorecardProps) {
                   ))}
                 </Pie>
                 <Tooltip formatter={(value) => `${value}%`} />
-                <Legend />
+                <Legend 
+                  verticalAlign="bottom" 
+                  height={60} 
+                  wrapperStyle={{ 
+                    paddingTop: 30, 
+                    marginTop: 15,
+                    borderTop: '1px solid #f0f0f0' 
+                  }}
+                  iconSize={10}
+                  iconType="circle"
+                />
               </PieChart>
             </ResponsiveContainer>
           </div>
