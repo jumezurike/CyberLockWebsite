@@ -968,7 +968,7 @@ export default function RasbitaReportPage() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div className="bg-white p-4 rounded-lg border border-gray-200">
                     <h3 className="font-semibold text-lg text-purple-700 mb-2">Cybersecurity Risk Governance</h3>
                     <div className="flex items-center gap-2 mb-1">
@@ -991,6 +991,48 @@ export default function RasbitaReportPage() {
                     <p className="text-sm text-gray-600 mt-2">
                       {getTierDescription(report.governanceMaturity.managementScore, "management")}
                     </p>
+                  </div>
+                </div>
+                
+                {/* Tier Legend */}
+                <div className="bg-white p-4 rounded-lg border border-gray-200 mb-2">
+                  <h3 className="font-semibold text-purple-700 mb-3">RASBITA GOV & MGNT SELF-SCORING Tier Legend</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3">
+                    <div className="border border-gray-200 rounded p-2 bg-gray-50">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="bg-red-500 w-3 h-3 rounded-full"></div>
+                        <span className="font-semibold">Tier 0 (0-0): None</span>
+                      </div>
+                      <p className="text-xs text-gray-600">0% - Completely uninformed about cybersecurity risk</p>
+                    </div>
+                    <div className="border border-gray-200 rounded p-2 bg-gray-50">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="bg-orange-500 w-3 h-3 rounded-full"></div>
+                        <span className="font-semibold">Tier 1 (0-1): Partial</span>
+                      </div>
+                      <p className="text-xs text-gray-600">25% - Limited awareness and implementation</p>
+                    </div>
+                    <div className="border border-gray-200 rounded p-2 bg-gray-50">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="bg-yellow-500 w-3 h-3 rounded-full"></div>
+                        <span className="font-semibold">Tier 2 (1-2): Risk Informed</span>
+                      </div>
+                      <p className="text-xs text-gray-600">50% - Risk-informed, inconsistently implemented</p>
+                    </div>
+                    <div className="border border-gray-200 rounded p-2 bg-gray-50">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="bg-blue-500 w-3 h-3 rounded-full"></div>
+                        <span className="font-semibold">Tier 3 (2-3): Repeatable</span>
+                      </div>
+                      <p className="text-xs text-gray-600">75% - Formally approved, consistently implemented</p>
+                    </div>
+                    <div className="border border-gray-200 rounded p-2 bg-gray-50">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className="bg-green-500 w-3 h-3 rounded-full"></div>
+                        <span className="font-semibold">Tier 4 (3-4): Adaptive</span>
+                      </div>
+                      <p className="text-xs text-gray-600">100% - Adaptive, continuously improved</p>
+                    </div>
                   </div>
                 </div>
               </CardContent>
