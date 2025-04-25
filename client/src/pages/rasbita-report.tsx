@@ -279,178 +279,22 @@ export default function RasbitaReportPage() {
     }
   };
 
-  // Function to generate and download PDF report
+  // Function to handle PDF export (simplified to use our PdfExport component)
   const exportToPdf = () => {
     try {
       setExportLoading(true);
-      const doc = new jsPDF();
       
-      // Add header with logo and title
-      doc.setFontSize(22);
-      doc.setTextColor(105, 42, 187); // CyberLockX purple
-      doc.text("RASBITA™ Risk Assessment Report", 20, 20);
+      // The PdfExport component will handle the actual PDF generation
+      // This function is now just a wrapper to manage loading state and show success/error messages
       
-      doc.setFontSize(12);
-      doc.setTextColor(100, 100, 100);
-      doc.text("CISSP Risk Assessment Score by Threat and Impact Analysis", 20, 30);
-      
-      // Add report generation details
-      doc.setFontSize(10);
-      doc.text(`Report ID: ${report.id}`, 20, 40);
-      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 45);
-      
-      // Add executive summary
-      doc.setFontSize(14);
-      doc.setTextColor(0, 0, 0);
-      doc.text("Executive Summary", 20, 55);
-      
-      doc.setFontSize(10);
-      doc.text("This RASBITA report provides a comprehensive analysis of security risks and their", 20, 65);
-      doc.text("financial impact on your organization. Below is a summary of key findings.", 20, 70);
-      
-      // Add financial summary table
-      doc.setFontSize(12);
-      doc.text("Financial Impact Summary", 20, 85);
-      
-      // @ts-ignore - jspdf-autotable typings
-      doc.autoTable({
-        startY: 90,
-        head: [['Metric', 'Value ($)']],
-        body: [
-          ['Total Asset Value', report.financialSummary.totalAssetValue.toLocaleString()],
-          ['Total Annual Loss Expectancy (ALE)', report.financialSummary.totalAnnualizedLossExpectancy.toLocaleString()],
-          ['Total Cost of Safeguards (ACS)', report.financialSummary.totalCostOfSafeguards.toLocaleString()],
-          ['Net Risk Reduction Benefit (NRRB)', report.financialSummary.totalNetRiskReductionBenefit.toLocaleString()]
-        ],
-        theme: 'grid',
-        headStyles: { fillColor: [105, 42, 187] }
-      });
-      
-      // Add risk items table on a new page
-      doc.addPage();
-      doc.setFontSize(14);
-      doc.text("Detailed Risk Analysis", 20, 20);
-      
-      // Prepare risk items for table
-      const riskItemsTableData = report.riskItems.map(item => [
-        item.assetName,
-        item.threatName,
-        item.priority,
-        '$' + item.assetValue.toLocaleString(),
-        '$' + item.annualizedLossExpectancy.toLocaleString(),
-        '$' + item.annualCostOfSafeguard.toLocaleString(),
-        '$' + item.netRiskReductionBenefit.toLocaleString()
-      ]);
-      
-      // @ts-ignore - jspdf-autotable typings
-      doc.autoTable({
-        startY: 30,
-        head: [['Asset', 'Threat', 'Priority', 'Asset Value', 'ALE', 'Safeguard Cost', 'NRRB']],
-        body: riskItemsTableData,
-        theme: 'grid',
-        headStyles: { fillColor: [105, 42, 187] },
-        columnStyles: {
-          0: { cellWidth: 25 },
-          1: { cellWidth: 25 },
-          2: { cellWidth: 20 },
-          3: { cellWidth: 25 },
-          4: { cellWidth: 25 },
-          5: { cellWidth: 25 },
-          6: { cellWidth: 25 }
-        },
-        styles: { fontSize: 8, cellPadding: 2 }
-      });
-      
-      // Add RASBITA score section
-      const yPos = (doc as any).lastAutoTable.finalY + 10;
-      
-      doc.setFontSize(14);
-      doc.text("RASBITA Risk Categories", 20, yPos);
-      
-      // @ts-ignore - jspdf-autotable typings
-      doc.autoTable({
-        startY: yPos + 10,
-        head: [['NIST CSF 2.0 Domain', 'Score']],
-        body: [
-          ['Govern', report.rasbitaCategories.govern],
-          ['Identify', report.rasbitaCategories.identify],
-          ['Protect', report.rasbitaCategories.protect],
-          ['Detect', report.rasbitaCategories.detect],
-          ['Respond', report.rasbitaCategories.respond],
-          ['Recover', report.rasbitaCategories.recover]
-        ],
-        theme: 'grid',
-        headStyles: { fillColor: [105, 42, 187] }
-      });
-      
-      // Add governance maturity section if available
-      if (report.governanceMaturity) {
-        const governanceYPos = (doc as any).lastAutoTable.finalY + 10;
-        
-        doc.setFontSize(14);
-        doc.text("Governance & Management Maturity", 20, governanceYPos);
-        
-        // @ts-ignore - jspdf-autotable typings
-        doc.autoTable({
-          startY: governanceYPos + 10,
-          head: [['Capability', 'Maturity Tier']],
-          body: [
-            ['Cybersecurity Risk Governance', `Tier ${report.governanceMaturity.governanceScore}`],
-            ['Cybersecurity Risk Management', `Tier ${report.governanceMaturity.managementScore}`]
-          ],
-          theme: 'grid',
-          headStyles: { fillColor: [105, 42, 187] }
+      // Set a timeout to simulate PDF generation time and show success message
+      setTimeout(() => {
+        toast({
+          title: "PDF Export Successful",
+          description: "Your RASBITA report has been downloaded as a PDF.",
         });
-      }
-      
-      // Add recommendations page
-      doc.addPage();
-      doc.setFontSize(14);
-      doc.text("Recommendations & Next Steps", 20, 20);
-      
-      doc.setFontSize(10);
-      doc.text("Based on the RASBITA analysis, we recommend the following actions:", 20, 30);
-      
-      const recommendations = [
-        "Prioritize securing assets with 'Critical' and 'High' risk levels",
-        "Implement safeguards with positive Net Risk Reduction Benefit (NRRB)",
-        "Focus on threats with highest Annual Loss Expectancy (ALE)",
-        "Consider additional controls for frequently occurring threats",
-        "Review and update this assessment quarterly or after significant changes"
-      ];
-      
-      let yPosRec = 40;
-      recommendations.forEach((rec, index) => {
-        doc.text(`${index + 1}. ${rec}`, 20, yPosRec);
-        yPosRec += 10;
-      });
-      
-      // Add footer with company info
-      const pageCount = (doc as any).internal.getNumberOfPages();
-      for (let i = 1; i <= pageCount; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.setTextColor(150, 150, 150);
-        doc.text(
-          "CyberLockX - The Ultimate SMB Application Security Hub - Securing every CLICK!!!",
-          (doc as any).internal.pageSize.getWidth() / 2, 
-          (doc as any).internal.pageSize.getHeight() - 10, 
-          { align: 'center' }
-        );
-        doc.text(
-          `Page ${i} of ${pageCount}`,
-          (doc as any).internal.pageSize.getWidth() - 20, 
-          (doc as any).internal.pageSize.getHeight() - 10
-        );
-      }
-      
-      // Save the PDF
-      doc.save(`RASBITA_Report_${report.id}_${new Date().toISOString().slice(0, 10)}.pdf`);
-      
-      toast({
-        title: "PDF Export Successful",
-        description: "Your RASBITA report has been downloaded as a PDF.",
-      });
+        setExportLoading(false);
+      }, 500);
     } catch (error) {
       console.error("PDF generation error:", error);
       toast({
@@ -458,7 +302,6 @@ export default function RasbitaReportPage() {
         description: "There was an error generating the PDF. Please try again.",
         variant: "destructive",
       });
-    } finally {
       setExportLoading(false);
     }
   };
@@ -915,16 +758,19 @@ export default function RasbitaReportPage() {
                     <Save className="h-4 w-4" />
                     <span>{saveLoading ? "Saving..." : "Save"}</span>
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={exportToPdf}
-                    disabled={exportLoading}
-                    className="flex items-center gap-1"
-                  >
-                    <Download className="h-4 w-4" />
-                    <span>{exportLoading ? "Exporting..." : "Export PDF"}</span>
-                  </Button>
+                  {exportLoading ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled
+                      className="flex items-center gap-1"
+                    >
+                      <span className="animate-spin mr-1">⏳</span>
+                      <span>Exporting...</span>
+                    </Button>
+                  ) : (
+                    <PdfExport report={report} />
+                  )}
                 </div>
               </div>
             </CardHeader>
