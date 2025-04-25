@@ -236,13 +236,12 @@ export interface RasbitaReport {
   };
   riskItems: RasbitaRiskItem[];
   rasbitaCategories: {
-    risk: number;
-    adversarialInsight: number;
-    securityControls: number;
-    businessImpact: number;
-    informationAssurance: number;
-    threatIntelligence: number;
-    architecture: number;
+    govern: number;
+    identify: number;
+    protect: number;
+    detect: number;
+    respond: number;
+    recover: number;
   };
   financialSummary: {
     totalAssetValue: number;
@@ -339,13 +338,12 @@ export interface AssessmentReport {
   rasbitaScore: {
     total: number;
     categories: {
-      risk: number;
-      adversarialInsight: number;
-      securityControls: number;
-      businessImpact: number;
-      informationAssurance: number;
-      threatIntelligence: number;
-      architecture: number;
+      govern: number;
+      identify: number;
+      protect: number;
+      detect: number;
+      respond: number;
+      recover: number;
     };
   };
 }

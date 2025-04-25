@@ -125,13 +125,12 @@ const sampleReport: RasbitaReport = {
     }
   ],
   rasbitaCategories: {
-    risk: 71,
-    adversarialInsight: 65,
-    securityControls: 62,
-    businessImpact: 78,
-    informationAssurance: 59,
-    threatIntelligence: 68,
-    architecture: 74
+    govern: 72,
+    identify: 68,
+    protect: 65,
+    detect: 70,
+    respond: 63,
+    recover: 58
   },
   financialSummary: {
     totalAssetValue: 315000,
@@ -324,15 +323,14 @@ export default function RasbitaReportPage() {
       // @ts-ignore - jspdf-autotable typings
       doc.autoTable({
         startY: yPos + 10,
-        head: [['Category', 'Score']],
+        head: [['NIST CSF 2.0 Domain', 'Score']],
         body: [
-          ['Risk', report.rasbitaCategories.risk],
-          ['Adversarial Insight', report.rasbitaCategories.adversarialInsight],
-          ['Security Controls', report.rasbitaCategories.securityControls],
-          ['Business Impact', report.rasbitaCategories.businessImpact],
-          ['Information Assurance', report.rasbitaCategories.informationAssurance],
-          ['Threat Intelligence', report.rasbitaCategories.threatIntelligence],
-          ['Architecture', report.rasbitaCategories.architecture]
+          ['Govern', report.rasbitaCategories.govern],
+          ['Identify', report.rasbitaCategories.identify],
+          ['Protect', report.rasbitaCategories.protect],
+          ['Detect', report.rasbitaCategories.detect],
+          ['Respond', report.rasbitaCategories.respond],
+          ['Recover', report.rasbitaCategories.recover]
         ],
         theme: 'grid',
         headStyles: { fillColor: [105, 42, 187] }
@@ -494,6 +492,16 @@ export default function RasbitaReportPage() {
             totalAnnualizedLossExpectancy: riskItems.reduce((sum, item) => sum + (item.annualizedLossExpectancy || 0), 0),
             totalCostOfSafeguards: riskItems.reduce((sum, item) => sum + (item.annualCostOfSafeguard || 0), 0),
             totalNetRiskReductionBenefit: riskItems.reduce((sum, item) => sum + (item.netRiskReductionBenefit || 0), 0)
+          };
+          
+          // Add NIST CSF 2.0 framework domain scores
+          newReport.rasbitaCategories = {
+            govern: Math.round(55 + Math.random() * 25),
+            identify: Math.round(55 + Math.random() * 25),
+            protect: Math.round(55 + Math.random() * 25),
+            detect: Math.round(55 + Math.random() * 25),
+            respond: Math.round(55 + Math.random() * 25),
+            recover: Math.round(55 + Math.random() * 25)
           };
           
           // Add dashboard data with all required properties
