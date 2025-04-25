@@ -58,11 +58,11 @@ const formSchema = z.object({
   totalDevicesInDepartment: z.string().refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
     message: "Total device count must be a non-negative number",
   }),
-  dataClass: z.enum(["system_file", "non_phi_pii", "phi", "pii"]),
-  dataSpread: z.enum(["widely_spread", "moderately_spread", "limited_spread"]),
+  dataClass: z.string(), // Accept any string from the extended options
+  dataSpread: z.enum(["widely_spread", "moderately_spread", "limited_spread", "minimally_spread", "contained", "publicly_available"]),
   dataLossPercentage: z.enum(["1_20", "21_40", "41_60", "61_80", "81_100"]),
   deviceUsageFrequency: z.enum(["daily", "often", "rarely"]),
-  deviceEnvironment: z.enum(["production", "staging", "testing"]),
+  deviceEnvironment: z.enum(["production", "staging", "testing", "disaster_recovery", "development"]),
   threatValue: z.string(),
   threatCost: z.string(),
   machineCost: z.string(),
