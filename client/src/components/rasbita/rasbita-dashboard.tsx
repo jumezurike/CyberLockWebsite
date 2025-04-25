@@ -11,56 +11,81 @@ interface RasbitaDashboardProps {
 
 export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
   // Format currency with commas and 2 decimal places
-  const formatCurrency = (value: number) => {
+  const formatCurrency = (value: number | undefined | null) => {
+    if (value === undefined || value === null) {
+      return '$0.00';
+    }
     return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
   };
 
+  // Ensure all properties exist with defaults for safety
+  const rasbitaCategories = report.rasbitaCategories || {
+    risk: 50,
+    adversarialInsight: 50,
+    securityControls: 50,
+    businessImpact: 50,
+    informationAssurance: 50,
+    threatIntelligence: 50,
+    architecture: 50
+  };
+  
   // Data for the radar chart
   const radarData = [
     {
       subject: 'R (Risk)',
-      value: report.rasbitaCategories.risk,
+      value: rasbitaCategories.risk || 0,
       fullMark: 100,
     },
     {
       subject: 'A (Adversarial)',
-      value: report.rasbitaCategories.adversarialInsight,
+      value: rasbitaCategories.adversarialInsight || 0,
       fullMark: 100,
     },
     {
       subject: 'S (Security)',
-      value: report.rasbitaCategories.securityControls,
+      value: rasbitaCategories.securityControls || 0,
       fullMark: 100,
     },
     {
       subject: 'B (Business)',
-      value: report.rasbitaCategories.businessImpact,
+      value: rasbitaCategories.businessImpact || 0,
       fullMark: 100,
     },
     {
       subject: 'I (Information)',
-      value: report.rasbitaCategories.informationAssurance,
+      value: rasbitaCategories.informationAssurance || 0,
       fullMark: 100,
     },
     {
       subject: 'T (Threat)',
-      value: report.rasbitaCategories.threatIntelligence,
+      value: rasbitaCategories.threatIntelligence || 0,
       fullMark: 100,
     },
     {
       subject: 'A (Architecture)',
-      value: report.rasbitaCategories.architecture,
+      value: rasbitaCategories.architecture || 0,
       fullMark: 100,
     },
   ];
 
+  // Ensure financial summary exists with defaults
+  const financialSummary = report.financialSummary || {
+    totalAssetValue: 0,
+    totalAnnualizedLossExpectancy: 0,
+    totalCostOfSafeguards: 0,
+    totalNetRiskReductionBenefit: 0
+  };
+  
+  // Ensure risk items exist with defaults
+  const riskItems = report.riskItems || [];
+  
   // Data for the cost-benefit analysis chart
-  const costBenefitData = report.riskItems.map(item => ({
-    name: item.assetName.substring(0, 15) + (item.assetName.length > 15 ? '...' : ''),
-    ale: item.annualizedLossExpectancy,
-    aleAfter: item.annualizedLossExpectancyAfterControls,
-    acs: item.annualCostOfSafeguard,
-    nrrb: item.netRiskReductionBenefit,
+  const costBenefitData = riskItems.map(item => ({
+    name: (item.assetName || "Unknown Asset").substring(0, 15) + ((item.assetName || "").length > 15 ? '...' : ''),
+    ale: item.annualizedLossExpectancy || 0,
+    aleAfter: item.annualizedLossExpectancyAfterControls || 0,
+    acs: item.annualCostOfSafeguard || 0,
+    nrrb: item.netRiskReductionBenefit || 0,
   }));
 
   // Function to determine status color based on NRRB value
@@ -107,18 +132,21 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
     }
   };
 
+  // Ensure overall risk score has a default value
+  const overallRiskScore = report.overallRiskScore || 50;
+  
   return (
     <div className="rasbita-dashboard space-y-6">
       {/* Risk Score Notification Card */}
-      <Card className={`border-l-4 border-${getRiskAssessment(report.overallRiskScore).color}-500 mb-6`}>
+      <Card className={`border-l-4 border-${getRiskAssessment(overallRiskScore).color}-500 mb-6`}>
         <CardContent className="flex items-start gap-4 pt-6">
-          {getRiskAssessment(report.overallRiskScore).icon}
+          {getRiskAssessment(overallRiskScore).icon}
           <div>
             <h3 className="text-lg font-semibold mb-1">
-              Risk Score: {report.overallRiskScore.toFixed(1)} - {getRiskAssessment(report.overallRiskScore).level} ({getRiskAssessment(report.overallRiskScore).title})
+              Risk Score: {overallRiskScore.toFixed(1)} - {getRiskAssessment(overallRiskScore).level} ({getRiskAssessment(overallRiskScore).title})
             </h3>
             <p className="text-gray-700">
-              {getRiskAssessment(report.overallRiskScore).notification}
+              {getRiskAssessment(overallRiskScore).notification}
             </p>
           </div>
         </CardContent>
@@ -236,20 +264,20 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
               <div className="grid grid-cols-2 gap-4">
                 <div className="bg-gray-50 p-4 rounded-md">
                   <div className="text-sm text-gray-500">Total Asset Value</div>
-                  <div className="font-bold text-xl text-chart-4">{formatCurrency(report.financialSummary.totalAssetValue)}</div>
+                  <div className="font-bold text-xl text-chart-4">{formatCurrency(financialSummary.totalAssetValue)}</div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-md">
                   <div className="text-sm text-gray-500">Total ALE (Before)</div>
-                  <div className="font-bold text-xl text-chart-4">{formatCurrency(report.financialSummary.totalAnnualizedLossExpectancy)}</div>
+                  <div className="font-bold text-xl text-chart-4">{formatCurrency(financialSummary.totalAnnualizedLossExpectancy)}</div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-md">
                   <div className="text-sm text-gray-500">Total Cost of Safeguards</div>
-                  <div className="font-bold text-xl text-chart-4">{formatCurrency(report.financialSummary.totalCostOfSafeguards)}</div>
+                  <div className="font-bold text-xl text-chart-4">{formatCurrency(financialSummary.totalCostOfSafeguards)}</div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-md">
                   <div className="text-sm text-gray-500">Net Risk Reduction Benefit</div>
-                  <div className={`font-bold text-xl ${getNRRBColor(report.financialSummary.totalNetRiskReductionBenefit)}`}>
-                    {formatCurrency(report.financialSummary.totalNetRiskReductionBenefit)}
+                  <div className={`font-bold text-xl ${getNRRBColor(financialSummary.totalNetRiskReductionBenefit || 0)}`}>
+                    {formatCurrency(financialSummary.totalNetRiskReductionBenefit)}
                   </div>
                 </div>
               </div>
