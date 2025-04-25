@@ -773,12 +773,12 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="assetName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Primary Asset Name</FormLabel>
+                        <FormLabel>What is the most critical asset affected by this incident?</FormLabel>
                         <FormControl>
                           <Input placeholder="Customer Database" {...field} />
                         </FormControl>
                         <FormDescription>
-                          Name the most critical asset affected by this incident
+                          Provide the name of the primary asset impacted
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -831,7 +831,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="totalDataCount"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Total Data Count</FormLabel>
+                          <FormLabel>How many data records were affected by this incident?</FormLabel>
                           <div className="flex flex-col space-y-2">
                             <div className="flex items-center gap-2 w-full">
                               <FormControl>
@@ -895,12 +895,12 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="totalDevicesInDepartment"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Total Devices in Department</FormLabel>
+                          <FormLabel>How many total devices are in this department or location?</FormLabel>
                           <FormControl>
                             <Input type="number" min="0" placeholder="10" {...field} />
                           </FormControl>
                           <FormDescription>
-                            Total number of devices in the locale or department
+                            Enter the total number of devices in the affected area
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -912,12 +912,12 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="damagedDevices"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Damaged/Compromised Devices</FormLabel>
+                          <FormLabel>How many devices were damaged or compromised in this incident?</FormLabel>
                           <FormControl>
                             <Input type="number" min="0" placeholder="1" {...field} />
                           </FormControl>
                           <FormDescription>
-                            Number of devices damaged in the incident
+                            Enter the number of affected devices
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -931,7 +931,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="deviceUsageFrequency"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Device Usage Frequency</FormLabel>
+                          <FormLabel>How frequently is this device used for business operations?</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -947,7 +947,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                             </SelectContent>
                           </Select>
                           <FormDescription>
-                            How frequently the device is used for business
+                            Select the typical usage pattern for this device
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
