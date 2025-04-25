@@ -4,6 +4,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface GovernanceAssessmentProps {
   onComplete: (scores: GovernanceScores) => void;
@@ -12,21 +14,23 @@ interface GovernanceAssessmentProps {
 export interface GovernanceScores {
   governanceScore: number; // 0-4
   managementScore: number; // 0-4
+  monthsAtTier: number; // Number of months at current tier
+  desireToImprove: boolean; // Whether they want to improve
 }
 
 export default function GovernanceAssessment({ onComplete }: GovernanceAssessmentProps) {
   const [activeTab, setActiveTab] = useState("governance");
-  const [governanceScore, setGovernanceScore] = useState<number | null>(null);
-  const [managementScore, setManagementScore] = useState<number | null>(null);
+  const [governanceScore, setGovernanceScore] = useState<number>(0); // Default to Tier 0
+  const [managementScore, setManagementScore] = useState<number>(0); // Default to Tier 0
+  const [monthsAtTier, setMonthsAtTier] = useState<number>(0);
+  const [desireToImprove, setDesireToImprove] = useState<boolean>(false);
   
   const handleSubmit = () => {
-    if (governanceScore === null || managementScore === null) {
-      return;
-    }
-    
     onComplete({
       governanceScore,
-      managementScore
+      managementScore,
+      monthsAtTier,
+      desireToImprove
     });
   };
   
@@ -45,12 +49,13 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
           <TabsList className="mb-6">
             <TabsTrigger value="governance">Cybersecurity Risk Governance</TabsTrigger>
             <TabsTrigger value="management">Cybersecurity Risk Management</TabsTrigger>
+            <TabsTrigger value="additional">Additional Questions</TabsTrigger>
           </TabsList>
           
           <TabsContent value="governance">
             <div className="space-y-6">
               <div className="text-lg font-semibold text-chart-4">
-                Cybersecurity Risk Governance Assessment
+                Question 1: What tier is your organization?
               </div>
               <p className="text-gray-600">
                 Evaluate your organization's approach to cybersecurity risk governance.
@@ -58,7 +63,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
               </p>
               
               <RadioGroup 
-                value={governanceScore?.toString() || ""} 
+                value={governanceScore?.toString() || "0"} 
                 onValueChange={(value) => setGovernanceScore(parseInt(value))}
                 className="space-y-4"
               >
@@ -77,8 +82,8 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                   <div className="space-y-1.5">
                     <Label htmlFor="governance-1" className="text-base font-semibold">Tier 1: Partial</Label>
                     <p className="text-sm text-gray-500">
-                      Application of the organizational cybersecurity risk strategy is managed in an ad hoc manner.
-                      Prioritization is ad hoc and not formally based on objectives or threat environment.
+                      Application of cybersecurity risk governance is ad hoc and prioritization is not 
+                      explicitly considered.
                     </p>
                   </div>
                 </div>
@@ -127,7 +132,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <Button 
                   variant="outline" 
                   onClick={() => setActiveTab("management")}
-                  disabled={governanceScore === null}
+                  className="bg-chart-4 text-white hover:bg-purple-700"
                 >
                   Continue to Risk Management
                 </Button>
@@ -146,7 +151,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
               </p>
               
               <RadioGroup 
-                value={managementScore?.toString() || ""} 
+                value={managementScore?.toString() || "0"} 
                 onValueChange={(value) => setManagementScore(parseInt(value))}
                 className="space-y-4"
               >
@@ -168,7 +173,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                       There is limited awareness of cybersecurity risks at the organizational level.
                       The organization implements cybersecurity risk management on an irregular, case-by-case basis.
                       The organization may not have processes that enable cybersecurity information to be shared within the organization.
-                      The organization is generally unaware of the cybersecurity risks associated with its suppliers and the products and services it acquires and uses.
+                      The organization is generally unaware of the cybersecurity risks associated with its third-party suppliers or business partners.
                     </p>
                   </div>
                 </div>
@@ -205,7 +210,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                     <p className="text-sm text-gray-500">
                       The organization adapts its cybersecurity practices based on previous and current cybersecurity activities, including lessons learned and predictive indicators.
                       The organization uses real-time or near real-time information to understand and consistently act upon cybersecurity risks associated with the products and services it provides and uses.
-                      Cybersecurity information is constantly shared throughout the organization and with authorized third parties.
+                      Cybersecurity information is consistently and accurately shared throughout the organization and with authorized third parties.
                     </p>
                   </div>
                 </div>
@@ -216,9 +221,79 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                   Back to Governance
                 </Button>
                 <Button 
-                  className="bg-chart-4 hover:bg-purple-700" 
+                  className="bg-chart-4 text-white hover:bg-purple-700" 
+                  onClick={() => setActiveTab("additional")}
+                >
+                  Continue to Additional Questions
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="additional">
+            <div className="space-y-6">
+              <div className="text-lg font-semibold text-chart-4">
+                Question 2: Time at Current Tier and Improvement Goals
+              </div>
+              
+              <div className="space-y-4 mb-6">
+                <div className="space-y-2">
+                  <Label htmlFor="months-at-tier" className="text-md font-medium">
+                    How many months has your organization been at Tier {governanceScore}?
+                  </Label>
+                  <Input 
+                    id="months-at-tier" 
+                    type="number" 
+                    min="0"
+                    value={monthsAtTier.toString()} 
+                    onChange={(e) => setMonthsAtTier(parseInt(e.target.value) || 0)}
+                    className="max-w-xs"
+                  />
+                </div>
+                
+                <div className="flex items-start space-x-2 pt-4">
+                  <Checkbox 
+                    id="improvement" 
+                    checked={desireToImprove}
+                    onCheckedChange={(checked) => {
+                      setDesireToImprove(checked === true);
+                    }}
+                  />
+                  <div className="grid gap-1.5 leading-none">
+                    <label
+                      htmlFor="improvement"
+                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                    >
+                      Would you like to improve your cybersecurity maturity?
+                    </label>
+                    <p className="text-sm text-muted-foreground">
+                      Our SOS²A (SMB Organizational and System Security Analysis) can help you improve your security maturity.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-8 bg-purple-50 p-4 rounded-md">
+                <h3 className="font-medium text-chart-4 mb-2">Why this matters</h3>
+                <p className="text-sm text-gray-700">
+                  Understanding your current tier and how long you've been operating at this level helps establish your organization's security maturity baseline. 
+                  Organizations that remain at lower tiers for extended periods face increased risk exposure.
+                </p>
+                <p className="text-sm text-gray-700 mt-2">
+                  CyberLockX's SOS²A assessment can help you identify gaps and create a roadmap to reach higher tiers of cybersecurity maturity.
+                </p>
+              </div>
+              
+              <div className="flex justify-between mt-4">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setActiveTab("management")}
+                >
+                  Back to Risk Management
+                </Button>
+                <Button 
+                  className="bg-chart-4 text-white hover:bg-purple-700" 
                   onClick={handleSubmit}
-                  disabled={!isComplete}
                 >
                   Complete Assessment
                 </Button>
@@ -227,7 +302,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
           </TabsContent>
         </Tabs>
         
-        {isComplete && (
+        {isComplete && governanceScore !== null && managementScore !== null && (
           <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-md">
             <div className="flex items-center text-green-700 gap-2 mb-2">
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -241,9 +316,12 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
             <ul className="mt-2 space-y-1 text-sm text-green-600">
               <li>• Governance Tier: {getTierLabel(governanceScore)}</li>
               <li>• Management Tier: {getTierLabel(managementScore)}</li>
+              <li>• Time at current tier: {monthsAtTier} months</li>
+              <li>• Improvement desired: {desireToImprove ? 'Yes' : 'No'}</li>
             </ul>
             <p className="mt-2 text-sm text-green-600">
               Click "Complete Assessment" to incorporate these results into your RASBITA report.
+              {desireToImprove && <span className="font-semibold"> We recommend using SOS²A to improve your security maturity.</span>}
             </p>
           </div>
         )}
