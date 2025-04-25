@@ -170,6 +170,70 @@ export interface ScorecardItem {
   notes?: string; // Optional notes about this score
 }
 
+export interface RasbitaRiskItem {
+  assetName: string;
+  assetValue: number; // AV
+  threatName: string;
+  exposureFactor: number; // EF (percentage as decimal, e.g., 0.3 for 30%)
+  annualizedRateOfOccurrence: number; // ARO
+  singleLossExpectancy: number; // SLE = AV * EF
+  annualizedLossExpectancy: number; // ALE = SLE * ARO
+  annualCostOfSafeguard: number; // ACS
+  annualizedLossExpectancyAfterControls: number; // ALE after implementing controls
+  netRiskReductionBenefit: number; // NRRB = [ALE(prior) - ALE(post)] - ACS
+  priority: 'Critical' | 'High' | 'Medium' | 'Low'; // Based on impact and probability
+  probability: number; // 0-1 representing likelihood of occurrence
+  impact: number; // 1-10 representing severity of impact
+  feasibilityFactors: {
+    organizational: boolean;
+    behavioral: boolean;
+    technical: boolean;
+    political: boolean;
+  };
+  deviceInfo?: {
+    deviceType: string;
+    deviceCount: number;
+    damagedDevices: number;
+  };
+}
+
+export interface RasbitaReport {
+  id: string;
+  businessId: string;
+  createdAt: string;
+  overallRiskScore: number;
+  riskItems: RasbitaRiskItem[];
+  rasbitaCategories: {
+    risk: number;
+    adversarialInsight: number;
+    securityControls: number;
+    businessImpact: number;
+    informationAssurance: number;
+    threatIntelligence: number;
+    architecture: number;
+  };
+  financialSummary: {
+    totalAssetValue: number;
+    totalAnnualizedLossExpectancy: number;
+    totalCostOfSafeguards: number;
+    totalNetRiskReductionBenefit: number;
+  };
+  dashboard: {
+    mostFrequentUser: string;
+    mostCurrentReportDate: string;
+    userCount: number;
+    mostFrequentThreat: string;
+    leastFrequentThreat: string;
+    minThreatCost: number;
+    maxThreatCost: number;
+    minALE: number;
+    maxALE: number;
+    minACS: number;
+    maxACS: number;
+    mostFrequentPriority: string;
+  };
+}
+
 export interface AssessmentReport {
   id: string;
   businessId: string;
