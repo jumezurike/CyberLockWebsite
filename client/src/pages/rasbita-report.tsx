@@ -614,10 +614,12 @@ export default function RasbitaReportPage() {
         availability: 6,
         threatLevel: getRiskLevelThreatLevel(riskLevel),
         feasibilityFactors: {
+          organizational: true,
+          behavioral: true,
           technical: true,
+          political: true,
           operational: true,
-          economic: true,
-          political: true
+          economic: true
         }
       };
       

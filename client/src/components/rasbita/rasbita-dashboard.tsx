@@ -10,12 +10,25 @@ interface RasbitaDashboardProps {
 }
 
 export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
-  // Format currency with commas and 2 decimal places
+  // Format currency with commas and 0 decimal places for better readability
   const formatCurrency = (value: number | undefined | null) => {
-    if (value === undefined || value === null) {
-      return '$0.00';
+    // Return $0 if value is undefined, null, NaN, or less than 0.01
+    if (value === undefined || value === null || isNaN(value) || value < 0.01) {
+      return '$0';
     }
-    return `$${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    
+    try {
+      // Use Intl.NumberFormat for safer currency formatting
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+      }).format(value);
+    } catch (error) {
+      console.error("Error formatting currency value:", error);
+      return '$0'; // Fallback value if formatting fails
+    }
   };
 
   // Ensure all properties exist with defaults for safety
