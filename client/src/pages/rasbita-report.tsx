@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { Download, Mail, Share2, FileText } from 'lucide-react';
+import { Download, Mail, Share2, FileText, Save, Inbox, Calendar } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -16,9 +16,28 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 // Sample data for demonstration - in a real app this would come from the API
 const sampleReport: RasbitaReport = {
   id: "rasbita-1",
+  userId: 1,
   businessId: "business-1",
+  title: "Quarterly Security Risk Assessment",
+  incidentCategory: "Data Breach",
   createdAt: new Date().toISOString(),
+  updatedAt: new Date().toISOString(),
   overallRiskScore: 68.5,
+  company: {
+    name: "Acme Corporation",
+    department: "Cybersecurity",
+    reportGenerator: {
+      name: "John Smith",
+      title: "Security Analyst"
+    }
+  },
+  incident: {
+    title: "Customer Database Breach",
+    description: "Unauthorized access to customer records detected through SQL injection vulnerability",
+    date: new Date().toISOString().split('T')[0],
+    category: "Data Breach",
+    affectedSystems: "Customer Database, Web Application"
+  },
   riskItems: [
     {
       assetName: "Web Application Server",
@@ -133,7 +152,16 @@ const sampleReport: RasbitaReport = {
     minACS: 2000,
     maxACS: 12000,
     mostFrequentPriority: "High"
-  }
+  },
+  deviceType: "Database Server",
+  totalDevices: 15,
+  affectedDevices: 3,
+  percentageAffected: "20%",
+  totalDataCount: 25000,
+  dataLost: 5000,
+  damagedDevicesCost: 12000,
+  threatSpreadCost: 8500,
+  residualCost: 4000
 };
 
 export default function RasbitaReportPage() {
@@ -141,7 +169,14 @@ export default function RasbitaReportPage() {
   const [report, setReport] = useState<RasbitaReport>(sampleReport);
   const [loading, setLoading] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
+  const [savedReports, setSavedReports] = useState<RasbitaReport[]>([]);
+  
+  // Load saved reports when the component mounts
+  useEffect(() => {
+    fetchSavedReports();
+  }, []);
 
   // Function to generate and download PDF report
   const exportToPdf = () => {
@@ -308,35 +343,117 @@ export default function RasbitaReportPage() {
     }
   };
   
-  // In a real implementation, this would fetch the report from the API
-  const fetchRasbitaReport = async (assessmentId: string) => {
+  // Load saved reports from the API
+  const fetchSavedReports = async () => {
     setLoading(true);
     try {
-      // This would be an actual API call in a real implementation
-      // const response = await apiRequest("GET", `/api/rasbita-reports/${assessmentId}`);
-      // const data = await response.json();
-      // setReport(data);
-      
-      // For now, we're just using the sample data
-      setTimeout(() => {
-        setReport({
-          ...sampleReport,
-          id: `rasbita-${assessmentId}`,
-          businessId: assessmentId
-        });
-        setLoading(false);
-        toast({
-          title: "Report Loaded",
-          description: "RASBITA risk assessment report has been loaded successfully.",
-        });
-      }, 1000);
+      const response = await apiRequest("GET", "/api/rasbita-reports");
+      const data = await response.json();
+      setSavedReports(data);
+      toast({
+        title: "Reports Loaded",
+        description: "Your saved RASBITA reports have been loaded successfully.",
+      });
     } catch (error) {
+      console.error("Error fetching reports:", error);
       toast({
         title: "Error",
-        description: "Failed to load RASBITA report. Please try again.",
+        description: "Failed to load saved reports. Please try again later.",
         variant: "destructive",
       });
+    } finally {
       setLoading(false);
+    }
+  };
+
+  // Fetch a specific report from the API
+  const fetchRasbitaReport = async (reportId: string) => {
+    setLoading(true);
+    try {
+      const response = await apiRequest("GET", `/api/rasbita-reports/${reportId}`);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to fetch report: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      setReport(data);
+      toast({
+        title: "Report Loaded",
+        description: "RASBITA risk assessment report has been loaded successfully.",
+      });
+    } catch (error) {
+      console.error("Error fetching report:", error);
+      
+      // If the report doesn't exist yet, use sample data
+      if (reportId === "new") {
+        setReport({
+          ...sampleReport,
+          id: "new",
+          createdAt: new Date().toISOString()
+        });
+        toast({
+          title: "New Report Created",
+          description: "A new RASBITA report template has been created.",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to load RASBITA report. Please try again.",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Save the current report to the API
+  const saveReport = async () => {
+    setSaveLoading(true);
+    try {
+      // Prepare the report object for saving
+      const reportToSave = {
+        ...report,
+        // If it's a new report, remove the id field so the server will generate one
+        ...(report.id === "new" ? { id: undefined } : {}),
+        // Update the timestamps
+        updatedAt: new Date().toISOString()
+      };
+      
+      let response;
+      
+      if (report.id === "new" || typeof report.id === 'string') {
+        // Create a new report
+        response = await apiRequest("POST", "/api/rasbita-reports", reportToSave);
+      } else {
+        // Update an existing report
+        response = await apiRequest("PUT", `/api/rasbita-reports/${report.id}`, reportToSave);
+      }
+      
+      if (!response.ok) {
+        throw new Error(`Failed to save report: ${response.statusText}`);
+      }
+      
+      const savedReport = await response.json();
+      setReport(savedReport);
+      
+      // Refresh the list of saved reports
+      fetchSavedReports();
+      
+      toast({
+        title: "Report Saved",
+        description: "Your RASBITA report has been saved successfully.",
+      });
+    } catch (error) {
+      console.error("Error saving report:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save RASBITA report. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setSaveLoading(false);
     }
   };
 
@@ -495,6 +612,18 @@ export default function RasbitaReportPage() {
           
           {/* Dashboard Tab */}
           <TabsContent value="dashboard">
+            <div className="flex justify-end mb-4">
+              <Button 
+                className="bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
+                onClick={saveReport}
+                disabled={saveLoading}
+              >
+                {saveLoading ? 'Saving Report...' : <>
+                  <Save size={16} />
+                  Save Report
+                </>}
+              </Button>
+            </div>
             <RasbitaDashboard report={report} />
           </TabsContent>
           

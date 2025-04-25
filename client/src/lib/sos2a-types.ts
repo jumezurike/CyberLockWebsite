@@ -198,10 +198,30 @@ export interface RasbitaRiskItem {
 }
 
 export interface RasbitaReport {
-  id: string;
+  id: string | number;
+  userId?: number;
   businessId: string;
+  title: string;
+  incidentCategory: string;
   createdAt: string;
+  updatedAt?: string;
   overallRiskScore: number;
+  company: {
+    name?: string;
+    department?: string;
+    reportGenerator?: {
+      name?: string;
+      title?: string;
+    };
+    logo?: string;
+  };
+  incident: {
+    title: string;
+    description: string;
+    date: string;
+    category: string;
+    affectedSystems: string;
+  };
   riskItems: RasbitaRiskItem[];
   rasbitaCategories: {
     risk: number;

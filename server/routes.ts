@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertAssessmentSchema, insertEarlyAccessSubmissionSchema } from "@shared/schema";
+import { insertAssessmentSchema, insertEarlyAccessSubmissionSchema, insertRasbitaReportSchema } from "@shared/schema";
 import { ZodError } from "zod";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -195,6 +195,97 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error updating early access submission status:", error);
       res.status(500).json({ error: "Failed to update early access submission status" });
+    }
+  });
+
+  // RASBITA Report API
+  // -------------------------------------------------------------------------
+  
+  // Get all RASBITA reports
+  app.get("/api/rasbita-reports", async (req, res) => {
+    try {
+      const reports = await storage.getAllRasbitaReports();
+      res.json(reports);
+    } catch (error) {
+      console.error("Error fetching RASBITA reports:", error);
+      res.status(500).json({ error: "Failed to fetch RASBITA reports" });
+    }
+  });
+
+  // Get RASBITA report by ID
+  app.get("/api/rasbita-reports/:id", async (req, res) => {
+    try {
+      const report = await storage.getRasbitaReportById(parseInt(req.params.id));
+      if (!report) {
+        return res.status(404).json({ error: "RASBITA report not found" });
+      }
+      res.json(report);
+    } catch (error) {
+      console.error("Error fetching RASBITA report:", error);
+      res.status(500).json({ error: "Failed to fetch RASBITA report" });
+    }
+  });
+
+  // Create a new RASBITA report
+  app.post("/api/rasbita-reports", async (req, res) => {
+    try {
+      const validatedData = insertRasbitaReportSchema.parse(req.body);
+      const newReport = await storage.createRasbitaReport(validatedData);
+      res.status(201).json(newReport);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        res.status(400).json({ error: "Validation error", details: error.errors });
+      } else {
+        console.error("Error creating RASBITA report:", error);
+        res.status(500).json({ error: "Failed to create RASBITA report" });
+      }
+    }
+  });
+
+  // Update a RASBITA report
+  app.put("/api/rasbita-reports/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertRasbitaReportSchema.parse(req.body);
+      const updatedReport = await storage.updateRasbitaReport(id, validatedData);
+      if (!updatedReport) {
+        return res.status(404).json({ error: "RASBITA report not found" });
+      }
+      res.json(updatedReport);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        res.status(400).json({ error: "Validation error", details: error.errors });
+      } else {
+        console.error("Error updating RASBITA report:", error);
+        res.status(500).json({ error: "Failed to update RASBITA report" });
+      }
+    }
+  });
+
+  // Delete a RASBITA report
+  app.delete("/api/rasbita-reports/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteRasbitaReport(id);
+      if (!success) {
+        return res.status(404).json({ error: "RASBITA report not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting RASBITA report:", error);
+      res.status(500).json({ error: "Failed to delete RASBITA report" });
+    }
+  });
+
+  // Get RASBITA reports for a specific user
+  app.get("/api/users/:userId/rasbita-reports", async (req, res) => {
+    try {
+      const userId = parseInt(req.params.userId);
+      const reports = await storage.getRasbitaReportsByUser(userId);
+      res.json(reports);
+    } catch (error) {
+      console.error("Error fetching user RASBITA reports:", error);
+      res.status(500).json({ error: "Failed to fetch user RASBITA reports" });
     }
   });
 
