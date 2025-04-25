@@ -86,7 +86,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="1" id="governance-1" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="governance-1" className="text-base font-semibold">Tier 1-2: Partial (25%)</Label>
+                    <Label htmlFor="governance-1" className="text-base font-semibold">Tier 1: Partial (25%)</Label>
                     <p className="text-sm text-gray-500">
                       Application of cybersecurity risk governance is ad hoc and prioritization is not 
                       explicitly considered.
@@ -97,7 +97,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="2" id="governance-2" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="governance-2" className="text-base font-semibold">Tier 2-3: Risk Informed (50%)</Label>
+                    <Label htmlFor="governance-2" className="text-base font-semibold">Tier 2: Risk Informed (50%)</Label>
                     <p className="text-sm text-gray-500">
                       Risk management practices are approved by management but may not be established as organization-wide policy. 
                       The prioritization of cybersecurity activities and protection needs is directly informed by organizational risk objectives, 
@@ -109,7 +109,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="3" id="governance-3" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="governance-3" className="text-base font-semibold">Tier 3-4: Repeatable (75%)</Label>
+                    <Label htmlFor="governance-3" className="text-base font-semibold">Tier 3: Repeatable (75%)</Label>
                     <p className="text-sm text-gray-500">
                       The organization's risk management practices are formally approved and expressed as policy.
                       Risk-informed policies, processes, and procedures are defined, implemented as intended, and reviewed.
@@ -122,7 +122,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="4" id="governance-4" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="governance-4" className="text-base font-semibold">Tier 4-5: Adaptive (100%)</Label>
+                    <Label htmlFor="governance-4" className="text-base font-semibold">Tier 4: Adaptive (100%)</Label>
                     <p className="text-sm text-gray-500">
                       There is an organization-wide approach to managing cybersecurity risks that uses risk-informed policies, 
                       processes, and procedures to address potential cybersecurity events. The relationship between cybersecurity 
@@ -164,7 +164,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="0" id="management-0" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="management-0" className="text-base font-semibold">Tier 0-1: None (0%)</Label>
+                    <Label htmlFor="management-0" className="text-base font-semibold">Tier 0: None (0%)</Label>
                     <p className="text-sm text-gray-500">
                       Not currently part of the cybersecurity risk governance and management practices in the organization.
                     </p>
@@ -174,7 +174,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="1" id="management-1" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="management-1" className="text-base font-semibold">Tier 1-2: Partial (25%)</Label>
+                    <Label htmlFor="management-1" className="text-base font-semibold">Tier 1: Partial (25%)</Label>
                     <p className="text-sm text-gray-500">
                       There is limited awareness of cybersecurity risks at the organizational level.
                       The organization implements cybersecurity risk management on an irregular, case-by-case basis.
@@ -187,7 +187,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="2" id="management-2" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="management-2" className="text-base font-semibold">Tier 2: Risk Informed</Label>
+                    <Label htmlFor="management-2" className="text-base font-semibold">Tier 2: Risk Informed (50%)</Label>
                     <p className="text-sm text-gray-500">
                       There is an awareness of cybersecurity risks at the organizational level, but an organization-wide approach to managing cybersecurity risks has not been established.
                       Consideration of cybersecurity in organizational objectives and programs may occur at some but not all levels of the organization. 
@@ -200,7 +200,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="3" id="management-3" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="management-3" className="text-base font-semibold">Tier 3: Repeatable</Label>
+                    <Label htmlFor="management-3" className="text-base font-semibold">Tier 3: Repeatable (75%)</Label>
                     <p className="text-sm text-gray-500">
                       There is an organization-wide approach to managing cybersecurity risks. Cybersecurity information is routinely shared throughout the organization.
                       Consistent methods are in place to respond effectively to changes in risk. Personnel possess the knowledge and skills to perform their appointed roles and responsibilities.
@@ -212,7 +212,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="4" id="management-4" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="management-4" className="text-base font-semibold">Tier 4: Adaptive</Label>
+                    <Label htmlFor="management-4" className="text-base font-semibold">Tier 4: Adaptive (100%)</Label>
                     <p className="text-sm text-gray-500">
                       The organization adapts its cybersecurity practices based on previous and current cybersecurity activities, including lessons learned and predictive indicators.
                       The organization uses real-time or near real-time information to understand and consistently act upon cybersecurity risks associated with the products and services it provides and uses.
