@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { RasbitaRiskItem } from '@/lib/sos2a-types';
+import { Mail, FileText, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -94,6 +95,13 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
   const form = useForm<IncidentFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      // Company information for reporting
+      companyName: "",
+      department: "",
+      reportGeneratorName: "",
+      reportGeneratorTitle: "",
+      companyLogo: "",
+      
       // Basic incident information
       incidentTitle: "",
       incidentDescription: "",
@@ -301,6 +309,15 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
 
       // Combine incident data with risk item for the full submission
       const fullSubmission = {
+        company: {
+          name: data.companyName,
+          department: data.department,
+          reportGenerator: {
+            name: data.reportGeneratorName,
+            title: data.reportGeneratorTitle
+          },
+          logo: data.companyLogo
+        },
         incident: {
           title: data.incidentTitle,
           description: data.incidentDescription,
@@ -468,7 +485,53 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
             <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
               {/* Company Information Section */}
               <div className="bg-purple-50 p-4 rounded-md mb-6">
-                <h3 className="text-md font-medium mb-3">Company Information for Report</h3>
+                <div className="flex justify-between items-center mb-3">
+                  <h3 className="text-md font-medium">Company Information for Report</h3>
+                  <div className="flex gap-2">
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        toast({
+                          title: "Report Distribution",
+                          description: "Email distribution option will be available after report generation."
+                        });
+                      }}
+                    >
+                      <Mail className="h-4 w-4 mr-1" />
+                      Email
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        toast({
+                          title: "Report Distribution",
+                          description: "PDF export will be available after report generation."
+                        });
+                      }}
+                    >
+                      <FileText className="h-4 w-4 mr-1" />
+                      PDF
+                    </Button>
+                    <Button 
+                      type="button" 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => {
+                        toast({
+                          title: "Report Distribution",
+                          description: "SMS notification option will be available after report generation."
+                        });
+                      }}
+                    >
+                      <MessageSquare className="h-4 w-4 mr-1" />
+                      SMS
+                    </Button>
+                  </div>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -620,8 +683,21 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="incidentCategory"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Incident Category</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormLabel>Select the incident category that best describes the event:</FormLabel>
+                          <Select 
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              // Auto-populate threat values based on incident category
+                              const selectedCategory = categoryOptions.find(c => c.value === value);
+                              if (selectedCategory) {
+                                const threatValue = getThreatValue(value);
+                                const threatCost = getThreatCost(value);
+                                
+                                form.setValue("threatValue", threatValue.toString());
+                                form.setValue("threatCost", threatCost.toString());
+                              }
+                            }} 
+                            defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select incident category" />
@@ -724,7 +800,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                               if (selectedDevice && selectedDevice.cost) {
                                 // If we have a machineCost field, populate it
                                 if (form.getValues().hasOwnProperty("machineCost")) {
-                                  form.setValue("machineCost", selectedDevice.cost);
+                                  form.setValue("machineCost", selectedDevice.cost.toString());
                                 }
                               }
                             }} 
