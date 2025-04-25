@@ -4,7 +4,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RasbitaDashboard from "@/components/rasbita/rasbita-dashboard";
-import { RasbitaReport } from '@/lib/sos2a-types';
+import IncidentForm from "@/components/rasbita/incident-form";
+import { RasbitaReport, RasbitaRiskItem } from '@/lib/sos2a-types';
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -190,6 +191,46 @@ export default function RasbitaReportPage() {
     { id: "3", name: "Cloud Infrastructure Assessment (Feb 2025)" },
   ];
 
+  const [activeTab, setActiveTab] = useState<string>("new-incident");
+  const [showResults, setShowResults] = useState<boolean>(false);
+  
+  const handleIncidentSubmit = (incidentData: any) => {
+    // In a real implementation, this would submit the incident data to the API
+    // and then fetch the generated report
+    
+    console.log("Incident data submitted:", incidentData);
+    
+    // For demo purposes, we'll use the sample report with a new risk item
+    const newRiskItem: RasbitaRiskItem = incidentData.riskItem;
+    
+    // Create updated report with the new risk item
+    const updatedReport: RasbitaReport = {
+      ...sampleReport,
+      riskItems: [newRiskItem, ...sampleReport.riskItems],
+      createdAt: new Date().toISOString()
+    };
+    
+    // Update financial summary (in a real app, this would be calculated on the server)
+    updatedReport.financialSummary = {
+      totalAssetValue: updatedReport.riskItems.reduce((sum, item) => sum + item.assetValue, 0),
+      totalAnnualizedLossExpectancy: updatedReport.riskItems.reduce((sum, item) => sum + item.annualizedLossExpectancy, 0),
+      totalCostOfSafeguards: updatedReport.riskItems.reduce((sum, item) => sum + item.annualCostOfSafeguard, 0),
+      totalNetRiskReductionBenefit: updatedReport.riskItems.reduce((sum, item) => sum + item.netRiskReductionBenefit, 0)
+    };
+    
+    // Update report
+    setReport(updatedReport);
+    
+    // Show results and switch to dashboard tab
+    setShowResults(true);
+    setActiveTab("dashboard");
+    
+    toast({
+      title: "RASBITA Analysis Complete",
+      description: "Your security incident has been analyzed. Reviewing financial impact analysis...",
+    });
+  };
+
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="py-10">
@@ -214,58 +255,81 @@ export default function RasbitaReportPage() {
           CISSP Risk Assessment Score by Threat and Impact Analysis
         </p>
 
-        <Card className="mb-8">
-          <CardHeader>
-            <CardTitle>Generate RASBITA Report</CardTitle>
-            <CardDescription>
-              Select an existing assessment to generate a RASBITA risk report with financial analysis.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <div className="w-full sm:w-2/3">
-                <Select value={selectedAssessment} onValueChange={setSelectedAssessment}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select an assessment" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {assessments.map(assessment => (
-                      <SelectItem key={assessment.id} value={assessment.id}>
-                        {assessment.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <Button 
-                className="bg-chart-4 hover:bg-purple-700 text-white" 
-                onClick={generateReport}
-                disabled={loading}
-              >
-                {loading ? 'Generating Report...' : 'Generate RASBITA Report'}
-              </Button>
-            </div>
-            
-            <div className="mt-4 text-sm text-gray-600 bg-purple-50 p-3 rounded-md">
-              <p>
-                <strong>Note:</strong> The RASBITA report provides a comprehensive financial analysis
-                of your security risks and controls, including asset values, exposure factors, and
-                cost-benefit analysis for each control.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Tabs defaultValue="dashboard">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
           <TabsList className="mb-4">
-            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
-            <TabsTrigger value="export">Export Options</TabsTrigger>
+            <TabsTrigger value="new-incident">Report Incident</TabsTrigger>
+            <TabsTrigger value="existing-assessment">Load Existing Assessment</TabsTrigger>
+            {showResults && <TabsTrigger value="dashboard">Dashboard</TabsTrigger>}
+            {showResults && <TabsTrigger value="export">Export Options</TabsTrigger>}
           </TabsList>
           
+          {/* Tab for reporting a new incident */}
+          <TabsContent value="new-incident">
+            <div className="mb-4 bg-purple-50 p-4 rounded-md">
+              <h3 className="text-lg font-semibold text-chart-4 mb-2">Security Incident Details</h3>
+              <p className="text-gray-700">
+                Complete the form below with details about the current security incident. The RASBITA tool will
+                analyze the financial impact and provide cost-benefit analysis to guide your response decisions.
+              </p>
+            </div>
+            <IncidentForm onSubmit={handleIncidentSubmit} />
+          </TabsContent>
+          
+          {/* Tab for loading an existing assessment */}
+          <TabsContent value="existing-assessment">
+            <Card className="mb-8">
+              <CardHeader>
+                <CardTitle>Generate RASBITA Report</CardTitle>
+                <CardDescription>
+                  Select an existing assessment to generate a RASBITA risk report with financial analysis.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="w-full sm:w-2/3">
+                    <Select value={selectedAssessment} onValueChange={setSelectedAssessment}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select an assessment" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {assessments.map(assessment => (
+                          <SelectItem key={assessment.id} value={assessment.id}>
+                            {assessment.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button 
+                    className="bg-chart-4 hover:bg-purple-700 text-white" 
+                    onClick={() => {
+                      generateReport();
+                      setShowResults(true);
+                      setActiveTab("dashboard");
+                    }}
+                    disabled={loading}
+                  >
+                    {loading ? 'Generating Report...' : 'Generate RASBITA Report'}
+                  </Button>
+                </div>
+                
+                <div className="mt-4 text-sm text-gray-600 bg-purple-50 p-3 rounded-md">
+                  <p>
+                    <strong>Note:</strong> The RASBITA report provides a comprehensive financial analysis
+                    of your security risks and controls, including asset values, exposure factors, and
+                    cost-benefit analysis for each control.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          {/* Dashboard Tab */}
           <TabsContent value="dashboard">
             <RasbitaDashboard report={report} />
           </TabsContent>
           
+          {/* Export Options Tab */}
           <TabsContent value="export">
             <Card>
               <CardHeader>

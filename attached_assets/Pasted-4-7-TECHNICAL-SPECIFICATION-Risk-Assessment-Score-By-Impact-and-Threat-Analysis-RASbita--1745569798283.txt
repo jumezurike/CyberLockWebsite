@@ -1,0 +1,252 @@
+4.7 TECHNICAL SPECIFICATION
+-Risk Assessment Score By Impact and Threat Analysis (RASbita)							
+The assessment starts with an exercise to enumerate certain questions about devices. 
+Risk Score questionnaire:
+The first question to address will be the device type whether it is a workstation, standard workstation, server or standard server. Standard will mean they have nothing like personal health record information(PHI) and Personal Identifiable Information (PII) in them.
+“Enter the device type here:”
+
+The number of devices damaged is very important as there are number of devices that will not work again after a major incident like power surge etc.,
+“Enter the number of devices damaged:”
+Here you will address the number of devices in the locale or department.
+“Please enter the total number of device in the locale or department:”
+
+This section will address the class of data involved in relation to the data classification at LokDon. A table is made to help users choose the right option. So we have values here in as system file =1, non-phi and pii =2, PHI =9 , PII =9
+“Enter the class of data held by the device by values shown above:”
+
+This question will address the data incident spread. What is the incident spread or coverage? The answers will have numerical values attached to them. A table is made to help users choose the right option. Widely spread = 9 and moderately spread = 5.
+“Choose the data spread or coverage shown above:”
+
+This addresses the percentage of data loss which is directly related to the infection propensity if the percentage is high the spread must have been high as well. Here we have a table showing the range required in our case.
+The Percentage Range                                                               
+
+
+ Percentage
+1-20 
+0.2
+21-40
+0.4
+41-60
+0.6
+61-80
+0.8
+81-100
+1
+
+
+“Please enter the percentage of data loss from the table above:”
+
+The question addresses the frequency of the business use engaged with the device mentioned in (1). Is it used on a daily basis? Is it used so often? Is it used on rare occasions? So we attached the values sample in a table: Daily basis = 9, so often = 5 and rarely used = 2.
+
+“Please choose the frequency of device business use as shown above:”
+
+This addresses the infrastructural environment in which the device/s is/are used. References are made to the three known environments in DHEC. Production = 9 , Staging=5 and Testing = 2. I believe workstations only have production and staging.
+“Please choose the device environment from the table above:”
+
+We need to remember the percentage we entered in (6). That way we will be choosing the right value for that percentage data loss. The table shows the necessary ranges and values:
+Percentage Range
+Values
+1-20 
+10.4
+21-40
+11.8
+41-60
+13.2
+61-80
+14.6
+81-100
+16
+
+
+
+
+
+
+“Please enter the value for percentage data loss, match the percentage entered in (5):”
+
+              Threat Areas (dollar amount and values)
+This will deal with the threat values used in deriving the overall “RiskScore”. Specifically the threat weigh of the score:
+	Security incident
+Values
+Denial of service/DDOS
+9
+Unauthorized external
+8
+Unauthorized internal
+9
+Disclosure Name and dob
+9
+Disclosure Name and ss
+9
+Social Engineering (known /unknown)
+5
+Malware Server
+9
+Malware Workstation
+9
+Improper usage
+5
+No significant loss
+0
+
+
+
+
+
+    “Please enter the value from the table above for any given threat:”
+If the threat is more than one e.g improper use=5 and malware workstation=9 (not malware workstation is the same as standard workstation) for that device type. Please make the total value = 9.
+
+
+This will deal with the economic or financial value used in deriving the overall “Risk management”. Our advice is to pull data from reliable sources regarding the cost of security incidents. Regular updates are needed. Specifically, the threat financial weigh or dollar amount equivalent to the score stemming from noted research works:
+
+	Security incident
+$ Values
+Denial of service/DDOS
+$30
+Unauthorized external
+$5
+Unauthorized internal
+$5
+Disclosure Name and dob
+$10
+Disclosure Name and ss
+$10
+Social Engineering (known /unknown)
+$3
+Malware Server
+$2160
+Malware Workstation
+$720
+Improper usage
+$24
+No significant loss
+$0
+Disclosure Name, Dob and SS
+$30
+
+     “Please enter the dollar value matching the threat from the table above (10):”
+If the threat is more than one threat selection, follow question 10 indication i.e improper use=$24 and malware Workstation =$720. You must use $720 as the threat cost for workstation device types and the derivatives. If the threat is improper use = $24 and malware server = $2160. You must use $2160. As you can see this is showing the difference in capped financial burden between the workstation/standard workstation and server / standard server. Refer to Limitation Added Solution #2.
+     Machine cost category
+This category will address the worth of each damaged workstation, server, standard workstation and server. They will be costed following the sample below:
+Damaged Machine Category
+$ values
+Damaged or lost server
+$5000
+Damaged or lost standard server
+$4000
+Damaged or lost workstation
+$500
+Damaged or lost standard workstation
+$300
+No lost applied
+$0
+
+
+
+
+
+    
+“Please enter the dollar value from the table above for the damaged device:”
+If you chose Workstation in (1) it means that you must choose the dollar amount corresponding to that Damaged or lost device step. If it is a workstation i.e equal to $500 too. If a user still chooses the wrong dollar amount thereby throwing an error you should catch that with an alert “Incorrect cost for <device type> try again”. In this scenario, the device type is workstation as an example.
+
+Total number of data held in all the devices in the department or locale. This is supplied by the user. 
+“Please enter the total number of data held in all devices in the department or locale:” 
+4.7.1 Quantitative Risk Analysis
+Analysis of risk events that have been prioritized using the qualitative risk analysis process and their effect on project activities will be estimated, a numerical rating applied to each risk based on this analysis, and then documented in this section of the risk management analysis should consider:
+
+Determine the loss in value if the asset remained unprotected.
+Determine the cost of protecting the asset.
+Help prioritize actions and spending on security.
+
+Factors in Risk Analysis
+
+Asset Value (AV)
+This refers to the asset values:
+Cost of buying/developing hardware, software and services.
+Cost of installing, maintaining upgrading hardware, software and services
+Cost to train and retrain personnel
+Exposure Factor (EF)
+This refers to the percentage loss that would occur from a given vulnerability being exploited by a given threat.
+Annualized Loss Expectancy(ALE) = ARO * SLE
+This refers to overall loss incurred by an attack (i.e by exploiting a vulnerability) in each year.
+Single Loss Expectancy (SLE) = AV * EF
+This is the most likely lost in value from an attack.
+Annualized Rate of Occurrence (ARO) 
+This will indicate how often an attack is expected to successfully occur in a year e.g if an attack occurs once every 4 years. The ARO is .25.
+
+           
+           EF = dataPercent -> percentage of the damage spread when threat targets a specific vulnerability
+          AV = (damCost* numDevices) +( addCalc(totnum_asset, dataPercent) *threatCost)
+SLE = (damCost* numDevices) +( addCalc(totnum_asset, dataPercent) *threatCost) * dataPercent 
+ARO = How often do you think this kind of attack will happen in a year? The user will have to supply this. E.g 1s in a year enter 1: 1s in 2 years enter .5: 1s in four years enter .25. etc.,
+ALE = ARO * (damCost* numDevices) +( addCalc(totnum_asset, dataPercent) *threatCost) * dataPercent 
+From above you can see that it is possible to present a table like the above to the user reflecting the            impact of the threat which exploited a specific vulnerability. Questions will commence henceforth
+Annualized Rate of Occurrence: How often an attack will happen in a year.
+Occurrence/number of years
+“Enter your Annualized Rate of Occurrence (ARO) for the security incident:”
+ 
+Once /year      =                   1
+Once /2yr        =                  .5
+Once /3yr        =                  .33
+Once/4yr         =                  .25
+With this ARO you can fill out the values in the table above easily.
+  <Company> USE OF ARO, SLE TO DETERMINE ALE
+
+Asset
+Risk/Vuln
+Asset Value $
+Exposure Factor(EF)
+SLE=AV*EF
+$
+Annualize Freq (ARO)
+ALE
+$
+Client Data(PII)
+hacked
+14,000000
+.6
+8400000
+.25
+2100000
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

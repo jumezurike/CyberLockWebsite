@@ -1,0 +1,954 @@
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { RasbitaRiskItem } from '@/lib/sos2a-types';
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/hooks/use-toast";
+
+// Define the form schema with zod based on RASBITA specifications
+const formSchema = z.object({
+  // Basic incident information
+  incidentTitle: z.string().min(5, "Title must be at least 5 characters"),
+  incidentDescription: z.string().min(10, "Please provide more details about the incident"),
+  incidentDate: z.string(),
+  incidentCategory: z.enum([
+    "denial_of_service",
+    "unauthorized_external", 
+    "unauthorized_internal", 
+    "disclosure_name_dob", 
+    "disclosure_name_ss",
+    "disclosure_name_dob_ss",
+    "social_engineering",
+    "malware_server",
+    "malware_workstation",
+    "improper_usage", 
+    "no_significant_loss"
+  ]),
+  
+  // RASBITA specific fields from technical spec
+  deviceType: z.enum(["workstation", "standard_workstation", "server", "standard_server"]),
+  damagedDevices: z.string().refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
+    message: "Damaged device count must be a non-negative number",
+  }),
+  totalDevicesInDepartment: z.string().refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
+    message: "Total device count must be a non-negative number",
+  }),
+  dataClass: z.enum(["system_file", "non_phi_pii", "phi", "pii"]),
+  dataSpread: z.enum(["widely_spread", "moderately_spread", "limited_spread"]),
+  dataLossPercentage: z.enum(["1_20", "21_40", "41_60", "61_80", "81_100"]),
+  deviceUsageFrequency: z.enum(["daily", "often", "rarely"]),
+  deviceEnvironment: z.enum(["production", "staging", "testing"]),
+  threatValue: z.string(),
+  threatCost: z.string(),
+  machineCost: z.string(),
+  totalDataCount: z.string().refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
+    message: "Total data count must be a non-negative number",
+  }),
+  annualizedRateOfOccurrence: z.enum(["1", "0.5", "0.33", "0.25"]),
+  
+  // Additional information
+  assetName: z.string().min(3, "Asset name is required"),
+  affectedSystems: z.string().min(3, "Please list the affected systems"),
+  existingSafeguards: z.string(),
+  
+  // Feasibility factors
+  organizationalFeasible: z.boolean(),
+  behavioralFeasible: z.boolean(),
+  technicalFeasible: z.boolean(),
+  politicalFeasible: z.boolean(),
+});
+
+type IncidentFormData = z.infer<typeof formSchema>;
+
+interface IncidentFormProps {
+  onSubmit: (data: any) => void;
+}
+
+export default function IncidentForm({ onSubmit }: IncidentFormProps) {
+  const { toast } = useToast();
+  
+  const form = useForm<IncidentFormData>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      // Basic incident information
+      incidentTitle: "",
+      incidentDescription: "",
+      incidentDate: new Date().toISOString().split('T')[0],
+      incidentCategory: "unauthorized_external",
+      affectedSystems: "",
+      
+      // RASBITA specific fields from technical spec
+      deviceType: "workstation",
+      damagedDevices: "1",
+      totalDevicesInDepartment: "10",
+      dataClass: "non_phi_pii",
+      dataSpread: "moderately_spread",
+      dataLossPercentage: "21_40",
+      deviceUsageFrequency: "daily",
+      deviceEnvironment: "production",
+      threatValue: "8", // Default for unauthorized_external
+      threatCost: "5", // Default cost for unauthorized_external
+      machineCost: "500", // Default for workstation
+      totalDataCount: "1000",
+      annualizedRateOfOccurrence: "0.5", // Once every 2 years
+      
+      // Additional information
+      assetName: "",
+      existingSafeguards: "",
+      
+      // Feasibility factors
+      organizationalFeasible: true,
+      behavioralFeasible: true,
+      technicalFeasible: true,
+      politicalFeasible: true,
+    },
+  });
+
+  // Helper function to calculate addCalc (used in AV calculation)
+  const addCalc = (totalDataCount: number, dataPercentage: number): number => {
+    // This is a placeholder for the calculation mentioned in the spec
+    // In the real application, this would implement the specific algorithm mentioned in
+    // addCalc(totnum_asset, dataPercent) from the spec
+    return totalDataCount * dataPercentage;
+  };
+  
+  // Get exposure factor value based on data loss percentage
+  const getExposureFactorFromDataLoss = (dataLossPercentage: string): number => {
+    switch(dataLossPercentage) {
+      case '1_20': return 0.2;
+      case '21_40': return 0.4;
+      case '41_60': return 0.6;
+      case '61_80': return 0.8;
+      case '81_100': return 1;
+      default: return 0.5;
+    }
+  };
+  
+  // Get data loss value from percentage range
+  const getDataLossValue = (dataLossPercentage: string): number => {
+    switch(dataLossPercentage) {
+      case '1_20': return 10.4;
+      case '21_40': return 11.8;
+      case '41_60': return 13.2;
+      case '61_80': return 14.6;
+      case '81_100': return 16;
+      default: return 12;
+    }
+  };
+  
+  // Get machine cost based on device type
+  const getMachineCost = (deviceType: string): number => {
+    switch(deviceType) {
+      case 'server': return 5000;
+      case 'standard_server': return 4000;
+      case 'workstation': return 500;
+      case 'standard_workstation': return 300;
+      default: return 0;
+    }
+  };
+  
+  // Get threat value based on incident category
+  const getThreatValue = (incidentCategory: string): number => {
+    switch(incidentCategory) {
+      case 'denial_of_service': return 9;
+      case 'unauthorized_external': return 8;
+      case 'unauthorized_internal': return 9;
+      case 'disclosure_name_dob': return 9;
+      case 'disclosure_name_ss': return 9;
+      case 'disclosure_name_dob_ss': return 9;
+      case 'social_engineering': return 5;
+      case 'malware_server': return 9;
+      case 'malware_workstation': return 9;
+      case 'improper_usage': return 5;
+      case 'no_significant_loss': return 0;
+      default: return 5;
+    }
+  };
+  
+  // Get threat cost based on incident category
+  const getThreatCost = (incidentCategory: string): number => {
+    switch(incidentCategory) {
+      case 'denial_of_service': return 30;
+      case 'unauthorized_external': return 5;
+      case 'unauthorized_internal': return 5;
+      case 'disclosure_name_dob': return 10;
+      case 'disclosure_name_ss': return 10;
+      case 'disclosure_name_dob_ss': return 30;
+      case 'social_engineering': return 3;
+      case 'malware_server': return 2160;
+      case 'malware_workstation': return 720;
+      case 'improper_usage': return 24;
+      case 'no_significant_loss': return 0;
+      default: return 10;
+    }
+  };
+  
+  // Get priority based on device usage and data sensitivity
+  const calculatePriority = (dataClass: string, deviceUsageFrequency: string): 'Critical' | 'High' | 'Medium' | 'Low' => {
+    if (dataClass === 'phi' || dataClass === 'pii') {
+      return deviceUsageFrequency === 'daily' ? 'Critical' : 'High';
+    } else if (dataClass === 'non_phi_pii') {
+      return deviceUsageFrequency === 'daily' ? 'High' : 'Medium';
+    } else {
+      return deviceUsageFrequency === 'rarely' ? 'Low' : 'Medium';
+    }
+  };
+
+  const handleFormSubmit = (data: IncidentFormData) => {
+    try {
+      // Extract values from form
+      const deviceType = data.deviceType;
+      const damagedDevices = Number(data.damagedDevices);
+      const totalDevicesInDepartment = Number(data.totalDevicesInDepartment);
+      const exposureFactor = getExposureFactorFromDataLoss(data.dataLossPercentage);
+      const annualizedRateOfOccurrence = Number(data.annualizedRateOfOccurrence);
+      const machineCost = getMachineCost(deviceType);
+      const threatValue = getThreatValue(data.incidentCategory); 
+      const threatCost = getThreatCost(data.incidentCategory);
+      const totalDataCount = Number(data.totalDataCount);
+      
+      // RASBITA Calculations according to the specification
+      // Asset Value (AV) calculation
+      const assetValue = (machineCost * damagedDevices) + 
+        (addCalc(totalDataCount, exposureFactor) * threatCost);
+      
+      // Single Loss Expectancy (SLE) calculation
+      const singleLossExpectancy = assetValue * exposureFactor;
+      
+      // Annualized Loss Expectancy (ALE) calculation
+      const annualizedLossExpectancy = singleLossExpectancy * annualizedRateOfOccurrence;
+      
+      // Define a placeholder for the annual cost of safeguards (ACS)
+      // In a real application, this would be populated from additional form fields
+      const annualCostOfSafeguard = assetValue * 0.1; // Placeholder: 10% of asset value
+      
+      // Calculate ALE after controls (simplified for demo purposes)
+      const estimatedAleAfterControls = annualizedLossExpectancy * 0.2;
+      
+      // Calculate Net Risk Reduction Benefit (NRRB)
+      const netRiskReductionBenefit = (annualizedLossExpectancy - estimatedAleAfterControls) - annualCostOfSafeguard;
+      
+      // Determine priority based on data classification and device usage frequency
+      const priority = calculatePriority(data.dataClass, data.deviceUsageFrequency);
+
+      // Create the risk item with all calculated values
+      const completeRiskItem: RasbitaRiskItem = {
+        assetName: data.assetName,
+        assetValue: assetValue,
+        threatName: data.incidentCategory,
+        exposureFactor: exposureFactor,
+        annualizedRateOfOccurrence: annualizedRateOfOccurrence,
+        singleLossExpectancy: singleLossExpectancy,
+        annualizedLossExpectancy: annualizedLossExpectancy,
+        annualCostOfSafeguard: annualCostOfSafeguard,
+        annualizedLossExpectancyAfterControls: estimatedAleAfterControls,
+        netRiskReductionBenefit: netRiskReductionBenefit,
+        priority: priority,
+        probability: exposureFactor, // Using exposureFactor as a proxy for probability
+        impact: threatValue, // Using threatValue as a proxy for impact
+        deviceInfo: {
+          deviceType: deviceType,
+          deviceCount: totalDevicesInDepartment,
+          damagedDevices: damagedDevices,
+        },
+        feasibilityFactors: {
+          organizational: data.organizationalFeasible,
+          behavioral: data.behavioralFeasible,
+          technical: data.technicalFeasible,
+          political: data.politicalFeasible,
+        }
+      };
+
+      // Combine incident data with risk item for the full submission
+      const fullSubmission = {
+        incident: {
+          title: data.incidentTitle,
+          description: data.incidentDescription,
+          date: data.incidentDate,
+          category: data.incidentCategory,
+          affectedSystems: data.affectedSystems,
+          dataClass: data.dataClass,
+          dataSpread: data.dataSpread,
+          dataLossPercentage: data.dataLossPercentage,
+          deviceUsageFrequency: data.deviceUsageFrequency,
+          deviceEnvironment: data.deviceEnvironment,
+          totalDataCount: data.totalDataCount
+        },
+        riskItem: completeRiskItem
+      };
+
+      // Submit the data
+      onSubmit(fullSubmission);
+
+      toast({
+        title: "RASBITA Analysis Complete",
+        description: "Your security incident has been analyzed using the CISSP Risk Assessment Score by Impact and Threat Analysis methodology.",
+      });
+    } catch (error) {
+      console.error("Error processing form data:", error);
+      toast({
+        title: "Error",
+        description: "There was a problem processing your incident data. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Options for the incident category dropdown based on the RASBITA specification
+  const categoryOptions = [
+    { value: "denial_of_service", label: "Denial of Service/DDoS" },
+    { value: "unauthorized_external", label: "Unauthorized External Access" },
+    { value: "unauthorized_internal", label: "Unauthorized Internal Access" },
+    { value: "disclosure_name_dob", label: "Disclosure (Name and DOB)" },
+    { value: "disclosure_name_ss", label: "Disclosure (Name and SS)" },
+    { value: "disclosure_name_dob_ss", label: "Disclosure (Name, DOB, and SS)" },
+    { value: "social_engineering", label: "Social Engineering" },
+    { value: "malware_server", label: "Malware (Server)" },
+    { value: "malware_workstation", label: "Malware (Workstation)" },
+    { value: "improper_usage", label: "Improper Usage" },
+    { value: "no_significant_loss", label: "No Significant Loss" },
+  ];
+
+  // Options for device type dropdown
+  const deviceTypeOptions = [
+    { value: "server", label: "Server" },
+    { value: "standard_server", label: "Standard Server" },
+    { value: "workstation", label: "Workstation" },
+    { value: "standard_workstation", label: "Standard Workstation" },
+  ];
+  
+  // Options for data class dropdown
+  const dataClassOptions = [
+    { value: "system_file", label: "System File (Value: 1)" },
+    { value: "non_phi_pii", label: "Non-PHI and PII Data (Value: 2)" },
+    { value: "phi", label: "Personal Health Record Information (PHI) (Value: 9)" },
+    { value: "pii", label: "Personal Identifiable Information (PII) (Value: 9)" },
+  ];
+  
+  // Options for data spread dropdown
+  const dataSpreadOptions = [
+    { value: "widely_spread", label: "Widely Spread (Value: 9)" },
+    { value: "moderately_spread", label: "Moderately Spread (Value: 5)" },
+    { value: "limited_spread", label: "Limited Spread (Value: 2)" },
+  ];
+  
+  // Options for data loss percentage dropdown
+  const dataLossPercentageOptions = [
+    { value: "1_20", label: "1-20% (Value: 0.2)" },
+    { value: "21_40", label: "21-40% (Value: 0.4)" },
+    { value: "41_60", label: "41-60% (Value: 0.6)" },
+    { value: "61_80", label: "61-80% (Value: 0.8)" },
+    { value: "81_100", label: "81-100% (Value: 1.0)" },
+  ];
+  
+  // Options for device usage frequency dropdown
+  const deviceUsageFrequencyOptions = [
+    { value: "daily", label: "Daily Basis (Value: 9)" },
+    { value: "often", label: "Used Often (Value: 5)" },
+    { value: "rarely", label: "Rarely Used (Value: 2)" },
+  ];
+  
+  // Options for device environment dropdown
+  const deviceEnvironmentOptions = [
+    { value: "production", label: "Production Environment (Value: 9)" },
+    { value: "staging", label: "Staging Environment (Value: 5)" },
+    { value: "testing", label: "Testing Environment (Value: 2)" },
+  ];
+  
+  // Options for annualized rate of occurrence dropdown
+  const aroOptions = [
+    { value: "1", label: "Once per year (ARO = 1)" },
+    { value: "0.5", label: "Once every 2 years (ARO = 0.5)" },
+    { value: "0.33", label: "Once every 3 years (ARO = 0.33)" },
+    { value: "0.25", label: "Once every 4 years (ARO = 0.25)" },
+  ];
+
+  return (
+    <div className="w-full">
+      <Card>
+        <CardHeader className="bg-red-50">
+          <CardTitle className="text-xl text-red-800">Security Incident Analysis</CardTitle>
+          <CardDescription>
+            Provide details about the security incident to generate a RASBITA risk and financial impact analysis
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
+              <Tabs defaultValue="incident" className="w-full">
+                <TabsList className="grid grid-cols-4 mb-4">
+                  <TabsTrigger value="incident">Incident Details</TabsTrigger>
+                  <TabsTrigger value="asset">Asset Information</TabsTrigger>
+                  <TabsTrigger value="threat">Threat Analysis</TabsTrigger>
+                  <TabsTrigger value="safeguards">Safeguards & Feasibility</TabsTrigger>
+                </TabsList>
+                
+                {/* Incident Details Tab */}
+                <TabsContent value="incident" className="space-y-4">
+                  <FormField
+                    control={form.control}
+                    name="incidentTitle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Incident Title</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Unauthorized Database Access" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          Provide a clear, concise title for the security incident
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="incidentDate"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Date of Incident</FormLabel>
+                          <FormControl>
+                            <Input type="date" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="incidentCategory"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Incident Category</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select incident category" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {categoryOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <FormField
+                    control={form.control}
+                    name="incidentDescription"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Incident Description</FormLabel>
+                        <FormControl>
+                          <Textarea 
+                            placeholder="Describe the security incident in detail, including when it was discovered and initial impact assessment..."
+                            className="min-h-[120px]"
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          Provide all relevant details that would help with the analysis
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="affectedSystems"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Affected Systems</FormLabel>
+                        <FormControl>
+                          <Textarea 
+                            placeholder="Customer database, payment processing server, employee workstations..."
+                            className="min-h-[80px]"
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          List all systems, applications, or data affected by this incident
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TabsContent>
+                
+                {/* Device Information Tab */}
+                <TabsContent value="asset" className="space-y-4">
+                  <div className="bg-blue-50 p-4 rounded-md mb-4">
+                    <p className="text-sm text-blue-800">
+                      <strong>Note:</strong> According to the RASBITA methodology, device type, damage status, and usage information are critical to the risk calculation.
+                    </p>
+                  </div>
+                  
+                  <FormField
+                    control={form.control}
+                    name="assetName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Primary Asset Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Customer Database" {...field} />
+                        </FormControl>
+                        <FormDescription>
+                          Name the most critical asset affected by this incident
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="deviceType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Device Type</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select device type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {deviceTypeOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            The type of device affected by this incident
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="totalDataCount"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Total Data Count</FormLabel>
+                          <FormControl>
+                            <Input type="number" min="0" placeholder="1000" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            Total number of data records held in the department
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="totalDevicesInDepartment"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Total Devices in Department</FormLabel>
+                          <FormControl>
+                            <Input type="number" min="0" placeholder="10" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            Total number of devices in the locale or department
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="damagedDevices"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Damaged/Compromised Devices</FormLabel>
+                          <FormControl>
+                            <Input type="number" min="0" placeholder="1" {...field} />
+                          </FormControl>
+                          <FormDescription>
+                            Number of devices damaged in the incident
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="deviceUsageFrequency"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Device Usage Frequency</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select usage frequency" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {deviceUsageFrequencyOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            How frequently the device is used for business
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="deviceEnvironment"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Device Environment</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select environment" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {deviceEnvironmentOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            The infrastructure environment in which the device is used
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </TabsContent>
+                
+                {/* Data Analysis Tab */}
+                <TabsContent value="threat" className="space-y-4">
+                  <div className="bg-purple-50 p-4 rounded-md mb-4">
+                    <p className="text-sm text-purple-800">
+                      <strong>Note:</strong> The data classification and exposure information is critical for calculating the risk score according to the RASBITA methodology.
+                    </p>
+                  </div>
+                  
+                  <FormField
+                    control={form.control}
+                    name="dataClass"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Data Classification</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select data classification" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {dataClassOptions.map(option => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Classification of data held by the affected systems
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="dataSpread"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Data Incident Spread</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select data spread" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {dataSpreadOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            The coverage or spread of the data incident
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="dataLossPercentage"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Data Loss Percentage</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select percentage range" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {dataLossPercentageOptions.map(option => (
+                                <SelectItem key={option.value} value={option.value}>
+                                  {option.label}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            Percentage of data lost or compromised
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  <FormField
+                    control={form.control}
+                    name="annualizedRateOfOccurrence"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Annualized Rate of Occurrence (ARO)</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select occurrence rate" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {aroOptions.map(option => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          How often this type of incident is expected to occur
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </TabsContent>
+                
+                {/* Safeguards & Feasibility Tab */}
+                <TabsContent value="safeguards" className="space-y-4">
+                  <div className="bg-green-50 p-4 rounded-md mb-4">
+                    <p className="text-sm text-green-800">
+                      <strong>Note:</strong> The cost of safeguards is used to calculate the Net Risk Reduction Benefit (NRRB) in the RASBITA methodology.
+                    </p>
+                  </div>
+                  
+                  <FormField
+                    control={form.control}
+                    name="existingSafeguards"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Existing Safeguards</FormLabel>
+                        <FormControl>
+                          <Textarea 
+                            placeholder="Firewall, IDS/IPS, data encryption, regular backups..."
+                            className="min-h-[100px]"
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormDescription>
+                          List all existing security controls relevant to this asset/threat
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <div className="bg-purple-50 p-4 rounded-md mb-4">
+                    <h4 className="font-medium text-purple-800 mb-2">Feasibility Assessment</h4>
+                    <p className="text-sm text-purple-800 mb-4">
+                      Indicate whether implementing additional safeguards would be feasible across these dimensions:
+                    </p>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="organizationalFeasible"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
+                            <div className="space-y-0.5">
+                              <FormLabel>Organizational Feasibility</FormLabel>
+                              <FormDescription>
+                                Aligns with organizational objectives
+                              </FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="behavioralFeasible"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
+                            <div className="space-y-0.5">
+                              <FormLabel>Behavioral Feasibility</FormLabel>
+                              <FormDescription>
+                                User acceptance and support
+                              </FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="technicalFeasible"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
+                            <div className="space-y-0.5">
+                              <FormLabel>Technical Feasibility</FormLabel>
+                              <FormDescription>
+                                Technical expertise and resources
+                              </FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="politicalFeasible"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3">
+                            <div className="space-y-0.5">
+                              <FormLabel>Political Feasibility</FormLabel>
+                              <FormDescription>
+                                Cross-department cooperation
+                              </FormDescription>
+                            </div>
+                            <FormControl>
+                              <Switch
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="px-4 py-3 bg-yellow-50 rounded-md border-l-4 border-yellow-500">
+                    <div className="flex">
+                      <div className="flex-shrink-0">
+                        <svg className="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                        </svg>
+                      </div>
+                      <div className="ml-3">
+                        <h3 className="text-sm font-medium text-yellow-800">Important Note</h3>
+                        <div className="mt-2 text-sm text-yellow-700">
+                          <ul className="list-disc pl-5 space-y-1">
+                            <li>The RASBITA analysis will automatically calculate the Annual Cost of Safeguards (ACS) based on the asset value and appropriate risk factors</li>
+                            <li>The Annualized Loss Expectancy (ALE) will be calculated as Single Loss Expectancy (SLE) multiplied by the Annualized Rate of Occurrence (ARO)</li>
+                            <li>The Net Risk Reduction Benefit (NRRB) calculation will show if your security investments are cost-effective</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+              </Tabs>
+              
+              <div className="flex justify-end">
+                <Button 
+                  type="submit" 
+                  className="bg-chart-4 hover:bg-purple-700 text-white"
+                >
+                  Generate RASBITA Analysis
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
