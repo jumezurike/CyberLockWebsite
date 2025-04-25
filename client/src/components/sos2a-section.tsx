@@ -4,8 +4,8 @@ export default function Sos2aSection() {
   const steps = [
     {
       number: 1,
-      title: "Questionnaire",
-      description: "The SOC Analyst sends a questionnaire to collect initial data from the SMB."
+      title: "Inquiry & Questionnaire",
+      description: "Initial business inquiry and detailed questionnaire to collect data from the SMB."
     },
     {
       number: 2,

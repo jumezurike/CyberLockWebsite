@@ -86,7 +86,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="grid grid-cols-4 gap-2 text-xs text-center">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Inquiry & Questionnaire</p>
+                      <p className="font-medium text-green-700">Questionnaire</p>
                       <p className="text-xs text-green-600">Data Collection</p>
                     </div>
                     <div className="space-y-1">
@@ -143,7 +143,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="grid grid-cols-4 gap-2 text-xs text-center">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Inquiry & Questionnaire</p>
+                      <p className="font-medium text-green-700">Questionnaire</p>
                       <p className="text-xs text-green-600">Data Collection</p>
                     </div>
                     <div className="space-y-1">

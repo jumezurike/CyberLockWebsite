@@ -4,7 +4,7 @@ interface StepIndicatorProps {
 
 export default function StepIndicator({ currentStep }: StepIndicatorProps) {
   const steps = [
-    { number: 1, title: "Questionnaire" },
+    { number: 1, title: "Inquiry & Questionnaire" },
     { number: 2, title: "Interview & Matrix Population" },
     { number: 3, title: "Preliminary Report" },
     { number: 4, title: "Comprehensive Report" },
