@@ -538,9 +538,9 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="companyName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Company/Bureau Name</FormLabel>
+                        <FormLabel>What is your organization's name?</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter company name" {...field} />
+                          <Input placeholder="Enter organization name" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -552,9 +552,9 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="department"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Department</FormLabel>
+                        <FormLabel>Which department is responsible for this report?</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter department name" {...field} />
+                          <Input placeholder="IT Security, Compliance, Risk Management, etc." {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -566,7 +566,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="reportGeneratorName"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Full Name of Report Generator</FormLabel>
+                        <FormLabel>Who is generating this report?</FormLabel>
                         <FormControl>
                           <Input placeholder="Enter your full name" {...field} />
                         </FormControl>
@@ -580,9 +580,9 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="reportGeneratorTitle"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Official Title or Company ID</FormLabel>
+                        <FormLabel>What is your title or position in the organization?</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your title or ID" {...field} />
+                          <Input placeholder="CISO, Security Analyst, IT Manager, etc." {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -596,7 +596,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="companyLogo"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Company Logo (optional)</FormLabel>
+                        <FormLabel>Would you like to upload your organization's logo for the report?</FormLabel>
                         <FormControl>
                           <div className="flex items-center gap-4">
                             <Input 
