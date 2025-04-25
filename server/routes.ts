@@ -215,6 +215,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get RASBITA report by ID
   app.get("/api/rasbita-reports/:id", async (req, res) => {
     try {
+      // Special case for "new" - return 404 to let client handle it
+      if (req.params.id === "new") {
+        return res.status(404).json({ error: "Creating new report" });
+      }
+      
       const report = await storage.getRasbitaReportById(parseInt(req.params.id));
       if (!report) {
         return res.status(404).json({ error: "RASBITA report not found" });
