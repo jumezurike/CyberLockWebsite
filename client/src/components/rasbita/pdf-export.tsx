@@ -77,7 +77,7 @@ export function PdfExport({ report }: PdfExportProps) {
         doc.rect(14, yPosition, 182, 12, 'F');
         doc.setFontSize(12);
         doc.setFont("helvetica", "bold");
-        doc.text("Cybersecurity Risk Governance & Management Assessment", 16, yPosition + 8);
+        doc.text("RASBITA™ GOV & MGNT SELF-SCORING Assessment", 16, yPosition + 8);
         
         yPosition += 15;
         
@@ -85,7 +85,7 @@ export function PdfExport({ report }: PdfExportProps) {
         doc.setFont("helvetica", "bold");
         doc.text("Governance Maturity:", 16, yPosition);
         doc.setFont("helvetica", "normal");
-        doc.text(`Tier ${report.governanceMaturity.governanceScore}: ${getTierLabel(report.governanceMaturity.governanceScore)}`, 90, yPosition);
+        doc.text(`Tier ${report.governanceMaturity.governanceScore}: ${getTierLabel(report.governanceMaturity.governanceScore)} (${report.governanceMaturity.governanceScore * 25}%)`, 90, yPosition);
         
         yPosition += 7;
         
@@ -93,32 +93,126 @@ export function PdfExport({ report }: PdfExportProps) {
         doc.setFont("helvetica", "bold");
         doc.text("Management Maturity:", 16, yPosition);
         doc.setFont("helvetica", "normal");
-        doc.text(`Tier ${report.governanceMaturity.managementScore}: ${getTierLabel(report.governanceMaturity.managementScore)}`, 90, yPosition);
+        doc.text(`Tier ${report.governanceMaturity.managementScore}: ${getTierLabel(report.governanceMaturity.managementScore)} (${report.governanceMaturity.managementScore * 25}%)`, 90, yPosition);
         
-        yPosition += 14;
+        yPosition += 10;
+        
+        // Relationship note
+        doc.setFontSize(9);
+        doc.setFillColor(232, 240, 254); // Light blue
+        doc.rect(14, yPosition, 182, 15, 'F');
+        doc.setTextColor(0, 40, 140); // Dark blue
+        doc.text("Note: Higher governance and management maturity (higher tier) typically results in a lower RASBITA™ risk", 16, yPosition + 5);
+        doc.text("score, indicating reduced security risk exposure due to better cybersecurity practices.", 16, yPosition + 10);
+        doc.setTextColor(0, 0, 0); // Reset to black
+        
+        yPosition += 20;
+        
+        // Governance assessment explanation
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text("Governance Assessment Explanation:", 16, yPosition);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        
+        let govExplanation = "";
+        switch(report.governanceMaturity.governanceScore) {
+          case 0:
+            govExplanation = "Organization has no formalized cybersecurity governance processes";
+            break;
+          case 1:
+            govExplanation = "Organization has some informal risk practices but lacks consistency";
+            break;
+          case 2:
+            govExplanation = "Organization has approved risk management practices with some documentation";
+            break;
+          case 3:
+            govExplanation = "Organization consistently applies risk-informed policies across the enterprise";
+            break;
+          case 4:
+            govExplanation = "Organization actively adapts cybersecurity practices to counter evolving threats";
+            break;
+          default:
+            govExplanation = "Assessment not completed";
+        }
+        
+        doc.text(govExplanation, 16, yPosition + 5);
+        yPosition += 12;
+        
+        // Management assessment explanation
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text("Management Assessment Explanation:", 16, yPosition);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        
+        let mgmtExplanation = "";
+        switch(report.governanceMaturity.managementScore) {
+          case 0:
+            mgmtExplanation = "No defined management processes for cybersecurity implementation";
+            break;
+          case 1:
+            mgmtExplanation = "Ad-hoc management of cybersecurity activities with limited awareness";
+            break;
+          case 2:
+            mgmtExplanation = "Management follows structured approach with defined responsibilities";
+            break;
+          case 3:
+            mgmtExplanation = "Established processes consistently managed with regular reviews";
+            break;
+          case 4:
+            mgmtExplanation = "Proactive management practices that continuously improve security posture";
+            break;
+          default:
+            mgmtExplanation = "Assessment not completed";
+        }
+        
+        doc.text(mgmtExplanation, 16, yPosition + 5);
+        yPosition += 15;
         
         // Tier Legend Table
         autoTable(doc, {
           startY: yPosition,
-          head: [['Tier', 'Name', 'Description']],
+          head: [['Tier', 'Name', 'Percentage', 'Description']],
           body: [
-            ['Tier 0 (0-0)', 'None', '0% - Completely uninformed about cybersecurity risk'],
-            ['Tier 1 (0-1)', 'Partial', '25% - Limited awareness and implementation'],
-            ['Tier 2 (1-2)', 'Risk Informed', '50% - Risk-informed, inconsistently implemented'],
-            ['Tier 3 (2-3)', 'Repeatable', '75% - Formally approved, consistently implemented'],
-            ['Tier 4 (3-4)', 'Adaptive', '100% - Adaptive, continuously improved']
+            ['Tier 0', 'None', '0%', 'Completely uninformed about cybersecurity risk'],
+            ['Tier 1', 'Partial', '25%', 'Limited awareness and implementation of risk practices'],
+            ['Tier 2', 'Risk Informed', '50%', 'Risk-informed practices, but inconsistently implemented'],
+            ['Tier 3', 'Repeatable', '75%', 'Formally approved, consistently implemented across organization'],
+            ['Tier 4', 'Adaptive', '100%', 'Adaptive practices that continuously evolve with changing threats']
           ],
           theme: 'grid',
           styles: { fontSize: 8, cellPadding: 2 },
           headStyles: { fillColor: [105, 42, 187], textColor: 255 },
           columnStyles: {
-            0: { cellWidth: 30 },
-            1: { cellWidth: 30 },
-            2: { cellWidth: 'auto' }
+            0: { cellWidth: 25 },
+            1: { cellWidth: 25 },
+            2: { cellWidth: 20 },
+            3: { cellWidth: 'auto' }
           }
         });
         
-        yPosition = (doc as any).lastAutoTable.finalY + 10;
+        yPosition = (doc as any).lastAutoTable.finalY + 8;
+        
+        // Improvement recommendations
+        doc.setFontSize(10);
+        doc.setFont("helvetica", "bold");
+        doc.text("Improvement Recommendations:", 16, yPosition);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(9);
+        
+        let recommendation = "";
+        if (report.governanceMaturity.governanceScore < 4) {
+          recommendation = `Focus on improving your governance practices from Tier ${report.governanceMaturity.governanceScore} to Tier ${Math.min(report.governanceMaturity.governanceScore + 1, 4)} by formalizing cybersecurity policies and risk management processes.`;
+        } else {
+          recommendation = "Maintain your excellent Tier 4 governance practices while continuously adapting to emerging threats and technologies.";
+        }
+        
+        // Handle text wrapping for recommendation
+        const splitRecommendation = doc.splitTextToSize(recommendation, 180);
+        doc.text(splitRecommendation, 16, yPosition + 5);
+        
+        yPosition = (doc as any).lastAutoTable.finalY + 15;
       }
       
       // FINANCIAL IMPACT SUMMARY
