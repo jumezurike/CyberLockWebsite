@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PdfExport } from '@/components/rasbita/pdf-export';
-import { Download, Mail, Share2, FileText, Save, Inbox, Calendar, CheckSquare } from 'lucide-react';
+import { Download, Mail, Share2, FileText, Save, Inbox, Calendar, CheckSquare, AlertCircle, AlertOctagon } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -929,6 +929,28 @@ export default function RasbitaReportPage() {
                       <FileText className="h-4 w-4" />
                       Report Details
                     </Button>
+                  </div>
+                  
+                  <div className="mt-3 bg-purple-50 p-3 rounded-md border border-purple-200">
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="h-5 w-5 text-purple-600 mt-0.5" />
+                      <div>
+                        <p className="text-sm text-purple-800 font-medium">Crisis Support Mode</p>
+                        <p className="text-xs text-purple-700 mt-1">
+                          Need a standalone governance assessment during an active security incident? 
+                          Access the dedicated crisis tool:
+                        </p>
+                        <div className="mt-2">
+                          <a 
+                            href="/rasbita-governance" 
+                            className="inline-flex items-center gap-1.5 text-xs font-medium bg-purple-700 text-white px-2.5 py-1.5 rounded hover:bg-purple-800 transition-colors"
+                          >
+                            <AlertOctagon className="h-3.5 w-3.5" />
+                            Launch RASBITA GOV & MGNT Crisis Tool
+                          </a>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </CardContent>

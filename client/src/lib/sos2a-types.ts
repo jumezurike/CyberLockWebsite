@@ -238,6 +238,7 @@ export interface RasbitaReport {
   governanceMaturity?: {
     governanceScore: number; // 0-4 tiered score
     managementScore: number; // 0-4 tiered score
+    completed?: boolean; // Indicates whether the assessment has been completed
   };
   rasbitaCategories: {
     govern: number;
