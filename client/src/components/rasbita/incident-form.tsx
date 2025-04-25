@@ -24,6 +24,13 @@ import { useToast } from "@/hooks/use-toast";
 
 // Define the form schema with zod based on RASBITA specifications
 const formSchema = z.object({
+  // Company information for report
+  companyName: z.string().optional(),
+  department: z.string().optional(),
+  reportGeneratorName: z.string().optional(),
+  reportGeneratorTitle: z.string().optional(),
+  companyLogo: z.string().optional(),
+  
   // Basic incident information
   incidentTitle: z.string().min(5, "Title must be at least 5 characters"),
   incidentDescription: z.string().min(10, "Please provide more details about the incident"),
@@ -459,6 +466,113 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
         <CardContent className="pt-6">
           <Form {...form}>
             <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
+              {/* Company Information Section */}
+              <div className="bg-purple-50 p-4 rounded-md mb-6">
+                <h3 className="text-md font-medium mb-3">Company Information for Report</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="companyName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company/Bureau Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter company name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="department"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Department</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter department name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="reportGeneratorName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Full Name of Report Generator</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your full name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="reportGeneratorTitle"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Official Title or Company ID</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your title or ID" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <div className="mt-4">
+                  <FormField
+                    control={form.control}
+                    name="companyLogo"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Company Logo (optional)</FormLabel>
+                        <FormControl>
+                          <div className="flex items-center gap-4">
+                            <Input 
+                              type="file" 
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  // Convert to base64 for storage
+                                  const reader = new FileReader();
+                                  reader.onload = (event) => {
+                                    if (event.target?.result) {
+                                      field.onChange(event.target.result);
+                                    }
+                                  };
+                                  reader.readAsDataURL(file);
+                                }
+                              }} 
+                            />
+                            {field.value && typeof field.value === 'string' && (
+                              <div className="h-16 w-16 relative overflow-hidden rounded border">
+                                <img 
+                                  src={field.value} 
+                                  alt="Company logo preview" 
+                                  className="h-full w-full object-contain"
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </FormControl>
+                        <FormDescription>
+                          Upload your company logo to appear on the generated report
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
               <Tabs defaultValue="incident" className="w-full">
                 <TabsList className="grid grid-cols-4 mb-4">
                   <TabsTrigger value="incident">Incident Details</TabsTrigger>
@@ -601,8 +715,20 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="deviceType"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Device Type</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormLabel>Enter the device type here:</FormLabel>
+                          <Select 
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              // Auto-populate device cost if a matching field exists
+                              const selectedDevice = deviceTypeOptions.find(d => d.value === value);
+                              if (selectedDevice && selectedDevice.cost) {
+                                // If we have a machineCost field, populate it
+                                if (form.getValues().hasOwnProperty("machineCost")) {
+                                  form.setValue("machineCost", selectedDevice.cost);
+                                }
+                              }
+                            }} 
+                            defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select device type" />
