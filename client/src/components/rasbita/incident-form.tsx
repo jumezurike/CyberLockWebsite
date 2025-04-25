@@ -93,54 +93,55 @@ type IncidentFormData = z.infer<typeof formSchema>;
 
 interface IncidentFormProps {
   onSubmit: (data: any) => void;
+  initialData?: Partial<IncidentFormData>;
 }
 
-export default function IncidentForm({ onSubmit }: IncidentFormProps) {
+export default function IncidentForm({ onSubmit, initialData }: IncidentFormProps) {
   const { toast } = useToast();
   
   const form = useForm<IncidentFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       // Company information for reporting
-      companyName: "",
-      department: "",
-      reportGeneratorName: "",
-      reportGeneratorTitle: "",
-      companyLogo: "",
+      companyName: initialData?.companyName || "",
+      department: initialData?.department || "",
+      reportGeneratorName: initialData?.reportGeneratorName || "",
+      reportGeneratorTitle: initialData?.reportGeneratorTitle || "",
+      companyLogo: initialData?.companyLogo || "",
       
       // Basic incident information
-      incidentTitle: "",
-      incidentDescription: "",
-      incidentDate: new Date().toISOString().split('T')[0],
-      incidentCategory: "unauthorized_external",
-      affectedSystems: "",
+      incidentTitle: initialData?.incidentTitle || "",
+      incidentDescription: initialData?.incidentDescription || "",
+      incidentDate: initialData?.incidentDate || new Date().toISOString().split('T')[0],
+      incidentCategory: initialData?.incidentCategory || "unauthorized_external",
+      affectedSystems: initialData?.affectedSystems || "",
       
       // RASBITA specific fields from technical spec
-      deviceType: "workstation",
-      damagedDevices: "1",
-      totalDevicesInDepartment: "10",
-      dataClass: "non_phi_pii",
-      dataSpread: "moderately_spread",
-      dataLossPercentage: "21_40",
-      deviceUsageFrequency: "daily",
-      deviceEnvironment: "production",
-      threatValue: "8", // Default for unauthorized_external
-      threatCost: "5", // Default cost for unauthorized_external
-      machineCost: "500", // Default for workstation
-      customAssetValue: "",
-      useCustomAssetValue: false,
-      totalDataCount: "1000",
-      annualizedRateOfOccurrence: "0.5", // Once every 2 years
+      deviceType: initialData?.deviceType || "workstation",
+      damagedDevices: initialData?.damagedDevices || "1",
+      totalDevicesInDepartment: initialData?.totalDevicesInDepartment || "10",
+      dataClass: initialData?.dataClass || "non_phi_pii",
+      dataSpread: initialData?.dataSpread || "moderately_spread",
+      dataLossPercentage: initialData?.dataLossPercentage || "21_40",
+      deviceUsageFrequency: initialData?.deviceUsageFrequency || "daily",
+      deviceEnvironment: initialData?.deviceEnvironment || "production",
+      threatValue: initialData?.threatValue || "8", // Default for unauthorized_external
+      threatCost: initialData?.threatCost || "5", // Default cost for unauthorized_external
+      machineCost: initialData?.machineCost || "500", // Default for workstation
+      customAssetValue: initialData?.customAssetValue || "",
+      useCustomAssetValue: initialData?.useCustomAssetValue || false,
+      totalDataCount: initialData?.totalDataCount || "1000",
+      annualizedRateOfOccurrence: initialData?.annualizedRateOfOccurrence || "0.5", // Once every 2 years
       
       // Additional information
-      assetName: "",
-      existingSafeguards: "",
+      assetName: initialData?.assetName || "",
+      existingSafeguards: initialData?.existingSafeguards || "",
       
       // Feasibility factors
-      organizationalFeasible: true,
-      behavioralFeasible: true,
-      technicalFeasible: true,
-      politicalFeasible: true,
+      organizationalFeasible: initialData?.organizationalFeasible !== undefined ? initialData.organizationalFeasible : true,
+      behavioralFeasible: initialData?.behavioralFeasible !== undefined ? initialData.behavioralFeasible : true,
+      technicalFeasible: initialData?.technicalFeasible !== undefined ? initialData.technicalFeasible : true,
+      politicalFeasible: initialData?.politicalFeasible !== undefined ? initialData.politicalFeasible : true,
     },
   });
 

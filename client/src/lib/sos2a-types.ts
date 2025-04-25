@@ -195,6 +195,8 @@ export interface RasbitaRiskItem {
     deviceCount: number;
     damagedDevices: number;
   };
+  useCustomAssetValue?: boolean;
+  customAssetValue?: string;
 }
 
 export interface RasbitaReport {
