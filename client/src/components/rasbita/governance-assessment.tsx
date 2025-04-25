@@ -36,9 +36,28 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
     const tierValue = parseInt(value);
     setGovernanceScore(tierValue);
     
-    // If Governance is set to Adaptive (Tier 4), Management must also be Adaptive
+    // Apply constraints based on governance tier
     if (tierValue === 4) {
+      // If Governance is set to Adaptive (Tier 4), Management must also be Adaptive
       setManagementScore(4);
+    } else if (managementScore > tierValue) {
+      // Management tier can never be higher than governance tier
+      setManagementScore(tierValue);
+    }
+  };
+  
+  // Ensure management tier is never higher than governance tier
+  const handleManagementChange = (value: string) => {
+    const tierValue = parseInt(value);
+    
+    // Only allow setting management tier if it's not higher than governance tier
+    if (tierValue <= governanceScore) {
+      setManagementScore(tierValue);
+    } else {
+      // If trying to set management higher than governance, show alert
+      alert("Management tier cannot be higher than Governance tier. Please upgrade your Governance tier first.");
+      // Keep existing value
+      setManagementScore(managementScore);
     }
   };
   
@@ -183,7 +202,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
               
               <RadioGroup 
                 value={managementScore?.toString() || "0"} 
-                onValueChange={(value) => setManagementScore(parseInt(value))}
+                onValueChange={handleManagementChange}
                 className="space-y-4"
                 disabled={governanceScore === 4} // Disable if Governance is set to Adaptive (Tier 4)
               >
