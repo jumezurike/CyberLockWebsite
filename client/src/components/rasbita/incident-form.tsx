@@ -651,12 +651,12 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="incidentTitle"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Incident Title</FormLabel>
+                        <FormLabel>What is the title of this security incident?</FormLabel>
                         <FormControl>
                           <Input placeholder="Unauthorized Database Access" {...field} />
                         </FormControl>
                         <FormDescription>
-                          Provide a clear, concise title for the security incident
+                          Provide a clear, concise title that summarizes the incident
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -791,7 +791,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="deviceType"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Enter the device type here:</FormLabel>
+                          <FormLabel>What type of device was affected in this incident?</FormLabel>
                           <Select 
                             onValueChange={(value) => {
                               field.onChange(value);
@@ -819,7 +819,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                             </SelectContent>
                           </Select>
                           <FormDescription>
-                            The type of device affected by this incident
+                            Select the specific device type that was primarily affected
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -1022,7 +1022,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                           </SelectContent>
                         </Select>
                         <FormDescription>
-                          Classification of data held by the affected systems
+                          Select the classification level of the affected data (higher sensitivity = higher risk)
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -1051,7 +1051,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                             </SelectContent>
                           </Select>
                           <FormDescription>
-                            The coverage or spread of the data incident
+                            Indicate how far the compromised data has spread (wider exposure = higher risk)
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
