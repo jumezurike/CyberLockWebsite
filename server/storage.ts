@@ -1,4 +1,17 @@
-import { users, type User, type InsertUser, type Assessment, type InsertAssessment, assessments, earlyAccessSubmissions, type InsertEarlyAccessSubmission, type EarlyAccessSubmission } from "@shared/schema";
+import { 
+  users, 
+  type User, 
+  type InsertUser, 
+  type Assessment, 
+  type InsertAssessment, 
+  assessments, 
+  earlyAccessSubmissions, 
+  type InsertEarlyAccessSubmission, 
+  type EarlyAccessSubmission,
+  rasbitaReports,
+  type InsertRasbitaReport,
+  type RasbitaReport 
+} from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -21,6 +34,14 @@ export interface IStorage {
   getEarlyAccessSubmission(id: number): Promise<EarlyAccessSubmission | undefined>;
   createEarlyAccessSubmission(submission: InsertEarlyAccessSubmission): Promise<EarlyAccessSubmission>;
   updateEarlyAccessSubmissionStatus(id: number, status: string): Promise<EarlyAccessSubmission | undefined>;
+  
+  // RASBITA operations
+  getAllRasbitaReports(): Promise<RasbitaReport[]>;
+  getRasbitaReportById(id: number): Promise<RasbitaReport | undefined>;
+  createRasbitaReport(report: InsertRasbitaReport): Promise<RasbitaReport>;
+  updateRasbitaReport(id: number, report: InsertRasbitaReport): Promise<RasbitaReport | undefined>;
+  deleteRasbitaReport(id: number): Promise<boolean>;
+  getRasbitaReportsByUser(userId: number): Promise<RasbitaReport[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -206,6 +227,82 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return submission;
+  }
+
+  // RASBITA operations
+  async getAllRasbitaReports(): Promise<RasbitaReport[]> {
+    return await db.select().from(rasbitaReports);
+  }
+
+  async getRasbitaReportById(id: number): Promise<RasbitaReport | undefined> {
+    const [report] = await db.select().from(rasbitaReports).where(eq(rasbitaReports.id, id));
+    return report;
+  }
+
+  async createRasbitaReport(report: InsertRasbitaReport): Promise<RasbitaReport> {
+    const [newReport] = await db
+      .insert(rasbitaReports)
+      .values({
+        userId: report.userId || null,
+        businessId: report.businessId || `business-${Date.now()}`,
+        title: report.title,
+        incidentCategory: report.incidentCategory,
+        overallRiskScore: report.overallRiskScore,
+        company: report.company,
+        incident: report.incident,
+        riskItems: report.riskItems,
+        rasbitaCategories: report.rasbitaCategories,
+        financialSummary: report.financialSummary,
+        dashboard: report.dashboard,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .returning();
+    
+    return newReport;
+  }
+
+  async updateRasbitaReport(id: number, updatedReport: InsertRasbitaReport): Promise<RasbitaReport | undefined> {
+    const existingReport = await this.getRasbitaReportById(id);
+    if (!existingReport) {
+      return undefined;
+    }
+    
+    const [report] = await db
+      .update(rasbitaReports)
+      .set({
+        title: updatedReport.title,
+        incidentCategory: updatedReport.incidentCategory,
+        overallRiskScore: updatedReport.overallRiskScore,
+        company: updatedReport.company,
+        incident: updatedReport.incident,
+        riskItems: updatedReport.riskItems,
+        rasbitaCategories: updatedReport.rasbitaCategories,
+        financialSummary: updatedReport.financialSummary,
+        dashboard: updatedReport.dashboard,
+        updatedAt: new Date()
+      })
+      .where(eq(rasbitaReports.id, id))
+      .returning();
+    
+    return report;
+  }
+
+  async deleteRasbitaReport(id: number): Promise<boolean> {
+    await db
+      .delete(rasbitaReports)
+      .where(eq(rasbitaReports.id, id));
+    
+    // Check if the report still exists
+    const report = await this.getRasbitaReportById(id);
+    return !report;
+  }
+
+  async getRasbitaReportsByUser(userId: number): Promise<RasbitaReport[]> {
+    return await db
+      .select()
+      .from(rasbitaReports)
+      .where(eq(rasbitaReports.userId, userId));
   }
 }
 

@@ -46,6 +46,23 @@ export const earlyAccessSubmissions = pgTable("early_access_submissions", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+export const rasbitaReports = pgTable("rasbita_reports", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  businessId: text("business_id"),
+  title: text("title").notNull(),
+  incidentCategory: text("incident_category").notNull(),
+  overallRiskScore: integer("overall_risk_score").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+  company: jsonb("company").notNull(),
+  incident: jsonb("incident").notNull(),
+  riskItems: jsonb("risk_items").notNull(),
+  rasbitaCategories: jsonb("rasbita_categories").notNull(),
+  financialSummary: jsonb("financial_summary").notNull(),
+  dashboard: jsonb("dashboard").notNull(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -95,3 +112,20 @@ export type Assessment = typeof assessments.$inferSelect;
 
 export type InsertEarlyAccessSubmission = z.infer<typeof insertEarlyAccessSubmissionSchema>;
 export type EarlyAccessSubmission = typeof earlyAccessSubmissions.$inferSelect;
+
+export const insertRasbitaReportSchema = z.object({
+  userId: z.number().optional(),
+  businessId: z.string().optional(),
+  title: z.string().min(3, "Report title is required"),
+  incidentCategory: z.string().min(1, "Incident category is required"),
+  overallRiskScore: z.number(),
+  company: z.any(),
+  incident: z.any(),
+  riskItems: z.array(z.any()),
+  rasbitaCategories: z.any(),
+  financialSummary: z.any(),
+  dashboard: z.any(),
+});
+
+export type InsertRasbitaReport = z.infer<typeof insertRasbitaReportSchema>;
+export type RasbitaReport = typeof rasbitaReports.$inferSelect;
