@@ -89,7 +89,8 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                   <div className="space-y-1.5">
                     <Label htmlFor="governance-0" className="text-base font-semibold">Tier 0 (0-0): 0% None</Label>
                     <p className="text-sm text-gray-500">
-                      Not currently part of the cybersecurity risk governance and management practices in the organization.
+                      The organization is completely uninformed about cybersecurity risk governance. There is no awareness, 
+                      understanding, or formal approach to managing cybersecurity risks at any level of the organization.
                     </p>
                   </div>
                 </div>
@@ -191,7 +192,8 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                   <div className="space-y-1.5">
                     <Label htmlFor="management-0" className="text-base font-semibold">Tier 0 (0-0): 0% None</Label>
                     <p className="text-sm text-gray-500">
-                      Not currently part of the cybersecurity risk governance and management practices in the organization.
+                      The organization is completely uninformed about cybersecurity risk management. There is no awareness, 
+                      understanding, or formal approach to managing cybersecurity risks at any level of the organization.
                     </p>
                   </div>
                 </div>
