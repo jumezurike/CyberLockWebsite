@@ -959,7 +959,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="deviceEnvironment"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Device Environment</FormLabel>
+                          <FormLabel>In which environment was the affected device located?</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -997,8 +997,17 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="dataClass"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Data Classification</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormLabel>What type of data was affected in this incident?</FormLabel>
+                        <Select 
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            // Auto-populate based on data classification 
+                            const selectedClass = dataClassOptions.find(c => c.value === value);
+                            if (selectedClass && selectedClass.value_weight) {
+                              // Could set downstream values based on data classification
+                            }
+                          }} 
+                          defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
                               <SelectValue placeholder="Select data classification" />
@@ -1026,7 +1035,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="dataSpread"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Data Incident Spread</FormLabel>
+                          <FormLabel>How widely was the data spread or exposed?</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
@@ -1054,8 +1063,15 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="dataLossPercentage"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Data Loss Percentage</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormLabel>What percentage of data was lost or compromised?</FormLabel>
+                          <Select 
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              // Auto-calculate exposure factor when data loss percentage changes
+                              const exposureFactor = getExposureFactorFromDataLoss(value);
+                              // Could potentially auto-populate other fields that depend on exposure factor
+                            }}
+                            defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
                                 <SelectValue placeholder="Select percentage range" />
@@ -1083,7 +1099,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="annualizedRateOfOccurrence"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Annualized Rate of Occurrence (ARO)</FormLabel>
+                        <FormLabel>How often do you expect this type of incident to occur?</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
@@ -1120,7 +1136,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="existingSafeguards"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Existing Safeguards</FormLabel>
+                        <FormLabel>What security controls were already in place during this incident?</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Firewall, IDS/IPS, data encryption, regular backups..."
@@ -1250,6 +1266,50 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                   </div>
                 </TabsContent>
               </Tabs>
+              
+              {/* Distribution options */}
+              <div className="mb-6 bg-gray-50 p-4 rounded-lg border">
+                <h3 className="text-lg font-medium mb-3">Report Distribution Options</h3>
+                <p className="text-sm text-gray-600 mb-4">Select how you want to distribute the RASBITA report:</p>
+                
+                <div className="flex flex-wrap gap-3">
+                  <Button 
+                    type="button" 
+                    className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+                    onClick={() => toast({
+                      title: "Email Distribution",
+                      description: "This feature will be available soon. The report will be emailed to specified stakeholders.",
+                    })}
+                  >
+                    <Mail className="h-4 w-4" />
+                    Email Report
+                  </Button>
+                  
+                  <Button 
+                    type="button" 
+                    className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
+                    onClick={() => toast({
+                      title: "PDF Export",
+                      description: "This feature will be available soon. The report will be exported as a PDF document.",
+                    })}
+                  >
+                    <FileText className="h-4 w-4" />
+                    Export PDF
+                  </Button>
+                  
+                  <Button 
+                    type="button" 
+                    className="bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-2"
+                    onClick={() => toast({
+                      title: "SMS Notification",
+                      description: "This feature will be available soon. Report summaries will be sent via SMS to key stakeholders.",
+                    })}
+                  >
+                    <MessageSquare className="h-4 w-4" />
+                    SMS Alert
+                  </Button>
+                </div>
+              </div>
               
               <div className="flex justify-end">
                 <Button 
