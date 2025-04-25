@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { PdfExport } from '@/components/rasbita/pdf-export';
 import { Download, Mail, Share2, FileText, Save, Inbox, Calendar, CheckSquare } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";

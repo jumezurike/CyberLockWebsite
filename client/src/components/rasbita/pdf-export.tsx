@@ -3,7 +3,19 @@ import { Button } from "@/components/ui/button";
 import { RasbitaReport } from "@shared/schema";
 import { jsPDF } from "jspdf";
 import autoTable from 'jspdf-autotable';
-import { getTierLabel } from '@/components/rasbita/governance-assessment';
+// Helper function to get tier label
+function getTierLabel(score: number | null): string {
+  if (score === null) return "Not assessed";
+  
+  switch (score) {
+    case 0: return "None";
+    case 1: return "Partial";
+    case 2: return "Risk Informed";
+    case 3: return "Repeatable";
+    case 4: return "Adaptive";
+    default: return "Unknown";
+  }
+}
 
 interface PdfExportProps {
   report: RasbitaReport;
