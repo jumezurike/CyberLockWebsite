@@ -20,6 +20,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 
@@ -369,7 +370,9 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
           dataLossPercentage: data.dataLossPercentage,
           deviceUsageFrequency: data.deviceUsageFrequency,
           deviceEnvironment: data.deviceEnvironment,
-          totalDataCount: data.totalDataCount
+          totalDataCount: data.totalDataCount,
+          useCustomAssetValue: data.useCustomAssetValue,
+          customAssetValue: data.customAssetValue
         },
         riskItem: completeRiskItem
       };
@@ -865,6 +868,53 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                         </FormItem>
                       )}
                     />
+                    
+                    <FormField
+                      control={form.control}
+                      name="useCustomAssetValue"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Use custom asset value?</FormLabel>
+                          <div className="flex items-center space-x-2">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <FormDescription>
+                              Use your organization's actual asset values
+                            </FormDescription>
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    {form.watch("useCustomAssetValue") && (
+                      <FormField
+                        control={form.control}
+                        name="customAssetValue"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>What is the custom asset value for each device? ($)</FormLabel>
+                            <FormControl>
+                              <Input
+                                {...field}
+                                type="number"
+                                min="0"
+                                step="100"
+                                placeholder="Enter custom asset value per device"
+                              />
+                            </FormControl>
+                            <FormDescription>
+                              Enter your organization's actual asset value per device
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
                     
                     <FormField
                       control={form.control}
