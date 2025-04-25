@@ -355,8 +355,18 @@ export default function RasbitaReportPage() {
         const formData = reportToFormData(data);
         setInitialFormData(formData);
         
-        // Ensure dashboard is shown
-        setShowResults(true);
+        // Check if governance assessment has been completed
+        if (data.governanceMaturity?.completed) {
+          // If governance is already done, proceed to results
+          setAssessmentStep("results");
+          setShowResults(true);
+          setShowGovernanceAndManagementAssessment(false);
+        } else {
+          // If governance is not done, start with governance assessment
+          setAssessmentStep("governance");
+          setShowGovernanceAndManagementAssessment(true);
+          setShowResults(false);
+        }
         
         toast({
           title: "Report Loaded",
@@ -464,13 +474,25 @@ export default function RasbitaReportPage() {
         setReport({
           ...sampleReport,
           id: "new",
-          createdAt: new Date().toISOString()
+          createdAt: new Date().toISOString(),
+          // Initialize governance maturity to Tier 0 for both scores
+          governanceMaturity: {
+            governanceScore: 0,
+            managementScore: 0,
+            completed: false
+          }
         });
         // Clear any initial form data
         setInitialFormData(null);
+        
+        // Start with the governance assessment
+        setAssessmentStep("governance");
+        setShowGovernanceAndManagementAssessment(true);
+        setShowResults(false);
+        
         toast({
           title: "New Report Created",
-          description: "A new RASBITA report template has been created.",
+          description: "Begin by completing the Governance & Management assessment.",
         });
       }
     } catch (error) {
@@ -645,6 +667,130 @@ export default function RasbitaReportPage() {
     }
   };
   
+  // Handle incident form submission
+  const handleIncidentFormSubmit = (formData: any) => {
+    // Process form data and update report
+    console.log("Form submitted with data:", formData);
+    
+    // Update the report with the form data
+    setReport(prevReport => {
+      // Extract company information
+      const company = {
+        ...prevReport.company,
+        name: formData.companyName || prevReport.company.name,
+        department: formData.department || prevReport.company.department,
+        reportGenerator: {
+          name: formData.reportGeneratorName || (prevReport.company.reportGenerator?.name || ""),
+          title: formData.reportGeneratorTitle || (prevReport.company.reportGenerator?.title || "")
+        },
+        logo: formData.companyLogo || prevReport.company.logo
+      };
+      
+      // Extract incident information
+      const incident = {
+        title: formData.incidentTitle || "Security Assessment",
+        description: formData.incidentDescription || "General security assessment",
+        date: formData.incidentDate || new Date().toISOString().slice(0, 10),
+        category: formData.incidentCategory || "general_assessment",
+        affectedSystems: formData.affectedSystems || "All Systems"
+      };
+      
+      // Process the risk item
+      const threatValue = parseInt(formData.threatValue || "5", 10);
+      const machineCost = parseInt(formData.machineCost || "1000", 10);
+      const damagedDevices = parseInt(formData.damagedDevices || "1", 10);
+      const assetValue = formData.useCustomAssetValue && formData.customAssetValue 
+        ? parseInt(formData.customAssetValue.replace(/[^\d]/g, ''), 10) 
+        : (machineCost * damagedDevices);
+      
+      // Calculate exposure factor based on data loss percentage
+      let exposureFactor = 0.3; // Default
+      switch (formData.dataLossPercentage) {
+        case "0_20": exposureFactor = 0.1; break;
+        case "21_40": exposureFactor = 0.3; break;
+        case "41_60": exposureFactor = 0.5; break;
+        case "61_80": exposureFactor = 0.7; break;
+        case "81_100": exposureFactor = 0.9; break;
+      }
+      
+      // Calculate other risk metrics
+      const singleLossExpectancy = assetValue * exposureFactor;
+      const annualizedRateOfOccurrence = parseFloat(formData.annualizedRateOfOccurrence || "0.5");
+      const annualizedLossExpectancy = singleLossExpectancy * annualizedRateOfOccurrence;
+      const annualCostOfSafeguard = assetValue * 0.2; // Assuming 20% of asset value
+      const netRiskReductionBenefit = annualizedLossExpectancy - annualCostOfSafeguard;
+      
+      // Create the risk item
+      const riskItem: RasbitaRiskItem = {
+        id: `item-${Date.now()}`,
+        assetName: formData.assetName || "Primary Business Systems",
+        assetValue,
+        threatName: formData.threatName || "Security Incident",
+        exposureFactor,
+        annualizedRateOfOccurrence,
+        singleLossExpectancy,
+        annualizedLossExpectancy,
+        annualCostOfSafeguard,
+        netRiskReductionBenefit,
+        priority: threatValue >= 8 ? "Critical" : threatValue >= 6 ? "High" : threatValue >= 4 ? "Medium" : "Low",
+        impact: threatValue,
+        likelihood: annualizedRateOfOccurrence * 10,
+        confidentiality: 7,
+        integrity: 7,
+        availability: 7,
+        feasibilityFactors: {
+          organizational: formData.organizationalFeasible || false,
+          behavioral: formData.behavioralFeasible || false,
+          technical: formData.technicalFeasible || false,
+          political: formData.politicalFeasible || false
+        },
+        deviceInfo: {
+          deviceType: formData.deviceType || "workstation",
+          deviceCount: parseInt(formData.totalDevicesInDepartment || "10", 10),
+          damagedDevices: damagedDevices
+        },
+        useCustomAssetValue: formData.useCustomAssetValue || false,
+        customAssetValue: formData.customAssetValue || ""
+      };
+      
+      // Update financial summary
+      const financialSummary = {
+        totalAssetValue: assetValue,
+        totalAnnualizedLossExpectancy: annualizedLossExpectancy,
+        totalCostOfSafeguards: annualCostOfSafeguard,
+        totalNetRiskReductionBenefit: netRiskReductionBenefit
+      };
+      
+      // Update the report
+      return {
+        ...prevReport,
+        title: formData.incidentTitle || prevReport.title || "RASBITA Risk Assessment",
+        company,
+        incident,
+        riskItems: [riskItem],
+        financialSummary,
+        deviceType: formData.deviceType || "workstation",
+        totalDevices: parseInt(formData.totalDevicesInDepartment || "10", 10),
+        affectedDevices: damagedDevices,
+        percentageAffected: `${Math.round((damagedDevices / parseInt(formData.totalDevicesInDepartment || "10", 10)) * 100)}%`,
+        totalDataCount: parseInt(formData.totalDataCount || "1000", 10),
+        dataLost: Math.round(parseInt(formData.totalDataCount || "1000", 10) * exposureFactor),
+        damagedDevicesCost: machineCost * damagedDevices,
+        threatSpreadCost: Math.round(singleLossExpectancy * 0.3),
+        residualCost: Math.round(singleLossExpectancy * 0.1),
+        updatedAt: new Date().toISOString()
+      };
+    });
+    
+    // Automatically save to database
+    setTimeout(() => saveReport(), 500);
+    
+    toast({
+      title: "Risk Assessment Updated",
+      description: "Your RASBITA risk assessment details have been updated.",
+    });
+  };
+  
   // Save the current report to the API
   const saveReport = async () => {
     setSaveLoading(true);
@@ -727,9 +873,82 @@ export default function RasbitaReportPage() {
         </div>
       </div>
       
-      {showGovernanceAndManagementAssessment ? (
-        <GovernanceAndManagementAssessment onComplete={handleGovernanceComplete} />
-      ) : (
+      {/* Sequential Assessment Flow */}
+      {assessmentStep === "governance" && (
+        <div className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-chart-4">STEP 1: Cybersecurity Risk Governance & Management Assessment</CardTitle>
+              <CardDescription>
+                Begin by assessing your organization's maturity in governing and managing cybersecurity risks
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-blue-50 p-4 rounded-md mb-6">
+                <div className="flex items-start gap-2">
+                  <div className="mt-1 text-blue-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 8v4" />
+                      <path d="M12 16h.01" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 className="font-medium text-blue-800">Required Assessment</h3>
+                    <p className="text-sm text-blue-700 mt-1">
+                      The Governance & Management assessment is a necessary first step in the RASBITA process. 
+                      Your assessment results will be included in both preliminary and comprehensive reports.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <GovernanceAndManagementAssessment onComplete={handleGovernanceComplete} />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+      
+      {/* Incident Form Step */}
+      {assessmentStep === "incident" && (
+        <div className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-chart-4">STEP 2: Risk Assessment Details</CardTitle>
+              <CardDescription>
+                Now that governance is assessed, provide details about the security incident or risk assessment
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="bg-green-50 p-4 rounded-md mb-6">
+                <div className="flex items-start gap-2">
+                  <CheckSquare className="h-5 w-5 text-green-600 mt-0.5" />
+                  <div>
+                    <h3 className="font-medium text-green-800">Governance Assessment Complete</h3>
+                    <p className="text-sm text-green-700 mt-1">
+                      Your organization's governance maturity is now at Tier {report.governanceMaturity?.governanceScore || 0} and 
+                      management maturity at Tier {report.governanceMaturity?.managementScore || 0}.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <IncidentForm 
+                onComplete={(formData: any) => {
+                  handleIncidentFormSubmit(formData);
+                  // Move to results after submitting incident form
+                  setAssessmentStep("results");
+                  setShowResults(true);
+                }}
+                initialData={initialFormData}
+              />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+      
+      {/* Results Dashboard */}
+      {assessmentStep === "results" && (
         <div className="grid grid-cols-1 gap-6">
           <Card>
             <CardHeader className="bg-purple-50">
@@ -746,11 +965,15 @@ export default function RasbitaReportPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setShowGovernanceAndManagementAssessment(true)}
+                    onClick={() => {
+                      setAssessmentStep("governance");
+                      setShowGovernanceAndManagementAssessment(true);
+                      setShowResults(false);
+                    }}
                     className="flex items-center gap-2 text-chart-4 border-chart-4"
                   >
                     <CheckSquare className="h-4 w-4" />
-                    <span>Governance & Management Assessment</span>
+                    <span>Update Governance Assessment</span>
                   </Button>
                   <Button
                     variant="outline"
