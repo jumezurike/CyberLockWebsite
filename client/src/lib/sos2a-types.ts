@@ -171,6 +171,7 @@ export interface ScorecardItem {
 }
 
 export interface RasbitaRiskItem {
+  id?: string; // Used for database identification
   assetName: string;
   assetValue: number; // AV
   threatName: string;
@@ -179,16 +180,25 @@ export interface RasbitaRiskItem {
   singleLossExpectancy: number; // SLE = AV * EF
   annualizedLossExpectancy: number; // ALE = SLE * ARO
   annualCostOfSafeguard: number; // ACS
-  annualizedLossExpectancyAfterControls: number; // ALE after implementing controls
+  annualizedLossExpectancyAfterControls?: number; // ALE after implementing controls
   netRiskReductionBenefit: number; // NRRB = [ALE(prior) - ALE(post)] - ACS
   priority: 'Critical' | 'High' | 'Medium' | 'Low'; // Based on impact and probability
-  probability: number; // 0-1 representing likelihood of occurrence
+  probability?: number; // 0-1 representing likelihood of occurrence
   impact: number; // 1-10 representing severity of impact
+  // Additional properties for RASBITA calculations
+  likelihood?: number; // 1-10 scale for likelihood calculation
+  threatLevel?: number; // 1-10 scale for threat severity
+  safeguardEffectiveness?: number; // 1-10 scale for effectiveness
+  confidentiality?: number; // 1-10 scale for confidentiality impact
+  integrity?: number; // 1-10 scale for integrity impact
+  availability?: number; // 1-10 scale for availability impact
   feasibilityFactors: {
     organizational: boolean;
     behavioral: boolean;
     technical: boolean;
     political: boolean;
+    operational?: boolean; // Some functions expect this property
+    economic?: boolean; // Some functions expect this property
   };
   deviceInfo?: {
     deviceType: string;

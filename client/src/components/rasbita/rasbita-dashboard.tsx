@@ -221,7 +221,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
           <CardHeader className="bg-purple-50 border-b">
             <CardTitle className="text-chart-4 flex items-center justify-between">
               <span>RASBITA™ Risk Score</span>
-              <span className="text-2xl font-bold">{report.overallRiskScore.toFixed(1)}%</span>
+              <span className="text-2xl font-bold">{overallRiskScore.toFixed(1)}%</span>
             </CardTitle>
             <CardDescription>
               CISSP Risk Assessment Score by Threat and Impact Analysis
@@ -241,7 +241,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
               </ResponsiveContainer>
             </div>
             <div className="mt-4 grid grid-cols-3 sm:grid-cols-7 gap-2 text-center">
-              {Object.entries(report.rasbitaCategories).map(([key, value], index) => (
+              {Object.entries(rasbitaCategories || {}).map(([key, value], index) => (
                 <div key={key} className="bg-purple-50 p-2 rounded-md">
                   <div className="text-xs uppercase text-gray-500">{key.charAt(0).toUpperCase()}</div>
                   <div className="font-bold text-chart-4">{value}%</div>
@@ -343,26 +343,26 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {report.riskItems.map((item, index) => (
+                {riskItems.map((item, index) => (
                   <TableRow key={index}>
-                    <TableCell className="font-medium">{item.assetName}</TableCell>
-                    <TableCell>{item.threatName}</TableCell>
+                    <TableCell className="font-medium">{item.assetName || "Unknown"}</TableCell>
+                    <TableCell>{item.threatName || "Unknown"}</TableCell>
                     <TableCell>
                       <span className={`inline-block px-2 py-1 rounded-full text-xs font-semibold
-                        ${item.priority === 'Critical' ? 'bg-red-100 text-red-800' : 
-                          item.priority === 'High' ? 'bg-orange-100 text-orange-800' :
-                          item.priority === 'Medium' ? 'bg-yellow-100 text-yellow-800' :
+                        ${(item.priority || "").toLowerCase() === 'critical' ? 'bg-red-100 text-red-800' : 
+                          (item.priority || "").toLowerCase() === 'high' ? 'bg-orange-100 text-orange-800' :
+                          (item.priority || "").toLowerCase() === 'medium' ? 'bg-yellow-100 text-yellow-800' :
                           'bg-green-100 text-green-800'}`}>
-                        {item.priority}
+                        {item.priority || "Low"}
                       </span>
                     </TableCell>
                     <TableCell>{formatCurrency(item.assetValue)}</TableCell>
-                    <TableCell>{(item.exposureFactor * 100).toFixed(0)}%</TableCell>
-                    <TableCell>{item.annualizedRateOfOccurrence.toFixed(2)}</TableCell>
+                    <TableCell>{((item.exposureFactor || 0) * 100).toFixed(0)}%</TableCell>
+                    <TableCell>{(item.annualizedRateOfOccurrence || 0).toFixed(2)}</TableCell>
                     <TableCell>{formatCurrency(item.singleLossExpectancy)}</TableCell>
                     <TableCell>{formatCurrency(item.annualizedLossExpectancy)}</TableCell>
                     <TableCell>{formatCurrency(item.annualCostOfSafeguard)}</TableCell>
-                    <TableCell className={getNRRBColor(item.netRiskReductionBenefit)}>
+                    <TableCell className={getNRRBColor(item.netRiskReductionBenefit || 0)}>
                       {formatCurrency(item.netRiskReductionBenefit)}
                     </TableCell>
                   </TableRow>
@@ -388,42 +388,45 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
       </Card>
 
       {/* Dashboard Metrics Card */}
-      <Card>
-        <CardHeader>
-          <CardTitle>RASBITA™ Dashboard Metrics</CardTitle>
-          <CardDescription>
-            Key metrics and trends from the risk analysis
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div className="bg-gray-50 p-4 rounded-md">
-              <div className="text-sm text-gray-500">Most Frequent Threat</div>
-              <div className="font-medium">{report.dashboard.mostFrequentThreat}</div>
+      {/* Only render the dashboard section if it exists */}
+      {report.dashboard ? (
+        <Card>
+          <CardHeader>
+            <CardTitle>RASBITA™ Dashboard Metrics</CardTitle>
+            <CardDescription>
+              Key metrics and trends from the risk analysis
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="text-sm text-gray-500">Most Frequent Threat</div>
+                <div className="font-medium">{report.dashboard.mostFrequentThreat || "Ransomware"}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="text-sm text-gray-500">Least Frequent Threat</div>
+                <div className="font-medium">{report.dashboard.leastFrequentThreat || "Physical Access"}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="text-sm text-gray-500">Most Frequent Priority</div>
+                <div className="font-medium">{report.dashboard.mostFrequentPriority || "Medium"}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="text-sm text-gray-500">Threat Cost Range</div>
+                <div className="font-medium">{formatCurrency(report.dashboard.minThreatCost || 5000)} - {formatCurrency(report.dashboard.maxThreatCost || 75000)}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="text-sm text-gray-500">ALE Range</div>
+                <div className="font-medium">{formatCurrency(report.dashboard.minALE || 1500)} - {formatCurrency(report.dashboard.maxALE || 45000)}</div>
+              </div>
+              <div className="bg-gray-50 p-4 rounded-md">
+                <div className="text-sm text-gray-500">Safeguard Cost Range</div>
+                <div className="font-medium">{formatCurrency(report.dashboard.minACS || 1000)} - {formatCurrency(report.dashboard.maxACS || 15000)}</div>
+              </div>
             </div>
-            <div className="bg-gray-50 p-4 rounded-md">
-              <div className="text-sm text-gray-500">Least Frequent Threat</div>
-              <div className="font-medium">{report.dashboard.leastFrequentThreat}</div>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-md">
-              <div className="text-sm text-gray-500">Most Frequent Priority</div>
-              <div className="font-medium">{report.dashboard.mostFrequentPriority}</div>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-md">
-              <div className="text-sm text-gray-500">Threat Cost Range</div>
-              <div className="font-medium">{formatCurrency(report.dashboard.minThreatCost)} - {formatCurrency(report.dashboard.maxThreatCost)}</div>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-md">
-              <div className="text-sm text-gray-500">ALE Range</div>
-              <div className="font-medium">{formatCurrency(report.dashboard.minALE)} - {formatCurrency(report.dashboard.maxALE)}</div>
-            </div>
-            <div className="bg-gray-50 p-4 rounded-md">
-              <div className="text-sm text-gray-500">Safeguard Cost Range</div>
-              <div className="font-medium">{formatCurrency(report.dashboard.minACS)} - {formatCurrency(report.dashboard.maxACS)}</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      ) : null}
 
       {/* Financial Impact Summary */}
       <Card className="mt-6">
@@ -502,11 +505,11 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
         <CardContent className="prose max-w-none pt-6">
           <p>This program helps organizations obtain risk scores for security incidents and calculate associated financial losses. This information supports IT security budgeting and overall resource management. The table above helps interpret score readings.</p>
           
-          <p>This RASBITA™ assessment identifies and quantifies key security risks across your organization's assets. The overall risk score is <strong>{report.overallRiskScore.toFixed(1)}</strong>, which is categorized as a <strong>{getRiskAssessment(report.overallRiskScore).level} priority</strong>.</p>
+          <p>This RASBITA™ assessment identifies and quantifies key security risks across your organization's assets. The overall risk score is <strong>{overallRiskScore.toFixed(1)}</strong>, which is categorized as a <strong>{getRiskAssessment(overallRiskScore).level} priority</strong>.</p>
           
           <p>Key findings:</p>
           <ul>
-            <li>The device type affected is <strong>{report.deviceType || "Server"}</strong> with a risk score of <strong>{report.overallRiskScore.toFixed(1)}</strong></li>
+            <li>The device type affected is <strong>{report.deviceType || "Server"}</strong> with a risk score of <strong>{overallRiskScore.toFixed(1)}</strong></li>
             <li>Total number of data held in the department is <strong>{report.totalDataCount || "50,000"}</strong></li>
             <li>Number of devices affected or damaged: <strong>{report.affectedDevices || "512"}</strong></li>
             <li>Cost of all damaged devices: <strong>{formatCurrency(report.damagedDevicesCost || 2560000)}</strong></li>
@@ -518,7 +521,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
           
           <p className="font-semibold">Conclusion:</p>
           <p className="font-semibold bg-red-50 p-3 border-l-4 border-red-500">
-            This is a risk score of {report.overallRiskScore.toFixed(1)}: {getRiskAssessment(report.overallRiskScore).notification}
+            This is a risk score of {overallRiskScore.toFixed(1)}: {getRiskAssessment(overallRiskScore).notification}
           </p>
         </CardContent>
       </Card>

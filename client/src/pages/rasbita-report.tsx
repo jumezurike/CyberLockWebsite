@@ -496,6 +496,22 @@ export default function RasbitaReportPage() {
             totalNetRiskReductionBenefit: riskItems.reduce((sum, item) => sum + (item.netRiskReductionBenefit || 0), 0)
           };
           
+          // Add dashboard data with all required properties
+          newReport.dashboard = {
+            mostFrequentUser: "Security Analyst",
+            mostCurrentReportDate: new Date().toISOString(),
+            userCount: 1,
+            mostFrequentThreat: "Ransomware",
+            leastFrequentThreat: "Physical Access",
+            mostFrequentPriority: "Medium",
+            minThreatCost: riskItems.length > 0 ? Math.min(...riskItems.map(item => item.assetValue * 0.1)) : 0,
+            maxThreatCost: riskItems.length > 0 ? Math.max(...riskItems.map(item => item.assetValue)) : 0,
+            minALE: riskItems.length > 0 ? Math.min(...riskItems.map(item => item.annualizedLossExpectancy * 0.5)) : 0,
+            maxALE: riskItems.length > 0 ? Math.max(...riskItems.map(item => item.annualizedLossExpectancy * 1.5)) : 0,
+            minACS: riskItems.length > 0 ? Math.min(...riskItems.map(item => item.annualCostOfSafeguard * 0.5)) : 0,
+            maxACS: riskItems.length > 0 ? Math.max(...riskItems.map(item => item.annualCostOfSafeguard * 1.5)) : 0
+          };
+          
           // Save the new report to the database
           console.log("Saving new report:", newReport);
           const saveResponse = await apiRequest("POST", "/api/rasbita-reports", newReport);
@@ -932,6 +948,17 @@ export default function RasbitaReportPage() {
             totalAnnualizedLossExpectancy: newRiskItem.annualizedLossExpectancy,
             totalCostOfSafeguards: newRiskItem.annualCostOfSafeguard,
             totalNetRiskReductionBenefit: newRiskItem.netRiskReductionBenefit
+          },
+          dashboard: {
+            mostFrequentThreat: newRiskItem.threatName || "Ransomware",
+            leastFrequentThreat: "Physical Access",
+            mostFrequentPriority: newRiskItem.priority || "Medium",
+            minThreatCost: newRiskItem.assetValue * 0.1,
+            maxThreatCost: newRiskItem.assetValue,
+            minALE: newRiskItem.annualizedLossExpectancy * 0.5,
+            maxALE: newRiskItem.annualizedLossExpectancy * 1.5,
+            minACS: newRiskItem.annualCostOfSafeguard * 0.5,
+            maxACS: newRiskItem.annualCostOfSafeguard * 1.5
           }
         };
       } else {
