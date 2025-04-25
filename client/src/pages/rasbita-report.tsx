@@ -561,53 +561,116 @@ export default function RasbitaReportPage() {
             <IncidentForm onSubmit={handleIncidentSubmit} />
           </TabsContent>
           
-          {/* Tab for loading an existing assessment */}
+          {/* Tab for loading an existing assessment or saved report */}
           <TabsContent value="existing-assessment">
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle>Generate RASBITA Report</CardTitle>
-                <CardDescription>
-                  Select an existing assessment to generate a RASBITA risk report with financial analysis.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <div className="w-full sm:w-2/3">
-                    <Select value={selectedAssessment} onValueChange={setSelectedAssessment}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select an assessment" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {assessments.map(assessment => (
-                          <SelectItem key={assessment.id} value={assessment.id}>
-                            {assessment.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Generate RASBITA Report</CardTitle>
+                  <CardDescription>
+                    Select an existing assessment to generate a new RASBITA risk report with financial analysis.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex flex-col gap-4">
+                    <div className="w-full">
+                      <Select value={selectedAssessment} onValueChange={setSelectedAssessment}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select an assessment" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {assessments.map(assessment => (
+                            <SelectItem key={assessment.id} value={assessment.id}>
+                              {assessment.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button 
+                      className="bg-chart-4 hover:bg-purple-700 text-white" 
+                      onClick={() => {
+                        generateReport();
+                        setShowResults(true);
+                        setActiveTab("dashboard");
+                      }}
+                      disabled={loading}
+                    >
+                      {loading ? 'Generating Report...' : 'Generate RASBITA Report'}
+                    </Button>
                   </div>
-                  <Button 
-                    className="bg-chart-4 hover:bg-purple-700 text-white" 
-                    onClick={() => {
-                      generateReport();
-                      setShowResults(true);
-                      setActiveTab("dashboard");
-                    }}
-                    disabled={loading}
-                  >
-                    {loading ? 'Generating Report...' : 'Generate RASBITA Report'}
-                  </Button>
-                </div>
-                
-                <div className="mt-4 text-sm text-gray-600 bg-purple-50 p-3 rounded-md">
-                  <p>
-                    <strong>Note:</strong> The RASBITA report provides a comprehensive financial analysis
-                    of your security risks and controls, including asset values, exposure factors, and
-                    cost-benefit analysis for each control.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
+                  
+                  <div className="mt-4 text-sm text-gray-600 bg-purple-50 p-3 rounded-md">
+                    <p>
+                      <strong>Note:</strong> The RASBITA report provides a comprehensive financial analysis
+                      of your security risks and controls, including asset values, exposure factors, and
+                      cost-benefit analysis for each control.
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle>Saved RASBITA Reports</CardTitle>
+                  <CardDescription>
+                    View your previously saved RASBITA risk assessment reports.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {savedReports.length === 0 ? (
+                    <div className="text-center py-8 bg-gray-50 rounded-md border border-gray-200">
+                      <Inbox className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                      <h3 className="text-lg font-medium text-gray-900">No saved reports</h3>
+                      <p className="mt-1 text-sm text-gray-500">
+                        After analyzing incidents, save your reports to access them later.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-2 max-h-80 overflow-y-auto pr-2">
+                      {savedReports.map(savedReport => (
+                        <div 
+                          key={savedReport.id} 
+                          className="p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer flex justify-between items-center"
+                          onClick={() => {
+                            fetchRasbitaReport(savedReport.id.toString());
+                            setShowResults(true);
+                            setActiveTab("dashboard");
+                          }}
+                        >
+                          <div>
+                            <h4 className="font-medium text-gray-900">{savedReport.title}</h4>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className="text-xs text-gray-500 flex items-center">
+                                <Calendar className="h-3 w-3 mr-1" />
+                                {new Date(savedReport.createdAt).toLocaleDateString()}
+                              </span>
+                              <span className="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">
+                                {savedReport.incidentCategory}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="bg-chart-4 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold">
+                            {Math.round(savedReport.overallRiskScore)}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  
+                  <div className="mt-4">
+                    <Button 
+                      onClick={fetchSavedReports} 
+                      variant="outline" 
+                      className="w-full"
+                      disabled={loading}
+                    >
+                      {loading ? 'Refreshing...' : 'Refresh Reports'}
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
           
           {/* Dashboard Tab */}
