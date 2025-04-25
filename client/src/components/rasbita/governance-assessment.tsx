@@ -1,0 +1,266 @@
+import React, { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+interface GovernanceAssessmentProps {
+  onComplete: (scores: GovernanceScores) => void;
+}
+
+export interface GovernanceScores {
+  governanceScore: number; // 0-4
+  managementScore: number; // 0-4
+}
+
+export default function GovernanceAssessment({ onComplete }: GovernanceAssessmentProps) {
+  const [activeTab, setActiveTab] = useState("governance");
+  const [governanceScore, setGovernanceScore] = useState<number | null>(null);
+  const [managementScore, setManagementScore] = useState<number | null>(null);
+  
+  const handleSubmit = () => {
+    if (governanceScore === null || managementScore === null) {
+      return;
+    }
+    
+    onComplete({
+      governanceScore,
+      managementScore
+    });
+  };
+  
+  const isComplete = governanceScore !== null && managementScore !== null;
+  
+  return (
+    <Card className="w-full mb-8">
+      <CardHeader className="bg-purple-50">
+        <CardTitle className="text-chart-4">Cybersecurity Risk Maturity Assessment</CardTitle>
+        <CardDescription>
+          Evaluate your organization's governance and management maturity based on NIST CSF 2.0 framework
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="pt-6">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="governance">Cybersecurity Risk Governance</TabsTrigger>
+            <TabsTrigger value="management">Cybersecurity Risk Management</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="governance">
+            <div className="space-y-6">
+              <div className="text-lg font-semibold text-chart-4">
+                Cybersecurity Risk Governance Assessment
+              </div>
+              <p className="text-gray-600">
+                Evaluate your organization's approach to cybersecurity risk governance.
+                Select the tier that best describes your current maturity level.
+              </p>
+              
+              <RadioGroup 
+                value={governanceScore?.toString() || ""} 
+                onValueChange={(value) => setGovernanceScore(parseInt(value))}
+                className="space-y-4"
+              >
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="0" id="governance-0" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="governance-0" className="text-base font-semibold">Tier 0: None</Label>
+                    <p className="text-sm text-gray-500">
+                      Not currently part of the cybersecurity risk governance and management practices in the organization.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="1" id="governance-1" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="governance-1" className="text-base font-semibold">Tier 1: Partial</Label>
+                    <p className="text-sm text-gray-500">
+                      Application of the organizational cybersecurity risk strategy is managed in an ad hoc manner.
+                      Prioritization is ad hoc and not formally based on objectives or threat environment.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="2" id="governance-2" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="governance-2" className="text-base font-semibold">Tier 2: Risk Informed</Label>
+                    <p className="text-sm text-gray-500">
+                      Risk management practices are approved by management but may not be established as organization-wide policy. 
+                      The prioritization of cybersecurity activities and protection needs is directly informed by organizational risk objectives, 
+                      the threat environment, or business/mission requirements.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="3" id="governance-3" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="governance-3" className="text-base font-semibold">Tier 3: Repeatable</Label>
+                    <p className="text-sm text-gray-500">
+                      The organization's risk management practices are formally approved and expressed as policy.
+                      Risk-informed policies, processes, and procedures are defined, implemented as intended, and reviewed.
+                      Organizational cybersecurity practices are regularly updated based on the application of risk management
+                      processes to changes in business/mission requirements, threats, and technological landscape.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="4" id="governance-4" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="governance-4" className="text-base font-semibold">Tier 4: Adaptive</Label>
+                    <p className="text-sm text-gray-500">
+                      There is an organization-wide approach to managing cybersecurity risks that uses risk-informed policies, 
+                      processes, and procedures to address potential cybersecurity events. The relationship between cybersecurity 
+                      risks and organizational objectives is clearly understood and considered when making decisions. 
+                      Executives monitor cybersecurity risks in the same context as financial and other organizational risks. 
+                      The organizational budget is based on an understanding of the current and predicted risk environment.
+                    </p>
+                  </div>
+                </div>
+              </RadioGroup>
+              
+              <div className="flex justify-end mt-4">
+                <Button 
+                  variant="outline" 
+                  onClick={() => setActiveTab("management")}
+                  disabled={governanceScore === null}
+                >
+                  Continue to Risk Management
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="management">
+            <div className="space-y-6">
+              <div className="text-lg font-semibold text-chart-4">
+                Cybersecurity Risk Management Assessment
+              </div>
+              <p className="text-gray-600">
+                Evaluate your organization's approach to cybersecurity risk management.
+                Select the tier that best describes your current maturity level.
+              </p>
+              
+              <RadioGroup 
+                value={managementScore?.toString() || ""} 
+                onValueChange={(value) => setManagementScore(parseInt(value))}
+                className="space-y-4"
+              >
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="0" id="management-0" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="management-0" className="text-base font-semibold">Tier 0: None</Label>
+                    <p className="text-sm text-gray-500">
+                      Not currently part of the cybersecurity risk governance and management practices in the organization.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="1" id="management-1" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="management-1" className="text-base font-semibold">Tier 1: Partial</Label>
+                    <p className="text-sm text-gray-500">
+                      There is limited awareness of cybersecurity risks at the organizational level.
+                      The organization implements cybersecurity risk management on an irregular, case-by-case basis.
+                      The organization may not have processes that enable cybersecurity information to be shared within the organization.
+                      The organization is generally unaware of the cybersecurity risks associated with its suppliers and the products and services it acquires and uses.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="2" id="management-2" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="management-2" className="text-base font-semibold">Tier 2: Risk Informed</Label>
+                    <p className="text-sm text-gray-500">
+                      There is an awareness of cybersecurity risks at the organizational level, but an organization-wide approach to managing cybersecurity risks has not been established.
+                      Consideration of cybersecurity in organizational objectives and programs may occur at some but not all levels of the organization. 
+                      Cyber risk assessment of organizational and external assets occurs, but is not typically repeatable or reoccurring.
+                      Cybersecurity information is shared within the organization on an informal basis.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="3" id="management-3" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="management-3" className="text-base font-semibold">Tier 3: Repeatable</Label>
+                    <p className="text-sm text-gray-500">
+                      There is an organization-wide approach to managing cybersecurity risks. Cybersecurity information is routinely shared throughout the organization.
+                      Consistent methods are in place to respond effectively to changes in risk. Personnel possess the knowledge and skills to perform their appointed roles and responsibilities.
+                      The organization consistently and accurately monitors cybersecurity risks of assets. Senior cybersecurity and non-cybersecurity executives communicate regularly regarding cybersecurity risks.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
+                  <RadioGroupItem value="4" id="management-4" className="mt-1" />
+                  <div className="space-y-1.5">
+                    <Label htmlFor="management-4" className="text-base font-semibold">Tier 4: Adaptive</Label>
+                    <p className="text-sm text-gray-500">
+                      The organization adapts its cybersecurity practices based on previous and current cybersecurity activities, including lessons learned and predictive indicators.
+                      The organization uses real-time or near real-time information to understand and consistently act upon cybersecurity risks associated with the products and services it provides and uses.
+                      Cybersecurity information is constantly shared throughout the organization and with authorized third parties.
+                    </p>
+                  </div>
+                </div>
+              </RadioGroup>
+              
+              <div className="flex justify-between mt-4">
+                <Button variant="outline" onClick={() => setActiveTab("governance")}>
+                  Back to Governance
+                </Button>
+                <Button 
+                  className="bg-chart-4 hover:bg-purple-700" 
+                  onClick={handleSubmit}
+                  disabled={!isComplete}
+                >
+                  Complete Assessment
+                </Button>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+        
+        {isComplete && (
+          <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-md">
+            <div className="flex items-center text-green-700 gap-2 mb-2">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+              <span className="font-semibold">Assessment Complete!</span>
+            </div>
+            <p className="text-sm text-green-600">
+              Based on your selections, your organization is at:
+            </p>
+            <ul className="mt-2 space-y-1 text-sm text-green-600">
+              <li>• Governance Tier: {getTierLabel(governanceScore)}</li>
+              <li>• Management Tier: {getTierLabel(managementScore)}</li>
+            </ul>
+            <p className="mt-2 text-sm text-green-600">
+              Click "Complete Assessment" to incorporate these results into your RASBITA report.
+            </p>
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function getTierLabel(score: number | null): string {
+  if (score === null) return "Not assessed";
+  
+  switch (score) {
+    case 0: return "Tier 0: None";
+    case 1: return "Tier 1: Partial";
+    case 2: return "Tier 2: Risk Informed";
+    case 3: return "Tier 3: Repeatable";
+    case 4: return "Tier 4: Adaptive";
+    default: return "Unknown";
+  }
+}

@@ -235,6 +235,10 @@ export interface RasbitaReport {
     affectedSystems: string;
   };
   riskItems: RasbitaRiskItem[];
+  governanceMaturity?: {
+    governanceScore: number; // 0-4 tiered score
+    managementScore: number; // 0-4 tiered score
+  };
   rasbitaCategories: {
     govern: number;
     identify: number;

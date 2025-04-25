@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
-import { Download, Mail, Share2, FileText, Save, Inbox, Calendar } from 'lucide-react';
+import { Download, Mail, Share2, FileText, Save, Inbox, Calendar, CheckSquare } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RasbitaDashboard from "@/components/rasbita/rasbita-dashboard";
 import IncidentForm from "@/components/rasbita/incident-form";
+import GovernanceAssessment, { GovernanceScores } from "@/components/rasbita/governance-assessment";
 import { RasbitaReport, RasbitaRiskItem } from '@/lib/sos2a-types';
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -124,6 +125,10 @@ const sampleReport: RasbitaReport = {
       }
     }
   ],
+  governanceMaturity: {
+    governanceScore: 3, // Tier 3: Repeatable
+    managementScore: 2  // Tier 2: Risk Informed
+  },
   rasbitaCategories: {
     govern: 72,
     identify: 68,
@@ -172,6 +177,10 @@ export default function RasbitaReportPage() {
   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
   const [savedReports, setSavedReports] = useState<RasbitaReport[]>([]);
   const [initialFormData, setInitialFormData] = useState<any>(null);
+  const [showResults, setShowResults] = useState(true);
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [showGovernanceAssessment, setShowGovernanceAssessment] = useState(false);
+  const [assessments, setAssessments] = useState<any[]>([]);
   
   // Convert a report to form data format for editing
   const reportToFormData = (report: RasbitaReport) => {
@@ -231,6 +240,45 @@ export default function RasbitaReportPage() {
     fetchSavedReports();
     fetchAssessments();
   }, []);
+  
+  // Handle governance assessment completion
+  const handleGovernanceComplete = (scores: GovernanceScores) => {
+    // Update the report with the governance scores
+    setReport(prevReport => ({
+      ...prevReport,
+      governanceMaturity: scores
+    }));
+    
+    // Hide the governance assessment form and show results
+    setShowGovernanceAssessment(false);
+    setShowResults(true);
+    
+    toast({
+      title: "Governance Assessment Complete",
+      description: "Your organization's governance and management maturity has been assessed.",
+    });
+  };
+  
+  // Fetch assessments list from the API
+  const fetchAssessments = async () => {
+    try {
+      const response = await apiRequest("GET", "/api/assessments");
+      if (response.ok) {
+        const data = await response.json();
+        
+        // Map assessment data to the format needed for the dropdown
+        const formattedAssessments = data.map((assessment: any) => ({
+          id: assessment.id.toString(),
+          name: `${assessment.businessName} (${new Date(assessment.createdAt).toLocaleDateString()})`
+        }));
+        
+        setAssessments(formattedAssessments);
+      }
+    } catch (error) {
+      console.error("Error fetching assessments:", error);
+      // No toast here to avoid too many notifications at startup
+    }
+  };
 
   // Function to generate and download PDF report
   const exportToPdf = () => {
@@ -335,6 +383,26 @@ export default function RasbitaReportPage() {
         theme: 'grid',
         headStyles: { fillColor: [105, 42, 187] }
       });
+      
+      // Add governance maturity section if available
+      if (report.governanceMaturity) {
+        const governanceYPos = (doc as any).lastAutoTable.finalY + 10;
+        
+        doc.setFontSize(14);
+        doc.text("Governance & Management Maturity", 20, governanceYPos);
+        
+        // @ts-ignore - jspdf-autotable typings
+        doc.autoTable({
+          startY: governanceYPos + 10,
+          head: [['Capability', 'Maturity Tier']],
+          body: [
+            ['Cybersecurity Risk Governance', `Tier ${report.governanceMaturity.governanceScore}`],
+            ['Cybersecurity Risk Management', `Tier ${report.governanceMaturity.managementScore}`]
+          ],
+          theme: 'grid',
+          headStyles: { fillColor: [105, 42, 187] }
+        });
+      }
       
       // Add recommendations page
       doc.addPage();
@@ -470,15 +538,14 @@ export default function RasbitaReportPage() {
             businessId: `business-${Date.now()}`,
             company: {
               name: assessmentData.businessName,
-              department: "Security",
-              businessId: `business-${Date.now()}`
+              department: "Security"
             },
             incident: {
               date: new Date().toISOString().slice(0, 10),
               title: "Security Assessment",
               category: "general_assessment",
               description: `Security assessment for ${assessmentData.businessName}`,
-              dataClass: "none"
+              affectedSystems: "All Systems"
             },
             riskItems: generateRiskItemsFromAssessment(assessmentData),
             createdAt: new Date().toISOString(),
@@ -781,648 +848,205 @@ export default function RasbitaReportPage() {
     }
   };
 
-  const generateReport = async () => {
-    if (!selectedAssessment) {
-      // If no assessments exist in the database yet, create a sample assessment
-      if (assessments.length === 0) {
-        try {
-          setLoading(true);
-          // Create a sample assessment
-          const sampleAssessment = {
-            businessName: "CyberLockX Demo Business",
-            industry: "Technology",
-            employeeCount: "50-100",
-            securityMeasures: ["Firewalls", "Endpoint Protection", "Employee Training"],
-            primaryConcerns: ["Data Breaches", "Ransomware", "Insider Threats"],
-            contactInfo: {
-              name: "Demo User",
-              email: "demo@cyberlockx.xyz",
-              phone: "555-123-4567"
-            },
-            reportType: "comprehensive", // lowercase to match schema
-            securityScore: 65,
-            matrixData: JSON.stringify([
-              {
-                id: "item1",
-                assetName: "Customer Database",
-                threatVector: "SQL Injection",
-                riskLevel: "High",
-                mitigationStatus: "In Progress"
-              }
-            ]),
-            findings: JSON.stringify([
-              {
-                category: "Data Security",
-                description: "Customer database lacks encryption at rest",
-                severity: "High",
-                recommendation: "Implement TDE for all sensitive databases"
-              }
-            ]),
-            recommendations: JSON.stringify([
-              {
-                title: "Enhance Data Protection",
-                description: "Implement encryption for all sensitive data at rest and in transit",
-                priority: "High",
-                estimatedCost: "Medium",
-                estimatedTimeframe: "3 months"
-              }
-            ])
-          };
-          
-          console.log("Creating sample assessment:", sampleAssessment);
-          const response = await apiRequest("POST", "/api/assessments", sampleAssessment);
-          if (!response.ok) {
-            throw new Error("Failed to create sample assessment");
-          }
-          
-          const newAssessment = await response.json();
-          console.log("Created new assessment:", newAssessment);
-          
-          // Add the new assessment to the list
-          const formattedAssessment = {
-            id: newAssessment.id.toString(),
-            name: `${newAssessment.businessName} (${new Date(newAssessment.createdAt).toLocaleDateString()})`
-          };
-          
-          setAssessments([formattedAssessment]);
-          setSelectedAssessment(formattedAssessment.id);
-          
-          // Now fetch the RASBITA report based on this assessment
-          await fetchRasbitaReport(formattedAssessment.id);
-          return;
-        } catch (error) {
-          console.error("Error creating sample assessment:", error);
-          toast({
-            title: "Error",
-            description: "Failed to create a sample assessment. Please try again.",
-            variant: "destructive",
-          });
-          setLoading(false);
-          return;
-        }
-      } else {
-        toast({
-          title: "Selection Required",
-          description: "Please select an assessment to generate a RASBITA report.",
-          variant: "destructive",
-        });
-        return;
-      }
-    }
-
-    console.log("Generating RASBITA report for assessment ID:", selectedAssessment);
-    try {
-      await fetchRasbitaReport(selectedAssessment);
-      // Ensure the UI updates to show results
-      setShowResults(true);
-      setActiveTab("dashboard");
-    } catch (error) {
-      console.error("Error in generateReport:", error);
-      toast({
-        title: "Error",
-        description: "Failed to generate RASBITA report. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  // Load assessments from the database
-  const [assessments, setAssessments] = useState<{id: string, name: string}[]>([]);
-  
-  // Function to fetch assessments
-  const fetchAssessments = async () => {
-    try {
-      const response = await apiRequest("GET", "/api/assessments");
-      if (!response.ok) {
-        throw new Error("Failed to fetch assessments");
-      }
-      
-      const data = await response.json();
-      
-      // Map assessment data to the format needed for the dropdown
-      const formattedAssessments = data.map((assessment: any) => ({
-        id: assessment.id.toString(),
-        name: `${assessment.businessName} (${new Date(assessment.createdAt).toLocaleDateString()})`
-      }));
-      
-      setAssessments(formattedAssessments);
-    } catch (error) {
-      console.error("Error fetching assessments:", error);
-      toast({
-        title: "Error",
-        description: "Failed to load assessments. Please try again later.",
-        variant: "destructive",
-      });
-    }
-  };
-
-  const [activeTab, setActiveTab] = useState<string>("new-incident");
-  
-  // If user clicks on "Report Incident" tab after loading a report, 
-  // set initialFormData and switch to that tab
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-    
-    // If switching to incident form after loading a report
-    if (tab === "new-incident" && initialFormData === null && report.id !== "new") {
-      // Convert report to form data
-      const formData = reportToFormData(report);
-      setInitialFormData(formData);
-    }
-  };
-  const [showResults, setShowResults] = useState<boolean>(false);
-  
-  const handleIncidentSubmit = async (incidentData: any) => {
-    // Create a new report based on the incident data
-    try {
-      setLoading(true);
-      
-      const newRiskItem: RasbitaRiskItem = incidentData.riskItem;
-      
-      // Create a new report or update existing one
-      let updatedReport: RasbitaReport;
-      if (report.id === "new") {
-        // Create new report
-        // Create a new report with all required properties from the RasbitaReport interface
-        updatedReport = {
-          id: "new", // Server will generate ID
-          title: incidentData.incident.title || "Security Incident Report",
-          incidentCategory: incidentData.incident.category,
-          overallRiskScore: calculateRiskScore(newRiskItem),
-          company: {
-            name: incidentData.company.name || "Unknown Organization",
-            department: incidentData.company.department || "Security",
-            reportGenerator: incidentData.company.reportGenerator || {
-              name: "System",
-              title: "RASBITA Analysis Engine"
-            },
-            logo: incidentData.company.logo || ""
-          },
-          incident: {
-            title: incidentData.incident.title || "Security Incident",
-            description: incidentData.incident.description || "Details not provided",
-            date: incidentData.incident.date || new Date().toISOString().split('T')[0],
-            category: incidentData.incident.category || "Other",
-            affectedSystems: incidentData.incident.affectedSystems || "Unknown"
-          },
-          riskItems: [newRiskItem],
-          createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString(),
-          businessId: incidentData.company.businessId || "unknown",
-          userId: 1, // Default user ID
-          rasbitaCategories: calculateRasbitaCategories(newRiskItem),
-          financialSummary: {
-            totalAssetValue: newRiskItem.assetValue || 0,
-            totalAnnualizedLossExpectancy: newRiskItem.annualizedLossExpectancy || 0,
-            totalCostOfSafeguards: newRiskItem.annualCostOfSafeguard || 0,
-            totalNetRiskReductionBenefit: newRiskItem.netRiskReductionBenefit || 0
-          },
-          dashboard: {
-            mostFrequentUser: "Admin",
-            mostCurrentReportDate: new Date().toISOString(),
-            userCount: 1,
-            mostFrequentThreat: newRiskItem.threatName || "Ransomware",
-            leastFrequentThreat: "Physical Access",
-            mostFrequentPriority: newRiskItem.priority || "Medium",
-            minThreatCost: (newRiskItem.assetValue || 10000) * 0.1,
-            maxThreatCost: newRiskItem.assetValue || 10000,
-            minALE: (newRiskItem.annualizedLossExpectancy || 5000) * 0.5,
-            maxALE: (newRiskItem.annualizedLossExpectancy || 5000) * 1.5,
-            minACS: (newRiskItem.annualCostOfSafeguard || 2000) * 0.5,
-            maxACS: (newRiskItem.annualCostOfSafeguard || 2000) * 1.5
-          },
-          // Add optional device impact data
-          deviceType: incidentData.deviceType || "Servers",
-          totalDevices: incidentData.totalDevices || 100,
-          affectedDevices: incidentData.affectedDevices || 25,
-          percentageAffected: incidentData.percentageAffected || "25%",
-          totalDataCount: incidentData.totalDataCount || 10000,
-          dataLost: incidentData.dataLost || 2500,
-          
-          // Add optional financial impact data
-          damagedDevicesCost: incidentData.damagedDevicesCost || 250000,
-          threatSpreadCost: incidentData.threatSpreadCost || 100000,
-          residualCost: incidentData.residualCost || 350000
-        };
-      } else {
-        // Update existing report
-        updatedReport = {
-          ...report,
-          riskItems: [newRiskItem, ...report.riskItems],
-          updatedAt: new Date().toISOString()
-        };
-        
-        // Update financial summary
-        updatedReport.financialSummary = {
-          totalAssetValue: updatedReport.riskItems.reduce((sum: number, item: RasbitaRiskItem) => sum + (item.assetValue || 0), 0),
-          totalAnnualizedLossExpectancy: updatedReport.riskItems.reduce((sum: number, item: RasbitaRiskItem) => sum + (item.annualizedLossExpectancy || 0), 0),
-          totalCostOfSafeguards: updatedReport.riskItems.reduce((sum: number, item: RasbitaRiskItem) => sum + (item.annualCostOfSafeguard || 0), 0),
-          totalNetRiskReductionBenefit: updatedReport.riskItems.reduce((sum: number, item: RasbitaRiskItem) => sum + (item.netRiskReductionBenefit || 0), 0)
-        };
-      }
-      
-      // Save the report to the database
-      const response = updatedReport.id === "new" ? 
-        await apiRequest("POST", "/api/rasbita-reports", updatedReport) :
-        await apiRequest("PUT", `/api/rasbita-reports/${updatedReport.id}`, updatedReport);
-      
-      if (!response.ok) {
-        throw new Error("Failed to save RASBITA report");
-      }
-      
-      const savedReport = await response.json();
-      
-      // Update the UI with the saved report
-      setReport(savedReport);
-      
-      // Show results and switch to dashboard tab
-      setShowResults(true);
-      setActiveTab("dashboard");
-      
-      // Refresh the saved reports list
-      fetchSavedReports();
-      
-      toast({
-        title: "RASBITA Analysis Complete",
-        description: "Your security incident has been analyzed. Reviewing financial impact analysis...",
-      });
-    } catch (error) {
-      console.error("Error submitting incident data:", error);
-      toast({
-        title: "Error",
-        description: "Failed to analyze security incident. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-  
-  // Helper function to calculate risk score based on RASBITA methodology
-  const calculateRiskScore = (riskItem: RasbitaRiskItem): number => {
-    const {
-      likelihood = 5,
-      impact = 5,
-      exposureFactor = 0.5,
-      threatLevel = 5
-    } = riskItem;
-    
-    // Calculate risk score using RASBITA methodology (simplified for demo)
-    // Actual implementation would use more sophisticated algorithm
-    const baseScore = (likelihood * impact * exposureFactor) / 10;
-    const adjustedScore = baseScore * (threatLevel / 5);
-    
-    return Math.min(Math.round(adjustedScore), 100);
-  };
-  
-  // Helper function to calculate RASBITA categories based on NIST CSF 2.0 framework domains
-  const calculateRasbitaCategories = (riskItem: RasbitaRiskItem): {
-    govern: number;
-    identify: number;
-    protect: number;
-    detect: number;
-    respond: number;
-    recover: number;
-  } => {
-    // Get all properties with defaults to avoid undefined errors
-    const {
-      likelihood = 5,
-      impact = 5,
-      exposureFactor = 0.5,
-      threatLevel = 5,
-      safeguardEffectiveness = 5,
-      confidentiality = 5,
-      integrity = 5,
-      availability = 5
-    } = riskItem;
-    
-    // Calculate values based on NIST CSF 2.0 framework domains
-    // These calculations would ideally come from the 5 governance questions
-    const governScore = Math.max(30, Math.min(90, Math.round(
-      ((10 - exposureFactor * 10) * 2.5) + // Good governance reduces exposure
-      ((10 - likelihood) * 2.5)             // Good governance reduces likelihood
-    )));
-    
-    const identifyScore = Math.max(30, Math.min(90, Math.round(
-      (threatLevel * 5) +                   // Higher threat awareness shows better identification
-      ((10 - impact) * 3)                   // Better identification reduces potential impact
-    )));
-    
-    const protectScore = Math.max(30, Math.min(90, Math.round(
-      (safeguardEffectiveness * 7) +        // Effective safeguards improve protection
-      ((confidentiality + integrity + availability) / 3 * 3) // CIA triad factors into protection
-    )));
-    
-    const detectScore = Math.max(30, Math.min(90, Math.round(
-      ((10 - likelihood) * 4) +             // Better detection reduces likelihood of successful attacks
-      (threatLevel * 5)                     // Higher threat awareness implies better detection
-    )));
-    
-    const respondScore = Math.max(30, Math.min(90, Math.round(
-      ((10 - impact) * 6) +                 // Good response reduces impact
-      (safeguardEffectiveness * 3)          // Effective safeguards improve response capabilities
-    )));
-    
-    const recoverScore = Math.max(30, Math.min(90, Math.round(
-      ((10 - impact) * 7) +                 // Good recovery reduces long-term impact
-      ((10 - exposureFactor * 10) * 2)      // Less exposure means easier recovery
-    )));
-    
-    return {
-      govern: governScore,
-      identify: identifyScore,
-      protect: protectScore,
-      detect: detectScore,
-      respond: respondScore,
-      recover: recoverScore
-    };
-  };
-
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="py-10">
-        <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-8">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
-              <svg className="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div className="ml-3">
-              <h3 className="text-sm font-medium text-red-800">Crisis Response Tool</h3>
-              <div className="mt-1 text-sm text-red-700">
-                This secure tool is designed to be invoked during security incidents to provide financial impact analysis and guide response decisions.
-              </div>
-            </div>
-          </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-2xl font-bold text-purple-700">RASBITA™ Risk Assessment</h1>
+        <div className="flex gap-4">
+          <Select value={selectedAssessment} onValueChange={setSelectedAssessment}>
+            <SelectTrigger className="w-[250px]">
+              <SelectValue placeholder="Select Report or Assessment" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="new">Create New Report</SelectItem>
+              {savedReports.map((report) => (
+                <SelectItem key={`report-${report.id}`} value={`${report.id}`}>
+                  {report.title || `Report ${report.id}`}
+                </SelectItem>
+              ))}
+              {assessments.map((assessment) => (
+                <SelectItem key={`assessment-${assessment.id}`} value={assessment.id}>
+                  {assessment.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button
+            onClick={() => fetchRasbitaReport(selectedAssessment)}
+            disabled={!selectedAssessment || loading}
+            className="bg-purple-700 text-white hover:bg-purple-800"
+          >
+            {loading ? "Loading..." : "Load"}
+          </Button>
         </div>
+      </div>
       
-        <h1 className="text-3xl font-bold mb-2 text-chart-4">RASBITA™ Risk Assessment Report</h1>
-        <p className="text-lg text-gray-600 mb-8">
-          CISSP Risk Assessment Score by Threat and Impact Analysis
-        </p>
-
-        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
-          <TabsList className="mb-4">
-            <TabsTrigger value="new-incident">Report Incident</TabsTrigger>
-            <TabsTrigger value="existing-assessment">Load Existing Assessment</TabsTrigger>
-            {showResults && <TabsTrigger value="dashboard">Dashboard</TabsTrigger>}
-            {showResults && <TabsTrigger value="export">Export Options</TabsTrigger>}
-          </TabsList>
-          
-          {/* Tab for reporting a new incident */}
-          <TabsContent value="new-incident">
-            <div className="mb-4 bg-purple-50 p-4 rounded-md">
-              <h3 className="text-lg font-semibold text-chart-4 mb-2">Security Incident Details</h3>
-              <p className="text-gray-700">
-                Complete the form below with details about the current security incident. The RASBITA tool will
-                analyze the financial impact and provide cost-benefit analysis to guide your response decisions.
-              </p>
-            </div>
-            <IncidentForm onSubmit={handleIncidentSubmit} initialData={initialFormData} />
-          </TabsContent>
-          
-          {/* Tab for loading an existing assessment or saved report */}
-          <TabsContent value="existing-assessment">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Generate RASBITA Report</CardTitle>
+      {showGovernanceAssessment ? (
+        <GovernanceAssessment onComplete={handleGovernanceComplete} />
+      ) : (
+        <div className="grid grid-cols-1 gap-6">
+          <Card>
+            <CardHeader className="bg-purple-50">
+              <div className="flex justify-between items-center">
+                <div>
+                  <CardTitle className="text-chart-4">
+                    {report.title || "RASBITA Risk Assessment Report"}
+                  </CardTitle>
                   <CardDescription>
-                    Select an existing assessment to generate a new RASBITA risk report with financial analysis.
+                    {report.company?.name ? `For ${report.company.name}` : "CISSP Risk Assessment Score by Threat and Impact Analysis"}
                   </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-col gap-4">
-                    <div className="w-full">
-                      <Select value={selectedAssessment} onValueChange={setSelectedAssessment}>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select an assessment" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {assessments.map(assessment => (
-                            <SelectItem key={assessment.id} value={assessment.id}>
-                              {assessment.name}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Button 
-                      className="bg-chart-4 hover:bg-purple-700 text-white" 
-                      onClick={() => {
-                        generateReport();
-                        setShowResults(true);
-                        setActiveTab("dashboard");
-                      }}
-                      disabled={loading}
-                    >
-                      {loading ? 'Generating Report...' : 'Generate RASBITA Report'}
-                    </Button>
-                  </div>
-                  
-                  <div className="mt-4 text-sm text-gray-600 bg-purple-50 p-3 rounded-md">
-                    <p>
-                      <strong>Note:</strong> The RASBITA report provides a comprehensive financial analysis
-                      of your security risks and controls, including asset values, exposure factors, and
-                      cost-benefit analysis for each control.
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-              
-              <Card>
-                <CardHeader>
-                  <CardTitle>Saved RASBITA Reports</CardTitle>
-                  <CardDescription>
-                    View your previously saved RASBITA risk assessment reports.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  {savedReports.length === 0 ? (
-                    <div className="text-center py-8 bg-gray-50 rounded-md border border-gray-200">
-                      <Inbox className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-                      <h3 className="text-lg font-medium text-gray-900">No saved reports</h3>
-                      <p className="mt-1 text-sm text-gray-500">
-                        After analyzing incidents, save your reports to access them later.
-                      </p>
-                    </div>
-                  ) : (
-                    <div className="space-y-2 max-h-80 overflow-y-auto pr-2">
-                      {savedReports.map(savedReport => (
-                        <div 
-                          key={savedReport.id} 
-                          className="p-3 border border-gray-200 rounded-md hover:bg-gray-50 cursor-pointer flex justify-between items-center"
-                          onClick={() => {
-                            fetchRasbitaReport(savedReport.id.toString());
-                            setShowResults(true);
-                            setActiveTab("dashboard");
-                          }}
-                        >
-                          <div>
-                            <h4 className="font-medium text-gray-900">{savedReport.title}</h4>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className="text-xs text-gray-500 flex items-center">
-                                <Calendar className="h-3 w-3 mr-1" />
-                                {new Date(savedReport.createdAt).toLocaleDateString()}
-                              </span>
-                              <span className="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded-full">
-                                {savedReport.incidentCategory}
-                              </span>
-                            </div>
-                          </div>
-                          <div className="bg-chart-4 text-white rounded-full w-10 h-10 flex items-center justify-center font-bold">
-                            {Math.round(savedReport.overallRiskScore)}
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                </div>
+                <div className="flex gap-2">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowGovernanceAssessment(true)}
+                    className="flex items-center gap-2 text-chart-4 border-chart-4"
+                  >
+                    <CheckSquare className="h-4 w-4" />
+                    <span>Governance Assessment</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={saveReport}
+                    disabled={saveLoading}
+                    className="flex items-center gap-1"
+                  >
+                    <Save className="h-4 w-4" />
+                    <span>{saveLoading ? "Saving..." : "Save"}</span>
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={exportToPdf}
+                    disabled={exportLoading}
+                    className="flex items-center gap-1"
+                  >
+                    <Download className="h-4 w-4" />
+                    <span>{exportLoading ? "Exporting..." : "Export PDF"}</span>
+                  </Button>
+                </div>
+              </div>
+            </CardHeader>
+            <CardContent className="p-0">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                <TabsList className="w-full">
+                  <TabsTrigger value="dashboard" className="flex-1">Dashboard</TabsTrigger>
+                  <TabsTrigger value="form" className="flex-1">Incident Form</TabsTrigger>
+                </TabsList>
+                <TabsContent value="dashboard" className="mt-0">
+                  {showResults && (
+                    <RasbitaDashboard report={report} />
                   )}
-                  
-                  <div className="mt-4">
-                    <Button 
-                      onClick={fetchSavedReports} 
-                      variant="outline" 
-                      className="w-full"
-                      disabled={loading}
-                    >
-                      {loading ? 'Refreshing...' : 'Refresh Reports'}
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
+                </TabsContent>
+                <TabsContent value="form" className="mt-0">
+                  <IncidentForm 
+                    onComplete={(formData: any) => {
+                      // Process form data and update report
+                      console.log("Form submitted with data:", formData);
+                      
+                      // TODO: Transform form data into report format
+                      
+                      // Show the results tab
+                      setShowResults(true);
+                      setActiveTab("dashboard");
+                    }}
+                    initialData={initialFormData}
+                  />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
           
-          {/* Dashboard Tab */}
-          <TabsContent value="dashboard">
-            <div className="flex justify-end mb-4">
-              <Button 
-                className="bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
-                onClick={saveReport}
-                disabled={saveLoading}
-              >
-                {saveLoading ? 'Saving Report...' : <>
-                  <Save size={16} />
-                  Save Report
-                </>}
-              </Button>
-            </div>
-            <RasbitaDashboard report={report} />
-          </TabsContent>
-          
-          {/* Export Options Tab */}
-          <TabsContent value="export">
-            <Card>
+          {report.governanceMaturity && (
+            <Card className="border-chart-4 bg-purple-50/30">
               <CardHeader>
-                <CardTitle>Export RASBITA Report</CardTitle>
+                <CardTitle className="text-chart-4">Governance & Management Maturity</CardTitle>
                 <CardDescription>
-                  Download or share your RASBITA risk assessment report
+                  Based on NIST CSF 2.0 Framework
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card className="border border-gray-200">
-                    <CardHeader className="bg-gray-50">
-                      <CardTitle className="text-lg">PDF Export</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-4">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Export a comprehensive PDF report with all RASBITA metrics, charts, and detailed financial analysis.
-                      </p>
-                      <Button 
-                        className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
-                        onClick={exportToPdf}
-                        disabled={exportLoading}
-                      >
-                        {exportLoading ? 'Generating PDF...' : <>
-                          <Download size={16} />
-                          Download PDF Report
-                        </>}
-                      </Button>
-                    </CardContent>
-                  </Card>
+                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                    <h3 className="font-semibold text-lg text-purple-700 mb-2">Cybersecurity Risk Governance</h3>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="bg-green-500 w-2 h-2 rounded-full"></div>
+                      <span className="font-medium">Tier {report.governanceMaturity.governanceScore}: </span>
+                      <span>{getTierLabel(report.governanceMaturity.governanceScore)}</span>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2">
+                      {getTierDescription(report.governanceMaturity.governanceScore, "governance")}
+                    </p>
+                  </div>
                   
-                  <Card className="border border-gray-200">
-                    <CardHeader className="bg-gray-50">
-                      <CardTitle className="text-lg">Excel Export</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-4">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Export all RASBITA metrics and calculations to an Excel spreadsheet for further analysis.
-                      </p>
-                      <Button 
-                        className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
-                        onClick={() => toast({
-                          title: "Coming Soon",
-                          description: "Excel export will be available in the next update.",
-                        })}
-                      >
-                        <FileText size={16} />
-                        Download Excel Report
-                      </Button>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="border border-gray-200">
-                    <CardHeader className="bg-gray-50">
-                      <CardTitle className="text-lg">Stakeholder Presentation</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-4">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Export a presentation-ready report formatted for executive stakeholders, focusing on key financial metrics.
-                      </p>
-                      <Button 
-                        className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
-                        onClick={() => toast({
-                          title: "Coming Soon",
-                          description: "Presentation export will be available in the next update.",
-                        })}
-                      >
-                        <FileText size={16} />
-                        Download Presentation
-                      </Button>
-                    </CardContent>
-                  </Card>
-                  
-                  <Card className="border border-gray-200">
-                    <CardHeader className="bg-gray-50">
-                      <CardTitle className="text-lg">Share Report</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pt-4">
-                      <p className="text-sm text-gray-600 mb-4">
-                        Share this RASBITA report with team members or stakeholders via a secure link or email.
-                      </p>
-                      <div className="grid grid-cols-1 gap-2">
-                        <Button 
-                          className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
-                          onClick={() => toast({
-                            title: "Share Link Generated",
-                            description: "A secure link has been copied to your clipboard. This link will expire in 7 days.",
-                          })}
-                        >
-                          <Share2 size={16} />
-                          Generate Sharing Link
-                        </Button>
-                        <Button 
-                          className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
-                          onClick={() => toast({
-                            title: "Email Option",
-                            description: "Email sharing will be available in the next update.",
-                          })}
-                        >
-                          <Mail size={16} />
-                          Email Report
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                  <div className="bg-white p-4 rounded-lg border border-gray-200">
+                    <h3 className="font-semibold text-lg text-purple-700 mb-2">Cybersecurity Risk Management</h3>
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="bg-blue-500 w-2 h-2 rounded-full"></div>
+                      <span className="font-medium">Tier {report.governanceMaturity.managementScore}: </span>
+                      <span>{getTierLabel(report.governanceMaturity.managementScore)}</span>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-2">
+                      {getTierDescription(report.governanceMaturity.managementScore, "management")}
+                    </p>
+                  </div>
                 </div>
               </CardContent>
             </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
+}
+
+function getTierLabel(score: number | null): string {
+  if (score === null) return "Not assessed";
+  
+  switch (score) {
+    case 0: return "None";
+    case 1: return "Partial";
+    case 2: return "Risk Informed";
+    case 3: return "Repeatable";
+    case 4: return "Adaptive";
+    default: return "Unknown";
+  }
+}
+
+function getTierDescription(score: number | null, type: "governance" | "management"): string {
+  if (score === null) return "";
+  
+  if (type === "governance") {
+    switch (score) {
+      case 0:
+        return "Not currently part of the cybersecurity risk governance practices in the organization.";
+      case 1:
+        return "Application of the organizational cybersecurity risk strategy is managed in an ad hoc manner. Prioritization is ad hoc and not formally based on objectives or threat environment.";
+      case 2:
+        return "Risk management practices are approved by management but may not be established as organization-wide policy. Prioritization is informed by organizational risk objectives, threat environment, or business requirements.";
+      case 3:
+        return "The organization's risk management practices are formally approved and expressed as policy. Cybersecurity practices are regularly updated based on the application of risk management processes.";
+      case 4:
+        return "There is an organization-wide approach to managing cybersecurity risks that uses risk-informed policies, processes, and procedures to address potential cybersecurity events.";
+      default:
+        return "";
+    }
+  } else {
+    switch (score) {
+      case 0:
+        return "Not currently part of the cybersecurity risk management practices in the organization.";
+      case 1:
+        return "Limited awareness of cybersecurity risks at the organizational level. The organization implements cybersecurity risk management on an irregular, case-by-case basis.";
+      case 2:
+        return "Awareness of cybersecurity risks exists, but an organization-wide approach to managing cybersecurity risks has not been established. Cybersecurity information is shared within the organization on an informal basis.";
+      case 3:
+        return "Organization-wide approach to managing cybersecurity risks. Cybersecurity information is routinely shared throughout the organization. Consistent methods are in place to respond effectively to changes in risk.";
+      case 4:
+        return "The organization adapts its cybersecurity practices based on previous activities and predictive indicators. Real-time information is used to understand and act upon cybersecurity risks associated with the products and services.";
+      default:
+        return "";
+    }
+  }
 }
