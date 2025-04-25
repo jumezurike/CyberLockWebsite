@@ -39,9 +39,9 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
   return (
     <Card className="w-full mb-8">
       <CardHeader className="bg-purple-50">
-        <CardTitle className="text-chart-4">Cybersecurity Risk Maturity Assessment</CardTitle>
+        <CardTitle className="text-chart-4">Cybersecurity Risk Governance Assessment</CardTitle>
         <CardDescription>
-          Evaluate your organization's governance and management maturity based on NIST CSF 2.0 framework
+          Evaluate your organization's cybersecurity risk governance and management maturity based on NIST CSF 2.0 framework
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
@@ -55,7 +55,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
           <TabsContent value="governance">
             <div className="space-y-6">
               <div className="text-lg font-semibold text-chart-4">
-                Question 1: What tier is your organization?
+                Question 1: What cybersecurity risk governance tier is your organization?
               </div>
               <p className="text-gray-600">
                 Evaluate your organization's approach to cybersecurity risk governance.
@@ -143,7 +143,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
           <TabsContent value="management">
             <div className="space-y-6">
               <div className="text-lg font-semibold text-chart-4">
-                Cybersecurity Risk Management Assessment
+                Question 1 (continued): What cybersecurity risk management tier is your organization?
               </div>
               <p className="text-gray-600">
                 Evaluate your organization's approach to cybersecurity risk management.
