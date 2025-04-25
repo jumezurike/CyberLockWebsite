@@ -31,6 +31,17 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
   const [monthsAtTier, setMonthsAtTier] = useState<number>(0);
   const [desireToImprove, setDesireToImprove] = useState<boolean>(false);
   
+  // Update management tier when governance tier changes to ensure consistency
+  const handleGovernanceChange = (value: string) => {
+    const tierValue = parseInt(value);
+    setGovernanceScore(tierValue);
+    
+    // If Governance is set to Adaptive (Tier 4), Management must also be Adaptive
+    if (tierValue === 4) {
+      setManagementScore(4);
+    }
+  };
+  
   const handleSubmit = () => {
     onComplete({
       governanceScore,
@@ -70,7 +81,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
               
               <RadioGroup 
                 value={governanceScore?.toString() || "0"} 
-                onValueChange={(value) => setGovernanceScore(parseInt(value))}
+                onValueChange={handleGovernanceChange}
                 className="space-y-4"
               >
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
@@ -130,6 +141,9 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                       Executives monitor cybersecurity risks in the same context as financial and other organizational risks. 
                       The organizational budget is based on an understanding of the current and predicted risk environment.
                     </p>
+                    <p className="text-sm font-medium mt-2 text-purple-600">
+                      Note: When selecting Adaptive tier for Governance, the Management tier will also be set to Adaptive.
+                    </p>
                   </div>
                 </div>
               </RadioGroup>
@@ -156,10 +170,21 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 Select the tier that best describes your current maturity level.
               </p>
               
+              {governanceScore === 4 && (
+                <div className="p-3 mb-4 bg-purple-50 rounded-md border-l-4 border-chart-4">
+                  <p className="text-sm text-purple-700">
+                    <span className="font-medium">Note:</span> Since you selected the Adaptive tier (Tier 4) for Governance, 
+                    Management has been automatically set to the Adaptive tier as well. 
+                    A truly adaptive organization must have both adaptive governance and management.
+                  </p>
+                </div>
+              )}
+              
               <RadioGroup 
                 value={managementScore?.toString() || "0"} 
                 onValueChange={(value) => setManagementScore(parseInt(value))}
                 className="space-y-4"
+                disabled={governanceScore === 4} // Disable if Governance is set to Adaptive (Tier 4)
               >
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="0" id="management-0" className="mt-1" />
