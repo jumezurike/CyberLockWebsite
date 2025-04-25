@@ -12,6 +12,7 @@ import ColorDemo from "@/pages/color-demo";
 import EarlyAccess from "@/pages/early-access";
 import Dashboard from "@/pages/dashboard";
 import AboutUs from "@/pages/about-us";
+import RasbitaReport from "@/pages/rasbita-report";
 
 function Router() {
   return (
@@ -25,6 +26,7 @@ function Router() {
           <Route path="/early-access" component={EarlyAccess} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/about-us" component={AboutUs} />
+          <Route path="/rasbita" component={RasbitaReport} />
           <Route component={NotFound} />
         </Switch>
       </main>
