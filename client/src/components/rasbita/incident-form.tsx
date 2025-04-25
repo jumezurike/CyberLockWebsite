@@ -144,6 +144,34 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
     return totalDataCount * dataPercentage;
   };
   
+  // Calculate total data size based on record count and average record size
+  const calculateTotalDataSize = (): string => {
+    const recordCount = Number(form.getValues().totalDataCount) || 0;
+    const recordSizeInput = document.getElementById('record-size-input') as HTMLInputElement;
+    const recordSize = recordSizeInput ? parseFloat(recordSizeInput.value || '32') : 32;
+    
+    const totalSizeKB = recordCount * recordSize;
+    
+    // Format total size with appropriate unit (KB, MB, GB, TB)
+    if (totalSizeKB < 1024) {
+      return `Total: ${totalSizeKB.toFixed(2)} KB`;
+    } else if (totalSizeKB < 1024 * 1024) {
+      return `Total: ${(totalSizeKB / 1024).toFixed(2)} MB`;
+    } else if (totalSizeKB < 1024 * 1024 * 1024) {
+      return `Total: ${(totalSizeKB / (1024 * 1024)).toFixed(2)} GB`;
+    } else {
+      return `Total: ${(totalSizeKB / (1024 * 1024 * 1024)).toFixed(2)} TB`;
+    }
+  };
+  
+  // Update the data size display when either record count or size changes
+  const updateDataSizeDisplay = () => {
+    const totalSizeElement = document.getElementById('total-data-size');
+    if (totalSizeElement) {
+      totalSizeElement.textContent = calculateTotalDataSize();
+    }
+  };
+  
   // Get exposure factor value based on data loss percentage
   const getExposureFactorFromDataLoss = (dataLossPercentage: string): number => {
     switch(dataLossPercentage) {
@@ -841,7 +869,35 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                                   min="0"
                                   placeholder="1000"
                                   {...field}
-                                  onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
+                                  onChange={e => {
+                                    // Set the field value
+                                    const newValue = parseFloat(e.target.value) || 0;
+                                    field.onChange(newValue);
+                                    
+                                    // Update total size calculation
+                                    const recordSizeInput = document.getElementById('record-size-input') as HTMLInputElement;
+                                    const recordSize = recordSizeInput ? parseFloat(recordSizeInput.value || '32') : 32;
+                                    const totalSizeElement = document.getElementById('total-data-size');
+                                    
+                                    if (totalSizeElement) {
+                                      // Calculate total size
+                                      const totalSizeKB = newValue * recordSize;
+                                      let sizeDisplay = "";
+                                      
+                                      // Format with appropriate unit
+                                      if (totalSizeKB < 1024) {
+                                        sizeDisplay = `Total: ${totalSizeKB.toFixed(2)} KB`;
+                                      } else if (totalSizeKB < 1024 * 1024) {
+                                        sizeDisplay = `Total: ${(totalSizeKB / 1024).toFixed(2)} MB`;
+                                      } else if (totalSizeKB < 1024 * 1024 * 1024) {
+                                        sizeDisplay = `Total: ${(totalSizeKB / (1024 * 1024)).toFixed(2)} GB`;
+                                      } else {
+                                        sizeDisplay = `Total: ${(totalSizeKB / (1024 * 1024 * 1024)).toFixed(2)} TB`;
+                                      }
+                                      
+                                      totalSizeElement.textContent = sizeDisplay;
+                                    }
+                                  }}
                                   className="flex-1"
                                 />
                               </FormControl>
@@ -860,8 +916,35 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                                   const inputElement = document.getElementById('data-count-input') as HTMLInputElement;
                                   const baseValue = inputElement ? parseFloat(inputElement.value || '0') : 0;
                                   
+                                  // Calculate new count value with multiplier
+                                  const newValue = baseValue * multiplier;
+                                  
                                   // Apply multiplier to base value and update the form field
-                                  field.onChange(baseValue * multiplier);
+                                  field.onChange(newValue);
+                                  
+                                  // Update the total size calculation
+                                  const recordSizeInput = document.getElementById('record-size-input') as HTMLInputElement;
+                                  const recordSize = recordSizeInput ? parseFloat(recordSizeInput.value || '32') : 32;
+                                  const totalSizeElement = document.getElementById('total-data-size');
+                                  
+                                  if (totalSizeElement) {
+                                    // Calculate total size
+                                    const totalSizeKB = newValue * recordSize;
+                                    let sizeDisplay = "";
+                                    
+                                    // Format with appropriate unit
+                                    if (totalSizeKB < 1024) {
+                                      sizeDisplay = `Total: ${totalSizeKB.toFixed(2)} KB`;
+                                    } else if (totalSizeKB < 1024 * 1024) {
+                                      sizeDisplay = `Total: ${(totalSizeKB / 1024).toFixed(2)} MB`;
+                                    } else if (totalSizeKB < 1024 * 1024 * 1024) {
+                                      sizeDisplay = `Total: ${(totalSizeKB / (1024 * 1024)).toFixed(2)} GB`;
+                                    } else {
+                                      sizeDisplay = `Total: ${(totalSizeKB / (1024 * 1024 * 1024)).toFixed(2)} TB`;
+                                    }
+                                    
+                                    totalSizeElement.textContent = sizeDisplay;
+                                  }
                                 }}
                                 defaultValue="unit"
                               >
@@ -876,8 +959,50 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                                 </SelectContent>
                               </Select>
                             </div>
-                            <div className="text-sm font-medium text-green-600" id="data-size-indicator">
-                              {Number(field.value) > 0 ? `≈ ${new Intl.NumberFormat().format(Number(field.value))} records` : "Enter the number of records"}
+                            <div className="flex flex-col space-y-1">
+                              <div className="text-sm font-medium text-green-600" id="data-size-indicator">
+                                {Number(field.value) > 0 ? `≈ ${new Intl.NumberFormat().format(Number(field.value))} records` : "Enter the number of records"}
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <span className="text-xs text-gray-500">Avg. record size (KB):</span>
+                                <Input 
+                                  type="number" 
+                                  min="0.1" 
+                                  step="0.1"
+                                  id="record-size-input"
+                                  defaultValue="32"
+                                  className="h-7 w-20 text-xs"
+                                  onChange={(e) => {
+                                    // Get the record size and count values
+                                    const recordSize = parseFloat(e.target.value) || 32;
+                                    const recordCount = Number(field.value) || 0;
+                                    
+                                    // Update the total size display
+                                    const totalSizeElement = document.getElementById('total-data-size');
+                                    if (totalSizeElement) {
+                                      // Calculate total size
+                                      const totalSizeKB = recordCount * recordSize;
+                                      let sizeDisplay = "";
+                                      
+                                      // Format with appropriate unit
+                                      if (totalSizeKB < 1024) {
+                                        sizeDisplay = `Total: ${totalSizeKB.toFixed(2)} KB`;
+                                      } else if (totalSizeKB < 1024 * 1024) {
+                                        sizeDisplay = `Total: ${(totalSizeKB / 1024).toFixed(2)} MB`;
+                                      } else if (totalSizeKB < 1024 * 1024 * 1024) {
+                                        sizeDisplay = `Total: ${(totalSizeKB / (1024 * 1024)).toFixed(2)} GB`;
+                                      } else {
+                                        sizeDisplay = `Total: ${(totalSizeKB / (1024 * 1024 * 1024)).toFixed(2)} TB`;
+                                      }
+                                      
+                                      totalSizeElement.textContent = sizeDisplay;
+                                    }
+                                  }}
+                                />
+                                <span className="text-xs font-medium text-purple-600" id="total-data-size">
+                                  {Number(field.value) > 0 ? `Total: ${(Number(field.value) * 32).toFixed(2)} KB` : "Enter data count"}
+                                </span>
+                              </div>
                             </div>
                           </div>
                           <FormDescription>
