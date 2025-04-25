@@ -168,13 +168,72 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
   
   return (
     <div className="rasbita-dashboard space-y-6">
+      {/* Understanding RASBITA Scores Legend Card */}
+      <Card className="mb-6 bg-gray-50">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-lg">Understanding RASBITA™ Scores</CardTitle>
+          <CardDescription>
+            Two complementary scoring systems to evaluate security posture
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border border-gray-200 rounded p-3 bg-white">
+              <h3 className="font-semibold text-purple-700 mb-1 flex items-center gap-2">
+                <span className="bg-purple-600 w-3 h-3 rounded-full"></span>
+                RASBITA™ Risk Score
+              </h3>
+              <p className="text-sm text-gray-600">
+                CISSP Risk Assessment Score by Impact and Threat Analysis. Quantifies actual <strong>security risks</strong> on a scale of 1-100%.
+                Higher scores indicate greater risk exposure.
+              </p>
+              <div className="mt-2 grid grid-cols-4 text-xs text-center">
+                <div className="bg-green-100 px-1 py-0.5 rounded-l">1-20% <span className="block font-medium">Low</span></div>
+                <div className="bg-yellow-100 px-1 py-0.5">21-35% <span className="block font-medium">Medium</span></div>
+                <div className="bg-orange-100 px-1 py-0.5">36-46% <span className="block font-medium">High</span></div>
+                <div className="bg-red-100 px-1 py-0.5 rounded-r">47-100% <span className="block font-medium">Critical</span></div>
+              </div>
+            </div>
+            <div className="border border-gray-200 rounded p-3 bg-white">
+              <h3 className="font-semibold text-blue-700 mb-1 flex items-center gap-2">
+                <span className="bg-blue-600 w-3 h-3 rounded-full"></span>
+                Governance & Management Maturity
+              </h3>
+              <p className="text-sm text-gray-600">
+                Measures organizational <strong>cybersecurity maturity</strong> on a tier scale of 0-4.
+                Higher tiers indicate stronger governance and management practices.
+              </p>
+              <div className="mt-2 grid grid-cols-1 text-xs">
+                <div className="grid grid-cols-5">
+                  <div className="bg-red-100 px-1 py-0.5 rounded-tl">Tier 0 <span className="block font-medium">0%</span></div>
+                  <div className="bg-orange-100 px-1 py-0.5">Tier 1 <span className="block font-medium">25%</span></div>
+                  <div className="bg-yellow-100 px-1 py-0.5">Tier 2 <span className="block font-medium">50%</span></div>
+                  <div className="bg-blue-100 px-1 py-0.5">Tier 3 <span className="block font-medium">75%</span></div>
+                  <div className="bg-green-100 px-1 py-0.5 rounded-tr">Tier 4 <span className="block font-medium">100%</span></div>
+                </div>
+                <div className="grid grid-cols-5 text-[10px] text-center">
+                  <div className="bg-red-50 px-1 py-0.5 rounded-bl border-t border-white">None</div>
+                  <div className="bg-orange-50 px-1 py-0.5 border-t border-white">Partial</div>
+                  <div className="bg-yellow-50 px-1 py-0.5 border-t border-white">Risk Informed</div>
+                  <div className="bg-blue-50 px-1 py-0.5 border-t border-white">Repeatable</div>
+                  <div className="bg-green-50 px-1 py-0.5 rounded-br border-t border-white">Adaptive</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="mt-3 bg-blue-50 p-2 rounded text-sm text-blue-800">
+            <strong>Key Relationship:</strong> More mature governance and management practices (higher tier) typically result in a lower RASBITA™ risk score, indicating reduced security risk exposure.
+          </div>
+        </CardContent>
+      </Card>
+      
       {/* Risk Score Notification Card */}
       <Card className={`border-l-4 border-${getRiskAssessment(overallRiskScore).color}-500 mb-6`}>
         <CardContent className="flex items-start gap-4 pt-6">
           {getRiskAssessment(overallRiskScore).icon}
           <div>
             <h3 className="text-lg font-semibold mb-1">
-              Risk Score: {overallRiskScore.toFixed(1)} - {getRiskAssessment(overallRiskScore).level} ({getRiskAssessment(overallRiskScore).title})
+              RASBITA™ Risk Score: {overallRiskScore.toFixed(1)}% - {getRiskAssessment(overallRiskScore).level} ({getRiskAssessment(overallRiskScore).title})
             </h3>
             <p className="text-gray-700">
               {getRiskAssessment(overallRiskScore).notification}
@@ -288,7 +347,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
             <CardHeader className="bg-purple-50 border-b">
               <CardTitle className="text-chart-4">Cybersecurity Risk Maturity</CardTitle>
               <CardDescription>
-                Governance & Management Tier Assessment
+                RASBITA™ GOV & MGNT SELF-SCORING Assessment
               </CardDescription>
             </CardHeader>
             <CardContent className="pt-6">
@@ -304,6 +363,13 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
                   <div className="text-xs text-gray-500 mt-1">
                     {report.governanceMaturity.governanceScore * 25}% Complete
                   </div>
+                  <div className="mt-2 text-xs text-gray-600 italic">
+                    {report.governanceMaturity.governanceScore === 0 && "Organization has no formalized cybersecurity governance processes"}
+                    {report.governanceMaturity.governanceScore === 1 && "Organization has some informal risk practices but lacks consistency"}
+                    {report.governanceMaturity.governanceScore === 2 && "Organization has approved risk management practices with some documentation"}
+                    {report.governanceMaturity.governanceScore === 3 && "Organization consistently applies risk-informed policies across the enterprise"}
+                    {report.governanceMaturity.governanceScore === 4 && "Organization actively adapts cybersecurity practices to counter evolving threats"}
+                  </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-md">
                   <div className="text-sm text-gray-500 mb-1">Management Maturity</div>
@@ -316,7 +382,23 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
                   <div className="text-xs text-gray-500 mt-1">
                     {report.governanceMaturity.managementScore * 25}% Complete
                   </div>
+                  <div className="mt-2 text-xs text-gray-600 italic">
+                    {report.governanceMaturity.managementScore === 0 && "No defined management processes for cybersecurity implementation"}
+                    {report.governanceMaturity.managementScore === 1 && "Ad-hoc management of cybersecurity activities with limited awareness"}
+                    {report.governanceMaturity.managementScore === 2 && "Management follows structured approach with defined responsibilities"}
+                    {report.governanceMaturity.managementScore === 3 && "Established processes consistently managed with regular reviews"}
+                    {report.governanceMaturity.managementScore === 4 && "Proactive management practices that continuously improve security posture"}
+                  </div>
                 </div>
+              </div>
+              <div className="mt-4 p-3 bg-blue-50 rounded-md text-sm">
+                <p className="text-blue-800 font-medium">Improvement Recommendation:</p>
+                <p className="text-blue-700 text-xs mt-1">
+                  {report.governanceMaturity.governanceScore < 4 && 
+                    `Focus on improving your governance practices from Tier ${report.governanceMaturity.governanceScore} to Tier ${Math.min(report.governanceMaturity.governanceScore + 1, 4)} by formalizing cybersecurity policies and risk management processes.`}
+                  {report.governanceMaturity.governanceScore === 4 && 
+                    `Maintain your excellent Tier 4 governance practices while continuously adapting to emerging threats and technologies.`}
+                </p>
               </div>
             </CardContent>
           </Card>
@@ -574,13 +656,45 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
           <CardTitle>Executive Summary</CardTitle>
         </CardHeader>
         <CardContent className="prose max-w-none pt-6">
-          <p>This program helps organizations obtain risk scores for security incidents and calculate associated financial losses. This information supports IT security budgeting and overall resource management. The table above helps interpret score readings.</p>
+          <div className="mb-4 bg-blue-50 p-4 rounded-md">
+            <h3 className="text-blue-800 font-semibold mb-2">RASBITA™ Assessment Overview</h3>
+            <p className="text-sm text-blue-700">
+              The RASBITA™ assessment provides two complementary views of your security posture:
+            </p>
+            <ol className="list-decimal list-inside text-sm text-blue-700 ml-4 mt-2">
+              <li className="mb-1">
+                <strong>RASBITA™ Risk Score ({overallRiskScore.toFixed(1)}%)</strong>: Quantifies the actual security risk exposure across assets. 
+                Higher scores indicate greater risk and require more immediate action.
+              </li>
+              <li>
+                <strong>Governance & Management Maturity (Tier {report.governanceMaturity?.governanceScore || 0}/{report.governanceMaturity?.managementScore || 0})</strong>: 
+                Evaluates your organization's cybersecurity program maturity level.
+                Higher tiers indicate more mature security practices which correlate with lower risk.
+              </li>
+            </ol>
+          </div>
           
-          <p>This RASBITA™ assessment identifies and quantifies key security risks across your organization's assets. The overall risk score is <strong>{overallRiskScore.toFixed(1)}</strong>, which is categorized as a <strong>{getRiskAssessment(overallRiskScore).level} priority</strong>.</p>
+          <p>This assessment helps organizations quantify security risks and calculate associated financial losses. This information supports IT security budgeting and resource allocation decisions. The risk score interpretation table above provides context for understanding the severity level.</p>
+          
+          <p>This RASBITA™ assessment identifies and quantifies key security risks across your organization's assets. The overall risk score is <strong>{overallRiskScore.toFixed(1)}%</strong>, which is categorized as a <strong>{getRiskAssessment(overallRiskScore).level} priority</strong>.</p>
+          
+          {report.governanceMaturity && (
+            <div className="my-4 p-3 bg-purple-50 rounded-md">
+              <p className="text-purple-800 font-medium">
+                Your organization's cybersecurity governance maturity is at <strong>Tier {report.governanceMaturity.governanceScore} ({getTierLabel(report.governanceMaturity.governanceScore)})</strong> with 
+                management maturity at <strong>Tier {report.governanceMaturity.managementScore} ({getTierLabel(report.governanceMaturity.managementScore)})</strong>. 
+                {report.governanceMaturity.governanceScore < 3 && report.governanceMaturity.managementScore < 3 ? 
+                  " This below-average maturity level likely contributes to your elevated risk score." : 
+                  report.governanceMaturity.governanceScore >= 3 && report.governanceMaturity.managementScore >= 3 ? 
+                  " This above-average maturity level helps manage your security risk exposure." :
+                  " Your organization has a mixed maturity profile that partially mitigates security risks."}
+              </p>
+            </div>
+          )}
           
           <p>Key findings:</p>
           <ul>
-            <li>The device type affected is <strong>{report.deviceType || "Server"}</strong> with a risk score of <strong>{overallRiskScore.toFixed(1)}</strong></li>
+            <li>The device type affected is <strong>{report.deviceType || "Server"}</strong> with a risk score of <strong>{overallRiskScore.toFixed(1)}%</strong></li>
             <li>Total number of data held in the department is <strong>{report.totalDataCount || "50,000"}</strong></li>
             <li>Number of devices affected or damaged: <strong>{report.affectedDevices || "512"}</strong></li>
             <li>Cost of all damaged devices: <strong>{formatCurrency(report.damagedDevicesCost || 2560000)}</strong></li>
@@ -592,8 +706,19 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
           
           <p className="font-semibold">Conclusion:</p>
           <p className="font-semibold bg-red-50 p-3 border-l-4 border-red-500">
-            This is a risk score of {overallRiskScore.toFixed(1)}: {getRiskAssessment(overallRiskScore).notification}
+            This is a RASBITA™ risk score of {overallRiskScore.toFixed(1)}%: {getRiskAssessment(overallRiskScore).notification}
           </p>
+          
+          {report.governanceMaturity && (
+            <div className="mt-4">
+              <p className="font-semibold">Governance & Management Improvement:</p>
+              <p className="bg-purple-50 p-3 border-l-4 border-purple-500">
+                {report.governanceMaturity.governanceScore < 4 ? 
+                  `To reduce future security risk, focus on improving your cybersecurity governance maturity from Tier ${report.governanceMaturity.governanceScore} to Tier ${Math.min(report.governanceMaturity.governanceScore + 1, 4)}. As maturity increases, overall security risk exposure typically decreases.` : 
+                  `Maintain your excellent Tier 4 governance practices to continue minimizing security risk exposure.`}
+              </p>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>
