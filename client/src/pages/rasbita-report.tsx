@@ -176,10 +176,11 @@ export default function RasbitaReportPage() {
   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
   const [savedReports, setSavedReports] = useState<RasbitaReport[]>([]);
   const [initialFormData, setInitialFormData] = useState<any>(null);
-  const [showResults, setShowResults] = useState(true);
+  const [showResults, setShowResults] = useState(false); // Changed to false by default to enforce assessment flow
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [showGovernanceAndManagementAssessment, setShowGovernanceAndManagementAssessment] = useState(false);
+  const [showGovernanceAndManagementAssessment, setShowGovernanceAndManagementAssessment] = useState(true); // Changed to true by default to make it required
   const [assessments, setAssessments] = useState<any[]>([]);
+  const [assessmentStep, setAssessmentStep] = useState<"governance" | "incident" | "results">("governance"); // Track assessment flow
   
   // Convert a report to form data format for editing
   const reportToFormData = (report: RasbitaReport) => {
@@ -245,16 +246,19 @@ export default function RasbitaReportPage() {
     // Update the report with the governance scores
     setReport(prevReport => ({
       ...prevReport,
-      governanceMaturity: scores
+      governanceMaturity: {
+        ...scores,
+        completed: true
+      }
     }));
     
-    // Hide the governance and management assessment form and show results
+    // Move to the next step in the assessment flow
     setShowGovernanceAndManagementAssessment(false);
-    setShowResults(true);
+    setAssessmentStep("incident");
     
     toast({
       title: "Governance Assessment Complete",
-      description: "Your organization's governance and management maturity has been assessed.",
+      description: "Your organization's governance and management maturity has been assessed. Continue with the incident assessment.",
     });
   };
   
