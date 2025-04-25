@@ -5,6 +5,20 @@ import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Responsi
 import { RasbitaReport, RasbitaRiskItem } from '@/lib/sos2a-types';
 import { AlertCircle, AlertTriangle, CheckCircle, AlertOctagon } from "lucide-react";
 
+// Helper function to get tier label text based on score
+function getTierLabel(score: number | null): string {
+  if (score === null) return "Not assessed";
+  
+  switch (score) {
+    case 0: return "None";
+    case 1: return "Partial";
+    case 2: return "Risk Informed";
+    case 3: return "Repeatable";
+    case 4: return "Adaptive";
+    default: return "Unknown";
+  }
+}
+
 interface RasbitaDashboardProps {
   report: RasbitaReport;
 }
@@ -267,6 +281,46 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
             </div>
           </CardContent>
         </Card>
+        
+        {/* Governance and Management Maturity */}
+        {report.governanceMaturity && (
+          <Card>
+            <CardHeader className="bg-purple-50 border-b">
+              <CardTitle className="text-chart-4">Cybersecurity Risk Maturity</CardTitle>
+              <CardDescription>
+                Governance & Management Tier Assessment
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pt-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="bg-gray-50 p-4 rounded-md">
+                  <div className="text-sm text-gray-500 mb-1">Governance Maturity</div>
+                  <div className="font-bold text-xl text-chart-4">
+                    Tier {report.governanceMaturity.governanceScore}
+                  </div>
+                  <div className="text-purple-700 font-semibold">
+                    {getTierLabel(report.governanceMaturity.governanceScore)}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {report.governanceMaturity.governanceScore * 25}% Complete
+                  </div>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-md">
+                  <div className="text-sm text-gray-500 mb-1">Management Maturity</div>
+                  <div className="font-bold text-xl text-chart-4">
+                    Tier {report.governanceMaturity.managementScore}
+                  </div>
+                  <div className="text-purple-700 font-semibold">
+                    {getTierLabel(report.governanceMaturity.managementScore)}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {report.governanceMaturity.managementScore * 25}% Complete
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Financial Summary */}
         <Card>
