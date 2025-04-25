@@ -45,7 +45,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
   return (
     <Card className="w-full mb-8">
       <CardHeader className="bg-purple-50">
-        <CardTitle className="text-chart-4">Cybersecurity Risk Governance Assessment</CardTitle>
+        <CardTitle className="text-chart-4">Cybersecurity Risk Governance & Management Assessment</CardTitle>
         <CardDescription>
           Evaluate your organization's cybersecurity risk governance and management maturity based on NIST CSF 2.0 framework
         </CardDescription>
@@ -200,7 +200,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="3" id="management-3" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="management-3" className="text-base font-semibold">Tier 3: Repeatable (75%)</Label>
+                    <Label htmlFor="management-3" className="text-base font-semibold">Tier 3 (2-3): 75% Repeatable</Label>
                     <p className="text-sm text-gray-500">
                       There is an organization-wide approach to managing cybersecurity risks. Cybersecurity information is routinely shared throughout the organization.
                       Consistent methods are in place to respond effectively to changes in risk. Personnel possess the knowledge and skills to perform their appointed roles and responsibilities.
@@ -212,7 +212,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="4" id="management-4" className="mt-1" />
                   <div className="space-y-1.5">
-                    <Label htmlFor="management-4" className="text-base font-semibold">Tier 4: Adaptive (100%)</Label>
+                    <Label htmlFor="management-4" className="text-base font-semibold">Tier 4 (3-4): 100% Adaptive</Label>
                     <p className="text-sm text-gray-500">
                       The organization adapts its cybersecurity practices based on previous and current cybersecurity activities, including lessons learned and predictive indicators.
                       The organization uses real-time or near real-time information to understand and consistently act upon cybersecurity risks associated with the products and services it provides and uses.
@@ -340,11 +340,11 @@ function getTierLabel(score: number | null): string {
   if (score === null) return "Not assessed";
   
   switch (score) {
-    case 0: return "Tier 0: None";
-    case 1: return "Tier 1: Partial";
-    case 2: return "Tier 2: Risk Informed";
-    case 3: return "Tier 3: Repeatable";
-    case 4: return "Tier 4: Adaptive";
+    case 0: return "Tier 0 (0-0): 0% None";
+    case 1: return "Tier 1 (0-1): 25% Partial";
+    case 2: return "Tier 2 (1-2): 50% Risk Informed";
+    case 3: return "Tier 3 (2-3): 75% Repeatable";
+    case 4: return "Tier 4 (3-4): 100% Adaptive";
     default: return "Unknown";
   }
 }
