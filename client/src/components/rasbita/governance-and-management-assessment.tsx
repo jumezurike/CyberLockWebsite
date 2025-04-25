@@ -319,7 +319,7 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                       Would you like to improve your cybersecurity maturity?
                     </label>
                     <p className="text-sm text-muted-foreground">
-                      Our SOS²A (SMB Organizational and System Security Analysis) can help you improve your security maturity.
+                      Our SOS²A (Healthcare Organizational and System Security Analysis) can help you improve your security maturity.
                     </p>
                   </div>
                 </div>

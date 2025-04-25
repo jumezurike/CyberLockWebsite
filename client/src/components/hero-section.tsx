@@ -48,7 +48,7 @@ export default function HeroSection() {
                   </div>
                   <div>
                     <h3 className="font-semibold">Automated Compliance</h3>
-                    <p className="text-sm text-neutral-200">ISO, SOC, and GDPR reporting</p>
+                    <p className="text-sm text-neutral-200">HIPAA, ISO, SOC, and GDPR reporting</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-3">

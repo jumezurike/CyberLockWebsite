@@ -22,7 +22,7 @@ export default function CompetitiveComparison() {
   const features: CompetitiveFeature[] = [
     {
       feature: "Target Market",
-      cyberLockX: { value: "Built for SMBs (10-500 employees)", positive: true },
+      cyberLockX: { value: "Built for Healthcare (all sizes)", positive: true },
       guardz: { value: "MSP-focused", positive: false },
       crowdStrike: { value: "Enterprise-only", positive: false },
       cynet: { value: "Mid-market+", positive: false }
@@ -50,14 +50,14 @@ export default function CompetitiveComparison() {
     },
     {
       feature: "SOC Support",
-      cyberLockX: { value: "AI + human analysts (SMB-friendly pricing)", positive: true },
+      cyberLockX: { value: "AI + human analysts (Healthcare-focused)", positive: true },
       guardz: { value: "AI-only", positive: false },
       crowdStrike: { value: "Humans ($$$)", positive: true },
       cynet: { value: "Humans ($$$)", positive: true }
     },
     {
       feature: "Pricing",
-      cyberLockX: { value: "SMB-transparent (flat-rate)", positive: true },
+      cyberLockX: { value: "Healthcare-transparent (flat-rate)", positive: true },
       guardz: { value: "Affordable but limited", positive: true },
       crowdStrike: { value: "$20k+/year", positive: false },
       cynet: { value: "$15k+/year", positive: false }

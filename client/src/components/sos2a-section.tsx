@@ -5,7 +5,7 @@ export default function Sos2aSection() {
     {
       number: 1,
       title: "Inquiry & Questionnaire",
-      description: "Initial business inquiry and detailed questionnaire to collect data from the SMB."
+      description: "Initial business inquiry and detailed questionnaire to collect data from the healthcare organization."
     },
     {
       number: 2,
@@ -28,8 +28,8 @@ export default function Sos2aSection() {
     <section id="sos2a" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold font-heading text-primary mb-4">SMB Organizational and System Security Analysis (SOS<sup>2</sup>A)</h2>
-          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">Our comprehensive security analysis tool provides real-time audit, compliance proof, and threat prevention for small and medium businesses.</p>
+          <h2 className="text-3xl font-bold font-heading text-primary mb-4">Healthcare Organizational and System Security Analysis (SOS<sup>2</sup>A)</h2>
+          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">Our comprehensive security analysis tool provides real-time audit, compliance proof, and threat prevention for healthcare organizations of all sizes.</p>
         </div>
 
         {/* Process Steps */}
