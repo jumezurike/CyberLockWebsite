@@ -31,54 +31,58 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
     }
   };
 
-  // Ensure all properties exist with defaults for safety
+  // Ensure all properties exist with defaults for safety using NIST CSF 2.0 framework domains
   const rasbitaCategories = report.rasbitaCategories || {
-    risk: 50,
-    adversarialInsight: 50,
-    securityControls: 50,
-    businessImpact: 50,
-    informationAssurance: 50,
-    threatIntelligence: 50,
-    architecture: 50
+    govern: 50,
+    identify: 50,
+    protect: 50,
+    detect: 50,
+    respond: 50,
+    recover: 50
   };
   
-  // Data for the radar chart
+  // Safe access to properties with fallbacks
+  const categories = {
+    govern: rasbitaCategories.govern || 50,
+    identify: rasbitaCategories.identify || 50,
+    protect: rasbitaCategories.protect || 50,
+    detect: rasbitaCategories.detect || 50,
+    respond: rasbitaCategories.respond || 50,
+    recover: rasbitaCategories.recover || 50
+  };
+  
+  // Data for the radar chart based on NIST CSF 2.0 framework domains
   const radarData = [
     {
-      subject: 'R (Risk)',
-      value: rasbitaCategories.risk || 0,
+      subject: 'Govern',
+      value: categories.govern,
       fullMark: 100,
     },
     {
-      subject: 'A (Adversarial)',
-      value: rasbitaCategories.adversarialInsight || 0,
+      subject: 'Identify',
+      value: categories.identify,
       fullMark: 100,
     },
     {
-      subject: 'S (Security)',
-      value: rasbitaCategories.securityControls || 0,
+      subject: 'Protect',
+      value: categories.protect,
       fullMark: 100,
     },
     {
-      subject: 'B (Business)',
-      value: rasbitaCategories.businessImpact || 0,
+      subject: 'Detect',
+      value: categories.detect,
       fullMark: 100,
     },
     {
-      subject: 'I (Information)',
-      value: rasbitaCategories.informationAssurance || 0,
+      subject: 'Respond',
+      value: categories.respond,
       fullMark: 100,
     },
     {
-      subject: 'T (Threat)',
-      value: rasbitaCategories.threatIntelligence || 0,
+      subject: 'Recover',
+      value: categories.recover,
       fullMark: 100,
-    },
-    {
-      subject: 'A (Architecture)',
-      value: rasbitaCategories.architecture || 0,
-      fullMark: 100,
-    },
+    }
   ];
 
   // Ensure financial summary exists with defaults
@@ -253,10 +257,10 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
                 </RadarChart>
               </ResponsiveContainer>
             </div>
-            <div className="mt-4 grid grid-cols-3 sm:grid-cols-7 gap-2 text-center">
-              {Object.entries(rasbitaCategories || {}).map(([key, value], index) => (
+            <div className="mt-4 grid grid-cols-3 sm:grid-cols-6 gap-2 text-center">
+              {Object.entries(categories).map(([key, value], index) => (
                 <div key={key} className="bg-purple-50 p-2 rounded-md">
-                  <div className="text-xs uppercase text-gray-500">{key.charAt(0).toUpperCase()}</div>
+                  <div className="text-xs uppercase text-gray-500">{key.charAt(0).toUpperCase() + key.slice(1)}</div>
                   <div className="font-bold text-chart-4">{value}%</div>
                 </div>
               ))}

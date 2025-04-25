@@ -1006,10 +1006,10 @@ export default function RasbitaReportPage() {
         
         // Update financial summary
         updatedReport.financialSummary = {
-          totalAssetValue: updatedReport.riskItems.reduce((sum, item) => sum + item.assetValue, 0),
-          totalAnnualizedLossExpectancy: updatedReport.riskItems.reduce((sum, item) => sum + item.annualizedLossExpectancy, 0),
-          totalCostOfSafeguards: updatedReport.riskItems.reduce((sum, item) => sum + item.annualCostOfSafeguard, 0),
-          totalNetRiskReductionBenefit: updatedReport.riskItems.reduce((sum, item) => sum + item.netRiskReductionBenefit, 0)
+          totalAssetValue: updatedReport.riskItems.reduce((sum: number, item: RasbitaRiskItem) => sum + (item.assetValue || 0), 0),
+          totalAnnualizedLossExpectancy: updatedReport.riskItems.reduce((sum: number, item: RasbitaRiskItem) => sum + (item.annualizedLossExpectancy || 0), 0),
+          totalCostOfSafeguards: updatedReport.riskItems.reduce((sum: number, item: RasbitaRiskItem) => sum + (item.annualCostOfSafeguard || 0), 0),
+          totalNetRiskReductionBenefit: updatedReport.riskItems.reduce((sum: number, item: RasbitaRiskItem) => sum + (item.netRiskReductionBenefit || 0), 0)
         };
       }
       
@@ -1067,15 +1067,14 @@ export default function RasbitaReportPage() {
     return Math.min(Math.round(adjustedScore), 100);
   };
   
-  // Helper function to calculate RASBITA categories
+  // Helper function to calculate RASBITA categories based on NIST CSF 2.0 framework domains
   const calculateRasbitaCategories = (riskItem: RasbitaRiskItem): {
-    risk: number;
-    adversarialInsight: number;
-    securityControls: number;
-    businessImpact: number;
-    informationAssurance: number;
-    threatIntelligence: number;
-    architecture: number;
+    govern: number;
+    identify: number;
+    protect: number;
+    detect: number;
+    respond: number;
+    recover: number;
   } => {
     // Get all properties with defaults to avoid undefined errors
     const {
@@ -1089,16 +1088,45 @@ export default function RasbitaReportPage() {
       availability = 5
     } = riskItem;
     
-    // In a real implementation, these would be calculated based on a more complex algorithm
-    // For demonstration, we'll use the risk item properties to generate values
+    // Calculate values based on NIST CSF 2.0 framework domains
+    // These calculations would ideally come from the 5 governance questions
+    const governScore = Math.max(30, Math.min(90, Math.round(
+      ((10 - exposureFactor * 10) * 2.5) + // Good governance reduces exposure
+      ((10 - likelihood) * 2.5)             // Good governance reduces likelihood
+    )));
+    
+    const identifyScore = Math.max(30, Math.min(90, Math.round(
+      (threatLevel * 5) +                   // Higher threat awareness shows better identification
+      ((10 - impact) * 3)                   // Better identification reduces potential impact
+    )));
+    
+    const protectScore = Math.max(30, Math.min(90, Math.round(
+      (safeguardEffectiveness * 7) +        // Effective safeguards improve protection
+      ((confidentiality + integrity + availability) / 3 * 3) // CIA triad factors into protection
+    )));
+    
+    const detectScore = Math.max(30, Math.min(90, Math.round(
+      ((10 - likelihood) * 4) +             // Better detection reduces likelihood of successful attacks
+      (threatLevel * 5)                     // Higher threat awareness implies better detection
+    )));
+    
+    const respondScore = Math.max(30, Math.min(90, Math.round(
+      ((10 - impact) * 6) +                 // Good response reduces impact
+      (safeguardEffectiveness * 3)          // Effective safeguards improve response capabilities
+    )));
+    
+    const recoverScore = Math.max(30, Math.min(90, Math.round(
+      ((10 - impact) * 7) +                 // Good recovery reduces long-term impact
+      ((10 - exposureFactor * 10) * 2)      // Less exposure means easier recovery
+    )));
+    
     return {
-      risk: Math.round(likelihood * 2),
-      adversarialInsight: Math.round(threatLevel * 2),
-      securityControls: Math.round((10 - safeguardEffectiveness) * 2),
-      businessImpact: Math.round(impact * 2),
-      informationAssurance: Math.round((confidentiality + integrity + availability) / 3 * 2),
-      threatIntelligence: Math.round(threatLevel * 1.5),
-      architecture: Math.round(10 - (exposureFactor * 10))
+      govern: governScore,
+      identify: identifyScore,
+      protect: protectScore,
+      detect: detectScore,
+      respond: respondScore,
+      recover: recoverScore
     };
   };
 
