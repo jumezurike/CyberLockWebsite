@@ -42,7 +42,7 @@ export default function SolutionOverview() {
                   <td className="py-4 px-6 font-medium">SOS²A AI Agent</td>
                   <td className="py-4 px-6">
                     <ul className="list-disc list-inside text-neutral-700">
-                      <li>Live compliance engine: Auto-generates ISO/SOC/GDPR reports</li>
+                      <li>Live compliance engine: Auto-generates HIPAA/ISO/SOC/GDPR reports</li>
                       <li>Self-healing mitigations (e.g., auto-patching)</li>
                     </ul>
                   </td>
@@ -53,7 +53,7 @@ export default function SolutionOverview() {
                   <td className="py-4 px-6">
                     <ul className="list-disc list-inside text-neutral-700">
                       <li>AI + human analysts 24/7</li>
-                      <li>Custom OWASP/SANS rules for SMB workflows</li>
+                      <li>Custom OWASP/SANS rules for healthcare workflows</li>
                     </ul>
                   </td>
                   <td className="py-4 px-6 text-neutral-700">Pure AI tools (Cynet) miss business-context threats</td>
@@ -90,7 +90,7 @@ export default function SolutionOverview() {
               </li>
               <li>
                 <span className="font-semibold text-blue-500">Compliance Autopilot:</span>
-                <p className="text-neutral-700">SOS²A maps controls in real time to NIST CSF 2.0, CIS CSC v8, and ISO 27001 Annex A.</p>
+                <p className="text-neutral-700">SOS²A maps controls in real time to HIPAA, HITECH, NIST CSF 2.0, ISO 27001, SOC 2, and GDPR requirements.</p>
               </li>
               <li>
                 <span className="font-semibold text-blue-500">Business-Ready Security:</span>

@@ -17,7 +17,7 @@ export default function RoadmapSection() {
   const roadmapItems: RoadmapItem[] = [
     {
       name: "SOS²A Organizational and System Security Assessment",
-      description: "Comprehensive security assessment tool with RASBITA scoring methodology",
+      description: "Comprehensive healthcare security assessment tool with RASBITA scoring methodology",
       status: "current",
       timeline: "Available Now",
       features: [

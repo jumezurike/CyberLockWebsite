@@ -36,7 +36,7 @@ export default function CompetitiveComparison() {
     },
     {
       feature: "Compliance Automation",
-      cyberLockX: { value: "SOS²A real-time reports (ISO/SOC/GDPR)", positive: true },
+      cyberLockX: { value: "SOS²A real-time reports (HIPAA/ISO/SOC/GDPR)", positive: true },
       guardz: { value: "Insurance-focused", positive: false },
       crowdStrike: { value: "Manual", positive: false },
       cynet: { value: "Partial", positive: false }
