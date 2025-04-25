@@ -669,7 +669,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       name="incidentDate"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Date of Incident</FormLabel>
+                          <FormLabel>When did the incident occur?</FormLabel>
                           <FormControl>
                             <Input type="date" {...field} />
                           </FormControl>
@@ -722,7 +722,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="incidentDescription"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Incident Description</FormLabel>
+                        <FormLabel>Please describe what happened during this security incident:</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Describe the security incident in detail, including when it was discovered and initial impact assessment..."

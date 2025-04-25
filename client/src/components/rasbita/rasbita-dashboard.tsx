@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table";
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid, BarChart, Bar } from 'recharts';
 import { RasbitaReport, RasbitaRiskItem } from '@/lib/sos2a-types';
+import { AlertCircle, AlertTriangle, CheckCircle, AlertOctagon } from "lucide-react";
 
 interface RasbitaDashboardProps {
   report: RasbitaReport;
@@ -68,9 +69,124 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
     if (nrrb === 0) return 'text-yellow-600';
     return 'text-red-600';
   };
+  
+  // Function to determine risk priority and notification based on score
+  const getRiskAssessment = (score: number) => {
+    if (score > 46) {
+      return {
+        level: 'P1',
+        color: 'red',
+        title: 'Disclosure of restricted information',
+        icon: <AlertOctagon className="h-6 w-6 text-red-500" />,
+        notification: 'It is critical: priority P1. Notify CISO; contact soc, privacy and compliance teams if there is a PHI and/or PII. Incident response and possible war room meeting must commence immediately.'
+      };
+    } else if (score >= 36 && score <= 46) {
+      return {
+        level: 'P2',
+        color: 'orange',
+        title: 'Disclosure of non-restricted information',
+        icon: <AlertCircle className="h-6 w-6 text-orange-500" />,
+        notification: 'It is high risk: priority P2. Notify IT Security Manager and track incident in security ticketing system. Begin investigation within 24 hours.'
+      };
+    } else if (score >= 21 && score <= 35) {
+      return {
+        level: 'P3',
+        color: 'yellow',
+        title: 'Minimal impact by non-restricted disclosure',
+        icon: <AlertTriangle className="h-6 w-6 text-yellow-500" />,
+        notification: 'It is medium risk: priority P3. Document and monitor the incident. Schedule remediation actions within standard change management process.'
+      };
+    } else {
+      return {
+        level: 'P4',
+        color: 'green',
+        title: 'Risk is low as in informational',
+        icon: <CheckCircle className="h-6 w-6 text-green-500" />,
+        notification: 'It is low risk: priority P4. No immediate action needed. Include in regular security reporting.'
+      };
+    }
+  };
 
   return (
     <div className="rasbita-dashboard space-y-6">
+      {/* Risk Score Notification Card */}
+      <Card className={`border-l-4 border-${getRiskAssessment(report.overallRiskScore).color}-500 mb-6`}>
+        <CardContent className="flex items-start gap-4 pt-6">
+          {getRiskAssessment(report.overallRiskScore).icon}
+          <div>
+            <h3 className="text-lg font-semibold mb-1">
+              Risk Score: {report.overallRiskScore.toFixed(1)} - {getRiskAssessment(report.overallRiskScore).level} ({getRiskAssessment(report.overallRiskScore).title})
+            </h3>
+            <p className="text-gray-700">
+              {getRiskAssessment(report.overallRiskScore).notification}
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+      
+      {/* Risk Score Categories Matrix */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>RISK SCORE NOTIFICATIONS</CardTitle>
+          <CardDescription>
+            Classification of risk levels and required actions
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-1/4">Category</TableHead>
+                <TableHead className="w-1/4">Range</TableHead>
+                <TableHead>Description</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                    <span>P1 (Critical)</span>
+                  </div>
+                </TableCell>
+                <TableCell>Greater than 46</TableCell>
+                <TableCell>Disclosure of restricted information</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                    <span>P2 (High)</span>
+                  </div>
+                </TableCell>
+                <TableCell>Between 36-46</TableCell>
+                <TableCell>Disclosure of non-restricted information</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                    <span>P3 (Medium)</span>
+                  </div>
+                </TableCell>
+                <TableCell>Between 21-35</TableCell>
+                <TableCell>Minimal impact by non-restricted disclosure</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell className="font-medium">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    <span>P4 (Low)</span>
+                  </div>
+                </TableCell>
+                <TableCell>Between 1-20</TableCell>
+                <TableCell>Risk is low as in informational</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* RASBITA Score Card */}
         <Card>
@@ -278,6 +394,104 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
               <div className="font-medium">{formatCurrency(report.dashboard.minACS)} - {formatCurrency(report.dashboard.maxACS)}</div>
             </div>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Financial Impact Summary */}
+      <Card className="mt-6">
+        <CardHeader className="bg-gray-50">
+          <CardTitle>Financial Impact Report</CardTitle>
+          <CardDescription>
+            Detailed financial breakdown of the security incident
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-4">
+              <div className="border p-4 rounded-md bg-slate-50">
+                <h3 className="font-semibold mb-2">Device Information</h3>
+                <div className="grid grid-cols-2 gap-y-2">
+                  <div className="text-gray-600">Device Type:</div>
+                  <div className="font-medium">{report.deviceType || "Server"}</div>
+                  
+                  <div className="text-gray-600">Total Devices:</div>
+                  <div className="font-medium">{report.totalDevices || "590"}</div>
+                  
+                  <div className="text-gray-600">Affected Devices:</div>
+                  <div className="font-medium">{report.affectedDevices || "512"}</div>
+                  
+                  <div className="text-gray-600">Percentage Affected:</div>
+                  <div className="font-medium">{report.percentageAffected || "86.78%"}</div>
+                </div>
+              </div>
+              
+              <div className="border p-4 rounded-md bg-slate-50">
+                <h3 className="font-semibold mb-2">Data Impact</h3>
+                <div className="grid grid-cols-2 gap-y-2">
+                  <div className="text-gray-600">Total Data Count:</div>
+                  <div className="font-medium">{report.totalDataCount || "50,000"}</div>
+                  
+                  <div className="text-gray-600">Data Lost/Exposed:</div>
+                  <div className="font-medium">{report.dataLost || "40,000"}</div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <div className="border p-4 rounded-md bg-slate-50">
+                <h3 className="font-semibold mb-2">Cost Analysis</h3>
+                <div className="grid grid-cols-2 gap-y-2">
+                  <div className="text-gray-600">Cost of Damaged Devices:</div>
+                  <div className="font-medium">{formatCurrency(report.damagedDevicesCost || 2560000)}</div>
+                  
+                  <div className="text-gray-600">Threat Spread Cost:</div>
+                  <div className="font-medium">{formatCurrency(report.threatSpreadCost || 960000)}</div>
+                  
+                  <div className="text-gray-600">Total Residual Cost:</div>
+                  <div className="font-medium font-bold text-red-600">{formatCurrency(report.residualCost || 3520000)}</div>
+                </div>
+              </div>
+              
+              <div className="border-l-4 border-red-500 bg-red-50 p-4 rounded-r-md">
+                <h3 className="font-semibold text-red-800 flex items-center gap-2">
+                  <AlertOctagon className="h-5 w-5" />
+                  Critical Financial Impact
+                </h3>
+                <p className="text-sm text-red-700 mt-1">
+                  The total financial impact of this incident is significant and requires immediate executive attention. Recovery costs may impact operational budgets.
+                </p>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Executive Summary */}
+      <Card className="mt-6">
+        <CardHeader className="bg-gray-50">
+          <CardTitle>Executive Summary</CardTitle>
+        </CardHeader>
+        <CardContent className="prose max-w-none pt-6">
+          <p>This program helps organizations obtain risk scores for security incidents and calculate associated financial losses. This information supports IT security budgeting and overall resource management. The table above helps interpret score readings.</p>
+          
+          <p>This RASBITA™ assessment identifies and quantifies key security risks across your organization's assets. The overall risk score is <strong>{report.overallRiskScore.toFixed(1)}</strong>, which is categorized as a <strong>{getRiskAssessment(report.overallRiskScore).level} priority</strong>.</p>
+          
+          <p>Key findings:</p>
+          <ul>
+            <li>The device type affected is <strong>{report.deviceType || "Server"}</strong> with a risk score of <strong>{report.overallRiskScore.toFixed(1)}</strong></li>
+            <li>Total number of data held in the department is <strong>{report.totalDataCount || "50,000"}</strong></li>
+            <li>Number of devices affected or damaged: <strong>{report.affectedDevices || "512"}</strong></li>
+            <li>Cost of all damaged devices: <strong>{formatCurrency(report.damagedDevicesCost || 2560000)}</strong></li>
+            <li>This is <strong>{report.percentageAffected || "86.78%"}</strong> of the total devices</li>
+            <li>Total pieces of data lost in the event: <strong>{report.dataLost || "40,000"}</strong></li>
+            <li>Cost associated with threat spread: <strong>{formatCurrency(report.threatSpreadCost || 960000)}</strong></li>
+            <li>Residual cost incurred from device damage and threat spread: <strong>{formatCurrency(report.residualCost || 3520000)}</strong></li>
+          </ul>
+          
+          <p className="font-semibold">Conclusion:</p>
+          <p className="font-semibold bg-red-50 p-3 border-l-4 border-red-500">
+            This is a risk score of {report.overallRiskScore.toFixed(1)}: {getRiskAssessment(report.overallRiskScore).notification}
+          </p>
         </CardContent>
       </Card>
     </div>
