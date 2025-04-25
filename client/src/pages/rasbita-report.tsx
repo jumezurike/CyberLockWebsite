@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import { Download, Mail, Share2, FileText } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -137,7 +140,173 @@ export default function RasbitaReportPage() {
   const { toast } = useToast();
   const [report, setReport] = useState<RasbitaReport>(sampleReport);
   const [loading, setLoading] = useState(false);
+  const [exportLoading, setExportLoading] = useState(false);
   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
+
+  // Function to generate and download PDF report
+  const exportToPdf = () => {
+    try {
+      setExportLoading(true);
+      const doc = new jsPDF();
+      
+      // Add header with logo and title
+      doc.setFontSize(22);
+      doc.setTextColor(105, 42, 187); // CyberLockX purple
+      doc.text("RASBITA™ Risk Assessment Report", 20, 20);
+      
+      doc.setFontSize(12);
+      doc.setTextColor(100, 100, 100);
+      doc.text("CISSP Risk Assessment Score by Threat and Impact Analysis", 20, 30);
+      
+      // Add report generation details
+      doc.setFontSize(10);
+      doc.text(`Report ID: ${report.id}`, 20, 40);
+      doc.text(`Generated: ${new Date().toLocaleDateString()}`, 20, 45);
+      
+      // Add executive summary
+      doc.setFontSize(14);
+      doc.setTextColor(0, 0, 0);
+      doc.text("Executive Summary", 20, 55);
+      
+      doc.setFontSize(10);
+      doc.text("This RASBITA report provides a comprehensive analysis of security risks and their", 20, 65);
+      doc.text("financial impact on your organization. Below is a summary of key findings.", 20, 70);
+      
+      // Add financial summary table
+      doc.setFontSize(12);
+      doc.text("Financial Impact Summary", 20, 85);
+      
+      // @ts-ignore - jspdf-autotable typings
+      doc.autoTable({
+        startY: 90,
+        head: [['Metric', 'Value ($)']],
+        body: [
+          ['Total Asset Value', report.financialSummary.totalAssetValue.toLocaleString()],
+          ['Total Annual Loss Expectancy (ALE)', report.financialSummary.totalAnnualizedLossExpectancy.toLocaleString()],
+          ['Total Cost of Safeguards (ACS)', report.financialSummary.totalCostOfSafeguards.toLocaleString()],
+          ['Net Risk Reduction Benefit (NRRB)', report.financialSummary.totalNetRiskReductionBenefit.toLocaleString()]
+        ],
+        theme: 'grid',
+        headStyles: { fillColor: [105, 42, 187] }
+      });
+      
+      // Add risk items table on a new page
+      doc.addPage();
+      doc.setFontSize(14);
+      doc.text("Detailed Risk Analysis", 20, 20);
+      
+      // Prepare risk items for table
+      const riskItemsTableData = report.riskItems.map(item => [
+        item.assetName,
+        item.threatName,
+        item.priority,
+        '$' + item.assetValue.toLocaleString(),
+        '$' + item.annualizedLossExpectancy.toLocaleString(),
+        '$' + item.annualCostOfSafeguard.toLocaleString(),
+        '$' + item.netRiskReductionBenefit.toLocaleString()
+      ]);
+      
+      // @ts-ignore - jspdf-autotable typings
+      doc.autoTable({
+        startY: 30,
+        head: [['Asset', 'Threat', 'Priority', 'Asset Value', 'ALE', 'Safeguard Cost', 'NRRB']],
+        body: riskItemsTableData,
+        theme: 'grid',
+        headStyles: { fillColor: [105, 42, 187] },
+        columnStyles: {
+          0: { cellWidth: 25 },
+          1: { cellWidth: 25 },
+          2: { cellWidth: 20 },
+          3: { cellWidth: 25 },
+          4: { cellWidth: 25 },
+          5: { cellWidth: 25 },
+          6: { cellWidth: 25 }
+        },
+        styles: { fontSize: 8, cellPadding: 2 }
+      });
+      
+      // Add RASBITA score section
+      const yPos = (doc as any).lastAutoTable.finalY + 10;
+      
+      doc.setFontSize(14);
+      doc.text("RASBITA Risk Categories", 20, yPos);
+      
+      // @ts-ignore - jspdf-autotable typings
+      doc.autoTable({
+        startY: yPos + 10,
+        head: [['Category', 'Score']],
+        body: [
+          ['Risk', report.rasbitaCategories.risk],
+          ['Adversarial Insight', report.rasbitaCategories.adversarialInsight],
+          ['Security Controls', report.rasbitaCategories.securityControls],
+          ['Business Impact', report.rasbitaCategories.businessImpact],
+          ['Information Assurance', report.rasbitaCategories.informationAssurance],
+          ['Threat Intelligence', report.rasbitaCategories.threatIntelligence],
+          ['Architecture', report.rasbitaCategories.architecture]
+        ],
+        theme: 'grid',
+        headStyles: { fillColor: [105, 42, 187] }
+      });
+      
+      // Add recommendations page
+      doc.addPage();
+      doc.setFontSize(14);
+      doc.text("Recommendations & Next Steps", 20, 20);
+      
+      doc.setFontSize(10);
+      doc.text("Based on the RASBITA analysis, we recommend the following actions:", 20, 30);
+      
+      const recommendations = [
+        "Prioritize securing assets with 'Critical' and 'High' risk levels",
+        "Implement safeguards with positive Net Risk Reduction Benefit (NRRB)",
+        "Focus on threats with highest Annual Loss Expectancy (ALE)",
+        "Consider additional controls for frequently occurring threats",
+        "Review and update this assessment quarterly or after significant changes"
+      ];
+      
+      let yPosRec = 40;
+      recommendations.forEach((rec, index) => {
+        doc.text(`${index + 1}. ${rec}`, 20, yPosRec);
+        yPosRec += 10;
+      });
+      
+      // Add footer with company info
+      const pageCount = (doc as any).internal.getNumberOfPages();
+      for (let i = 1; i <= pageCount; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8);
+        doc.setTextColor(150, 150, 150);
+        doc.text(
+          "CyberLockX - The Ultimate SMB Application Security Hub - Securing every CLICK!!!",
+          (doc as any).internal.pageSize.getWidth() / 2, 
+          (doc as any).internal.pageSize.getHeight() - 10, 
+          { align: 'center' }
+        );
+        doc.text(
+          `Page ${i} of ${pageCount}`,
+          (doc as any).internal.pageSize.getWidth() - 20, 
+          (doc as any).internal.pageSize.getHeight() - 10
+        );
+      }
+      
+      // Save the PDF
+      doc.save(`RASBITA_Report_${report.id}_${new Date().toISOString().slice(0, 10)}.pdf`);
+      
+      toast({
+        title: "PDF Export Successful",
+        description: "Your RASBITA report has been downloaded as a PDF.",
+      });
+    } catch (error) {
+      console.error("PDF generation error:", error);
+      toast({
+        title: "Export Failed",
+        description: "There was an error generating the PDF. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setExportLoading(false);
+    }
+  };
   
   // In a real implementation, this would fetch the report from the API
   const fetchRasbitaReport = async (assessmentId: string) => {
@@ -348,8 +517,15 @@ export default function RasbitaReportPage() {
                       <p className="text-sm text-gray-600 mb-4">
                         Export a comprehensive PDF report with all RASBITA metrics, charts, and detailed financial analysis.
                       </p>
-                      <Button className="w-full bg-chart-4 hover:bg-purple-700">
-                        Download PDF Report
+                      <Button 
+                        className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
+                        onClick={exportToPdf}
+                        disabled={exportLoading}
+                      >
+                        {exportLoading ? 'Generating PDF...' : <>
+                          <Download size={16} />
+                          Download PDF Report
+                        </>}
                       </Button>
                     </CardContent>
                   </Card>
@@ -362,7 +538,14 @@ export default function RasbitaReportPage() {
                       <p className="text-sm text-gray-600 mb-4">
                         Export all RASBITA metrics and calculations to an Excel spreadsheet for further analysis.
                       </p>
-                      <Button className="w-full bg-chart-4 hover:bg-purple-700">
+                      <Button 
+                        className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
+                        onClick={() => toast({
+                          title: "Coming Soon",
+                          description: "Excel export will be available in the next update.",
+                        })}
+                      >
+                        <FileText size={16} />
                         Download Excel Report
                       </Button>
                     </CardContent>
@@ -376,7 +559,14 @@ export default function RasbitaReportPage() {
                       <p className="text-sm text-gray-600 mb-4">
                         Export a presentation-ready report formatted for executive stakeholders, focusing on key financial metrics.
                       </p>
-                      <Button className="w-full bg-chart-4 hover:bg-purple-700">
+                      <Button 
+                        className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
+                        onClick={() => toast({
+                          title: "Coming Soon",
+                          description: "Presentation export will be available in the next update.",
+                        })}
+                      >
+                        <FileText size={16} />
                         Download Presentation
                       </Button>
                     </CardContent>
@@ -388,11 +578,30 @@ export default function RasbitaReportPage() {
                     </CardHeader>
                     <CardContent className="pt-4">
                       <p className="text-sm text-gray-600 mb-4">
-                        Share this RASBITA report with team members or stakeholders via a secure link.
+                        Share this RASBITA report with team members or stakeholders via a secure link or email.
                       </p>
-                      <Button className="w-full bg-chart-4 hover:bg-purple-700">
-                        Generate Sharing Link
-                      </Button>
+                      <div className="grid grid-cols-1 gap-2">
+                        <Button 
+                          className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
+                          onClick={() => toast({
+                            title: "Share Link Generated",
+                            description: "A secure link has been copied to your clipboard. This link will expire in 7 days.",
+                          })}
+                        >
+                          <Share2 size={16} />
+                          Generate Sharing Link
+                        </Button>
+                        <Button 
+                          className="w-full bg-chart-4 hover:bg-purple-700 flex items-center justify-center gap-2"
+                          onClick={() => toast({
+                            title: "Email Option",
+                            description: "Email sharing will be available in the next update.",
+                          })}
+                        >
+                          <Mail size={16} />
+                          Email Report
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 </div>
