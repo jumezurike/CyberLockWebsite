@@ -56,9 +56,9 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
   return (
     <Card className="w-full mb-8">
       <CardHeader className="bg-purple-50">
-        <CardTitle className="text-chart-4">Cybersecurity Risk Governance & Management Assessment</CardTitle>
+        <CardTitle className="text-chart-4">RASBITA™ GOV & MGNT SELF-SCORING</CardTitle>
         <CardDescription>
-          Evaluate your organization's cybersecurity risk governance and management maturity based on NIST CSF 2.0 framework
+          Evaluate your organization's cybersecurity risk governance and management tiers based on NIST CSF 2.0 framework
         </CardDescription>
       </CardHeader>
       <CardContent className="pt-6">
@@ -326,7 +326,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
                   className="bg-chart-4 text-white hover:bg-purple-700" 
                   onClick={handleSubmit}
                 >
-                  Complete Assessment
+                  Complete Self-Scoring
                 </Button>
               </div>
             </div>
@@ -339,10 +339,10 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
-              <span className="font-semibold">Assessment Complete!</span>
+              <span className="font-semibold">Self-Scoring Complete!</span>
             </div>
             <p className="text-sm text-green-600">
-              Based on your selections, your organization is at:
+              Based on your self-scoring, your organization is at:
             </p>
             <ul className="mt-2 space-y-1 text-sm text-green-600">
               <li>• Governance Tier: {getTierLabel(governanceScore)}</li>
@@ -351,7 +351,7 @@ export default function GovernanceAssessment({ onComplete }: GovernanceAssessmen
               <li>• Improvement desired: {desireToImprove ? 'Yes' : 'No'}</li>
             </ul>
             <p className="mt-2 text-sm text-green-600">
-              Click "Complete Assessment" to incorporate these results into your RASBITA report.
+              Click "Complete Self-Scoring" to incorporate these results into your RASBITA report.
               {desireToImprove && <span className="font-semibold"> We recommend using SOS²A to improve your security maturity.</span>}
             </p>
           </div>
