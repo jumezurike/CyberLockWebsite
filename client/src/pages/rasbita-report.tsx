@@ -648,10 +648,12 @@ export default function RasbitaReportPage() {
         availability: 6,
         threatLevel: 5,
         feasibilityFactors: {
+          organizational: true,
+          behavioral: true,
           technical: true,
+          political: true,
           operational: true,
-          economic: true,
-          political: true
+          economic: true
         }
       };
       
@@ -933,35 +935,66 @@ export default function RasbitaReportPage() {
       let updatedReport: RasbitaReport;
       if (report.id === "new") {
         // Create new report
+        // Create a new report with all required properties from the RasbitaReport interface
         updatedReport = {
           id: "new", // Server will generate ID
           title: incidentData.incident.title || "Security Incident Report",
           incidentCategory: incidentData.incident.category,
           overallRiskScore: calculateRiskScore(newRiskItem),
-          company: incidentData.company,
-          incident: incidentData.incident,
+          company: {
+            name: incidentData.company.name || "Unknown Organization",
+            department: incidentData.company.department || "Security",
+            reportGenerator: incidentData.company.reportGenerator || {
+              name: "System",
+              title: "RASBITA Analysis Engine"
+            },
+            logo: incidentData.company.logo || ""
+          },
+          incident: {
+            title: incidentData.incident.title || "Security Incident",
+            description: incidentData.incident.description || "Details not provided",
+            date: incidentData.incident.date || new Date().toISOString().split('T')[0],
+            category: incidentData.incident.category || "Other",
+            affectedSystems: incidentData.incident.affectedSystems || "Unknown"
+          },
           riskItems: [newRiskItem],
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
           businessId: incidentData.company.businessId || "unknown",
+          userId: 1, // Default user ID
           rasbitaCategories: calculateRasbitaCategories(newRiskItem),
           financialSummary: {
-            totalAssetValue: newRiskItem.assetValue,
-            totalAnnualizedLossExpectancy: newRiskItem.annualizedLossExpectancy,
-            totalCostOfSafeguards: newRiskItem.annualCostOfSafeguard,
-            totalNetRiskReductionBenefit: newRiskItem.netRiskReductionBenefit
+            totalAssetValue: newRiskItem.assetValue || 0,
+            totalAnnualizedLossExpectancy: newRiskItem.annualizedLossExpectancy || 0,
+            totalCostOfSafeguards: newRiskItem.annualCostOfSafeguard || 0,
+            totalNetRiskReductionBenefit: newRiskItem.netRiskReductionBenefit || 0
           },
           dashboard: {
+            mostFrequentUser: "Admin",
+            mostCurrentReportDate: new Date().toISOString(),
+            userCount: 1,
             mostFrequentThreat: newRiskItem.threatName || "Ransomware",
             leastFrequentThreat: "Physical Access",
             mostFrequentPriority: newRiskItem.priority || "Medium",
-            minThreatCost: newRiskItem.assetValue * 0.1,
-            maxThreatCost: newRiskItem.assetValue,
-            minALE: newRiskItem.annualizedLossExpectancy * 0.5,
-            maxALE: newRiskItem.annualizedLossExpectancy * 1.5,
-            minACS: newRiskItem.annualCostOfSafeguard * 0.5,
-            maxACS: newRiskItem.annualCostOfSafeguard * 1.5
-          }
+            minThreatCost: (newRiskItem.assetValue || 10000) * 0.1,
+            maxThreatCost: newRiskItem.assetValue || 10000,
+            minALE: (newRiskItem.annualizedLossExpectancy || 5000) * 0.5,
+            maxALE: (newRiskItem.annualizedLossExpectancy || 5000) * 1.5,
+            minACS: (newRiskItem.annualCostOfSafeguard || 2000) * 0.5,
+            maxACS: (newRiskItem.annualCostOfSafeguard || 2000) * 1.5
+          },
+          // Add optional device impact data
+          deviceType: incidentData.deviceType || "Servers",
+          totalDevices: incidentData.totalDevices || 100,
+          affectedDevices: incidentData.affectedDevices || 25,
+          percentageAffected: incidentData.percentageAffected || "25%",
+          totalDataCount: incidentData.totalDataCount || 10000,
+          dataLost: incidentData.dataLost || 2500,
+          
+          // Add optional financial impact data
+          damagedDevicesCost: incidentData.damagedDevicesCost || 250000,
+          threatSpreadCost: incidentData.threatSpreadCost || 100000,
+          residualCost: incidentData.residualCost || 350000
         };
       } else {
         // Update existing report
@@ -1020,10 +1053,10 @@ export default function RasbitaReportPage() {
   // Helper function to calculate risk score based on RASBITA methodology
   const calculateRiskScore = (riskItem: RasbitaRiskItem): number => {
     const {
-      likelihood,
-      impact,
-      exposureFactor,
-      threatLevel
+      likelihood = 5,
+      impact = 5,
+      exposureFactor = 0.5,
+      threatLevel = 5
     } = riskItem;
     
     // Calculate risk score using RASBITA methodology (simplified for demo)
@@ -1044,16 +1077,28 @@ export default function RasbitaReportPage() {
     threatIntelligence: number;
     architecture: number;
   } => {
+    // Get all properties with defaults to avoid undefined errors
+    const {
+      likelihood = 5,
+      impact = 5,
+      exposureFactor = 0.5,
+      threatLevel = 5,
+      safeguardEffectiveness = 5,
+      confidentiality = 5,
+      integrity = 5,
+      availability = 5
+    } = riskItem;
+    
     // In a real implementation, these would be calculated based on a more complex algorithm
     // For demonstration, we'll use the risk item properties to generate values
     return {
-      risk: Math.round(riskItem.likelihood * 2),
-      adversarialInsight: Math.round(riskItem.threatLevel * 2),
-      securityControls: Math.round((10 - riskItem.safeguardEffectiveness) * 2),
-      businessImpact: Math.round(riskItem.impact * 2),
-      informationAssurance: Math.round((riskItem.confidentiality + riskItem.integrity + riskItem.availability) / 3 * 2),
-      threatIntelligence: Math.round(riskItem.threatLevel * 1.5),
-      architecture: Math.round(10 - riskItem.exposureFactor)
+      risk: Math.round(likelihood * 2),
+      adversarialInsight: Math.round(threatLevel * 2),
+      securityControls: Math.round((10 - safeguardEffectiveness) * 2),
+      businessImpact: Math.round(impact * 2),
+      informationAssurance: Math.round((confidentiality + integrity + availability) / 3 * 2),
+      threatIntelligence: Math.round(threatLevel * 1.5),
+      architecture: Math.round(10 - (exposureFactor * 10))
     };
   };
 
