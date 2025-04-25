@@ -33,22 +33,22 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
 
   // Ensure all properties exist with defaults for safety using NIST CSF 2.0 framework domains
   const rasbitaCategories = report.rasbitaCategories || {
-    govern: 50,
-    identify: 50,
-    protect: 50,
-    detect: 50,
-    respond: 50,
-    recover: 50
+    govern: 0,
+    identify: 0,
+    protect: 0,
+    detect: 0,
+    respond: 0,
+    recover: 0
   };
   
   // Safe access to properties with fallbacks
   const categories = {
-    govern: rasbitaCategories.govern || 50,
-    identify: rasbitaCategories.identify || 50,
-    protect: rasbitaCategories.protect || 50,
-    detect: rasbitaCategories.detect || 50,
-    respond: rasbitaCategories.respond || 50,
-    recover: rasbitaCategories.recover || 50
+    govern: rasbitaCategories.govern || 0,
+    identify: rasbitaCategories.identify || 0,
+    protect: rasbitaCategories.protect || 0,
+    detect: rasbitaCategories.detect || 0,
+    respond: rasbitaCategories.respond || 0,
+    recover: rasbitaCategories.recover || 0
   };
   
   // Data for the radar chart based on NIST CSF 2.0 framework domains
@@ -150,7 +150,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
   };
 
   // Ensure overall risk score has a default value
-  const overallRiskScore = report.overallRiskScore || 50;
+  const overallRiskScore = report.overallRiskScore || 0;
   
   return (
     <div className="rasbita-dashboard space-y-6">
