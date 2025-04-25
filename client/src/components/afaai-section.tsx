@@ -14,7 +14,7 @@ export default function AfaaiSection() {
           </h2>
           <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
             Our revolutionary AFAAI (Adaptive Functional Artificial Augmented Intelligence) Browser technology forms the 
-            central nervous system of the entire CyberLockX security ecosystem, fundamentally transforming how SMB applications 
+            central nervous system of the entire CyberLockX security ecosystem, fundamentally transforming how healthcare applications 
             are protected in real-time.
           </p>
         </div>
@@ -131,9 +131,9 @@ export default function AfaaiSection() {
             
             {/* Content container with higher z-index */}
             <div className="relative z-10">
-              <h3 className="text-3xl font-bold text-primary text-center mb-6">The AFAAI Browser: SMB Security Revolution</h3>
+              <h3 className="text-3xl font-bold text-primary text-center mb-6">The AFAAI Browser: Healthcare Security Revolution</h3>
               <p className="text-lg text-neutral-700 text-center max-w-3xl mx-auto mb-8">
-                <span className="font-semibold text-primary">The AFAAI Browser is the beating heart of the SMB Application Security Hub (SASH)</span> — 
+                <span className="font-semibold text-primary">The AFAAI Browser is the beating heart of the Healthcare Application Security Hub</span> — 
                 a groundbreaking command center that transcends conventional security approaches by fusing 
                 triple-patented language technology with real-time threat intelligence across all secure applications.
               </p>

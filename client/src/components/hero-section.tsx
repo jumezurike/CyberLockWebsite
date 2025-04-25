@@ -13,10 +13,10 @@ export default function HeroSection() {
               Securing every CLICK!!!
             </p>
             <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight mb-4">
-              The Ultimate SMB Application Security Hub
+              Healthcare Application Security Hub
             </h2>
             <p className="mb-8 text-neutral-200">
-              The only SMB platform that eliminates threats, automates compliance, and unifies business apps—with patented quantum-safe encryption and cell-level data protection at its core.
+              The only healthcare-focused platform that eliminates threats, automates compliance, and unifies clinical apps—with patented quantum-safe encryption and patient data protection at its core.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="#demo" className="bg-secondary hover:bg-green-600 text-white py-3 px-6 rounded-md shadow-md transition duration-150 ease-in-out text-center font-medium">

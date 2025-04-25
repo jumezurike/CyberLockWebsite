@@ -292,7 +292,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   return (
     <Card className="w-full">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">SMB Organizational and System Security Analysis (SOS²A)</CardTitle>
+        <CardTitle className="text-2xl font-bold">Healthcare Organizational and System Security Analysis (SOS²A)</CardTitle>
         <CardDescription>
           Complete this questionnaire to begin your security assessment
         </CardDescription>

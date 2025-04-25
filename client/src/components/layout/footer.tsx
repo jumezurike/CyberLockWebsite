@@ -64,7 +64,7 @@ export default function Footer() {
               />
             </div>
             <p className="text-secondary mb-1 font-bold text-xl">Securing every CLICK!!!</p>
-            <p className="text-neutral-300 mb-4">The Ultimate SMB Application Security Hub</p>
+            <p className="text-neutral-300 mb-4">Healthcare Application Security Hub</p>
             <div className="flex space-x-4">
               <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-white hover:text-secondary">
                 <i className="fab fa-twitter"></i>
