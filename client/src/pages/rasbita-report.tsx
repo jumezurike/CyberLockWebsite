@@ -172,6 +172,60 @@ export default function RasbitaReportPage() {
   const [saveLoading, setSaveLoading] = useState(false);
   const [selectedAssessment, setSelectedAssessment] = useState<string>("");
   const [savedReports, setSavedReports] = useState<RasbitaReport[]>([]);
+  const [initialFormData, setInitialFormData] = useState<any>(null);
+  
+  // Convert a report to form data format for editing
+  const reportToFormData = (report: RasbitaReport) => {
+    // Get the first risk item as our source
+    const riskItem = report.riskItems[0];
+    
+    return {
+      // Company information for reporting
+      companyName: report.company.name || "",
+      department: report.company.department || "",
+      reportGeneratorName: report.company.reportGenerator?.name || "",
+      reportGeneratorTitle: report.company.reportGenerator?.title || "",
+      companyLogo: report.company.logo || "",
+      
+      // Basic incident information
+      incidentTitle: report.incident.title,
+      incidentDescription: report.incident.description,
+      incidentDate: report.incident.date,
+      incidentCategory: report.incident.category,
+      affectedSystems: report.incident.affectedSystems,
+      
+      // RASBITA specific fields
+      deviceType: riskItem.deviceInfo?.deviceType || "workstation",
+      damagedDevices: String(riskItem.deviceInfo?.damagedDevices || 1),
+      totalDevicesInDepartment: String(riskItem.deviceInfo?.deviceCount || 10),
+      dataClass: "non_phi_pii", // Default, should be stored somewhere in the report
+      dataSpread: "moderately_spread", // Default, should be stored somewhere in the report
+      dataLossPercentage: "21_40", // Default, should be derived from exposureFactor
+      deviceUsageFrequency: "daily", // Default
+      deviceEnvironment: "production", // Default
+      threatValue: String(riskItem.impact || 8),
+      threatCost: String(Math.round(riskItem.assetValue / 10) || 5),
+      machineCost: String(Math.round(riskItem.assetValue / riskItem.deviceInfo?.damagedDevices!) || 500),
+      useCustomAssetValue: riskItem.useCustomAssetValue || false,
+      customAssetValue: riskItem.customAssetValue || "",
+      totalDataCount: report.totalDataCount ? String(report.totalDataCount) : "1000",
+      annualizedRateOfOccurrence: String(riskItem.annualizedRateOfOccurrence || 0.5),
+      
+      // Additional information
+      assetName: riskItem.assetName,
+      existingSafeguards: "",
+      
+      // Feasibility factors
+      organizationalFeasible: riskItem.feasibilityFactors?.organizational !== undefined ? 
+        riskItem.feasibilityFactors.organizational : true,
+      behavioralFeasible: riskItem.feasibilityFactors?.behavioral !== undefined ? 
+        riskItem.feasibilityFactors.behavioral : true,
+      technicalFeasible: riskItem.feasibilityFactors?.technical !== undefined ? 
+        riskItem.feasibilityFactors.technical : true,
+      politicalFeasible: riskItem.feasibilityFactors?.political !== undefined ? 
+        riskItem.feasibilityFactors.political : true,
+    };
+  };
   
   // Load saved reports when the component mounts
   useEffect(() => {
@@ -378,6 +432,11 @@ export default function RasbitaReportPage() {
       
       const data = await response.json();
       setReport(data);
+      
+      // Convert the report to form data format for editing
+      const formData = reportToFormData(data);
+      setInitialFormData(formData);
+      
       toast({
         title: "Report Loaded",
         description: "RASBITA risk assessment report has been loaded successfully.",
@@ -392,6 +451,8 @@ export default function RasbitaReportPage() {
           id: "new",
           createdAt: new Date().toISOString()
         });
+        // Clear any initial form data
+        setInitialFormData(null);
         toast({
           title: "New Report Created",
           description: "A new RASBITA report template has been created.",
@@ -478,6 +539,19 @@ export default function RasbitaReportPage() {
   ];
 
   const [activeTab, setActiveTab] = useState<string>("new-incident");
+  
+  // If user clicks on "Report Incident" tab after loading a report, 
+  // set initialFormData and switch to that tab
+  const handleTabChange = (tab: string) => {
+    setActiveTab(tab);
+    
+    // If switching to incident form after loading a report
+    if (tab === "new-incident" && initialFormData === null && report.id !== "new") {
+      // Convert report to form data
+      const formData = reportToFormData(report);
+      setInitialFormData(formData);
+    }
+  };
   const [showResults, setShowResults] = useState<boolean>(false);
   
   const handleIncidentSubmit = (incidentData: any) => {
@@ -541,7 +615,7 @@ export default function RasbitaReportPage() {
           CISSP Risk Assessment Score by Threat and Impact Analysis
         </p>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-8">
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-8">
           <TabsList className="mb-4">
             <TabsTrigger value="new-incident">Report Incident</TabsTrigger>
             <TabsTrigger value="existing-assessment">Load Existing Assessment</TabsTrigger>
@@ -558,7 +632,7 @@ export default function RasbitaReportPage() {
                 analyze the financial impact and provide cost-benefit analysis to guide your response decisions.
               </p>
             </div>
-            <IncidentForm onSubmit={handleIncidentSubmit} />
+            <IncidentForm onSubmit={handleIncidentSubmit} initialData={initialFormData} />
           </TabsContent>
           
           {/* Tab for loading an existing assessment or saved report */}
