@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import RasbitaDashboard from "@/components/rasbita/rasbita-dashboard";
 import IncidentForm from "@/components/rasbita/incident-form";
-import GovernanceAssessment, { GovernanceScores } from "@/components/rasbita/governance-assessment";
+import GovernanceAndManagementAssessment, { GovernanceScores } from "@/components/rasbita/governance-and-management-assessment";
 import { RasbitaReport, RasbitaRiskItem } from '@/lib/sos2a-types';
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
@@ -178,7 +178,7 @@ export default function RasbitaReportPage() {
   const [initialFormData, setInitialFormData] = useState<any>(null);
   const [showResults, setShowResults] = useState(true);
   const [activeTab, setActiveTab] = useState("dashboard");
-  const [showGovernanceAssessment, setShowGovernanceAssessment] = useState(false);
+  const [showGovernanceAndManagementAssessment, setShowGovernanceAndManagementAssessment] = useState(false);
   const [assessments, setAssessments] = useState<any[]>([]);
   
   // Convert a report to form data format for editing
@@ -248,8 +248,8 @@ export default function RasbitaReportPage() {
       governanceMaturity: scores
     }));
     
-    // Hide the governance assessment form and show results
-    setShowGovernanceAssessment(false);
+    // Hide the governance and management assessment form and show results
+    setShowGovernanceAndManagementAssessment(false);
     setShowResults(true);
     
     toast({
@@ -723,8 +723,8 @@ export default function RasbitaReportPage() {
         </div>
       </div>
       
-      {showGovernanceAssessment ? (
-        <GovernanceAssessment onComplete={handleGovernanceComplete} />
+      {showGovernanceAndManagementAssessment ? (
+        <GovernanceAndManagementAssessment onComplete={handleGovernanceComplete} />
       ) : (
         <div className="grid grid-cols-1 gap-6">
           <Card>
@@ -742,11 +742,11 @@ export default function RasbitaReportPage() {
                   <Button
                     variant="outline"
                     size="sm"
-                    onClick={() => setShowGovernanceAssessment(true)}
+                    onClick={() => setShowGovernanceAndManagementAssessment(true)}
                     className="flex items-center gap-2 text-chart-4 border-chart-4"
                   >
                     <CheckSquare className="h-4 w-4" />
-                    <span>Governance Assessment</span>
+                    <span>Governance & Management Assessment</span>
                   </Button>
                   <Button
                     variant="outline"
