@@ -1086,7 +1086,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                             </SelectContent>
                           </Select>
                           <FormDescription>
-                            Percentage of data lost or compromised
+                            Estimate the percentage of affected data (impacts the Exposure Factor calculation)
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -1115,7 +1115,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                           </SelectContent>
                         </Select>
                         <FormDescription>
-                          How often this type of incident is expected to occur
+                          Frequency of occurrence directly impacts the Annualized Loss Expectancy (ALE) calculation
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -1145,7 +1145,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                           />
                         </FormControl>
                         <FormDescription>
-                          List all existing security controls relevant to this asset/threat
+                          Include all security controls that were active but failed to prevent this incident
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -1167,7 +1167,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                             <div className="space-y-0.5">
                               <FormLabel>Organizational Feasibility</FormLabel>
                               <FormDescription>
-                                Aligns with organizational objectives
+                                Would additional controls align with business goals and strategies?
                               </FormDescription>
                             </div>
                             <FormControl>
@@ -1188,7 +1188,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                             <div className="space-y-0.5">
                               <FormLabel>Behavioral Feasibility</FormLabel>
                               <FormDescription>
-                                User acceptance and support
+                                Would users accept and adapt to the new security measures?
                               </FormDescription>
                             </div>
                             <FormControl>
@@ -1209,7 +1209,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                             <div className="space-y-0.5">
                               <FormLabel>Technical Feasibility</FormLabel>
                               <FormDescription>
-                                Technical expertise and resources
+                                Do you have the technical expertise and resources to implement new controls?
                               </FormDescription>
                             </div>
                             <FormControl>
@@ -1230,7 +1230,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                             <div className="space-y-0.5">
                               <FormLabel>Political Feasibility</FormLabel>
                               <FormDescription>
-                                Cross-department cooperation
+                                Will you be able to secure cooperation across departments and management?
                               </FormDescription>
                             </div>
                             <FormControl>
