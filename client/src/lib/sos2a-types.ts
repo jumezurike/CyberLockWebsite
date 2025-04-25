@@ -232,6 +232,18 @@ export interface RasbitaReport {
     maxACS: number;
     mostFrequentPriority: string;
   };
+  // Device impact data
+  deviceType?: string;
+  totalDevices?: number;
+  affectedDevices?: number;
+  percentageAffected?: string;
+  totalDataCount?: number;
+  dataLost?: number;
+  
+  // Financial impact data
+  damagedDevicesCost?: number;
+  threatSpreadCost?: number;
+  residualCost?: number;
 }
 
 export interface AssessmentReport {

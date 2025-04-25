@@ -743,7 +743,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                     name="affectedSystems"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Affected Systems</FormLabel>
+                        <FormLabel>Which systems, applications, or data were affected by this incident?</FormLabel>
                         <FormControl>
                           <Textarea 
                             placeholder="Customer database, payment processing server, employee workstations..."
