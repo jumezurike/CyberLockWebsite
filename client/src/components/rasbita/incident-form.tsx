@@ -153,62 +153,78 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
     }
   };
   
-  // Get machine cost based on device type
+  // Get machine cost based on device type using the comprehensive list
   const getMachineCost = (deviceType: string): number => {
-    switch(deviceType) {
-      case 'server': return 5000;
-      case 'standard_server': return 4000;
-      case 'workstation': return 500;
-      case 'standard_workstation': return 300;
-      default: return 0;
-    }
+    // Find the device type in our expanded list
+    const device = deviceTypeOptions.find(option => option.value === deviceType);
+    
+    // If found, use its cost, otherwise default to 0
+    return device ? device.cost : 0;
   };
   
-  // Get threat value based on incident category
+  // Get threat value based on incident category using the comprehensive list
   const getThreatValue = (incidentCategory: string): number => {
-    switch(incidentCategory) {
-      case 'denial_of_service': return 9;
-      case 'unauthorized_external': return 8;
-      case 'unauthorized_internal': return 9;
-      case 'disclosure_name_dob': return 9;
-      case 'disclosure_name_ss': return 9;
-      case 'disclosure_name_dob_ss': return 9;
-      case 'social_engineering': return 5;
-      case 'malware_server': return 9;
-      case 'malware_workstation': return 9;
-      case 'improper_usage': return 5;
-      case 'no_significant_loss': return 0;
-      default: return 5;
+    // Find the category in our expanded list
+    const category = categoryOptions.find(option => option.value === incidentCategory);
+    
+    // If found, derive the threat value from the cost (higher cost = higher threat)
+    if (category) {
+      const cost = category.cost;
+      if (cost >= 5000) return 10;
+      if (cost >= 2000) return 9;
+      if (cost >= 1000) return 8;
+      if (cost >= 500) return 7;
+      if (cost >= 100) return 6;
+      if (cost >= 50) return 5;
+      if (cost >= 20) return 4;
+      if (cost >= 10) return 3;
+      if (cost > 0) return 2;
+      return 0;
     }
+    
+    return 5; // Default medium threat value
   };
   
-  // Get threat cost based on incident category
+  // Get threat cost based on incident category using the comprehensive list
   const getThreatCost = (incidentCategory: string): number => {
-    switch(incidentCategory) {
-      case 'denial_of_service': return 30;
-      case 'unauthorized_external': return 5;
-      case 'unauthorized_internal': return 5;
-      case 'disclosure_name_dob': return 10;
-      case 'disclosure_name_ss': return 10;
-      case 'disclosure_name_dob_ss': return 30;
-      case 'social_engineering': return 3;
-      case 'malware_server': return 2160;
-      case 'malware_workstation': return 720;
-      case 'improper_usage': return 24;
-      case 'no_significant_loss': return 0;
-      default: return 10;
-    }
+    // Find the category in our expanded list
+    const category = categoryOptions.find(option => option.value === incidentCategory);
+    
+    // If found, use its cost, otherwise default to a medium cost of 10
+    return category ? category.cost : 10;
   };
   
-  // Get priority based on device usage and data sensitivity
+  // Get data classification value weight from comprehensive list
+  const getDataClassWeight = (dataClass: string): number => {
+    // Find the data class in our expanded list
+    const classification = dataClassOptions.find(option => option.value === dataClass);
+    
+    // If found, use its weight, otherwise default to 1
+    return classification ? classification.value_weight : 1;
+  };
+  
+  // Get priority based on device usage and data sensitivity from expanded list
   const calculatePriority = (dataClass: string, deviceUsageFrequency: string): 'Critical' | 'High' | 'Medium' | 'Low' => {
-    if (dataClass === 'phi' || dataClass === 'pii') {
-      return deviceUsageFrequency === 'daily' ? 'Critical' : 'High';
-    } else if (dataClass === 'non_phi_pii') {
-      return deviceUsageFrequency === 'daily' ? 'High' : 'Medium';
-    } else {
-      return deviceUsageFrequency === 'rarely' ? 'Low' : 'Medium';
+    // Get the data class weight value
+    const dataWeight = getDataClassWeight(dataClass);
+    
+    // Get device usage value
+    let usageWeight: number;
+    switch(deviceUsageFrequency) {
+      case 'daily': usageWeight = 9; break;
+      case 'often': usageWeight = 5; break;
+      case 'rarely': usageWeight = 2; break;
+      default: usageWeight = 5;
     }
+    
+    // Calculate priority based on both factors
+    const combinedScore = dataWeight * usageWeight;
+    
+    // Thresholds for priorities based on combined score
+    if (combinedScore >= 60) return 'Critical';
+    if (combinedScore >= 30) return 'High';
+    if (combinedScore >= 10) return 'Medium';
+    return 'Low';
   };
 
   const handleFormSubmit = (data: IncidentFormData) => {
@@ -311,35 +327,86 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
     }
   };
 
-  // Options for the incident category dropdown based on the RASBITA specification
+  // Expanded comprehensive options for the incident category dropdown
   const categoryOptions = [
-    { value: "denial_of_service", label: "Denial of Service/DDoS" },
-    { value: "unauthorized_external", label: "Unauthorized External Access" },
-    { value: "unauthorized_internal", label: "Unauthorized Internal Access" },
-    { value: "disclosure_name_dob", label: "Disclosure (Name and DOB)" },
-    { value: "disclosure_name_ss", label: "Disclosure (Name and SS)" },
-    { value: "disclosure_name_dob_ss", label: "Disclosure (Name, DOB, and SS)" },
-    { value: "social_engineering", label: "Social Engineering" },
-    { value: "malware_server", label: "Malware (Server)" },
-    { value: "malware_workstation", label: "Malware (Workstation)" },
-    { value: "improper_usage", label: "Improper Usage" },
-    { value: "no_significant_loss", label: "No Significant Loss" },
+    // Core categories from the RASBITA specification
+    { value: "denial_of_service", label: "Denial of Service/DDoS", cost: 30 },
+    { value: "unauthorized_external", label: "Unauthorized External Access", cost: 5 },
+    { value: "unauthorized_internal", label: "Unauthorized Internal Access", cost: 5 },
+    { value: "disclosure_name_dob", label: "Disclosure (Name and DOB)", cost: 10 },
+    { value: "disclosure_name_ss", label: "Disclosure (Name and SS)", cost: 10 },
+    { value: "disclosure_name_dob_ss", label: "Disclosure (Name, DOB, and SS)", cost: 30 },
+    { value: "social_engineering", label: "Social Engineering", cost: 3 },
+    { value: "malware_server", label: "Malware (Server)", cost: 2160 },
+    { value: "malware_workstation", label: "Malware (Workstation)", cost: 720 },
+    { value: "improper_usage", label: "Improper Usage", cost: 24 },
+    { value: "no_significant_loss", label: "No Significant Loss", cost: 0 },
+    
+    // Extended categories for a more comprehensive assessment
+    { value: "ransomware", label: "Ransomware Attack", cost: 4000 },
+    { value: "business_email_compromise", label: "Business Email Compromise (BEC)", cost: 750 },
+    { value: "phishing", label: "Phishing Campaign", cost: 500 },
+    { value: "spear_phishing", label: "Targeted Spear Phishing", cost: 1200 },
+    { value: "web_application_attack", label: "Web Application Attack (SQL Injection, XSS)", cost: 3500 },
+    { value: "insider_threat_malicious", label: "Malicious Insider Threat", cost: 8000 },
+    { value: "insider_threat_negligent", label: "Negligent Insider Incident", cost: 1800 },
+    { value: "lost_device", label: "Lost/Stolen Device", cost: 970 },
+    { value: "cloud_storage_breach", label: "Cloud Storage/Service Breach", cost: 2700 },
+    { value: "supply_chain_attack", label: "Supply Chain Attack", cost: 7500 },
+    { value: "credential_stuffing", label: "Credential Stuffing/Password Attack", cost: 450 },
+    { value: "cryptojacking", label: "Cryptojacking", cost: 150 },
+    { value: "zero_day_exploit", label: "Zero-Day Exploit", cost: 15000 },
+    { value: "iot_device_compromise", label: "IoT Device Compromise", cost: 890 },
+    { value: "api_breach", label: "API Security Breach", cost: 3200 },
   ];
 
-  // Options for device type dropdown
+  // Expanded options for device type dropdown
   const deviceTypeOptions = [
-    { value: "server", label: "Server" },
-    { value: "standard_server", label: "Standard Server" },
-    { value: "workstation", label: "Workstation" },
-    { value: "standard_workstation", label: "Standard Workstation" },
+    // Core types from the RASBITA specification
+    { value: "server", label: "Server", cost: 5000 },
+    { value: "standard_server", label: "Standard Server", cost: 4000 },
+    { value: "workstation", label: "Workstation", cost: 500 },
+    { value: "standard_workstation", label: "Standard Workstation", cost: 300 },
+    
+    // Extended device types
+    { value: "database_server", label: "Database Server", cost: 7000 },
+    { value: "application_server", label: "Application Server", cost: 6500 },
+    { value: "file_server", label: "File Server", cost: 4500 },
+    { value: "web_server", label: "Web Server", cost: 5500 },
+    { value: "mail_server", label: "Mail Server", cost: 4200 },
+    { value: "authentication_server", label: "Authentication Server", cost: 8000 },
+    { value: "mobile_device", label: "Mobile Device", cost: 800 },
+    { value: "tablet", label: "Tablet", cost: 600 },
+    { value: "network_device", label: "Network Device (Switch/Router)", cost: 3000 },
+    { value: "iot_device", label: "IoT Device", cost: 300 },
+    { value: "industrial_control_system", label: "Industrial Control System", cost: 12000 },
+    { value: "cloud_instance", label: "Cloud Virtual Instance", cost: 2500 },
+    { value: "virtual_machine", label: "Virtual Machine", cost: 1800 },
   ];
   
-  // Options for data class dropdown
+  // Expanded options for data class dropdown
   const dataClassOptions = [
-    { value: "system_file", label: "System File (Value: 1)" },
-    { value: "non_phi_pii", label: "Non-PHI and PII Data (Value: 2)" },
-    { value: "phi", label: "Personal Health Record Information (PHI) (Value: 9)" },
-    { value: "pii", label: "Personal Identifiable Information (PII) (Value: 9)" },
+    // Core classes from the RASBITA specification
+    { value: "system_file", label: "System File", value_weight: 1 },
+    { value: "non_phi_pii", label: "Non-PHI and PII Data", value_weight: 2 },
+    { value: "phi", label: "Personal Health Record Information (PHI)", value_weight: 9 },
+    { value: "pii", label: "Personal Identifiable Information (PII)", value_weight: 9 },
+    
+    // Extended data classifications
+    { value: "pci_dss", label: "Payment Card Information (PCI)", value_weight: 9 },
+    { value: "intellectual_property", label: "Intellectual Property", value_weight: 8 },
+    { value: "trade_secrets", label: "Trade Secrets", value_weight: 10 },
+    { value: "financial_records", label: "Financial Records", value_weight: 8 },
+    { value: "employee_data", label: "Employee Data", value_weight: 7 },
+    { value: "authentication_data", label: "Authentication Data (Credentials)", value_weight: 9 },
+    { value: "encryption_keys", label: "Encryption Keys/Certificates", value_weight: 10 },
+    { value: "source_code", label: "Source Code", value_weight: 8 },
+    { value: "customer_database", label: "Customer Database", value_weight: 8 },
+    { value: "biometric_data", label: "Biometric Data", value_weight: 10 },
+    { value: "system_configurations", label: "System Configurations", value_weight: 6 },
+    { value: "log_files", label: "Log Files", value_weight: 5 },
+    { value: "backups", label: "System Backups", value_weight: 7 },
+    { value: "classified_information", label: "Classified/Restricted Information", value_weight: 10 },
   ];
   
   // Options for data spread dropdown
