@@ -66,6 +66,11 @@ const formSchema = z.object({
   threatValue: z.string(),
   threatCost: z.string(),
   machineCost: z.string(),
+  // Custom asset valuation fields
+  customAssetValue: z.string().refine(val => val === "" || (!isNaN(Number(val)) && Number(val) >= 0), {
+    message: "Asset value must be a non-negative number",
+  }).optional(),
+  useCustomAssetValue: z.boolean().default(false),
   totalDataCount: z.string().refine(val => !isNaN(Number(val)) && Number(val) >= 0, {
     message: "Total data count must be a non-negative number",
   }),
@@ -121,6 +126,8 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
       threatValue: "8", // Default for unauthorized_external
       threatCost: "5", // Default cost for unauthorized_external
       machineCost: "500", // Default for workstation
+      customAssetValue: "",
+      useCustomAssetValue: false,
       totalDataCount: "1000",
       annualizedRateOfOccurrence: "0.5", // Once every 2 years
       
@@ -196,9 +203,14 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
     }
   };
   
-  // Get machine cost based on device type using the comprehensive list
-  const getMachineCost = (deviceType: string): number => {
-    // Find the device type in our expanded list
+  // Get machine cost based on device type or custom value
+  const getMachineCost = (deviceType: string, useCustomValue: boolean, customValue: string): number => {
+    // If using custom value and it's not empty, use that
+    if (useCustomValue && customValue !== "") {
+      return Number(customValue);
+    }
+    
+    // Otherwise, find the device type in our expanded list
     const device = deviceTypeOptions.find(option => option.value === deviceType);
     
     // If found, use its cost, otherwise default to 0
@@ -278,7 +290,7 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
       const totalDevicesInDepartment = Number(data.totalDevicesInDepartment);
       const exposureFactor = getExposureFactorFromDataLoss(data.dataLossPercentage);
       const annualizedRateOfOccurrence = Number(data.annualizedRateOfOccurrence);
-      const machineCost = getMachineCost(deviceType);
+      const machineCost = getMachineCost(deviceType, data.useCustomAssetValue, data.customAssetValue || "");
       const threatValue = getThreatValue(data.incidentCategory); 
       const threatCost = getThreatCost(data.incidentCategory);
       const totalDataCount = Number(data.totalDataCount);
