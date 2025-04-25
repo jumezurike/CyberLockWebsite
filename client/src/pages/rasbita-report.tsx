@@ -227,9 +227,10 @@ export default function RasbitaReportPage() {
     };
   };
   
-  // Load saved reports when the component mounts
+  // Load saved reports and assessments when the component mounts
   useEffect(() => {
     fetchSavedReports();
+    fetchAssessments();
   }, []);
 
   // Function to generate and download PDF report
@@ -518,25 +519,125 @@ export default function RasbitaReportPage() {
     }
   };
 
-  const generateReport = () => {
+  const generateReport = async () => {
     if (!selectedAssessment) {
-      toast({
-        title: "Selection Required",
-        description: "Please select an assessment to generate a RASBITA report.",
-        variant: "destructive",
-      });
-      return;
+      // If no assessments exist in the database yet, create a sample assessment
+      if (assessments.length === 0) {
+        try {
+          setLoading(true);
+          // Create a sample assessment
+          const sampleAssessment = {
+            businessName: "CyberLockX Demo Business",
+            industry: "Technology",
+            employeeCount: "50-100",
+            securityMeasures: ["Firewalls", "Endpoint Protection", "Employee Training"],
+            primaryConcerns: ["Data Breaches", "Ransomware", "Insider Threats"],
+            contactInfo: {
+              name: "Demo User",
+              email: "demo@cyberlockx.xyz",
+              phone: "555-123-4567"
+            },
+            reportType: "Comprehensive",
+            securityScore: 65,
+            matrixData: JSON.stringify([
+              {
+                id: "item1",
+                assetName: "Customer Database",
+                threatVector: "SQL Injection",
+                riskLevel: "High",
+                mitigationStatus: "In Progress"
+              }
+            ]),
+            findings: JSON.stringify([
+              {
+                category: "Data Security",
+                description: "Customer database lacks encryption at rest",
+                severity: "High",
+                recommendation: "Implement TDE for all sensitive databases"
+              }
+            ]),
+            recommendations: JSON.stringify([
+              {
+                title: "Enhance Data Protection",
+                description: "Implement encryption for all sensitive data at rest and in transit",
+                priority: "High",
+                estimatedCost: "Medium",
+                estimatedTimeframe: "3 months"
+              }
+            ])
+          };
+          
+          const response = await apiRequest("POST", "/api/assessments", sampleAssessment);
+          if (!response.ok) {
+            throw new Error("Failed to create sample assessment");
+          }
+          
+          const newAssessment = await response.json();
+          
+          // Add the new assessment to the list
+          const formattedAssessment = {
+            id: newAssessment.id.toString(),
+            name: `${newAssessment.businessName} (${new Date(newAssessment.createdAt).toLocaleDateString()})`
+          };
+          
+          setAssessments([formattedAssessment]);
+          setSelectedAssessment(formattedAssessment.id);
+          
+          // Now fetch the RASBITA report based on this assessment
+          await fetchRasbitaReport(formattedAssessment.id);
+          return;
+        } catch (error) {
+          console.error("Error creating sample assessment:", error);
+          toast({
+            title: "Error",
+            description: "Failed to create a sample assessment. Please try again.",
+            variant: "destructive",
+          });
+          setLoading(false);
+          return;
+        }
+      } else {
+        toast({
+          title: "Selection Required",
+          description: "Please select an assessment to generate a RASBITA report.",
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     fetchRasbitaReport(selectedAssessment);
   };
 
-  // Sample assessments for the dropdown
-  const assessments = [
-    { id: "1", name: "Main Office Assessment (Apr 2025)" },
-    { id: "2", name: "Remote Operations Assessment (Mar 2025)" },
-    { id: "3", name: "Cloud Infrastructure Assessment (Feb 2025)" },
-  ];
+  // Load assessments from the database
+  const [assessments, setAssessments] = useState<{id: string, name: string}[]>([]);
+  
+  // Function to fetch assessments
+  const fetchAssessments = async () => {
+    try {
+      const response = await apiRequest("GET", "/api/assessments");
+      if (!response.ok) {
+        throw new Error("Failed to fetch assessments");
+      }
+      
+      const data = await response.json();
+      
+      // Map assessment data to the format needed for the dropdown
+      const formattedAssessments = data.map((assessment: any) => ({
+        id: assessment.id.toString(),
+        name: `${assessment.businessName} (${new Date(assessment.createdAt).toLocaleDateString()})`
+      }));
+      
+      setAssessments(formattedAssessments);
+    } catch (error) {
+      console.error("Error fetching assessments:", error);
+      toast({
+        title: "Error",
+        description: "Failed to load assessments. Please try again later.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const [activeTab, setActiveTab] = useState<string>("new-incident");
   
@@ -554,41 +655,128 @@ export default function RasbitaReportPage() {
   };
   const [showResults, setShowResults] = useState<boolean>(false);
   
-  const handleIncidentSubmit = (incidentData: any) => {
-    // In a real implementation, this would submit the incident data to the API
-    // and then fetch the generated report
+  const handleIncidentSubmit = async (incidentData: any) => {
+    // Create a new report based on the incident data
+    try {
+      setLoading(true);
+      
+      const newRiskItem: RasbitaRiskItem = incidentData.riskItem;
+      
+      // Create a new report or update existing one
+      let updatedReport: RasbitaReport;
+      if (report.id === "new") {
+        // Create new report
+        updatedReport = {
+          id: "new", // Server will generate ID
+          title: incidentData.incident.title || "Security Incident Report",
+          incidentCategory: incidentData.incident.category,
+          overallRiskScore: calculateRiskScore(newRiskItem),
+          company: incidentData.company,
+          incident: incidentData.incident,
+          riskItems: [newRiskItem],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          businessId: incidentData.company.businessId || "unknown",
+          rasbitaCategories: calculateRasbitaCategories(newRiskItem),
+          financialSummary: {
+            totalAssetValue: newRiskItem.assetValue,
+            totalAnnualizedLossExpectancy: newRiskItem.annualizedLossExpectancy,
+            totalCostOfSafeguards: newRiskItem.annualCostOfSafeguard,
+            totalNetRiskReductionBenefit: newRiskItem.netRiskReductionBenefit
+          }
+        };
+      } else {
+        // Update existing report
+        updatedReport = {
+          ...report,
+          riskItems: [newRiskItem, ...report.riskItems],
+          updatedAt: new Date().toISOString()
+        };
+        
+        // Update financial summary
+        updatedReport.financialSummary = {
+          totalAssetValue: updatedReport.riskItems.reduce((sum, item) => sum + item.assetValue, 0),
+          totalAnnualizedLossExpectancy: updatedReport.riskItems.reduce((sum, item) => sum + item.annualizedLossExpectancy, 0),
+          totalCostOfSafeguards: updatedReport.riskItems.reduce((sum, item) => sum + item.annualCostOfSafeguard, 0),
+          totalNetRiskReductionBenefit: updatedReport.riskItems.reduce((sum, item) => sum + item.netRiskReductionBenefit, 0)
+        };
+      }
+      
+      // Save the report to the database
+      const response = updatedReport.id === "new" ? 
+        await apiRequest("POST", "/api/rasbita-reports", updatedReport) :
+        await apiRequest("PUT", `/api/rasbita-reports/${updatedReport.id}`, updatedReport);
+      
+      if (!response.ok) {
+        throw new Error("Failed to save RASBITA report");
+      }
+      
+      const savedReport = await response.json();
+      
+      // Update the UI with the saved report
+      setReport(savedReport);
+      
+      // Show results and switch to dashboard tab
+      setShowResults(true);
+      setActiveTab("dashboard");
+      
+      // Refresh the saved reports list
+      fetchSavedReports();
+      
+      toast({
+        title: "RASBITA Analysis Complete",
+        description: "Your security incident has been analyzed. Reviewing financial impact analysis...",
+      });
+    } catch (error) {
+      console.error("Error submitting incident data:", error);
+      toast({
+        title: "Error",
+        description: "Failed to analyze security incident. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Helper function to calculate risk score based on RASBITA methodology
+  const calculateRiskScore = (riskItem: RasbitaRiskItem): number => {
+    const {
+      likelihood,
+      impact,
+      exposureFactor,
+      threatLevel
+    } = riskItem;
     
-    console.log("Incident data submitted:", incidentData);
+    // Calculate risk score using RASBITA methodology (simplified for demo)
+    // Actual implementation would use more sophisticated algorithm
+    const baseScore = (likelihood * impact * exposureFactor) / 10;
+    const adjustedScore = baseScore * (threatLevel / 5);
     
-    // For demo purposes, we'll use the sample report with a new risk item
-    const newRiskItem: RasbitaRiskItem = incidentData.riskItem;
-    
-    // Create updated report with the new risk item
-    const updatedReport: RasbitaReport = {
-      ...sampleReport,
-      riskItems: [newRiskItem, ...sampleReport.riskItems],
-      createdAt: new Date().toISOString()
+    return Math.min(Math.round(adjustedScore), 100);
+  };
+  
+  // Helper function to calculate RASBITA categories
+  const calculateRasbitaCategories = (riskItem: RasbitaRiskItem): {
+    risk: number;
+    adversarialInsight: number;
+    securityControls: number;
+    businessImpact: number;
+    informationAssurance: number;
+    threatIntelligence: number;
+    architecture: number;
+  } => {
+    // In a real implementation, these would be calculated based on a more complex algorithm
+    // For demonstration, we'll use the risk item properties to generate values
+    return {
+      risk: Math.round(riskItem.likelihood * 2),
+      adversarialInsight: Math.round(riskItem.threatLevel * 2),
+      securityControls: Math.round((10 - riskItem.safeguardEffectiveness) * 2),
+      businessImpact: Math.round(riskItem.impact * 2),
+      informationAssurance: Math.round((riskItem.confidentiality + riskItem.integrity + riskItem.availability) / 3 * 2),
+      threatIntelligence: Math.round(riskItem.threatLevel * 1.5),
+      architecture: Math.round(10 - riskItem.exposureFactor)
     };
-    
-    // Update financial summary (in a real app, this would be calculated on the server)
-    updatedReport.financialSummary = {
-      totalAssetValue: updatedReport.riskItems.reduce((sum, item) => sum + item.assetValue, 0),
-      totalAnnualizedLossExpectancy: updatedReport.riskItems.reduce((sum, item) => sum + item.annualizedLossExpectancy, 0),
-      totalCostOfSafeguards: updatedReport.riskItems.reduce((sum, item) => sum + item.annualCostOfSafeguard, 0),
-      totalNetRiskReductionBenefit: updatedReport.riskItems.reduce((sum, item) => sum + item.netRiskReductionBenefit, 0)
-    };
-    
-    // Update report
-    setReport(updatedReport);
-    
-    // Show results and switch to dashboard tab
-    setShowResults(true);
-    setActiveTab("dashboard");
-    
-    toast({
-      title: "RASBITA Analysis Complete",
-      description: "Your security incident has been analyzed. Reviewing financial impact analysis...",
-    });
   };
 
   return (
