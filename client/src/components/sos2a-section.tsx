@@ -58,7 +58,7 @@ export default function Sos2aSection() {
                   <ul className="space-y-2">
                     <li className="flex items-center text-chart-4 font-medium">
                       <div className="w-8 h-8 rounded-full bg-chart-4 text-white flex items-center justify-center mr-3">1</div>
-                      <span>Questionnaire</span>
+                      <span>Inquiry & Questionnaire</span>
                     </li>
                     <li className="flex items-center text-neutral-600">
                       <div className="w-8 h-8 rounded-full bg-neutral-200 text-neutral-600 flex items-center justify-center mr-3">2</div>

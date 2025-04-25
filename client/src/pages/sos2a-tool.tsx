@@ -718,7 +718,7 @@ export default function Sos2aTool() {
             
             <div className="flex justify-between text-sm">
               <div className={`${step === 'questionnaire' ? 'text-primary font-medium' : ''}`}>
-                1. Questionnaire
+                1. Inquiry & Questionnaire
               </div>
               <div className={`${step === 'matrix' ? 'text-primary font-medium' : ''}`}>
                 2. Interview & Matrix Population (Gap Analysis)
@@ -744,7 +744,7 @@ export default function Sos2aTool() {
         </CardContent>
       </Card>
       
-      {/* Step 1: Questionnaire */}
+      {/* Step 1: Inquiry & Questionnaire */}
       {step === 'questionnaire' && (
         <div className="questionnaire-container">
           <QuestionnaireForm onSubmit={handleQuestionnaireSubmit} />
