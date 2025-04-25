@@ -126,16 +126,16 @@ const sampleReport: RasbitaReport = {
     }
   ],
   governanceMaturity: {
-    governanceScore: 3, // Tier 3: Repeatable
-    managementScore: 2  // Tier 2: Risk Informed
+    governanceScore: 0, // Tier 0: None
+    managementScore: 0  // Tier 0: None
   },
   rasbitaCategories: {
-    govern: 72,
-    identify: 68,
-    protect: 65,
-    detect: 70,
-    respond: 63,
-    recover: 58
+    govern: 0,
+    identify: 0,
+    protect: 0,
+    detect: 0,
+    respond: 0,
+    recover: 0
   },
   financialSummary: {
     totalAssetValue: 315000,
@@ -561,14 +561,14 @@ export default function RasbitaReportPage() {
             totalNetRiskReductionBenefit: riskItems.reduce((sum, item) => sum + (item.netRiskReductionBenefit || 0), 0)
           };
           
-          // Add NIST CSF 2.0 framework domain scores
+          // Add NIST CSF 2.0 framework domain scores - initialize all to 0
           newReport.rasbitaCategories = {
-            govern: Math.round(55 + Math.random() * 25),
-            identify: Math.round(55 + Math.random() * 25),
-            protect: Math.round(55 + Math.random() * 25),
-            detect: Math.round(55 + Math.random() * 25),
-            respond: Math.round(55 + Math.random() * 25),
-            recover: Math.round(55 + Math.random() * 25)
+            govern: 0,
+            identify: 0,
+            protect: 0,
+            detect: 0,
+            respond: 0,
+            recover: 0
           };
           
           // Add dashboard data with all required properties
