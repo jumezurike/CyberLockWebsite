@@ -630,11 +630,56 @@ export default function IncidentForm({ onSubmit }: IncidentFormProps) {
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Total Data Count</FormLabel>
-                          <FormControl>
-                            <Input type="number" min="0" placeholder="1000" {...field} />
-                          </FormControl>
+                          <div className="flex flex-col space-y-2">
+                            <div className="flex items-center gap-2 w-full">
+                              <FormControl>
+                                <Input
+                                  id="data-count-input"
+                                  type="number"
+                                  min="0"
+                                  placeholder="1000"
+                                  {...field}
+                                  onChange={e => field.onChange(parseFloat(e.target.value) || 0)}
+                                  className="flex-1"
+                                />
+                              </FormControl>
+                              <Select 
+                                onValueChange={(value) => {
+                                  // Create a multiplier based on the selected scale
+                                  let multiplier = 1;
+                                  switch(value) {
+                                    case "thousand": multiplier = 1000; break;
+                                    case "million": multiplier = 1000000; break;
+                                    case "billion": multiplier = 1000000000; break;
+                                    default: multiplier = 1;
+                                  }
+                                  
+                                  // Get base number from current input
+                                  const inputElement = document.getElementById('data-count-input') as HTMLInputElement;
+                                  const baseValue = inputElement ? parseFloat(inputElement.value || '0') : 0;
+                                  
+                                  // Apply multiplier to base value and update the form field
+                                  field.onChange(baseValue * multiplier);
+                                }}
+                                defaultValue="unit"
+                              >
+                                <SelectTrigger id="data-count-scale" className="w-[150px]">
+                                  <SelectValue placeholder="Scale" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="unit">Individual Records</SelectItem>
+                                  <SelectItem value="thousand">Thousands (K)</SelectItem>
+                                  <SelectItem value="million">Millions (M)</SelectItem>
+                                  <SelectItem value="billion">Billions (B)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div className="text-sm font-medium text-green-600" id="data-size-indicator">
+                              {Number(field.value) > 0 ? `≈ ${new Intl.NumberFormat().format(Number(field.value))} records` : "Enter the number of records"}
+                            </div>
+                          </div>
                           <FormDescription>
-                            Total number of data records held in the department
+                            Total number of data records affected by this incident. Use the scale selector for large numbers.
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
