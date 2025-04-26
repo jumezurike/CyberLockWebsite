@@ -235,8 +235,8 @@ const AboutUs = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-gray-700">
-                  With a deep expertise in cybersecurity and network architecture, Josiah leads CyberLockX's
-                  technical vision and innovation. His pioneering work resulted in three U.S. patents that form 
+                  With a deep expertise in cybersecurity, AI, and network architecture, Josiah leads CyberLockX's
+                  technical vision and innovation. His pioneering work resulted in thirteen patents with six U.S. patents that form 
                   the foundation of our security platform.
                 </p>
                 <a 
