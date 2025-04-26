@@ -249,7 +249,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
               <TabsTrigger value="risks">Risks & Vulnerabilities</TabsTrigger>
               <TabsTrigger value="compliance">Compliance Status</TabsTrigger>
-              <TabsTrigger value="frameworks">Framework Gaps</TabsTrigger>
+              <TabsTrigger value="frameworks">Framework Control Gaps</TabsTrigger>
             </TabsList>
             
             <TabsContent value="scorecard" className="space-y-4 pt-4">
@@ -380,7 +380,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <li key={index}>{gap}</li>
                     ))
                   ) : (
-                    <li className="text-muted-foreground">No operational framework gaps identified</li>
+                    <li className="text-muted-foreground">No operational framework control gaps identified</li>
                   )}
                 </ul>
               </div>
@@ -392,7 +392,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <li key={index}>{gap}</li>
                     ))
                   ) : (
-                    <li className="text-muted-foreground">No management framework gaps identified</li>
+                    <li className="text-muted-foreground">No management framework control gaps identified</li>
                   )}
                 </ul>
               </div>
@@ -404,7 +404,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <li key={index}>{gap}</li>
                     ))
                   ) : (
-                    <li className="text-muted-foreground">No technology framework gaps identified</li>
+                    <li className="text-muted-foreground">No technology framework control gaps identified</li>
                   )}
                 </ul>
               </div>
