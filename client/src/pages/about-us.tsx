@@ -236,8 +236,8 @@ const AboutUs = () => {
               <CardContent className="space-y-4">
                 <p className="text-gray-700">
                   With a deep expertise in cybersecurity, AI, and network architecture, Josiah leads CyberLockX's
-                  technical vision and innovation. His pioneering work resulted in thirteen patents with six U.S. patents granted 
-                  and three form the foundation of our security platform.
+                  technical vision and innovation. His pioneering work resulted in six patents granted with three U.S. patents
+                  forming the foundation of our security platform.
                 </p>
                 <a 
                   href="https://www.linkedin.com/in/josiah-umezurike/" 
