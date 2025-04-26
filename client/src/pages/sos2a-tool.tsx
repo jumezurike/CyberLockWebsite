@@ -423,7 +423,7 @@ export default function Sos2aTool() {
     return { immediate, shortTerm, longTerm };
   };
   
-  // Identify framework gaps based on matrix data
+  // Identify framework control gaps based on matrix data
   const identifyFrameworkGaps = (data: MatrixItem[]) => {
     const operations: string[] = [];
     const management: string[] = [];
