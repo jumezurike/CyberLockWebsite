@@ -274,7 +274,7 @@ const AboutUs = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-gray-700">
-                  As CEO, Mike brings extensive business leadership experience to CyberLockX. 
+                  As CEO, Mike brings extensive software development, business leadership experience at an enterprise level to CyberLockX. 
                   His strategic vision focuses on making enterprise-grade cybersecurity accessible 
                   to healthcare organizations while growing CyberLockX into the leading security platform for 
                   protecting patient data and clinical systems.
