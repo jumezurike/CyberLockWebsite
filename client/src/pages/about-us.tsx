@@ -22,11 +22,14 @@ const AboutUs = () => {
     <div className="py-16 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Democratizing Enterprise-Grade Cybersecurity for SMBs</h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Securing Healthcare's Digital Frontline</h1>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Founded in 2022, CyberLockX was born from a stark realization: 99% of businesses are SMBs,
-            yet they receive less than 1% of actionable cybersecurity solutions while facing 43% of all cyberattacks 
-            <a href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(Verizon 2023 DBIR)</a>.
+            Founded in 2022, CyberLockX was born from a stark realization: healthcare organizations of all sizes face unique cybersecurity challenges, 
+            yet small and mid-sized healthcare providers receive disproportionately fewer tailored security solutions despite being targeted in 45% of all healthcare breaches 
+            <a href="https://www.hipaajournal.com/healthcare-data-breach-statistics/" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(HIPAA Journal 2023)</a>. 
+            With patient data breaches costing an average of $10.93 million per incident—the highest of any industry 
+            <a href="https://www.ibm.com/reports/data-breach" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(IBM Cost of a Data Breach Report 2023)</a>—CyberLockX 
+            is democratizing enterprise-grade cybersecurity specifically for healthcare organizations, bringing automated HIPAA compliance and specialized protection for clinical applications and patient data systems.
           </p>
         </div>
 
@@ -42,35 +45,35 @@ const AboutUs = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="border-red-200 shadow-md">
               <CardHeader className="pb-2">
-                <CardTitle className="text-xl">Insurance Isn't Protection</CardTitle>
+                <CardTitle className="text-xl">Patient Data at Risk</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700">
-                  SMBs are forced to rely on cyber insurance (which pays after breaches) rather than prevention.
+                  Healthcare providers face 821 attacks per week, with sensitive patient data the primary target 
+                  <a href="https://www.checkpoint.com/cyber-hub/threat-prevention/ransomware/healthcare-ransomware/" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(Check Point)</a>.
                 </p>
               </CardContent>
             </Card>
 
             <Card className="border-red-200 shadow-md">
               <CardHeader className="pb-2">
-                <CardTitle className="text-xl">Enterprise Bias</CardTitle>
+                <CardTitle className="text-xl">Enterprise Security Gap</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700">
-                  Solutions priced for Fortune 500 leave SMBs defenseless—50% fold within 6 months of an attack 
-                  <a href="https://www.sba.gov/blog/cybersecurity-small-businesses" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(U.S. SBA)</a>.
+                  Small and mid-sized healthcare providers lack the resources for comprehensive HIPAA protection despite facing the same compliance requirements as large hospitals.
                 </p>
               </CardContent>
             </Card>
 
             <Card className="border-red-200 shadow-md">
               <CardHeader className="pb-2">
-                <CardTitle className="text-xl">$12.75B in Losses</CardTitle>
+                <CardTitle className="text-xl">$10.93M Per Breach</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-700">
-                  The 2023 cost of SMB cyberattacks 
-                  <a href="https://www.accenture.com/us-en/insights/security/cost-cybercrime-study" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(Accenture)</a>.
+                  Healthcare breaches cost more than any other industry
+                  <a href="https://www.ibm.com/reports/data-breach" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-primary/80 ml-1">(IBM Security)</a>.
                 </p>
               </CardContent>
             </Card>
@@ -85,7 +88,7 @@ const AboutUs = () => {
               <h2 className="text-3xl font-bold text-gray-900">Our Mission</h2>
             </div>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
-              We're building accessible, all-in-one cybersecurity for SMBs through six pillars:
+              We're building accessible, all-in-one cybersecurity for healthcare organizations through six pillars:
             </p>
           </div>
 
@@ -166,7 +169,7 @@ const AboutUs = () => {
               <h2 className="text-3xl font-bold text-gray-900">Why Now?</h2>
             </div>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              The market is ripe for disruption. SMBs need protection that's:
+              The healthcare cybersecurity market is ripe for disruption. Healthcare organizations need protection that's:
             </p>
           </div>
 
@@ -186,14 +189,14 @@ const AboutUs = () => {
             <div className="flex items-start">
               <div className="flex-shrink-0 h-6 w-6 rounded-full bg-secondary flex items-center justify-center text-white font-bold mr-3">✅</div>
               <p className="text-gray-700 text-lg">
-                <span className="font-medium">Cost-effective</span> (priced for SMB budgets, not enterprises)
+                <span className="font-medium">Cost-effective</span> (priced for healthcare organization budgets, not just major hospital systems)
               </p>
             </div>
           </div>
 
           <div className="text-center mt-12">
             <p className="text-xl text-gray-800 font-medium">
-              Join us in rewriting the rules of SMB cybersecurity.
+              Join us in rewriting the rules of healthcare cybersecurity.
             </p>
           </div>
         </div>
@@ -273,8 +276,8 @@ const AboutUs = () => {
                 <p className="text-gray-700">
                   As CEO, Mike brings extensive business leadership experience to CyberLockX. 
                   His strategic vision focuses on making enterprise-grade cybersecurity accessible 
-                  to SMBs while growing CyberLockX into the leading security platform for 
-                  businesses of all sizes.
+                  to healthcare organizations while growing CyberLockX into the leading security platform for 
+                  protecting patient data and clinical systems.
                 </p>
                 <a 
                   href="https://www.linkedin.com/in/mikeikonomou/" 
