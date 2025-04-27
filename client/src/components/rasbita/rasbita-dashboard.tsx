@@ -733,6 +733,96 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
           )}
         </CardContent>
       </Card>
+
+      {/* Threat Modeling for Architecture */}
+      <Card className="mt-6">
+        <CardHeader className="bg-gray-50">
+          <CardTitle>Threat Modeling for Architecture</CardTitle>
+          <CardDescription>
+            Security architecture analysis using threat modeling methodology
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <div className="space-y-6">
+            <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
+              <h3 className="font-semibold text-chart-4 mb-2">Architectural Components</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="border p-3 rounded-md bg-white">
+                  <h4 className="font-medium text-gray-800 mb-1">Entry Points</h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-600">
+                    <li>Web Application Interfaces</li>
+                    <li>API Endpoints</li>
+                    <li>Remote Access Services</li>
+                    <li>Email Communication</li>
+                  </ul>
+                </div>
+                <div className="border p-3 rounded-md bg-white">
+                  <h4 className="font-medium text-gray-800 mb-1">Trust Boundaries</h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-600">
+                    <li>Network Segmentation</li>
+                    <li>Authentication Zones</li>
+                    <li>Data Classification Boundaries</li>
+                    <li>Internal/External Interfaces</li>
+                  </ul>
+                </div>
+                <div className="border p-3 rounded-md bg-white">
+                  <h4 className="font-medium text-gray-800 mb-1">Data Flows</h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-600">
+                    <li>User → Application → Database</li>
+                    <li>API Integrations</li>
+                    <li>Authentication Processes</li>
+                    <li>Backup and Recovery Flows</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h3 className="font-semibold">Threat Scenarios</h3>
+                <div className="border p-3 rounded-md bg-red-50">
+                  <h4 className="font-medium text-red-800 mb-1">Critical Threats</h4>
+                  <ul className="list-disc pl-5 text-sm text-red-700">
+                    <li>SQL Injection targeting patient data</li>
+                    <li>Ransomware affecting critical systems</li>
+                    <li>Privilege escalation in admin interface</li>
+                  </ul>
+                </div>
+                <div className="border p-3 rounded-md bg-orange-50">
+                  <h4 className="font-medium text-orange-800 mb-1">High Risk Threats</h4>
+                  <ul className="list-disc pl-5 text-sm text-orange-700">
+                    <li>Session hijacking in user portal</li>
+                    <li>Cross-site scripting in search functionality</li>
+                    <li>Third-party API data exposure</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <h3 className="font-semibold">Architectural Controls</h3>
+                <div className="border p-3 rounded-md bg-green-50">
+                  <h4 className="font-medium text-green-800 mb-1">Implemented Controls</h4>
+                  <ul className="list-disc pl-5 text-sm text-green-700">
+                    <li>Multi-factor authentication</li>
+                    <li>Data encryption at rest and in transit</li>
+                    <li>Web application firewall</li>
+                    <li>Network segmentation</li>
+                  </ul>
+                </div>
+                <div className="border p-3 rounded-md bg-blue-50">
+                  <h4 className="font-medium text-blue-800 mb-1">Recommended Controls</h4>
+                  <ul className="list-disc pl-5 text-sm text-blue-700">
+                    <li>API gateway with rate limiting</li>
+                    <li>Zero trust network architecture</li>
+                    <li>Enhanced logging and monitoring</li>
+                    <li>Regular penetration testing</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }
