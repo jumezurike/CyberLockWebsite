@@ -237,7 +237,7 @@ export function PdfExport({ report }: PdfExportProps) {
             ['ARO (Annual Rate of Occurrence)', report.financialSummary.annualRateOccurrence || '0', 'Expected annual frequency of this incident'],
             ['ALE (Annual Loss Expectancy)', `$${report.financialSummary.annualLossExpectancy || 0}`, 'Expected annual cost of this incident'],
             ['ACS (Annual Countermeasure Savings)', `$${report.financialSummary.annualCountermeasureSavings || 0}`, 'Annual savings from implementing countermeasures'],
-            ['NRRB (Net Risk Reduction Benefit)', `$${report.financialSummary.netRiskReductionBenefit || 0}`, 'Net benefit after implementation costs'],
+            ['NRRB (positive)', `$${report.financialSummary.netRiskReductionBenefit || 0}`, 'Net benefit after implementation costs - positive value means spending makes sense'],
           ],
           theme: 'grid',
           styles: { fontSize: 8, cellPadding: 2 },

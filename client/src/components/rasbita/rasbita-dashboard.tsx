@@ -317,7 +317,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
               CISSP Risk Assessment Score by Threat and Impact Analysis
             </CardDescription>
             <div className="mt-2 text-xs text-gray-600 bg-gray-100 p-2 rounded">
-              <p><strong>Core Components:</strong> Cybersecurity Incident Risk Score, Cybersecurity Gov & Mngt maturity level, NRRB (+ Spend on tools makes sense financially if positive), and threat modeling for architecture</p>
+              <p><strong>Core Components:</strong> Cybersecurity Incident Risk Score, Cybersecurity Gov & Mngt maturity level, NRRB (positive): spend on tools makes sense financially, and threat modeling for architecture</p>
             </div>
           </CardHeader>
           <CardContent className="pt-6">
@@ -439,14 +439,14 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
               </div>
               
               <div className="text-sm text-center text-gray-600 bg-blue-50 p-2 rounded-md">
-                <strong>Note:</strong> Positive NRRB (+) values indicate that spending on tools makes sense financially.
+                <strong>Note:</strong> Positive NRRB values indicate that spending on tools makes sense financially.
               </div>
               
               <div className="mt-3 bg-gray-50 p-3 rounded-md">
-                <p className="text-sm font-medium text-gray-700">NRRB (+ Spend on tools)</p>
+                <p className="text-sm font-medium text-gray-700">NRRB (positive)</p>
                 <p className="text-xs text-gray-600 mt-1">
                   Net Risk Reduction Benefit (NRRB) quantifies the financial benefit of your security investment by comparing 
-                  your Annual Cost of Safeguards (ACS) against the reduction in annualized loss. A positive NRRB (+) indicates 
+                  your Annual Cost of Safeguards (ACS) against the reduction in annualized loss. A positive NRRB indicates 
                   spending on security tools makes sense financially and your security tooling investment is providing tangible value.
                 </p>
               </div>
@@ -504,7 +504,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
                   <TableHead>SLE</TableHead>
                   <TableHead>ALE</TableHead>
                   <TableHead>ACS</TableHead>
-                  <TableHead>NRRB</TableHead>
+                  <TableHead>NRRB (positive)</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>

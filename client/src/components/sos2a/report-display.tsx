@@ -220,7 +220,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <p className="font-bold text-purple-600">{report.rasbitaScore.categories.securityControls || report.rasbitaScore.categories.protect}</p>
                 </div>
                 <div className="bg-primary/5 rounded-md p-2 border-l-4 border-green-500">
-                  <p className="text-xs text-muted-foreground">NRRB (+ Spend on tools)</p>
+                  <p className="text-xs text-muted-foreground">NRRB (positive)</p>
                   <p className="font-bold text-green-600">{report.rasbitaScore.categories.architecture || report.rasbitaScore.categories.respond}</p>
                   <p className="text-[10px] text-muted-foreground">Positive value = spend makes sense</p>
                 </div>
@@ -232,23 +232,23 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <h2 className="text-lg font-semibold mb-3">Summary Findings</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-red-500">{report.findings.filter(f => f.severity === 'High').length}</div>
-                <div className="text-sm">High Risks</div>
-                <div className="text-xs text-muted-foreground">Between 60%-80% probability</div>
-              </div>
-              <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-orange-500">{report.findings.filter(f => f.severity === 'Medium').length}</div>
-                <div className="text-sm">Medium Risks</div>
-                <div className="text-xs text-muted-foreground">Between 30%-60% probability</div>
-              </div>
-              <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-amber-500">{report.vulnerabilities.critical.length}</div>
+                <div className="text-lg font-bold text-red-600">{report.vulnerabilities.critical.length}</div>
                 <div className="text-sm">Critical Vulnerabilities</div>
                 <div className="text-xs text-muted-foreground">Greater than 80% probability</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-blue-500">{report.recommendations.immediate.length}</div>
-                <div className="text-sm">Immediate Actions</div>
+                <div className="text-lg font-bold text-orange-600">{report.findings.filter(f => f.severity === 'High').length}</div>
+                <div className="text-sm">High Risks</div>
+                <div className="text-xs text-muted-foreground">Between 60%-80% probability</div>
+              </div>
+              <div className="border rounded-md p-3 text-center">
+                <div className="text-lg font-bold text-amber-600">{report.findings.filter(f => f.severity === 'Medium').length}</div>
+                <div className="text-sm">Medium Risks</div>
+                <div className="text-xs text-muted-foreground">Between 30%-60% probability</div>
+              </div>
+              <div className="border rounded-md p-3 text-center">
+                <div className="text-lg font-bold text-green-600">{report.recommendations.immediate.length}</div>
+                <div className="text-sm">Informational</div>
                 <div className="text-xs text-muted-foreground">Below 30% probability</div>
               </div>
             </div>
@@ -259,7 +259,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <li><span className="font-semibold text-red-600">Critical</span> – Greater than 80% probability of occurrence</li>
                 <li><span className="font-semibold text-orange-600">High</span> – Between 60% and 80% probability of occurrence</li>
                 <li><span className="font-semibold text-amber-600">Medium</span> – Between 30% and 60% probability of occurrence</li>
-                <li><span className="font-semibold text-green-600">Low</span> – Below 30% probability of occurrence</li>
+                <li><span className="font-semibold text-green-600">Informational</span> – Below 30% probability of occurrence</li>
               </ul>
             </div>
           </div>
@@ -286,7 +286,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             
             <TabsContent value="recommendations" className="space-y-4 pt-4">
               <div>
-                <h3 className="font-medium mb-2">Immediate Actions</h3>
+                <h3 className="font-medium mb-2">Informational</h3>
                 <ul className="space-y-2 list-disc pl-5">
                   {report.recommendations.immediate.map((rec, index) => (
                     <li key={index}>{rec}</li>
