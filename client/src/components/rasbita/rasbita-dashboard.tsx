@@ -546,7 +546,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
               <div>SLE = Single Loss Expectancy</div>
               <div>ALE = Annualized Loss Expectancy</div>
               <div>ACS = Annual Cost of Safeguards</div>
-              <div>NRRB = Net Risk Reduction Benefit</div>
+              <div>NRRB = Net Risk Reduction Benefit (positive)</div>
             </div>
           </div>
         </CardFooter>

@@ -248,7 +248,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               </div>
               <div className="border rounded-md p-3 text-center">
                 <div className="text-lg font-bold text-green-600">{report.recommendations.immediate.length}</div>
-                <div className="text-sm">Informational</div>
+                <div className="text-sm">Low Risks</div>
                 <div className="text-xs text-muted-foreground">Below 30% probability</div>
               </div>
             </div>
@@ -259,7 +259,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <li><span className="font-semibold text-red-600">Critical</span> – Greater than 80% probability of occurrence</li>
                 <li><span className="font-semibold text-orange-600">High</span> – Between 60% and 80% probability of occurrence</li>
                 <li><span className="font-semibold text-amber-600">Medium</span> – Between 30% and 60% probability of occurrence</li>
-                <li><span className="font-semibold text-green-600">Informational</span> – Below 30% probability of occurrence</li>
+                <li><span className="font-semibold text-green-600">Low</span> – Below 30% probability of occurrence</li>
               </ul>
             </div>
           </div>
@@ -286,7 +286,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             
             <TabsContent value="recommendations" className="space-y-4 pt-4">
               <div>
-                <h3 className="font-medium mb-2">Informational</h3>
+                <h3 className="font-medium mb-2">Immediate Actions</h3>
                 <ul className="space-y-2 list-disc pl-5">
                   {report.recommendations.immediate.map((rec, index) => (
                     <li key={index}>{rec}</li>
