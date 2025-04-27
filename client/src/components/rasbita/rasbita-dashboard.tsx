@@ -4,6 +4,7 @@ import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid, BarChart, Bar } from 'recharts';
 import { RasbitaReport, RasbitaRiskItem } from '@/lib/sos2a-types';
 import { AlertCircle, AlertTriangle, CheckCircle, AlertOctagon } from "lucide-react";
+import ThreatModeling from '@/components/rasbita/threat-modeling';
 
 // Helper function to get tier label text based on score
 function getTierLabel(score: number | null): string {

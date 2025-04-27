@@ -1176,6 +1176,19 @@ export default function RasbitaReportPage() {
                             Launch RASBITA GOV & MGNT Crisis Tool
                           </a>
                         </div>
+                        
+                        <p className="text-xs text-blue-700 mt-4">
+                          Need to assess your architecture security? Access our standalone threat modeling tool:
+                        </p>
+                        <div className="mt-2">
+                          <a 
+                            href="/threat-modeling" 
+                            className="inline-flex items-center gap-1.5 text-xs font-medium bg-blue-700 text-white px-2.5 py-1.5 rounded hover:bg-blue-800 transition-colors"
+                          >
+                            <Shield className="h-3.5 w-3.5" />
+                            Launch RASBITA Threat Modeling Tool
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>

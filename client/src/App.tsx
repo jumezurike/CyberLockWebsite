@@ -14,6 +14,7 @@ import Dashboard from "@/pages/dashboard";
 import AboutUs from "@/pages/about-us";
 import RasbitaReport from "@/pages/rasbita-report";
 import RasbitaGovernance from "@/pages/rasbita-governance";
+import ThreatModelingPage from "@/pages/threat-modeling";
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function Router() {
           <Route path="/about-us" component={AboutUs} />
           <Route path="/rasbita" component={RasbitaReport} />
           <Route path="/rasbita-governance" component={RasbitaGovernance} />
+          <Route path="/threat-modeling" component={ThreatModelingPage} />
           <Route component={NotFound} />
         </Switch>
       </main>
