@@ -400,59 +400,235 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
             </div>
             
             <div className="space-y-4">
-              <h3 className="font-semibold">Sample Identified Threats (Based on Microsoft TMT)</h3>
-              <p className="text-gray-600 text-sm mb-2">
-                Below are sample threats that might be identified during the analysis. During our consultation, 
-                we'll generate a complete list tailored to your specific architecture:
+              <h3 className="font-semibold">Risk Scoring Methodology</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Each identified threat will be assessed using the following risk scoring table. This allows us to 
+                prioritize threats and develop appropriate mitigation strategies based on risk level.
               </p>
               
+              <div className="overflow-x-auto mb-6">
+                <table className="min-w-full bg-white border text-sm">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Description of Risk</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Impact (I) Score (1-5)</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Likelihood (L) Score (1-5)</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Risk Score Explanation</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Risk Score (I x L)</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Risk Level</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Mitigating Controls</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Implemented Control Y/N</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Residual Risk</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Residual Risk Level</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="py-2 px-3 border">Elevation Using Impersonation: Web portal may impersonate user context</td>
+                      <td className="py-2 px-3 border text-center">4</td>
+                      <td className="py-2 px-3 border text-center">3</td>
+                      <td className="py-2 px-3 border">Major impact on integrity with likely occurrence</td>
+                      <td className="py-2 px-3 border text-center font-medium">12</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">High</span></td>
+                      <td className="py-2 px-3 border">Implement RBAC and session validation</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Spoofing the Mobile User: User may be spoofed leading to unauthorized access</td>
+                      <td className="py-2 px-3 border text-center">5</td>
+                      <td className="py-2 px-3 border text-center">3</td>
+                      <td className="py-2 px-3 border">Severe impact on confidentiality with likely occurrence</td>
+                      <td className="py-2 px-3 border text-center font-medium">15</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">High</span></td>
+                      <td className="py-2 px-3 border">Implement MFA and device fingerprinting</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Data Flow Interruption: API Request may be intercepted</td>
+                      <td className="py-2 px-3 border text-center">3</td>
+                      <td className="py-2 px-3 border text-center">2</td>
+                      <td className="py-2 px-3 border">Moderate impact on availability with unlikely occurrence</td>
+                      <td className="py-2 px-3 border text-center font-medium">6</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">Medium</span></td>
+                      <td className="py-2 px-3 border">Implement TLS and API request signing</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Weak Authentication Scheme: Custom authentication susceptible to bypass</td>
+                      <td className="py-2 px-3 border text-center">4</td>
+                      <td className="py-2 px-3 border text-center">3</td>
+                      <td className="py-2 px-3 border">Major impact on authentication with likely occurrence</td>
+                      <td className="py-2 px-3 border text-center font-medium">12</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">High</span></td>
+                      <td className="py-2 px-3 border">Implement OAuth 2.0 with modern standards</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                      <td className="py-2 px-3 border text-center">TBD</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="border p-3 rounded-md bg-red-50">
-                  <h4 className="font-medium text-red-800 mb-2 flex items-center gap-1">
-                    <AlertCircle className="h-4 w-4" />
-                    Privilege Elevation Risks
-                  </h4>
-                  <ul className="list-disc pl-5 text-sm text-red-700 space-y-2">
-                    <li><span className="font-medium">Elevation Using Impersonation:</span> Portal may impersonate user context to gain additional privileges</li>
-                    <li><span className="font-medium">Remote Code Execution:</span> External entities may remotely execute code in application services</li>
-                    <li><span className="font-medium">Changing Execution Flow:</span> Attackers may pass data to change program execution flow</li>
-                  </ul>
+                <div className="border p-3 rounded-md bg-gray-50">
+                  <h4 className="font-medium text-gray-800 mb-2">Risk Scoring Matrix</h4>
+                  <p className="text-xs text-gray-600 mb-3">Impact (rows) × Likelihood (columns)</p>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full bg-white border text-xs">
+                      <thead>
+                        <tr>
+                          <th className="p-1 border bg-gray-100"></th>
+                          <th className="p-1 border bg-gray-100">1</th>
+                          <th className="p-1 border bg-gray-100">2</th>
+                          <th className="p-1 border bg-gray-100">3</th>
+                          <th className="p-1 border bg-gray-100">4</th>
+                          <th className="p-1 border bg-gray-100">5</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="p-1 border bg-gray-100">5</td>
+                          <td className="p-1 border bg-yellow-100">5</td>
+                          <td className="p-1 border bg-yellow-100">10</td>
+                          <td className="p-1 border bg-red-100">15</td>
+                          <td className="p-1 border bg-red-100">20</td>
+                          <td className="p-1 border bg-red-100">25</td>
+                        </tr>
+                        <tr>
+                          <td className="p-1 border bg-gray-100">4</td>
+                          <td className="p-1 border bg-blue-100">4</td>
+                          <td className="p-1 border bg-yellow-100">8</td>
+                          <td className="p-1 border bg-red-100">12</td>
+                          <td className="p-1 border bg-red-100">16</td>
+                          <td className="p-1 border bg-red-100">20</td>
+                        </tr>
+                        <tr>
+                          <td className="p-1 border bg-gray-100">3</td>
+                          <td className="p-1 border bg-blue-100">3</td>
+                          <td className="p-1 border bg-blue-100">6</td>
+                          <td className="p-1 border bg-yellow-100">9</td>
+                          <td className="p-1 border bg-red-100">12</td>
+                          <td className="p-1 border bg-red-100">15</td>
+                        </tr>
+                        <tr>
+                          <td className="p-1 border bg-gray-100">2</td>
+                          <td className="p-1 border bg-blue-100">2</td>
+                          <td className="p-1 border bg-blue-100">4</td>
+                          <td className="p-1 border bg-blue-100">6</td>
+                          <td className="p-1 border bg-yellow-100">8</td>
+                          <td className="p-1 border bg-yellow-100">10</td>
+                        </tr>
+                        <tr>
+                          <td className="p-1 border bg-gray-100">1</td>
+                          <td className="p-1 border bg-blue-100">1</td>
+                          <td className="p-1 border bg-blue-100">2</td>
+                          <td className="p-1 border bg-blue-100">3</td>
+                          <td className="p-1 border bg-blue-100">4</td>
+                          <td className="p-1 border bg-yellow-100">5</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="flex flex-wrap gap-3 mt-3">
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-blue-100"></div>
+                      <span className="text-xs">Low (1-6)</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-yellow-100"></div>
+                      <span className="text-xs">Medium (7-10)</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-red-100"></div>
+                      <span className="text-xs">High (11-25)</span>
+                    </div>
+                  </div>
                 </div>
                 
-                <div className="border p-3 rounded-md bg-orange-50">
-                  <h4 className="font-medium text-orange-800 mb-2 flex items-center gap-1">
-                    <AlertTriangle className="h-4 w-4" />
-                    Spoofing Risks
-                  </h4>
-                  <ul className="list-disc pl-5 text-sm text-orange-700 space-y-2">
-                    <li><span className="font-medium">User Spoofing:</span> External user may be spoofed, leading to unauthorized access</li>
-                    <li><span className="font-medium">Destination Spoofing:</span> Entities may be spoofed, causing data to be sent to attacker's target</li>
-                    <li><span className="font-medium">Service Spoofing:</span> Authentication services may be spoofed to capture credentials</li>
-                  </ul>
+                <div className="space-y-2">
+                  <div className="border p-3 rounded-md bg-gray-50">
+                    <h4 className="font-medium text-gray-800 mb-1">Customer Input for Risk Scoring</h4>
+                    <p className="text-sm text-gray-600 mb-2">
+                      To accurately assess risks in your environment, we'll need your input on:
+                    </p>
+                    <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+                      <li>Business impact of different types of security incidents</li>
+                      <li>Historical data on previous security incidents</li>
+                      <li>Industry-specific threat intelligence</li>
+                      <li>Risk appetite and tolerance levels</li>
+                      <li>Regulatory compliance requirements</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="border p-3 rounded-md bg-gray-50">
+                    <h4 className="font-medium text-gray-800 mb-1">Risk Assessment Next Steps</h4>
+                    <ol className="list-decimal pl-5 text-sm text-gray-600 space-y-1">
+                      <li>Complete risk assessment for all identified threats</li>
+                      <li>Prioritize risks based on score and business impact</li>
+                      <li>Develop mitigation strategies for high and medium risks</li>
+                      <li>Document risk acceptance decisions for any unmitigated risks</li>
+                      <li>Create implementation plan for security controls</li>
+                    </ol>
+                  </div>
                 </div>
+              </div>
+              
+              <div className="overflow-x-auto mb-6">
+                <h4 className="font-medium text-purple-800 mb-2">Microsoft TMT Identified STRIDE Threats</h4>
+                <p className="text-sm text-purple-700 mb-3">
+                  Below are some of the actual threats identified by the Microsoft Threat Modeling Tool for your application:
+                </p>
+                <table className="min-w-full bg-white border text-sm">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Identified Risk</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Risk Description</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="py-2 px-3 border">Elevation Of Privilege: Elevation Using Impersonation</td>
+                      <td className="py-2 px-3 border">Web Portal (Doppio/API:Payment service) may be able to impersonate the context of Web Member / User in order to gain additional privilege.</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Spoofing: Spoofing the Mobile Member/User External Entity</td>
+                      <td className="py-2 px-3 border">Mobile Member/User may be spoofed by an attacker and this may lead to unauthorized access to web Portal (Doppio/API:Payment service). Consider using a standard authentication mechanism to identify the external entity.</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Repudiation: Potential Data Repudiation by web Portal</td>
+                      <td className="py-2 px-3 border">Web Portal claims that it did not receive data from a source outside the trust boundary. Consider using logging or auditing to record the source, time, and summary of the received data.</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Denial Of Service: Process Crash or Stop</td>
+                      <td className="py-2 px-3 border">Web Portal crashes, halts, stops or runs slowly; in all cases violating an availability metric.</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Information Disclosure: Weak Authentication Scheme</td>
+                      <td className="py-2 px-3 border">Custom authentication schemes are susceptible to common weaknesses such as weak credential change management, credential equivalence, easily guessable credentials, null credentials, downgrade authentication or a weak credential change management system.</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Elevation Of Privilege: Remote Code Execution</td>
+                      <td className="py-2 px-3 border">Mobile Member/User may be able to remotely execute code for web Portal (Doppio/API:Payment service).</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Tampering: Collision Attacks</td>
+                      <td className="py-2 px-3 border">Attackers who can send a series of packets or messages may be able to overlap data. For example, packet 1 may be 100 bytes starting at offset 0. Packet 2 may be 100 bytes starting at offset 25. Packet 2 will overwrite 75 bytes of packet 1.</td>
+                    </tr>
+                  </tbody>
+                </table>
                 
-                <div className="border p-3 rounded-md bg-yellow-50">
-                  <h4 className="font-medium text-yellow-800 mb-2 flex items-center gap-1">
-                    <AlertTriangle className="h-4 w-4" />
-                    Denial of Service Risks
-                  </h4>
-                  <ul className="list-disc pl-5 text-sm text-yellow-700 space-y-2">
-                    <li><span className="font-medium">Process Crash:</span> Services may crash, halt, or run slowly, violating availability metrics</li>
-                    <li><span className="font-medium">Data Flow Interruption:</span> External agents may interrupt data flowing across trust boundaries</li>
-                    <li><span className="font-medium">Resource Exhaustion:</span> Systems may be overwhelmed by excessive requests</li>
-                  </ul>
-                </div>
-                
-                <div className="border p-3 rounded-md bg-blue-50">
-                  <h4 className="font-medium text-blue-800 mb-2 flex items-center gap-1">
-                    <AlertTriangle className="h-4 w-4" />
-                    Repudiation & Information Disclosure Risks
-                  </h4>
-                  <ul className="list-disc pl-5 text-sm text-blue-700 space-y-2">
-                    <li><span className="font-medium">Data Repudiation:</span> Services claim they did not receive data from external sources</li>
-                    <li><span className="font-medium">Weak Authentication:</span> Custom authentication schemes susceptible to weaknesses</li>
-                    <li><span className="font-medium">Collision Attacks:</span> Overlapping data in packet or message sequences can be exploited</li>
-                  </ul>
+                <div className="mt-4 p-3 bg-gray-50 rounded-md">
+                  <h5 className="text-sm font-medium mb-2 text-gray-800">Risk Assessment Process</h5>
+                  <p className="text-sm text-gray-600">
+                    During our consultation, we'll work with you to assess each identified threat using the impact and likelihood scoring framework.
+                    This will help prioritize which risks to address first in the mitigation phase.
+                  </p>
                 </div>
               </div>
             </div>
@@ -509,115 +685,206 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h3 className="font-semibold">STRIDE Mitigation Approaches</h3>
-                <div className="border p-3 rounded-md bg-white">
-                  <h4 className="font-medium text-red-800 mb-1">Spoofing Mitigations</h4>
-                  <ul className="list-disc pl-5 text-sm text-gray-700">
-                    <li>Strong authentication mechanisms</li>
-                    <li>Multi-factor authentication</li>
-                    <li>Digital signatures</li>
-                    <li>Unique identifiers and certificates</li>
-                  </ul>
+            <div className="space-y-6">
+              <h3 className="font-semibold text-gray-800">Mitigation Planning</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Based on the risk assessment from Step 2, we develop a comprehensive mitigation plan for each identified risk. 
+                This table tracks the complete mitigation lifecycle from planning through implementation to residual risk evaluation.
+              </p>
+              
+              <div className="overflow-x-auto mb-6">
+                <table className="min-w-full bg-white border text-sm">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Description of Risk</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Impact (I) Score (1-5)</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Likelihood (L) Score (1-5)</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Risk Score Explanation</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Risk Score (I x L)</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Risk Level</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Mitigating Controls</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Implemented Control Y/N</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Residual Risk</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Residual Risk Level</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Mitigation Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="py-2 px-3 border">Elevation Using Impersonation: Web portal may impersonate user context</td>
+                      <td className="py-2 px-3 border text-center">4</td>
+                      <td className="py-2 px-3 border text-center">3</td>
+                      <td className="py-2 px-3 border">Major impact on integrity with likely occurrence</td>
+                      <td className="py-2 px-3 border text-center font-medium">12</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">High</span></td>
+                      <td className="py-2 px-3 border">Implement RBAC and strong session validation</td>
+                      <td className="py-2 px-3 border text-center">N</td>
+                      <td className="py-2 px-3 border text-center">4</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Low</span></td>
+                      <td className="py-2 px-3 border">
+                        <ol className="list-decimal pl-3 text-xs">
+                          <li>Implement RBAC for all services</li>
+                          <li>Add context validation checks</li>
+                          <li>Implement session monitoring</li>
+                        </ol>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Spoofing the Mobile User: User may be spoofed leading to unauthorized access</td>
+                      <td className="py-2 px-3 border text-center">5</td>
+                      <td className="py-2 px-3 border text-center">3</td>
+                      <td className="py-2 px-3 border">Severe impact on confidentiality with likely occurrence</td>
+                      <td className="py-2 px-3 border text-center font-medium">15</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">High</span></td>
+                      <td className="py-2 px-3 border">Implement MFA and device fingerprinting</td>
+                      <td className="py-2 px-3 border text-center">N</td>
+                      <td className="py-2 px-3 border text-center">6</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-yellow-100 text-yellow-800 rounded-full text-xs font-medium">Medium</span></td>
+                      <td className="py-2 px-3 border">
+                        <ol className="list-decimal pl-3 text-xs">
+                          <li>Deploy MFA for all user access</li>
+                          <li>Implement device registration</li>
+                          <li>Add anomaly detection alerts</li>
+                          <li>Strengthen identity validation</li>
+                        </ol>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Weak Authentication Scheme: Custom authentication susceptible to bypass</td>
+                      <td className="py-2 px-3 border text-center">4</td>
+                      <td className="py-2 px-3 border text-center">3</td>
+                      <td className="py-2 px-3 border">Major impact on authentication with likely occurrence</td>
+                      <td className="py-2 px-3 border text-center font-medium">12</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-red-100 text-red-800 rounded-full text-xs font-medium">High</span></td>
+                      <td className="py-2 px-3 border">Implement OAuth 2.0 with modern standards</td>
+                      <td className="py-2 px-3 border text-center">N</td>
+                      <td className="py-2 px-3 border text-center">3</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Low</span></td>
+                      <td className="py-2 px-3 border">
+                        <ol className="list-decimal pl-3 text-xs">
+                          <li>Replace custom auth with OAuth 2.0</li>
+                          <li>Implement proper token validation</li>
+                          <li>Add JWT signature verification</li>
+                          <li>Configure proper token expiration</li>
+                        </ol>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Data Flow Interruption: API Request may be intercepted</td>
+                      <td className="py-2 px-3 border text-center">3</td>
+                      <td className="py-2 px-3 border text-center">2</td>
+                      <td className="py-2 px-3 border">Moderate impact on availability with unlikely occurrence</td>
+                      <td className="py-2 px-3 border text-center font-medium">6</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Low</span></td>
+                      <td className="py-2 px-3 border">Implement TLS and API request signing</td>
+                      <td className="py-2 px-3 border text-center">Y</td>
+                      <td className="py-2 px-3 border text-center">2</td>
+                      <td className="py-2 px-3 border text-center"><span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">Low</span></td>
+                      <td className="py-2 px-3 border">
+                        <ol className="list-decimal pl-3 text-xs">
+                          <li>Maintain TLS 1.3 configuration</li>
+                          <li>Verify HMAC implementation</li>
+                          <li>Monitor for TLS downgrade attacks</li>
+                        </ol>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h3 className="font-semibold">STRIDE Mitigation Strategy Reference</h3>
+                  <div className="border p-3 rounded-md bg-white">
+                    <h4 className="font-medium text-red-800 mb-1">Spoofing Mitigations</h4>
+                    <ul className="list-disc pl-5 text-sm text-gray-700">
+                      <li>Strong authentication mechanisms</li>
+                      <li>Multi-factor authentication</li>
+                      <li>Digital signatures</li>
+                      <li>Unique identifiers and certificates</li>
+                    </ul>
+                  </div>
+                  <div className="border p-3 rounded-md bg-white">
+                    <h4 className="font-medium text-orange-800 mb-1">Tampering Mitigations</h4>
+                    <ul className="list-disc pl-5 text-sm text-gray-700">
+                      <li>Digital signatures</li>
+                      <li>File permissions and access controls</li>
+                      <li>Cryptographic hashes</li>
+                      <li>Input validation at all trust boundaries</li>
+                    </ul>
+                  </div>
+                  <div className="border p-3 rounded-md bg-white">
+                    <h4 className="font-medium text-yellow-800 mb-1">Repudiation Mitigations</h4>
+                    <ul className="list-disc pl-5 text-sm text-gray-700">
+                      <li>Secure audit logging</li>
+                      <li>Digital signatures for all transactions</li>
+                      <li>Timestamps with secure time source</li>
+                      <li>Strong user authentication and session management</li>
+                    </ul>
+                  </div>
                 </div>
-                <div className="border p-3 rounded-md bg-white">
-                  <h4 className="font-medium text-orange-800 mb-1">Tampering Mitigations</h4>
-                  <ul className="list-disc pl-5 text-sm text-gray-700">
-                    <li>Digital signatures</li>
-                    <li>File permissions and access controls</li>
-                    <li>Cryptographic hashes</li>
-                    <li>Input validation at all trust boundaries</li>
-                  </ul>
-                </div>
-                <div className="border p-3 rounded-md bg-white">
-                  <h4 className="font-medium text-yellow-800 mb-1">Repudiation Mitigations</h4>
-                  <ul className="list-disc pl-5 text-sm text-gray-700">
-                    <li>Secure audit logging</li>
-                    <li>Digital signatures for all transactions</li>
-                    <li>Timestamps with secure time source</li>
-                    <li>Strong user authentication and session management</li>
-                  </ul>
+                
+                <div className="space-y-4">
+                  <h3 className="font-semibold">&nbsp;</h3>
+                  <div className="border p-3 rounded-md bg-white">
+                    <h4 className="font-medium text-green-800 mb-1">Information Disclosure Mitigations</h4>
+                    <ul className="list-disc pl-5 text-sm text-gray-700">
+                      <li>Encryption (in transit and at rest)</li>
+                      <li>Access controls and authorization</li>
+                      <li>Data minimization policies</li>
+                      <li>Privacy enhancing technologies</li>
+                    </ul>
+                  </div>
+                  <div className="border p-3 rounded-md bg-white">
+                    <h4 className="font-medium text-blue-800 mb-1">Denial of Service Mitigations</h4>
+                    <ul className="list-disc pl-5 text-sm text-gray-700">
+                      <li>Resource quotas and rate limiting</li>
+                      <li>Scalable architecture</li>
+                      <li>Traffic filtering</li>
+                      <li>Redundant systems and failover</li>
+                    </ul>
+                  </div>
+                  <div className="border p-3 rounded-md bg-white">
+                    <h4 className="font-medium text-purple-800 mb-1">Elevation of Privilege Mitigations</h4>
+                    <ul className="list-disc pl-5 text-sm text-gray-700">
+                      <li>Principle of least privilege</li>
+                      <li>Strong authorization controls</li>
+                      <li>Input validation and sanitization</li>
+                      <li>Security context verification</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
               
-              <div className="space-y-4">
-                <h3 className="font-semibold">&nbsp;</h3>
-                <div className="border p-3 rounded-md bg-white">
-                  <h4 className="font-medium text-green-800 mb-1">Information Disclosure Mitigations</h4>
-                  <ul className="list-disc pl-5 text-sm text-gray-700">
-                    <li>Encryption (in transit and at rest)</li>
-                    <li>Access controls and authorization</li>
-                    <li>Data minimization policies</li>
-                    <li>Privacy enhancing technologies</li>
-                  </ul>
-                </div>
-                <div className="border p-3 rounded-md bg-white">
-                  <h4 className="font-medium text-blue-800 mb-1">Denial of Service Mitigations</h4>
-                  <ul className="list-disc pl-5 text-sm text-gray-700">
-                    <li>Resource quotas and rate limiting</li>
-                    <li>Scalable architecture</li>
-                    <li>Traffic filtering</li>
-                    <li>Redundant systems and failover</li>
-                  </ul>
-                </div>
-                <div className="border p-3 rounded-md bg-white">
-                  <h4 className="font-medium text-purple-800 mb-1">Elevation of Privilege Mitigations</h4>
-                  <ul className="list-disc pl-5 text-sm text-gray-700">
-                    <li>Principle of least privilege</li>
-                    <li>Strong authorization controls</li>
-                    <li>Input validation and sanitization</li>
-                    <li>Security context verification</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h3 className="font-semibold">Security Controls Implementation</h3>
-                <div className="border p-3 rounded-md bg-green-50">
-                  <h4 className="font-medium text-green-800 mb-1">Implemented Controls</h4>
-                  <ul className="list-disc pl-5 text-sm text-green-700">
-                    <li>Multi-factor authentication</li>
-                    <li>Data encryption at rest and in transit</li>
-                    <li>Web application firewall</li>
-                    <li>Network segmentation</li>
-                    <li>Secure coding practices</li>
-                  </ul>
-                </div>
-                <div className="border p-3 rounded-md bg-blue-50">
-                  <h4 className="font-medium text-blue-800 mb-1">Recommended Controls</h4>
-                  <ul className="list-disc pl-5 text-sm text-blue-700">
-                    <li>API gateway with rate limiting</li>
-                    <li>Zero trust network architecture</li>
-                    <li>Enhanced logging and monitoring</li>
-                    <li>Regular penetration testing</li>
-                    <li>Security key management system</li>
-                  </ul>
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <h3 className="font-semibold">Defense Strategy</h3>
-                <div className="border p-3 rounded-md bg-purple-50">
-                  <h4 className="font-medium text-purple-800 mb-1">Attack Surface Reduction</h4>
-                  <ul className="list-disc pl-5 text-sm text-purple-700">
-                    <li>Minimize third-party integrations</li>
-                    <li>Implement least privilege access model</li>
-                    <li>Disable unnecessary services and features</li>
-                    <li>Regular security code reviews</li>
-                    <li>Vulnerability management program</li>
-                  </ul>
-                </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="border p-3 rounded-md bg-gray-50">
-                  <h4 className="font-medium text-gray-800 mb-1">Defense in Depth Strategy</h4>
-                  <ul className="list-disc pl-5 text-sm text-gray-700">
-                    <li>Input validation at multiple layers</li>
-                    <li>Sequential security controls</li>
-                    <li>Redundant security mechanisms</li>
-                    <li>Isolated security zones</li>
-                    <li>Regular security assessments</li>
+                  <h4 className="font-medium text-gray-800 mb-2">Mitigation Implementation Guide</h4>
+                  <p className="text-sm text-gray-600 mb-3">
+                    For each identified risk, follow these steps to develop an effective mitigation plan:
+                  </p>
+                  <ol className="list-decimal pl-5 text-sm text-gray-600 space-y-1">
+                    <li>Identify security controls that address the specific threat</li>
+                    <li>Evaluate each control for effectiveness and implementation feasibility</li>
+                    <li>Prioritize controls based on risk severity and implementation complexity</li>
+                    <li>Document detailed implementation steps for each control</li>
+                    <li>Assign implementation responsibility and deadlines</li>
+                    <li>Establish metrics to measure control effectiveness</li>
+                    <li>Plan for post-implementation validation testing</li>
+                  </ol>
+                </div>
+                
+                <div className="border p-3 rounded-md bg-gray-50">
+                  <h4 className="font-medium text-gray-800 mb-2">Healthcare-Specific Considerations</h4>
+                  <p className="text-sm text-gray-600 mb-3">
+                    For healthcare environments, also consider these specialized security controls:
+                  </p>
+                  <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+                    <li><span className="font-medium">PHI Protection:</span> Implement specific controls for protected health information</li>
+                    <li><span className="font-medium">HIPAA Alignment:</span> Ensure controls satisfy HIPAA Security Rule requirements</li>
+                    <li><span className="font-medium">Medical Device Integration:</span> Address unique risks of medical device connectivity</li>
+                    <li><span className="font-medium">Clinical Workflow Impact:</span> Evaluate security control impact on clinical operations</li>
+                    <li><span className="font-medium">Emergency Access:</span> Design break-glass procedures for emergency scenarios</li>
+                    <li><span className="font-medium">Audit Trail:</span> Implement comprehensive audit logging for all PHI access</li>
                   </ul>
                 </div>
               </div>

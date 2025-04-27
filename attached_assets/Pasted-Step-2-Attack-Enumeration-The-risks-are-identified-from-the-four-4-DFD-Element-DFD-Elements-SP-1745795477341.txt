@@ -1,0 +1,93 @@
+Step 2. Attack Enumeration
+The risks are identified from the four (4) DFD Element:
+DFD Elements	SPOOFING	TAMPERING	REPUDIATION	INFORMATION DISCLOSURE	DOS	ESCALATION OF PRIVILEGE
+Entity
+-ECS Faregate; Application Containers (Docker)
+-Doppio (back-frontend)
+-Okta IDp (tenancy auth) -AWS Cognito (User authentication)
+-Kafka (data stream pipeline)
+-Snowflakes (data analytics)	 
+	 
+		
+Data flow
+User<->
+Affiliate website
+<->API AFW||Non-API <-> (Loan, Risk service) <-> Doppio Backend <-> Create Account<->DB		 
+	 
+ 
+
+Data store
+-NoSQL DynamoDB
+
+		 
+ 
+ 
+ 
+
+Processes
+-AWF microservice s
+**Onboarding**
+-Affiliate workflow service
+-Loan application service
+-Risk service
+-Doppio
+	 
+ 
+ 
+ 
+ 
+ 
+
+Identified Risk 	Risk Description
+Elevation Of Privilege: Elevation Using Impersonation*	web Portal (Doppio/API:Payment service) may be able to impersonate the context of Web Member / User in order to gain additional privilege.
+Spoofing: 
+Spoofing the Mobile Member/User External Entity*	Mobile Member/User may be spoofed by an attacker and this may lead to unauthorized access to web Portal (Doppio/API:Payment service). Consider using a standard authentication mechanism to identify the external entity.
+Elevation Of Privilege: Elevation Using Impersonation	web Portal (Doppio/API:Payment service) may be able to impersonate the context of Mobile Member/User in order to gain additional privilege.
+Repudiation: 
+Potential Data Repudiation by web Portal (Doppio/API:Payment service)	web Portal (Doppio/API:Payment service) claims that it did not receive data from a source outside the trust boundary. Consider using logging or auditing to record the source, time, and summary of the received data.
+Denial Of Service: 
+Potential Process Crash or Stop for web Portal (Doppio/API:Payment service)	web Portal (Doppio/API:Payment service) crashes, halts, stops or runs slowly; in all cases violating an availability metric.
+Denial Of Service: 
+Data Flow HTTPS | API Request Is Potentially Interrupted	An external agent interrupts data flowing across a trust boundary in either direction.
+Elevation Of Privilege: 
+Web Portal (Doppio/API:Payment service) May be Subject to Elevation of Privilege Using Remote Code Execution	Mobile Member/User may be able to remotely execute code for web Portal (Doppio/API:Payment service).
+Elevation Of Privilege: Elevation by Changing the Execution Flow in web Portal (Doppio/API:Payment service)	An attacker may pass data into web Portal (Doppio/API:Payment service) in order to change the flow of program execution within web Portal (Doppio/API:Payment service) to the attacker's choosing.
+Repudiation: 
+Potential Data Repudiation by web Portal (Doppio/API:Payment service)	web Portal (Doppio/API:Payment service) claims that it did not receive data from a source outside the trust boundary. Consider using logging or auditing to record the source, time, and summary of the received data.
+Denial Of Service: 
+Potential Process Crash or Stop for web Portal (Doppio/API:Payment service)	web Portal (Doppio/API:Payment service) crashes, halts, stops or runs slowly; in all cases violating an availability metric.
+Denial Of Service: 
+Data Flow HTTPS | API Request Is Potentially Interrupted	An external agent interrupts data flowing across a trust boundary in either direction.
+Elevation Of Privilege: 
+Web Portal (Doppio/API:Payment service) May be Subject to Elevation of Privilege Using Remote Code Execution	Web Member / User may be able to remotely execute code for web Portal (Doppio/API:Payment service).
+Elevation Of Privilege:
+Elevation by Changing the Execution Flow in web Portal (Doppio/API:Payment service)	An attacker may pass data into web Portal (Doppio/API:Payment service) in order to change the flow of program execution within web Portal (Doppio/API:Payment service) to the attacker's choosing.
+Spoofing:
+Spoofing of the Mobile Member/User External Destination Entity	Mobile Member/User may be spoofed by an attacker, and this may lead to data being sent to the attacker's target instead of Mobile Member/User. Consider using a standard authentication mechanism to identify the external entity.
+Repudiation: 
+External Entity Mobile Member/User External Destination Entity	Mobile Member/User claims that it did not receive data from a process on the other side of the trust boundary. Consider using logging or auditing to record the source, time, and summary of the received data.
+Denial Of Service: 
+Data Flow HTTPS | API Response Is Potentially Interrupted	An external agent interrupts data flowing across a trust boundary in either direction.
+Spoofing: 
+Spoofing the Mobile Member/User External Entity	Web Member / User may be spoofed by an attacker and this may lead to data being sent to the attacker's target instead of Web Member / User. Consider using a standard authentication mechanism to identify the external entity.
+Repudiation: 
+External Entity Web Member / User Potentially Denies Receiving Data	Web Member / User claims that it did not receive data from a process on the other side of the trust boundary. Consider using logging or auditing to record the source, time, and summary of the received data.
+Denial Of Service: 
+Data Flow HTTPS | API Response Is Potentially Interrupted	An external agent interrupts data flowing across a trust boundary in either direction.
+Elevation Of Privilege: Elevation by Changing the Execution Flow in Kafka (data stream)	An attacker may pass data into Kafka (data stream) in order to change the flow of program execution within Kafka (data stream) to the attacker's choosing.
+Elevation Of Privilege: 
+Kafka (data stream) May be Subject to Elevation of Privilege Using Remote Code Execution	web Portal (Doppio/API:Payment service) may be able to remotely execute code for Kafka (data stream).
+Elevation Of Privilege: Elevation Using Impersonation	Kafka (data stream) may be able to impersonate the context of web Portal (Doppio/API:Payment service) in order to gain additional privilege.
+Denial Of Service: 
+Data Flow HTTPS | API Request Is Potentially Interrupted*	An external agent interrupts data flowing across a trust boundary in either direction.
+Denial Of Service: 
+Potential Process Crash or Stop for Kafka (data stream)	Kafka (data stream) crashes, halts, stops or runs slowly; in all cases violating an availability metric.
+Information Disclosure: 
+Weak Authentication Scheme *	Custom authentication schemes are susceptible to common weaknesses such as weak credential change management, credential equivalence, easily guessable credentials, null credentials, downgrade authentication or a weak credential change management system. Consider the impact and potential mitigations for your custom authentication scheme.
+Repudiation: 
+Potential Data Repudiation by Kafka (data stream) *	Kafka (data stream) claims that it did not receive data from a source outside the trust boundary. Consider using logging or auditing to record the source, time, and summary of the received data.
+Tampering: Collision Attacks *	Attackers who can send a series of packets or messages may be able to overlap data. For example, packet 1 may be 100 bytes starting at offset 0. Packet 2 may be 100 bytes starting at offset 25. Packet 2 will overwrite 75 bytes of packet 1. Ensure you reassemble data before filtering it, and ensure you explicitly handle these sorts of cases.
+                                                                                                                                                                                                                 Chart 1.0 Data from TMT file
+
+
+
