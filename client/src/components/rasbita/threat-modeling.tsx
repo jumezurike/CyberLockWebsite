@@ -7,13 +7,20 @@ import {
   Shield, 
   AlertCircle, 
   FileText, 
-  CheckCircle, 
+  CheckCircle,
+  CheckSquare, 
   XCircle, 
   AlertTriangle,
   ArrowRightLeft,
   Lock,
   Workflow,
-  Key
+  Key,
+  ClipboardCheck,
+  FileCheck,
+  ShieldAlert,
+  Download,
+  Printer as PrinterIcon,
+  Share
 } from 'lucide-react';
 
 interface ThreatModelingProps {
@@ -36,12 +43,12 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
               Security architecture analysis using STRIDE methodology
             </CardDescription>
           </div>
-          <Badge className="bg-chart-4 hover:bg-chart-4/90">4-Step Process</Badge>
+          <Badge className="bg-chart-4 hover:bg-chart-4/90">5-Step Process</Badge>
         </div>
       </CardHeader>
       <CardContent className="pt-6">
         <Tabs defaultValue="step1" className="space-y-4" onValueChange={setCurrentStep}>
-          <TabsList className="grid grid-cols-4 gap-2">
+          <TabsList className="grid grid-cols-5 gap-2">
             <TabsTrigger value="step1" className={currentStep === "step1" ? "bg-chart-4 text-white" : ""}>
               Step 1: Data Flow
             </TabsTrigger>
@@ -53,6 +60,9 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
             </TabsTrigger>
             <TabsTrigger value="step4" className={currentStep === "step4" ? "bg-chart-4 text-white" : ""}>
               Step 4: Validation
+            </TabsTrigger>
+            <TabsTrigger value="step5" className={currentStep === "step5" ? "bg-chart-4 text-white" : ""}>
+              Step 5: Approval
             </TabsTrigger>
           </TabsList>
           
@@ -1260,6 +1270,298 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                     <input type="text" className="flex-grow p-2 border rounded text-sm" placeholder="Add your custom recommendation..." />
                     <button className="bg-blue-600 text-white px-3 py-2 rounded text-sm">Add</button>
                   </div>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+          
+          {/* STEP 5: Approval Recommendation */}
+          <TabsContent value="step5" className="space-y-6">
+            <div className="bg-green-50 p-4 rounded-md border border-green-200 mb-4">
+              <h3 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
+                <CheckSquare className="h-5 w-5" />
+                Approval Recommendation
+              </h3>
+              <p className="text-green-700 text-sm">
+                This final step synthesizes all the information gathered throughout the threat modeling process into a 
+                comprehensive approval recommendation. This report becomes the formal documentation of the security 
+                assessment and provides guidance on whether the assessed system meets security requirements.
+              </p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-md border border-gray-200 mb-6 shadow-sm">
+              <div className="flex justify-between items-center border-b border-gray-200 pb-4 mb-4">
+                <div className="flex items-center gap-3">
+                  <div className="bg-purple-100 rounded-full w-10 h-10 flex items-center justify-center">
+                    <ClipboardCheck className="h-5 w-5 text-chart-4" />
+                  </div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900">Threat Modeling Approval Recommendation</h3>
+                    <p className="text-xs text-gray-500">Generated on {new Date().toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <Badge className="bg-green-600">Final Report</Badge>
+              </div>
+              
+              <div className="space-y-6">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <File className="h-4 w-4 text-gray-500" />
+                    <h4 className="font-medium text-gray-800">Report Information</h4>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pl-6">
+                    <div>
+                      <p className="text-xs text-gray-500">Organization</p>
+                      <p className="text-sm font-medium text-gray-800">Healthcare Organization</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">System/Application</p>
+                      <p className="text-sm font-medium text-gray-800">Change Payment Account (CPA)</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Version</p>
+                      <p className="text-sm font-medium text-gray-800">1.0</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Date</p>
+                      <p className="text-sm font-medium text-gray-800">{new Date().toLocaleDateString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Assessed By</p>
+                      <p className="text-sm font-medium text-gray-800">CyberLockX Threat Modeling Team</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Report Status</p>
+                      <p className="text-sm font-medium text-purple-800">Final</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border-t border-gray-200 pt-4 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <FileText className="h-4 w-4 text-gray-500" />
+                    <h4 className="font-medium text-gray-800">Executive Summary</h4>
+                  </div>
+                  <div className="pl-6 text-sm text-gray-600 space-y-2">
+                    <p>
+                      The CyberLockX Threat Modeling Team conducted a comprehensive security assessment of the Change Payment 
+                      Account (CPA) application using the STRIDE methodology. The assessment identified several security risks 
+                      that require mitigation before production deployment.
+                    </p>
+                    <p>
+                      Based on our assessment, with the implementation of the recommended security controls, the overall 
+                      residual risk level is considered acceptable for continued use within the organization.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="border-t border-gray-200 pt-4 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4 text-yellow-500" />
+                    <h4 className="font-medium text-gray-800">Key Findings</h4>
+                  </div>
+                  <div className="pl-6 space-y-3">
+                    <div className="bg-yellow-50 p-3 rounded-md border border-yellow-100">
+                      <h5 className="text-sm font-medium text-yellow-800 mb-1">Service Account Privilege Concerns</h5>
+                      <p className="text-xs text-gray-600">
+                        We identified a service account (adv-affiliate-workflow). However, it is not clear what role the service 
+                        account has in the AuroraDB (backoffice_change_payment_account_request). It is not very clear which is the 
+                        right database table. We should identity the right database to ascertain immediate mitigation making sure 
+                        that the service account be given 'db_read' or 'db_write' privilege as best practice for Change Payment Account (CPA).
+                      </p>
+                    </div>
+                    
+                    <div className="bg-yellow-50 p-3 rounded-md border border-yellow-100">
+                      <h5 className="text-sm font-medium text-yellow-800 mb-1">Data Integrity Concerns</h5>
+                      <p className="text-xs text-gray-600">
+                        We noticed another risk directed to unverified integrity of data as they traverse the Matcha Lead 2.0 process 
+                        architecture. The system architecture and host instances are clear. The CPA Solution design documents traverse 
+                        other application including (Matcha engine). Matcha Lead 2.0 application does not transform information: This means 
+                        that any sensitive (PII) information is encrypted, and transferred with TLS 1.3 which seems not to be good enough.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border-t border-gray-200 pt-4 space-y-3">
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="h-4 w-4 text-green-500" />
+                    <h4 className="font-medium text-gray-800">Recommended Mitigations</h4>
+                  </div>
+                  <div className="pl-6">
+                    <ol className="list-decimal space-y-3 text-sm text-gray-600 pl-4">
+                      <li>
+                        <span className="font-medium">Service Account Privileges</span>: Implement least privilege access for 
+                        the service account (adv-affiliate-workflow), limiting it to only the specific database tables required 
+                        and with only 'db_read' or 'db_write' privileges as appropriate, not both.
+                      </li>
+                      <li>
+                        <span className="font-medium">Data Integrity</span>: Upgrade TLS implementation to ensure all data in 
+                        transit is properly secured. Implement additional integrity checks for data traversing between systems, 
+                        particularly for sensitive PII information.
+                      </li>
+                      <li>
+                        <span className="font-medium">Encryption Standards</span>: Ensure all sensitive information is encrypted 
+                        using industry-standard encryption algorithms both in transit and at rest.
+                      </li>
+                      <li>
+                        <span className="font-medium">Authentication</span>: Implement multi-factor authentication for all 
+                        administrative access to the system.
+                      </li>
+                      <li>
+                        <span className="font-medium">Audit Logging</span>: Enhance audit logging capabilities to capture all 
+                        security-relevant events, including authentication attempts, privilege changes, and data access.
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+                
+                <div className="border-t border-gray-200 pt-4 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <h4 className="font-medium text-gray-800">Approval Statement</h4>
+                  </div>
+                  <div className="pl-6 text-sm text-gray-600 space-y-3">
+                    <p>
+                      The security risks associated with the use of Change Payment Account (CPA) have been assessed by the 
+                      threat modeling team, and appropriate mitigation actions or controls have been identified. Based on successful 
+                      completion of the mitigation actions and implementation of mitigation controls, the threat modeling team 
+                      judges the overall residual level of risk, to be acceptable for continued use of the Change Payment Account 
+                      (CPA) within the Healthcare organization.
+                    </p>
+                    <p>
+                      This Report will be reviewed by the delegates of the organization, and risks reassessed for any future major 
+                      releases of the Change Payment Account (CPA) software and for any minor releases that impact security.
+                    </p>
+                    <p>
+                      The use of Change Payment Account (CPA) will be subject to Information Security Policies as applicable to all 
+                      staff and all systems within the organization.
+                    </p>
+                  </div>
+                </div>
+                
+                <div className="border-t border-gray-200 pt-4 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <ClipboardCheck className="h-4 w-4 text-gray-500" />
+                    <h4 className="font-medium text-gray-800">Approval Signatures</h4>
+                  </div>
+                  <div className="pl-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="border p-3 rounded-md">
+                      <div className="flex justify-between items-center mb-2">
+                        <p className="text-xs text-gray-500">Security Lead</p>
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Approved</Badge>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs text-gray-500">Name:</p>
+                          <p className="text-sm font-medium">_______________________</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs text-gray-500">Date:</p>
+                          <p className="text-sm font-medium">_______________________</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs text-gray-500">Signature:</p>
+                          <p className="text-sm font-medium">_______________________</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="border p-3 rounded-md">
+                      <div className="flex justify-between items-center mb-2">
+                        <p className="text-xs text-gray-500">CTO/CISO</p>
+                        <Badge className="bg-green-100 text-green-800 hover:bg-green-100">Approved</Badge>
+                      </div>
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs text-gray-500">Name:</p>
+                          <p className="text-sm font-medium">_______________________</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs text-gray-500">Date:</p>
+                          <p className="text-sm font-medium">_______________________</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <p className="text-xs text-gray-500">Signature:</p>
+                          <p className="text-sm font-medium">_______________________</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border-t border-gray-200 pt-4">
+                  <div className="flex gap-3">
+                    <a href="#" className="flex items-center gap-1 px-3 py-2 text-xs text-white bg-chart-4 rounded-md">
+                      <FileDown className="h-4 w-4" />
+                      Download Report (PDF)
+                    </a>
+                    <a href="#" className="flex items-center gap-1 px-3 py-2 text-xs text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                      <Printer className="h-4 w-4" />
+                      Print Report
+                    </a>
+                    <a href="#" className="flex items-center gap-1 px-3 py-2 text-xs text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
+                      <Share2 className="h-4 w-4" />
+                      Share Report
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
+              <h3 className="font-medium text-gray-800 mb-3">Customize Approval Report</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                You can customize the approval recommendation report to include specific findings, recommendations, and conclusions 
+                that are relevant to your organization and the assessed system.
+              </p>
+              
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">System/Application Name</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-2 border rounded text-sm" 
+                    defaultValue="Change Payment Account (CPA)"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">Organization Name</label>
+                  <input 
+                    type="text" 
+                    className="w-full p-2 border rounded text-sm"
+                    defaultValue="Healthcare Organization" 
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">Key Findings</label>
+                  <textarea
+                    className="w-full p-2 border rounded text-sm h-32" 
+                    defaultValue="We identified a service account (adv-affiliate-workflow). However, it is not clear what role the service account has in the AuroraDB (backoffice_change_payment_account_request). It is not very clear which is the right database table."
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">Recommended Mitigations</label>
+                  <textarea
+                    className="w-full p-2 border rounded text-sm h-32"
+                    defaultValue="Implement least privilege access for the service account (adv-affiliate-workflow), limiting it to only the specific database tables required and with only 'db_read' or 'db_write' privileges as appropriate, not both."
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-gray-700">Approval Statement</label>
+                  <textarea
+                    className="w-full p-2 border rounded text-sm h-32"
+                    defaultValue="The security risks associated with the use of Change Payment Account (CPA) have been assessed by the threat modeling team, and appropriate mitigation actions or controls have been identified. Based on successful completion of the mitigation actions and implementation of mitigation controls, the threat modeling team judges the overall residual level of risk, to be acceptable for continued use of the Change Payment Account (CPA) within the Healthcare organization."
+                  />
+                </div>
+                
+                <div className="flex gap-3">
+                  <button className="px-4 py-2 bg-chart-4 text-white rounded text-sm">Update Report</button>
+                  <button className="px-4 py-2 bg-gray-100 text-gray-700 rounded text-sm">Reset to Default</button>
                 </div>
               </div>
             </div>
