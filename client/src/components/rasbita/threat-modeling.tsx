@@ -337,59 +337,121 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
               </div>
             </div>
             
-            <div className="space-y-4">
-              <h3 className="font-semibold">Example Threat Categories by Severity</h3>
-              <p className="text-gray-600 text-sm mb-2">
-                Below are examples of how we'll categorize threats for your system once we've completed the analysis. 
-                The actual threats will be specific to your architecture, compliance requirements, and risk profile.
+            <div className="bg-gray-50 p-4 rounded-md border border-gray-200 mb-6">
+              <h3 className="font-semibold text-gray-800 mb-3">STRIDE Analysis Matrix Example</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Below is an example of how we map DFD elements against STRIDE categories to identify potential threats. 
+                During consultation, we'll create a customized matrix specific to your architecture.
               </p>
+              
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="py-2 px-3 border text-left text-xs font-medium text-gray-600 uppercase tracking-wider">DFD Elements</th>
+                      <th className="py-2 px-3 border text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Spoofing</th>
+                      <th className="py-2 px-3 border text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Tampering</th>
+                      <th className="py-2 px-3 border text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Repudiation</th>
+                      <th className="py-2 px-3 border text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Info Disclosure</th>
+                      <th className="py-2 px-3 border text-left text-xs font-medium text-gray-600 uppercase tracking-wider">DoS</th>
+                      <th className="py-2 px-3 border text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Elevation</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="py-2 px-3 border font-medium">Entity (Users, Auth Systems)</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border"></td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border"></td>
+                      <td className="py-2 px-3 border"></td>
+                      <td className="py-2 px-3 border">✓</td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border font-medium">Data Flows (API requests/responses)</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border"></td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border font-medium">Data Stores (Databases, Storage)</td>
+                      <td className="py-2 px-3 border"></td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border"></td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border font-medium">Processes (Services, Applications)</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                      <td className="py-2 px-3 border">✓</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="font-semibold">Sample Identified Threats (Based on Microsoft TMT)</h3>
+              <p className="text-gray-600 text-sm mb-2">
+                Below are sample threats that might be identified during the analysis. During our consultation, 
+                we'll generate a complete list tailored to your specific architecture:
+              </p>
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="border p-3 rounded-md bg-red-50">
-                  <h4 className="font-medium text-red-800 mb-1 flex items-center gap-1">
+                  <h4 className="font-medium text-red-800 mb-2 flex items-center gap-1">
                     <AlertCircle className="h-4 w-4" />
-                    Critical Threats (Score 16-25)
+                    Privilege Elevation Risks
                   </h4>
-                  <ul className="list-disc pl-5 text-sm text-red-700">
-                    <li>SQL Injection targeting patient data (S:5, I:5)</li>
-                    <li>Ransomware affecting critical systems (S:4, I:5)</li>
-                    <li>Privilege escalation in admin interface (S:4, I:5)</li>
-                    <li>Authentication bypass in patient portal (S:3, I:5)</li>
+                  <ul className="list-disc pl-5 text-sm text-red-700 space-y-2">
+                    <li><span className="font-medium">Elevation Using Impersonation:</span> Portal may impersonate user context to gain additional privileges</li>
+                    <li><span className="font-medium">Remote Code Execution:</span> External entities may remotely execute code in application services</li>
+                    <li><span className="font-medium">Changing Execution Flow:</span> Attackers may pass data to change program execution flow</li>
                   </ul>
                 </div>
+                
                 <div className="border p-3 rounded-md bg-orange-50">
-                  <h4 className="font-medium text-orange-800 mb-1 flex items-center gap-1">
+                  <h4 className="font-medium text-orange-800 mb-2 flex items-center gap-1">
                     <AlertTriangle className="h-4 w-4" />
-                    High Risk Threats (Score 10-15)
+                    Spoofing Risks
                   </h4>
-                  <ul className="list-disc pl-5 text-sm text-orange-700">
-                    <li>Session hijacking in user portal (S:3, I:4)</li>
-                    <li>Cross-site scripting in search functionality (S:4, I:3)</li>
-                    <li>Third-party API data exposure (S:3, I:4)</li>
-                    <li>Weak authentication scheme (S:3, I:4)</li>
+                  <ul className="list-disc pl-5 text-sm text-orange-700 space-y-2">
+                    <li><span className="font-medium">User Spoofing:</span> External user may be spoofed, leading to unauthorized access</li>
+                    <li><span className="font-medium">Destination Spoofing:</span> Entities may be spoofed, causing data to be sent to attacker's target</li>
+                    <li><span className="font-medium">Service Spoofing:</span> Authentication services may be spoofed to capture credentials</li>
                   </ul>
                 </div>
+                
                 <div className="border p-3 rounded-md bg-yellow-50">
-                  <h4 className="font-medium text-yellow-800 mb-1 flex items-center gap-1">
+                  <h4 className="font-medium text-yellow-800 mb-2 flex items-center gap-1">
                     <AlertTriangle className="h-4 w-4" />
-                    Medium Risk Threats (Score 5-9)
+                    Denial of Service Risks
                   </h4>
-                  <ul className="list-disc pl-5 text-sm text-yellow-700">
-                    <li>Insecure direct object references (S:3, I:3)</li>
-                    <li>Sensitive data exposure in logs (S:2, I:4)</li>
-                    <li>Broken authentication mechanisms (S:2, I:4)</li>
-                    <li>API endpoint without rate limiting (S:3, I:2)</li>
+                  <ul className="list-disc pl-5 text-sm text-yellow-700 space-y-2">
+                    <li><span className="font-medium">Process Crash:</span> Services may crash, halt, or run slowly, violating availability metrics</li>
+                    <li><span className="font-medium">Data Flow Interruption:</span> External agents may interrupt data flowing across trust boundaries</li>
+                    <li><span className="font-medium">Resource Exhaustion:</span> Systems may be overwhelmed by excessive requests</li>
                   </ul>
                 </div>
+                
                 <div className="border p-3 rounded-md bg-blue-50">
-                  <h4 className="font-medium text-blue-800 mb-1 flex items-center gap-1">
+                  <h4 className="font-medium text-blue-800 mb-2 flex items-center gap-1">
                     <AlertTriangle className="h-4 w-4" />
-                    Low Risk Threats (Score 1-4)
+                    Repudiation & Information Disclosure Risks
                   </h4>
-                  <ul className="list-disc pl-5 text-sm text-blue-700">
-                    <li>Verbose error messages (S:2, I:2)</li>
-                    <li>Missing HTTP security headers (S:2, I:2)</li>
-                    <li>Insecure cookie attributes (S:2, I:2)</li>
-                    <li>Software version disclosure (S:1, I:2)</li>
+                  <ul className="list-disc pl-5 text-sm text-blue-700 space-y-2">
+                    <li><span className="font-medium">Data Repudiation:</span> Services claim they did not receive data from external sources</li>
+                    <li><span className="font-medium">Weak Authentication:</span> Custom authentication schemes susceptible to weaknesses</li>
+                    <li><span className="font-medium">Collision Attacks:</span> Overlapping data in packet or message sequences can be exploited</li>
                   </ul>
                 </div>
               </div>
@@ -404,10 +466,47 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                 Mitigation Strategies
               </h3>
               <p className="text-green-700 text-sm">
-                Mitigation strategies address each identified risk by either updating system design, 
-                introducing security controls, or accepting the risk after assessment. Each STRIDE category 
-                has specific mitigation approaches to counter the particular threat type.
+                For each identified threat from Step 2, we'll develop custom mitigation strategies based on your 
+                organization's security posture, existing controls, and resource constraints. This collaborative
+                process ensures that security controls are practical, cost-effective, and aligned with your compliance requirements.
               </p>
+            </div>
+            
+            <div className="bg-white p-5 rounded-md border border-gray-200 mb-6">
+              <h3 className="font-semibold text-gray-800 mb-3">Mitigation Strategy Development Process</h3>
+              <p className="text-gray-700 text-sm mb-4">
+                Our security experts will work with your team to develop a mitigation plan tailored to your specific needs.
+                This interactive process requires additional input about your environment and constraints.
+              </p>
+              
+              <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200 mb-4">
+                <h4 className="font-medium text-yellow-800 mb-2">Customer Input Required</h4>
+                <p className="text-sm text-yellow-700 mb-2">
+                  To develop effective mitigations, we'll need the following information:
+                </p>
+                <ul className="list-disc pl-5 text-sm text-yellow-700 space-y-1">
+                  <li>Current security controls and their effectiveness</li>
+                  <li>Security budget and resource constraints</li>
+                  <li>Implementation timeline requirements</li>
+                  <li>Technical environment limitations</li>
+                  <li>Compliance requirements and audit schedules</li>
+                  <li>Security maturity level and appetite for change</li>
+                </ul>
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-md mb-4">
+                <h4 className="font-medium text-gray-800 mb-2">Our Mitigation Approach</h4>
+                <p className="text-sm text-gray-600 mb-2">
+                  We follow a structured process to develop mitigations:
+                </p>
+                <ol className="list-decimal pl-6 text-sm text-gray-600 space-y-1">
+                  <li>Match each identified threat with corresponding control strategies</li>
+                  <li>Prioritize mitigations based on risk severity and implementation complexity</li>
+                  <li>Develop a phased implementation roadmap</li>
+                  <li>Identify quick wins and critical controls for immediate implementation</li>
+                  <li>Align with industry-standard frameworks relevant to your sector</li>
+                </ol>
+              </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -533,10 +632,46 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                 Validation Process
               </h3>
               <p className="text-purple-700 text-sm">
-                The validation step ensures that our threat model accurately reflects the system being modeled
-                and that mitigations align with organizational policies and risk management objectives. 
-                This step confirms the completeness and effectiveness of the threat modeling process.
+                The final step validates that our threat model accurately reflects your system architecture, 
+                and that the proposed mitigations align with your organization's policies and risk tolerance.
+                This collaborative validation process confirms the completeness and effectiveness of the threat modeling exercise.
               </p>
+            </div>
+            
+            <div className="bg-white p-5 rounded-md border border-gray-200 mb-6">
+              <h3 className="font-semibold text-gray-800 mb-3">Validation Methodology</h3>
+              <p className="text-gray-700 text-sm mb-4">
+                The validation phase is an interactive process requiring your team's input and expertise to ensure 
+                that our assessment and recommendations align with your organizational context.
+              </p>
+              
+              <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200 mb-4">
+                <h4 className="font-medium text-yellow-800 mb-2">Customer Collaboration Required</h4>
+                <p className="text-sm text-yellow-700 mb-2">
+                  For effective validation, we'll need your team to:
+                </p>
+                <ul className="list-disc pl-5 text-sm text-yellow-700 space-y-1">
+                  <li>Review and confirm that our data flow diagram accurately represents your systems</li>
+                  <li>Verify that all critical assets and sensitive data flows have been identified</li>
+                  <li>Assess whether proposed mitigations align with your current capabilities</li>
+                  <li>Identify any organizational constraints that may impact implementation</li>
+                  <li>Confirm that the security controls meet regulatory requirements</li>
+                </ul>
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-md mb-4">
+                <h4 className="font-medium text-gray-800 mb-2">Validation Activities</h4>
+                <p className="text-sm text-gray-600 mb-2">
+                  Our validation process includes:
+                </p>
+                <ol className="list-decimal pl-6 text-sm text-gray-600 space-y-1">
+                  <li>Expert review session with your security and development teams</li>
+                  <li>Cross-referencing with your existing security policies and standards</li>
+                  <li>Gap analysis between proposed controls and current implementation</li>
+                  <li>Implementation roadmap development with priority-based scheduling</li>
+                  <li>Final documentation and handover of the complete threat modeling package</li>
+                </ol>
+              </div>
             </div>
             
             <div className="border p-4 rounded-md">
