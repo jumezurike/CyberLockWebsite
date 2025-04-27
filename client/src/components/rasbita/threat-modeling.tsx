@@ -46,7 +46,7 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
               Step 1: Data Flow
             </TabsTrigger>
             <TabsTrigger value="step2" className={currentStep === "step2" ? "bg-chart-4 text-white" : ""}>
-              Step 2: Attacks
+              Step 2: Attack Enumeration
             </TabsTrigger>
             <TabsTrigger value="step3" className={currentStep === "step3" ? "bg-chart-4 text-white" : ""}>
               Step 3: Mitigations
@@ -906,111 +906,204 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
             </div>
             
             <div className="bg-white p-5 rounded-md border border-gray-200 mb-6">
-              <h3 className="font-semibold text-gray-800 mb-3">Validation Methodology</h3>
+              <h3 className="font-semibold text-gray-800 mb-3">Validation Process Overview</h3>
               <p className="text-gray-700 text-sm mb-4">
-                The validation phase is an interactive process requiring your team's input and expertise to ensure 
-                that our assessment and recommendations align with your organizational context.
+                We'll work with your team to complete the validation process through an interactive consultation.
+                This meeting allows us to review all findings, adjust the model as needed, and finalize recommendations.
               </p>
               
               <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200 mb-4">
-                <h4 className="font-medium text-yellow-800 mb-2">Customer Collaboration Required</h4>
-                <p className="text-sm text-yellow-700 mb-2">
-                  For effective validation, we'll need your team to:
+                <h4 className="font-medium text-yellow-800 mb-2">Schedule Threat Model Validation Meeting</h4>
+                <p className="text-sm text-yellow-700 mb-3">
+                  Please provide your availability for a validation meeting with your key stakeholders:
                 </p>
-                <ul className="list-disc pl-5 text-sm text-yellow-700 space-y-1">
-                  <li>Review and confirm that our data flow diagram accurately represents your systems</li>
-                  <li>Verify that all critical assets and sensitive data flows have been identified</li>
-                  <li>Assess whether proposed mitigations align with your current capabilities</li>
-                  <li>Identify any organizational constraints that may impact implementation</li>
-                  <li>Confirm that the security controls meet regulatory requirements</li>
-                </ul>
-              </div>
-              
-              <div className="bg-gray-50 p-4 rounded-md mb-4">
-                <h4 className="font-medium text-gray-800 mb-2">Validation Activities</h4>
-                <p className="text-sm text-gray-600 mb-2">
-                  Our validation process includes:
-                </p>
-                <ol className="list-decimal pl-6 text-sm text-gray-600 space-y-1">
-                  <li>Expert review session with your security and development teams</li>
-                  <li>Cross-referencing with your existing security policies and standards</li>
-                  <li>Gap analysis between proposed controls and current implementation</li>
-                  <li>Implementation roadmap development with priority-based scheduling</li>
-                  <li>Final documentation and handover of the complete threat modeling package</li>
-                </ol>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-yellow-800">Preferred Meeting Date</label>
+                    <input type="date" className="w-full p-2 border rounded text-sm" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-yellow-800">Preferred Time (Your Timezone)</label>
+                    <input type="time" className="w-full p-2 border rounded text-sm" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-yellow-800">Key Stakeholders to Include</label>
+                    <input type="text" className="w-full p-2 border rounded text-sm" placeholder="Security Lead, Development Manager, etc." />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="block text-sm font-medium text-yellow-800">Meeting Format</label>
+                    <select className="w-full p-2 border rounded text-sm">
+                      <option>Virtual (Teams/Zoom)</option>
+                      <option>In-person</option>
+                      <option>Hybrid</option>
+                    </select>
+                  </div>
+                </div>
+                <div className="mt-3">
+                  <button className="bg-chart-4 text-white px-4 py-2 rounded text-sm">Schedule Validation Meeting</button>
+                </div>
               </div>
             </div>
             
-            <div className="border p-4 rounded-md">
+            <div className="border p-4 rounded-md mb-6">
               <h3 className="font-medium text-gray-800 mb-3">Validation Checklist</h3>
+              <p className="text-sm text-gray-600 mb-4">
+                Use this checklist during the validation meeting to ensure all aspects of the threat model have been verified.
+                Check each item once it has been reviewed and confirmed by your team.
+              </p>
               
-              <div className="space-y-4">
-                <div className="bg-gray-50 p-3 rounded-md">
-                  <div className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-medium">Data Flow Diagram Validation</h4>
-                      <p className="text-sm text-gray-600">The diagram accurately reflects the system/application being modeled, including all components, data flows, and trust boundaries.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-gray-50 p-3 rounded-md">
-                  <div className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-medium">Threat Coverage Validation</h4>
-                      <p className="text-sm text-gray-600">All six STRIDE threat categories have been applied to each component of the data flow diagram with no gaps in coverage.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-gray-50 p-3 rounded-md">
-                  <div className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-medium">Mitigation Effectiveness</h4>
-                      <p className="text-sm text-gray-600">Proposed mitigations are appropriate for the identified threats and will effectively reduce risk to acceptable levels.</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="bg-gray-50 p-3 rounded-md">
-                  <div className="flex items-start gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600 mt-0.5" />
-                    <div>
-                      <h4 className="font-medium">Policy Alignment</h4>
-                      <p className="text-sm text-gray-600">All mitigations are in line with organizational policies, compliance requirements, and risk management objectives.</p>
-                    </div>
-                  </div>
-                </div>
+              <div className="overflow-x-auto">
+                <table className="min-w-full bg-white border text-sm">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Validation Item</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Description</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Stakeholder</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Status</th>
+                      <th className="py-2 px-3 border text-left font-medium text-gray-700">Comments</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200">
+                    <tr>
+                      <td className="py-2 px-3 border">Data Flow Diagram Accuracy</td>
+                      <td className="py-2 px-3 border">Verify all components, data flows, and trust boundaries</td>
+                      <td className="py-2 px-3 border">Architecture Team</td>
+                      <td className="py-2 px-3 border">
+                        <select className="w-full p-1 border rounded text-xs">
+                          <option value="">Select status</option>
+                          <option value="approved">Approved</option>
+                          <option value="rejected">Needs Revision</option>
+                          <option value="na">Not Applicable</option>
+                        </select>
+                      </td>
+                      <td className="py-2 px-3 border">
+                        <input type="text" className="w-full p-1 border rounded text-xs" placeholder="Enter comments..." />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Threat Coverage Completeness</td>
+                      <td className="py-2 px-3 border">Confirm all STRIDE categories applied to each component</td>
+                      <td className="py-2 px-3 border">Security Team</td>
+                      <td className="py-2 px-3 border">
+                        <select className="w-full p-1 border rounded text-xs">
+                          <option value="">Select status</option>
+                          <option value="approved">Approved</option>
+                          <option value="rejected">Needs Revision</option>
+                          <option value="na">Not Applicable</option>
+                        </select>
+                      </td>
+                      <td className="py-2 px-3 border">
+                        <input type="text" className="w-full p-1 border rounded text-xs" placeholder="Enter comments..." />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Risk Assessment Accuracy</td>
+                      <td className="py-2 px-3 border">Validate impact and likelihood scores for all threats</td>
+                      <td className="py-2 px-3 border">Risk Management Team</td>
+                      <td className="py-2 px-3 border">
+                        <select className="w-full p-1 border rounded text-xs">
+                          <option value="">Select status</option>
+                          <option value="approved">Approved</option>
+                          <option value="rejected">Needs Revision</option>
+                          <option value="na">Not Applicable</option>
+                        </select>
+                      </td>
+                      <td className="py-2 px-3 border">
+                        <input type="text" className="w-full p-1 border rounded text-xs" placeholder="Enter comments..." />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Mitigation Effectiveness</td>
+                      <td className="py-2 px-3 border">Review if controls adequately address identified risks</td>
+                      <td className="py-2 px-3 border">Development Team</td>
+                      <td className="py-2 px-3 border">
+                        <select className="w-full p-1 border rounded text-xs">
+                          <option value="">Select status</option>
+                          <option value="approved">Approved</option>
+                          <option value="rejected">Needs Revision</option>
+                          <option value="na">Not Applicable</option>
+                        </select>
+                      </td>
+                      <td className="py-2 px-3 border">
+                        <input type="text" className="w-full p-1 border rounded text-xs" placeholder="Enter comments..." />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Implementation Feasibility</td>
+                      <td className="py-2 px-3 border">Assess technical feasibility of recommended controls</td>
+                      <td className="py-2 px-3 border">Engineering Team</td>
+                      <td className="py-2 px-3 border">
+                        <select className="w-full p-1 border rounded text-xs">
+                          <option value="">Select status</option>
+                          <option value="approved">Approved</option>
+                          <option value="rejected">Needs Revision</option>
+                          <option value="na">Not Applicable</option>
+                        </select>
+                      </td>
+                      <td className="py-2 px-3 border">
+                        <input type="text" className="w-full p-1 border rounded text-xs" placeholder="Enter comments..." />
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="py-2 px-3 border">Compliance Alignment</td>
+                      <td className="py-2 px-3 border">Verify controls meet regulatory requirements (HIPAA, etc.)</td>
+                      <td className="py-2 px-3 border">Compliance Officer</td>
+                      <td className="py-2 px-3 border">
+                        <select className="w-full p-1 border rounded text-xs">
+                          <option value="">Select status</option>
+                          <option value="approved">Approved</option>
+                          <option value="rejected">Needs Revision</option>
+                          <option value="na">Not Applicable</option>
+                        </select>
+                      </td>
+                      <td className="py-2 px-3 border">
+                        <input type="text" className="w-full p-1 border rounded text-xs" placeholder="Enter comments..." />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div className="border p-4 rounded-md bg-gray-50">
                 <h3 className="font-medium text-gray-800 mb-3">Risk Assessment Summary</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium">Critical Threats:</span>
-                    <Badge className="bg-red-500">4 identified</Badge>
+                    <div className="flex items-center gap-1">
+                      <input type="number" className="w-12 p-1 border rounded text-center text-sm" defaultValue="4" min="0" />
+                      <Badge className="bg-red-500">identified</Badge>
+                    </div>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium">High Risk Threats:</span>
-                    <Badge className="bg-orange-500">4 identified</Badge>
+                    <div className="flex items-center gap-1">
+                      <input type="number" className="w-12 p-1 border rounded text-center text-sm" defaultValue="4" min="0" />
+                      <Badge className="bg-orange-500">identified</Badge>
+                    </div>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium">Medium Risk Threats:</span>
-                    <Badge className="bg-yellow-500">4 identified</Badge>
+                    <div className="flex items-center gap-1">
+                      <input type="number" className="w-12 p-1 border rounded text-center text-sm" defaultValue="4" min="0" />
+                      <Badge className="bg-yellow-500">identified</Badge>
+                    </div>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-medium">Low Risk Threats:</span>
-                    <Badge className="bg-blue-500">4 identified</Badge>
+                    <div className="flex items-center gap-1">
+                      <input type="number" className="w-12 p-1 border rounded text-center text-sm" defaultValue="4" min="0" />
+                      <Badge className="bg-blue-500">identified</Badge>
+                    </div>
                   </div>
                   <div className="pt-2 border-t border-gray-200 mt-2">
                     <div className="flex justify-between items-center">
                       <span className="text-sm font-medium">Total Threats:</span>
-                      <Badge className="bg-purple-600">16 identified</Badge>
+                      <div className="flex items-center gap-1">
+                        <input type="number" className="w-12 p-1 border rounded text-center text-sm" defaultValue="16" min="0" />
+                        <Badge className="bg-purple-600">identified</Badge>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1020,46 +1113,153 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                 <h3 className="font-medium text-gray-800 mb-3">Implementation Recommendations</h3>
                 <div className="space-y-2">
                   <div className="flex items-start gap-2">
-                    <Key className="h-4 w-4 text-chart-4 mt-0.5 flex-shrink-0" />
+                    <input type="checkbox" className="mt-1" />
                     <p className="text-sm">Address all critical and high risk threats in the current development cycle</p>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Key className="h-4 w-4 text-chart-4 mt-0.5 flex-shrink-0" />
+                    <input type="checkbox" className="mt-1" />
                     <p className="text-sm">Schedule medium risk threat mitigations in the next release cycle</p>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Key className="h-4 w-4 text-chart-4 mt-0.5 flex-shrink-0" />
+                    <input type="checkbox" className="mt-1" />
                     <p className="text-sm">Document accepted risks with business justification</p>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Key className="h-4 w-4 text-chart-4 mt-0.5 flex-shrink-0" />
+                    <input type="checkbox" className="mt-1" />
                     <p className="text-sm">Establish ongoing threat modeling as part of the secure development lifecycle</p>
                   </div>
                   <div className="flex items-start gap-2">
-                    <Key className="h-4 w-4 text-chart-4 mt-0.5 flex-shrink-0" />
+                    <input type="checkbox" className="mt-1" />
                     <p className="text-sm">Set up continuous validation through regular penetration testing</p>
+                  </div>
+                  <div className="mt-3">
+                    <label className="block text-sm font-medium mb-1">Additional Recommendations:</label>
+                    <textarea className="w-full p-2 border rounded text-sm" rows={2} placeholder="Add your custom recommendations..."></textarea>
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="border p-4 rounded-md bg-green-50">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="font-medium text-green-800">Threat Model Approval Status</h3>
-                <Badge className="bg-green-600">Approved</Badge>
+            <div className="border p-4 rounded-md bg-green-50 mb-6">
+              <h3 className="font-medium text-green-800 mb-3">Threat Model Approval</h3>
+              <p className="text-sm text-green-700 mb-4">
+                The final threat model requires formal approval from key stakeholders. Please complete the form below:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-green-800">Document Version</label>
+                  <input type="text" className="w-full p-2 border rounded text-sm" defaultValue="1.0" />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-green-800">Review Date</label>
+                  <input type="date" className="w-full p-2 border rounded text-sm" defaultValue="2025-04-27" />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-green-800">Next Review Date</label>
+                  <input type="date" className="w-full p-2 border rounded text-sm" defaultValue="2025-10-27" />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium text-green-800">Approval Status</label>
+                  <select className="w-full p-2 border rounded text-sm">
+                    <option value="pending">Pending Approval</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected - Needs Revision</option>
+                  </select>
+                </div>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-gray-600" />
-                  <span>Document Version: 1.0</span>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-green-800 mb-2">Security Team Approval</label>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div>
+                      <input type="text" className="w-full p-2 border rounded text-sm" placeholder="Name" />
+                    </div>
+                    <div>
+                      <input type="text" className="w-full p-2 border rounded text-sm" placeholder="Title/Role" />
+                    </div>
+                    <div>
+                      <input type="date" className="w-full p-2 border rounded text-sm" placeholder="Date" />
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Workflow className="h-4 w-4 text-gray-600" />
-                  <span>Review Date: April 27, 2025</span>
+                
+                <div>
+                  <label className="block text-sm font-medium text-green-800 mb-2">Development Team Approval</label>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div>
+                      <input type="text" className="w-full p-2 border rounded text-sm" placeholder="Name" />
+                    </div>
+                    <div>
+                      <input type="text" className="w-full p-2 border rounded text-sm" placeholder="Title/Role" />
+                    </div>
+                    <div>
+                      <input type="date" className="w-full p-2 border rounded text-sm" placeholder="Date" />
+                    </div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Shield className="h-4 w-4 text-gray-600" />
-                  <span>Next Review: October 27, 2025</span>
+                
+                <div>
+                  <label className="block text-sm font-medium text-green-800 mb-2">Executive Approval</label>
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <div>
+                      <input type="text" className="w-full p-2 border rounded text-sm" placeholder="Name" />
+                    </div>
+                    <div>
+                      <input type="text" className="w-full p-2 border rounded text-sm" placeholder="Title/Role" />
+                    </div>
+                    <div>
+                      <input type="date" className="w-full p-2 border rounded text-sm" placeholder="Date" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 flex gap-3">
+                <button className="bg-chart-4 text-white px-4 py-2 rounded text-sm">Submit for Approval</button>
+                <button className="bg-white border border-gray-300 px-4 py-2 rounded text-sm">Save as Draft</button>
+                <button className="bg-white border border-gray-300 px-4 py-2 rounded text-sm">Export as PDF</button>
+              </div>
+            </div>
+            
+            <div className="border p-4 rounded-md bg-blue-50">
+              <h3 className="font-medium text-blue-800 mb-3">Additional Recommendations</h3>
+              <p className="text-sm text-blue-700 mb-4">
+                Based on our experience with similar systems, we recommend the following additional security measures:
+              </p>
+              
+              <div className="space-y-3">
+                <div className="bg-white p-3 rounded-md border border-blue-100">
+                  <h4 className="text-sm font-medium text-blue-800 mb-1">Regular Security Training</h4>
+                  <p className="text-xs text-gray-600">We recommend implementing quarterly security awareness training for all development and operations staff focused on secure coding practices and threat awareness.</p>
+                  <div className="flex justify-end mt-2">
+                    <button className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Add to Plan</button>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-3 rounded-md border border-blue-100">
+                  <h4 className="text-sm font-medium text-blue-800 mb-1">Automated Security Scanning</h4>
+                  <p className="text-xs text-gray-600">Implement automated security scanning in your CI/CD pipeline using tools like OWASP ZAP, SonarQube, and Snyk to detect vulnerabilities early in the development process.</p>
+                  <div className="flex justify-end mt-2">
+                    <button className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Add to Plan</button>
+                  </div>
+                </div>
+                
+                <div className="bg-white p-3 rounded-md border border-blue-100">
+                  <h4 className="text-sm font-medium text-blue-800 mb-1">Security Champions Program</h4>
+                  <p className="text-xs text-gray-600">Establish a security champions program where each development team designates a member responsible for security oversight and advocacy within their team.</p>
+                  <div className="flex justify-end mt-2">
+                    <button className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs">Add to Plan</button>
+                  </div>
+                </div>
+                
+                <div className="mt-3">
+                  <label className="block text-sm font-medium text-blue-800 mb-1">Custom Recommendation:</label>
+                  <div className="flex gap-2">
+                    <input type="text" className="flex-grow p-2 border rounded text-sm" placeholder="Add your custom recommendation..." />
+                    <button className="bg-blue-600 text-white px-3 py-2 rounded text-sm">Add</button>
+                  </div>
                 </div>
               </div>
             </div>
