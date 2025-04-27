@@ -36,14 +36,9 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
     const tierValue = parseInt(value);
     setGovernanceScore(tierValue);
     
-    // Apply constraints based on governance tier
-    if (tierValue === 4) {
-      // If Governance is set to Adaptive (Tier 4), Management must also be Adaptive
-      setManagementScore(4);
-    } else if (managementScore > tierValue) {
-      // Management tier can never be higher than governance tier
-      setManagementScore(tierValue);
-    }
+    // Always set management score to match governance score
+    // This ensures when selecting a tier for Governance, all lower tiers are also set
+    setManagementScore(tierValue);
   };
   
   // Ensure management tier is never higher than governance tier
@@ -190,21 +185,19 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                 Select the tier that best describes your current maturity level.
               </p>
               
-              {governanceScore === 4 && (
-                <div className="p-3 mb-4 bg-purple-50 rounded-md border-l-4 border-chart-4">
-                  <p className="text-sm text-purple-700">
-                    <span className="font-medium">Note:</span> Since you selected the Adaptive tier (Tier 4) for Governance, 
-                    Management has been automatically set to the Adaptive tier as well. 
-                    A truly adaptive organization must have both adaptive governance and management.
-                  </p>
-                </div>
-              )}
+              <div className="p-3 mb-4 bg-purple-50 rounded-md border-l-4 border-chart-4">
+                <p className="text-sm text-purple-700">
+                  <span className="font-medium">Note:</span> When selecting a tier for Governance, 
+                  the Management tier will automatically be set to match that tier.
+                  This ensures consistency between governance and management maturity levels.
+                </p>
+              </div>
               
               <RadioGroup 
                 value={managementScore?.toString() || "0"} 
                 onValueChange={handleManagementChange}
                 className="space-y-4"
-                disabled={governanceScore === 4} // Disable if Governance is set to Adaptive (Tier 4)
+                disabled={true} // Disabled because Management tier automatically matches Governance tier
               >
                 <div className="flex items-start space-x-3 p-4 rounded-md border-2 border-gray-200 hover:border-chart-4">
                   <RadioGroupItem value="0" id="management-0" className="mt-1" />
