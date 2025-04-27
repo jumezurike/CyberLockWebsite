@@ -227,19 +227,33 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div className="border rounded-md p-3 text-center">
                 <div className="text-lg font-bold text-red-500">{report.findings.filter(f => f.severity === 'High').length}</div>
                 <div className="text-sm">High Risks</div>
+                <div className="text-xs text-muted-foreground">Between 60%-80% probability</div>
               </div>
               <div className="border rounded-md p-3 text-center">
                 <div className="text-lg font-bold text-orange-500">{report.findings.filter(f => f.severity === 'Medium').length}</div>
                 <div className="text-sm">Medium Risks</div>
+                <div className="text-xs text-muted-foreground">Between 30%-60% probability</div>
               </div>
               <div className="border rounded-md p-3 text-center">
                 <div className="text-lg font-bold text-amber-500">{report.vulnerabilities.critical.length}</div>
                 <div className="text-sm">Critical Vulnerabilities</div>
+                <div className="text-xs text-muted-foreground">Greater than 80% probability</div>
               </div>
               <div className="border rounded-md p-3 text-center">
                 <div className="text-lg font-bold text-blue-500">{report.recommendations.immediate.length}</div>
                 <div className="text-sm">Immediate Actions</div>
+                <div className="text-xs text-muted-foreground">Below 30% probability</div>
               </div>
+            </div>
+            
+            <div className="mt-3 p-3 bg-gray-50 rounded-md text-sm">
+              <p className="font-medium mb-1">Risk Probability Categories:</p>
+              <ul className="list-disc ml-5 space-y-1">
+                <li><span className="font-semibold text-red-600">Critical</span> – Greater than 80% probability of occurrence</li>
+                <li><span className="font-semibold text-orange-600">High</span> – Between 60% and 80% probability of occurrence</li>
+                <li><span className="font-semibold text-amber-600">Medium</span> – Between 30% and 60% probability of occurrence</li>
+                <li><span className="font-semibold text-green-600">Low</span> – Below 30% probability of occurrence</li>
+              </ul>
             </div>
           </div>
           
