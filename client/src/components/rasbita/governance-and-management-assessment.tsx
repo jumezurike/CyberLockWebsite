@@ -93,6 +93,14 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                 Select the tier that best describes your current maturity level.
               </p>
               
+              <div className="p-3 mb-4 bg-purple-50 rounded-md border-l-4 border-chart-4">
+                <p className="text-sm text-purple-700">
+                  <span className="font-medium">Important:</span> When you select a tier for Governance, 
+                  the Management tier will automatically be set to the exact same tier.
+                  The two tiers must always match in your organization's assessment.
+                </p>
+              </div>
+              
               <RadioGroup 
                 value={governanceScore?.toString() || "0"} 
                 onValueChange={handleGovernanceChange}
@@ -156,9 +164,7 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                       Executives monitor cybersecurity risks in the same context as financial and other organizational risks. 
                       The organizational budget is based on an understanding of the current and predicted risk environment.
                     </p>
-                    <p className="text-sm font-medium mt-2 text-purple-600">
-                      Note: When selecting Adaptive tier for Governance, the Management tier will also be set to Adaptive.
-                    </p>
+
                   </div>
                 </div>
               </RadioGroup>
@@ -187,9 +193,9 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
               
               <div className="p-3 mb-4 bg-purple-50 rounded-md border-l-4 border-chart-4">
                 <p className="text-sm text-purple-700">
-                  <span className="font-medium">Note:</span> When selecting a tier for Governance, 
-                  the Management tier will automatically be set to match that tier.
-                  This ensures consistency between governance and management maturity levels.
+                  <span className="font-medium">Note:</span> The Management tier must always exactly match 
+                  the Governance tier. It cannot be higher or lower.
+                  This ensures consistency in your organization's cybersecurity maturity assessment.
                 </p>
               </div>
               
