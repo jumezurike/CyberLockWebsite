@@ -62,7 +62,7 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
               Step 4: Validation
             </TabsTrigger>
             <TabsTrigger value="step5" className={currentStep === "step5" ? "bg-chart-4 text-white" : ""}>
-              Step 5: Approval
+              Step 5: Approval Recommendation
             </TabsTrigger>
           </TabsList>
           
@@ -1280,7 +1280,7 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
             <div className="bg-green-50 p-4 rounded-md border border-green-200 mb-4">
               <h3 className="font-semibold text-green-800 mb-2 flex items-center gap-2">
                 <CheckSquare className="h-5 w-5" />
-                Approval Recommendation
+                Approval Recommendation Report
               </h3>
               <p className="text-green-700 text-sm">
                 This final step synthesizes all the information gathered throughout the threat modeling process into a 
@@ -1296,7 +1296,7 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                     <ClipboardCheck className="h-5 w-5 text-chart-4" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Threat Modeling Approval Recommendation</h3>
+                    <h3 className="font-semibold text-gray-900">Threat Modeling Approval Recommendation Report</h3>
                     <p className="text-xs text-gray-500">Generated on {new Date().toLocaleDateString()}</p>
                   </div>
                 </div>
@@ -1510,7 +1510,7 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
             </div>
             
             <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-              <h3 className="font-medium text-gray-800 mb-3">Customize Approval Report</h3>
+              <h3 className="font-medium text-gray-800 mb-3">Customize Approval Recommendation Report</h3>
               <p className="text-sm text-gray-600 mb-4">
                 You can customize the approval recommendation report to include specific findings, recommendations, and conclusions 
                 that are relevant to your organization and the assessed system.
