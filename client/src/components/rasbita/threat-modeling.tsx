@@ -1306,7 +1306,7 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
               <div className="space-y-6">
                 <div className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <File className="h-4 w-4 text-gray-500" />
+                    <FileCheck className="h-4 w-4 text-gray-500" />
                     <h4 className="font-medium text-gray-800">Report Information</h4>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pl-6">
@@ -1385,7 +1385,7 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                 
                 <div className="border-t border-gray-200 pt-4 space-y-3">
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="h-4 w-4 text-green-500" />
+                    <ShieldAlert className="h-4 w-4 text-green-500" />
                     <h4 className="font-medium text-gray-800">Recommended Mitigations</h4>
                   </div>
                   <div className="pl-6">
@@ -1418,7 +1418,7 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                 
                 <div className="border-t border-gray-200 pt-4 space-y-2">
                   <div className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    <CheckSquare className="h-4 w-4 text-green-500" />
                     <h4 className="font-medium text-gray-800">Approval Statement</h4>
                   </div>
                   <div className="pl-6 text-sm text-gray-600 space-y-3">
@@ -1493,15 +1493,15 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                 <div className="border-t border-gray-200 pt-4">
                   <div className="flex gap-3">
                     <a href="#" className="flex items-center gap-1 px-3 py-2 text-xs text-white bg-chart-4 rounded-md">
-                      <FileDown className="h-4 w-4" />
+                      <Download className="h-4 w-4" />
                       Download Report (PDF)
                     </a>
                     <a href="#" className="flex items-center gap-1 px-3 py-2 text-xs text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
-                      <Printer className="h-4 w-4" />
+                      <PrinterIcon className="h-4 w-4" />
                       Print Report
                     </a>
                     <a href="#" className="flex items-center gap-1 px-3 py-2 text-xs text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200">
-                      <Share2 className="h-4 w-4" />
+                      <Share className="h-4 w-4" />
                       Share Report
                     </a>
                   </div>
