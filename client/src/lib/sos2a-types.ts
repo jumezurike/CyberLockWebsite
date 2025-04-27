@@ -349,6 +349,10 @@ export interface AssessmentReport {
       detect: number;
       respond: number;
       recover: number;
+      // Legacy fields for compatibility
+      risk?: number;
+      securityControls?: number;
+      architecture?: number;
     };
   };
 }

@@ -203,19 +203,26 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             </div>
             
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-muted-foreground">RASBITA Score Components</h3>
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium text-muted-foreground">RASBITA Score Components</h3>
+                <div className="bg-purple-100 text-purple-900 font-bold px-3 py-1 rounded-full flex items-center">
+                  <span>Overall: {report.rasbitaScore.total}%</span>
+                  <span className="ml-1 text-xs px-2 py-0.5 bg-purple-800 text-white rounded-full">RASBITA™</span>
+                </div>
+              </div>
               <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="bg-primary/5 rounded p-2">
-                  <p className="text-xs text-muted-foreground">Risk</p>
-                  <p className="font-bold">{report.rasbitaScore.categories.risk}</p>
+                <div className="bg-primary/5 rounded-md p-2 border-l-4 border-red-500">
+                  <p className="text-xs text-muted-foreground">Cybersecurity Incident Risk Score</p>
+                  <p className="font-bold text-red-600">{report.rasbitaScore.categories.risk || report.rasbitaScore.categories.govern}</p>
                 </div>
-                <div className="bg-primary/5 rounded p-2">
-                  <p className="text-xs text-muted-foreground">Security</p>
-                  <p className="font-bold">{report.rasbitaScore.categories.securityControls}</p>
+                <div className="bg-primary/5 rounded-md p-2 border-l-4 border-purple-500">
+                  <p className="text-xs text-muted-foreground">Cybersecurity Gov & Mngt maturity level</p>
+                  <p className="font-bold text-purple-600">{report.rasbitaScore.categories.securityControls || report.rasbitaScore.categories.protect}</p>
                 </div>
-                <div className="bg-primary/5 rounded p-2">
-                  <p className="text-xs text-muted-foreground">Architecture</p>
-                  <p className="font-bold">{report.rasbitaScore.categories.architecture}</p>
+                <div className="bg-primary/5 rounded-md p-2 border-l-4 border-green-500">
+                  <p className="text-xs text-muted-foreground">NRRB (+ Spend on tools)</p>
+                  <p className="font-bold text-green-600">{report.rasbitaScore.categories.architecture || report.rasbitaScore.categories.respond}</p>
+                  <p className="text-[10px] text-muted-foreground">Positive value = spend makes sense</p>
                 </div>
               </div>
             </div>
