@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
@@ -10,6 +10,13 @@ import ThreatModeling from '@/components/rasbita/threat-modeling';
 export default function ThreatModelingPage() {
   const { toast } = useToast();
   const [showThreatModel, setShowThreatModel] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
+  
+  useEffect(() => {
+    // To confirm the component is actually rendering
+    console.log("ThreatModelingPage mounted");
+    setIsLoaded(true);
+  }, []);
   
   // Handle export to PDF functionality if needed
   const handleExportPdf = () => {
@@ -19,6 +26,10 @@ export default function ThreatModelingPage() {
       duration: 5000,
     });
   };
+
+  if (!isLoaded) {
+    return <div className="container mx-auto p-8 text-center">Loading threat modeling...</div>;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

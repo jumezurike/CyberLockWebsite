@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -15,8 +15,16 @@ import AboutUs from "@/pages/about-us";
 import RasbitaReport from "@/pages/rasbita-report";
 import RasbitaGovernance from "@/pages/rasbita-governance";
 import ThreatModelingPage from "@/pages/threat-modeling";
+import { useEffect } from "react";
 
 function Router() {
+  const [location] = useLocation();
+  
+  useEffect(() => {
+    // Debug current location
+    console.log("Current route:", location);
+  }, [location]);
+  
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
