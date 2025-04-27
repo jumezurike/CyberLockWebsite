@@ -64,14 +64,73 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                 Data Flow Diagram Analysis
               </h3>
               <p className="text-blue-700 text-sm">
-                The data flow diagram (DFD) helps establish the movement of data between trust boundaries. 
-                This critical first step identifies where security controls should be implemented based on 
-                how data moves through the system.
+                The process begins with analyzing your current architecture for data flow. We'll establish how 
+                data moves between different trust levels in your system, identifying components, trust boundaries,
+                and data flows that require security controls.
               </p>
             </div>
             
+            <div className="bg-white p-5 rounded-md border border-gray-200 mb-6">
+              <h3 className="font-semibold text-gray-800 mb-3">Customer Input Required</h3>
+              <p className="text-gray-700 text-sm mb-4">
+                To create an accurate data flow diagram, please provide one or more of the following:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                <div className="border p-3 rounded-md bg-gray-50">
+                  <h4 className="font-medium text-chart-4 mb-2">Acceptable Diagram Types</h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+                    <li>Data Flow Diagram (DFD)</li>
+                    <li>Swim Lane Diagram</li>
+                    <li>API Architectural Diagram</li>
+                    <li>Network Diagram</li>
+                    <li>System Architecture Diagram</li>
+                  </ul>
+                </div>
+                
+                <div className="border p-3 rounded-md bg-gray-50">
+                  <h4 className="font-medium text-chart-4 mb-2">Alternative Options</h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-600 space-y-1">
+                    <li>We can simulate a DFD using Microsoft Threat Modeling Tool</li>
+                    <li>For concept designs, we follow a shift-left approach</li>
+                    <li>We can work with you to create a data flow diagram</li>
+                    <li>For existing applications, we can analyze deployed architecture</li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200 mb-4">
+                <h4 className="font-medium text-yellow-800 mb-2 flex items-center gap-2">
+                  <AlertTriangle className="h-4 w-4" />
+                  Why This Step Matters
+                </h4>
+                <p className="text-sm text-yellow-700">
+                  This defensive approach ensures your application is developed with proper security from 
+                  inception. We'll establish all system components, identify assets that need protection, 
+                  document and rate threats, and define trust levels and boundaries that require specific 
+                  permissions.
+                </p>
+              </div>
+              
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-purple-100 rounded-full w-10 h-10 flex-shrink-0 flex items-center justify-center">
+                  <FileText className="h-5 w-5 text-chart-4" />
+                </div>
+                <label htmlFor="file-upload" className="cursor-pointer bg-chart-4 hover:bg-chart-4/90 text-white py-2 px-4 rounded text-sm">
+                  Upload Your Diagram
+                  <input id="file-upload" type="file" className="hidden" accept=".png,.jpg,.jpeg,.pdf,.docx,.vsdx,.xml,.drawio" />
+                </label>
+                <span className="text-xs text-gray-500">Upload files (PNG, JPG, PDF, DOCX, VSDX, Drawio)</span>
+              </div>
+            </div>
+            
             <div className="bg-gray-50 p-4 rounded-md border border-gray-200">
-              <h3 className="font-semibold text-chart-4 mb-2">Architectural Components</h3>
+              <h3 className="font-semibold text-chart-4 mb-2">DFD Component Examples</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                Below are examples of common components we'll identify in your data flow diagram. These are provided as 
+                reference - your actual architecture may contain different elements specific to your system.
+              </p>
+              
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="border p-3 rounded-md bg-white">
                   <h4 className="font-medium text-gray-800 mb-1">Entry Points</h4>
@@ -108,6 +167,10 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
             
             <div className="border p-4 rounded-md">
               <h3 className="font-semibold text-gray-800 mb-2">DFD Element Categories</h3>
+              <p className="text-gray-600 text-sm mb-4">
+                The Microsoft Threat Modeling Tool organizes elements into these four categories. We'll use
+                these to categorize components in your data flow diagram.
+              </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div className="bg-gray-50 p-3 rounded-md">
                   <h4 className="font-medium text-gray-800 mb-1">Entity Elements</h4>
@@ -157,10 +220,46 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
                 STRIDE Threat Analysis
               </h3>
               <p className="text-red-700 text-sm">
-                Using the STRIDE methodology, we identify potential threats to each component in the data flow diagram. 
-                This approach ensures complete coverage across all threat categories: Spoofing, Tampering, Repudiation, 
-                Information Disclosure, Denial of Service, and Elevation of Privilege.
+                Based on your completed data flow diagram, we'll systematically identify potential threats to each component
+                using the STRIDE methodology. This analysis ensures complete coverage across all threat categories: Spoofing, 
+                Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege.
               </p>
+            </div>
+            
+            <div className="bg-white p-5 rounded-md border border-gray-200 mb-6">
+              <h3 className="font-semibold text-gray-800 mb-3">Attack Enumeration Process</h3>
+              <p className="text-gray-700 text-sm mb-4">
+                In this step, we'll examine each DFD element from Step 1 and identify potential threats based on your
+                specific architecture. This requires an interactive consultation to understand your unique risks.
+              </p>
+              
+              <div className="p-4 bg-yellow-50 rounded-md border border-yellow-200 mb-4">
+                <h4 className="font-medium text-yellow-800 mb-2">Customer Input Required</h4>
+                <p className="text-sm text-yellow-700 mb-2">
+                  To accurately enumerate attacks for your system, we'll need to gather additional information:
+                </p>
+                <ul className="list-disc pl-5 text-sm text-yellow-700 space-y-1">
+                  <li>Existing security controls and countermeasures already in place</li>
+                  <li>Industry-specific threat intelligence relevant to your sector</li>
+                  <li>Historical security incidents or near-misses</li>
+                  <li>Risk tolerance and security priorities</li>
+                  <li>Regulatory/compliance requirements (HIPAA, GDPR, etc.)</li>
+                </ul>
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-md mb-4">
+                <h4 className="font-medium text-gray-800 mb-2">Analysis Methodology</h4>
+                <p className="text-sm text-gray-600 mb-2">
+                  Our security experts will perform the following activities during the attack enumeration:
+                </p>
+                <ol className="list-decimal pl-6 text-sm text-gray-600 space-y-1">
+                  <li>Categorize each DFD element by type (Process, Data Store, Data Flow, External Entity)</li>
+                  <li>Apply relevant STRIDE categories to each element based on its type</li>
+                  <li>Identify potential threats for each applicable STRIDE category</li>
+                  <li>Perform risk assessment to prioritize threats</li>
+                  <li>Document complete threat profile with severity levels</li>
+                </ol>
+              </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -239,7 +338,11 @@ export default function ThreatModeling({ report, standalone = false }: ThreatMod
             </div>
             
             <div className="space-y-4">
-              <h3 className="font-semibold">Identified Threats by Severity</h3>
+              <h3 className="font-semibold">Example Threat Categories by Severity</h3>
+              <p className="text-gray-600 text-sm mb-2">
+                Below are examples of how we'll categorize threats for your system once we've completed the analysis. 
+                The actual threats will be specific to your architecture, compliance requirements, and risk profile.
+              </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="border p-3 rounded-md bg-red-50">
                   <h4 className="font-medium text-red-800 mb-1 flex items-center gap-1">
