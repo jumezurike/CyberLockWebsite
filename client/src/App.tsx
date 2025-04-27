@@ -15,6 +15,8 @@ import AboutUs from "@/pages/about-us";
 import RasbitaReport from "@/pages/rasbita-report";
 import RasbitaGovernance from "@/pages/rasbita-governance";
 import ThreatModelingPage from "@/pages/threat-modeling";
+import ThreatModelingSimple from "@/pages/threat-modeling-simple";
+import DirectNavigation from "@/components/direct-navigation";
 import { useEffect } from "react";
 
 function Router() {
@@ -38,9 +40,12 @@ function Router() {
           <Route path="/about-us" component={AboutUs} />
           <Route path="/rasbita" component={RasbitaReport} />
           <Route path="/rasbita-governance" component={RasbitaGovernance} />
-          <Route path="/threat-modeling" component={ThreatModelingPage} />
+          <Route path="/threat-modeling" component={ThreatModelingSimple} />
+          <Route path="/threat-modeling-full" component={ThreatModelingPage} />
           <Route component={NotFound} />
         </Switch>
+        {/* Add direct navigation for testing */}
+        <DirectNavigation />
       </main>
       <Footer />
     </div>

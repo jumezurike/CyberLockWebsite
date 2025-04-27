@@ -7,19 +7,22 @@ export default function DirectNavigation() {
       <h3 className="font-bold text-gray-700 mb-2">Quick Navigation</h3>
       <div className="flex flex-col space-y-2">
         <Link href="/">
-          <a className="text-blue-600 hover:underline">Home</a>
+          <span className="text-blue-600 hover:underline cursor-pointer">Home</span>
         </Link>
         <Link href="/rasbita">
-          <a className="text-blue-600 hover:underline">RASBITA Report</a>
+          <span className="text-blue-600 hover:underline cursor-pointer">RASBITA Report</span>
         </Link>
         <Link href="/rasbita-governance">
-          <a className="text-blue-600 hover:underline">RASBITA Governance</a>
+          <span className="text-blue-600 hover:underline cursor-pointer">RASBITA Governance</span>
         </Link>
         <Link href="/threat-modeling">
-          <a className="text-blue-600 hover:underline">Threat Modeling</a>
+          <span className="text-blue-600 hover:underline cursor-pointer">Threat Modeling (Simple)</span>
+        </Link>
+        <Link href="/threat-modeling-full">
+          <span className="text-blue-600 hover:underline cursor-pointer">Threat Modeling (Full)</span>
         </Link>
         <Link href="/about-us">
-          <a className="text-blue-600 hover:underline">About Us</a>
+          <span className="text-blue-600 hover:underline cursor-pointer">About Us</span>
         </Link>
       </div>
     </div>
