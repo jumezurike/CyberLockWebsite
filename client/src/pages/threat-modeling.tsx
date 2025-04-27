@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Link } from "wouter";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
-import { PdfExport } from '@/components/rasbita/pdf-export';
-import { Shield, AlertCircle, AlertTriangle, AlertOctagon, CheckCircle, Lock, FileText } from 'lucide-react';
+import { Shield, ArrowRightLeft, AlertTriangle, FileText, Lock } from 'lucide-react';
 import ThreatModeling from '@/components/rasbita/threat-modeling';
 
 export default function ThreatModelingPage() {
@@ -17,8 +16,7 @@ export default function ThreatModelingPage() {
     console.log("ThreatModelingPage mounted");
     setIsLoaded(true);
   }, []);
-  
-  // Handle export to PDF functionality if needed
+
   const handleExportPdf = () => {
     toast({
       title: "PDF Export",
@@ -49,13 +47,14 @@ export default function ThreatModelingPage() {
           <CardContent>
             <div className="bg-blue-50 p-4 rounded-md mb-4">
               <h3 className="font-semibold text-blue-800 mb-2 flex items-center gap-2">
-                <Shield className="h-5 w-5" />
-                Why Threat Modeling Matters
+                <ArrowRightLeft className="h-5 w-5" />
+                4-Step STRIDE Methodology
               </h3>
               <p className="text-blue-700 text-sm">
-                Threat modeling is a crucial process that identifies potential security threats to your architecture 
-                and enables you to implement appropriate countermeasures. By systematically analyzing your system's 
-                components, data flows, and trust boundaries, you can proactively address vulnerabilities before they're exploited.
+                Our threat modeling follows a comprehensive 4-step process using the STRIDE methodology: 
+                (1) Data Flow Diagram Analysis, (2) Attack Enumeration, (3) Mitigation Strategies, and 
+                (4) Validation. This structured approach ensures complete coverage of all potential security 
+                vulnerabilities in your architecture.
               </p>
             </div>
             
@@ -106,7 +105,7 @@ export default function ThreatModelingPage() {
             </div>
             
             <div className="bg-gray-50 p-4 rounded-md">
-              <h3 className="font-semibold text-gray-700 mb-2">Threat Modeling Framework</h3>
+              <h3 className="font-semibold text-gray-700 mb-2">STRIDE Threat Categories</h3>
               <p className="text-gray-600 text-sm mb-4">
                 This assessment follows the industry-standard STRIDE methodology for threat modeling, analyzing 
                 your system across six key threat categories: Spoofing, Tampering, Repudiation, Information disclosure, 
@@ -172,7 +171,7 @@ export default function ThreatModelingPage() {
             </div>
           </div>
           
-          {/* The standalone threat modeling component */}
+          {/* The standalone threat modeling component with the 4-step process */}
           <ThreatModeling standalone={true} />
           
           {/* Additional resources */}

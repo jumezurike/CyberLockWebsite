@@ -16,10 +16,10 @@ export default function DirectNavigation() {
           <span className="text-blue-600 hover:underline cursor-pointer">RASBITA Governance</span>
         </Link>
         <Link href="/threat-modeling">
-          <span className="text-blue-600 hover:underline cursor-pointer">Threat Modeling (Simple)</span>
+          <span className="text-blue-600 hover:underline cursor-pointer">Threat Modeling (Overview)</span>
         </Link>
         <Link href="/threat-modeling-full">
-          <span className="text-blue-600 hover:underline cursor-pointer">Threat Modeling (Full)</span>
+          <span className="text-blue-600 hover:underline cursor-pointer">Threat Modeling (4-Step STRIDE)</span>
         </Link>
         <Link href="/about-us">
           <span className="text-blue-600 hover:underline cursor-pointer">About Us</span>
