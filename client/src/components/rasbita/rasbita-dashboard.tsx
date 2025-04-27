@@ -317,7 +317,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
               CISSP Risk Assessment Score by Threat and Impact Analysis
             </CardDescription>
             <div className="mt-2 text-xs text-gray-600 bg-gray-100 p-2 rounded">
-              <p><strong>Core Components:</strong> Cybersecurity Incident Risk Score, Cybersecurity Gov & Mngt maturity level, NRRB (+ Spend on tools), and threat modeling for architecture</p>
+              <p><strong>Core Components:</strong> Cybersecurity Incident Risk Score, Cybersecurity Gov & Mngt maturity level, NRRB (+ Spend on tools makes sense financially if positive), and threat modeling for architecture</p>
             </div>
           </CardHeader>
           <CardContent className="pt-6">
