@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { PdfExport } from '@/components/rasbita/pdf-export';
-import { Download, Mail, Share2, FileText, Save, Inbox, Calendar, CheckSquare, AlertCircle, AlertOctagon } from 'lucide-react';
+import { Download, Mail, Share2, FileText, Save, Inbox, Calendar, CheckSquare, AlertCircle, AlertOctagon, Shield } from 'lucide-react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
