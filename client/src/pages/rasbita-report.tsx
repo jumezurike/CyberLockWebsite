@@ -897,7 +897,7 @@ export default function RasbitaReportPage() {
                     <h3 className="font-medium text-blue-800">Required Assessment</h3>
                     <p className="text-sm text-blue-700 mt-1">
                       The Governance & Management assessment is a necessary first step in the RASBITA process. 
-                      Your assessment results will be included in both preliminary and comprehensive reports.
+                      Your assessment results will be included in both SOS2A preliminary and comprehensive reports.
                     </p>
                   </div>
                 </div>
