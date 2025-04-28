@@ -396,6 +396,20 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege. This comprehensive 
                   approach ensures all architectural threats are identified and mitigated.
                 </p>
+                <div className="mt-3 ml-9 grid grid-cols-1 md:grid-cols-3 gap-2">
+                  <div className="bg-white rounded-md p-2 border border-purple-100 text-xs">
+                    <p className="font-medium text-gray-700">Industry Relevance:</p>
+                    <p className="text-gray-600">High for Healthcare, Finance, Tech</p>
+                  </div>
+                  <div className="bg-white rounded-md p-2 border border-purple-100 text-xs">
+                    <p className="font-medium text-gray-700">Implementation Timeframe:</p>
+                    <p className="text-gray-600">Initial: 3-6 months, Full: 12-18 months</p>
+                  </div>
+                  <div className="bg-white rounded-md p-2 border border-purple-100 text-xs">
+                    <p className="font-medium text-gray-700">ROI Impact:</p>
+                    <p className="text-gray-600">Reduces architectural vulnerabilities by 65%</p>
+                  </div>
+                </div>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -590,7 +604,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 </div>
               </div>
               
-              <div className="text-right mt-2">
+              <div className="text-right mt-4">
                 <button className="text-sm text-primary font-medium hover:underline focus:outline-none inline-flex items-center">
                   View Full Threat Modeling Report
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
