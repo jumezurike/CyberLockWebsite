@@ -28,7 +28,7 @@ export default function Sos2aSection() {
     <section id="sos2a" className="py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold font-heading text-primary mb-4">Healthcare Organizational and System Security Analysis (SOS<sup>2</sup>A)</h2>
+          <h2 className="text-3xl font-bold font-heading text-primary mb-4">Healthcare Organizational and System Security Analysis (SOS²A)</h2>
           <p className="text-lg text-neutral-600 max-w-3xl mx-auto">Our comprehensive security analysis tool provides real-time audit, compliance proof, and threat prevention for healthcare organizations of all sizes.</p>
         </div>
 
@@ -49,7 +49,7 @@ export default function Sos2aSection() {
         <div className="bg-neutral-50 rounded-xl shadow-lg p-6 md:p-8">
           <div className="flex flex-col md:flex-row gap-8">
             <div className="md:w-1/3">
-              <h3 className="text-xl font-semibold font-heading mb-4 text-chart-4">SOS<sup>2</sup>A Assessment Tool</h3>
+              <h3 className="text-xl font-semibold font-heading mb-4 text-chart-4">SOS²A Assessment Tool</h3>
               <div className="bg-white rounded-lg shadow-md overflow-hidden">
                 <div className="bg-chart-4 text-white py-3 px-4">
                   <h4 className="font-medium">Assessment Steps</h4>

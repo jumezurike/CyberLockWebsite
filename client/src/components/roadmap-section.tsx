@@ -149,7 +149,7 @@ export default function RoadmapSection() {
       timeline: "Q4 2026",
       features: [
         "Elevating ethnic languages from translation-only status to foundational AI model components",
-        "AFAAI oracle of knowledge with the unified alphabet (Σ<sub>U</sub>) system",
+        "AFAAI oracle of knowledge with the unified alphabet (ΣU) system",
         "Keyless encryption resistant to quantum computing threats",
         "Authentic cultural and linguistic nuance preservation in AI interactions"
       ],

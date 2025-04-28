@@ -75,9 +75,9 @@ export default function AfaaiSection() {
               <h3 className="text-xl font-bold text-primary mb-6">The AFAAI Cyberdefense Innovation</h3>
               <div className="space-y-4">
                 <div className="bg-neutral-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-primary mb-2">Unified Alphabet System (Σ<sub>U</sub>)</h4>
+                  <h4 className="font-semibold text-primary mb-2">Unified Alphabet System (ΣU)</h4>
                   <p className="text-sm text-neutral-600">
-                    Our proprietary Σ<sub>U</sub> system enables AFAAI to process information across languages with unprecedented accuracy,
+                    Our proprietary ΣU system enables AFAAI to process information across languages with unprecedented accuracy,
                     creating a more secure environment for global businesses.
                   </p>
                 </div>
