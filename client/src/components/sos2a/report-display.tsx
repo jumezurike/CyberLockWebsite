@@ -71,19 +71,19 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="flex mb-2 items-center justify-between">
                     <div>
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-primary text-white">
-                        Step 3 of 4
+                        Step 3 of 5
                       </span>
                     </div>
                     <div className="text-right">
                       <span className="text-xs font-semibold inline-block text-primary">
-                        75% Complete
+                        60% Complete
                       </span>
                     </div>
                   </div>
                   <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                    <div style={{ width: "75%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+                    <div style={{ width: "60%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
                   </div>
-                  <div className="grid grid-cols-4 gap-2 text-xs text-center">
+                  <div className="grid grid-cols-5 gap-2 text-xs text-center">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">Inquiry & Questionnaire</p>
@@ -96,11 +96,16 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Preliminary Report</p>
-                      <p className="text-xs text-green-600">Qualitative Assessment</p>
+                      <p className="font-medium text-green-700">Architecture Analysis</p>
+                      <p className="text-xs text-green-600">Threat Modeling</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">4</div>
+                      <p className="text-muted-foreground">Preliminary Report</p>
+                      <p className="text-xs text-muted-foreground">Qualitative Assessment</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">5</div>
                       <p className="text-muted-foreground">Comprehensive Report</p>
                       <p className="text-xs text-muted-foreground">With Evidence Collection</p>
                     </div>
@@ -128,7 +133,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="flex mb-2 items-center justify-between">
                     <div>
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-green-500 text-white">
-                        Step 4 of 4
+                        Step 5 of 5
                       </span>
                     </div>
                     <div className="text-right">
@@ -140,7 +145,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
                     <div style={{ width: "100%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"></div>
                   </div>
-                  <div className="grid grid-cols-4 gap-2 text-xs text-center">
+                  <div className="grid grid-cols-5 gap-2 text-xs text-center">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">Inquiry & Questionnaire</p>
@@ -153,13 +158,18 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">Architecture Analysis</p>
+                      <p className="text-xs text-green-600">Threat Modeling</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">Preliminary Report</p>
                       <p className="text-xs text-green-600">Remediation Plan</p>
                     </div>
                     <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mx-auto">4</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mx-auto">5</div>
                       <p className="font-medium">Comprehensive Report</p>
-                      <p className="text-xs text-muted-foreground">Evidence-Based</p>
+                      <p className="text-xs text-green-600">Evidence-Based</p>
                     </div>
                   </div>
                 </div>
@@ -177,6 +187,12 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 and best practices. The purpose of this report is to illustrate the need for comprehensive monitoring, 
                 threat detection, and an effective incident response system.
               </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                As part of this assessment, we've conducted an architectural review using our STRIDE threat modeling methodology, 
+                which evaluates your systems for Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, 
+                and Elevation of Privilege threats. This analysis has identified architectural vulnerabilities and recommended 
+                mitigation controls that are incorporated into our overall risk assessment.
+              </p>
             </div>
           )}
           
@@ -190,6 +206,13 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 gaps, and provides a roadmap for continuous security improvement. The RASBITA scoring methodology offers
                 measurable metrics across risk, adversarial insight, security controls, business impact, information assurance,
                 threat intelligence, and architecture domains.
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Our assessment includes a comprehensive architectural risk analysis using the STRIDE threat modeling methodology.
+                This thorough evaluation has documented security controls implemented since the preliminary assessment and verified
+                their effectiveness through penetration testing and security validation. The threat modeling results show significant 
+                improvement in architectural security controls, with all critical architectural vulnerabilities successfully mitigated
+                as evidenced in the Approval Recommendation report.
               </p>
             </div>
           )}
@@ -265,10 +288,11 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           </div>
           
           <Tabs defaultValue="scorecard" className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-5 w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-6 w-full">
               <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
               <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
               <TabsTrigger value="risks">Risks & Vulnerabilities</TabsTrigger>
+              <TabsTrigger value="architecture">Architecture Analysis</TabsTrigger>
               <TabsTrigger value="compliance">Compliance Status</TabsTrigger>
               <TabsTrigger value="frameworks">Framework Control Gaps</TabsTrigger>
             </TabsList>
