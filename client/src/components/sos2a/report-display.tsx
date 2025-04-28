@@ -380,6 +380,227 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               </div>
             </TabsContent>
             
+            <TabsContent value="architecture" className="space-y-4 pt-4">
+              <div className="bg-purple-50 p-4 rounded-md border border-purple-100 mb-4">
+                <div className="flex items-center gap-3 mb-2">
+                  <div className="bg-purple-100 p-2 rounded-full">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-600">
+                      <path d="M21 9v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h10" />
+                      <path d="m16 2 5 5-9 9H7v-5l9-9Z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-purple-900 font-medium">STRIDE Threat Model Analysis</h3>
+                </div>
+                <p className="text-sm text-purple-700 ml-9">
+                  The STRIDE methodology evaluates system architecture against six threat categories: Spoofing, Tampering, 
+                  Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege. This comprehensive 
+                  approach ensures all architectural threats are identified and mitigated.
+                </p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="border rounded-md p-4 bg-white">
+                  <h3 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                      <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+                      <path d="M13 5v8" />
+                      <path d="M13 17v2" />
+                      <path d="M2 15h20" />
+                      <path d="M2 9h20" />
+                    </svg>
+                    Data Flow Diagram
+                  </h3>
+                  <div className="text-sm text-gray-600 space-y-2">
+                    <p>
+                      We analyzed your organization's architecture using data flow diagrams to map the movement of data across all system components. 
+                      This visual representation helped identify trust boundaries and potential vulnerability points.
+                    </p>
+                    <ul className="list-disc pl-5 text-xs text-gray-500 space-y-1">
+                      <li>External systems and data connections identified</li>
+                      <li>Trust boundaries between systems documented</li>
+                      <li>Data processing and storage locations mapped</li>
+                      <li>Authentication and access control points assessed</li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div className="border rounded-md p-4 bg-white">
+                  <h3 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500">
+                      <path d="m2 12 8-8 3 3-6 6 6 6-3 3-8-8Z" />
+                      <path d="M13 5h9v14h-9" />
+                    </svg>
+                    Attack Enumeration
+                  </h3>
+                  <div className="text-sm text-gray-600 space-y-2">
+                    <p>
+                      We applied the STRIDE methodology to identify all possible threat vectors across your architecture.
+                      Each component was systematically evaluated against the six threat categories.
+                    </p>
+                    <div className="grid grid-cols-2 gap-2 text-xs text-gray-500">
+                      <div className="border-l-2 border-red-300 pl-2">
+                        <p className="font-medium text-red-700">Spoofing</p>
+                        <p>3 threats identified</p>
+                      </div>
+                      <div className="border-l-2 border-orange-300 pl-2">
+                        <p className="font-medium text-orange-700">Tampering</p>
+                        <p>2 threats identified</p>
+                      </div>
+                      <div className="border-l-2 border-yellow-300 pl-2">
+                        <p className="font-medium text-yellow-700">Repudiation</p>
+                        <p>1 threat identified</p>
+                      </div>
+                      <div className="border-l-2 border-green-300 pl-2">
+                        <p className="font-medium text-green-700">Info Disclosure</p>
+                        <p>4 threats identified</p>
+                      </div>
+                      <div className="border-l-2 border-blue-300 pl-2">
+                        <p className="font-medium text-blue-700">Denial of Service</p>
+                        <p>2 threats identified</p>
+                      </div>
+                      <div className="border-l-2 border-purple-300 pl-2">
+                        <p className="font-medium text-purple-700">Elevation of Privilege</p>
+                        <p>2 threats identified</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div className="border rounded-md p-4 bg-white">
+                  <h3 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-500">
+                      <rect width="18" height="18" x="3" y="3" rx="2" />
+                      <path d="m9 9 6 6" />
+                      <path d="m15 9-6 6" />
+                    </svg>
+                    Mitigation Strategy
+                  </h3>
+                  <div className="text-sm text-gray-600 space-y-2">
+                    <p>
+                      For each identified threat, we developed specific mitigation controls based on industry best practices 
+                      and recommended security standards.
+                    </p>
+                    <div className="border-t border-gray-100 pt-2 space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs">Critical Threats Mitigated:</span>
+                        <span className="text-xs font-medium text-green-600">100%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-1.5">
+                        <div className="bg-green-600 h-1.5 rounded-full" style={{ width: "100%" }}></div>
+                      </div>
+                    </div>
+                    <div className="border-t border-gray-100 pt-2 space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs">High Threats Mitigated:</span>
+                        <span className="text-xs font-medium text-green-600">87%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-1.5">
+                        <div className="bg-green-600 h-1.5 rounded-full" style={{ width: "87%" }}></div>
+                      </div>
+                    </div>
+                    <div className="border-t border-gray-100 pt-2 space-y-1">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs">Medium Threats Mitigated:</span>
+                        <span className="text-xs font-medium text-amber-600">74%</span>
+                      </div>
+                      <div className="w-full bg-gray-200 rounded-full h-1.5">
+                        <div className="bg-amber-500 h-1.5 rounded-full" style={{ width: "74%" }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border rounded-md p-4 bg-white">
+                  <h3 className="font-medium text-gray-800 mb-2 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-purple-500">
+                      <path d="M16 16h6v6h-6z" />
+                      <path d="M2 16h6v6H2z" />
+                      <path d="M9 2h6v6H9z" />
+                      <path d="M3 10v4h18v-4" />
+                      <path d="M12 12v10" />
+                    </svg>
+                    Validation & Approval
+                  </h3>
+                  <div className="text-sm text-gray-600 space-y-2">
+                    <p>
+                      Our architectural security analysis included rigorous validation testing to ensure all mitigation controls were properly implemented 
+                      and effective against the identified threats.
+                    </p>
+                    <div className="bg-green-50 border border-green-100 rounded-md p-2 mt-2">
+                      <div className="flex items-center">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600 mr-2">
+                          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                          <path d="m9 11 3 3L22 4" />
+                        </svg>
+                        <p className="text-sm font-medium text-green-800">Approval Recommendation: Approved</p>
+                      </div>
+                      <p className="text-xs text-green-700 ml-6 mt-1">
+                        Based on successful mitigation implementation and validation, the system architecture 
+                        meets the required security standards. All critical and high-risk architectural vulnerabilities 
+                        have been addressed.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="border rounded-md p-4 bg-white">
+                <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                    <path d="M2 12h10" />
+                    <path d="M9 4v16" />
+                    <path d="m3 9 3 3-3 3" />
+                    <path d="M14 8h8" />
+                    <path d="M18 4v16" />
+                    <path d="m21 12-3 3-3-3" />
+                  </svg>
+                  Top Architectural Recommendations
+                </h3>
+                <div className="space-y-3">
+                  <div className="border-l-4 border-blue-300 pl-3 py-1">
+                    <h4 className="text-sm font-medium text-gray-800">Service Account Privilege Management</h4>
+                    <p className="text-xs text-gray-600">
+                      Implement least privilege access for all service accounts, limiting database permissions to only required tables
+                      with separate read and write accounts.
+                    </p>
+                  </div>
+                  <div className="border-l-4 border-blue-300 pl-3 py-1">
+                    <h4 className="text-sm font-medium text-gray-800">Data Integrity Protection</h4>
+                    <p className="text-xs text-gray-600">
+                      Upgrade all TLS implementations to 1.3 and implement additional integrity checks for data traversing between
+                      systems, especially for sensitive PII information.
+                    </p>
+                  </div>
+                  <div className="border-l-4 border-blue-300 pl-3 py-1">
+                    <h4 className="text-sm font-medium text-gray-800">Enhanced Access Controls</h4>
+                    <p className="text-xs text-gray-600">
+                      Implement multi-factor authentication for all administrative access points, with particular focus on
+                      centralized authentication services for consistent policy enforcement.
+                    </p>
+                  </div>
+                  <div className="border-l-4 border-blue-300 pl-3 py-1">
+                    <h4 className="text-sm font-medium text-gray-800">Comprehensive Audit Logging</h4>
+                    <p className="text-xs text-gray-600">
+                      Enhance audit logging capabilities to capture all security-relevant events, including authentication attempts,
+                      privilege changes, and data access across all architectural components.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="text-right mt-2">
+                <button className="text-sm text-primary font-medium hover:underline focus:outline-none inline-flex items-center">
+                  View Full Threat Modeling Report
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="ml-1">
+                    <path d="M5 12h14" />
+                    <path d="m12 5 7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            </TabsContent>
+            
             <TabsContent value="compliance" className="space-y-4 pt-4">
               <div>
                 <h3 className="font-medium mb-2">Compliance Standards</h3>
