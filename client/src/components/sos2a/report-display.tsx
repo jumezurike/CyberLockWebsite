@@ -221,7 +221,11 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <div className="space-y-2">
               <h3 className="text-sm font-medium text-muted-foreground">Business Information</h3>
               <p className="font-medium">{report.businessId}</p>
-              <p>{report.industry} | {report.businessLocation.state}, {report.businessLocation.country}</p>
+              <p>{report.industry} | {
+                report.businessLocation && typeof report.businessLocation === 'object' 
+                  ? `${report.businessLocation.state || 'Unknown'}, ${report.businessLocation.country || 'Unknown'}` 
+                  : 'Unknown location'
+              }</p>
               <p className="text-sm text-muted-foreground">{report.businessServices}</p>
             </div>
             
@@ -229,25 +233,39 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-medium text-muted-foreground">RASBITA Score Components</h3>
                 <div className="bg-purple-100 text-purple-900 font-bold px-3 py-1 rounded-full flex items-center">
-                  <span>Overall: {report.rasbitaScore.total}%</span>
+                  <span>Overall: {report.rasbitaScore?.total || "N/A"}%</span>
                   <span className="ml-1 text-xs px-2 py-0.5 bg-purple-800 text-white rounded-full">RASBITA™</span>
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="bg-primary/5 rounded-md p-2 border-l-4 border-red-500">
-                  <p className="text-xs text-muted-foreground">Cybersecurity Incident Risk Score</p>
-                  <p className="font-bold text-red-600">{report.rasbitaScore.categories.risk || report.rasbitaScore.categories.govern}</p>
+              {report.rasbitaScore && (
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="bg-primary/5 rounded-md p-2 border-l-4 border-red-500">
+                    <p className="text-xs text-muted-foreground">Cybersecurity Incident Risk Score</p>
+                    <p className="font-bold text-red-600">
+                      {report.rasbitaScore.categories?.risk || 
+                       report.rasbitaScore.categories?.govern || 
+                       "N/A"}
+                    </p>
+                  </div>
+                  <div className="bg-primary/5 rounded-md p-2 border-l-4 border-purple-500">
+                    <p className="text-xs text-muted-foreground">Cybersecurity Gov & Mngt maturity level</p>
+                    <p className="font-bold text-purple-600">
+                      {report.rasbitaScore.categories?.securityControls || 
+                       report.rasbitaScore.categories?.protect || 
+                       "N/A"}
+                    </p>
+                  </div>
+                  <div className="bg-primary/5 rounded-md p-2 border-l-4 border-green-500">
+                    <p className="text-xs text-muted-foreground">NRRB (positive)</p>
+                    <p className="font-bold text-green-600">
+                      {report.rasbitaScore.categories?.architecture || 
+                       report.rasbitaScore.categories?.respond || 
+                       "N/A"}
+                    </p>
+                    <p className="text-[10px] text-muted-foreground">Positive value = spend makes sense</p>
+                  </div>
                 </div>
-                <div className="bg-primary/5 rounded-md p-2 border-l-4 border-purple-500">
-                  <p className="text-xs text-muted-foreground">Cybersecurity Gov & Mngt maturity level</p>
-                  <p className="font-bold text-purple-600">{report.rasbitaScore.categories.securityControls || report.rasbitaScore.categories.protect}</p>
-                </div>
-                <div className="bg-primary/5 rounded-md p-2 border-l-4 border-green-500">
-                  <p className="text-xs text-muted-foreground">NRRB (positive)</p>
-                  <p className="font-bold text-green-600">{report.rasbitaScore.categories.architecture || report.rasbitaScore.categories.respond}</p>
-                  <p className="text-[10px] text-muted-foreground">Positive value = spend makes sense</p>
-                </div>
-              </div>
+              )}
             </div>
           </div>
           
@@ -255,22 +273,38 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <h2 className="text-lg font-semibold mb-3">Summary Findings</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-red-600">{report.vulnerabilities.critical.length}</div>
+                <div className="text-lg font-bold text-red-600">
+                  {report.vulnerabilities && Array.isArray(report.vulnerabilities.critical) 
+                    ? report.vulnerabilities.critical.length 
+                    : 0}
+                </div>
                 <div className="text-sm">Critical Vulnerabilities</div>
                 <div className="text-xs text-muted-foreground">Greater than 80% probability</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-orange-600">{report.findings.filter(f => f.severity === 'High').length}</div>
+                <div className="text-lg font-bold text-orange-600">
+                  {report.findings && Array.isArray(report.findings) 
+                    ? report.findings.filter(f => f.severity === 'High').length 
+                    : 0}
+                </div>
                 <div className="text-sm">High Risks</div>
                 <div className="text-xs text-muted-foreground">Between 60%-80% probability</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-amber-600">{report.findings.filter(f => f.severity === 'Medium').length}</div>
+                <div className="text-lg font-bold text-amber-600">
+                  {report.findings && Array.isArray(report.findings) 
+                    ? report.findings.filter(f => f.severity === 'Medium').length 
+                    : 0}
+                </div>
                 <div className="text-sm">Medium Risks</div>
                 <div className="text-xs text-muted-foreground">Between 30%-60% probability</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-green-600">{report.recommendations.immediate.length}</div>
+                <div className="text-lg font-bold text-green-600">
+                  {report.recommendations && Array.isArray(report.recommendations.immediate) 
+                    ? report.recommendations.immediate.length 
+                    : 0}
+                </div>
                 <div className="text-sm">Low Risks</div>
                 <div className="text-xs text-muted-foreground">Below 30% probability</div>
               </div>
@@ -309,75 +343,112 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             </TabsContent>
             
             <TabsContent value="recommendations" className="space-y-4 pt-4">
-              <div>
-                <h3 className="font-medium mb-2">Immediate Actions</h3>
-                <ul className="space-y-2 list-disc pl-5">
-                  {report.recommendations.immediate.map((rec, index) => (
-                    <li key={index}>{rec}</li>
-                  ))}
-                </ul>
-              </div>
+              {report.recommendations && (
+                <div>
+                  <h3 className="font-medium mb-2">Immediate Actions</h3>
+                  <ul className="space-y-2 list-disc pl-5">
+                    {Array.isArray(report.recommendations.immediate) 
+                      ? report.recommendations.immediate.map((rec, index) => (
+                          <li key={index}>{rec}</li>
+                        ))
+                      : <li>No immediate actions required</li>
+                    }
+                  </ul>
+                </div>
+              )}
               
-              <div>
-                <h3 className="font-medium mb-2">Short Term (30-90 days)</h3>
-                <ul className="space-y-2 list-disc pl-5">
-                  {report.recommendations.shortTerm.map((rec, index) => (
-                    <li key={index}>{rec}</li>
-                  ))}
-                </ul>
-              </div>
+              {report.recommendations && (
+                <div>
+                  <h3 className="font-medium mb-2">Short Term (30-90 days)</h3>
+                  <ul className="space-y-2 list-disc pl-5">
+                    {Array.isArray(report.recommendations.shortTerm) 
+                      ? report.recommendations.shortTerm.map((rec, index) => (
+                          <li key={index}>{rec}</li>
+                        ))
+                      : <li>No short-term actions required</li>
+                    }
+                  </ul>
+                </div>
+              )}
               
-              <div>
-                <h3 className="font-medium mb-2">Long Term (90+ days)</h3>
-                <ul className="space-y-2 list-disc pl-5">
-                  {report.recommendations.longTerm.map((rec, index) => (
-                    <li key={index}>{rec}</li>
-                  ))}
-                </ul>
-              </div>
+              {report.recommendations && (
+                <div>
+                  <h3 className="font-medium mb-2">Long Term (90+ days)</h3>
+                  <ul className="space-y-2 list-disc pl-5">
+                    {Array.isArray(report.recommendations.longTerm) 
+                      ? report.recommendations.longTerm.map((rec, index) => (
+                          <li key={index}>{rec}</li>
+                        ))
+                      : <li>No long-term actions required</li>
+                    }
+                  </ul>
+                </div>
+              )}
             </TabsContent>
             
             <TabsContent value="risks" className="space-y-4 pt-4">
-              <div>
-                <h3 className="font-medium mb-2">Security Risks</h3>
-                <div className="space-y-3">
-                  {report.findings.map((finding, index) => (
-                    <div key={index} className="border rounded-md p-3">
-                      <div className="flex justify-between items-center mb-1">
-                        <h4 className="font-medium">{finding.title}</h4>
-                        <span className={`text-xs px-2 py-1 rounded ${
-                          finding.severity === 'High' ? 'bg-red-100 text-red-800' :
-                          finding.severity === 'Medium' ? 'bg-orange-100 text-orange-800' :
-                          'bg-yellow-100 text-yellow-800'
-                        }`}>{finding.severity}</span>
+              {report.findings && Array.isArray(report.findings) && (
+                <div>
+                  <h3 className="font-medium mb-2">Security Risks</h3>
+                  <div className="space-y-3">
+                    {report.findings.length > 0 ? (
+                      report.findings.map((finding, index) => (
+                        <div key={index} className="border rounded-md p-3">
+                          <div className="flex justify-between items-center mb-1">
+                            <h4 className="font-medium">{finding.title}</h4>
+                            <span className={`text-xs px-2 py-1 rounded ${
+                              finding.severity === 'High' ? 'bg-red-100 text-red-800' :
+                              finding.severity === 'Medium' ? 'bg-orange-100 text-orange-800' :
+                              'bg-yellow-100 text-yellow-800'
+                            }`}>{finding.severity}</span>
+                          </div>
+                          <p className="text-sm text-muted-foreground">{finding.description}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="border rounded-md p-4 text-center text-muted-foreground">
+                        No security risks identified
                       </div>
-                      <p className="text-sm text-muted-foreground">{finding.description}</p>
-                    </div>
-                  ))}
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
               
-              <div>
-                <h3 className="font-medium mb-2">Vulnerabilities</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  <div className="border rounded-md p-3">
-                    <h4 className="text-red-600 font-medium mb-2">Critical ({report.vulnerabilities.critical.length})</h4>
-                    <ul className="list-disc pl-5 text-sm">
-                      {report.vulnerabilities.critical.map((vuln, index) => (
-                        <li key={index}>{vuln}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="border rounded-md p-3">
-                    <h4 className="text-orange-600 font-medium mb-2">High ({report.vulnerabilities.high.length})</h4>
-                    <ul className="list-disc pl-5 text-sm">
-                      {report.vulnerabilities.high.map((vuln, index) => (
-                        <li key={index}>{vuln}</li>
-                      ))}
-                    </ul>
+              {report.vulnerabilities && (
+                <div>
+                  <h3 className="font-medium mb-2">Vulnerabilities</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div className="border rounded-md p-3">
+                      <h4 className="text-red-600 font-medium mb-2">
+                        Critical ({Array.isArray(report.vulnerabilities.critical) ? report.vulnerabilities.critical.length : 0})
+                      </h4>
+                      <ul className="list-disc pl-5 text-sm">
+                        {Array.isArray(report.vulnerabilities.critical) && report.vulnerabilities.critical.length > 0 ? (
+                          report.vulnerabilities.critical.map((vuln, index) => (
+                            <li key={index}>{vuln}</li>
+                          ))
+                        ) : (
+                          <li>No critical vulnerabilities found</li>
+                        )}
+                      </ul>
+                    </div>
+                    <div className="border rounded-md p-3">
+                      <h4 className="text-orange-600 font-medium mb-2">
+                        High ({Array.isArray(report.vulnerabilities.high) ? report.vulnerabilities.high.length : 0})
+                      </h4>
+                      <ul className="list-disc pl-5 text-sm">
+                        {Array.isArray(report.vulnerabilities.high) && report.vulnerabilities.high.length > 0 ? (
+                          report.vulnerabilities.high.map((vuln, index) => (
+                            <li key={index}>{vuln}</li>
+                          ))
+                        ) : (
+                          <li>No high vulnerabilities found</li>
+                        )}
+                      </ul>
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
             </TabsContent>
             
             <TabsContent value="architecture" className="space-y-4 pt-4">
