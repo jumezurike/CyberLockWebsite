@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Sos2aFormData, MatrixItem, AssessmentReport } from "@/lib/sos2a-types";
 import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
 import MatrixForm from "@/components/sos2a/matrix-form";
@@ -6,6 +6,10 @@ import ReportDisplay from "@/components/sos2a/report-display";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
+import { apiRequest } from "@/lib/queryClient";
+import { useToast } from "@/hooks/use-toast";
 
 // Sample scorecard data for testing
 const sampleScorecardData = [
@@ -111,6 +115,9 @@ export default function Sos2aTool() {
   const [formData, setFormData] = useState<Sos2aFormData | null>(null);
   const [matrixData, setMatrixData] = useState<MatrixItem[] | null>(null);
   const [report, setReport] = useState<AssessmentReport | null>(null); // Don't use sample report by default
+  const [savedAssessments, setSavedAssessments] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [selectedAssessmentId, setSelectedAssessmentId] = useState<string>("");
   
   // Progress percentage based on current step and report type
   const isComprehensive = formData?.reportType === 'comprehensive';
@@ -271,6 +278,74 @@ export default function Sos2aTool() {
   const handleBack = () => {
     if (step === 'matrix') setStep('questionnaire');
     if (step === 'report') setStep('matrix');
+  };
+  
+  // Handle starting over
+  const handleStartOver = () => {
+    setStep('questionnaire');
+    setFormData(null);
+    setMatrixData(null);
+    setReport(null);
+    setSelectedAssessmentId("");
+  };
+  
+  // Fetch saved assessments on component mount
+  useEffect(() => {
+    const fetchSavedAssessments = async () => {
+      setIsLoading(true);
+      try {
+        const response = await apiRequest("GET", "/api/assessments");
+        
+        if (!response.ok) {
+          throw new Error("Failed to fetch saved assessments");
+        }
+        
+        const assessments = await response.json();
+        setSavedAssessments(assessments);
+      } catch (error) {
+        console.error("Error fetching saved assessments:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    
+    fetchSavedAssessments();
+  }, []);
+  
+  // Load an assessment by ID
+  const loadAssessment = async (id: string) => {
+    if (!id) return;
+    
+    setIsLoading(true);
+    try {
+      const response = await apiRequest("GET", `/api/assessments/${id}`);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to load assessment with ID: ${id}`);
+      }
+      
+      const assessment = await response.json();
+      
+      // Parse matrix data if it's stored as a string
+      if (typeof assessment.matrixData === 'string' && assessment.matrixData) {
+        try {
+          assessment.matrixData = JSON.parse(assessment.matrixData);
+        } catch (e) {
+          console.error("Error parsing matrix data:", e);
+          assessment.matrixData = null;
+        }
+      }
+      
+      // Set the report
+      setReport(assessment);
+      setStep('report');
+      setSelectedAssessmentId(id);
+      
+    } catch (error) {
+      console.error("Error loading assessment:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   // Calculate security score based on matrix data
