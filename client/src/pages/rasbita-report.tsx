@@ -419,18 +419,10 @@ export default function RasbitaReportPage() {
         const formData = reportToFormData(data);
         setInitialFormData(formData);
         
-        // Check if governance assessment has been completed
-        if (data.governanceMaturity?.completed) {
-          // If governance is already done, proceed to results
-          setAssessmentStep("results");
-          setShowResults(true);
-          setShowGovernanceAndManagementAssessment(false);
-        } else {
-          // If governance is not done, start with governance assessment
-          setAssessmentStep("governance");
-          setShowGovernanceAndManagementAssessment(true);
-          setShowResults(false);
-        }
+        // Always show full results directly when clicking "Generate RASBITA Analysis Report"
+        setAssessmentStep("results");
+        setShowResults(true);
+        setShowGovernanceAndManagementAssessment(false);
         
         toast({
           title: "Report Loaded",
@@ -528,8 +520,9 @@ export default function RasbitaReportPage() {
           setReport(savedReport);
           setInitialFormData(null); // No initial form data for new report
           
-          // Ensure the results are shown
+          // Ensure the results are shown immediately
           setShowResults(true);
+          setAssessmentStep("results");
           
           toast({
             title: "New RASBITA Report Created",
@@ -716,7 +709,10 @@ export default function RasbitaReportPage() {
     // Process form data and update report
     console.log("Form submitted with data:", formData);
     
-    // Update the report with the form data
+    // Update the report with the form data and immediately show results
+    setShowResults(true);
+    setAssessmentStep("results");
+    
     setReport(prevReport => {
       // Extract company information
       const company = {

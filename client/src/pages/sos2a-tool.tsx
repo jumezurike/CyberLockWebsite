@@ -107,10 +107,10 @@ const sampleReport: AssessmentReport = {
 
 export default function Sos2aTool() {
   // State for multi-step form
-  const [step, setStep] = useState<'questionnaire' | 'matrix' | 'report'>('report'); // Start at report for testing
+  const [step, setStep] = useState<'questionnaire' | 'matrix' | 'report'>('questionnaire'); // Start at questionnaire (first step)
   const [formData, setFormData] = useState<Sos2aFormData | null>(null);
   const [matrixData, setMatrixData] = useState<MatrixItem[] | null>(null);
-  const [report, setReport] = useState<AssessmentReport | null>(sampleReport); // Use sample report
+  const [report, setReport] = useState<AssessmentReport | null>(null); // Don't use sample report by default
   
   // Progress percentage based on current step and report type
   const isComprehensive = formData?.reportType === 'comprehensive';
