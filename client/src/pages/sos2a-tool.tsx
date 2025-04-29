@@ -376,6 +376,52 @@ export default function Sos2aTool() {
     }
   };
   
+  // Delete an assessment by ID
+  const deleteAssessment = async (id: string) => {
+    if (!id) return;
+    
+    const { toast } = useToast();
+    
+    if (confirm("Are you sure you want to delete this assessment? This action cannot be undone.")) {
+      setIsLoading(true);
+      try {
+        const response = await apiRequest("DELETE", `/api/assessments/${id}`);
+        
+        if (!response.ok) {
+          throw new Error(`Failed to delete assessment with ID: ${id}`);
+        }
+        
+        // Remove the deleted assessment from the list
+        setSavedAssessments(savedAssessments.filter(assessment => 
+          assessment.id.toString() !== id
+        ));
+        
+        // Reset selected assessment if it was deleted
+        if (selectedAssessmentId === id) {
+          setSelectedAssessmentId("");
+          setReport(null);
+          setStep('questionnaire');
+        }
+        
+        toast({
+          title: "Assessment deleted",
+          description: "The assessment has been successfully deleted.",
+          variant: "default",
+        });
+        
+      } catch (error) {
+        console.error("Error deleting assessment:", error);
+        toast({
+          title: "Error",
+          description: "Failed to delete the assessment. Please try again.",
+          variant: "destructive",
+        });
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+  
   // Calculate security score based on matrix data
   const calculateSecurityScore = (data: MatrixItem[]): number => {
     let totalScore = 0;
@@ -835,13 +881,33 @@ export default function Sos2aTool() {
                 </SelectContent>
               </Select>
             </div>
-            <Button 
-              onClick={() => loadAssessment(selectedAssessmentId)}
-              disabled={!selectedAssessmentId || isLoading}
-              variant="outline"
-            >
-              Load Report
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => loadAssessment(selectedAssessmentId)}
+                disabled={!selectedAssessmentId || isLoading}
+                variant="outline"
+              >
+                Load Report
+              </Button>
+              
+              {selectedAssessmentId && (
+                <Button 
+                  onClick={() => deleteAssessment(selectedAssessmentId)}
+                  disabled={isLoading}
+                  variant="destructive"
+                  className="px-3"
+                  title="Delete selected assessment"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                    <path d="M3 6h18"></path>
+                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                  </svg>
+                  Delete
+                </Button>
+              )}
+            </div>
+            
             <Button 
               onClick={handleStartOver}
               disabled={isLoading}
