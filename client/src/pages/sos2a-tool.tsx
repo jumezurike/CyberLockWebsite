@@ -380,8 +380,6 @@ export default function Sos2aTool() {
   const deleteAssessment = async (id: string) => {
     if (!id) return;
     
-    const { toast } = useToast();
-    
     if (confirm("Are you sure you want to delete this assessment? This action cannot be undone.")) {
       setIsLoading(true);
       try {

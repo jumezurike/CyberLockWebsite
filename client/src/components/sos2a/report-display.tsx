@@ -687,78 +687,110 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             </TabsContent>
             
             <TabsContent value="compliance" className="space-y-4 pt-4">
-              <div>
-                <h3 className="font-medium mb-2">Compliance Standards</h3>
-                <div className="space-y-3">
-                  {report.complianceStatus.standards.map((standard, index) => (
-                    <div key={index} className="flex justify-between items-center border-b pb-2">
-                      <span>{standard.standard}</span>
-                      <span className={`text-xs px-2 py-1 rounded ${
-                        standard.status === 'Compliant' ? 'bg-green-100 text-green-800' :
-                        standard.status === 'Partially Compliant' ? 'bg-amber-100 text-amber-800' :
-                        standard.status === 'Non-Compliant' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>{standard.status}</span>
+              {report.complianceStatus ? (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-medium mb-2">Compliance Standards</h3>
+                    <div className="space-y-3">
+                      {report.complianceStatus.standards && Array.isArray(report.complianceStatus.standards) ? (
+                        report.complianceStatus.standards.length > 0 ? (
+                          report.complianceStatus.standards.map((standard, index) => (
+                            <div key={index} className="flex justify-between items-center border-b pb-2">
+                              <span>{standard.standard}</span>
+                              <span className={`text-xs px-2 py-1 rounded ${
+                                standard.status === 'Compliant' ? 'bg-green-100 text-green-800' :
+                                standard.status === 'Partially Compliant' ? 'bg-amber-100 text-amber-800' :
+                                standard.status === 'Non-Compliant' ? 'bg-red-100 text-red-800' :
+                                'bg-gray-100 text-gray-800'
+                              }`}>{standard.status}</span>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-muted-foreground text-sm">No compliance standards applicable</div>
+                        )
+                      ) : (
+                        <div className="text-muted-foreground text-sm">Standards data not available</div>
+                      )}
                     </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div>
-                <h3 className="font-medium mb-2">Regulatory Requirements</h3>
-                <div className="space-y-3">
-                  {report.complianceStatus.regulations.map((regulation, index) => (
-                    <div key={index} className="flex justify-between items-center border-b pb-2">
-                      <span>{regulation.standard}</span>
-                      <span className={`text-xs px-2 py-1 rounded ${
-                        regulation.status === 'Compliant' ? 'bg-green-100 text-green-800' :
-                        regulation.status === 'Partially Compliant' ? 'bg-amber-100 text-amber-800' :
-                        regulation.status === 'Non-Compliant' ? 'bg-red-100 text-red-800' :
-                        'bg-gray-100 text-gray-800'
-                      }`}>{regulation.status}</span>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium mb-2">Regulatory Requirements</h3>
+                    <div className="space-y-3">
+                      {report.complianceStatus.regulations && Array.isArray(report.complianceStatus.regulations) ? (
+                        report.complianceStatus.regulations.length > 0 ? (
+                          report.complianceStatus.regulations.map((regulation, index) => (
+                            <div key={index} className="flex justify-between items-center border-b pb-2">
+                              <span>{regulation.standard}</span>
+                              <span className={`text-xs px-2 py-1 rounded ${
+                                regulation.status === 'Compliant' ? 'bg-green-100 text-green-800' :
+                                regulation.status === 'Partially Compliant' ? 'bg-amber-100 text-amber-800' :
+                                regulation.status === 'Non-Compliant' ? 'bg-red-100 text-red-800' :
+                                'bg-gray-100 text-gray-800'
+                              }`}>{regulation.status}</span>
+                            </div>
+                          ))
+                        ) : (
+                          <div className="text-muted-foreground text-sm">No regulatory requirements applicable</div>
+                        )
+                      ) : (
+                        <div className="text-muted-foreground text-sm">Regulations data not available</div>
+                      )}
                     </div>
-                  ))}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>Compliance status information is not available for this report.</p>
+                </div>
+              )}
             </TabsContent>
             
             <TabsContent value="frameworks" className="space-y-4 pt-4">
-              <div>
-                <h3 className="font-medium mb-2">Operation Control Gaps</h3>
-                <ul className="list-disc pl-5">
-                  {report.frameworkGaps.operations.length > 0 ? (
-                    report.frameworkGaps.operations.map((gap, index) => (
-                      <li key={index}>{gap}</li>
-                    ))
-                  ) : (
-                    <li className="text-muted-foreground">No operational framework control gaps identified</li>
-                  )}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-medium mb-2">Management Control Gaps</h3>
-                <ul className="list-disc pl-5">
-                  {report.frameworkGaps.management.length > 0 ? (
-                    report.frameworkGaps.management.map((gap, index) => (
-                      <li key={index}>{gap}</li>
-                    ))
-                  ) : (
-                    <li className="text-muted-foreground">No management framework control gaps identified</li>
-                  )}
-                </ul>
-              </div>
-              <div>
-                <h3 className="font-medium mb-2">Technology Control Gaps</h3>
-                <ul className="list-disc pl-5">
-                  {report.frameworkGaps.technology.length > 0 ? (
-                    report.frameworkGaps.technology.map((gap, index) => (
-                      <li key={index}>{gap}</li>
-                    ))
-                  ) : (
-                    <li className="text-muted-foreground">No technology framework control gaps identified</li>
-                  )}
-                </ul>
-              </div>
+              {report.frameworkGaps ? (
+                <>
+                  <div>
+                    <h3 className="font-medium mb-2">Operation Control Gaps</h3>
+                    <ul className="list-disc pl-5">
+                      {report.frameworkGaps.operations && Array.isArray(report.frameworkGaps.operations) && report.frameworkGaps.operations.length > 0 ? (
+                        report.frameworkGaps.operations.map((gap, index) => (
+                          <li key={index}>{gap}</li>
+                        ))
+                      ) : (
+                        <li className="text-muted-foreground">No operational framework control gaps identified</li>
+                      )}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="font-medium mb-2">Management Control Gaps</h3>
+                    <ul className="list-disc pl-5">
+                      {report.frameworkGaps.management && Array.isArray(report.frameworkGaps.management) && report.frameworkGaps.management.length > 0 ? (
+                        report.frameworkGaps.management.map((gap, index) => (
+                          <li key={index}>{gap}</li>
+                        ))
+                      ) : (
+                        <li className="text-muted-foreground">No management framework control gaps identified</li>
+                      )}
+                    </ul>
+                  </div>
+                  <div>
+                    <h3 className="font-medium mb-2">Technology Control Gaps</h3>
+                    <ul className="list-disc pl-5">
+                      {report.frameworkGaps.technology && Array.isArray(report.frameworkGaps.technology) && report.frameworkGaps.technology.length > 0 ? (
+                        report.frameworkGaps.technology.map((gap, index) => (
+                          <li key={index}>{gap}</li>
+                        ))
+                      ) : (
+                        <li className="text-muted-foreground">No technology framework control gaps identified</li>
+                      )}
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>Framework control gaps information is not available for this report.</p>
+                </div>
+              )}
             </TabsContent>
           </Tabs>
         </CardContent>
