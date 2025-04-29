@@ -118,6 +118,7 @@ export default function Sos2aTool() {
   const [savedAssessments, setSavedAssessments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedAssessmentId, setSelectedAssessmentId] = useState<string>("");
+  const { toast } = useToast();
   
   // Progress percentage based on current step and report type
   const isComprehensive = formData?.reportType === 'comprehensive';
