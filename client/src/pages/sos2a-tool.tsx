@@ -240,7 +240,7 @@ export default function Sos2aTool() {
   };
 
   // Handle matrix submission
-  const handleMatrixSubmit = (data: MatrixItem[]) => {
+  const handleMatrixSubmit = async (data: MatrixItem[]) => {
     setMatrixData(data);
     
     const reportType = formData?.reportType || 'preliminary';
@@ -272,6 +272,34 @@ export default function Sos2aTool() {
     
     setReport(generatedReport);
     setStep('report');
+    
+    // Save the assessment to the database
+    try {
+      const response = await apiRequest("POST", "/api/assessments", {
+        businessName: formData?.businessName || "Unknown",
+        industry: formData?.industry || "Unknown",
+        reportType: reportType,
+        securityScore: calculateSecurityScore(data),
+        findings: JSON.stringify(identifySecurityRisks(data)),
+        recommendations: JSON.stringify(generateRecommendations(data)),
+        matrixData: JSON.stringify(data),
+        rasbitaScore: JSON.stringify(calculateRasbitaScore(data)),
+        createdAt: new Date().toISOString()
+      });
+      
+      if (!response.ok) {
+        throw new Error("Failed to save assessment");
+      }
+      
+      // Refresh the list of saved assessments
+      const assessmentsResponse = await apiRequest("GET", "/api/assessments");
+      if (assessmentsResponse.ok) {
+        const assessments = await assessmentsResponse.json();
+        setSavedAssessments(assessments);
+      }
+    } catch (error) {
+      console.error("Error saving assessment:", error);
+    }
   };
   
   // Go back to previous step
@@ -783,10 +811,46 @@ export default function Sos2aTool() {
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            SMB Organizational and System Security Analysis (SOS²A)
+            Healthcare Organizational and System Security Analysis (SOS²A)
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {/* Saved Assessments Selector */}
+          <div className="flex items-center justify-between mb-6 gap-4">
+            <div className="flex-1">
+              <Select 
+                value={selectedAssessmentId} 
+                onValueChange={(value) => setSelectedAssessmentId(value)}
+                disabled={isLoading}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Load a saved assessment" />
+                </SelectTrigger>
+                <SelectContent>
+                  {savedAssessments.map((assessment) => (
+                    <SelectItem key={assessment.id} value={assessment.id.toString()}>
+                      {new Date(assessment.createdAt).toLocaleDateString()} - {assessment.industry || 'Unknown'} ({assessment.reportType})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <Button 
+              onClick={() => loadAssessment(selectedAssessmentId)}
+              disabled={!selectedAssessmentId || isLoading}
+              variant="outline"
+            >
+              Load Report
+            </Button>
+            <Button 
+              onClick={handleStartOver}
+              disabled={isLoading}
+              variant="secondary"
+            >
+              Start New Assessment
+            </Button>
+          </div>
+
           <div className="space-y-4">
             <h2 className="text-lg font-medium">Assessment Progress</h2>
             <Progress value={progressPercentage} className="h-2" />
