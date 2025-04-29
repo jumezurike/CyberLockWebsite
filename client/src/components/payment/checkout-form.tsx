@@ -8,11 +8,12 @@ import { Loader2 } from "lucide-react";
 interface CheckoutFormProps {
   amount: string;
   planName: string;
+  addons?: Array<{id: string; label: string; price: string}>;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
 
-export default function CheckoutForm({ amount, planName, onSuccess, onCancel }: CheckoutFormProps) {
+export default function CheckoutForm({ amount, planName, addons = [], onSuccess, onCancel }: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const { toast } = useToast();
@@ -90,10 +91,31 @@ export default function CheckoutForm({ amount, planName, onSuccess, onCancel }: 
         <p className="text-lg font-semibold text-neutral-700 mb-2">
           {planName} Plan
         </p>
-        <div className="bg-neutral-50 p-3 rounded-md">
-          <p className="text-xl font-bold text-primary">
-            Total: ${amount}
-          </p>
+        <div className="bg-neutral-50 p-4 rounded-md text-left">
+          {/* Base plan cost */}
+          <div className="flex justify-between mb-2">
+            <span className="font-medium">{planName} Base Plan:</span>
+            <span>${parseFloat(amount) - addons.reduce((sum, addon) => sum + parseFloat(addon.price), 0)}</span>
+          </div>
+          
+          {/* Add-ons */}
+          {addons.length > 0 && (
+            <>
+              {addons.map((addon, index) => (
+                <div key={addon.id} className="flex justify-between text-sm text-neutral-600 mb-1">
+                  <span>{addon.label}:</span>
+                  <span>${addon.price}</span>
+                </div>
+              ))}
+              <div className="border-t border-neutral-200 my-2 pt-2"></div>
+            </>
+          )}
+          
+          {/* Total */}
+          <div className="flex justify-between font-bold text-primary">
+            <span>Total:</span>
+            <span>${amount}</span>
+          </div>
         </div>
       </div>
 
