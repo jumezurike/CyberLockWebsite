@@ -38,6 +38,28 @@ const sampleReport: RasbitaReport = {
     category: "Data Breach",
     affectedSystems: "Customer Database, Web Application"
   },
+  // Required fields for the complete RASBITA structure
+  dashboard: {
+    mostFrequentUser: "Security Analyst",
+    mostCurrentReportDate: new Date().toISOString(),
+    userCount: 1,
+    mostFrequentThreat: "Data Breach",
+    leastFrequentThreat: "Physical Access",
+    mostFrequentPriority: "Medium",
+    minThreatCost: 5000,
+    maxThreatCost: 85000,
+    minALE: 10000,
+    maxALE: 50000,
+    minACS: 2000,
+    maxACS: 20000
+  },
+  // Add financial summary
+  financialSummary: {
+    totalAssetValue: 85000,
+    totalAnnualizedLossExpectancy: 14875,
+    totalCostOfSafeguards: 5000,
+    totalNetRiskReductionBenefit: 9875
+  },
   riskItems: [
     {
       assetName: "Web Application Server",
@@ -124,38 +146,6 @@ const sampleReport: RasbitaReport = {
       }
     }
   ],
-  governanceMaturity: {
-    governanceScore: 0, // Tier 0: None
-    managementScore: 0  // Tier 0: None
-  },
-  rasbitaCategories: {
-    govern: 0,
-    identify: 0,
-    protect: 0,
-    detect: 0,
-    respond: 0,
-    recover: 0
-  },
-  financialSummary: {
-    totalAssetValue: 315000,
-    totalAnnualizedLossExpectancy: 46075,
-    totalCostOfSafeguards: 22500,
-    totalNetRiskReductionBenefit: 13910
-  },
-  dashboard: {
-    mostFrequentUser: "Security Admin",
-    mostCurrentReportDate: new Date().toISOString(),
-    userCount: 12,
-    mostFrequentThreat: "Data Breach",
-    leastFrequentThreat: "Physical Damage",
-    minThreatCost: 4200,
-    maxThreatCost: 18000,
-    minALE: 4200,
-    maxALE: 18000,
-    minACS: 2000,
-    maxACS: 12000,
-    mostFrequentPriority: "High"
-  },
   deviceType: "Database Server",
   totalDevices: 15,
   affectedDevices: 3,
@@ -164,7 +154,21 @@ const sampleReport: RasbitaReport = {
   dataLost: 5000,
   damagedDevicesCost: 12000,
   threatSpreadCost: 8500,
-  residualCost: 4000
+  residualCost: 4000,
+  // Add governance and NIST category scores
+  governanceMaturity: {
+    governanceScore: 0,
+    managementScore: 0,
+    completed: false
+  },
+  rasbitaCategories: {
+    govern: 0,
+    identify: 0,
+    protect: 0,
+    detect: 0,
+    respond: 0,
+    recover: 0
+  }
 };
 
 export default function RasbitaReportPage() {
@@ -340,7 +344,67 @@ export default function RasbitaReportPage() {
     console.log("fetchRasbitaReport called with:", idInput);
     
     try {
-      // First check if this is a RASBITA report ID (if it exists in the database)
+      // First check if this is the "new" case
+      if (idInput === "new") {
+        console.log("Creating brand new empty report");
+        
+        // Create a new empty report using the sample report template
+        const newEmptyReport = {
+          ...sampleReport,
+          id: "new",
+          title: "New RASBITA Assessment",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          // Initialize governance maturity to Tier 0 for both scores
+          governanceMaturity: {
+            governanceScore: 0,
+            managementScore: 0,
+            completed: false
+          },
+          // Reset the NIST CSF 2.0 framework domain scores
+          rasbitaCategories: {
+            govern: 0,
+            identify: 0,
+            protect: 0,
+            detect: 0,
+            respond: 0,
+            recover: 0
+          },
+          company: {
+            name: "Your Organization",
+            department: "Security",
+            reportGenerator: {
+              name: "Security Officer",
+              title: "Analyst"
+            }
+          },
+          incident: {
+            title: "Security Assessment",
+            description: "Initial security assessment for your organization",
+            date: new Date().toISOString().slice(0, 10),
+            category: "general_assessment",
+            affectedSystems: "All Systems"
+          }
+        };
+        
+        setReport(newEmptyReport);
+        // Clear any initial form data
+        setInitialFormData(null);
+        
+        // Start with the governance assessment
+        setAssessmentStep("governance");
+        setShowGovernanceAndManagementAssessment(true);
+        setShowResults(false);
+        
+        toast({
+          title: "New Report Created",
+          description: "Begin by completing the Governance & Management assessment.",
+        });
+        
+        return; // Exit the function early
+      }
+      
+      // Check if this is a RASBITA report ID (if it exists in the database)
       const checkReportResponse = await apiRequest("GET", `/api/rasbita-reports/${idInput}`);
       
       // If found, use the existing report
@@ -374,7 +438,7 @@ export default function RasbitaReportPage() {
         });
       } 
       // If not found, check if this is an assessment ID
-      else if (idInput !== "new") {
+      else {
         console.log("Report not found, checking if this is an assessment ID...");
         
         // Fetch the assessment
@@ -443,6 +507,13 @@ export default function RasbitaReportPage() {
             maxACS: riskItems.length > 0 ? Math.max(...riskItems.map(item => item.annualCostOfSafeguard * 1.5)) : 0
           };
           
+          // Add governance maturity
+          newReport.governanceMaturity = {
+            governanceScore: 0,
+            managementScore: 0,
+            completed: false
+          };
+          
           // Save the new report to the database
           console.log("Saving new report:", newReport);
           const saveResponse = await apiRequest("POST", "/api/rasbita-reports", newReport);
@@ -467,33 +538,6 @@ export default function RasbitaReportPage() {
         } else {
           throw new Error("Could not find assessment or report with the given ID");
         }
-      } 
-      // Handle "new" report case
-      else {
-        console.log("Creating brand new empty report");
-        setReport({
-          ...sampleReport,
-          id: "new",
-          createdAt: new Date().toISOString(),
-          // Initialize governance maturity to Tier 0 for both scores
-          governanceMaturity: {
-            governanceScore: 0,
-            managementScore: 0,
-            completed: false
-          }
-        });
-        // Clear any initial form data
-        setInitialFormData(null);
-        
-        // Start with the governance assessment
-        setAssessmentStep("governance");
-        setShowGovernanceAndManagementAssessment(true);
-        setShowResults(false);
-        
-        toast({
-          title: "New Report Created",
-          description: "Begin by completing the Governance & Management assessment.",
-        });
       }
     } catch (error) {
       console.error("Error in fetchRasbitaReport:", error);
