@@ -186,7 +186,7 @@ export default function AfaaiBrowser() {
                 </div>
                 <p className="text-neutral-300 text-sm">
                   Our AFAAI language engine is actively monitoring and protecting this application, ensuring security 
-                  across all communications including low-resource languages through our unified alphabet system (ΣU).
+                  across all communications including low-resource languages through our unified alphabet system (Σᵤ).
                 </p>
               </div>
             </div>
