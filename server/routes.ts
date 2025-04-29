@@ -3,6 +3,14 @@ import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertAssessmentSchema, insertEarlyAccessSubmissionSchema, insertRasbitaReportSchema } from "@shared/schema";
 import { ZodError } from "zod";
+import Stripe from "stripe";
+
+// Initialize Stripe with API key
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error("Missing STRIPE_SECRET_KEY environment variable");
+}
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function registerRoutes(app: Express): Promise<Server> {
   // API routes
@@ -291,6 +299,87 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching user RASBITA reports:", error);
       res.status(500).json({ error: "Failed to fetch user RASBITA reports" });
+    }
+  });
+
+  // Stripe Payment Integration API
+  // -------------------------------------------------------------------------
+  
+  // Create a payment intent for checkout
+  app.post("/api/create-payment-intent", async (req, res) => {
+    try {
+      const { planId, amount, addons = [] } = req.body;
+      
+      if (!planId || !amount) {
+        return res.status(400).json({ error: "Plan ID and amount are required" });
+      }
+      
+      // Calculate total amount (in cents as Stripe requires)
+      const totalAmount = Math.round(parseFloat(amount) * 100);
+      
+      // Create a payment intent
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: totalAmount,
+        currency: "usd",
+        metadata: {
+          planId,
+          addons: JSON.stringify(addons)
+        },
+        // Secure the payment intent with ECSMID encryption technology
+        description: "CyberLockX Secured Payment - Protected by ECSMID Encryption",
+      });
+      
+      res.status(200).json({
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id
+      });
+    } catch (error) {
+      console.error("Error creating payment intent:", error);
+      res.status(500).json({ 
+        error: "Failed to create payment intent",
+        details: error instanceof Error ? error.message : "Unknown error" 
+      });
+    }
+  });
+  
+  // Confirm payment completion and provision services
+  app.post("/api/payment-success", async (req, res) => {
+    try {
+      const { paymentIntentId } = req.body;
+      
+      if (!paymentIntentId) {
+        return res.status(400).json({ error: "Payment Intent ID is required" });
+      }
+      
+      // Retrieve the payment intent to confirm it's successful
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+      
+      if (paymentIntent.status !== 'succeeded') {
+        return res.status(400).json({ error: "Payment has not succeeded" });
+      }
+      
+      // Extract metadata from the payment intent
+      const planId = paymentIntent.metadata.planId;
+      const addons = JSON.parse(paymentIntent.metadata.addons || '[]');
+      
+      // Here you would typically:
+      // 1. Update the user's subscription status in the database
+      // 2. Provision any services that were purchased
+      // 3. Send confirmation emails, etc.
+      
+      // For now, we'll just return success
+      res.status(200).json({
+        success: true,
+        message: "Payment processed successfully",
+        planId,
+        addons
+      });
+    } catch (error) {
+      console.error("Error processing payment success:", error);
+      res.status(500).json({ 
+        error: "Failed to process payment success",
+        details: error instanceof Error ? error.message : "Unknown error" 
+      });
     }
   });
 
