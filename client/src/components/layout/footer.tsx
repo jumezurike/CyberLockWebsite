@@ -108,7 +108,7 @@ export default function Footer() {
               <li><Link href="/#" className="text-neutral-300 hover:text-secondary">Careers</Link></li>
               <li><Link href="/#contact" className="text-neutral-300 hover:text-secondary">Contact</Link></li>
               <li><Link href="/#" className="text-neutral-300 hover:text-secondary">Partners</Link></li>
-              <li><Link href="/#" className="text-neutral-300 hover:text-secondary">Legal</Link></li>
+              <li><Link href="/privacy-policy" className="text-neutral-300 hover:text-secondary">Legal Documents</Link></li>
             </ul>
           </div>
         </div>
@@ -116,9 +116,9 @@ export default function Footer() {
         <div className="border-t border-white/20 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-neutral-300 text-sm mb-4 md:mb-0">© {new Date().getFullYear()} CyberLockX. All rights reserved. Protected by U.S. Patents 10,911,217, 10,999,276, 11,367,065.</p>
           <div className="flex space-x-6">
-            <Link href="/#" className="text-neutral-300 hover:text-secondary text-sm">Privacy Policy</Link>
-            <Link href="/#" className="text-neutral-300 hover:text-secondary text-sm">Terms of Service</Link>
-            <Link href="/#" className="text-neutral-300 hover:text-secondary text-sm">Cookie Policy</Link>
+            <Link href="/privacy-policy" className="text-neutral-300 hover:text-secondary text-sm">Privacy Policy</Link>
+            <Link href="/terms-of-service" className="text-neutral-300 hover:text-secondary text-sm">Terms of Service</Link>
+            <Link href="/data-use-policy" className="text-neutral-300 hover:text-secondary text-sm">Data Use Policy</Link>
           </div>
         </div>
       </div>

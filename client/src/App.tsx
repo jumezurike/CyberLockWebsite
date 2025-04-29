@@ -16,6 +16,9 @@ import RasbitaReport from "@/pages/rasbita-report";
 import RasbitaGovernance from "@/pages/rasbita-governance";
 import ThreatModelingPage from "@/pages/threat-modeling";
 import ThreatModelingSimple from "@/pages/threat-modeling-simple";
+import PrivacyPolicy from "@/pages/privacy-policy";
+import TermsOfService from "@/pages/terms-of-service";
+import DataUsePolicy from "@/pages/data-use-policy";
 import DirectNavigation from "@/components/direct-navigation";
 import { useEffect } from "react";
 
@@ -42,6 +45,9 @@ function Router() {
           <Route path="/rasbita-governance" component={RasbitaGovernance} />
           <Route path="/threat-modeling" component={ThreatModelingSimple} />
           <Route path="/threat-modeling-full" component={ThreatModelingPage} />
+          <Route path="/privacy-policy" component={PrivacyPolicy} />
+          <Route path="/terms-of-service" component={TermsOfService} />
+          <Route path="/data-use-policy" component={DataUsePolicy} />
           <Route component={NotFound} />
         </Switch>
         {/* Add direct navigation for testing */}
