@@ -19,6 +19,9 @@ import ThreatModelingSimple from "@/pages/threat-modeling-simple";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfService from "@/pages/terms-of-service";
 import DataUsePolicy from "@/pages/data-use-policy";
+import Checkout from "@/pages/checkout";
+import PaymentSuccess from "@/pages/payment-success";
+import PaymentError from "@/pages/payment-error";
 import DirectNavigation from "@/components/direct-navigation";
 import { useEffect } from "react";
 
