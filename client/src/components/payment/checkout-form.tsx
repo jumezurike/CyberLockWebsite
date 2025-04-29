@@ -87,9 +87,14 @@ export default function CheckoutForm({ amount, planName, onSuccess, onCancel }: 
         <p className="text-neutral-500 mb-1">
           Secured by ECSMID Encryption Technology
         </p>
-        <p className="text-lg font-semibold text-neutral-700">
-          {planName} - ${amount}
+        <p className="text-lg font-semibold text-neutral-700 mb-2">
+          {planName} Plan
         </p>
+        <div className="bg-neutral-50 p-3 rounded-md">
+          <p className="text-xl font-bold text-primary">
+            Total: ${amount}
+          </p>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">

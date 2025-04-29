@@ -62,16 +62,25 @@ export default function PricingSection() {
         
         return {
           id: addonId,
+          label: addonDetails.label,
           price
         };
       })
-      .filter(Boolean);
+      .filter((addon): addon is { id: string, label: string, price: string } => addon !== null);
+    
+    // Calculate total amount (plan price + addons)
+    const basePlanPrice = parseFloat(plan.price);
+    const addonsTotal = selectedAddonsList.reduce(
+      (sum, addon) => sum + (addon ? parseFloat(addon.price) : 0), 
+      0
+    );
+    const totalAmount = (basePlanPrice + addonsTotal).toFixed(2);
     
     // Create URL query params for checkout
     const params = new URLSearchParams();
     params.set('planId', selectedPlan);
     params.set('planName', plan.name);
-    params.set('amount', plan.price);
+    params.set('amount', totalAmount);
     
     if (selectedAddonsList.length > 0) {
       params.set('addons', encodeURIComponent(JSON.stringify(selectedAddonsList)));

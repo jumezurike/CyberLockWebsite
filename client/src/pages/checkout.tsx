@@ -10,7 +10,7 @@ export default function CheckoutRoute() {
     planId: string;
     planName: string;
     amount: string;
-    addons: Array<{id: string; price: string}>;
+    addons: Array<{id: string; label: string; price: string}>;
   } | null>(null);
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export default function CheckoutRoute() {
     
     // If we have the required params, set them in state
     if (planId && planName && amount) {
-      let addons: Array<{id: string; price: string}> = [];
+      let addons: Array<{id: string; label: string; price: string}> = [];
       
       if (addonsParam) {
         try {

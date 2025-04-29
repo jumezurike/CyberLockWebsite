@@ -18,7 +18,7 @@ interface CheckoutPageProps {
   planId: string;
   planName: string;
   amount: string;
-  addons?: Array<{id: string; price: string}>;
+  addons?: Array<{id: string; label: string; price: string}>;
 }
 
 export default function CheckoutPage({ planId, planName, amount, addons = [] }: CheckoutPageProps) {
@@ -105,6 +105,7 @@ export default function CheckoutPage({ planId, planName, amount, addons = [] }: 
           <CheckoutForm 
             amount={amount} 
             planName={planName} 
+            addons={addons}
             onCancel={handleCancel}
             onSuccess={handleSuccess}
           />
