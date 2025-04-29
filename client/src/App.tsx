@@ -51,6 +51,9 @@ function Router() {
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
           <Route path="/data-use-policy" component={DataUsePolicy} />
+          <Route path="/checkout" component={Checkout} />
+          <Route path="/payment-success" component={PaymentSuccess} />
+          <Route path="/payment-error" component={PaymentError} />
           <Route component={NotFound} />
         </Switch>
         {/* Add direct navigation for testing */}

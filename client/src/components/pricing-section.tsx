@@ -1,4 +1,8 @@
 import { useState } from "react";
+import { useLocation } from "wouter";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Check, Shield } from "lucide-react";
 
 interface PricingFeature {
   included: boolean;
@@ -27,6 +31,7 @@ export default function PricingSection() {
     professional: {},
     business: {}
   });
+  const [, setLocation] = useLocation();
 
   const handleAddonChange = (planId: string, addonId: string, checked: boolean) => {
     setSelectedAddons(prev => ({
@@ -36,6 +41,44 @@ export default function PricingSection() {
         [addonId]: checked
       }
     }));
+  };
+  
+  const proceedToCheckout = () => {
+    // Find the selected plan
+    const plan = plans.find(p => p.name.toLowerCase() === selectedPlan);
+    
+    if (!plan) return;
+    
+    // Get selected addons for this plan
+    const selectedAddonsList = Object.entries(selectedAddons[selectedPlan] || {})
+      .filter(([, isSelected]) => isSelected)
+      .map(([addonId]) => {
+        const addonDetails = plan.addons.find(a => a.id === addonId);
+        if (!addonDetails) return null;
+        
+        // Extract just the numeric part from the price string (e.g. "$25/month" -> "25")
+        const priceMatch = addonDetails.price.match(/\$(\d+)/);
+        const price = priceMatch ? priceMatch[1] : "0";
+        
+        return {
+          id: addonId,
+          price
+        };
+      })
+      .filter(Boolean);
+    
+    // Create URL query params for checkout
+    const params = new URLSearchParams();
+    params.set('planId', selectedPlan);
+    params.set('planName', plan.name);
+    params.set('amount', plan.price);
+    
+    if (selectedAddonsList.length > 0) {
+      params.set('addons', encodeURIComponent(JSON.stringify(selectedAddonsList)));
+    }
+    
+    // Navigate to checkout page
+    setLocation(`/checkout?${params.toString()}`);
   };
 
   const plans: PricingPlan[] = [
@@ -145,7 +188,7 @@ export default function PricingSection() {
                   <ul className="space-y-4">
                     {plan.features.map((feature, idx) => (
                       <li key={idx} className="flex items-start">
-                        <i className="fas fa-check text-green-600 mt-1 mr-3"></i>
+                        <Check className="text-green-600 h-5 w-5 mr-2 flex-shrink-0" />
                         <span>{feature.text}</span>
                       </li>
                     ))}
@@ -172,16 +215,33 @@ export default function PricingSection() {
                     </div>
                   </div>
                   
-                  <button 
-                    onClick={() => setSelectedPlan(planId)}
-                    className={`w-full ${isSelected ? 'bg-secondary' : 'bg-primary'} hover:bg-blue-700 text-white mt-6 py-3 rounded-md transition duration-150 ease-in-out font-medium`}
-                  >
-                    {isSelected ? 'Selected' : 'Select Plan'}
-                  </button>
+                  <div className="space-y-3 mt-6">
+                    <button 
+                      onClick={() => setSelectedPlan(planId)}
+                      className={`w-full ${isSelected ? 'bg-secondary' : 'bg-primary'} hover:bg-primary/90 text-white py-3 rounded-md transition duration-150 ease-in-out font-medium`}
+                    >
+                      {isSelected ? 'Selected' : 'Select Plan'}
+                    </button>
+                    
+                    {isSelected && (
+                      <Button 
+                        onClick={proceedToCheckout}
+                        className="w-full bg-green-600 hover:bg-green-700 text-white font-medium flex items-center justify-center"
+                      >
+                        <Shield className="mr-2 h-4 w-4" />
+                        Proceed to Secure Checkout
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
             );
           })}
+        </div>
+        
+        <div className="mt-8 text-center">
+          <Badge className="mb-2 bg-secondary text-white">SECURE PAYMENT</Badge>
+          <p className="text-neutral-600 text-sm">All payments are secured with ECSMID encryption technology.</p>
         </div>
       </div>
     </section>

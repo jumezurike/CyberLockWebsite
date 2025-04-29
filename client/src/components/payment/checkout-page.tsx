@@ -25,7 +25,7 @@ export default function CheckoutPage({ planId, planName, amount, addons = [] }: 
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [, navigate] = useLocation();
+  const [, setLocation] = useLocation();
 
   useEffect(() => {
     // Create PaymentIntent as soon as the page loads
@@ -57,11 +57,11 @@ export default function CheckoutPage({ planId, planName, amount, addons = [] }: 
   }, [planId, amount, addons]);
 
   const handleCancel = () => {
-    navigate("/");
+    setLocation("/");
   };
 
   const handleSuccess = () => {
-    navigate("/payment-success");
+    setLocation("/payment-success");
   };
 
   if (isLoading) {
