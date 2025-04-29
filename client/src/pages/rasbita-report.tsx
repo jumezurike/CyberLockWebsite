@@ -359,7 +359,7 @@ export default function RasbitaReportPage() {
           governanceMaturity: {
             governanceScore: 0,
             managementScore: 0,
-            completed: false
+            completed: true // Mark as completed to show full report immediately
           },
           // Reset the NIST CSF 2.0 framework domain scores
           rasbitaCategories: {
@@ -391,14 +391,14 @@ export default function RasbitaReportPage() {
         // Clear any initial form data
         setInitialFormData(null);
         
-        // Start with the governance assessment
-        setAssessmentStep("governance");
-        setShowGovernanceAndManagementAssessment(true);
-        setShowResults(false);
+        // Skip directly to results for testing
+        setAssessmentStep("results");
+        setShowGovernanceAndManagementAssessment(false);
+        setShowResults(true);
         
         toast({
-          title: "New Report Created",
-          description: "Begin by completing the Governance & Management assessment.",
+          title: "RASBITA Report Generated",
+          description: "Complete RASBITA report is ready for review.",
         });
         
         return; // Exit the function early
@@ -912,7 +912,7 @@ export default function RasbitaReportPage() {
             disabled={!selectedAssessment || loading}
             className="bg-purple-700 text-white hover:bg-purple-800"
           >
-            {loading ? "Loading..." : "Load"}
+            {loading ? "Loading..." : "Generate RASBITA Analysis Report"}
           </Button>
         </div>
       </div>
