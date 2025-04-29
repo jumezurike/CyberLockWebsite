@@ -177,7 +177,7 @@ export default function RasbitaReportPage() {
   const [loading, setLoading] = useState(false);
   const [exportLoading, setExportLoading] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
-  const [selectedAssessment, setSelectedAssessment] = useState<string>("");
+  const [selectedAssessment, setSelectedAssessment] = useState<string>("new");
   const [savedReports, setSavedReports] = useState<RasbitaReport[]>([]);
   const [initialFormData, setInitialFormData] = useState<any>(null);
   const [showResults, setShowResults] = useState(false); // Changed to false by default to enforce assessment flow
@@ -916,7 +916,7 @@ export default function RasbitaReportPage() {
           </Button>
         </div>
       </div>
-      
+
       {/* Sequential Assessment Flow */}
       {assessmentStep === "governance" && (
         <div className="mt-6">
