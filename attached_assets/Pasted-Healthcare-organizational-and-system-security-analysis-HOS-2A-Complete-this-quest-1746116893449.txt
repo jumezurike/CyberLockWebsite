@@ -1,0 +1,444 @@
+Healthcare organizational and system security analysis (HOS^2A)
+               (Complete this questionnaire to begin your assessment)
+1. Business Information
+
+2. Infrastructure Mode of Operation
+
+What we try to do here is to figure out the:
+-Operating system. (identify OS)
+-Potential Security Risks (identify potential risk)
+-Potential Vulnerabilities (identify potential risk)
+
+These must be known from the business point of view with respecting the infrastructure mode of operation. These information are usually supplied by the business during questionnaire: It could also be validated during matrix population. 
+
+3. Configuration Baseline
+
+- OS / System Hardening
+- CIS Benchmark
+
+4. Security Control Framework
+-Operations
+-Management
+-Technology
+-People
+
+There are limitations to what framework applies to operations or management or technology or people or more controls... Find the table below for that. 
+
+Framework	Operations	Management	Technology	People	
+NIST CSF	✓	✓	✓	✗ (Awareness in "Protect")	
+CIS CSC	✓	✓	✓	✗ (Training in Controls 14–16)	
+Cyber Essentials (UK)	✓	✗	✓	✗	
+ISO/IEC 27001	✓	✓	✗	✗ (Implied in A.7.2.2)	
+SBA Cybersecurity Guide	✓	✓	✗	✗	
+PCI DSS	✓	✗	✓	✗ (Req. 12.6 training)	
+FTC Cybersecurity for SB	✓	✓	✗	✗	
+CMMC	✓	✓	✗	✗	
+HIPAA	✓	✓	✗	✓✗ (§164.308(a)(5) training)	
+SECURE SB (SCORE Initiative)	✓	✓	✗	✗	
+HITECH Act	✓	✓	✗	✓ (Expands HIPAA training/enforcement)	
+HITRUST CSF	✓	✓	✓	✓ (Workforce security controls)	
+MITRE ATT&CK	✓	✗	✓	✗	
+SECURE SB (SCORE)	✓	✓	✗	✗	
+NISTIR 8286	✗	✗	✗	✓ (Workforce skille, roles/training)	
+SANS Security Awareness	✗	✗	✗	✓ (Behavior/culture, Human risk)	
+COSO ERM	✗	✓	✗	✓ (Culture/governance)	
+Cyber Readiness Institute	✓	✓	✗	✓ (SMB behavior change	
+					
+(✓ = Explicit coverage | ✗ = Minimal/implied coverage | ✓✗ = Partial coverage)					
+
+5. Compliance
+
+6. Regulatory requirements
+
+7. Standards
+
+8. Relevant Questionnaires
+What we want to do is to check what questionnaire and checklist that will be needed for the application of
+-Security Control Framework
+-Compliance
+-Regulatory Requirements
+-Standards
+e.g if you choose PCI-DSS we must find the security assessment question that is relevant to that. I have compiled an exhaustive table below:
+
+Framework	Questionnaire Type	Purpose	Applicability	Key Focus Areas	Resource Link
+PCI-DSS	SAQ A, A-EP, B, B-IP, C, C-VT, D, P2PE-HW	Payment security	Merchants/service providers handling card data	Encryption, access control, network security	PCI SSC SAQs
+HIPAA	HIPAA Security Risk Assessment (SRA) Tool	Protected Health Information (PHI) security	Healthcare providers, insurers, business associates	Data encryption, audit logs, breach notification	HHS SRA Tool
+SOC 2	SOC 2 Readiness Questionnaire	Trust services criteria (security, availability, confidentiality)	Cloud service providers, SaaS companies	Access controls, incident response, data integrity	AICPA SOC 2
+ISO 27001	ISO 27001 Self-Assessment Questionnaire	Information Security Management System (ISMS)	Organizations of all sizes	Risk management, asset protection, continuous improvement	ISO 27001 Checklist
+NIST CSF	NIST Cybersecurity Framework Self-Assessment	Cyber risk management	Critical infrastructure, federal agencies	Identify, Protect, Detect, Respond, Recover	NIST CSF Tool
+GDPR	GDPR Compliance Questionnaire	EU data protection	Organizations processing EU citizen data	Consent management, data subject rights, breach reporting	GDPR Toolkit
+CIS Controls	CIS Controls Self-Assessment Tool (CSAT)	Foundational cybersecurity practices	All organizations	Basic hygiene (patches, MFA, backups)	CIS CSAT
+FedRAMP	FedRAMP Security Assessment Questionnaire (SAQ)	Cloud security for U.S. government	Cloud service providers	FedRAMP Moderate/High baselines	FedRAMP SAQ
+CCPA	CCPA Compliance Checklist	California consumer privacy	Businesses handling CA resident data	Consumer rights, opt-out mechanisms	CCPA Guide
+NYDFS 23 NYCRR 500	NYDFS Cybersecurity Self-Assessment	Financial services cybersecurity	NY-regulated financial institutions	Multi-factor auth, penetration testing, CISO appointment	NYDFS Tool
+
+9. Adversarial Insight (Mitre ATT&CK)
+-Tactic
+-Technique
+
+The ideas is when going over the matrix adversarial insight. We must identify the ATT&CK for a particular potential vulnerability and the security risk. If a Tactics is chosen the corresponding techniques will appear. Then we have to choose the appropriate one which is most likely. For example Credential access tactic TA0006, password guessing T1110.001 or brute force T1110 ETC, are techniques that could apply here. Then when we do the monitoring during comprehensive report we will see for sure in the SIEM. 
+
+10. ISMS
+-Policies
+-Procedures
+-Plans
+-Process
+
+After the matrix is first populated based on the information the business supplies. We would provide the relevant tools (policies, procedures, plans, process) they need to run their business. We can now determine what they need focusing on the industry as a part of the GAP analysis. This will be provided to the business.
+
+11. Contact and confirmation. 
+
+
+Note- I included the processes, plans, procedures and policies for you. This allows you to append to what we already have. 
+
+PROCESSES:
+Payroll  Offboarding  Invoicing  Expense Management  Tax Filing  Audit Prep  IT Setup  Security Monitoring  Data Backup  IT Support  Lead Management  Sales Process  Customer Support  Billing  Vendor Selection  Purchasing  Inventory Control  Policy Compliance  Regulatory Updates  Incident Reporting  Emergency Response  Disaster Recovery  SOP Documentation  Process Automation  Delegation  Quarterly Reviews
+
+PLANS:
+
+Information Security Plan (ISP) - Overall security strategy
+
+System Security Plan (SSP) - Per-system protection details
+
+Risk Management Plan - Risk identification/mitigation process
+
+Incident Response Plan - Breach containment procedures
+
+Disaster Recovery Plan - IT system restoration process
+
+Business Continuity Plan - Operations maintenance during disruptions
+
+Patch Management Plan - Software update schedule/process
+
+Vendor Risk Management Plan - Third-party security oversight
+
+Data Backup Plan - Secure backup procedures
+
+Access Control Plan - User permission management
+
+Network Security Plan - Infrastructure protection strategy
+
+Cloud Security Plan - Cloud configuration standards
+
+Physical Security Plan - Facility access controls
+
+Security Awareness Training Plan - Employee education schedule
+
+Vulnerability Management Plan - Scanning/remediation process
+
+Encryption Management Plan - Data protection standards
+
+Mobile Device Management Plan - BYOD security controls
+
+Change Management Plan - System modification procedures
+
+Compliance Management Plan - Regulatory adherence roadmap
+
+Penetration Testing Plan - Security assessment schedule
+
+
+PROCEDURES:
+
+Access Control Procedures
+User Account Provisioning Procedure
+
+Privileged Access Request Procedure
+
+Password Reset Procedure
+
+Multi-Factor Authentication (MFA) Enrollment Procedure
+
+Access Revocation Procedure (Terminations/Transfers)
+
+Role-Based Access Control (RBAC) Implementation Procedure
+
+Access Review & Recertification Procedure (Quarterly)
+
+Service Account Management Procedure
+
+Emergency Access ("Break Glass") Procedure
+
+Remote Access VPN Setup Procedure
+
+Incident Management Procedures
+Security Incident Reporting Procedure
+
+Malware Containment Procedure
+
+Ransomware Response Procedure
+
+Data Breach Notification Procedure (Legal/Regulatory)
+
+Forensic Evidence Collection Procedure
+
+Incident Post-Mortem Analysis Procedure
+
+Data Protection Procedures
+Data Classification Handling Procedure
+
+Encryption Key Management Procedure
+
+Secure File Transfer Procedure
+
+Data Retention Purge Procedure
+
+BYOD Data Wipe Procedure
+
+Cloud Data Backup Procedure
+
+Physical Media Destruction Procedure
+
+Network Security Procedures
+Firewall Rule Change Procedure
+
+IDS/IPS Tuning Procedure
+
+Wireless Network Audit Procedure
+
+Network Segmentation Implementation Procedure
+
+VPN Tunnel Configuration Procedure
+
+System Hardening Procedures
+OS Hardening Baseline Procedure (Windows/Linux)
+
+Database Security Configuration Procedure
+
+Application Whitelisting Procedure
+
+Patch Deployment Rollback Procedure
+
+Physical Security Procedures
+Badge Access Activation/Deactivation Procedure
+
+Data Center Entry Logging Procedure
+
+Visitor Escort Procedure
+
+Secure Workstation Clearance Procedure (End-of-Day)
+
+Third-Party Risk Procedures
+Vendor Security Assessment Procedure
+
+Cloud Service Configuration Review Procedure
+
+Contractor Access Termination Procedure
+
+Compliance & Audit Procedures
+Policy Exception Handling Procedure
+
+Audit Log Review Procedure
+
+Regulatory Gap Assessment Procedure
+
+Control Testing Procedure
+
+Operational Procedures
+New Employee Security Onboarding Procedure
+
+Secure Software Development Lifecycle (SDLC) Procedure
+
+Change Management Approval Procedure
+
+Disaster Recovery Failover Procedure
+
+Backup Restoration Test Procedure
+
+Phishing Test Execution Procedure
+
+Security Awareness Training Delivery Procedure
+
+Industry-Specific Additions
+
+HIPAA PHI Access Log Review Procedure (Healthcare)
+
+PCI-DSS PAN Masking Procedure (Payment Processing)
+
+GDPR Data Subject Request Fulfillment Procedure
+
+
+
+
+POLICIES
+
+Acceptable Use Policy - IT resource usage rules
+
+Password Policy - Credential requirements
+
+Data Classification Policy - Information handling standards
+
+Remote Access Policy - Secure connection requirements
+
+Email Security Policy - Communication protections
+
+Bring Your Own Device (BYOD) Policy - Personal device rules
+
+Social Media Policy - Online conduct guidelines
+
+Clean Desk Policy - Physical document security
+
+Whistleblower Policy - Reporting procedures
+
+Data Retention Policy - Storage/deletion timelines
+
+Encryption Policy - Data protection standards
+
+Access Control Policy - Permission management
+
+Network Security Policy - Infrastructure protections
+
+Incident Reporting Policy - Breach notification rules
+
+Third-Party Security Policy - Vendor requirements
+
+Wireless Security Policy - WiFi usage standards
+
+Physical Security Policy - Facility access rules
+
+Backup Policy - Data protection procedures
+
+Software Acquisition Policy - Approved applications
+
+Audit Policy - Compliance verification process
+
+HIPAA Security Policy (Healthcare)
+
+SOX IT Controls Policy (Financial reporting)
+
+
+Possible operating system in the market:
+Windows OS
+Windows Server
+
+Windows Server 2022
+
+Windows Server 2019
+
+Windows Server 2016
+
+Windows Server 2012 R2
+
+Windows Client
+
+Windows 11
+
+Windows 10
+
+Windows 8.1
+
+Linux Distributions
+Red Hat Family
+
+Red Hat Enterprise Linux (RHEL) 9, 8, 7
+
+CentOS 7, 8 (Stream)
+
+Oracle Linux 9, 8, 7
+
+Debian Family
+
+Debian 12, 11, 10
+
+Ubuntu 22.04 LTS, 20.04 LTS, 18.04 LTS
+
+SUSE Family
+
+SUSE Linux Enterprise Server (SLES) 15, 12
+
+openSUSE Leap 15
+
+Other Linux
+
+Amazon Linux 2, 2023
+
+AlmaLinux 9, 8
+
+Rocky Linux 9, 8
+
+Fedora (Latest)
+
+Unix-Based OS
+IBM AIX (7.2, 7.1)
+
+Solaris (11.4, 11.3)
+
+HP-UX (11i v3)
+
+Cloud/Container OS
+Google Cloud Platform (GCP)
+
+Google Compute Engine (GCE) Hardening
+
+Microsoft Azure
+
+Azure Virtual Machines (Linux/Windows)
+
+AWS
+
+Amazon Linux AMI
+
+AWS Ubuntu/Debian/RHEL
+
+Container OS
+
+Docker (CIS Docker Benchmark)
+
+Kubernetes (CIS Kubernetes Benchmark)
+
+Network/Embedded OS
+Cisco IOS (Router/Switch OS)
+
+VMware ESXi (7.0, 8.0)
+
+PfSense (Firewall OS)
+
+Mobile OS (Limited Benchmarks)
+Android (Enterprise-Relevant Configurations)
+
+iOS (Enterprise Security Baselines)
+
+
+OSes commonly found in POS system
+
+1. Proprietary/POS-Specific OS
+IBM 4690 OS (Legacy, used in older IBM/Toshiba POS systems)
+
+NCR Advanced Checkout Solution (ACS) (NCR’s proprietary retail OS)
+
+Micros RES (Oracle MICROS POS systems)
+
+SUSE Linux Enterprise Point of Service (SLEPOS) (Retail-focused Linux distro)
+
+2. Windows-Based POS OS
+Windows 10/11 IoT Enterprise (Common in modern POS terminals)
+
+Windows Embedded POSReady 7/2009 (Legacy, still in use)
+
+Windows CE (Deprecated, but found in older devices)
+
+3. Linux-Based POS OS
+Ubuntu Touch (Used in some tablet-based POS systems)
+
+Debian/CentOS (Customized for POS by vendors like Toast, Square)
+
+Android (Common in mobile POS/mPOP devices like Square, Clover)
+
+Raspberry Pi OS (DIY/kiosk POS setups)
+
+4. Mobile/Tablet POS (mPOS) OS
+iOS (iPad-based POS: Shopify, Square, Lightspeed)
+
+Android (Clover Flex, SumUp, Revel Systems)
+
+HarmonyOS (Emerging in Huawei-based POS devices in China)
+
+5. Cloud/Web-Based POS (OS-Agnostic)
+ChromeOS (Browser-based POS like Square for Chrome)
+
+PWA (Progressive Web Apps) (Runs on any OS with a browser)
+
+6. Legacy/End-of-Life POS OS
+Windows XP for POS (Still in use in some regions, high risk)
+
+Windows Embedded 8.1 Industry (Phased out)
+
