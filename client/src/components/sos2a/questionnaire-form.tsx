@@ -15,6 +15,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sos2aFormData } from "@/lib/sos2a-types";
 
 const formSchema = z.object({
+  // 1. Business Information
   businessName: z.string().min(2, "Business name is required"),
   businessAddress: z.string().min(5, "Business address is required"),
   businessLocation: z.object({
@@ -27,8 +28,15 @@ const formSchema = z.object({
   showCustomIndustry: z.boolean().optional(),
   employeeCount: z.string().min(1, "Employee count is required"),
   businessServices: z.string().min(5, "Business services description is required"),
+  
+  // 2. Infrastructure Mode of Operation
   operationMode: z.array(z.string()).min(1, "At least one operation mode is required"),
   internetPresence: z.array(z.string()).min(1, "At least one internet presence is required"),
+  
+  // 3. Configuration Baseline
+  configurationBaseline: z.string().optional(),
+  
+  // 4. Security Control Framework
   securityMeasures: z.array(z.string()),
   primaryConcerns: z.array(z.string()),
   frameworks: z.object({
@@ -36,18 +44,32 @@ const formSchema = z.object({
     management: z.array(z.string()),
     technology: z.array(z.string()),
   }),
+  
+  // 5. Compliance
   complianceRequirements: z.object({
     frameworks: z.array(z.string()),
     standards: z.array(z.string()),
     compliance: z.array(z.string()),
     regulations: z.array(z.string()),
   }),
+  
+  // 6. Regulatory Requirements
+  regulatoryRequirements: z.array(z.string()).optional(),
+  
+  // 7. Standards
+  healthcareStandards: z.array(z.string()).optional(),
+  
   policyDocuments: z.object({
     policies: z.array(z.string()),
     procedures: z.array(z.string()),
     plans: z.array(z.string()),
     guides: z.array(z.string()),
   }),
+  
+  // 8. Relevant Questionnaires
+  relevantQuestionnaires: z.array(z.string()).optional(),
+  
+  // 9. Adversarial Insight
   osHardening: z.object({
     stig: z.boolean(),
     scap: z.boolean(),
@@ -56,6 +78,12 @@ const formSchema = z.object({
   adversarialInsights: z.object({
     mitreAttackIds: z.array(z.string()),
   }),
+  threatActors: z.array(z.string()).optional(),
+  
+  // 10. ISMS
+  ismsImplementation: z.string().optional(),
+  
+  // 11. Contact and Confirmation
   contactInfo: z.object({
     name: z.string().min(2, "Name is required"),
     pointOfContact: z.string().min(2, "Point of contact is required"),
@@ -64,6 +92,8 @@ const formSchema = z.object({
     phone: z.string().min(10, "Valid phone number is required"),
     sameAsContact: z.boolean().optional(),
   }),
+  
+  // Report options
   matrixData: z.any().nullable(),
   reportType: z.enum(['preliminary', 'comprehensive']),
   availabilityConfirmation: z.boolean().refine(val => val === true, {
@@ -80,6 +110,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const form = useForm<Sos2aFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      // 1. Business Information
       businessName: "",
       businessAddress: "",
       businessLocation: {
@@ -92,8 +123,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       showCustomIndustry: false,
       employeeCount: "",
       businessServices: "",
+      
+      // 2-3. Infrastructure and Configuration
       operationMode: [],
       internetPresence: [],
+      configurationBaseline: "",
+      
+      // 4. Security Control Framework
       securityMeasures: [],
       primaryConcerns: [],
       frameworks: {
@@ -101,18 +137,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         management: [],
         technology: [],
       },
+      
+      // 5-7. Compliance, Regulatory, Standards
       complianceRequirements: {
         frameworks: [],
         standards: [],
         compliance: [],
         regulations: [],
       },
+      regulatoryRequirements: [],
+      healthcareStandards: [],
       policyDocuments: {
         policies: [],
         procedures: [],
         plans: [],
         guides: [],
       },
+      
+      // 8-9. Questionnaires & Adversarial Insight
+      relevantQuestionnaires: [],
       osHardening: {
         stig: false,
         scap: false,
@@ -121,6 +164,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       adversarialInsights: {
         mitreAttackIds: [],
       },
+      threatActors: [],
+      
+      // 10. ISMS
+      ismsImplementation: "",
+      
+      // 11. Contact and Confirmation
       contactInfo: {
         name: "",
         pointOfContact: "",
@@ -128,6 +177,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         contactEmail: "",
         phone: "",
       },
+      
+      // Report options
       matrixData: null,
       reportType: 'preliminary',
       availabilityConfirmation: false,

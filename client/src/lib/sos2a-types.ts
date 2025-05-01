@@ -29,6 +29,7 @@ export interface PolicyDocuments {
 }
 
 export interface Sos2aFormData {
+  // 1. Business Information
   businessName: string;
   businessAddress: string;
   businessLocation: {
@@ -41,13 +42,33 @@ export interface Sos2aFormData {
   showCustomIndustry?: boolean;
   employeeCount: string;
   businessServices: string;
+  
+  // 2. Infrastructure Mode of Operation
   operationMode: string[];
   internetPresence: string[];
+  
+  // 3. Configuration Baseline
+  configurationBaseline?: string;
+  
+  // 4. Security Control Framework
   securityMeasures: string[];
   primaryConcerns: string[];
   frameworks: FrameworkSelection;
+  
+  // 5. Compliance
   complianceRequirements: ComplianceRequirements;
+  
+  // 6. Regulatory Requirements
+  regulatoryRequirements?: string[];
+  
+  // 7. Standards
+  healthcareStandards?: string[];
   policyDocuments: PolicyDocuments;
+  
+  // 8. Relevant Questionnaires
+  relevantQuestionnaires?: string[];
+  
+  // 9. Adversarial Insight
   osHardening: {
     stig: boolean;
     scap: boolean;
@@ -56,7 +77,15 @@ export interface Sos2aFormData {
   adversarialInsights: {
     mitreAttackIds: string[];
   };
+  threatActors?: string[];
+  
+  // 10. ISMS
+  ismsImplementation?: string;
+  
+  // 11. Contact and Confirmation
   contactInfo: ContactInfo;
+  
+  // Report options
   matrixData: any | null; // Using any here since matrix data can be complex and varied
   reportType: 'preliminary' | 'comprehensive';
   availabilityConfirmation: boolean;
