@@ -1017,7 +1017,7 @@ export default function Sos2aTool() {
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
-            Healthcare Organizational and System Security Analysis (SOS²A)
+            Healthcare Organizational and System Security Analysis (HOS²A)
           </CardTitle>
         </CardHeader>
         <CardContent>
