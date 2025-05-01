@@ -47,6 +47,7 @@ export default function RasbitaDashboard({ report }: RasbitaDashboardProps) {
   };
 
   // Ensure all properties exist with defaults for safety using NIST CSF 2.0 framework domains
+  // The report uses rasbitaCategories directly
   const rasbitaCategories = report.rasbitaCategories || {
     govern: 0,
     identify: 0,

@@ -242,24 +242,27 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="bg-primary/5 rounded-md p-2 border-l-4 border-red-500">
                     <p className="text-xs text-muted-foreground">Cybersecurity Incident Risk Score</p>
                     <p className="font-bold text-red-600">
-                      {report.rasbitaScore.categories?.risk || 
-                       report.rasbitaScore.categories?.govern || 
+                      {/* Prioritize new NIST CSF 2.0 domains, fallback to legacy fields */}
+                      {report.rasbitaScore.categories?.govern || 
+                       report.rasbitaScore.categories?.risk || 
                        "N/A"}
                     </p>
                   </div>
                   <div className="bg-primary/5 rounded-md p-2 border-l-4 border-purple-500">
                     <p className="text-xs text-muted-foreground">Cybersecurity Gov & Mngt maturity level</p>
                     <p className="font-bold text-purple-600">
-                      {report.rasbitaScore.categories?.securityControls || 
-                       report.rasbitaScore.categories?.protect || 
+                      {/* Prioritize new NIST CSF 2.0 domains, fallback to legacy fields */}
+                      {report.rasbitaScore.categories?.protect || 
+                       report.rasbitaScore.categories?.securityControls || 
                        "N/A"}
                     </p>
                   </div>
                   <div className="bg-primary/5 rounded-md p-2 border-l-4 border-green-500">
                     <p className="text-xs text-muted-foreground">NRRB (positive)</p>
                     <p className="font-bold text-green-600">
-                      {report.rasbitaScore.categories?.architecture || 
-                       report.rasbitaScore.categories?.respond || 
+                      {/* Prioritize new NIST CSF 2.0 domains, fallback to legacy fields */}
+                      {report.rasbitaScore.categories?.respond || 
+                       report.rasbitaScore.categories?.architecture || 
                        "N/A"}
                     </p>
                     <p className="text-[10px] text-muted-foreground">Positive value = spend makes sense</p>

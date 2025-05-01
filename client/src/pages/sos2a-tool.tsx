@@ -250,6 +250,18 @@ export default function Sos2aTool() {
     const reportType = formData?.reportType || 'preliminary';
     
     // Generate the report based on the form and matrix data
+    const calculatedRasbitaScore = calculateRasbitaScore(data);
+    
+    // Create the rasbitaCategories property in the format expected by the RasbitaReport type
+    const rasbitaCategories = {
+      govern: calculatedRasbitaScore.categories.govern,
+      identify: calculatedRasbitaScore.categories.identify,
+      protect: calculatedRasbitaScore.categories.protect, 
+      detect: calculatedRasbitaScore.categories.detect,
+      respond: calculatedRasbitaScore.categories.respond,
+      recover: calculatedRasbitaScore.categories.recover
+    };
+    
     const generatedReport: AssessmentReport = {
       id: 'report-' + Date.now(),
       businessId: data[0].infraType + '-' + Date.now(),
@@ -271,7 +283,8 @@ export default function Sos2aTool() {
       mitreAttackCoverage: evaluateMitreAttackCoverage(data),
       matrixData: data,
       scorecard: generateScorecardData(data, reportType),
-      rasbitaScore: calculateRasbitaScore(data),
+      rasbitaScore: calculatedRasbitaScore,
+      rasbitaCategories: rasbitaCategories
     };
     
     setReport(generatedReport);
@@ -279,6 +292,19 @@ export default function Sos2aTool() {
     
     // Save the assessment to the database
     try {
+      // Calculate RASBITA score and convert for use in both formats
+      const calculatedRasbitaScore = calculateRasbitaScore(data);
+      
+      // Create the rasbitaCategories property in the format expected by the RasbitaReport type
+      const rasbitaCategories = {
+        govern: calculatedRasbitaScore.categories.govern,
+        identify: calculatedRasbitaScore.categories.identify,
+        protect: calculatedRasbitaScore.categories.protect, 
+        detect: calculatedRasbitaScore.categories.detect,
+        respond: calculatedRasbitaScore.categories.respond,
+        recover: calculatedRasbitaScore.categories.recover
+      };
+      
       const response = await apiRequest("POST", "/api/assessments", {
         businessName: formData?.businessName || "Unknown",
         industry: formData?.industry || "Unknown",
@@ -287,7 +313,8 @@ export default function Sos2aTool() {
         findings: JSON.stringify(identifySecurityRisks(data)),
         recommendations: JSON.stringify(generateRecommendations(data)),
         matrixData: JSON.stringify(data),
-        rasbitaScore: JSON.stringify(calculateRasbitaScore(data)),
+        rasbitaScore: JSON.stringify(calculatedRasbitaScore),
+        rasbitaCategories: JSON.stringify(rasbitaCategories),
         createdAt: new Date().toISOString()
       });
       
