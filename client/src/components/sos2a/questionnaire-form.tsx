@@ -1270,52 +1270,156 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <FormDescription className="mb-4">
                     System hardening is critical for protecting healthcare applications and patient data. These practices help secure operating systems hosting healthcare applications.
                   </FormDescription>
-                  <div className="space-y-4">
+                  
+                  <div className="mb-6">
                     <FormField
                       control={form.control}
-                      name="osHardening.stig"
+                      name="configurationManagement"
                       render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel>
-                              STIG (Security Technical Implementation Guides)
-                            </FormLabel>
-                            <FormDescription>
-                              Standard security configurations for different operating systems
-                            </FormDescription>
-                          </div>
+                        <FormItem>
+                          <FormLabel>Configuration Management Approach</FormLabel>
+                          <FormDescription className="mb-2">
+                            How does your organization manage and maintain secure configurations across healthcare systems?
+                          </FormDescription>
+                          <Select
+                            value={field.value}
+                            onValueChange={field.onChange}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select configuration management approach" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="manual">Manual Configuration Management</SelectItem>
+                              <SelectItem value="automated-partial">Partially Automated Configuration Management</SelectItem>
+                              <SelectItem value="automated-full">Fully Automated Configuration Management</SelectItem>
+                              <SelectItem value="dcb">Desired Configuration Baseline (DCB)</SelectItem>
+                              <SelectItem value="cmmc">CMMC Configuration Management</SelectItem>
+                              <SelectItem value="hitrust">HITRUST Configuration Management</SelectItem>
+                              <SelectItem value="none">No Formal Configuration Management</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            An effective configuration management process ensures consistent application of security settings across all healthcare systems.
+                          </FormDescription>
+                          <FormMessage />
                         </FormItem>
                       )}
                     />
+                  </div>
+                  <div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      <FormField
+                        control={form.control}
+                        name="osHardening.stig"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                STIG (Security Technical Implementation Guides)
+                              </FormLabel>
+                              <FormDescription>
+                                Standard security configurations for healthcare systems
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="osHardening.scap"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>
+                                SCAP (Security Content Automation Protocol)
+                              </FormLabel>
+                              <FormDescription>
+                                Automated vulnerability checking for healthcare systems
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                     
-                    <FormField
-                      control={form.control}
-                      name="osHardening.scap"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel>
-                              SCAP (Security Content Automation Protocol)
-                            </FormLabel>
-                            <FormDescription>
-                              Automated vulnerability checking and policy compliance
+                    <div className="mt-6">
+                      <FormLabel className="mb-3 block">CIS Benchmarks for Healthcare Systems</FormLabel>
+                      <FormDescription className="mb-3">
+                        The Center for Internet Security (CIS) provides secure configuration guidelines for healthcare systems.
+                        Select the benchmarks applicable to your healthcare organization:
+                      </FormDescription>
+                      <FormField
+                        control={form.control}
+                        name="cisBenchmarks"
+                        render={({ field }) => (
+                          <FormItem>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {[
+                                { id: "cis-windows", label: "CIS Windows Benchmark" },
+                                { id: "cis-linux", label: "CIS Linux Benchmark" },
+                                { id: "cis-macos", label: "CIS macOS Benchmark" },
+                                { id: "cis-cloud", label: "CIS Cloud Infrastructure Benchmark" },
+                                { id: "cis-aws", label: "CIS AWS Benchmark" },
+                                { id: "cis-azure", label: "CIS Azure Benchmark" },
+                                { id: "cis-gcp", label: "CIS Google Cloud Benchmark" },
+                                { id: "cis-kubernetes", label: "CIS Kubernetes Benchmark" },
+                                { id: "cis-docker", label: "CIS Docker Benchmark" },
+                                { id: "cis-hipaa", label: "CIS HIPAA Benchmark" },
+                              ].map((option) => (
+                                <FormField
+                                  key={option.id}
+                                  control={form.control}
+                                  name="cisBenchmarks"
+                                  render={({ field }) => (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([...(field.value || []), option.id])
+                                              : field.onChange(
+                                                  (field.value || []).filter(
+                                                    (value) => value !== option.id
+                                                  )
+                                                );
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  )}
+                                />
+                              ))}
+                            </div>
+                            <FormDescription className="mt-4 text-amber-500">
+                              Note: For healthcare organizations, the CIS HIPAA Benchmark is recommended to help meet regulatory compliance requirements.
                             </FormDescription>
-                          </div>
-                        </FormItem>
-                      )}
-                    />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                 </div>
               </TabsContent>
