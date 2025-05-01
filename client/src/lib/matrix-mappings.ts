@@ -160,6 +160,94 @@ export const commonVulnerabilities = {
   ]
 };
 
+// Define assessment tools categorized by type and relevance
+export const assessmentTools = {
+  // Category 1: Questionnaires - For information gathering and initial assessments
+  questionnaires: {
+    'pci-dss': [
+      "SAQ A (Card-not-present Merchants)",
+      "SAQ B (Merchants with Imprint-only or Standalone Terminals)",
+      "SAQ C (Merchants with Payment Application Systems)",
+      "SAQ B-IP (Merchants with Standalone IP-Connected Terminals)",
+      "SAQ A-EP (E-commerce Merchants with Third-Party Processing)",
+      "SAQ C-VT (Merchants with Virtual Terminals)",
+      "SAQ D (Merchants with Full Cardholder Data Environment)",
+      "SAQ P2PE-HW (Hardware Payment Terminal P2PE)"
+    ],
+    'hipaa': [
+      "HIPAA Security Risk Assessment (SRA) Tool",
+      "HIPAA Privacy Rule Compliance Questionnaire",
+      "HIPAA Breach Notification Readiness Assessment",
+      "HIPAA Security Rule Technical Safeguards Questionnaire",
+      "HIPAA Administrative Safeguards Assessment"
+    ],
+    'gdpr': [
+      "GDPR Compliance Questionnaire (Articles 5-30)",
+      "GDPR Data Protection Impact Assessment Questionnaire",
+      "GDPR Data Subject Rights Readiness Questionnaire",
+      "GDPR Cross-Border Data Transfer Assessment"
+    ],
+    'other': [
+      "FERPA Compliance Questionnaire",
+      "CCPA Consumer Rights Implementation Questionnaire",
+      "GLBA Financial Privacy Questionnaire",
+      "SOX IT General Controls (ITGC) Questionnaire"
+    ]
+  },
+  
+  // Category 2: Checklists - For validating compliance with specific controls or requirements
+  checklists: {
+    'pci-dss': [
+      "PCI DSS Firewall Configuration Checklist",
+      "PCI DSS Log Review Checklist",
+      "PCI DSS Vendor Management Checklist",
+      "PCI DSS Secure Coding Checklist"
+    ],
+    'hipaa': [
+      "HIPAA Business Associate Agreement Checklist",
+      "HIPAA Contingency Planning Checklist",
+      "HIPAA Security Incident Response Checklist",
+      "HIPAA Workstation Security Checklist"
+    ],
+    'nist': [
+      "NIST SP 800-171 Controls Checklist",
+      "NIST CSF Basic Hygiene Checklist",
+      "NIST Incident Response Preparedness Checklist"
+    ],
+    'industry': [
+      "Healthcare Data Protection Checklist",
+      "Financial Services Authentication Checklist",
+      "Retail E-commerce Security Checklist", 
+      "Cloud Service Provider Security Checklist"
+    ]
+  },
+  
+  // Category 3: Assessment Tools - For comprehensive evaluations and scoring
+  assessmentTools: {
+    'comprehensive': [
+      "ISO 27001 Self-Assessment Questionnaire (Annex A Controls)",
+      "NIST Cybersecurity Framework Self-Assessment Tool",
+      "SOC 2 Readiness Assessment (Security, Availability, Confidentiality, Processing Integrity, Privacy)"
+    ],
+    'specialized': [
+      "HITRUST MyCSF Self-Assessment",
+      "FedRAMP Security Assessment Questionnaire (SAQ)",
+      "CIS Controls Self-Assessment Tool (CSAT)",
+      "NYDFS Cybersecurity Self-Assessment Tool"
+    ],
+    'regulatory': [
+      "FISMA Compliance Assessment Tool",
+      "CMMC Assessment Tool",
+      "GDPR Readiness Assessment Tool"
+    ],
+    'industry-specific': [
+      "Healthcare Security Maturity Assessment Tool",
+      "Financial Services Cyber Resilience Assessment",
+      "Critical Infrastructure Security Assessment Tool"
+    ]
+  }
+};
+
 // Define questionnaires based on infrastructure mode and industry
 export const relevantQuestionnaires = {
   // Basic infrastructure questionnaires (PCI-DSS focused)
