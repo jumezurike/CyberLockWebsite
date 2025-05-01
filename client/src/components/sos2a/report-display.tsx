@@ -37,7 +37,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="text-xl md:text-2xl font-bold">
-                {report.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'} Assessment Report
+                Healthcare Organizational and System Security Analysis (HOS²A) {report.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'} Report
               </CardTitle>
               <CardDescription>
                 Generated on {formatDate(report.createdAt)}
