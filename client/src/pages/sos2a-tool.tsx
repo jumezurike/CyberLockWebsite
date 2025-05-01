@@ -270,7 +270,7 @@ export default function Sos2aTool() {
     const reportType = formData?.reportType || 'preliminary';
     
     // Generate the report based on the form and matrix data
-    const calculatedRasbitaScore = calculateRasbitaScore(data);
+    const calculatedRasbitaScore = calculateRasbitaScore(data, formData);
     
     // Create the rasbitaCategories property in the format expected by the RasbitaReport type
     const rasbitaCategories = {
@@ -613,6 +613,160 @@ export default function Sos2aTool() {
     return { immediate, shortTerm, longTerm };
   };
   
+  // Evaluate Information Security Management System (ISMS) status based on form data and matrix items
+  const evaluateIsmsStatus = (data: MatrixItem[], formData: Sos2aFormData | null) => {
+    // Default implementation status if not provided in form data
+    const implementation = formData?.ismsImplementation || 'none';
+    
+    // Collect all ISMS components from matrix items
+    const allPolicies = new Set<string>();
+    const allPlans = new Set<string>();
+    const allProcedures = new Set<string>();
+    const allProcesses = new Set<string>();
+    
+    // Recommended policies, plans, procedures, and processes based on industry
+    const healthcareRecommendedPolicies = [
+      "hipaa-privacy-policy",
+      "hipaa-security-policy", 
+      "phi-handling-policy", 
+      "information-security-policy", 
+      "data-classification-policy"
+    ];
+    
+    const healthcareRecommendedPlans = [
+      "phi-breach-response-plan",
+      "healthcare-contingency-plan",
+      "disaster-recovery-plan",
+      "security-awareness-training-plan"
+    ];
+    
+    const healthcareRecommendedProcedures = [
+      "phi-access-procedure",
+      "hipaa-audit-procedure",
+      "patient-data-transfer-procedure",
+      "incident-reporting-procedure"
+    ];
+    
+    const healthcareRecommendedProcesses = [
+      "hipaa-compliance-monitoring",
+      "healthcare-security-review",
+      "continuous-monitoring-process"
+    ];
+    
+    // Process formData to identify implemented components
+    const implementedPolicies = formData?.ismsPolicies || [];
+    const implementedPlans = formData?.ismsPlans || [];
+    const implementedProcedures = formData?.ismsProcedures || [];
+    const implementedProcesses = formData?.ismsProcesses || [];
+    
+    // Process matrix data to identify recommended components based on infrastructure
+    data.forEach(item => {
+      // Add all ISMS components from the matrix item
+      if (item.isms) {
+        if (Array.isArray(item.isms.policies)) {
+          item.isms.policies.forEach(policy => allPolicies.add(policy));
+        }
+        if (Array.isArray(item.isms.plans)) {
+          item.isms.plans.forEach(plan => allPlans.add(plan));
+        }
+        if (Array.isArray(item.isms.procedures)) {
+          item.isms.procedures.forEach(procedure => allProcedures.add(procedure));
+        }
+        if (Array.isArray(item.isms.processes)) {
+          item.isms.processes.forEach(process => allProcesses.add(process));
+        }
+      }
+      
+      // For healthcare industry, add healthcare-specific components
+      if (formData?.industry === "healthcare") {
+        healthcareRecommendedPolicies.forEach(policy => allPolicies.add(policy));
+        healthcareRecommendedPlans.forEach(plan => allPlans.add(plan));
+        healthcareRecommendedProcedures.forEach(procedure => allProcedures.add(procedure));
+        healthcareRecommendedProcesses.forEach(process => allProcesses.add(process));
+      }
+    });
+    
+    // Determine missing components (those recommended but not implemented)
+    const missingPolicies = Array.from(allPolicies).filter(policy => !implementedPolicies.includes(policy));
+    const missingPlans = Array.from(allPlans).filter(plan => !implementedPlans.includes(plan));
+    const missingProcedures = Array.from(allProcedures).filter(procedure => !implementedProcedures.includes(procedure));
+    const missingProcesses = Array.from(allProcesses).filter(process => !implementedProcesses.includes(process));
+    
+    // Generate recommendations for next steps
+    const recommendedNext: string[] = [];
+    
+    // Prioritize recommendations based on implementation status
+    if (implementation === 'none' || implementation === 'planning') {
+      // Starting from scratch - focus on foundational policies first
+      if (missingPolicies.includes("information-security-policy")) {
+        recommendedNext.push("Develop an Information Security Policy");
+      }
+      
+      if (formData?.industry === "healthcare") {
+        if (missingPolicies.includes("hipaa-privacy-policy")) {
+          recommendedNext.push("Develop a HIPAA Privacy Policy");
+        }
+        if (missingPolicies.includes("hipaa-security-policy")) {
+          recommendedNext.push("Develop a HIPAA Security Policy");
+        }
+      }
+      
+      if (missingPlans.includes("disaster-recovery-plan")) {
+        recommendedNext.push("Create a Disaster Recovery Plan");
+      }
+      
+    } else if (implementation === 'implementing' || implementation === 'operational') {
+      // Building on existing foundation - focus on maturity
+      if (missingProcesses.includes("continuous-monitoring-process")) {
+        recommendedNext.push("Establish a Continuous Monitoring Process");
+      }
+      
+      if (formData?.industry === "healthcare") {
+        if (missingProcedures.includes("phi-access-procedure")) {
+          recommendedNext.push("Implement PHI Access Procedures");
+        }
+        if (missingProcesses.includes("hipaa-compliance-monitoring")) {
+          recommendedNext.push("Develop HIPAA Compliance Monitoring Process");
+        }
+      }
+    } else if (implementation === 'certified' || implementation === 'hipaa' || implementation === 'hitrust') {
+      // Mature program - focus on continuous improvement
+      recommendedNext.push("Perform annual review and update of all ISMS components");
+      recommendedNext.push("Conduct third-party assessment of ISMS effectiveness");
+    }
+    
+    // Add a few general recommendations if list is too short
+    if (recommendedNext.length < 3) {
+      if (missingPlans.length > 0) {
+        recommendedNext.push(`Develop missing plans (${missingPlans.slice(0, 2).join(", ")})`);
+      }
+      if (missingProcedures.length > 0) {
+        recommendedNext.push(`Implement missing procedures (${missingProcedures.slice(0, 2).join(", ")})`);
+      }
+    }
+    
+    return {
+      implementation,
+      policies: {
+        implemented: implementedPolicies,
+        missing: missingPolicies
+      },
+      plans: {
+        implemented: implementedPlans,
+        missing: missingPlans
+      },
+      procedures: {
+        implemented: implementedProcedures,
+        missing: missingProcedures
+      },
+      processes: {
+        implemented: implementedProcesses,
+        missing: missingProcesses
+      },
+      recommendedNext
+    };
+  };
+  
   // Identify framework control gaps based on matrix data
   const identifyFrameworkGaps = (data: MatrixItem[]) => {
     const operations: string[] = [];
@@ -825,41 +979,108 @@ export default function Sos2aTool() {
     return { covered, vulnerable, recommendations };
   };
   
-  // Calculate RASBITA score based on matrix data
-  const calculateRasbitaScore = (data: MatrixItem[]) => {
+  // Calculate RASBITA score based on matrix data with industry-specific adjustments
+  const calculateRasbitaScore = (data: MatrixItem[], formData?: Sos2aFormData | null) => {
+    // Industry weight factors (healthcare gets higher weights for security)
+    const industryWeights = {
+      healthcare: {
+        govern: 1.2,    // Higher governance importance for healthcare
+        identify: 1.15, // Higher risk identification importance
+        protect: 1.25,  // Much higher protection importance
+        detect: 1.2,    // Higher detection importance
+        respond: 1.3,   // Much higher response importance
+        recover: 1.15   // Higher recovery importance
+      },
+      finance: {
+        govern: 1.2,
+        identify: 1.1,
+        protect: 1.2,
+        detect: 1.15,
+        respond: 1.1,
+        recover: 1.05
+      },
+      // Default weights for all other industries
+      default: {
+        govern: 1.0,
+        identify: 1.0,
+        protect: 1.0,
+        detect: 1.0,
+        respond: 1.0,
+        recover: 1.0
+      }
+    };
+    
+    // Determine the industry from formData or the first matrix item
+    const industry = formData?.industry?.toLowerCase() || '';
+    const isHealthcare = industry === 'healthcare' || industry === 'medical' || 
+                         industry === 'health' || industry === 'hospital';
+    const isFinance = industry === 'finance' || industry === 'banking' || 
+                      industry === 'financial services';
+    
+    // Select appropriate weights
+    const weights = isHealthcare ? industryWeights.healthcare :
+                    isFinance ? industryWeights.finance :
+                    industryWeights.default;
+    
     // Calculate scores for NIST CSF 2.0 domains
     
     // GOVERN - Based on management controls and governance frameworks
-    const governScore = Math.round(calculateManagementScore(data) * 0.8 + 
+    let governScore = Math.round(calculateManagementScore(data) * 0.8 + 
       (data.some(item => item.standards.nistCsf || item.standards.iso27001) ? 20 : 0));
     
+    // Apply industry weight to governance score
+    governScore = Math.min(100, Math.round(governScore * weights.govern));
+    
     // IDENTIFY - Based on asset inventory and risk identification
-    const identifyScore = 100 - Math.min(data.flatMap(item => item.risks).length * 5, 50);
+    let identifyScore = 100 - Math.min(data.flatMap(item => item.risks).length * 5, 50);
+    
+    // Apply industry weight to identify score
+    identifyScore = Math.min(100, Math.round(identifyScore * weights.identify));
     
     // PROTECT - Based on security controls implementation
-    const protectScore = calculateSecurityControlsScore(data);
+    let protectScore = calculateSecurityControlsScore(data);
+    
+    // Apply industry weight to protect score
+    protectScore = Math.min(100, Math.round(protectScore * weights.protect));
     
     // DETECT - Based on monitoring capabilities and threat intelligence
-    const detectScore = calculateThreatIntelligenceScore(data);
+    let detectScore = calculateThreatIntelligenceScore(data);
+    
+    // Apply industry weight to detect score
+    detectScore = Math.min(100, Math.round(detectScore * weights.detect));
     
     // RESPOND - Based on incident response capabilities
-    const respondScore = data.some(item => 
+    let respondScore = data.some(item => 
       item.operationControls.implemented && 
       item.operationControls.frameworks.includes('Incident Response')
     ) ? 80 : 40;
     
+    // Apply industry weight to respond score
+    respondScore = Math.min(100, Math.round(respondScore * weights.respond));
+    
     // RECOVER - Based on business continuity/disaster recovery
-    const recoverScore = data.some(item => 
+    let recoverScore = data.some(item => 
       item.operationControls.implemented && 
       (item.operationControls.frameworks.includes('Disaster Recovery') || 
        item.operationControls.frameworks.includes('Business Continuity'))
     ) ? 75 : 35;
     
-    // Calculate the total score as an average of all domain scores
-    const totalScore = Math.round(
-      (governScore + identifyScore + protectScore + 
-        detectScore + respondScore + recoverScore) / 6
-    );
+    // Apply industry weight to recover score
+    recoverScore = Math.min(100, Math.round(recoverScore * weights.recover));
+    
+    // Calculate the total score as a weighted average based on industry
+    const categoryScores = [
+      { score: governScore, weight: weights.govern },
+      { score: identifyScore, weight: weights.identify },
+      { score: protectScore, weight: weights.protect },
+      { score: detectScore, weight: weights.detect },
+      { score: respondScore, weight: weights.respond },
+      { score: recoverScore, weight: weights.recover }
+    ];
+    
+    const totalWeightedScore = categoryScores.reduce((sum, cat) => sum + (cat.score * cat.weight), 0);
+    const totalWeights = categoryScores.reduce((sum, cat) => sum + cat.weight, 0);
+    const totalScore = Math.round(totalWeightedScore / totalWeights);
     
     // Calculate legacy scores for backward compatibility
     const riskScore = identifyScore;
@@ -868,6 +1089,33 @@ export default function Sos2aTool() {
       item.managementControls.implemented && 
       item.technologyControls.implemented
     ) ? 90 : 50;
+    
+    // GPA-style scoring for Information Security Management System (ISMS) maturity
+    // Scale: 0-100 to 0-4.0
+    const calculateGPAScore = (score: number): number => {
+      return parseFloat((score / 25).toFixed(1)); // Convert 0-100 to 0-4.0 scale with one decimal
+    };
+    
+    // Create GPA-equivalent scores for reporting
+    const gpaScores = {
+      total: calculateGPAScore(totalScore),
+      govern: calculateGPAScore(governScore),
+      identify: calculateGPAScore(identifyScore),
+      protect: calculateGPAScore(protectScore),
+      detect: calculateGPAScore(detectScore),
+      respond: calculateGPAScore(respondScore),
+      recover: calculateGPAScore(recoverScore)
+    };
+    
+    // Healthcare-specific HIPAA compliance score (only calculated for healthcare industry)
+    const hipaaComponents = isHealthcare ? {
+      securityRuleScore: ((protectScore + detectScore) / 2) * 0.4, // 40% of compliance
+      privacyRuleScore: governScore * 0.4, // 40% of compliance
+      breachNotificationScore: respondScore * 0.2 // 20% of compliance
+    } : null;
+    
+    const hipaaComplianceScore = hipaaComponents ? 
+      Math.round(hipaaComponents.securityRuleScore + hipaaComponents.privacyRuleScore + hipaaComponents.breachNotificationScore) : null;
     
     return {
       total: totalScore,
@@ -883,8 +1131,11 @@ export default function Sos2aTool() {
         // Legacy fields for backward compatibility
         risk: riskScore,
         securityControls: protectScore,
-        architecture: respondScore
-      }
+        architecture: architectureScore
+      },
+      gpaScores: gpaScores,
+      hipaaCompliance: isHealthcare ? hipaaComplianceScore : null,
+      industryType: isHealthcare ? 'healthcare' : isFinance ? 'finance' : 'general'
     };
   };
   
