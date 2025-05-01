@@ -212,16 +212,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   ];
   
   const securityMeasureOptions = [
-    { id: "firewall", label: "Firewall" },
-    { id: "antivirus", label: "Antivirus" },
-    { id: "endpoint-protection", label: "Endpoint Protection" },
-    { id: "vpn", label: "VPN" },
-    { id: "mfa", label: "Multi-Factor Authentication" },
-    { id: "ids-ips", label: "Intrusion Detection/Prevention" },
-    { id: "encryption", label: "Encryption" },
-    { id: "backup", label: "Regular Backups" },
-    { id: "security-training", label: "Security Awareness Training" },
-    { id: "none", label: "None" },
+    { id: "firewall-vpn", label: "Firewall and VPN Solutions" },
+    { id: "endpoint-security", label: "Endpoint and Device Security (EDR, MDM)" },
+    { id: "network-segmentation", label: "Network Segmentation Solutions" },
+    { id: "backup-disaster-recovery", label: "Backup and Disaster Recovery Solutions" },
+    { id: "email-filtering", label: "Email Filtering and Anti-Phishing Solutions" },
+    { id: "mfa", label: "Multi-Factor Authentication (MFA)" },
+    { id: "dns-filtering", label: "DNS Filtering and Secure DNS" },
+    { id: "cloud-security", label: "Cloud Security Tools (CASB, WAF)" },
+    { id: "soc-incident-response", label: "SOC and Incident Response" },
+    { id: "security-training", label: "Employee Training on Cybersecurity Threats Platforms" },
+    { id: "data-encryption-dlp", label: "Data Encryption and DLP Solutions" },
+    { id: "ids-ips", label: "Intrusion Detection/Prevention Systems" },
+    { id: "antivirus", label: "Antivirus/Anti-malware Solutions" },
+    { id: "none", label: "None Currently Implemented" },
   ];
   
   const primaryConcernOptions = [
@@ -987,7 +991,130 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Security Control Framework Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Security Frameworks by Domain</h3>
+                  <h3 className="font-medium mb-4">Current Healthcare Security Measures</h3>
+                  <FormField
+                    control={form.control}
+                    name="securityMeasures"
+                    render={() => (
+                      <FormItem>
+                        <div className="mb-4">
+                          <FormLabel className="text-base">
+                            Select security measures currently implemented in your healthcare organization
+                          </FormLabel>
+                          <FormDescription>
+                            These help us understand your current security posture and identify gaps relative to industry standards.
+                          </FormDescription>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {securityMeasureOptions.map((option) => (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="securityMeasures"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={option.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...field.value, option.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== option.id
+                                                )
+                                              );
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormDescription className="mt-4 text-amber-500">
+                          Note: For healthcare organizations, endpoint and device security, data encryption, and MFA are typically required for HIPAA compliance.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <div className="border rounded-md p-4 mb-6">
+                  <h3 className="font-medium mb-4">Healthcare Security Priorities</h3>
+                  <FormField
+                    control={form.control}
+                    name="primaryConcerns"
+                    render={() => (
+                      <FormItem>
+                        <div className="mb-4">
+                          <FormLabel className="text-base">
+                            Select your healthcare organization's primary security concerns
+                          </FormLabel>
+                          <FormDescription>
+                            This helps us prioritize recommendations based on your most pressing concerns in the healthcare setting.
+                          </FormDescription>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {primaryConcernOptions.map((option) => (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="primaryConcerns"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={option.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...field.value, option.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== option.id
+                                                )
+                                              );
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormDescription className="mt-4 text-amber-500">
+                          Note: For healthcare organizations, data breach prevention and ransomware protection are critical concerns given the sensitive nature of PHI.
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <div className="border rounded-md p-4 mb-6">
+                  <h3 className="font-medium mb-4">Healthcare Security Frameworks by Domain</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Please select any security frameworks currently implemented or being considered in your healthcare organization.
+                  </p>
                   <div className="space-y-6">
                     <FormField
                       control={form.control}
@@ -995,6 +1122,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       render={() => (
                         <FormItem>
                           <FormLabel>Operational Controls Frameworks</FormLabel>
+                          <FormDescription className="mb-2">
+                            Day-to-day security activities and processes
+                          </FormDescription>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             {operationalFrameworks.map((framework) => (
                               <FormField
@@ -1040,6 +1170,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       render={() => (
                         <FormItem>
                           <FormLabel>Management Controls Frameworks</FormLabel>
+                          <FormDescription className="mb-2">
+                            Governance, policies, and oversight mechanisms
+                          </FormDescription>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             {managementFrameworks.map((framework) => (
                               <FormField
@@ -1085,6 +1218,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       render={() => (
                         <FormItem>
                           <FormLabel>Technology Controls Frameworks</FormLabel>
+                          <FormDescription className="mb-2">
+                            Technical safeguards and security solutions
+                          </FormDescription>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             {technologyFrameworks.map((framework) => (
                               <FormField
@@ -1123,11 +1259,17 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         </FormItem>
                       )}
                     />
+                    <FormDescription className="mt-4 text-amber-500">
+                      Note: Healthcare organizations should consider implementing NIST CSF aligned with HIPAA Security Rule requirements. Our assessment will guide you through recommended framework adoption based on your specific needs.
+                    </FormDescription>
                   </div>
                 </div>
                 
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">OS Hardening</h3>
+                  <h3 className="font-medium mb-4">Healthcare System Hardening</h3>
+                  <FormDescription className="mb-4">
+                    System hardening is critical for protecting healthcare applications and patient data. These practices help secure operating systems hosting healthcare applications.
+                  </FormDescription>
                   <div className="space-y-4">
                     <FormField
                       control={form.control}
