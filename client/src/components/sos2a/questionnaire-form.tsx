@@ -84,6 +84,10 @@ const formSchema = z.object({
   
   // 10. ISMS
   ismsImplementation: z.string().optional(),
+  ismsPolicies: z.array(z.string()).optional(),
+  ismsPlans: z.array(z.string()).optional(),
+  ismsProcedures: z.array(z.string()).optional(),
+  ismsProcesses: z.array(z.string()).optional(),
   
   // 11. Contact and Confirmation
   contactInfo: z.object({
@@ -172,6 +176,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       
       // 10. ISMS
       ismsImplementation: "",
+      ismsPolicies: [],
+      ismsPlans: [],
+      ismsProcedures: [],
+      ismsProcesses: [],
       
       // 11. Contact and Confirmation
       contactInfo: {
