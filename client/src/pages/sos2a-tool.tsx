@@ -98,12 +98,15 @@ const sampleReport: AssessmentReport = {
   rasbitaScore: {
     total: 68,
     categories: {
-      risk: 65,
-      adversarialInsight: 55,
-      securityControls: 70,
-      businessImpact: 75,
-      informationAssurance: 60,
-      threatIntelligence: 58,
+      govern: 65,
+      identify: 70,
+      protect: 75,
+      detect: 60,
+      respond: 62,
+      recover: 55,
+      // Legacy fields for backward compatibility
+      risk: 70,
+      securityControls: 75,
       architecture: 62
     }
   }
@@ -881,33 +884,50 @@ export default function Sos2aTool() {
   
   // Calculate business impact score based on critical business services and assets
   const calculateBusinessImpactScore = (data: MatrixItem[]): number => {
-    // Check if criticalityData is present in any items
-    const hasCriticalityData = data.some(item => item.criticalityData && item.criticalityData > 0);
+    // Use risk information to determine business impact
+    const riskCount = data.flatMap(item => item.risks).length;
     
-    if (hasCriticalityData) {
-      // Average the criticality data where available
-      const criticalityScores = data
-        .filter(item => item.criticalityData && item.criticalityData > 0)
-        .map(item => item.criticalityData || 0);
-      
-      return criticalityScores.length > 0
-        ? Math.round(criticalityScores.reduce((sum, score) => sum + score, 0) / criticalityScores.length)
-        : 50;
-    }
+    // More risks = higher business impact
+    let baseScore = Math.min(riskCount * 10, 60);
     
-    // Fallback calculation based on business services and internet presence
-    const internetPresenceValues = data.flatMap(item => item.internetPresence);
-    const hasEcommerce = internetPresenceValues.includes('E-commerce');
-    const hasMarketing = internetPresenceValues.includes('Marketing Website');
-    const hasWebApp = internetPresenceValues.includes('Web Application');
+    // Check if specific infrastructure types are present
+    const hasFinancialSystems = data.some(item => 
+      item.infraType.toLowerCase().includes('financial') || 
+      item.infraType.toLowerCase().includes('payment')
+    );
+    
+    const hasHealthcareData = data.some(item => 
+      item.infraType.toLowerCase().includes('health') || 
+      item.infraType.toLowerCase().includes('medical') ||
+      item.infraType.toLowerCase().includes('patient')
+    );
+    
+    // Add score for high-criticality systems
+    if (hasFinancialSystems) baseScore += 20;
+    if (hasHealthcareData) baseScore += 20;
+    
+    // Check if there are indications of e-commerce or web applications
+    const hasEcommerce = data.some(item => 
+      item.infraType.toLowerCase().includes('ecommerce') || 
+      item.infraType.toLowerCase().includes('e-commerce')
+    );
+    
+    const hasWebApp = data.some(item => 
+      item.infraType.toLowerCase().includes('web app') || 
+      item.infraType.toLowerCase().includes('webapp')
+    );
+    
+    const hasMarketing = data.some(item => 
+      item.infraType.toLowerCase().includes('marketing') || 
+      item.infraType.toLowerCase().includes('website')
+    );
     
     // Higher risk for e-commerce and web applications
-    let score = 50;
-    if (hasEcommerce) score += 20;
-    if (hasWebApp) score += 15;
-    if (hasMarketing) score += 5;
+    if (hasEcommerce) baseScore += 20;
+    if (hasWebApp) baseScore += 15;
+    if (hasMarketing) baseScore += 5;
     
-    return Math.min(score, 100);
+    return Math.min(baseScore, 100);
   };
   
   // Calculate information assurance score based on OS hardening and data protection
