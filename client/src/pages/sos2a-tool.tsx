@@ -39,6 +39,26 @@ const sampleReport: AssessmentReport = {
   businessServices: "Cloud Services Provider",
   operationModes: ["Remote-First"],
   internetPresence: ["E-commerce", "Marketing"],
+  ismsStatus: {
+    implementation: "partial",
+    policies: {
+      implemented: ["information-security-policy", "acceptable-use-policy"],
+      missing: ["access-control-policy", "password-policy", "data-classification-policy"]
+    },
+    plans: {
+      implemented: ["disaster-recovery-plan"],
+      missing: ["business-continuity-plan", "risk-treatment-plan"]
+    },
+    procedures: {
+      implemented: ["incident-reporting-procedure"],
+      missing: ["user-access-provisioning-procedure", "patch-management-procedure"]
+    },
+    processes: {
+      implemented: ["security-incident-response-process"],
+      missing: ["continuous-monitoring-process", "access-review-process"]
+    },
+    recommendedNext: ["Implement access control policy", "Develop patch management procedure"]
+  },
   findings: [
     { severity: 'High', title: 'Unpatched Systems', description: 'Critical security patches missing on multiple systems.' },
     { severity: 'Medium', title: 'Weak Password Policies', description: 'Password policies do not enforce complexity requirements.' }
@@ -280,6 +300,7 @@ export default function Sos2aTool() {
       complianceStatus: evaluateComplianceStatus(data),
       policyDocumentStatus: evaluatePolicyDocumentStatus(data),
       osHardeningStatus: evaluateOsHardeningStatus(data),
+      ismsStatus: evaluateIsmsStatus(data, formData),
       mitreAttackCoverage: evaluateMitreAttackCoverage(data),
       matrixData: data,
       scorecard: generateScorecardData(data, reportType),

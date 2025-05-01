@@ -386,7 +386,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
             <div>7. Standards</div>
             <div>8. Relevant Questionnaires</div>
             <div>9. Adversarial Insight</div>
-            <div>10. ISMS</div>
+            <div>10. Information Security Management System (ISMS)</div>
             <div>11. Contact & Confirmation</div>
           </div>
         </div>
@@ -405,7 +405,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="standards" className="flex-shrink-0">7. Standards</TabsTrigger>
                 <TabsTrigger value="questionnaires" className="flex-shrink-0">8. Relevant Questionnaires</TabsTrigger>
                 <TabsTrigger value="adversarial" className="flex-shrink-0">9. Adversarial Insight</TabsTrigger>
-                <TabsTrigger value="isms" className="flex-shrink-0">10. ISMS</TabsTrigger>
+                <TabsTrigger value="isms" className="flex-shrink-0">10. Information Security Management System</TabsTrigger>
                 <TabsTrigger value="contact" className="flex-shrink-0">11. Contact & Confirmation</TabsTrigger>
               </TabsList>
               
@@ -2411,12 +2411,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* ISMS Tab */}
+              {/* Information Security Management System (ISMS) Tab */}
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">Information Security Management System (ISMS)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Provide information about your current ISMS implementation.
+                    Provide information about your current Information Security Management System (ISMS) implementation.
                   </p>
                   
                   <FormField
@@ -2424,15 +2424,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     name="ismsImplementation"
                     render={({ field }) => (
                       <FormItem className="mb-6">
-                        <FormLabel>ISMS Implementation Status</FormLabel>
+                        <FormLabel>Information Security Management System Implementation Status</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select ISMS implementation status" />
+                              <SelectValue placeholder="Select Information Security Management System implementation status" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="none">No formal ISMS</SelectItem>
+                            <SelectItem value="none">No formal Information Security Management System</SelectItem>
                             <SelectItem value="planning">Planning phase</SelectItem>
                             <SelectItem value="implementing">Currently implementing</SelectItem>
                             <SelectItem value="operational">Operational but not certified</SelectItem>
@@ -2448,9 +2448,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   />
                   
                   <div className="space-y-6">
-                    <h4 className="font-medium">ISMS Components (4Ps)</h4>
+                    <h4 className="font-medium">Information Security Management System Components (4Ps)</h4>
                     <FormDescription className="mb-4">
-                      Information Security Management Systems (ISMS) is composed of four key components: Policies, Plans, Procedures, and Processes. Select which components you have implemented.
+                      Information Security Management System (ISMS) is composed of four key components: Policies, Plans, Procedures, and Processes. Select which components you have implemented.
                       <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-md">
                         <span className="font-semibold text-amber-700">Healthcare Note:</span> Healthcare organizations should focus on components that address PHI protection, patient data privacy, and compliance with healthcare regulations.
                       </div>
