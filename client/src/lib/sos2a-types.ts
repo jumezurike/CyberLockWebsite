@@ -418,6 +418,17 @@ export interface AssessmentReport {
       securityControls?: number;
       architecture?: number;
     };
+    gpaScores?: {
+      total: number;
+      govern: number;
+      identify: number;
+      protect: number;
+      detect: number;
+      respond: number;
+      recover: number;
+    };
+    hipaaCompliance?: number | null;
+    industryType?: 'healthcare' | 'finance' | 'general';
   };
   // Explicit categories for compatibility with RasbitaReport format
   rasbitaCategories?: {

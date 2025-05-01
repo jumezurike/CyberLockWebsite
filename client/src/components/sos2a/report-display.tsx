@@ -238,36 +238,75 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 </div>
               </div>
               {report.rasbitaScore && (
-                <div className="grid grid-cols-3 gap-2 text-center">
-                  <div className="bg-primary/5 rounded-md p-2 border-l-4 border-red-500">
-                    <p className="text-xs text-muted-foreground">Cybersecurity Incident Risk Score</p>
-                    <p className="font-bold text-red-600">
-                      {/* Prioritize new NIST CSF 2.0 domains, fallback to legacy fields */}
-                      {report.rasbitaScore.categories?.govern || 
-                       report.rasbitaScore.categories?.risk || 
-                       "N/A"}
-                    </p>
+                <>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-red-500">
+                      <p className="text-xs text-muted-foreground">Cybersecurity Incident Risk Score</p>
+                      <p className="font-bold text-red-600">
+                        {/* Prioritize new NIST CSF 2.0 domains, fallback to legacy fields */}
+                        {report.rasbitaScore.categories?.govern || 
+                         report.rasbitaScore.categories?.risk || 
+                         "N/A"}
+                      </p>
+                    </div>
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-purple-500">
+                      <p className="text-xs text-muted-foreground">Cybersecurity Gov & Mngt maturity level</p>
+                      <p className="font-bold text-purple-600">
+                        {/* Prioritize new NIST CSF 2.0 domains, fallback to legacy fields */}
+                        {report.rasbitaScore.categories?.protect || 
+                         report.rasbitaScore.categories?.securityControls || 
+                         "N/A"}
+                      </p>
+                    </div>
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-green-500">
+                      <p className="text-xs text-muted-foreground">NRRB (positive)</p>
+                      <p className="font-bold text-green-600">
+                        {/* Prioritize new NIST CSF 2.0 domains, fallback to legacy fields */}
+                        {report.rasbitaScore.categories?.respond || 
+                         report.rasbitaScore.categories?.architecture || 
+                         "N/A"}
+                      </p>
+                      <p className="text-[10px] text-muted-foreground">Positive value = spend makes sense</p>
+                    </div>
                   </div>
-                  <div className="bg-primary/5 rounded-md p-2 border-l-4 border-purple-500">
-                    <p className="text-xs text-muted-foreground">Cybersecurity Gov & Mngt maturity level</p>
-                    <p className="font-bold text-purple-600">
-                      {/* Prioritize new NIST CSF 2.0 domains, fallback to legacy fields */}
-                      {report.rasbitaScore.categories?.protect || 
-                       report.rasbitaScore.categories?.securityControls || 
-                       "N/A"}
-                    </p>
-                  </div>
-                  <div className="bg-primary/5 rounded-md p-2 border-l-4 border-green-500">
-                    <p className="text-xs text-muted-foreground">NRRB (positive)</p>
-                    <p className="font-bold text-green-600">
-                      {/* Prioritize new NIST CSF 2.0 domains, fallback to legacy fields */}
-                      {report.rasbitaScore.categories?.respond || 
-                       report.rasbitaScore.categories?.architecture || 
-                       "N/A"}
-                    </p>
-                    <p className="text-[10px] text-muted-foreground">Positive value = spend makes sense</p>
-                  </div>
-                </div>
+                  
+                  {/* GPA-style Information Security Management System (ISMS) Maturity Scoring */}
+                  {report.rasbitaScore.gpaScores && (
+                    <div className="mt-3 border-t pt-2">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="text-xs font-medium text-muted-foreground">Information Security Management System (ISMS) Maturity</h3>
+                        <div className="bg-blue-100 text-blue-900 text-xs px-2 py-0.5 rounded-full">
+                          GPA-style Rating: {report.rasbitaScore.gpaScores.total || "N/A"}/4.0
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-6 gap-1 text-center">
+                        {['govern', 'identify', 'protect', 'detect', 'respond', 'recover'].map((domain) => (
+                          <div key={domain} className="bg-blue-50 rounded p-1">
+                            <p className="text-[10px] capitalize">{domain}</p>
+                            <p className="text-xs font-bold text-blue-700">
+                              {report.rasbitaScore.gpaScores[domain as keyof typeof report.rasbitaScore.gpaScores] || "N/A"}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Healthcare-specific HIPAA Compliance Score */}
+                  {report.rasbitaScore.hipaaCompliance && report.industry?.toLowerCase().includes('health') && (
+                    <div className="mt-2 bg-green-50 rounded-md p-2 border border-green-200">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-xs font-medium text-green-800">Healthcare HIPAA Compliance Score</h3>
+                        <div className="bg-green-200 text-green-900 text-xs px-2 py-0.5 rounded-full">
+                          {report.rasbitaScore.hipaaCompliance}%
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-green-700 mt-1">
+                        This score indicates the estimated level of alignment with HIPAA Security Rule, Privacy Rule, and Breach Notification requirements.
+                      </p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
@@ -325,13 +364,14 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           </div>
           
           <Tabs defaultValue="scorecard" className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-6 w-full">
+            <TabsList className="grid grid-cols-2 md:grid-cols-7 w-full">
               <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
               <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
               <TabsTrigger value="risks">Risks & Vulnerabilities</TabsTrigger>
               <TabsTrigger value="architecture">Architecture Analysis</TabsTrigger>
               <TabsTrigger value="compliance">Compliance Status</TabsTrigger>
               <TabsTrigger value="frameworks">Framework Control Gaps</TabsTrigger>
+              <TabsTrigger value="isms">ISMS</TabsTrigger>
             </TabsList>
             
             <TabsContent value="scorecard" className="space-y-4 pt-4">
@@ -792,6 +832,178 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               ) : (
                 <div className="text-center py-8 text-muted-foreground">
                   <p>Framework control gaps information is not available for this report.</p>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="isms" className="space-y-4 pt-4">
+              {report.ismsStatus ? (
+                <>
+                  <div className="bg-blue-50 p-4 rounded-md border border-blue-100 mb-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="bg-blue-100 p-2 rounded-full">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
+                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                          <path d="M9.1 12a2.1 2.1 0 0 0 0 3h0a2.1 2.1 0 0 0 3.6 1.5h0a2.1 2.1 0 0 0 0-3h0a2.1 2.1 0 0 0-3.6-1.5Z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-blue-900 font-medium">Information Security Management System (ISMS)</h3>
+                    </div>
+                    <p className="text-sm text-blue-700 ml-9">
+                      An ISMS provides a systematic approach to managing sensitive company information, using a comprehensive framework of policies, procedures, plans, and processes to ensure that appropriate safeguards are in place to protect the confidentiality, integrity, and availability of information.
+                    </p>
+                    <div className="mt-3 ml-9 grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <div className="bg-white rounded-md p-2 border border-blue-100 text-xs">
+                        <p className="font-medium text-gray-700">Implementation Status:</p>
+                        <p className="text-gray-600 capitalize">{report.ismsStatus.implementation || 'Not implemented'}</p>
+                      </div>
+                      <div className="bg-white rounded-md p-2 border border-blue-100 text-xs">
+                        <p className="font-medium text-gray-700">Healthcare Focus:</p>
+                        <p className="text-gray-600">
+                          {report.industry?.toLowerCase().includes('health') ? 
+                            'HIPAA Security and Privacy Rule Compliance' : 
+                            'General Information Security'}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                    {/* ISMS Policies */}
+                    <div className="border rounded-md p-4">
+                      <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                          <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                          <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z" />
+                        </svg>
+                        Policies
+                      </h3>
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-medium text-green-700">Implemented</h4>
+                        <div className="bg-green-50 rounded-md p-2 min-h-12">
+                          {Array.isArray(report.ismsStatus.policies.implemented) && report.ismsStatus.policies.implemented.length > 0 ? (
+                            <ul className="list-disc pl-5 text-xs text-green-800">
+                              {report.ismsStatus.policies.implemented.map((policy, index) => (
+                                <li key={index} className="capitalize">{policy.replace(/-/g, ' ')}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-xs text-gray-500 text-center py-1">No policies implemented</p>
+                          )}
+                        </div>
+                        
+                        <h4 className="text-sm font-medium text-red-700">Missing</h4>
+                        <div className="bg-red-50 rounded-md p-2 min-h-12">
+                          {Array.isArray(report.ismsStatus.policies.missing) && report.ismsStatus.policies.missing.length > 0 ? (
+                            <ul className="list-disc pl-5 text-xs text-red-800">
+                              {report.ismsStatus.policies.missing.map((policy, index) => (
+                                <li key={index} className="capitalize">{policy.replace(/-/g, ' ')}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-xs text-gray-500 text-center py-1">No missing policies identified</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* ISMS Plans */}
+                    <div className="border rounded-md p-4">
+                      <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                          <path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z" />
+                          <path d="m8 10 3 3 5-5" />
+                        </svg>
+                        Plans
+                      </h3>
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-medium text-green-700">Implemented</h4>
+                        <div className="bg-green-50 rounded-md p-2 min-h-12">
+                          {Array.isArray(report.ismsStatus.plans.implemented) && report.ismsStatus.plans.implemented.length > 0 ? (
+                            <ul className="list-disc pl-5 text-xs text-green-800">
+                              {report.ismsStatus.plans.implemented.map((plan, index) => (
+                                <li key={index} className="capitalize">{plan.replace(/-/g, ' ')}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-xs text-gray-500 text-center py-1">No plans implemented</p>
+                          )}
+                        </div>
+                        
+                        <h4 className="text-sm font-medium text-red-700">Missing</h4>
+                        <div className="bg-red-50 rounded-md p-2 min-h-12">
+                          {Array.isArray(report.ismsStatus.plans.missing) && report.ismsStatus.plans.missing.length > 0 ? (
+                            <ul className="list-disc pl-5 text-xs text-red-800">
+                              {report.ismsStatus.plans.missing.map((plan, index) => (
+                                <li key={index} className="capitalize">{plan.replace(/-/g, ' ')}</li>
+                              ))}
+                            </ul>
+                          ) : (
+                            <p className="text-xs text-gray-500 text-center py-1">No missing plans identified</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Recommended Next Steps */}
+                  <div className="mt-4 border rounded-md p-4 bg-primary-50">
+                    <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                        <path d="m9 18 6-6-6-6" />
+                      </svg>
+                      Recommended Next Steps
+                    </h3>
+                    {Array.isArray(report.ismsStatus.recommendedNext) && report.ismsStatus.recommendedNext.length > 0 ? (
+                      <ul className="list-disc pl-5 text-sm text-gray-700">
+                        {report.ismsStatus.recommendedNext.map((recommendation, index) => (
+                          <li key={index}>{recommendation}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-sm text-gray-500 py-2">No specific recommendations available</p>
+                    )}
+                  </div>
+                  
+                  {/* Healthcare-specific guidance */}
+                  {report.industry?.toLowerCase().includes('health') && (
+                    <div className="mt-4 border border-green-100 rounded-md p-4 bg-green-50">
+                      <h3 className="font-medium text-green-800 mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
+                          <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                        </svg>
+                        Healthcare Compliance Guidance
+                      </h3>
+                      <p className="text-sm text-green-700 mb-2">
+                        For healthcare organizations, your ISMS should specifically address HIPAA Security Rule and Privacy Rule requirements:
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                        <div className="bg-white rounded-md p-2 border border-green-100">
+                          <p className="font-medium text-green-800">Security Rule Considerations:</p>
+                          <ul className="list-disc pl-5 text-green-700 space-y-1 mt-1">
+                            <li>Administrative safeguards for ePHI</li>
+                            <li>Physical safeguards for facility access</li>
+                            <li>Technical safeguards including access controls</li>
+                            <li>Security incident procedures</li>
+                          </ul>
+                        </div>
+                        <div className="bg-white rounded-md p-2 border border-green-100">
+                          <p className="font-medium text-green-800">Privacy Rule Considerations:</p>
+                          <ul className="list-disc pl-5 text-green-700 space-y-1 mt-1">
+                            <li>Patient rights to access their PHI</li>
+                            <li>Permitted uses and disclosures of PHI</li>
+                            <li>Notice of Privacy Practices (NPP)</li>
+                            <li>Business Associate Agreements (BAAs)</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                  <p>Information Security Management System (ISMS) data is not available for this report.</p>
                 </div>
               )}
             </TabsContent>
