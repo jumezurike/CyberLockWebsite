@@ -68,8 +68,13 @@ const formSchema = z.object({
     guides: z.array(z.string()),
   }),
   
-  // 8. Relevant Questionnaires
-  relevantQuestionnaires: z.array(z.string()).optional(),
+  // 8. Relevant ACQ Tool (Assessment, Checklist, Questionnaire)
+  relevantACQTools: z.object({
+    assessments: z.array(z.string()).optional(),
+    checklists: z.array(z.string()).optional(),
+    questionnaires: z.array(z.string()).optional(),
+  }).optional(),
+  relevantQuestionnaires: z.array(z.string()).optional(), // For backward compatibility
   
   // 9. Adversarial Insight
   osHardening: z.object({

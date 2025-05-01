@@ -67,8 +67,12 @@ export interface Sos2aFormData {
   healthcareStandards?: string[];
   policyDocuments: PolicyDocuments;
   
-  // 8. Relevant Questionnaires
-  relevantQuestionnaires?: string[];
+  // 8. Relevant ACQ Tool (Assessment, Checklist, Questionnaire)
+  relevantACQTools?: {
+    assessments?: string[];
+    checklists?: string[];
+    questionnaires?: string[];
+  };
   
   // 9. Adversarial Insight
   osHardening: {
@@ -121,7 +125,12 @@ export interface MatrixItem {
   risks: string[];
   vulnerabilities: string[];
   educationAwareness: boolean;
-  relevantQuestionnaires: string[]; // SAQ A, SAQ B, SAQ C, etc.
+  relevantACQTools?: {
+    assessments?: string[];
+    checklists?: string[];
+    questionnaires?: string[];
+  };
+  relevantQuestionnaires?: string[]; // Maintaining for backward compatibility
   operationControls: {
     frameworks: string[];
     applicable: boolean;

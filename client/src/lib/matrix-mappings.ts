@@ -162,8 +162,45 @@ export const commonVulnerabilities = {
 
 // Define assessment tools categorized by type and relevance
 export const assessmentTools = {
+  // Restructured to match the specific ACQ Tool categories
+  
+  // Category 1: Assessments - For comprehensive evaluations
+  assessments: [
+    "HIPAA Security Risk Assessment (SRA) Tool",
+    "NIST Cybersecurity Framework Self-Assessment Tool",
+    "ISO 27001 Self-Assessment Questionnaire (Annex A Controls)",
+    "HITRUST MyCSF Self-Assessment",
+    "FedRAMP Security Assessment Questionnaire (SAQ)",
+    "SOC 2 Readiness Assessment (Security, Availability, Confidentiality, Processing Integrity, Privacy)"
+  ],
+  
+  // Category 2: Checklists - For verification and validation
+  checklists: [
+    "FERPA Compliance Checklist",
+    "GLBA Safeguards Rule Self-Assessment",
+    "FISMA Compliance Checklist",
+    "CCPA Compliance Checklist",
+    "CIS Controls Self-Assessment Tool (CSAT)",
+    "SOX IT General Controls (ITGC) Questionnaire"
+  ],
+  
+  // Category 3: Questionnaires - For specific information gathering
+  questionnaires: [
+    "SAQ A (Card-not-present Merchants)",
+    "SAQ B (Merchants with Imprint-only or Standalone Terminals)",
+    "SAQ C (Merchants with Payment Application Systems)",
+    "SAQ B-IP (Merchants with Standalone IP-Connected Terminals)",
+    "SAQ A-EP (E-commerce Merchants with Third-Party Processing)",
+    "SAQ C-VT (Merchants with Virtual Terminals)",
+    "SAQ D (Merchant)",
+    "SAQ P2PE-HW (Hardware Payment Terminal P2PE)",
+    "GDPR Compliance Questionnaire (Articles 5-30)",
+    "NYDFS Cybersecurity Self-Assessment Tool"
+  ],
+
+  // Keeping the original structure for backward compatibility
   // Category 1: Questionnaires - For information gathering and initial assessments
-  questionnaires: {
+  legacy_questionnaires: {
     'pci-dss': [
       "SAQ A (Card-not-present Merchants)",
       "SAQ B (Merchants with Imprint-only or Standalone Terminals)",
@@ -196,7 +233,7 @@ export const assessmentTools = {
   },
   
   // Category 2: Checklists - For validating compliance with specific controls or requirements
-  checklists: {
+  legacy_checklists: {
     'pci-dss': [
       "PCI DSS Firewall Configuration Checklist",
       "PCI DSS Log Review Checklist",
@@ -223,7 +260,7 @@ export const assessmentTools = {
   },
   
   // Category 3: Assessment Tools - For comprehensive evaluations and scoring
-  assessmentTools: {
+  legacy_assessmentTools: {
     'comprehensive': [
       "ISO 27001 Self-Assessment Questionnaire (Annex A Controls)",
       "NIST Cybersecurity Framework Self-Assessment Tool",
