@@ -2468,12 +2468,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             {[
                               { id: "information-security-policy", label: "Information Security Policy" },
-                              { id: "data-protection-policy", label: "Data Protection Policy" },
-                              { id: "access-control-policy", label: "Access Control Policy" },
                               { id: "acceptable-use-policy", label: "Acceptable Use Policy" },
+                              { id: "access-control-policy", label: "Access Control Policy" },
                               { id: "password-policy", label: "Password Policy" },
-                              { id: "incident-response-policy", label: "Incident Response Policy" },
                               { id: "data-classification-policy", label: "Data Classification Policy" },
+                              { id: "encryption-policy", label: "Encryption Policy" },
+                              { id: "remote-work-policy", label: "Remote Work Policy" },
+                              { id: "incident-response-policy", label: "Incident Response Policy" },
+                              { id: "business-continuity-policy", label: "Business Continuity Policy" },
+                              { id: "vendor-risk-management-policy", label: "Vendor Risk Management Policy" },
                               { id: "hipaa-privacy-policy", label: "HIPAA Privacy Policy" },
                               { id: "hipaa-security-policy", label: "HIPAA Security Policy" },
                               { id: "phi-handling-policy", label: "PHI Handling Policy" },
@@ -2521,12 +2524,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           </FormDescription>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             {[
-                              { id: "security-improvement-plan", label: "Security Improvement Plan" },
+                              { id: "risk-treatment-plan", label: "Risk Treatment Plan" },
                               { id: "disaster-recovery-plan", label: "Disaster Recovery Plan" },
                               { id: "business-continuity-plan", label: "Business Continuity Plan" },
-                              { id: "incident-response-plan", label: "Incident Response Plan" },
                               { id: "security-awareness-training-plan", label: "Security Awareness Training Plan" },
-                              { id: "risk-management-plan", label: "Risk Management Plan" },
+                              { id: "vulnerability-management-plan", label: "Vulnerability Management Plan" },
+                              { id: "compliance-monitoring-plan", label: "Compliance Monitoring Plan" },
+                              { id: "network-security-plan", label: "Network Security Plan" },
+                              { id: "cloud-security-plan", label: "Cloud Security Plan" },
+                              { id: "physical-security-plan", label: "Physical Security Plan" },
+                              { id: "third-party-audit-plan", label: "Third-Party Audit Plan" },
                               { id: "phi-breach-response-plan", label: "PHI Breach Response Plan" },
                               { id: "healthcare-contingency-plan", label: "Healthcare Contingency Plan" },
                             ].map((option) => (
@@ -2573,12 +2580,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           </FormDescription>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             {[
-                              { id: "incident-handling-procedure", label: "Incident Handling Procedure" },
-                              { id: "backup-restoration-procedure", label: "Backup & Restoration Procedure" },
-                              { id: "vulnerability-management-procedure", label: "Vulnerability Management Procedure" },
-                              { id: "access-provisioning-procedure", label: "Access Provisioning Procedure" },
+                              { id: "user-access-provisioning-procedure", label: "User Access Provisioning Procedure" },
+                              { id: "privileged-access-management-procedure", label: "Privileged Access Management (PAM) Procedure" },
+                              { id: "patch-management-procedure", label: "Patch Management Procedure" },
+                              { id: "backup-restoration-procedure", label: "Backup & Recovery Procedure" },
+                              { id: "incident-reporting-procedure", label: "Incident Reporting/Escalation Procedure" },
+                              { id: "forensic-data-collection-procedure", label: "Forensic Data Collection Procedure" },
+                              { id: "secure-disposal-procedure", label: "Secure Disposal of Media Procedure" },
+                              { id: "risk-assessment-methodology-procedure", label: "Risk Assessment Methodology Procedure" },
                               { id: "change-management-procedure", label: "Change Management Procedure" },
-                              { id: "log-review-procedure", label: "Log Review Procedure" },
+                              { id: "audit-log-review-procedure", label: "Audit Log Review Procedure" },
                               { id: "phi-access-procedure", label: "PHI Access Procedure" },
                               { id: "hipaa-audit-procedure", label: "HIPAA Audit Procedure" },
                               { id: "patient-data-transfer-procedure", label: "Patient Data Transfer Procedure" },
@@ -2626,12 +2637,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           </FormDescription>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             {[
-                              { id: "risk-assessment-process", label: "Risk Assessment Process" },
-                              { id: "security-audit-process", label: "Security Audit Process" },
-                              { id: "security-monitoring-process", label: "Security Monitoring Process" },
-                              { id: "vendor-risk-management-process", label: "Vendor Risk Management Process" },
-                              { id: "asset-management-process", label: "Asset Management Process" },
-                              { id: "continuous-improvement-process", label: "Continuous Improvement Process" },
+                              { id: "continuous-monitoring-process", label: "Continuous Monitoring Process" },
+                              { id: "security-incident-response-process", label: "Security Incident Response Process" },
+                              { id: "access-review-process", label: "Access Review Process" },
+                              { id: "configuration-management-process", label: "Configuration Management Process" },
+                              { id: "penetration-testing-process", label: "Penetration Testing Process" },
+                              { id: "data-leakage-prevention-process", label: "Data Leakage Prevention Process" },
+                              { id: "threat-intelligence-gathering-process", label: "Threat Intelligence Gathering Process" },
+                              { id: "security-policy-exception-process", label: "Security Policy Exception Process" },
+                              { id: "asset-inventory-management-process", label: "Asset Inventory Management Process" },
+                              { id: "compliance-gap-remediation-process", label: "Compliance Gap Remediation Process" },
                               { id: "hipaa-compliance-monitoring", label: "HIPAA Compliance Monitoring" },
                               { id: "healthcare-security-review", label: "Healthcare Security Review Process" },
                             ].map((option) => (
