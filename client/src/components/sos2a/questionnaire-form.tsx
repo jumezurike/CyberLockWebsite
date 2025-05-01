@@ -44,6 +44,7 @@ const formSchema = z.object({
     operations: z.array(z.string()),
     management: z.array(z.string()),
     technology: z.array(z.string()),
+    people: z.array(z.string()),
   }),
   
   // 5. Compliance
@@ -138,6 +139,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         operations: [],
         management: [],
         technology: [],
+        people: [],
       },
       
       // 5-7. Compliance, Regulatory, Standards
@@ -269,6 +271,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "nist-800-53", label: "NIST 800-53" },
   ];
   
+  const peopleFrameworks = [
+    { id: "sans-security-awareness", label: "SANS Security Awareness" },
+    { id: "isaca-cism", label: "ISACA CISM" }, 
+    { id: "nist-nice", label: "NIST NICE Framework" },
+    { id: "iapp", label: "IAPP Privacy Certification" },
+    { id: "cyber-essentials-plus", label: "Cyber Essentials Plus" },
+    { id: "comp-tia-security", label: "CompTIA Security+" },
+  ];
+  
   // Compliance, standards, frameworks
   const complianceFrameworkOptions = [
     { id: "iso-27001", label: "ISO 27001" },
@@ -380,7 +391,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="business" className="flex-shrink-0">1. Business Information</TabsTrigger>
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
                 <TabsTrigger value="configuration" className="flex-shrink-0">3. Configuration Baseline</TabsTrigger>
-                <TabsTrigger value="security" className="flex-shrink-0">4. Security Control Framework</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">4. Security Controls vs Framework</TabsTrigger>
                 <TabsTrigger value="compliance" className="flex-shrink-0">5. Compliance</TabsTrigger>
                 <TabsTrigger value="regulatory" className="flex-shrink-0">6. Regulatory Requirements</TabsTrigger>
                 <TabsTrigger value="standards" className="flex-shrink-0">7. Standards</TabsTrigger>
@@ -1010,13 +1021,44 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Security Control Framework Tab */}
+              {/* Security Controls vs Framework Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Security Control Framework</h3>
+                  <h3 className="font-medium mb-4">Security Controls vs Framework</h3>
                   <FormDescription className="mb-4">
-                    A security control framework provides structure to your cybersecurity program and helps ensure comprehensive coverage.
+                    This section helps us identify if your organization is applying security controls properly across the four main domains (Operations, Management, Technology, and People), with a focus on your specific industry requirements.
                   </FormDescription>
+                  
+                  {form.watch('industry') === 'healthcare' && (
+                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                      <h4 className="text-sm font-medium text-blue-800 mb-1">Healthcare Industry Focus</h4>
+                      <p className="text-sm text-blue-700">
+                        Healthcare organizations have specific framework requirements related to patient data protection, 
+                        HIPAA compliance, medical device security, and clinical systems integrity. We'll help identify the most 
+                        appropriate frameworks for your healthcare organization.
+                      </p>
+                    </div>
+                  )}
+                  
+                  {form.watch('industry') === 'finance' && (
+                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                      <h4 className="text-sm font-medium text-blue-800 mb-1">Finance Industry Focus</h4>
+                      <p className="text-sm text-blue-700">
+                        Financial organizations need to address PCI DSS, SOX compliance, and financial fraud protection. 
+                        We'll help identify the most appropriate frameworks for your financial institution.
+                      </p>
+                    </div>
+                  )}
+                  
+                  {form.watch('industry') && !['healthcare', 'finance'].includes(form.watch('industry')) && (
+                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                      <h4 className="text-sm font-medium text-blue-800 mb-1">Industry-Specific Guidance</h4>
+                      <p className="text-sm text-blue-700">
+                        Different industries have unique security requirements. Based on your {form.watch('industry')} industry 
+                        selection, we'll help identify the most appropriate frameworks and controls for your organization.
+                      </p>
+                    </div>
+                  )}
                 </div>
                 
                 <div className="border rounded-md p-4 mb-6">
@@ -1236,6 +1278,59 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               />
                             ))}
                           </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="frameworks.people"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>People Controls Frameworks</FormLabel>
+                          <FormDescription className="mb-2">
+                            Human resource and awareness frameworks
+                          </FormDescription>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {peopleFrameworks.map((framework) => (
+                              <FormField
+                                key={framework.id}
+                                control={form.control}
+                                name="frameworks.people"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={framework.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(framework.id)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), framework.id]
+                                              : (field.value || [])?.filter(
+                                                  (value) => value !== framework.id
+                                                );
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {framework.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          {form.watch('industry') === 'healthcare' && (
+                            <FormDescription className="mt-4 text-amber-500">
+                              Note: For healthcare organizations, user awareness training and role-based certifications are critical for maintaining HIPAA compliance and reducing human-factor risks.
+                            </FormDescription>
+                          )}
                           <FormMessage />
                         </FormItem>
                       )}
