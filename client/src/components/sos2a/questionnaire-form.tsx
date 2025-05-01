@@ -294,21 +294,43 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   return (
     <Card className="w-full">
       <CardHeader className="text-center">
-        <CardTitle className="text-2xl font-bold">Healthcare Organizational and System Security Analysis (SOS²A)</CardTitle>
+        <CardTitle className="text-2xl font-bold">Healthcare Organizational and System Security Analysis (HOS²A)</CardTitle>
         <CardDescription>
-          Complete this questionnaire to begin your security assessment
+          Complete this questionnaire to begin your assessment
         </CardDescription>
+        <div className="mt-4 text-sm text-muted-foreground">
+          <p className="mb-2">Our 11-step assessment process:</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-left">
+            <div>1. Business Information</div>
+            <div>2. Infrastructure Mode</div>
+            <div>3. Configuration Baseline</div>
+            <div>4. Security Control Framework</div>
+            <div>5. Compliance</div>
+            <div>6. Regulatory Requirements</div>
+            <div>7. Standards</div>
+            <div>8. Relevant Questionnaires</div>
+            <div>9. Adversarial Insight</div>
+            <div>10. ISMS</div>
+            <div>11. Contact & Confirmation</div>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
             <Tabs defaultValue="business" className="w-full">
-              <TabsList className="grid grid-cols-5 mb-4">
-                <TabsTrigger value="business">Business Information</TabsTrigger>
-                <TabsTrigger value="infrastructure">Infrastructure</TabsTrigger>
-                <TabsTrigger value="security">Security Profile</TabsTrigger>
-                <TabsTrigger value="compliance">Compliance</TabsTrigger>
-                <TabsTrigger value="contact">Contact & Confirmation</TabsTrigger>
+              <TabsList className="flex flex-wrap mb-4 overflow-x-auto">
+                <TabsTrigger value="business" className="flex-shrink-0">1. Business Information</TabsTrigger>
+                <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
+                <TabsTrigger value="configuration" className="flex-shrink-0">3. Configuration Baseline</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">4. Security Control Framework</TabsTrigger>
+                <TabsTrigger value="compliance" className="flex-shrink-0">5. Compliance</TabsTrigger>
+                <TabsTrigger value="regulatory" className="flex-shrink-0">6. Regulatory Requirements</TabsTrigger>
+                <TabsTrigger value="standards" className="flex-shrink-0">7. Standards</TabsTrigger>
+                <TabsTrigger value="questionnaires" className="flex-shrink-0">8. Relevant Questionnaires</TabsTrigger>
+                <TabsTrigger value="adversarial" className="flex-shrink-0">9. Adversarial Insight</TabsTrigger>
+                <TabsTrigger value="isms" className="flex-shrink-0">10. ISMS</TabsTrigger>
+                <TabsTrigger value="contact" className="flex-shrink-0">11. Contact & Confirmation</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
@@ -682,7 +704,42 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 />
               </TabsContent>
               
-              {/* Security Profile Tab */}
+              {/* Configuration Baseline Tab */}
+              <TabsContent value="configuration" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Configuration Baseline</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Define your organization's configuration baseline to help assess security posture.
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="configurationBaseline"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Configuration Management Approach</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select configuration approach" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="ad-hoc">Ad-hoc (No formal configuration management)</SelectItem>
+                            <SelectItem value="documented">Documented configurations</SelectItem>
+                            <SelectItem value="automated">Automated configuration management</SelectItem>
+                            <SelectItem value="compliance-driven">Compliance-driven configuration</SelectItem>
+                            <SelectItem value="continuous">Continuous configuration validation</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+              
+              {/* Security Control Framework Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
                   <h3 className="font-medium mb-4">Security Frameworks by Domain</h3>
@@ -1246,6 +1303,396 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       )}
                     />
                   </div>
+                </div>
+              </TabsContent>
+              
+              {/* Regulatory Requirements Tab */}
+              <TabsContent value="regulatory" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Regulatory Requirements</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select all healthcare regulatory requirements applicable to your organization.
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="regulatoryRequirements"
+                    render={() => (
+                      <FormItem>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          <FormField
+                            control={form.control}
+                            name="regulatoryRequirements"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("hipaa")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "hipaa"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "hipaa"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel>HIPAA</FormLabel>
+                                  <FormDescription>
+                                    Health Insurance Portability and Accountability Act
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="regulatoryRequirements"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("hitech")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "hitech"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "hitech"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel>HITECH</FormLabel>
+                                  <FormDescription>
+                                    Health Information Technology for Economic and Clinical Health Act
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="regulatoryRequirements"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("gdpr")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "gdpr"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "gdpr"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel>GDPR</FormLabel>
+                                  <FormDescription>
+                                    General Data Protection Regulation
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="regulatoryRequirements"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("ccpa")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "ccpa"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "ccpa"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel>CCPA</FormLabel>
+                                  <FormDescription>
+                                    California Consumer Privacy Act
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+              
+              {/* Standards Tab */}
+              <TabsContent value="standards" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Healthcare Security Standards</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select relevant healthcare security standards your organization follows or needs to implement.
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="healthcareStandards"
+                    render={() => (
+                      <FormItem>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          <FormField
+                            control={form.control}
+                            name="healthcareStandards"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("iso27001")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "iso27001"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "iso27001"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel>ISO 27001</FormLabel>
+                                  <FormDescription>
+                                    Information security management standard
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="healthcareStandards"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("hitrust")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "hitrust"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "hitrust"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel>HITRUST CSF</FormLabel>
+                                  <FormDescription>
+                                    Health Information Trust Alliance Common Security Framework
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+              
+              {/* Relevant Questionnaires Tab */}
+              <TabsContent value="questionnaires" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Relevant Questionnaires</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select questionnaires that are applicable to your healthcare organization.
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="relevantQuestionnaires"
+                    render={() => (
+                      <FormItem>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          <FormField
+                            control={form.control}
+                            name="relevantQuestionnaires"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("sra")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "sra"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "sra"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel>HIPAA Security Risk Assessment (SRA)</FormLabel>
+                                  <FormDescription>
+                                    Assessment of security risks to protected health information
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="relevantQuestionnaires"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("vendor")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "vendor"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "vendor"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel>Vendor Security Assessment</FormLabel>
+                                  <FormDescription>
+                                    Assessment of third-party vendor security practices
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+              
+              {/* Adversarial Insight Tab */}
+              <TabsContent value="adversarial" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Adversarial Insight (MITRE ATT&CK)</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select threat actors and techniques most relevant to your healthcare organization.
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="threatActors"
+                    render={() => (
+                      <FormItem>
+                        <FormLabel>Threat Actors of Concern</FormLabel>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          <FormField
+                            control={form.control}
+                            name="threatActors"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("nation-state")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "nation-state"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "nation-state"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  Nation State Actors
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="threatActors"
+                            render={({ field }) => (
+                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes("ransomware")}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), "ransomware"]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== "ransomware"
+                                          );
+                                      field.onChange(updatedValue);
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  Ransomware Groups
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+              
+              {/* ISMS Tab */}
+              <TabsContent value="isms" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Information Security Management System (ISMS)</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Provide information about your current ISMS implementation.
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="ismsImplementation"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>ISMS Implementation Status</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select ISMS implementation status" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="none">No formal ISMS</SelectItem>
+                            <SelectItem value="planning">Planning phase</SelectItem>
+                            <SelectItem value="implementing">Currently implementing</SelectItem>
+                            <SelectItem value="operational">Operational but not certified</SelectItem>
+                            <SelectItem value="certified">Certified (e.g., ISO 27001)</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 </div>
               </TabsContent>
               
