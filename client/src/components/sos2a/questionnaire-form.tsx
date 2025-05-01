@@ -2423,7 +2423,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     control={form.control}
                     name="ismsImplementation"
                     render={({ field }) => (
-                      <FormItem>
+                      <FormItem className="mb-6">
                         <FormLabel>ISMS Implementation Status</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
@@ -2436,13 +2436,237 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             <SelectItem value="planning">Planning phase</SelectItem>
                             <SelectItem value="implementing">Currently implementing</SelectItem>
                             <SelectItem value="operational">Operational but not certified</SelectItem>
-                            <SelectItem value="certified">Certified (e.g., ISO 27001)</SelectItem>
+                            <SelectItem value="certified">ISO 27001 certified</SelectItem>
+                            <SelectItem value="hipaa">HIPAA compliant</SelectItem>
+                            <SelectItem value="hitrust">HITRUST certified</SelectItem>
+                            <SelectItem value="other">Other framework</SelectItem>
                           </SelectContent>
                         </Select>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
+                  
+                  <div className="space-y-6">
+                    <h4 className="font-medium">ISMS Components (4Ps)</h4>
+                    <FormDescription className="mb-4">
+                      Information Security Management Systems (ISMS) is composed of four key components: Policies, Plans, Procedures, and Processes. Select which components you have implemented.
+                      <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-md">
+                        <span className="font-semibold text-amber-700">Healthcare Note:</span> Healthcare organizations should focus on components that address PHI protection, patient data privacy, and compliance with healthcare regulations.
+                      </div>
+                    </FormDescription>
+                    
+                    <FormField
+                      control={form.control}
+                      name="ismsPolicies"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Policies</FormLabel>
+                          <FormDescription className="mb-2">
+                            Formal documents that define your organization's security objectives, principles, and rules
+                          </FormDescription>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {[
+                              { id: "information-security-policy", label: "Information Security Policy" },
+                              { id: "data-protection-policy", label: "Data Protection Policy" },
+                              { id: "access-control-policy", label: "Access Control Policy" },
+                              { id: "acceptable-use-policy", label: "Acceptable Use Policy" },
+                              { id: "password-policy", label: "Password Policy" },
+                              { id: "incident-response-policy", label: "Incident Response Policy" },
+                              { id: "data-classification-policy", label: "Data Classification Policy" },
+                              { id: "hipaa-privacy-policy", label: "HIPAA Privacy Policy" },
+                              { id: "hipaa-security-policy", label: "HIPAA Security Policy" },
+                              { id: "phi-handling-policy", label: "PHI Handling Policy" },
+                            ].map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="ismsPolicies"
+                                render={({ field }) => (
+                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), option.id]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== option.id
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="ismsPlans"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Plans</FormLabel>
+                          <FormDescription className="mb-2">
+                            Strategic documents that outline how security objectives will be achieved over time
+                          </FormDescription>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {[
+                              { id: "security-improvement-plan", label: "Security Improvement Plan" },
+                              { id: "disaster-recovery-plan", label: "Disaster Recovery Plan" },
+                              { id: "business-continuity-plan", label: "Business Continuity Plan" },
+                              { id: "incident-response-plan", label: "Incident Response Plan" },
+                              { id: "security-awareness-training-plan", label: "Security Awareness Training Plan" },
+                              { id: "risk-management-plan", label: "Risk Management Plan" },
+                              { id: "phi-breach-response-plan", label: "PHI Breach Response Plan" },
+                              { id: "healthcare-contingency-plan", label: "Healthcare Contingency Plan" },
+                            ].map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="ismsPlans"
+                                render={({ field }) => (
+                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), option.id]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== option.id
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="ismsProcedures"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Procedures</FormLabel>
+                          <FormDescription className="mb-2">
+                            Step-by-step instructions for performing security-related tasks and activities
+                          </FormDescription>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {[
+                              { id: "incident-handling-procedure", label: "Incident Handling Procedure" },
+                              { id: "backup-restoration-procedure", label: "Backup & Restoration Procedure" },
+                              { id: "vulnerability-management-procedure", label: "Vulnerability Management Procedure" },
+                              { id: "access-provisioning-procedure", label: "Access Provisioning Procedure" },
+                              { id: "change-management-procedure", label: "Change Management Procedure" },
+                              { id: "log-review-procedure", label: "Log Review Procedure" },
+                              { id: "phi-access-procedure", label: "PHI Access Procedure" },
+                              { id: "hipaa-audit-procedure", label: "HIPAA Audit Procedure" },
+                              { id: "patient-data-transfer-procedure", label: "Patient Data Transfer Procedure" },
+                            ].map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="ismsProcedures"
+                                render={({ field }) => (
+                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), option.id]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== option.id
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="ismsProcesses"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>Processes</FormLabel>
+                          <FormDescription className="mb-2">
+                            Ongoing activities and workflows that maintain and improve security operations
+                          </FormDescription>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {[
+                              { id: "risk-assessment-process", label: "Risk Assessment Process" },
+                              { id: "security-audit-process", label: "Security Audit Process" },
+                              { id: "security-monitoring-process", label: "Security Monitoring Process" },
+                              { id: "vendor-risk-management-process", label: "Vendor Risk Management Process" },
+                              { id: "asset-management-process", label: "Asset Management Process" },
+                              { id: "continuous-improvement-process", label: "Continuous Improvement Process" },
+                              { id: "hipaa-compliance-monitoring", label: "HIPAA Compliance Monitoring" },
+                              { id: "healthcare-security-review", label: "Healthcare Security Review Process" },
+                            ].map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="ismsProcesses"
+                                render={({ field }) => (
+                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), option.id]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== option.id
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                )}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               </TabsContent>
               

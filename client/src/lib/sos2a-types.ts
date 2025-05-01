@@ -12,6 +12,7 @@ export interface FrameworkSelection {
   operations: string[];
   management: string[];
   technology: string[];
+  people?: string[]; // Added people domain
 }
 
 export interface ComplianceRequirements {
@@ -82,6 +83,10 @@ export interface Sos2aFormData {
   
   // 10. ISMS
   ismsImplementation?: string;
+  ismsPolicies?: string[];
+  ismsPlans?: string[];
+  ismsProcedures?: string[];
+  ismsProcesses?: string[];
   
   // 11. Contact and Confirmation
   contactInfo: ContactInfo;
@@ -191,6 +196,13 @@ export interface MatrixItem {
   osHardening: {
     stigScap: boolean;
     guidelines: string[];
+  };
+  isms: {
+    implementation: string;
+    policies: string[];
+    plans: string[];
+    procedures: string[];
+    processes: string[];
   };
 }
 
