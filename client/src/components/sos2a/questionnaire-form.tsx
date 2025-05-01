@@ -748,50 +748,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   />
                 </div>
                 
-                <FormField
-                  control={form.control}
-                  name="primaryConcerns"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>Primary Security Concerns (select all that apply)</FormLabel>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                        {primaryConcernOptions.map((option) => (
-                          <FormField
-                            key={option.id}
-                            control={form.control}
-                            name="primaryConcerns"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={option.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(option.id)}
-                                      onCheckedChange={(checked) => {
-                                        const updatedValue = checked
-                                          ? [...field.value, option.id]
-                                          : field.value?.filter(
-                                              (value) => value !== option.id
-                                            );
-                                        field.onChange(updatedValue);
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    {option.label}
-                                  </FormLabel>
-                                </FormItem>
-                              );
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+
               </TabsContent>
               
               {/* Configuration Baseline Tab */}
