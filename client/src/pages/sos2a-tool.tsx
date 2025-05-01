@@ -785,35 +785,63 @@ export default function Sos2aTool() {
   
   // Calculate RASBITA score based on matrix data
   const calculateRasbitaScore = (data: MatrixItem[]) => {
-    // This is a simplified version of how the RASBITA score might be calculated
-    const riskScore = 100 - Math.min(data.flatMap(item => item.risks).length * 5, 50);
-    const adversarialInsightScore = Math.min(data.flatMap(item => item.mitreTechniques).length * 10, 100);
-    const securityControlsScore = calculateSecurityControlsScore(data);
-    const businessImpactScore = 70; // Placeholder value
-    const informationAssuranceScore = data.some(item => item.osHardening.stigScap) ? 80 : 40;
-    const threatIntelligenceScore = 60; // Placeholder value
+    // Calculate scores for NIST CSF 2.0 domains
+    
+    // GOVERN - Based on management controls and governance frameworks
+    const governScore = Math.round(calculateManagementScore(data) * 0.8 + 
+      (data.some(item => item.standards.nistCsf || item.standards.iso27001) ? 20 : 0));
+    
+    // IDENTIFY - Based on asset inventory and risk identification
+    const identifyScore = 100 - Math.min(data.flatMap(item => item.risks).length * 5, 50);
+    
+    // PROTECT - Based on security controls implementation
+    const protectScore = calculateSecurityControlsScore(data);
+    
+    // DETECT - Based on monitoring capabilities and threat intelligence
+    const detectScore = calculateThreatIntelligenceScore(data);
+    
+    // RESPOND - Based on incident response capabilities
+    const respondScore = data.some(item => 
+      item.operationControls.implemented && 
+      item.operationControls.frameworks.includes('Incident Response')
+    ) ? 80 : 40;
+    
+    // RECOVER - Based on business continuity/disaster recovery
+    const recoverScore = data.some(item => 
+      item.operationControls.implemented && 
+      (item.operationControls.frameworks.includes('Disaster Recovery') || 
+       item.operationControls.frameworks.includes('Business Continuity'))
+    ) ? 75 : 35;
+    
+    // Calculate the total score as an average of all domain scores
+    const totalScore = Math.round(
+      (governScore + identifyScore + protectScore + 
+        detectScore + respondScore + recoverScore) / 6
+    );
+    
+    // Calculate legacy scores for backward compatibility
+    const riskScore = identifyScore;
     const architectureScore = data.some(item => 
       item.operationControls.implemented && 
       item.managementControls.implemented && 
       item.technologyControls.implemented
     ) ? 90 : 50;
     
-    const totalScore = Math.round(
-      (riskScore + adversarialInsightScore + securityControlsScore + 
-        businessImpactScore + informationAssuranceScore + 
-        threatIntelligenceScore + architectureScore) / 7
-    );
-    
     return {
       total: totalScore,
       categories: {
+        // New NIST CSF 2.0 domain scores
+        govern: governScore,
+        identify: identifyScore,
+        protect: protectScore,
+        detect: detectScore,
+        respond: respondScore,
+        recover: recoverScore,
+        
+        // Legacy fields for backward compatibility
         risk: riskScore,
-        adversarialInsight: adversarialInsightScore,
-        securityControls: securityControlsScore,
-        businessImpact: businessImpactScore,
-        informationAssurance: informationAssuranceScore,
-        threatIntelligence: threatIntelligenceScore,
-        architecture: architectureScore,
+        securityControls: protectScore,
+        architecture: respondScore
       }
     };
   };
@@ -849,6 +877,101 @@ export default function Sos2aTool() {
     const implementedItems = data.filter(item => item.technologyControls.implemented).length;
     
     return Math.round((implementedItems / totalItems) * 100);
+  };
+  
+  // Calculate business impact score based on critical business services and assets
+  const calculateBusinessImpactScore = (data: MatrixItem[]): number => {
+    // Check if criticalityData is present in any items
+    const hasCriticalityData = data.some(item => item.criticalityData && item.criticalityData > 0);
+    
+    if (hasCriticalityData) {
+      // Average the criticality data where available
+      const criticalityScores = data
+        .filter(item => item.criticalityData && item.criticalityData > 0)
+        .map(item => item.criticalityData || 0);
+      
+      return criticalityScores.length > 0
+        ? Math.round(criticalityScores.reduce((sum, score) => sum + score, 0) / criticalityScores.length)
+        : 50;
+    }
+    
+    // Fallback calculation based on business services and internet presence
+    const internetPresenceValues = data.flatMap(item => item.internetPresence);
+    const hasEcommerce = internetPresenceValues.includes('E-commerce');
+    const hasMarketing = internetPresenceValues.includes('Marketing Website');
+    const hasWebApp = internetPresenceValues.includes('Web Application');
+    
+    // Higher risk for e-commerce and web applications
+    let score = 50;
+    if (hasEcommerce) score += 20;
+    if (hasWebApp) score += 15;
+    if (hasMarketing) score += 5;
+    
+    return Math.min(score, 100);
+  };
+  
+  // Calculate information assurance score based on OS hardening and data protection
+  const calculateInformationAssuranceScore = (data: MatrixItem[]): number => {
+    const hasOsHardening = data.some(item => item.osHardening.stigScap);
+    const hasDataProtection = data.some(item => 
+      item.managementControls.implemented && 
+      item.managementControls.frameworks.includes('Data Protection')
+    );
+    const hasEncryption = data.some(item => 
+      item.technologyControls.implemented && 
+      (item.technologyControls.frameworks.includes('Encryption') || 
+       item.technologyControls.frameworks.includes('Data Encryption'))
+    );
+    
+    let score = 40; // Base score
+    if (hasOsHardening) score += 20;
+    if (hasDataProtection) score += 20;
+    if (hasEncryption) score += 20;
+    
+    return Math.min(score, 100);
+  };
+  
+  // Calculate threat intelligence score based on MITRE tactics and vulnerabilities
+  const calculateThreatIntelligenceScore = (data: MatrixItem[]): number => {
+    const mitreTacticsCount = data.flatMap(item => item.mitreTactics).length;
+    const vulnerabilitiesCount = data.flatMap(item => item.vulnerabilities).length;
+    
+    // More tactics and vulnerabilities identified = better threat intelligence
+    const tacticsScore = Math.min(mitreTacticsCount * 10, 60);
+    const vulnerabilitiesScore = Math.min(vulnerabilitiesCount * 5, 40);
+    
+    return tacticsScore + vulnerabilitiesScore;
+  };
+  
+  // Calculate architecture score based on implementation of all control types
+  const calculateArchitectureScore = (data: MatrixItem[]): number => {
+    // Check if all three control types are implemented
+    const hasAllControls = data.some(item => 
+      item.operationControls.implemented && 
+      item.managementControls.implemented && 
+      item.technologyControls.implemented
+    );
+    
+    // Count items with specific framework implementations
+    const hasNetworkSegmentation = data.some(item => 
+      item.technologyControls.frameworks.includes('Network Segmentation')
+    );
+    
+    const hasEndpointProtection = data.some(item => 
+      item.technologyControls.frameworks.includes('Endpoint Protection')
+    );
+    
+    const hasPatchManagement = data.some(item => 
+      item.operationControls.frameworks.includes('Patch Management')
+    );
+    
+    // Calculate score based on architecture components
+    let score = hasAllControls ? 70 : 40;
+    if (hasNetworkSegmentation) score += 10;
+    if (hasEndpointProtection) score += 10;
+    if (hasPatchManagement) score += 10;
+    
+    return Math.min(score, 100);
   };
   
   return (
