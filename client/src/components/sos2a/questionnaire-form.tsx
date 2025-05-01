@@ -2225,8 +2225,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   
                   <Tabs defaultValue="universal" className="w-full">
                     <TabsList className="grid w-full grid-cols-6">
-                      <TabsTrigger value="universal">Universal</TabsTrigger>
-                      <TabsTrigger value="healthcare" className="bg-blue-50">Healthcare</TabsTrigger>
+                      <TabsTrigger value="universal">Universal Security</TabsTrigger>
+                      <TabsTrigger value="healthcare" className="bg-blue-50">Healthcare-specific</TabsTrigger>
                       <TabsTrigger value="financial">Financial</TabsTrigger>
                       <TabsTrigger value="privacy">Cloud & Data Privacy</TabsTrigger>
                       <TabsTrigger value="government">Government & Critical Infrastructure</TabsTrigger>
@@ -2550,7 +2550,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Select threat actors and techniques most relevant to your healthcare organization.
+                    Select threat actors and techniques most relevant to your university or educational institution.
                   </p>
                   
                   <FormField
@@ -2657,7 +2657,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     <FormDescription className="mb-4">
                       Information Security Management System (ISMS) is composed of four key components: Policies, Plans, Procedures, and Processes. Select which components you have implemented.
                       <div className="mt-2 p-2 bg-amber-50 border border-amber-200 rounded-md">
-                        <span className="font-semibold text-amber-700">Healthcare Note:</span> Healthcare organizations should focus on components that address PHI protection, patient data privacy, and compliance with healthcare regulations.
+                        <span className="font-semibold text-amber-700">University Security Note:</span> Educational institutions should focus on components that address student data protection, research integrity, campus safety, and compliance with educational regulations like FERPA.
                       </div>
                     </FormDescription>
                     
@@ -2682,9 +2682,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               { id: "incident-response-policy", label: "Incident Response Policy" },
                               { id: "business-continuity-policy", label: "Business Continuity Policy" },
                               { id: "vendor-risk-management-policy", label: "Vendor Risk Management Policy" },
-                              { id: "hipaa-privacy-policy", label: "HIPAA Privacy Policy" },
-                              { id: "hipaa-security-policy", label: "HIPAA Security Policy" },
-                              { id: "phi-handling-policy", label: "PHI Handling Policy" },
+                              { id: "ferpa-privacy-policy", label: "FERPA Privacy Policy" },
+                              { id: "research-data-security-policy", label: "Research Data Security Policy" },
+                              { id: "student-data-handling-policy", label: "Student Data Handling Policy" },
                             ].map((option) => (
                               <FormField
                                 key={option.id}
@@ -2739,8 +2739,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               { id: "cloud-security-plan", label: "Cloud Security Plan" },
                               { id: "physical-security-plan", label: "Physical Security Plan" },
                               { id: "third-party-audit-plan", label: "Third-Party Audit Plan" },
-                              { id: "phi-breach-response-plan", label: "PHI Breach Response Plan" },
-                              { id: "healthcare-contingency-plan", label: "Healthcare Contingency Plan" },
+                              { id: "student-data-breach-response-plan", label: "Student Data Breach Response Plan" },
+                              { id: "campus-security-plan", label: "Campus Security Plan" },
                             ].map((option) => (
                               <FormField
                                 key={option.id}
