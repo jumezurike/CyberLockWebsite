@@ -13,6 +13,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sos2aFormData } from "@/lib/sos2a-types";
+import { assessmentTools } from "@/lib/matrix-mappings";
 
 const formSchema = z.object({
   // 1. Business Information
@@ -168,7 +169,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       },
       
       // 8-9. Questionnaires & Adversarial Insight
-      relevantQuestionnaires: [],
+      relevantACQTools: {
+        assessments: [],
+        checklists: [],
+        questionnaires: [],
+      },
+      relevantQuestionnaires: [], // For backward compatibility
       osHardening: {
         stig: false,
         scap: false,
@@ -364,6 +370,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "byod-guide", label: "BYOD Best Practices Guide" },
   ];
   
+  // ACQ Tools options
+  const assessmentOptions = assessmentTools.assessments.map(assessment => ({
+    id: assessment.toLowerCase().replace(/\s+/g, '-'),
+    label: assessment
+  }));
+  
+  const checklistOptions = assessmentTools.checklists.map(checklist => ({
+    id: checklist.toLowerCase().replace(/\s+/g, '-'),
+    label: checklist
+  }));
+  
+  const questionnaireOptions = assessmentTools.questionnaires.map(questionnaire => ({
+    id: questionnaire.toLowerCase().replace(/\s+/g, '-'),
+    label: questionnaire
+  }));
+  
   // Function to update Contact Email when "Same as above" is checked
   const handleSameAsContactChange = (checked: boolean) => {
     if (checked) {
@@ -389,7 +411,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
             <div>5. Compliance</div>
             <div>6. Regulatory Requirements</div>
             <div>7. Standards</div>
-            <div>8. Relevant Questionnaires</div>
+            <div>8. Relevant ACQ Tool</div>
             <div>9. Adversarial Insight</div>
             <div>10. Information Security Management System (ISMS)</div>
             <div>11. Contact & Confirmation</div>
@@ -408,7 +430,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="compliance" className="flex-shrink-0">5. Compliance</TabsTrigger>
                 <TabsTrigger value="regulatory" className="flex-shrink-0">6. Regulatory Requirements</TabsTrigger>
                 <TabsTrigger value="standards" className="flex-shrink-0">7. Standards</TabsTrigger>
-                <TabsTrigger value="questionnaires" className="flex-shrink-0">8. Relevant Questionnaires</TabsTrigger>
+                <TabsTrigger value="questionnaires" className="flex-shrink-0">8. Relevant ACQ Tool</TabsTrigger>
                 <TabsTrigger value="adversarial" className="flex-shrink-0">9. Adversarial Insight</TabsTrigger>
                 <TabsTrigger value="isms" className="flex-shrink-0">10. Information Security Management System</TabsTrigger>
                 <TabsTrigger value="contact" className="flex-shrink-0">11. Contact & Confirmation</TabsTrigger>
@@ -2269,79 +2291,140 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Relevant Questionnaires Tab */}
+              {/* Relevant ACQ Tools Tab */}
               <TabsContent value="questionnaires" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Relevant Questionnaires</h3>
+                  <h3 className="font-medium mb-4">Relevant ACQ Tool (Assessment, Checklist, Questionnaire)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Select questionnaires that are applicable to your healthcare organization.
+                    Select the assessment tools, checklists, and questionnaires relevant to your healthcare organization.
                   </p>
                   
-                  <FormField
-                    control={form.control}
-                    name="relevantQuestionnaires"
-                    render={() => (
-                      <FormItem>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                          <FormField
-                            control={form.control}
-                            name="relevantQuestionnaires"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  {/* Assessments Section */}
+                  <div className="mb-6">
+                    <h4 className="text-md font-medium mb-2">Assessments</h4>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Comprehensive evaluation tools for security and compliance
+                    </p>
+                    
+                    <FormField
+                      control={form.control}
+                      name="relevantACQTools.assessments"
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {assessmentOptions.map((option) => (
+                              <FormItem key={option.id} className="flex flex-row items-start space-x-3 space-y-0">
                                 <FormControl>
                                   <Checkbox
-                                    checked={field.value?.includes("sra")}
+                                    checked={field.value?.includes(option.id)}
                                     onCheckedChange={(checked) => {
                                       const updatedValue = checked
-                                        ? [...(field.value || []), "sra"]
+                                        ? [...(field.value || []), option.id]
                                         : (field.value || [])?.filter(
-                                            (value) => value !== "sra"
+                                            (value) => value !== option.id
                                           );
                                       field.onChange(updatedValue);
                                     }}
                                   />
                                 </FormControl>
                                 <div className="space-y-1 leading-none">
-                                  <FormLabel>HIPAA Security Risk Assessment (SRA)</FormLabel>
-                                  <FormDescription>
-                                    Assessment of security risks to protected health information
-                                  </FormDescription>
+                                  <FormLabel>{option.label}</FormLabel>
                                 </div>
                               </FormItem>
-                            )}
-                          />
-                          
-                          <FormField
-                            control={form.control}
-                            name="relevantQuestionnaires"
-                            render={({ field }) => (
-                              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                            ))}
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  {/* Checklists Section */}
+                  <div className="mb-6">
+                    <h4 className="text-md font-medium mb-2">Checklists</h4>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Verification tools for regulatory and compliance requirements
+                    </p>
+                    
+                    <FormField
+                      control={form.control}
+                      name="relevantACQTools.checklists"
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {checklistOptions.map((option) => (
+                              <FormItem key={option.id} className="flex flex-row items-start space-x-3 space-y-0">
                                 <FormControl>
                                   <Checkbox
-                                    checked={field.value?.includes("vendor")}
+                                    checked={field.value?.includes(option.id)}
                                     onCheckedChange={(checked) => {
                                       const updatedValue = checked
-                                        ? [...(field.value || []), "vendor"]
+                                        ? [...(field.value || []), option.id]
                                         : (field.value || [])?.filter(
-                                            (value) => value !== "vendor"
+                                            (value) => value !== option.id
                                           );
                                       field.onChange(updatedValue);
                                     }}
                                   />
                                 </FormControl>
                                 <div className="space-y-1 leading-none">
-                                  <FormLabel>Vendor Security Assessment</FormLabel>
-                                  <FormDescription>
-                                    Assessment of third-party vendor security practices
-                                  </FormDescription>
+                                  <FormLabel>{option.label}</FormLabel>
                                 </div>
                               </FormItem>
-                            )}
-                          />
-                        </div>
-                      </FormItem>
-                    )}
-                  />
+                            ))}
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  
+                  {/* Questionnaires Section */}
+                  <div>
+                    <h4 className="text-md font-medium mb-2">Questionnaires</h4>
+                    <p className="text-sm text-muted-foreground mb-3">
+                      Detailed information gathering tools for specific compliance needs
+                    </p>
+                    
+                    <FormField
+                      control={form.control}
+                      name="relevantACQTools.questionnaires"
+                      render={({ field }) => (
+                        <FormItem>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            {questionnaireOptions.map((option) => (
+                              <FormItem key={option.id} className="flex flex-row items-start space-x-3 space-y-0">
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      const updatedValue = checked
+                                        ? [...(field.value || []), option.id]
+                                        : (field.value || [])?.filter(
+                                            (value) => value !== option.id
+                                          );
+                                      field.onChange(updatedValue);
+                                      
+                                      // Also update backward compatibility field if needed
+                                      const relevantQuestionnaires = form.getValues("relevantQuestionnaires") || [];
+                                      if (checked && !relevantQuestionnaires.includes(option.id)) {
+                                        form.setValue("relevantQuestionnaires", [...relevantQuestionnaires, option.id]);
+                                      } else if (!checked && relevantQuestionnaires.includes(option.id)) {
+                                        form.setValue("relevantQuestionnaires", 
+                                          relevantQuestionnaires.filter(value => value !== option.id)
+                                        );
+                                      }
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel>{option.label}</FormLabel>
+                                </div>
+                              </FormItem>
+                            ))}
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               </TabsContent>
               
