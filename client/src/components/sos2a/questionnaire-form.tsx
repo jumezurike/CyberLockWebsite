@@ -2224,13 +2224,100 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </p>
                   
                   <Tabs defaultValue="universal" className="w-full">
-                    <TabsList className="grid w-full grid-cols-5">
+                    <TabsList className="grid w-full grid-cols-6">
                       <TabsTrigger value="universal">Universal</TabsTrigger>
                       <TabsTrigger value="healthcare" className="bg-blue-50">Healthcare</TabsTrigger>
                       <TabsTrigger value="financial">Financial</TabsTrigger>
-                      <TabsTrigger value="privacy">Privacy</TabsTrigger>
-                      <TabsTrigger value="government">Government</TabsTrigger>
+                      <TabsTrigger value="privacy">Cloud & Data Privacy</TabsTrigger>
+                      <TabsTrigger value="government">Government & Critical Infrastructure</TabsTrigger>
+                      <TabsTrigger value="regional">Emerging & Regional</TabsTrigger>
                     </TabsList>
+                    
+                    {/* Regional Standards & Guidelines Tab */}
+                    <TabsContent value="regional" className="space-y-4 pt-4">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="h-3 w-3 rounded-full bg-primary"></div>
+                        <span className="text-sm font-medium">Standards (Mandatory)</span>
+                        <div className="h-3 w-3 rounded-full bg-secondary ml-4"></div>
+                        <span className="text-sm font-medium">Guidelines (Voluntary)</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-4">
+                        <h4 className="font-medium">Emerging & Regional Standards</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through regional standards */}
+                          {standardsAndGuidelinesLibrary.regional.map((standard) => (
+                            <FormField
+                              key={standard.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-primary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(standard.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), standard.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== standard.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{standard.name}</FormLabel>
+                                    <FormDescription>
+                                      {standard.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                        
+                        <h4 className="font-medium mt-4">Regional Guidelines</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through regional guidelines */}
+                          {standardsAndGuidelinesLibrary.regionalGuidelines.map((guideline) => (
+                            <FormField
+                              key={guideline.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(guideline.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), guideline.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== guideline.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{guideline.name}</FormLabel>
+                                    <FormDescription>
+                                      {guideline.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </TabsContent>
                     
                     {/* Universal Standards & Guidelines Tab */}
                     <TabsContent value="universal" className="space-y-4 pt-4">

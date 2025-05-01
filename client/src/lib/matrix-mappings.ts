@@ -48,6 +48,15 @@ export const standardsAndGuidelinesLibrary = {
     { id: "soc-1", name: "SOC 1 - Financial reporting controls (SSAE 18)", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" }
   ],
   
+  // Emerging & Regional Standards (Mandatory)
+  regional: [
+    { id: "apec-cbpr", name: "APEC CBPR - Asia-Pacific Economic Cooperation Cross-Border Privacy Rules", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "pdpa-thailand", name: "PDPA (Thailand) - Personal Data Protection Act", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "lgpd-brazil", name: "LGPD (Brazil) - Lei Geral de Proteção de Dados", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "pipa-south-korea", name: "PIPA (South Korea) - Personal Information Protection Act", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "pipl-china", name: "PIPL (China) - Personal Information Protection Law", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" }
+  ],
+  
   // Industry-Specific Standards (Mandatory)
   industry: [
     { id: "iec-62443", name: "IEC 62443 - Industrial control systems (ICS)", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
@@ -55,11 +64,11 @@ export const standardsAndGuidelinesLibrary = {
     { id: "fips-140", name: "FIPS 140-2/3 - Cryptographic module validation", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" }
   ],
   
-  // Emerging & Regional Standards (Mandatory)
-  regional: [
-    { id: "cccs-33", name: "CCCS 33 (Canada) - Baseline cyber requirements", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
-    { id: "ens-spain", name: "ENS (Spain) - National Security Framework", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
-    { id: "meiti", name: "MEITI (Saudi Arabia) - Critical infrastructure protection", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" }
+  // Regional Guidelines (Voluntary)
+  regionalGuidelines: [
+    { id: "cccs-33", name: "CCCS 33 (Canada) - Baseline cyber requirements", isHealthcareRelevant: false, type: "guideline", enforcement: "voluntary" },
+    { id: "ens-spain", name: "ENS (Spain) - National Security Framework", isHealthcareRelevant: false, type: "guideline", enforcement: "voluntary" },
+    { id: "meiti", name: "MEITI (Saudi Arabia) - Critical infrastructure protection", isHealthcareRelevant: false, type: "guideline", enforcement: "voluntary" }
   ],
   
   // Universal Security Guidelines (Voluntary)
