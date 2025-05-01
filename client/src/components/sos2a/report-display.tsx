@@ -1179,7 +1179,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                                   <div className="mt-2 flex items-center justify-between">
                                     <span className="text-xs text-gray-600">Alignment Score:</span>
                                     <span className="text-sm font-bold text-blue-700">
-                                      {report.ismsStatus.iso27001Alignment[clause as keyof typeof report.ismsStatus.iso27001Alignment] || 0}/4
+                                      {report.ismsStatus.iso27001Alignment?.[clause as keyof typeof report.ismsStatus.iso27001Alignment] || 0}/4
                                     </span>
                                   </div>
                                 </div>
@@ -1190,7 +1190,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                               <div className="flex items-center justify-between">
                                 <span className="font-medium">Overall ISO 27001 Alignment:</span>
                                 <span className="font-bold text-lg text-blue-700">
-                                  {report.ismsStatus.iso27001Alignment.overallScore || 0}/4
+                                  {report.ismsStatus.iso27001Alignment?.overallScore || 0}/4
                                 </span>
                               </div>
                               <p className="text-xs text-gray-600 mt-1">
@@ -1228,37 +1228,127 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   
                   {/* Healthcare-specific guidance */}
                   {report.industry?.toLowerCase().includes('health') && (
-                    <div className="mt-4 border border-green-100 rounded-md p-4 bg-green-50">
-                      <h3 className="font-medium text-green-800 mb-3 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
-                          <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-                        </svg>
-                        Healthcare Compliance Guidance
-                      </h3>
-                      <p className="text-sm text-green-700 mb-2">
-                        For healthcare organizations, your ISMS should specifically address HIPAA Security Rule and Privacy Rule requirements:
-                      </p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-                        <div className="bg-white rounded-md p-2 border border-green-100">
-                          <p className="font-medium text-green-800">Security Rule Considerations:</p>
-                          <ul className="list-disc pl-5 text-green-700 space-y-1 mt-1">
-                            <li>Administrative safeguards for ePHI</li>
-                            <li>Physical safeguards for facility access</li>
-                            <li>Technical safeguards including access controls</li>
-                            <li>Security incident procedures</li>
-                          </ul>
-                        </div>
-                        <div className="bg-white rounded-md p-2 border border-green-100">
-                          <p className="font-medium text-green-800">Privacy Rule Considerations:</p>
-                          <ul className="list-disc pl-5 text-green-700 space-y-1 mt-1">
-                            <li>Patient rights to access their PHI</li>
-                            <li>Permitted uses and disclosures of PHI</li>
-                            <li>Notice of Privacy Practices (NPP)</li>
-                            <li>Business Associate Agreements (BAAs)</li>
-                          </ul>
+                    <>
+                      <div className="mt-4 border border-green-100 rounded-md p-4 bg-green-50">
+                        <h3 className="font-medium text-green-800 mb-3 flex items-center gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                          </svg>
+                          Healthcare Compliance Guidance
+                        </h3>
+                        <p className="text-sm text-green-700 mb-2">
+                          For healthcare organizations, your ISMS should specifically address HIPAA Security Rule and Privacy Rule requirements:
+                        </p>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                          <div className="bg-white rounded-md p-2 border border-green-100">
+                            <p className="font-medium text-green-800">Security Rule Considerations:</p>
+                            <ul className="list-disc pl-5 text-green-700 space-y-1 mt-1">
+                              <li>Administrative safeguards for ePHI</li>
+                              <li>Physical safeguards for facility access</li>
+                              <li>Technical safeguards including access controls</li>
+                              <li>Security incident procedures</li>
+                            </ul>
+                          </div>
+                          <div className="bg-white rounded-md p-2 border border-green-100">
+                            <p className="font-medium text-green-800">Privacy Rule Considerations:</p>
+                            <ul className="list-disc pl-5 text-green-700 space-y-1 mt-1">
+                              <li>Patient rights to access their PHI</li>
+                              <li>Permitted uses and disclosures of PHI</li>
+                              <li>Notice of Privacy Practices (NPP)</li>
+                              <li>Business Associate Agreements (BAAs)</li>
+                            </ul>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                      
+                      {/* Healthcare-specific Questionnaires */}
+                      <div className="mt-4 border border-green-100 rounded-md p-4 bg-green-50">
+                        <h3 className="font-medium text-green-800 mb-3 flex items-center gap-2">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
+                            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                            <path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z" />
+                          </svg>
+                          Healthcare-Specific Assessment Questionnaires
+                        </h3>
+                        
+                        <p className="text-sm text-green-700 mb-3">
+                          Healthcare organizations should complete the following industry-specific assessment questionnaires to evaluate compliance with key regulations and identify security gaps:
+                        </p>
+                        
+                        <div className="space-y-4">
+                          {/* HIPAA: Security Risk Assessment Tool */}
+                          <div className="bg-white rounded-md p-3 border border-green-100">
+                            <div className="flex justify-between items-center mb-2">
+                              <h4 className="font-medium text-green-800">HIPAA: Security Risk Assessment Tool</h4>
+                              <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Required for HIPAA</span>
+                            </div>
+                            <p className="text-xs text-gray-600 mb-2">
+                              Comprehensive assessment of Protected Health Information (PHI) security controls for healthcare providers, insurers, and business associates.
+                            </p>
+                            <div className="mt-2 grid grid-cols-1 sm:grid-cols-3 gap-2">
+                              <div className="rounded bg-gray-50 p-1 text-center">
+                                <p className="text-[10px] text-gray-500 mb-0.5">Administrative</p>
+                                <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+                                  <div className="bg-green-500 h-1 rounded-full" style={{width: '60%'}}></div>
+                                </div>
+                              </div>
+                              <div className="rounded bg-gray-50 p-1 text-center">
+                                <p className="text-[10px] text-gray-500 mb-0.5">Physical</p>
+                                <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+                                  <div className="bg-green-500 h-1 rounded-full" style={{width: '75%'}}></div>
+                                </div>
+                              </div>
+                              <div className="rounded bg-gray-50 p-1 text-center">
+                                <p className="text-[10px] text-gray-500 mb-0.5">Technical</p>
+                                <div className="h-1 bg-gray-200 rounded-full overflow-hidden">
+                                  <div className="bg-green-500 h-1 rounded-full" style={{width: '45%'}}></div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="mt-2">
+                              <p className="text-[10px] font-medium text-gray-700">Critical Questions:</p>
+                              <ul className="text-[10px] pl-3 list-disc text-gray-600">
+                                <li>Are encryption technologies implemented for ePHI?</li>
+                                <li>Are audit controls in place to track PHI access?</li>
+                                <li>Is there a documented risk analysis process?</li>
+                              </ul>
+                            </div>
+                          </div>
+                          
+                          {/* HITRUST: CSF Self-Assessment */}
+                          <div className="bg-white rounded-md p-3 border border-green-100">
+                            <div className="flex justify-between items-center mb-2">
+                              <h4 className="font-medium text-green-800">HITRUST: CSF Self-Assessment</h4>
+                              <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Recommended</span>
+                            </div>
+                            <p className="text-xs text-gray-600 mb-2">
+                              Comprehensive healthcare security framework assessment for organizations seeking certification or enhanced security controls.
+                            </p>
+                            <div className="mt-2">
+                              <p className="text-[10px] font-medium text-gray-700">Key Focus Areas:</p>
+                              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 mt-1">
+                                <div className="bg-gray-50 rounded p-1 text-center">
+                                  <p className="text-[9px] text-gray-600">Information Protection</p>
+                                </div>
+                                <div className="bg-gray-50 rounded p-1 text-center">
+                                  <p className="text-[9px] text-gray-600">Endpoint Protection</p>
+                                </div>
+                                <div className="bg-gray-50 rounded p-1 text-center">
+                                  <p className="text-[9px] text-gray-600">Third-party Assurance</p>
+                                </div>
+                                <div className="bg-gray-50 rounded p-1 text-center">
+                                  <p className="text-[9px] text-gray-600">Incident Management</p>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <p className="text-xs text-gray-600 mt-3">
+                          <span className="font-medium">Note:</span> Completing these healthcare-specific questionnaires provides a comprehensive view of your organization's compliance posture and helps identify critical gaps in your security controls.
+                        </p>
+                      </div>
+                    </>
                   )}
                 </>
               ) : (

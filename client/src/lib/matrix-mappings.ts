@@ -160,14 +160,162 @@ export const commonVulnerabilities = {
   ]
 };
 
-// Define questionnaires based on infrastructure mode
+// Define questionnaires based on infrastructure mode and industry
 export const relevantQuestionnaires = {
-  "isp-modem": ["SAQ A"],
-  "mobile-hotspot": ["SAQ A", "SAQ B"],
-  "commercial-internet": ["SAQ A", "SAQ B", "SAQ C"],
-  "dedicated-connection": ["SAQ B", "SAQ C", "SAQ D"],
-  "satellite": ["SAQ A", "SAQ B"],
-  "other": ["SAQ A"],
+  // Basic infrastructure questionnaires (PCI-DSS focused)
+  "isp-modem": ["PCI-DSS: SAQ A", "CIS: CSAT Basic"],
+  "mobile-hotspot": ["PCI-DSS: SAQ A", "PCI-DSS: SAQ B", "CIS: CSAT Basic"],
+  "commercial-internet": ["PCI-DSS: SAQ A", "PCI-DSS: SAQ B", "PCI-DSS: SAQ C", "CIS: CSAT Basic", "CIS: CSAT Intermediate"],
+  "dedicated-connection": ["PCI-DSS: SAQ B", "PCI-DSS: SAQ C", "PCI-DSS: SAQ D", "CIS: CSAT Intermediate"],
+  "satellite": ["PCI-DSS: SAQ A", "PCI-DSS: SAQ B", "CIS: CSAT Basic"],
+  "other": ["PCI-DSS: SAQ A", "CIS: CSAT Basic"],
+  
+  // Industry-specific questionnaires
+  "healthcare": [
+    "HIPAA: Security Risk Assessment Tool",
+    "HIPAA: Privacy Rule Compliance Questionnaire",
+    "HIPAA: Breach Notification Readiness",
+    "NIST CSF: Healthcare Profile",
+    "ISO 27001: Healthcare Implementation Checklist", 
+    "HITRUST: CSF Self-Assessment",
+    "ONC: Security Risk Assessment Tool"
+  ],
+  "finance": [
+    "PCI-DSS: SAQ D",
+    "SOC 2: Type II Readiness Assessment",
+    "NYDFS: 23 NYCRR 500 Cybersecurity Self-Assessment",
+    "GLBA: Safeguards Rule Assessment",
+    "ISO 27001: Financial Services Implementation Checklist",
+    "FFIEC: Cybersecurity Assessment Tool"
+  ],
+  "education": [
+    "FERPA: Data Privacy Assessment",
+    "NIST CSF: Education Profile",
+    "CIS: CSAT Education Profile",
+    "COPPA: Compliance Checklist"
+  ],
+  "government": [
+    "FedRAMP: Security Assessment Questionnaire",
+    "FISMA: Controls Assessment",
+    "CMMC: Level 2 Assessment",
+    "NIST 800-53: Controls Implementation Checklist"
+  ],
+  "retail": [
+    "PCI-DSS: SAQ D",
+    "CCPA: Consumer Privacy Compliance Checklist",
+    "ISO 27001: Retail Implementation Checklist",
+    "GDPR: Retail-focused Data Protection Questionnaire"
+  ],
+  "tech-saas": [
+    "SOC 2: Type II Readiness Assessment",
+    "ISO 27001: Cloud Services Checklist",
+    "GDPR: Data Protection Questionnaire",
+    "CSA: Cloud Controls Matrix Self-Assessment"
+  ]
+};
+
+// Healthcare-specific questionnaire details and requirements
+export const healthcareQuestionnaires = {
+  "HIPAA: Security Risk Assessment Tool": {
+    purpose: "Protected Health Information (PHI) security assessment",
+    applicability: "Healthcare providers, insurers, business associates",
+    keyFocusAreas: [
+      "Administrative safeguards",
+      "Physical safeguards",
+      "Technical safeguards",
+      "Organizational requirements",
+      "Policies and procedures"
+    ],
+    resourceLink: "HHS SRA Tool",
+    requiredFor: "HIPAA compliance",
+    criticalQuestions: [
+      "Are encryption technologies implemented for ePHI?",
+      "Are audit controls in place to track PHI access?",
+      "Are workforce members trained on security policies?",
+      "Is there a documented risk analysis process?",
+      "Are there documented incident response procedures?"
+    ]
+  },
+  "HIPAA: Privacy Rule Compliance Questionnaire": {
+    purpose: "PHI privacy practices assessment",
+    applicability: "Covered entities, business associates",
+    keyFocusAreas: [
+      "Notice of Privacy Practices",
+      "Patient access rights",
+      "Minimum necessary standards",
+      "Administrative requirements",
+      "Use and disclosure limitations"
+    ],
+    resourceLink: "OCR Privacy Rule Guidance",
+    requiredFor: "HIPAA compliance",
+    criticalQuestions: [
+      "Is there a compliant Notice of Privacy Practices?",
+      "Are processes in place for patient access to PHI?",
+      "Are authorization procedures documented and followed?",
+      "Is there a Privacy Officer appointed?",
+      "Are minimum necessary standards implemented?"
+    ]
+  },
+  "HIPAA: Breach Notification Readiness": {
+    purpose: "Breach detection and notification preparedness",
+    applicability: "Covered entities, business associates",
+    keyFocusAreas: [
+      "Breach detection capabilities",
+      "Risk assessment procedures",
+      "Notification timelines and processes",
+      "Documentation requirements",
+      "Media and HHS notification processes"
+    ],
+    resourceLink: "OCR Breach Notification Rule",
+    requiredFor: "HIPAA compliance",
+    criticalQuestions: [
+      "Is there a defined process to identify breaches?",
+      "Is there a documented breach risk assessment procedure?",
+      "Are notification templates prepared?",
+      "Are staff trained on breach identification?",
+      "Is there a 60-day notification timeline procedure?"
+    ]
+  },
+  "HITRUST: CSF Self-Assessment": {
+    purpose: "Comprehensive healthcare security framework assessment",
+    applicability: "Healthcare organizations seeking certification",
+    keyFocusAreas: [
+      "Information protection program",
+      "Endpoint protection",
+      "Portable media security",
+      "Third-party assurance",
+      "Incident management"
+    ],
+    resourceLink: "HITRUST CSF",
+    requiredFor: "HITRUST certification",
+    criticalQuestions: [
+      "Is there a formal information security management program?",
+      "Are controls mapped to multiple regulatory requirements?",
+      "Is there a third-party risk management process?",
+      "Are technical vulnerabilities managed through a structured process?",
+      "Is there a business continuity plan specific to healthcare operations?"
+    ]
+  },
+  "ONC: Security Risk Assessment Tool": {
+    purpose: "Security risk assessment for EHR Meaningful Use",
+    applicability: "Healthcare providers with EHR systems",
+    keyFocusAreas: [
+      "EHR system security",
+      "PHI transmission security",
+      "Access management",
+      "Audit controls",
+      "Device and media controls"
+    ],
+    resourceLink: "ONC SRA Tool",
+    requiredFor: "Meaningful Use attestation",
+    criticalQuestions: [
+      "Are EHR systems protected by access controls?",
+      "Is transmitted PHI encrypted?",
+      "Are audit logs enabled and reviewed?",
+      "Is there a documented contingency plan for EHR systems?",
+      "Are mobile devices securely managed?"
+    ]
+  }
 };
 
 // Define MITRE ATT&CK tactics and techniques for different infrastructure modes
