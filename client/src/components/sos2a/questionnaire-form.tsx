@@ -670,50 +670,72 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   )}
                 />
                 
-                <FormField
-                  control={form.control}
-                  name="securityMeasures"
-                  render={() => (
-                    <FormItem>
-                      <FormLabel>Current Security Measures (select all that apply)</FormLabel>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                        {securityMeasureOptions.map((option) => (
-                          <FormField
-                            key={option.id}
-                            control={form.control}
-                            name="securityMeasures"
-                            render={({ field }) => {
-                              return (
-                                <FormItem
-                                  key={option.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(option.id)}
-                                      onCheckedChange={(checked) => {
-                                        const updatedValue = checked
-                                          ? [...field.value, option.id]
-                                          : field.value?.filter(
-                                              (value) => value !== option.id
-                                            );
-                                        field.onChange(updatedValue);
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    {option.label}
-                                  </FormLabel>
-                                </FormItem>
-                              );
-                            }}
-                          />
-                        ))}
-                      </div>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                <div className="border rounded-md p-4 mb-6">
+                  <h3 className="font-medium mb-4">
+                    {form.watch('industry') === 'healthcare' 
+                      ? "Current Healthcare Security Measures" 
+                      : "Current Security Measures"}
+                  </h3>
+                  <FormField
+                    control={form.control}
+                    name="securityMeasures"
+                    render={() => (
+                      <FormItem>
+                        <div className="mb-4">
+                          <FormLabel className="text-base">
+                            {form.watch('industry') === 'healthcare'
+                              ? "Select security measures currently implemented in your healthcare organization"
+                              : "Current Security Measures (select all that apply)"}
+                          </FormLabel>
+                          <FormDescription>
+                            These help us understand your current security posture and identify gaps relative to industry standards.
+                          </FormDescription>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {securityMeasureOptions.map((option) => (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="securityMeasures"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={option.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...field.value, option.id]
+                                            : field.value?.filter(
+                                                (value) => value !== option.id
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                        </div>
+                        {form.watch('industry') === 'healthcare' && (
+                          <FormDescription className="mt-4 text-amber-500">
+                            Note: For healthcare organizations, endpoint and device security, data encryption, and MFA are typically required for HIPAA compliance.
+                          </FormDescription>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
                 
                 <FormField
                   control={form.control}
@@ -991,71 +1013,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Security Control Framework Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">
-                    {form.watch('industry') === 'healthcare' 
-                      ? "Current Healthcare Security Measures" 
-                      : "Current Security Measures"}
-                  </h3>
-                  <FormField
-                    control={form.control}
-                    name="securityMeasures"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-4">
-                          <FormLabel className="text-base">
-                            {form.watch('industry') === 'healthcare'
-                              ? "Select security measures currently implemented in your healthcare organization"
-                              : "Current Security Measures (select all that apply)"}
-                          </FormLabel>
-                          <FormDescription>
-                            These help us understand your current security posture and identify gaps relative to industry standards.
-                          </FormDescription>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {securityMeasureOptions.map((option) => (
-                            <FormField
-                              key={option.id}
-                              control={form.control}
-                              name="securityMeasures"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={option.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(option.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...field.value, option.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== option.id
-                                                )
-                                              );
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      {option.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                );
-                              }}
-                            />
-                          ))}
-                        </div>
-                        {form.watch('industry') === 'healthcare' && (
-                          <FormDescription className="mt-4 text-amber-500">
-                            Note: For healthcare organizations, endpoint and device security, data encryption, and MFA are typically required for HIPAA compliance.
-                          </FormDescription>
-                        )}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <h3 className="font-medium mb-4">Security Control Framework</h3>
+                  <FormDescription className="mb-4">
+                    A security control framework provides structure to your cybersecurity program and helps ensure comprehensive coverage.
+                  </FormDescription>
                 </div>
                 
                 <div className="border rounded-md p-4 mb-6">
