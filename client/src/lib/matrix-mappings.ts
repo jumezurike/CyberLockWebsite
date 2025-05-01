@@ -339,18 +339,133 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
   };
 }
 
+// Helper function to auto-select appropriate compliance standards based on infrastructure type
+export function autoSelectComplianceStandards(infraType: string): {
+  complianceStandards: MatrixItem['complianceStandards'];
+  regulatoryRequirements: MatrixItem['regulatoryRequirements'];
+  standards: MatrixItem['standards'];
+} {
+  // Default all to false
+  const complianceStandards: MatrixItem['complianceStandards'] = {
+    pciDss: false,
+    hipaa: false,
+    cmmc: false,
+    gdpr: false,
+    ccpa: false,
+    soc2: false,
+    iso27001: false,
+    cyberEssentialsUk: false,
+    ferpa: false,
+    glba: false,
+    pipeda: false,
+    ftcSafeguardRules: false,
+    sbaCsg: false,
+  };
+  
+  const regulatoryRequirements: MatrixItem['regulatoryRequirements'] = {
+    pciDss: false,
+    coppa: false,
+    hipaa: false,
+    gdpr: false,
+    ccpa: false,
+    glba: false,
+    ferpa: false,
+    pipeda: false,
+    ftcSafeguardRules: false,
+    fisma: false,
+    dfars: false,
+  };
+  
+  const standards: MatrixItem['standards'] = {
+    iso27001: false,
+    iso27002: false,
+    nistCsf: false,
+    nist80053: false,
+    iso27018: false,
+    iso27005: false,
+    cisCsc: false,
+    nist800171: false,
+    itil: false,
+    cobit: false,
+  };
+  
+  // Set recommended standards for healthcare/sensitive data systems
+  if (infraType === "website" || infraType === "cloud-servers" || infraType === "office-servers") {
+    complianceStandards.hipaa = true;
+    regulatoryRequirements.hipaa = true;
+    standards.nistCsf = true;
+    standards.iso27001 = true;
+  }
+  
+  // Payment systems
+  if (infraType === "website" || infraType === "commercial-internet") {
+    complianceStandards.pciDss = true;
+    regulatoryRequirements.pciDss = true;
+  }
+  
+  // Customer data handling systems
+  if (infraType === "website" || infraType === "cloud-servers" || infraType === "social-media") {
+    complianceStandards.gdpr = true;
+    regulatoryRequirements.gdpr = true;
+    complianceStandards.ccpa = true;
+    regulatoryRequirements.ccpa = true;
+  }
+  
+  // Dedicated systems typically need stronger standards
+  if (infraType === "dedicated-connection") {
+    standards.nistCsf = true;
+    standards.iso27001 = true;
+    standards.iso27002 = true;
+    complianceStandards.soc2 = true;
+  }
+  
+  // Education systems
+  if (infraType === "website" || infraType === "cloud-servers") {
+    complianceStandards.ferpa = true;
+    regulatoryRequirements.ferpa = true;
+  }
+
+  return { complianceStandards, regulatoryRequirements, standards };
+}
+
 // Generate matrix data based on selected operation modes and internet presence
 export function generateInitialMatrixData(operationModes: string[], internetPresence: string[]): MatrixItem[] {
   const matrixData: MatrixItem[] = [];
   
   // Add operation modes to matrix
   operationModes.forEach(mode => {
-    matrixData.push(createMatrixItemForInfraMode(mode));
+    const baseMatrixItem = createMatrixItemForInfraMode(mode);
+    
+    // Auto-select appropriate compliance standards based on infrastructure type
+    const autoSelectedStandards = autoSelectComplianceStandards(mode);
+    
+    // Merge the auto-selected standards with the base matrix item
+    const enhancedMatrixItem: MatrixItem = {
+      ...baseMatrixItem,
+      complianceStandards: autoSelectedStandards.complianceStandards,
+      regulatoryRequirements: autoSelectedStandards.regulatoryRequirements,
+      standards: autoSelectedStandards.standards
+    };
+    
+    matrixData.push(enhancedMatrixItem);
   });
   
   // Add internet presence to matrix
   internetPresence.forEach(presence => {
-    matrixData.push(createMatrixItemForInfraMode(presence));
+    const baseMatrixItem = createMatrixItemForInfraMode(presence);
+    
+    // Auto-select appropriate compliance standards based on infrastructure type
+    const autoSelectedStandards = autoSelectComplianceStandards(presence);
+    
+    // Merge the auto-selected standards with the base matrix item
+    const enhancedMatrixItem: MatrixItem = {
+      ...baseMatrixItem,
+      complianceStandards: autoSelectedStandards.complianceStandards,
+      regulatoryRequirements: autoSelectedStandards.regulatoryRequirements,
+      standards: autoSelectedStandards.standards
+    };
+    
+    matrixData.push(enhancedMatrixItem);
   });
   
   return matrixData;

@@ -20,6 +20,7 @@ const formSchema = z.object({
   businessLocation: z.object({
     state: z.string().min(2, "State is required"),
     country: z.string().min(2, "Country is required"),
+    zipCode: z.string().optional(),
   }),
   industry: z.string().min(2, "Industry is required"),
   customIndustry: z.string().optional(),
@@ -84,6 +85,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       businessLocation: {
         state: "",
         country: "",
+        zipCode: "",
       },
       industry: "",
       customIndustry: "",
@@ -339,7 +341,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   )}
                 />
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   <FormField
                     control={form.control}
                     name="businessLocation.state"
@@ -362,6 +364,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <FormLabel>Country</FormLabel>
                         <FormControl>
                           <Input placeholder="Enter country" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <FormField
+                    control={form.control}
+                    name="businessLocation.zipCode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Zip/Postal Code</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter zip or postal code" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

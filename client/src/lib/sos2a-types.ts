@@ -34,6 +34,7 @@ export interface Sos2aFormData {
   businessLocation: {
     state: string;
     country: string;
+    zipCode?: string;
   };
   industry: string;
   customIndustry?: string;
@@ -291,6 +292,7 @@ export interface AssessmentReport {
   businessLocation: {
     state: string;
     country: string;
+    zipCode?: string;
   };
   industry: string;
   businessServices: string;
