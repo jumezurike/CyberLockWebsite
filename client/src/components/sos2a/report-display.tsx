@@ -284,7 +284,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                           <div key={domain} className="bg-blue-50 rounded p-1">
                             <p className="text-[10px] capitalize">{domain}</p>
                             <p className="text-xs font-bold text-blue-700">
-                              {report.rasbitaScore.gpaScores[domain as keyof typeof report.rasbitaScore.gpaScores] || "N/A"}
+                              {report.rasbitaScore.gpaScores?.[domain as keyof typeof report.rasbitaScore.gpaScores] || "N/A"}
                             </p>
                           </div>
                         ))}
@@ -868,83 +868,343 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                     </div>
                   </div>
                   
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-                    {/* ISMS Policies */}
-                    <div className="border rounded-md p-4">
-                      <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
-                          <path d="M14 3v4a1 1 0 0 0 1 1h4" />
-                          <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z" />
-                        </svg>
-                        Policies
-                      </h3>
-                      <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-green-700">Implemented</h4>
-                        <div className="bg-green-50 rounded-md p-2 min-h-12">
-                          {Array.isArray(report.ismsStatus.policies.implemented) && report.ismsStatus.policies.implemented.length > 0 ? (
-                            <ul className="list-disc pl-5 text-xs text-green-800">
-                              {report.ismsStatus.policies.implemented.map((policy, index) => (
-                                <li key={index} className="capitalize">{policy.replace(/-/g, ' ')}</li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="text-xs text-gray-500 text-center py-1">No policies implemented</p>
-                          )}
+                  <div className="mb-4">
+                    <Tabs defaultValue="4ps" className="w-full">
+                      <TabsList className="w-full grid grid-cols-2 md:grid-cols-8">
+                        <TabsTrigger value="4ps">4Ps</TabsTrigger>
+                        <TabsTrigger value="governance">Governance</TabsTrigger>
+                        <TabsTrigger value="risk">Risk Mgmt</TabsTrigger>
+                        <TabsTrigger value="assets">Assets</TabsTrigger>
+                        <TabsTrigger value="compliance">Compliance</TabsTrigger>
+                        <TabsTrigger value="operations">Operations</TabsTrigger>
+                        <TabsTrigger value="performance">Performance</TabsTrigger>
+                        <TabsTrigger value="improvement">Improvement</TabsTrigger>
+                      </TabsList>
+                      
+                      {/* 4Ps Tab - Traditional components */}
+                      <TabsContent value="4ps" className="pt-4">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+                          {/* ISMS Policies */}
+                          <div className="border rounded-md p-4">
+                            <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z" />
+                              </svg>
+                              Policies
+                            </h3>
+                            <div className="space-y-2">
+                              <h4 className="text-sm font-medium text-green-700">Implemented</h4>
+                              <div className="bg-green-50 rounded-md p-2 min-h-12">
+                                {Array.isArray(report.ismsStatus.policies.implemented) && report.ismsStatus.policies.implemented.length > 0 ? (
+                                  <ul className="list-disc pl-5 text-xs text-green-800">
+                                    {report.ismsStatus.policies.implemented.map((policy, index) => (
+                                      <li key={index} className="capitalize">{policy.replace(/-/g, ' ')}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="text-xs text-gray-500 text-center py-1">No policies implemented</p>
+                                )}
+                              </div>
+                              
+                              <h4 className="text-sm font-medium text-red-700">Missing</h4>
+                              <div className="bg-red-50 rounded-md p-2 min-h-12">
+                                {Array.isArray(report.ismsStatus.policies.missing) && report.ismsStatus.policies.missing.length > 0 ? (
+                                  <ul className="list-disc pl-5 text-xs text-red-800">
+                                    {report.ismsStatus.policies.missing.map((policy, index) => (
+                                      <li key={index} className="capitalize">{policy.replace(/-/g, ' ')}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="text-xs text-gray-500 text-center py-1">No missing policies identified</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* ISMS Plans */}
+                          <div className="border rounded-md p-4">
+                            <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+                                <path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z" />
+                                <path d="m8 10 3 3 5-5" />
+                              </svg>
+                              Plans
+                            </h3>
+                            <div className="space-y-2">
+                              <h4 className="text-sm font-medium text-green-700">Implemented</h4>
+                              <div className="bg-green-50 rounded-md p-2 min-h-12">
+                                {Array.isArray(report.ismsStatus.plans.implemented) && report.ismsStatus.plans.implemented.length > 0 ? (
+                                  <ul className="list-disc pl-5 text-xs text-green-800">
+                                    {report.ismsStatus.plans.implemented.map((plan, index) => (
+                                      <li key={index} className="capitalize">{plan.replace(/-/g, ' ')}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="text-xs text-gray-500 text-center py-1">No plans implemented</p>
+                                )}
+                              </div>
+                              
+                              <h4 className="text-sm font-medium text-red-700">Missing</h4>
+                              <div className="bg-red-50 rounded-md p-2 min-h-12">
+                                {Array.isArray(report.ismsStatus.plans.missing) && report.ismsStatus.plans.missing.length > 0 ? (
+                                  <ul className="list-disc pl-5 text-xs text-red-800">
+                                    {report.ismsStatus.plans.missing.map((plan, index) => (
+                                      <li key={index} className="capitalize">{plan.replace(/-/g, ' ')}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="text-xs text-gray-500 text-center py-1">No missing plans identified</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* ISMS Procedures */}
+                          <div className="border rounded-md p-4">
+                            <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                                <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                                <path d="M17 21H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7l5 5v11a2 2 0 0 1-2 2Z" />
+                                <path d="M9 17h6" />
+                                <path d="M9 13h6" />
+                              </svg>
+                              Procedures
+                            </h3>
+                            <div className="space-y-2">
+                              <h4 className="text-sm font-medium text-green-700">Implemented</h4>
+                              <div className="bg-green-50 rounded-md p-2 min-h-12">
+                                {Array.isArray(report.ismsStatus.procedures.implemented) && report.ismsStatus.procedures.implemented.length > 0 ? (
+                                  <ul className="list-disc pl-5 text-xs text-green-800">
+                                    {report.ismsStatus.procedures.implemented.map((procedure, index) => (
+                                      <li key={index} className="capitalize">{procedure.replace(/-/g, ' ')}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="text-xs text-gray-500 text-center py-1">No procedures implemented</p>
+                                )}
+                              </div>
+                              
+                              <h4 className="text-sm font-medium text-red-700">Missing</h4>
+                              <div className="bg-red-50 rounded-md p-2 min-h-12">
+                                {Array.isArray(report.ismsStatus.procedures.missing) && report.ismsStatus.procedures.missing.length > 0 ? (
+                                  <ul className="list-disc pl-5 text-xs text-red-800">
+                                    {report.ismsStatus.procedures.missing.map((procedure, index) => (
+                                      <li key={index} className="capitalize">{procedure.replace(/-/g, ' ')}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="text-xs text-gray-500 text-center py-1">No missing procedures identified</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          
+                          {/* ISMS Processes */}
+                          <div className="border rounded-md p-4">
+                            <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
+                                <path d="M3 6v18h18" />
+                                <path d="M7 4v16" />
+                                <path d="M11 4v16" />
+                                <path d="M15 4v16" />
+                                <path d="M19 4v16" />
+                                <path d="M3 8h16" />
+                                <path d="M3 12h16" />
+                                <path d="M3 16h16" />
+                                <path d="M3 20h16" />
+                              </svg>
+                              Processes
+                            </h3>
+                            <div className="space-y-2">
+                              <h4 className="text-sm font-medium text-green-700">Implemented</h4>
+                              <div className="bg-green-50 rounded-md p-2 min-h-12">
+                                {Array.isArray(report.ismsStatus.processes.implemented) && report.ismsStatus.processes.implemented.length > 0 ? (
+                                  <ul className="list-disc pl-5 text-xs text-green-800">
+                                    {report.ismsStatus.processes.implemented.map((process, index) => (
+                                      <li key={index} className="capitalize">{process.replace(/-/g, ' ')}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="text-xs text-gray-500 text-center py-1">No processes implemented</p>
+                                )}
+                              </div>
+                              
+                              <h4 className="text-sm font-medium text-red-700">Missing</h4>
+                              <div className="bg-red-50 rounded-md p-2 min-h-12">
+                                {Array.isArray(report.ismsStatus.processes.missing) && report.ismsStatus.processes.missing.length > 0 ? (
+                                  <ul className="list-disc pl-5 text-xs text-red-800">
+                                    {report.ismsStatus.processes.missing.map((process, index) => (
+                                      <li key={index} className="capitalize">{process.replace(/-/g, ' ')}</li>
+                                    ))}
+                                  </ul>
+                                ) : (
+                                  <p className="text-xs text-gray-500 text-center py-1">No missing processes identified</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </TabsContent>
+
+                      {/* Governance & Leadership Tab */}
+                      <TabsContent value="governance" className="pt-4">
+                        <div className="border-b pb-2 mb-4">
+                          <h3 className="text-lg font-medium text-blue-800">Governance & Leadership</h3>
+                          <p className="text-sm text-gray-600">Leadership commitment and clear accountability structures for security initiatives</p>
                         </div>
                         
-                        <h4 className="text-sm font-medium text-red-700">Missing</h4>
-                        <div className="bg-red-50 rounded-md p-2 min-h-12">
-                          {Array.isArray(report.ismsStatus.policies.missing) && report.ismsStatus.policies.missing.length > 0 ? (
-                            <ul className="list-disc pl-5 text-xs text-red-800">
-                              {report.ismsStatus.policies.missing.map((policy, index) => (
-                                <li key={index} className="capitalize">{policy.replace(/-/g, ' ')}</li>
-                              ))}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="bg-white rounded-md border p-4">
+                            <h4 className="font-medium text-blue-700 mb-3">Key Components</h4>
+                            <ul className="space-y-2 text-sm">
+                              <li className="flex items-center gap-2">
+                                <div className="w-5 h-5 rounded-full flex items-center justify-center bg-blue-100">
+                                  <span className="text-blue-700 text-xs">1</span>
+                                </div>
+                                <span><span className="font-medium">ISMS Scope Document:</span> Defines boundaries and exclusions</span>
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <div className="w-5 h-5 rounded-full flex items-center justify-center bg-blue-100">
+                                  <span className="text-blue-700 text-xs">2</span>
+                                </div>
+                                <span><span className="font-medium">Roles & Responsibilities Matrix:</span> RACI for security tasks</span>
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <div className="w-5 h-5 rounded-full flex items-center justify-center bg-blue-100">
+                                  <span className="text-blue-700 text-xs">3</span>
+                                </div>
+                                <span><span className="font-medium">Management Review Records:</span> Proof of leadership oversight</span>
+                              </li>
+                              <li className="flex items-center gap-2">
+                                <div className="w-5 h-5 rounded-full flex items-center justify-center bg-blue-100">
+                                  <span className="text-blue-700 text-xs">4</span>
+                                </div>
+                                <span><span className="font-medium">Statement of Applicability (SoA):</span> ISO 27001 controls alignment</span>
+                              </li>
                             </ul>
-                          ) : (
-                            <p className="text-xs text-gray-500 text-center py-1">No missing policies identified</p>
-                          )}
+                          </div>
+                          
+                          <div className="bg-white rounded-md border p-4">
+                            <h4 className="font-medium text-blue-700 mb-2">Status</h4>
+                            {report.ismsStatus.governanceLeadership ? (
+                              <>
+                                <div className="flex items-center gap-2 mb-3">
+                                  <div className="w-16 h-16 rounded-full border-4 border-blue-100 flex items-center justify-center">
+                                    <span className="text-xl font-bold text-blue-700">{report.ismsStatus.governanceLeadership.score || 0}/4</span>
+                                  </div>
+                                  <div>
+                                    <p className="font-medium">Maturity Score</p>
+                                    <p className="text-xs text-gray-600">Based on implementation completeness</p>
+                                  </div>
+                                </div>
+                                
+                                <div className="space-y-2">
+                                  <h5 className="text-sm font-medium text-green-700">Implemented</h5>
+                                  <div className="bg-green-50 rounded-md p-2 min-h-12">
+                                    {Array.isArray(report.ismsStatus.governanceLeadership.implemented) && report.ismsStatus.governanceLeadership.implemented.length > 0 ? (
+                                      <ul className="list-disc pl-5 text-xs text-green-800">
+                                        {report.ismsStatus.governanceLeadership.implemented.map((item, index) => (
+                                          <li key={index} className="capitalize">{item.replace(/-/g, ' ')}</li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <p className="text-xs text-gray-500 text-center py-1">No components implemented</p>
+                                    )}
+                                  </div>
+                                  
+                                  <h5 className="text-sm font-medium text-red-700">Missing</h5>
+                                  <div className="bg-red-50 rounded-md p-2 min-h-12">
+                                    {Array.isArray(report.ismsStatus.governanceLeadership.missing) && report.ismsStatus.governanceLeadership.missing.length > 0 ? (
+                                      <ul className="list-disc pl-5 text-xs text-red-800">
+                                        {report.ismsStatus.governanceLeadership.missing.map((item, index) => (
+                                          <li key={index} className="capitalize">{item.replace(/-/g, ' ')}</li>
+                                        ))}
+                                      </ul>
+                                    ) : (
+                                      <p className="text-xs text-gray-500 text-center py-1">No missing components identified</p>
+                                    )}
+                                  </div>
+                                </div>
+                              </>
+                            ) : (
+                              <p className="text-sm text-gray-500 py-2 text-center">Governance & Leadership components not assessed</p>
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                    
-                    {/* ISMS Plans */}
-                    <div className="border rounded-md p-4">
-                      <h3 className="font-medium text-gray-800 mb-3 flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-500">
-                          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
-                          <path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z" />
-                          <path d="m8 10 3 3 5-5" />
-                        </svg>
-                        Plans
-                      </h3>
-                      <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-green-700">Implemented</h4>
-                        <div className="bg-green-50 rounded-md p-2 min-h-12">
-                          {Array.isArray(report.ismsStatus.plans.implemented) && report.ismsStatus.plans.implemented.length > 0 ? (
-                            <ul className="list-disc pl-5 text-xs text-green-800">
-                              {report.ismsStatus.plans.implemented.map((plan, index) => (
-                                <li key={index} className="capitalize">{plan.replace(/-/g, ' ')}</li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="text-xs text-gray-500 text-center py-1">No plans implemented</p>
-                          )}
+                      </TabsContent>
+                      
+                      {/* Other tabs would follow similar pattern - providing simplified version for ISO 27001 alignment */}
+                      <TabsContent value="risk" className="pt-4">
+                        <div className="border-b pb-2 mb-4">
+                          <h3 className="text-lg font-medium text-blue-800">Risk Management</h3>
+                          <p className="text-sm text-gray-600">Systematic approach to identifying, assessing, and treating information security risks</p>
                         </div>
                         
-                        <h4 className="text-sm font-medium text-red-700">Missing</h4>
-                        <div className="bg-red-50 rounded-md p-2 min-h-12">
-                          {Array.isArray(report.ismsStatus.plans.missing) && report.ismsStatus.plans.missing.length > 0 ? (
-                            <ul className="list-disc pl-5 text-xs text-red-800">
-                              {report.ismsStatus.plans.missing.map((plan, index) => (
-                                <li key={index} className="capitalize">{plan.replace(/-/g, ' ')}</li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="text-xs text-gray-500 text-center py-1">No missing plans identified</p>
-                          )}
+                        <div className="flex flex-col items-center justify-center py-4 border rounded-md bg-gray-50">
+                          <p className="text-sm text-gray-500">Detailed Risk Management implementation data will be provided in a future assessment</p>
                         </div>
-                      </div>
-                    </div>
+                      </TabsContent>
+                      
+                      {/* ISO 27001 Alignment Tab - would be implemented fully in production */}
+                      <TabsContent value="improvement" className="pt-4">
+                        <div className="border-b pb-2 mb-4">
+                          <h3 className="text-lg font-medium text-blue-800">ISO 27001 Alignment</h3>
+                          <p className="text-sm text-gray-600">Assessment of alignment with key ISO 27001 clauses</p>
+                        </div>
+                        
+                        {report.ismsStatus.iso27001Alignment ? (
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            {['clause4', 'clause5', 'clause6', 'clause7', 'clause8', 'clause9', 'clause10'].map((clause, index) => {
+                              const clauseNumber = clause.replace('clause', '');
+                              const descriptions = {
+                                '4': 'Context of the Organization',
+                                '5': 'Leadership',
+                                '6': 'Planning',
+                                '7': 'Support',
+                                '8': 'Operation',
+                                '9': 'Performance Evaluation',
+                                '10': 'Improvement'
+                              };
+                              
+                              return (
+                                <div key={clause} className="border rounded-md p-3 bg-white">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                                      <span className="font-medium text-blue-700">{clauseNumber}</span>
+                                    </div>
+                                    <span className="text-sm font-medium">{descriptions[clauseNumber as keyof typeof descriptions]}</span>
+                                  </div>
+                                  <div className="mt-2 flex items-center justify-between">
+                                    <span className="text-xs text-gray-600">Alignment Score:</span>
+                                    <span className="text-sm font-bold text-blue-700">
+                                      {report.ismsStatus.iso27001Alignment[clause as keyof typeof report.ismsStatus.iso27001Alignment] || 0}/4
+                                    </span>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                            
+                            <div className="border rounded-md p-3 bg-blue-50 md:col-span-4">
+                              <div className="flex items-center justify-between">
+                                <span className="font-medium">Overall ISO 27001 Alignment:</span>
+                                <span className="font-bold text-lg text-blue-700">
+                                  {report.ismsStatus.iso27001Alignment.overallScore || 0}/4
+                                </span>
+                              </div>
+                              <p className="text-xs text-gray-600 mt-1">
+                                Score represents overall maturity of ISMS implementation against ISO 27001 requirements
+                              </p>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center py-4 border rounded-md bg-gray-50">
+                            <p className="text-sm text-gray-500">ISO 27001 alignment data will be provided in a future assessment</p>
+                          </div>
+                        )}
+                      </TabsContent>
+                    </Tabs>
                   </div>
                   
                   {/* Recommended Next Steps */}

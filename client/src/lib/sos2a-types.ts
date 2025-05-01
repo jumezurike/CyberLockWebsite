@@ -199,10 +199,49 @@ export interface MatrixItem {
   };
   isms: {
     implementation: string;
+    // 1. Traditional 4Ps components (maintaining backward compatibility)
     policies: string[];
     plans: string[];
     procedures: string[];
     processes: string[];
+    
+    // 2. Expanded ISO 27001-aligned components
+    governanceLeadership?: {
+      ismsScope?: boolean;
+      rolesResponsibilities?: boolean;
+      managementReview?: boolean;
+      statementOfApplicability?: boolean;
+    };
+    riskManagement?: {
+      riskAssessmentMethodology?: boolean;
+      riskRegister?: boolean;
+      riskTreatmentPlan?: boolean;
+    };
+    assetManagement?: {
+      assetInventory?: boolean;
+      assetClassification?: boolean;
+      dataFlowDiagrams?: boolean;
+    };
+    complianceLegal?: {
+      regulatoryComplianceRegister?: boolean;
+      contractualSecurityClauses?: boolean;
+      auditReports?: boolean;
+    };
+    operationalControls?: {
+      secureConfigurationBaselines?: boolean;
+      changeManagementLogs?: boolean;
+      backupTestingRecords?: boolean;
+    };
+    performanceEvaluation?: {
+      keyPerformanceIndicators?: boolean;
+      securityMetricsDashboard?: boolean;
+      internalAuditReports?: boolean;
+    };
+    continuousImprovement?: {
+      correctiveActionPlans?: boolean;
+      lessonsLearnedRepository?: boolean;
+      ismsImprovementRoadmap?: boolean;
+    };
   };
 }
 
@@ -379,6 +418,7 @@ export interface AssessmentReport {
   };
   ismsStatus: {
     implementation: string;
+    // Traditional 4Ps components
     policies: {
       implemented: string[];
       missing: string[];
@@ -394,6 +434,52 @@ export interface AssessmentReport {
     processes: {
       implemented: string[];
       missing: string[];
+    };
+    // Expanded ISO 27001-aligned components
+    governanceLeadership?: {
+      implemented: string[];
+      missing: string[];
+      score?: number; // 0-4 maturity score
+    };
+    riskManagement?: {
+      implemented: string[];
+      missing: string[];
+      score?: number; // 0-4 maturity score
+    };
+    assetManagement?: {
+      implemented: string[];
+      missing: string[];
+      score?: number; // 0-4 maturity score
+    };
+    complianceLegal?: {
+      implemented: string[];
+      missing: string[];
+      score?: number; // 0-4 maturity score
+    };
+    operationalControls?: {
+      implemented: string[];
+      missing: string[];
+      score?: number; // 0-4 maturity score
+    };
+    performanceEvaluation?: {
+      implemented: string[];
+      missing: string[];
+      score?: number; // 0-4 maturity score
+    };
+    continuousImprovement?: {
+      implemented: string[];
+      missing: string[];
+      score?: number; // 0-4 maturity score
+    };
+    iso27001Alignment?: {
+      clause4?: number; // 0-4 alignment score
+      clause5?: number; // 0-4 alignment score
+      clause6?: number; // 0-4 alignment score
+      clause7?: number; // 0-4 alignment score
+      clause8?: number; // 0-4 alignment score
+      clause9?: number; // 0-4 alignment score
+      clause10?: number; // 0-4 alignment score
+      overallScore?: number; // Overall alignment score
     };
     recommendedNext: string[];
   };
@@ -428,7 +514,7 @@ export interface AssessmentReport {
       recover: number;
     };
     hipaaCompliance?: number | null;
-    industryType?: 'healthcare' | 'finance' | 'general';
+    industryType?: string;
   };
   // Explicit categories for compatibility with RasbitaReport format
   rasbitaCategories?: {
