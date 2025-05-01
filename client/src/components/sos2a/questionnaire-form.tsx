@@ -34,7 +34,8 @@ const formSchema = z.object({
   internetPresence: z.array(z.string()).min(1, "At least one internet presence is required"),
   
   // 3. Configuration Baseline
-  configurationBaseline: z.string().optional(),
+  configurationManagement: z.string().optional(),
+  cisBenchmarks: z.array(z.string()).optional(),
   
   // 4. Security Control Framework
   securityMeasures: z.array(z.string()),
@@ -127,7 +128,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       // 2-3. Infrastructure and Configuration
       operationMode: [],
       internetPresence: [],
-      configurationBaseline: "",
+      configurationManagement: "",
+      cisBenchmarks: [],
       
       // 4. Security Control Framework
       securityMeasures: [],
@@ -765,7 +767,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   
                   <FormField
                     control={form.control}
-                    name="configurationBaseline"
+                    name="configurationManagement"
                     render={({ field }) => (
                       <FormItem>
                         <FormLabel>Configuration Management Approach</FormLabel>
@@ -787,6 +789,198 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </FormItem>
                     )}
                   />
+                </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">OS/System Hardening</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select system hardening guidelines and benchmarks implemented in your healthcare organization.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="osHardening.stig"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              STIG (Security Technical Implementation Guides)
+                            </FormLabel>
+                            <FormDescription>
+                              DoD security configurations for operating systems
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="osHardening.scap"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              SCAP (Security Content Automation Protocol)
+                            </FormLabel>
+                            <FormDescription>
+                              Automated vulnerability checking and policy compliance
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="cisBenchmarks"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>CIS Benchmarks Implemented</FormLabel>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("windows")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "windows"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "windows"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Microsoft Windows Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("linux")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "linux"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "linux"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Linux/Unix Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("macos")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "macos"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "macos"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Apple macOS Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("cloud")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "cloud"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "cloud"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Cloud Platform Benchmarks
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("hipaa")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "hipaa"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "hipaa"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS HIPAA Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               </TabsContent>
               

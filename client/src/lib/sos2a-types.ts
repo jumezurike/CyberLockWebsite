@@ -48,7 +48,8 @@ export interface Sos2aFormData {
   internetPresence: string[];
   
   // 3. Configuration Baseline
-  configurationBaseline?: string;
+  configurationManagement?: string;
+  cisBenchmarks?: string[];
   
   // 4. Security Control Framework
   securityMeasures: string[];
