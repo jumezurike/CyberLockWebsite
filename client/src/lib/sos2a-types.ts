@@ -377,6 +377,26 @@ export interface AssessmentReport {
       gaps: string[];
     };
   };
+  ismsStatus: {
+    implementation: string;
+    policies: {
+      implemented: string[];
+      missing: string[];
+    };
+    plans: {
+      implemented: string[];
+      missing: string[];
+    };
+    procedures: {
+      implemented: string[];
+      missing: string[];
+    };
+    processes: {
+      implemented: string[];
+      missing: string[];
+    };
+    recommendedNext: string[];
+  };
   mitreAttackCoverage: {
     covered: string[];
     vulnerable: string[];

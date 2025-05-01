@@ -261,6 +261,13 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
     vulnerabilities: commonVulnerabilities[infraType as keyof typeof commonVulnerabilities] || [],
     educationAwareness: educationAwarenessNeeded[infraType as keyof typeof educationAwarenessNeeded] || false,
     relevantQuestionnaires: relevantQuestionnaires[infraType as keyof typeof relevantQuestionnaires] || [],
+    isms: {
+      implementation: "none",
+      policies: [],
+      plans: [],
+      procedures: [],
+      processes: [],
+    },
     operationControls: {
       frameworks: commonFrameworks.operations[infraType as keyof typeof commonFrameworks.operations] || [],
       applicable: true,

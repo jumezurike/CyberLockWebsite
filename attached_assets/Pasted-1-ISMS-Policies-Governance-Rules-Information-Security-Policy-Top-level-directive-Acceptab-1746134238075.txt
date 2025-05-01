@@ -1,0 +1,95 @@
+1. ISMS Policies (Governance & Rules)
+Information Security Policy (Top-level directive)
+
+Acceptable Use Policy (IT resources)
+
+Access Control Policy (RBAC, least privilege)
+
+Password Policy (Complexity, rotation)
+
+Data Classification Policy (Confidentiality tiers)
+
+Encryption Policy (Data-at-rest/transit)
+
+Remote Work Policy (BYOD/VPN rules)
+
+Incident Response Policy (Breach handling)
+
+Business Continuity Policy (Disruption mitigation)
+
+Vendor Risk Management Policy (Third-party security)
+
+2. ISMS Procedures (Step-by-Step Actions)
+User Access Provisioning/Deprovisioning
+
+Privileged Access Management (PAM) Procedure
+
+Patch Management Procedure
+
+Backup and Recovery Procedure
+
+Incident Reporting/Escalation Procedure
+
+Forensic Data Collection Procedure
+
+Secure Disposal of Media Procedure
+
+Risk Assessment Methodology Procedure
+
+Change Management Procedure
+
+Audit Log Review Procedure
+
+3. ISMS Plans (Strategic Roadmaps)
+Risk Treatment Plan (Mitigation roadmap)
+
+Disaster Recovery Plan (DRP)
+
+Business Continuity Plan (BCP)
+
+Security Awareness Training Plan
+
+Vulnerability Management Plan
+
+Compliance Monitoring Plan (GDPR, PCI-DSS, etc.)
+
+Network Security Plan (Firewalls, segmentation)
+
+Cloud Security Plan (SaaS/IaaS controls)
+
+Physical Security Plan (Facility access)
+
+Third-Party Audit Plan (Vendor assessments)
+
+4. ISMS Processes (Ongoing Activities)
+Continuous Monitoring Process (SIEM, IDS)
+
+Security Incident Response Process
+
+Access Review Process (Quarterly recertification)
+
+Configuration Management Process (Baselines)
+
+Penetration Testing Process (Annual/adhoc)
+
+Data Leakage Prevention (DLP) Process
+
+Threat Intelligence Gathering Process
+
+Security Policy Exception Process
+
+Asset Inventory Management Process
+
+Compliance Gap Remediation Process
+
+5. Supporting Documents
+Asset Inventory Register
+
+Risk Register (With scoring methodology)
+
+Statement of Applicability (SoA) (ISO 27001)
+
+Security Roles & Responsibilities Matrix
+
+Training Records (Proof of awareness programs)
+
