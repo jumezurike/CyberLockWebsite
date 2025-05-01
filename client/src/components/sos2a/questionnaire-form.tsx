@@ -786,12 +786,43 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
                 
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">OS/System Hardening</h3>
+                  <h3 className="font-medium mb-4">OS / System Hardening</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Select system hardening guidelines and benchmarks implemented in your healthcare organization.
+                    System hardening is critical for protecting applications and systems. These practices help secure operating systems and configure them properly.
                   </p>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="configurationManagement"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Configuration Management Approach</FormLabel>
+                          <FormDescription className="mb-2">
+                            How does your organization manage and maintain secure configurations across systems?
+                          </FormDescription>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select configuration management approach" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="ad-hoc">Ad-hoc (No formal configuration management)</SelectItem>
+                              <SelectItem value="documented">Documented configurations</SelectItem>
+                              <SelectItem value="automated">Automated configuration management</SelectItem>
+                              <SelectItem value="compliance-driven">Compliance-driven configuration</SelectItem>
+                              <SelectItem value="continuous">Continuous configuration validation</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormDescription className="mt-2">
+                            An effective configuration management process ensures consistent application of security settings across all systems.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
                     <FormField
                       control={form.control}
                       name="osHardening.stig"
@@ -808,7 +839,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               STIG (Security Technical Implementation Guides)
                             </FormLabel>
                             <FormDescription>
-                              DoD security configurations for operating systems
+                              Standard security configurations for different operating systems
                             </FormDescription>
                           </div>
                         </FormItem>
@@ -843,7 +874,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       name="cisBenchmarks"
                       render={() => (
                         <FormItem>
-                          <FormLabel>CIS Benchmarks Implemented</FormLabel>
+                          <FormLabel>CIS Benchmarks</FormLabel>
+                          <FormDescription className="mb-2">
+                            The Center for Internet Security (CIS) provides secure configuration guidelines. Select the benchmarks applicable to your organization:
+                          </FormDescription>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
                             <FormField
                               control={form.control}
@@ -864,7 +898,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     />
                                   </FormControl>
                                   <FormLabel className="font-normal">
-                                    CIS Microsoft Windows Benchmark
+                                    CIS Windows Benchmark
                                   </FormLabel>
                                 </FormItem>
                               )}
@@ -889,7 +923,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     />
                                   </FormControl>
                                   <FormLabel className="font-normal">
-                                    CIS Linux/Unix Benchmark
+                                    CIS Linux Benchmark
                                   </FormLabel>
                                 </FormItem>
                               )}
@@ -914,7 +948,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     />
                                   </FormControl>
                                   <FormLabel className="font-normal">
-                                    CIS Apple macOS Benchmark
+                                    CIS macOS Benchmark
                                   </FormLabel>
                                 </FormItem>
                               )}
@@ -939,7 +973,132 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     />
                                   </FormControl>
                                   <FormLabel className="font-normal">
-                                    CIS Cloud Platform Benchmarks
+                                    CIS Cloud Infrastructure Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("aws")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "aws"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "aws"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS AWS Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("azure")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "azure"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "azure"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Azure Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("gcp")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "gcp"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "gcp"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Google Cloud Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("kubernetes")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "kubernetes"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "kubernetes"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Kubernetes Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("docker")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "docker"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "docker"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Docker Benchmark
                                   </FormLabel>
                                 </FormItem>
                               )}
@@ -970,6 +1129,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               )}
                             />
                           </div>
+                          <FormDescription className="mt-3 text-amber-500">
+                            Note: Organizations with compliance requirements should consider industry-specific CIS Benchmarks relevant to their operations.
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
