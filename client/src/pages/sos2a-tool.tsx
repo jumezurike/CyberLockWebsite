@@ -268,7 +268,7 @@ export default function Sos2aTool() {
       reportType: reportType,
       createdAt: new Date().toISOString(),
       securityScore: calculateSecurityScore(data),
-      businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown" },
+      businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
       industry: formData?.industry || "Unknown",
       businessServices: formData?.businessServices || "Unknown",
       operationModes: formData?.operationMode || [],
@@ -292,22 +292,13 @@ export default function Sos2aTool() {
     
     // Save the assessment to the database
     try {
-      // Calculate RASBITA score and convert for use in both formats
-      const calculatedRasbitaScore = calculateRasbitaScore(data);
-      
-      // Create the rasbitaCategories property in the format expected by the RasbitaReport type
-      const rasbitaCategories = {
-        govern: calculatedRasbitaScore.categories.govern,
-        identify: calculatedRasbitaScore.categories.identify,
-        protect: calculatedRasbitaScore.categories.protect, 
-        detect: calculatedRasbitaScore.categories.detect,
-        respond: calculatedRasbitaScore.categories.respond,
-        recover: calculatedRasbitaScore.categories.recover
-      };
+      // We already calculated RASBITA score above, reuse it for consistency
+      // The rasbitaCategories property is already in the format expected by the RasbitaReport type
       
       const response = await apiRequest("POST", "/api/assessments", {
         businessName: formData?.businessName || "Unknown",
         industry: formData?.industry || "Unknown",
+        businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
         reportType: reportType,
         securityScore: calculateSecurityScore(data),
         findings: JSON.stringify(identifySecurityRisks(data)),

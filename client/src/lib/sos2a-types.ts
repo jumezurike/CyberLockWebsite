@@ -357,4 +357,13 @@ export interface AssessmentReport {
       architecture?: number;
     };
   };
+  // Explicit categories for compatibility with RasbitaReport format
+  rasbitaCategories?: {
+    govern: number;
+    identify: number;
+    protect: number;
+    detect: number;
+    respond: number;
+    recover: number;
+  };
 }
