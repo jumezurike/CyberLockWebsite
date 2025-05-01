@@ -661,6 +661,20 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
   // Default false values for boolean fields
   const defaultBooleanFalse = false;
   
+  // Get basic universal standards and guidelines to recommend initially
+  const initialStandards = [
+    ...standardsAndGuidelinesLibrary.universal.map(standard => ({
+      id: standard.id,
+      name: standard.name,
+      isHealthcareRelevant: standard.isHealthcareRelevant || false
+    })),
+    ...standardsAndGuidelinesLibrary.universalGuidelines.map(guideline => ({
+      id: guideline.id,
+      name: guideline.name,
+      isHealthcareRelevant: guideline.isHealthcareRelevant || false
+    }))
+  ];
+  
   // Initialize the matrix item with the appropriate values
   return {
     infraType,
@@ -668,6 +682,30 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
     vulnerabilities: commonVulnerabilities[infraType as keyof typeof commonVulnerabilities] || [],
     educationAwareness: educationAwarenessNeeded[infraType as keyof typeof educationAwarenessNeeded] || false,
     relevantQuestionnaires: relevantQuestionnaires[infraType as keyof typeof relevantQuestionnaires] || [],
+    // Initialize with recommended standards from our library
+    recommendedStandards: initialStandards,
+    // Initialize ACQ tools categories from a lookup table
+    relevantACQTools: {
+      // Standard assessments for all infrastructure types
+      assessments: infraType === 'healthcare' ? 
+                  [...assessmentTools.assessments] : 
+                  (assessmentTools.legacy_questionnaires && 
+                   infraType in assessmentTools.legacy_questionnaires ? 
+                   [...assessmentTools.legacy_questionnaires[infraType as keyof typeof assessmentTools.legacy_questionnaires]] : 
+                   []),
+      
+      // Add standard checklists based on infrastructure type
+      checklists: infraType === 'website' ?
+                 ["GDPR Compliance Checklist", "CCPA Compliance Checklist"] :
+                 (infraType === 'cloud-servers' ?
+                 ["CIS Controls Self-Assessment Tool (CSAT)", "SOX IT General Controls (ITGC) Questionnaire"] :
+                 []),
+      
+      // Add questionnaires based on infrastructure type
+      questionnaires: infraType === 'commercial-internet' || infraType === 'website' ?
+                     ["PCI DSS Questionnaire", "Data Privacy Questionnaire"] :
+                     [],
+    },
     isms: {
       implementation: "none",
       policies: [],
@@ -807,8 +845,9 @@ export function autoSelectComplianceStandards(infraType: string, industry: strin
   // Array to store recommended standards from our comprehensive library
   let recommendedStandards: Array<{id: string, name: string, isHealthcareRelevant: boolean}> = [];
   
-  // Always include these universal standards as a baseline
+  // Always include these universal standards and guidelines as a baseline
   recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.universal);
+  recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.universalGuidelines);
   
   // Check if healthcare industry
   const isHealthcare = industry.toLowerCase() === "healthcare";
