@@ -131,6 +131,8 @@ export interface MatrixItem {
     questionnaires?: string[];
   };
   relevantQuestionnaires?: string[]; // Maintaining for backward compatibility
+  // New field for recommended standards from standardsLibrary (with healthcare highlighting)
+  recommendedStandards?: Array<{id: string, name: string, isHealthcareRelevant: boolean}>;
   operationControls: {
     frameworks: string[];
     applicable: boolean;

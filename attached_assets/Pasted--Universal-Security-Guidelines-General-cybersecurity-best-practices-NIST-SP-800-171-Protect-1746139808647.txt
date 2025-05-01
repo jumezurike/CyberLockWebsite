@@ -1,0 +1,76 @@
+. Universal Security Guidelines
+(General cybersecurity best practices)
+
+NIST SP 800-171 - Protecting Controlled Unclassified Information (CUI)
+
+NIST SP 800-63 - Digital Identity Guidelines (Authentication)
+
+CIS Benchmarks - Configuration baselines for OS/apps
+
+OWASP Top 10 - Web application security risks
+
+SANS Critical Security Controls - Prioritized defense actions
+
+ISO/IEC 27004 - Information security measurement metrics
+
+2. Healthcare-Specific Guidelines
+(PHI protection, medical devices, telehealth)
+7. NIST SP 800-66 Rev. 2 - HIPAA Security Rule implementation guide
+8. HHS HIPAA Security Series - Detailed guidance on:
+
+Risk analysis (§164.308)
+
+Encryption (§164.312)
+
+Breach notification
+
+FDA Pre-market Cybersecurity Guidance - Medical device security
+
+MDS2 (Medical Device Security Standard) - Manufacturer disclosure form
+
+NH-ISAC Healthcare Cybersecurity Framework - Threat intelligence sharing
+
+AMA Cybersecurity Guidelines - Physician practice recommendations
+
+3. Government & Critical Infrastructure
+NIST IR 8374 - Cybersecurity Framework (CSF) for critical infrastructure
+
+CISA Healthcare Sector Cybersecurity Guidelines - U.S. critical infrastructure protection
+
+ENISA Healthcare Cybersecurity Guidelines (EU)
+
+4. Privacy-Focused Guidelines
+NIST Privacy Framework - Complement to NIST CSF
+
+EDPB GDPR Guidelines - EU data protection interpretations
+
+HHS Guidance on HIPAA & Cloud Computing
+
+5. Cloud & IoT
+CSA Cloud Controls Matrix - Cloud security best practices
+
+NIST SP 800-144 - Cloud computing security guidelines
+
+IoMT (Internet of Medical Things) Security Guidelines - H-ISAC
+
+6. Operational Guidance
+NIST SP 800-61 - Computer Security Incident Handling Guide
+
+NIST SP 800-40 Rev. 4 - Patch management
+
+BIS 3.0 - Banking industry security guidelines
+
+Healthcare-Specific Examples
+Guideline	Focus Area	Key Recommendations
+NIST SP 800-66 Rev. 2	HIPAA compliance	Risk analysis templates, encryption case studies
+FDA Post-market Medical Device Cybersecurity	Vulnerability management	Patch EOL devices, network segmentation
+HHS Telehealth Security Guidelines	Remote care	Endpoint protection, secure video platforms
+Key Differences: Standards vs. Guidelines
+Aspect	Standards	Guidelines
+Enforcement	Mandatory (e.g., HIPAA, PCI-DSS)	Voluntary best practices
+Flexibility	Prescriptive controls	Adaptable recommendations
+Examples	ISO 27001, NIST SP 800-53	NIST SP 800-66, CIS Benchmarks
+Implementation Tools
+NIST HIPAA Tool: Security Rule Assessment
+
+CIS Workbench: Free benchmarks

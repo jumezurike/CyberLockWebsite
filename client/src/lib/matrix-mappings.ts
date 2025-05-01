@@ -1,6 +1,140 @@
 // Matrix mappings for different infrastructure modes
 import { MatrixItem } from "./sos2a-types";
 
+// Comprehensive Standards & Guidelines list organized by category
+export const standardsAndGuidelinesLibrary = {
+  // Universal Security Standards (Mandatory)
+  universal: [
+    { id: "iso-27001", name: "ISO 27001 - Information Security Management System (ISMS)", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "iso-27002", name: "ISO 27002 - Controls for information security", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "nist-csf", name: "NIST Cybersecurity Framework (CSF)", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "nist-800-53", name: "NIST SP 800-53 - Security controls", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "cis-controls", name: "CIS Controls - 18 prioritized security best practices", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "soc-2", name: "SOC 2 - Security, Availability, Confidentiality", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "pci-dss", name: "PCI-DSS - Payment Card Industry Data Security Standard", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" }
+  ],
+  
+  // Healthcare-Specific Standards (Mandatory)
+  healthcare: [
+    { id: "hipaa-security", name: "HIPAA Security Rule - U.S. mandate for protecting health data (PHI)", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "hitrust-csf", name: "HITRUST CSF - Certifiable framework combining HIPAA, ISO 27001, NIST", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "hipaa-privacy", name: "HIPAA Privacy Rule - Governs PHI use/disclosure", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "21-cfr-part-11", name: "21 CFR Part 11 (FDA) - Electronic records/signatures for medical devices", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "gdpr-healthcare", name: "GDPR (for EU healthcare) - Protects patient data in Europe", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "nist-800-66", name: "NIST SP 800-66 - HIPAA Security Rule implementation guide", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "dicom-security", name: "DICOM Security - Medical imaging data protection", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "hl7-fhir-security", name: "HL7 FHIR Security - Standards for healthcare API security", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" }
+  ],
+  
+  // Government & Critical Infrastructure Standards (Mandatory)
+  government: [
+    { id: "fisma", name: "FISMA - U.S. federal agency security", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "fedramp", name: "FedRAMP - Cloud security for U.S. government", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "cmmc", name: "CMMC - Cybersecurity Maturity Model Certification", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "nerc-cip", name: "NERC CIP - North American electric grid security", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" }
+  ],
+  
+  // Financial & Payment Standards (Mandatory)
+  financial: [
+    { id: "glba", name: "GLBA - Gramm-Leach-Bliley Act (financial data)", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "sox", name: "SOX - Sarbanes-Oxley (financial reporting controls)", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "psd2", name: "PSD2 - EU payment services directive", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" }
+  ],
+  
+  // Cloud & Data Privacy Standards (Mandatory)
+  privacy: [
+    { id: "iso-27701", name: "ISO 27701 - Privacy extension to ISO 27001", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "ccpa", name: "CCPA - California Consumer Privacy Act", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" },
+    { id: "soc-1", name: "SOC 1 - Financial reporting controls (SSAE 18)", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" }
+  ],
+  
+  // Industry-Specific Standards (Mandatory)
+  industry: [
+    { id: "iec-62443", name: "IEC 62443 - Industrial control systems (ICS)", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "tisax", name: "TISAX - Automotive industry security", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "fips-140", name: "FIPS 140-2/3 - Cryptographic module validation", isHealthcareRelevant: true, type: "standard", enforcement: "mandatory" }
+  ],
+  
+  // Emerging & Regional Standards (Mandatory)
+  regional: [
+    { id: "cccs-33", name: "CCCS 33 (Canada) - Baseline cyber requirements", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "ens-spain", name: "ENS (Spain) - National Security Framework", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" },
+    { id: "meiti", name: "MEITI (Saudi Arabia) - Critical infrastructure protection", isHealthcareRelevant: false, type: "standard", enforcement: "mandatory" }
+  ],
+  
+  // Universal Security Guidelines (Voluntary)
+  universalGuidelines: [
+    { id: "nist-800-171", name: "NIST SP 800-171 - Protecting Controlled Unclassified Information (CUI)", isHealthcareRelevant: false, type: "guideline", enforcement: "voluntary" },
+    { id: "nist-800-63", name: "NIST SP 800-63 - Digital Identity Guidelines (Authentication)", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "cis-benchmarks", name: "CIS Benchmarks - Configuration baselines for OS/apps", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "owasp-top-10", name: "OWASP Top 10 - Web application security risks", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "sans-csc", name: "SANS Critical Security Controls - Prioritized defense actions", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "iso-27004", name: "ISO/IEC 27004 - Information security measurement metrics", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" }
+  ],
+  
+  // Healthcare-Specific Guidelines (Voluntary)
+  healthcareGuidelines: [
+    { id: "nist-800-66-r2", name: "NIST SP 800-66 Rev. 2 - HIPAA Security Rule implementation guide", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "hhs-hipaa-security", name: "HHS HIPAA Security Series - Detailed guidance (Risk analysis, Encryption, Breach)", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "fda-medical-cybersec", name: "FDA Pre-market Cybersecurity Guidance - Medical device security", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "mds2", name: "MDS2 (Medical Device Security Standard) - Manufacturer disclosure form", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "nh-isac", name: "NH-ISAC Healthcare Cybersecurity Framework - Threat intelligence sharing", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "ama-cybersec", name: "AMA Cybersecurity Guidelines - Physician practice recommendations", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" }
+  ],
+  
+  // Government Guidelines (Voluntary)
+  governmentGuidelines: [
+    { id: "nist-ir-8374", name: "NIST IR 8374 - Cybersecurity Framework for critical infrastructure", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "cisa-healthcare", name: "CISA Healthcare Sector Cybersecurity Guidelines - U.S. critical infrastructure", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "enisa-healthcare", name: "ENISA Healthcare Cybersecurity Guidelines (EU)", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" }
+  ],
+  
+  // Privacy Guidelines (Voluntary)
+  privacyGuidelines: [
+    { id: "nist-privacy", name: "NIST Privacy Framework - Complement to NIST CSF", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "edpb-gdpr", name: "EDPB GDPR Guidelines - EU data protection interpretations", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "hhs-hipaa-cloud", name: "HHS Guidance on HIPAA & Cloud Computing", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" }
+  ],
+  
+  // Cloud & IoT Guidelines (Voluntary)
+  cloudGuidelines: [
+    { id: "csa-cloud-matrix", name: "CSA Cloud Controls Matrix - Cloud security best practices", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "nist-800-144", name: "NIST SP 800-144 - Cloud computing security guidelines", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "iomt-security", name: "IoMT (Internet of Medical Things) Security Guidelines - H-ISAC", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" }
+  ],
+  
+  // Operational Guidelines (Voluntary)
+  operationalGuidelines: [
+    { id: "nist-800-61", name: "NIST SP 800-61 - Computer Security Incident Handling Guide", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "nist-800-40", name: "NIST SP 800-40 Rev. 4 - Patch management", isHealthcareRelevant: true, type: "guideline", enforcement: "voluntary" },
+    { id: "bis-3", name: "BIS 3.0 - Banking industry security guidelines", isHealthcareRelevant: false, type: "guideline", enforcement: "voluntary" }
+  ]
+};
+
+// Healthcare Standards with Key Requirements
+export const healthcareStandardDetails = {
+  "hipaa-security": {
+    scope: "U.S. healthcare providers",
+    keyRequirements: ["Encryption", "Access controls", "Audit logs"],
+    importance: "High"
+  },
+  "hitrust-csf": {
+    scope: "Certifiable (HIPAA + ISO 27001)",
+    keyRequirements: ["19 domains", "156 controls"],
+    importance: "High"
+  },
+  "21-cfr-part-11": {
+    scope: "FDA-regulated medical devices",
+    keyRequirements: ["Audit trails", "Electronic signatures"],
+    importance: "High"
+  },
+  "dicom-security": {
+    scope: "Medical imaging systems",
+    keyRequirements: ["Secure storage/transmission of MRI/X-rays"],
+    importance: "Medium"
+  }
+};
+
 // Define common security frameworks for different domains
 export const commonFrameworks = {
   operations: {
@@ -620,10 +754,11 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
 }
 
 // Helper function to auto-select appropriate compliance standards based on infrastructure type
-export function autoSelectComplianceStandards(infraType: string): {
+export function autoSelectComplianceStandards(infraType: string, industry: string = ""): {
   complianceStandards: MatrixItem['complianceStandards'];
   regulatoryRequirements: MatrixItem['regulatoryRequirements'];
   standards: MatrixItem['standards'];
+  recommendedStandards?: Array<{id: string, name: string, isHealthcareRelevant: boolean}>;
 } {
   // Default all to false
   const complianceStandards: MatrixItem['complianceStandards'] = {
@@ -669,18 +804,37 @@ export function autoSelectComplianceStandards(infraType: string): {
     cobit: false,
   };
   
+  // Array to store recommended standards from our comprehensive library
+  let recommendedStandards: Array<{id: string, name: string, isHealthcareRelevant: boolean}> = [];
+  
+  // Always include these universal standards as a baseline
+  recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.universal);
+  
+  // Check if healthcare industry
+  const isHealthcare = industry.toLowerCase() === "healthcare";
+  
   // Set recommended standards for healthcare/sensitive data systems
   if (infraType === "website" || infraType === "cloud-servers" || infraType === "office-servers") {
     complianceStandards.hipaa = true;
     regulatoryRequirements.hipaa = true;
     standards.nistCsf = true;
     standards.iso27001 = true;
+    
+    // Add healthcare standards for these infrastructure types
+    if (isHealthcare) {
+      recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.healthcare);
+      // Also add healthcare-specific guidelines for these infrastructure types
+      recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.healthcareGuidelines);
+    }
   }
   
   // Payment systems
   if (infraType === "website" || infraType === "commercial-internet") {
     complianceStandards.pciDss = true;
     regulatoryRequirements.pciDss = true;
+    
+    // Add financial standards
+    recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.financial);
   }
   
   // Customer data handling systems
@@ -689,6 +843,10 @@ export function autoSelectComplianceStandards(infraType: string): {
     regulatoryRequirements.gdpr = true;
     complianceStandards.ccpa = true;
     regulatoryRequirements.ccpa = true;
+    
+    // Add privacy standards and guidelines
+    recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.privacy);
+    recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.privacyGuidelines);
   }
   
   // Dedicated systems typically need stronger standards
@@ -704,8 +862,35 @@ export function autoSelectComplianceStandards(infraType: string): {
     complianceStandards.ferpa = true;
     regulatoryRequirements.ferpa = true;
   }
+  
+  // If the industry is government/critical infrastructure
+  if (industry.toLowerCase() === "government" || industry.toLowerCase() === "critical infrastructure") {
+    recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.government);
+    recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.governmentGuidelines);
+  }
+  
+  // If the industry is finance
+  if (industry.toLowerCase() === "finance" || industry.toLowerCase() === "banking") {
+    recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.financial);
+    // Also add operational guidelines for financial institutions
+    recommendedStandards = recommendedStandards.concat(standardsAndGuidelinesLibrary.operationalGuidelines);
+  }
+  
+  // Remove duplicates from recommendedStandards
+  recommendedStandards = recommendedStandards.filter((standard, index, self) => 
+    index === self.findIndex((s) => s.id === standard.id)
+  );
+  
+  // Sort standards to put healthcare-relevant ones at the top when industry is healthcare
+  if (isHealthcare) {
+    recommendedStandards.sort((a, b) => {
+      if (a.isHealthcareRelevant && !b.isHealthcareRelevant) return -1;
+      if (!a.isHealthcareRelevant && b.isHealthcareRelevant) return 1;
+      return 0;
+    });
+  }
 
-  return { complianceStandards, regulatoryRequirements, standards };
+  return { complianceStandards, regulatoryRequirements, standards, recommendedStandards };
 }
 
 // Generate matrix data based on selected operation modes and internet presence
@@ -724,7 +909,9 @@ export function generateInitialMatrixData(operationModes: string[], internetPres
       ...baseMatrixItem,
       complianceStandards: autoSelectedStandards.complianceStandards,
       regulatoryRequirements: autoSelectedStandards.regulatoryRequirements,
-      standards: autoSelectedStandards.standards
+      standards: autoSelectedStandards.standards,
+      // Add the recommended standards to a new property (will need to update MatrixItem type)
+      recommendedStandards: autoSelectedStandards.recommendedStandards || []
     };
     
     matrixData.push(enhancedMatrixItem);
@@ -742,7 +929,9 @@ export function generateInitialMatrixData(operationModes: string[], internetPres
       ...baseMatrixItem,
       complianceStandards: autoSelectedStandards.complianceStandards,
       regulatoryRequirements: autoSelectedStandards.regulatoryRequirements,
-      standards: autoSelectedStandards.standards
+      standards: autoSelectedStandards.standards,
+      // Add the recommended standards to a new property
+      recommendedStandards: autoSelectedStandards.recommendedStandards || []
     };
     
     matrixData.push(enhancedMatrixItem);

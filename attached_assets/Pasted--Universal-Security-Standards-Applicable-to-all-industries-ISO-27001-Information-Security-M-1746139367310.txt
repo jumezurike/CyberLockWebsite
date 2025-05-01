@@ -1,0 +1,65 @@
+. Universal Security Standards
+(Applicable to all industries)
+
+ISO 27001 - Information Security Management System (ISMS)
+
+ISO 27002 - Controls for information security
+
+NIST Cybersecurity Framework (CSF) - Risk management (Identify, Protect, Detect, Respond, Recover)
+
+NIST SP 800-53 - Security controls for federal systems (used beyond gov)
+
+CIS Controls - 18 prioritized security best practices
+
+SOC 2 - Security, Availability, Confidentiality (for cloud/services)
+
+PCI-DSS - Payment Card Industry Data Security Standard
+
+2. Healthcare-Specific Standards
+(Focus: PHI, medical devices, patient privacy)
+8. HIPAA Security Rule - U.S. mandate for protecting health data (PHI)
+9. HITRUST CSF - Certifiable framework combining HIPAA, ISO 27001, NIST
+10. HIPAA Privacy Rule - Governs PHI use/disclosure
+11. 21 CFR Part 11 (FDA) - Electronic records/signatures for medical devices
+12. GDPR (for EU healthcare) - Protects patient data in Europe
+13. NIST SP 800-66 - HIPAA Security Rule implementation guide
+14. DICOM Security - Medical imaging data protection
+15. HL7 FHIR Security - Standards for healthcare API security
+
+3. Government & Critical Infrastructure
+FISMA - U.S. federal agency security (aligned with NIST)
+
+FedRAMP - Cloud security for U.S. government
+
+CMMC - Cybersecurity Maturity Model Certification (U.S. defense)
+
+NERC CIP - North American electric grid security
+
+4. Financial & Payment Standards
+GLBA - Gramm-Leach-Bliley Act (financial data)
+
+SOX - Sarbanes-Oxley (financial reporting controls)
+
+PSD2 - EU payment services directive
+
+5. Cloud & Data Privacy
+ISO 27701 - Privacy extension to ISO 27001
+
+CCPA - California Consumer Privacy Act
+
+SOC 1 - Financial reporting controls (SSAE 18)
+
+6. Industry-Specific Standards
+IEC 62443 - Industrial control systems (ICS)
+
+TISAX - Automotive industry security
+
+FIPS 140-2/3 - Cryptographic module validation
+
+7. Emerging & Regional Standards
+CCCS 33 (Canada) - Baseline cyber requirements
+
+ENS (Spain) - National Security Framework
+
+MEITI (Saudi Arabia) - Critical infrastructure protection
+
