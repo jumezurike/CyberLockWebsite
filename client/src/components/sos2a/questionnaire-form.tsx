@@ -1266,9 +1266,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
                 
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Healthcare System Hardening</h3>
+                  <h3 className="font-medium mb-4">OS / System Hardening</h3>
                   <FormDescription className="mb-4">
-                    System hardening is critical for protecting healthcare applications and patient data. These practices help secure operating systems hosting healthcare applications.
+                    System hardening is critical for protecting applications and systems. These practices help secure operating systems and configure them properly.
                   </FormDescription>
                   
                   <div className="mb-6">
@@ -1279,7 +1279,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <FormItem>
                           <FormLabel>Configuration Management Approach</FormLabel>
                           <FormDescription className="mb-2">
-                            How does your organization manage and maintain secure configurations across healthcare systems?
+                            How does your organization manage and maintain secure configurations across systems?
                           </FormDescription>
                           <Select
                             value={field.value}
@@ -1301,7 +1301,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </SelectContent>
                           </Select>
                           <FormDescription>
-                            An effective configuration management process ensures consistent application of security settings across all healthcare systems.
+                            An effective configuration management process ensures consistent application of security settings across all systems.
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -1326,7 +1326,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 STIG (Security Technical Implementation Guides)
                               </FormLabel>
                               <FormDescription>
-                                Standard security configurations for healthcare systems
+                                Standard security configurations for different operating systems
                               </FormDescription>
                             </div>
                           </FormItem>
@@ -1349,7 +1349,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 SCAP (Security Content Automation Protocol)
                               </FormLabel>
                               <FormDescription>
-                                Automated vulnerability checking for healthcare systems
+                                Automated vulnerability checking and policy compliance
                               </FormDescription>
                             </div>
                           </FormItem>
@@ -1358,10 +1358,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                     
                     <div className="mt-6">
-                      <FormLabel className="mb-3 block">CIS Benchmarks for Healthcare Systems</FormLabel>
+                      <FormLabel className="mb-3 block">CIS Benchmarks</FormLabel>
                       <FormDescription className="mb-3">
-                        The Center for Internet Security (CIS) provides secure configuration guidelines for healthcare systems.
-                        Select the benchmarks applicable to your healthcare organization:
+                        The Center for Internet Security (CIS) provides secure configuration guidelines.
+                        Select the benchmarks applicable to your organization:
                       </FormDescription>
                       <FormField
                         control={form.control}
@@ -1413,7 +1413,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               ))}
                             </div>
                             <FormDescription className="mt-4 text-amber-500">
-                              Note: For healthcare organizations, the CIS HIPAA Benchmark is recommended to help meet regulatory compliance requirements.
+                              Note: Organizations with compliance requirements should consider industry-specific CIS Benchmarks relevant to their operations.
                             </FormDescription>
                             <FormMessage />
                           </FormItem>
