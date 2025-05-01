@@ -1259,8 +1259,64 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         </FormItem>
                       )}
                     />
-                    <FormDescription className="mt-4 text-amber-500">
-                      Note: Healthcare organizations should consider implementing NIST CSF aligned with HIPAA Security Rule requirements. Our assessment will guide you through recommended framework adoption based on your specific needs.
+                    <FormDescription className="mt-6 mb-4">
+                      <strong>Framework Coverage by Security Control Domain</strong>
+                    </FormDescription>
+                    <div className="overflow-x-auto mb-4">
+                      <table className="w-full min-w-[600px] border-collapse">
+                        <thead>
+                          <tr className="bg-slate-100 dark:bg-slate-800">
+                            <th className="border border-slate-300 dark:border-slate-700 p-2 text-left">Framework</th>
+                            <th className="border border-slate-300 dark:border-slate-700 p-2 text-center">Operations</th>
+                            <th className="border border-slate-300 dark:border-slate-700 p-2 text-center">Management</th>
+                            <th className="border border-slate-300 dark:border-slate-700 p-2 text-center">Technology</th>
+                            <th className="border border-slate-300 dark:border-slate-700 p-2 text-center">People</th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-sm">
+                          <tr>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2">NIST CSF</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✗</td>
+                          </tr>
+                          <tr>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2">CIS CSC</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✗</td>
+                          </tr>
+                          <tr>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2">HIPAA</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✗</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓✗</td>
+                          </tr>
+                          <tr>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2">ISO/IEC 27001</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✗</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✗</td>
+                          </tr>
+                          <tr>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2">HITRUST CSF</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                            <td className="border border-slate-300 dark:border-slate-700 p-2 text-center">✓</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <FormDescription className="text-sm text-slate-500 mb-4">
+                      <strong>Legend:</strong> ✓ = Explicit coverage | ✗ = Minimal/implied coverage | ✓✗ = Partial coverage
+                    </FormDescription>
+                    <FormDescription className="text-sm text-amber-500">
+                      When selecting frameworks, consider your organization's security needs across all four domains. Our assessment will guide you through recommended framework adoption based on your specific requirements.
                     </FormDescription>
                   </div>
                 </div>
