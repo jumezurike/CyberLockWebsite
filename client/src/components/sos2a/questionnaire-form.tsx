@@ -410,7 +410,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
             <div>4. Security Control Framework</div>
             <div>5. Compliance</div>
             <div>6. Regulatory Requirements</div>
-            <div>7. Standards</div>
+            <div>7. Standards & Guidelines</div>
             <div>8. Relevant ACQ Tool</div>
             <div>9. Adversarial Insight</div>
             <div>10. Information Security Management System (ISMS)</div>
@@ -429,7 +429,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="security" className="flex-shrink-0">4. Security Controls vs Framework</TabsTrigger>
                 <TabsTrigger value="compliance" className="flex-shrink-0">5. Compliance</TabsTrigger>
                 <TabsTrigger value="regulatory" className="flex-shrink-0">6. Regulatory Requirements</TabsTrigger>
-                <TabsTrigger value="standards" className="flex-shrink-0">7. Standards</TabsTrigger>
+                <TabsTrigger value="standards" className="flex-shrink-0">7. Standards & Guidelines</TabsTrigger>
                 <TabsTrigger value="questionnaires" className="flex-shrink-0">8. Relevant ACQ Tool</TabsTrigger>
                 <TabsTrigger value="adversarial" className="flex-shrink-0">9. Adversarial Insight</TabsTrigger>
                 <TabsTrigger value="isms" className="flex-shrink-0">10. Information Security Management System</TabsTrigger>
