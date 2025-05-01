@@ -991,7 +991,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Security Control Framework Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Current Healthcare Security Measures</h3>
+                  <h3 className="font-medium mb-4">
+                    {form.watch('industry') === 'healthcare' 
+                      ? "Current Healthcare Security Measures" 
+                      : "Current Security Measures"}
+                  </h3>
                   <FormField
                     control={form.control}
                     name="securityMeasures"
@@ -999,7 +1003,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       <FormItem>
                         <div className="mb-4">
                           <FormLabel className="text-base">
-                            Select security measures currently implemented in your healthcare organization
+                            {form.watch('industry') === 'healthcare'
+                              ? "Select security measures currently implemented in your healthcare organization"
+                              : "Current Security Measures (select all that apply)"}
                           </FormLabel>
                           <FormDescription>
                             These help us understand your current security posture and identify gaps relative to industry standards.
@@ -1041,9 +1047,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             />
                           ))}
                         </div>
-                        <FormDescription className="mt-4 text-amber-500">
-                          Note: For healthcare organizations, endpoint and device security, data encryption, and MFA are typically required for HIPAA compliance.
-                        </FormDescription>
+                        {form.watch('industry') === 'healthcare' && (
+                          <FormDescription className="mt-4 text-amber-500">
+                            Note: For healthcare organizations, endpoint and device security, data encryption, and MFA are typically required for HIPAA compliance.
+                          </FormDescription>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
@@ -1051,7 +1059,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
                 
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Healthcare Security Priorities</h3>
+                  <h3 className="font-medium mb-4">
+                    {form.watch('industry') === 'healthcare' 
+                      ? "Healthcare Security Priorities" 
+                      : "Security Priorities"}
+                  </h3>
                   <FormField
                     control={form.control}
                     name="primaryConcerns"
@@ -1059,10 +1071,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       <FormItem>
                         <div className="mb-4">
                           <FormLabel className="text-base">
-                            Select your healthcare organization's primary security concerns
+                            {form.watch('industry') === 'healthcare'
+                              ? "Select your healthcare organization's primary security concerns"
+                              : "Select your organization's primary security concerns"}
                           </FormLabel>
                           <FormDescription>
-                            This helps us prioritize recommendations based on your most pressing concerns in the healthcare setting.
+                            This helps us prioritize recommendations based on your most pressing concerns.
                           </FormDescription>
                         </div>
                         
@@ -1101,9 +1115,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             />
                           ))}
                         </div>
-                        <FormDescription className="mt-4 text-amber-500">
-                          Note: For healthcare organizations, data breach prevention and ransomware protection are critical concerns given the sensitive nature of PHI.
-                        </FormDescription>
+                        {form.watch('industry') === 'healthcare' && (
+                          <FormDescription className="mt-4 text-amber-500">
+                            Note: For healthcare organizations, data breach prevention and ransomware protection are critical concerns given the sensitive nature of PHI.
+                          </FormDescription>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
@@ -1111,9 +1127,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
                 
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Healthcare Security Frameworks by Domain</h3>
+                  <h3 className="font-medium mb-4">
+                    {form.watch('industry') === 'healthcare' 
+                      ? "Healthcare Security Frameworks by Domain" 
+                      : "Security Frameworks by Domain"}
+                  </h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Please select any security frameworks currently implemented or being considered in your healthcare organization.
+                    Please select any security frameworks currently implemented or being considered in your organization.
                   </p>
                   <div className="space-y-6">
                     <FormField
