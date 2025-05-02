@@ -422,8 +422,306 @@ export function StandardsContent({ form }: StandardsContentProps) {
         </div>
       </div>
       
+      {/* Government & Critical Infrastructure Standards */}
+      <div className="mb-6">
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Government & Critical Infrastructure Standards <span className="text-sm font-normal text-red-600">(Mandatory for government/CI)</span></h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("fisma")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "fisma"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "fisma"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">FISMA</FormLabel>
+                  <FormDescription>
+                    U.S. federal agency security (aligned with NIST)
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("fedramp")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "fedramp"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "fedramp"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">FedRAMP</FormLabel>
+                  <FormDescription>
+                    Cloud security for U.S. government
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("cmmc")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "cmmc"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "cmmc"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">CMMC</FormLabel>
+                  <FormDescription>
+                    Cybersecurity Maturity Model Certification (U.S. defense)
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("nerc-cip")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "nerc-cip"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "nerc-cip"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">NERC CIP</FormLabel>
+                  <FormDescription>
+                    North American electric grid security
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+      
+      {/* Financial & Payment Standards */}
+      <div className="mb-6">
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Financial & Payment Standards <span className="text-sm font-normal text-red-600">(Mandatory for financial sector)</span></h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("glba")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "glba"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "glba"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">GLBA</FormLabel>
+                  <FormDescription>
+                    Gramm-Leach-Bliley Act (financial data)
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("sox")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "sox"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "sox"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">SOX</FormLabel>
+                  <FormDescription>
+                    Sarbanes-Oxley (financial reporting controls)
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("psd2")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "psd2"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "psd2"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">PSD2</FormLabel>
+                  <FormDescription>
+                    EU payment services directive
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+      
+      {/* Cloud & Data Privacy Standards */}
+      <div className="mb-6">
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Cloud & Data Privacy Standards <span className="text-sm font-normal text-red-600">(Mandatory for relevant sectors)</span></h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("iso-27701")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "iso-27701"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "iso-27701"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">ISO 27701</FormLabel>
+                  <FormDescription>
+                    Privacy extension to ISO 27001
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("ccpa")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "ccpa"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "ccpa"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">CCPA</FormLabel>
+                  <FormDescription>
+                    California Consumer Privacy Act
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("soc-1")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "soc-1"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "soc-1"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">SOC 1</FormLabel>
+                  <FormDescription>
+                    Financial reporting controls (SSAE 18)
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+
       {/* Industry-specific Standards */}
-      <div>
+      <div className="mb-6">
         <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Industry-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for specific industries)</span></h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
@@ -447,7 +745,35 @@ export function StandardsContent({ form }: StandardsContentProps) {
                 <div className="space-y-1 leading-none">
                   <FormLabel className="font-medium">IEC 62443</FormLabel>
                   <FormDescription>
-                    Industrial Automation and Control Systems Security
+                    Industrial control systems (ICS)
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("tisax")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "tisax"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "tisax"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">TISAX</FormLabel>
+                  <FormDescription>
+                    Automotive industry security
                   </FormDescription>
                 </div>
               </FormItem>
@@ -475,7 +801,97 @@ export function StandardsContent({ form }: StandardsContentProps) {
                 <div className="space-y-1 leading-none">
                   <FormLabel className="font-medium">FIPS 140-2/3</FormLabel>
                   <FormDescription>
-                    Federal Information Processing Standard (Cryptographic Modules)
+                    Cryptographic module validation
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+        </div>
+      </div>
+      
+      {/* Emerging & Regional Standards */}
+      <div className="mb-6">
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Emerging & Regional Standards <span className="text-sm font-normal text-red-600">(Mandatory for specific regions)</span></h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("cccs-33")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "cccs-33"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "cccs-33"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">CCCS 33 (Canada)</FormLabel>
+                  <FormDescription>
+                    Baseline cyber requirements
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("ens-spain")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "ens-spain"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "ens-spain"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">ENS (Spain)</FormLabel>
+                  <FormDescription>
+                    National Security Framework
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="complianceRequirements.standards"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("meiti-saudi")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "meiti-saudi"]
+                        : (field.value || [])?.filter(
+                            (value) => value !== "meiti-saudi"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">MEITI (Saudi Arabia)</FormLabel>
+                  <FormDescription>
+                    Critical infrastructure protection
                   </FormDescription>
                 </div>
               </FormItem>
