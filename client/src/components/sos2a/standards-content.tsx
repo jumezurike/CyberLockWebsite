@@ -917,7 +917,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
       
       {/* Guidelines Section */}
       <div className="mt-8">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-green-600">Security Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-green-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+          Security Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span>
+        </h4>
         <p className="text-sm text-muted-foreground mb-4">
           Unlike standards, guidelines provide recommended practices but are not mandatory. Select guidelines relevant to your organization.
         </p>
@@ -1149,7 +1152,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
         </div>
         
         <div className="mt-6">
-          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">Healthcare-specific Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h5>
+          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">
+            <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+            Healthcare-specific Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span>
+          </h5>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -1323,7 +1329,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
         
         {/* Government & Critical Infrastructure Guidelines */}
         <div className="mt-6">
-          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">Government & Critical Infrastructure Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h5>
+          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">
+            <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+            Government & Critical Infrastructure Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span>
+          </h5>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -1441,7 +1450,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
         
         {/* Privacy-Focused Guidelines */}
         <div className="mt-6">
-          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">Privacy-Focused Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h5>
+          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">
+            <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+            Privacy-Focused Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span>
+          </h5>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -1559,7 +1571,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
         
         {/* Cloud & IoT Guidelines */}
         <div className="mt-6">
-          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">Cloud & IoT Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h5>
+          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">
+            <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+            Cloud & IoT Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span>
+          </h5>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -1677,7 +1692,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
         
         {/* Operational Guidelines */}
         <div className="mt-6">
-          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">Operational Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h5>
+          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">
+            <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+            Operational Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span>
+          </h5>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
