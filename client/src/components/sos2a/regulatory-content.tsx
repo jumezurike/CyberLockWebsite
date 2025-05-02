@@ -94,6 +94,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
         <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">Healthcare-Specific Regulations</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
+            key="hipaa"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
@@ -125,6 +126,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
           />
           
           <FormField
+            key="hitech"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
@@ -159,6 +161,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
         <h4 className="font-medium text-lg border-b pb-2 mb-4">Financial & Payment Regulations</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
+            key="pci-dss"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
@@ -190,6 +193,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
           />
           
           <FormField
+            key="glba"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
@@ -227,6 +231,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
         <h4 className="font-medium text-lg border-b pb-2 mb-4">Government & Critical Infrastructure</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
+            key="nist-800-171"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
@@ -258,6 +263,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
           />
           
           <FormField
+            key="nis2"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
@@ -295,6 +301,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
         <h4 className="font-medium text-lg border-b pb-2 mb-4">Industry-Specific Regulations</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
+            key="iec-62443"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
@@ -326,6 +333,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
           />
           
           <FormField
+            key="tisax"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
@@ -357,6 +365,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
           />
           
           <FormField
+            key="fips"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
