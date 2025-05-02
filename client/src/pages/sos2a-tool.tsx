@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Sos2aFormData, MatrixItem, AssessmentReport } from "@/lib/sos2a-types";
-import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
+import QuestionnaireForm from "@/components/sos2a/questionnaire-form-fixed";
 import MatrixForm from "@/components/sos2a/matrix-form";
 import ReportDisplay from "@/components/sos2a/report-display";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
