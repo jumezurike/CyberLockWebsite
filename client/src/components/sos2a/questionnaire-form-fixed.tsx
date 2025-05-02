@@ -877,7 +877,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <FormField
                           control={form.control}
                           name="configManagement.documented"
-                          render={({ field }) => (
+                          render={({ field }: any) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
                               <FormControl>
                                 <Checkbox
@@ -898,7 +898,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <FormField
                           control={form.control}
                           name="configManagement.reviewed"
-                          render={({ field }) => (
+                          render={({ field }: any) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
                               <FormControl>
                                 <Checkbox
@@ -919,7 +919,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <FormField
                           control={form.control}
                           name="configManagement.automated"
-                          render={({ field }) => (
+                          render={({ field }: any) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
                               <FormControl>
                                 <Checkbox

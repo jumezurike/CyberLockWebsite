@@ -309,36 +309,36 @@ export const assessmentTools = {
   
   // Category 1: Assessments - For comprehensive evaluations
   assessments: [
-    "HIPAA Security Risk Assessment (SRA) Tool",
-    "NIST Cybersecurity Framework Self-Assessment Tool",
-    "ISO 27001 Self-Assessment Questionnaire (Annex A Controls)",
-    "HITRUST MyCSF Self-Assessment",
-    "FedRAMP Security Assessment Questionnaire (SAQ)",
-    "SOC 2 Readiness Assessment (Security, Availability, Confidentiality, Processing Integrity, Privacy)"
+    { id: "hipaa-sra", name: "HIPAA Security Risk Assessment (SRA) Tool" },
+    { id: "nist-csf-assessment", name: "NIST Cybersecurity Framework Self-Assessment Tool" },
+    { id: "iso-27001-assessment", name: "ISO 27001 Self-Assessment Questionnaire (Annex A Controls)" },
+    { id: "hitrust-mycsf", name: "HITRUST MyCSF Self-Assessment" },
+    { id: "fedramp-saq", name: "FedRAMP Security Assessment Questionnaire (SAQ)" },
+    { id: "soc2-readiness", name: "SOC 2 Readiness Questionnaire (Security, Availability, Confidentiality, Processing Integrity, Privacy)" }
   ],
   
   // Category 2: Checklists - For verification and validation
   checklists: [
-    "FERPA Compliance Checklist",
-    "GLBA Safeguards Rule Self-Assessment",
-    "FISMA Compliance Checklist",
-    "CCPA Compliance Checklist",
-    "CIS Controls Self-Assessment Tool (CSAT)",
-    "SOX IT General Controls (ITGC) Questionnaire"
+    { id: "ferpa-checklist", name: "FERPA Compliance Checklist" },
+    { id: "glba-safeguards", name: "GLBA Safeguards Rule Self-Assessment" },
+    { id: "fisma-checklist", name: "FISMA Compliance Checklist" },
+    { id: "ccpa-checklist", name: "CCPA Compliance Checklist" },
+    { id: "cis-csat", name: "CIS Controls Self-Assessment Tool (CSAT)" },
+    { id: "sox-itgc", name: "SOX IT General Controls (ITGC) Questionnaire" }
   ],
   
   // Category 3: Questionnaires - For specific information gathering
   questionnaires: [
-    "SAQ A (Card-not-present Merchants)",
-    "SAQ B (Merchants with Imprint-only or Standalone Terminals)",
-    "SAQ C (Merchants with Payment Application Systems)",
-    "SAQ B-IP (Merchants with Standalone IP-Connected Terminals)",
-    "SAQ A-EP (E-commerce Merchants with Third-Party Processing)",
-    "SAQ C-VT (Merchants with Virtual Terminals)",
-    "SAQ D (Merchant)",
-    "SAQ P2PE-HW (Hardware Payment Terminal P2PE)",
-    "GDPR Compliance Questionnaire (Articles 5-30)",
-    "NYDFS Cybersecurity Self-Assessment Tool"
+    { id: "saq-a", name: "SAQ A (Card-not-present Merchants)" },
+    { id: "saq-b", name: "SAQ B (Merchants with Imprint-only or Standalone Terminals)" },
+    { id: "saq-c", name: "SAQ C (Merchants with Payment Application Systems)" },
+    { id: "saq-b-ip", name: "SAQ B-IP (Merchants with Standalone IP-Connected Terminals)" },
+    { id: "saq-a-ep", name: "SAQ A-EP (E-commerce Merchants with Third-Party Processing)" },
+    { id: "saq-c-vt", name: "SAQ C-VT (Merchants with Virtual Terminals)" },
+    { id: "saq-d-merchant", name: "SAQ D (Merchant)" },
+    { id: "saq-p2pe-hw", name: "SAQ P2PE-HW (Hardware Payment Terminal P2PE)" },
+    { id: "gdpr-compliance", name: "GDPR Compliance Questionnaire (Articles 5-30)" },
+    { id: "nydfs-cybersecurity", name: "NYDFS Cybersecurity Self-Assessment Tool" }
   ],
 
   // Keeping the original structure for backward compatibility
@@ -697,7 +697,7 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
     relevantACQTools: {
       // Standard assessments for all infrastructure types
       assessments: infraType === 'healthcare' ? 
-                  [...assessmentTools.assessments] : 
+                  [...assessmentTools.assessments.map(item => item.name)] : 
                   (assessmentTools.legacy_questionnaires && 
                    infraType in assessmentTools.legacy_questionnaires ? 
                    [...assessmentTools.legacy_questionnaires[infraType as keyof typeof assessmentTools.legacy_questionnaires]] : 
