@@ -2780,8 +2780,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                 </div>
                 
-                <div className="flex justify-end">
-                  <Button type="submit" className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-lg px-6 py-5">Submit Questionnaire</Button>
+                <div className="flex justify-center">
+                  <Button type="submit" className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-lg px-10 py-5 w-1/2">Submit Questionnaire</Button>
                 </div>
               </TabsContent>
             </Tabs>
