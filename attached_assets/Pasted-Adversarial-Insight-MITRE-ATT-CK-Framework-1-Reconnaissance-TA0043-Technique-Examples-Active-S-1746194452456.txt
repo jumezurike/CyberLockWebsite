@@ -1,0 +1,137 @@
+Adversarial Insight: MITRE ATT&CK Framework
+1. Reconnaissance (TA0043)
+Technique Examples:
+
+Active Scanning (T1595)
+
+Phishing for Information (T1598)
+
+Search Open Websites/Domains (T1593)
+
+2. Resource Development (TA0042)
+Technique Examples:
+
+Acquire Infrastructure (T1583)
+
+Obtain Capabilities (T1588)
+
+3. Initial Access (TA0001)
+Technique Examples:
+
+Phishing (T1566)
+
+Exploit Public-Facing Application (T1190)
+
+Valid Accounts (T1078)
+
+4. Execution (TA0002)
+Technique Examples:
+
+Command and Scripting Interpreter (T1059)
+
+User Execution (T1204)
+
+Exploitation for Client Execution (T1203)
+
+5. Persistence (TA0003)
+Technique Examples:
+
+Boot or Logon Autostart Execution (T1547)
+
+Account Manipulation (T1098)
+
+Scheduled Task/Job (T1053)
+
+6. Privilege Escalation (TA0004)
+Technique Examples:
+
+Exploitation for Privilege Escalation (T1068)
+
+Abuse Elevation Control Mechanism (T1548)
+
+Process Injection (T1055)
+
+7. Defense Evasion (TA0005)
+Technique Examples:
+
+Masquerading (T1036)
+
+Obfuscated Files or Information (T1027)
+
+Indicator Removal on Host (T1070)
+
+8. Credential Access (TA0006) (Example in detail)
+Technique Examples:
+
+Password Guessing (T1110.001)
+
+Brute Force (T1110)
+
+OS Credential Dumping (T1003)
+
+Input Capture (T1056)
+
+9. Discovery (TA0007)
+Technique Examples:
+
+File and Directory Discovery (T1083)
+
+Network Service Scanning (T1046)
+
+Account Discovery (T1087)
+
+10. Lateral Movement (TA0008)
+Technique Examples:
+
+Remote Desktop Protocol (T1021.001)
+
+SMB/Windows Admin Shares (T1021.002)
+
+Remote Services (T1021)
+
+11. Collection (TA0009)
+Technique Examples:
+
+Data from Local System (T1005)
+
+Screen Capture (T1113)
+
+Data Staged (T1074)
+
+12. Command and Control (TA0011)
+Technique Examples:
+
+Application Layer Protocol (T1071)
+
+Non-Application Layer Protocol (T1095)
+
+Proxy (T1090)
+
+13. Exfiltration (TA0010)
+Technique Examples:
+
+Exfiltration Over Web Service (T1567)
+
+Exfiltration Over Alternative Protocol (T1048)
+
+Automated Exfiltration (T1020)
+
+14. Impact (TA0040)
+Technique Examples:
+
+Data Encrypted for Impact (T1486)
+
+Account Access Removal (T1531)
+
+Disk Wipe (T1561)
+
+Usage Example:
+When you identify a vulnerability or a suspicious activity, choose the relevant Tactic first, then the appropriate corresponding Technique(s) most likely related to your specific scenario.
+
+Example:
+
+Tactic: Credential Access (TA0006)
+
+Technique: Brute Force (T1110)
+
+Upon monitoring via SIEM during the comprehensive assessment, you will confirm the presence or attempt of the identified tactic and technique.

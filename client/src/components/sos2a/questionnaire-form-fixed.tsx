@@ -1436,28 +1436,35 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">9. Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Select options related to OS hardening and threat actor analysis.
+                    Select the most relevant MITRE ATT&CK tactics and techniques for your threat model.
                   </p>
                   
                   <div className="space-y-6">
-                    <div>
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">OS Hardening</h4>
-                      <div className="space-y-4">
+                    <div className="mb-6">
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Select Primary Tactics of Concern</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <FormField
                           control={form.control}
-                          name="osHardening.stig"
+                          name="mitreTactics"
                           render={({ field }) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-red-50">
                               <FormControl>
                                 <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
+                                  checked={field.value?.includes("TA0043")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0043"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0043"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
                                 />
                               </FormControl>
                               <div className="space-y-1 leading-none">
-                                <FormLabel className="font-medium">STIG</FormLabel>
+                                <FormLabel className="font-medium">Reconnaissance (TA0043)</FormLabel>
                                 <FormDescription>
-                                  Security Technical Implementation Guides
+                                  Gathering information to plan future operations
                                 </FormDescription>
                               </div>
                             </FormItem>
@@ -1466,19 +1473,384 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         
                         <FormField
                           control={form.control}
-                          name="osHardening.scap"
+                          name="mitreTactics"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-orange-50">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("TA0042")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0042"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0042"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Resource Development (TA0042)</FormLabel>
+                                <FormDescription>
+                                  Establishing resources to support operations
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="mitreTactics"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-yellow-50">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("TA0001")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0001"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0001"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Initial Access (TA0001)</FormLabel>
+                                <FormDescription>
+                                  Gaining entry into your environment
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="mitreTactics"
                           render={({ field }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
                               <FormControl>
                                 <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
+                                  checked={field.value?.includes("TA0002")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0002"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0002"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
                                 />
                               </FormControl>
                               <div className="space-y-1 leading-none">
-                                <FormLabel className="font-medium">SCAP</FormLabel>
+                                <FormLabel className="font-medium">Execution (TA0002)</FormLabel>
                                 <FormDescription>
-                                  Security Content Automation Protocol
+                                  Running malicious code in your environment
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="mitreTactics"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("TA0003")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0003"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0003"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Persistence (TA0003)</FormLabel>
+                                <FormDescription>
+                                  Maintaining access despite restarts or credentials changes
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="mitreTactics"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("TA0004")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0004"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0004"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Privilege Escalation (TA0004)</FormLabel>
+                                <FormDescription>
+                                  Gaining higher-level permissions
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="mitreTactics"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("TA0006")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0006"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0006"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Credential Access (TA0006)</FormLabel>
+                                <FormDescription>
+                                  Stealing credentials like passwords or access keys
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="mitreTactics"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("TA0010")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0010"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0010"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Exfiltration (TA0010)</FormLabel>
+                                <FormDescription>
+                                  Stealing data from your network
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="mitreTactics"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-red-50">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("TA0040")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0040"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0040"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Impact (TA0040)</FormLabel>
+                                <FormDescription>
+                                  Disrupting business and operations (e.g., ransomware)
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Common Techniques by Tactic</h4>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Based on your selected tactics, these are some common techniques to be aware of:
+                      </p>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <div className="rounded-md border p-4">
+                          <h5 className="font-medium">Initial Access (TA0001)</h5>
+                          <ul className="mt-2 space-y-1 text-sm">
+                            <li>• Phishing (T1566)</li>
+                            <li>• Exploit Public-Facing Application (T1190)</li>
+                            <li>• Valid Accounts (T1078)</li>
+                          </ul>
+                        </div>
+                        
+                        <div className="rounded-md border p-4">
+                          <h5 className="font-medium">Credential Access (TA0006)</h5>
+                          <ul className="mt-2 space-y-1 text-sm">
+                            <li>• Brute Force (T1110)</li>
+                            <li>• OS Credential Dumping (T1003)</li>
+                            <li>• Input Capture (T1056)</li>
+                          </ul>
+                        </div>
+                        
+                        <div className="rounded-md border p-4">
+                          <h5 className="font-medium">Impact (TA0040)</h5>
+                          <ul className="mt-2 space-y-1 text-sm">
+                            <li>• Data Encrypted for Impact (T1486)</li>
+                            <li>• Account Access Removal (T1531)</li>
+                            <li>• Disk Wipe (T1561)</li>
+                          </ul>
+                        </div>
+                        
+                        <div className="rounded-md border p-4">
+                          <h5 className="font-medium">Exfiltration (TA0010)</h5>
+                          <ul className="mt-2 space-y-1 text-sm">
+                            <li>• Exfiltration Over Web Service (T1567)</li>
+                            <li>• Exfiltration Over Alternative Protocol (T1048)</li>
+                            <li>• Automated Exfiltration (T1020)</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Threat Actor Types</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="threatActorTypes"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("nation-state")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "nation-state"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "nation-state"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Nation State Actors</FormLabel>
+                                <FormDescription>
+                                  Government-backed groups with sophisticated capabilities
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="threatActorTypes"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("ransomware")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "ransomware"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "ransomware"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Ransomware Groups</FormLabel>
+                                <FormDescription>
+                                  Criminal organizations focusing on encryption and extortion
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="threatActorTypes"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("hacktivists")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "hacktivists"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "hacktivists"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Hacktivists</FormLabel>
+                                <FormDescription>
+                                  Politically or ideologically motivated groups
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="threatActorTypes"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("insider")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "insider"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "insider"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Insider Threats</FormLabel>
+                                <FormDescription>
+                                  Current or former employees/contractors with legitimate access
                                 </FormDescription>
                               </div>
                             </FormItem>
