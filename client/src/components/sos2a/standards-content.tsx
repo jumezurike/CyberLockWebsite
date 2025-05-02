@@ -20,7 +20,7 @@ export function StandardsContent({ form }: StandardsContentProps) {
     <div className="space-y-8">
       {/* Universal Security Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4">Universal Security Standards <span className="text-sm font-normal text-red-600">(Mandatory)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Universal Security Standards <span className="text-sm font-normal text-red-600">(Mandatory)</span></h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -82,7 +82,7 @@ export function StandardsContent({ form }: StandardsContentProps) {
                 
       {/* Healthcare-specific Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">Healthcare-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for Healthcare)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Healthcare-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for Healthcare)</span></h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -144,7 +144,7 @@ export function StandardsContent({ form }: StandardsContentProps) {
       
       {/* Industry-specific Standards */}
       <div>
-        <h4 className="font-medium text-lg border-b pb-2 mb-4">Industry-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for specific industries)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Industry-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for specific industries)</span></h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -206,12 +206,152 @@ export function StandardsContent({ form }: StandardsContentProps) {
       
       {/* Guidelines Section */}
       <div className="mt-8">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4">Security Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-green-600">Security Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h4>
         <p className="text-sm text-muted-foreground mb-4">
           Unlike standards, guidelines provide recommended practices but are not mandatory. Select guidelines relevant to your organization.
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <FormField
+            control={form.control}
+            name="securityGuidelines"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("nist-800-171")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "nist-800-171"]
+                        : (field.value || [])?.filter(
+                            (value: string) => value !== "nist-800-171"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">NIST SP 800-171</FormLabel>
+                  <FormDescription>
+                    Protecting Controlled Unclassified Information (CUI)
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="securityGuidelines"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("nist-800-63")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "nist-800-63"]
+                        : (field.value || [])?.filter(
+                            (value: string) => value !== "nist-800-63"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">NIST SP 800-63</FormLabel>
+                  <FormDescription>
+                    Digital Identity Guidelines (Authentication)
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="securityGuidelines"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("cis-benchmarks")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "cis-benchmarks"]
+                        : (field.value || [])?.filter(
+                            (value: string) => value !== "cis-benchmarks"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">CIS Benchmarks</FormLabel>
+                  <FormDescription>
+                    Configuration baselines for OS/applications
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="securityGuidelines"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("owasp-top-10")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "owasp-top-10"]
+                        : (field.value || [])?.filter(
+                            (value: string) => value !== "owasp-top-10"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">OWASP Top 10</FormLabel>
+                  <FormDescription>
+                    Web application security risks
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="securityGuidelines"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("sans-critical-controls")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "sans-critical-controls"]
+                        : (field.value || [])?.filter(
+                            (value: string) => value !== "sans-critical-controls"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">SANS Critical Security Controls</FormLabel>
+                  <FormDescription>
+                    Prioritized defense actions
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
+          
           <FormField
             control={form.control}
             name="securityGuidelines"
@@ -267,44 +407,44 @@ export function StandardsContent({ form }: StandardsContentProps) {
               </FormItem>
             )}
           />
+          
+          <FormField
+            control={form.control}
+            name="securityGuidelines"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value?.includes("iso-27004")}
+                    onCheckedChange={(checked) => {
+                      const updatedValue = checked
+                        ? [...(field.value || []), "iso-27004"]
+                        : (field.value || [])?.filter(
+                            (value: string) => value !== "iso-27004"
+                          );
+                      field.onChange(updatedValue);
+                    }}
+                  />
+                </FormControl>
+                <div className="space-y-1 leading-none">
+                  <FormLabel className="font-medium">ISO/IEC 27004</FormLabel>
+                  <FormDescription>
+                    Information security measurement metrics
+                  </FormDescription>
+                </div>
+              </FormItem>
+            )}
+          />
         </div>
         
         <div className="mt-6">
-          <h5 className="font-medium text-md border-b pb-2 mb-4 text-blue-600">Healthcare-specific Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h5>
+          <h5 className="font-medium text-md border-b pb-2 mb-4 text-green-600">Healthcare-specific Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span></h5>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="healthcareGuidelines"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-blue-50">
-                  <FormControl>
-                    <Checkbox
-                      checked={field.value?.includes("oci-healthcare")}
-                      onCheckedChange={(checked) => {
-                        const updatedValue = checked
-                          ? [...(field.value || []), "oci-healthcare"]
-                          : (field.value || [])?.filter(
-                              (value: string) => value !== "oci-healthcare"
-                            );
-                        field.onChange(updatedValue);
-                      }}
-                    />
-                  </FormControl>
-                  <div className="space-y-1 leading-none">
-                    <FormLabel className="font-medium">ONC Security Guidelines</FormLabel>
-                    <FormDescription>
-                      Office of the National Coordinator for Health IT Security Guidelines
-                    </FormDescription>
-                  </div>
-                </FormItem>
-              )}
-            />
-            
-            <FormField
-              control={form.control}
-              name="healthcareGuidelines"
-              render={({ field }) => (
-                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-blue-50">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
                   <FormControl>
                     <Checkbox
                       checked={field.value?.includes("nist-800-66")}
@@ -319,9 +459,149 @@ export function StandardsContent({ form }: StandardsContentProps) {
                     />
                   </FormControl>
                   <div className="space-y-1 leading-none">
-                    <FormLabel className="font-medium">NIST SP 800-66</FormLabel>
+                    <FormLabel className="font-medium">NIST SP 800-66 Rev. 2</FormLabel>
                     <FormDescription>
-                      Implementing HIPAA Security Rule
+                      HIPAA Security Rule implementation guide
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="healthcareGuidelines"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value?.includes("hhs-hipaa-series")}
+                      onCheckedChange={(checked) => {
+                        const updatedValue = checked
+                          ? [...(field.value || []), "hhs-hipaa-series"]
+                          : (field.value || [])?.filter(
+                              (value: string) => value !== "hhs-hipaa-series"
+                            );
+                        field.onChange(updatedValue);
+                      }}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="font-medium">HHS HIPAA Security Series</FormLabel>
+                    <FormDescription>
+                      Detailed guidance on risk analysis and encryption
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="healthcareGuidelines"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value?.includes("fda-premarket")}
+                      onCheckedChange={(checked) => {
+                        const updatedValue = checked
+                          ? [...(field.value || []), "fda-premarket"]
+                          : (field.value || [])?.filter(
+                              (value: string) => value !== "fda-premarket"
+                            );
+                        field.onChange(updatedValue);
+                      }}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="font-medium">FDA Pre-market Cybersecurity Guidance</FormLabel>
+                    <FormDescription>
+                      Medical device security
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="healthcareGuidelines"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value?.includes("mds2")}
+                      onCheckedChange={(checked) => {
+                        const updatedValue = checked
+                          ? [...(field.value || []), "mds2"]
+                          : (field.value || [])?.filter(
+                              (value: string) => value !== "mds2"
+                            );
+                        field.onChange(updatedValue);
+                      }}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="font-medium">MDS2</FormLabel>
+                    <FormDescription>
+                      Medical Device Security Standard - Manufacturer disclosure form
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="healthcareGuidelines"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value?.includes("nh-isac")}
+                      onCheckedChange={(checked) => {
+                        const updatedValue = checked
+                          ? [...(field.value || []), "nh-isac"]
+                          : (field.value || [])?.filter(
+                              (value: string) => value !== "nh-isac"
+                            );
+                        field.onChange(updatedValue);
+                      }}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="font-medium">NH-ISAC Healthcare Cybersecurity Framework</FormLabel>
+                    <FormDescription>
+                      Threat intelligence sharing
+                    </FormDescription>
+                  </div>
+                </FormItem>
+              )}
+            />
+            
+            <FormField
+              control={form.control}
+              name="healthcareGuidelines"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value?.includes("ama-guidelines")}
+                      onCheckedChange={(checked) => {
+                        const updatedValue = checked
+                          ? [...(field.value || []), "ama-guidelines"]
+                          : (field.value || [])?.filter(
+                              (value: string) => value !== "ama-guidelines"
+                            );
+                        field.onChange(updatedValue);
+                      }}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel className="font-medium">AMA Cybersecurity Guidelines</FormLabel>
+                    <FormDescription>
+                      Physician practice recommendations
                     </FormDescription>
                   </div>
                 </FormItem>
