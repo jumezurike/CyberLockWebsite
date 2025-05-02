@@ -1434,7 +1434,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 9. Adversarial Insight Tab */}
               <TabsContent value="adversarial" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">9. Adversarial Insight</h3>
+                  <h3 className="font-medium mb-4">9. Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select options related to OS hardening and threat actor analysis.
                   </p>
