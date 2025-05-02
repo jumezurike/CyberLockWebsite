@@ -395,7 +395,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure">2. Infrastructure Mode</TabsTrigger>
                 <TabsTrigger value="baseline">3. Baseline Config</TabsTrigger>
-                <TabsTrigger value="security">4. Security Controls</TabsTrigger>
+                <TabsTrigger value="security">4. Security Control vs Framework</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="compliance">5. Compliance</TabsTrigger>
@@ -899,10 +899,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* 4. Security Controls Framework Tab */}
+              {/* 4. Security Control vs Framework Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">4. Security Controls Framework</h3>
+                  <h3 className="font-medium mb-4">4. Security Control vs Framework</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select security frameworks by domain (Operations, Management, Technology, People).
                   </p>
