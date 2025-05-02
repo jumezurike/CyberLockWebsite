@@ -101,6 +101,12 @@ const formSchema = z.object({
   ismsPlans: z.array(z.string()).optional(),
   ismsProcedures: z.array(z.string()).optional(),
   ismsProcesses: z.array(z.string()).optional(),
+  ismsLeadership: z.object({
+    executiveSupport: z.boolean().optional(),
+    ciso: z.boolean().optional(),
+    boardReporting: z.boolean().optional(),
+    securityCommittee: z.boolean().optional(),
+  }).optional(),
   
   // 11. Contact and Confirmation
   contactInfo: z.object({
@@ -197,6 +203,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       ismsPlans: [],
       ismsProcedures: [],
       ismsProcesses: [],
+      ismsLeadership: {
+        executiveSupport: false,
+        ciso: false,
+        boardReporting: false,
+        securityCommittee: false,
+      },
       
       // 11. Contact and Confirmation
       contactInfo: {
@@ -1462,6 +1474,95 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             )}
                           />
                         ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Leadership</h4>
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="ismsLeadership.executiveSupport"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Executive Leadership Support</FormLabel>
+                                <FormDescription>
+                                  Executive leadership actively supports and is involved in information security governance
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="ismsLeadership.ciso"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>CISO or Security Leader</FormLabel>
+                                <FormDescription>
+                                  Organization has a dedicated CISO or senior-level security leader position
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="ismsLeadership.boardReporting"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Board-Level Reporting</FormLabel>
+                                <FormDescription>
+                                  Regular security reporting to the board of directors or highest leadership level
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="ismsLeadership.securityCommittee"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Security Steering Committee</FormLabel>
+                                <FormDescription>
+                                  Cross-functional security committee that guides security initiatives and decisions
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
                       </div>
                     </div>
                   </div>
