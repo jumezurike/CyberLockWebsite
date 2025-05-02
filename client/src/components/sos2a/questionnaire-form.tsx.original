@@ -2524,32 +2524,222 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </div>
                           </div>
                         </div>
-                        <div>
-                          <FormMessage className="mt-4" />
-                        </div>
-                      </div>
+                        <FormMessage className="mt-4" />
+                      </FormItem>
                     )}
                   />
                 </div>
               </TabsContent>
-              
-              {/* Standards & Guidelines Tab */}
-              <TabsContent value="standards" className="space-y-6">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Standards & Guidelines</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Select the standards and guidelines relevant to your organization.
-                  </p>
-                </div>
-              </TabsContent>
-              <TabsContent value="healthcare" className="space-y-4 pt-4">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Healthcare-Specific Regulations</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Select regulations specific to healthcare organizations.
-                  </p>
-                </div>
-              </TabsContent>
+                    
+                    {/* Global Data Protection Tab */}
+                    <TabsContent value="global" className="space-y-4 pt-4">
+                      <div className="space-y-4">
+                        <h4 className="font-medium text-lg">Global Data Protection Regulations</h4>
+                        
+                        {/* GDPR */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">GDPR (General Data Protection Regulation - EU)</h5>
+                              <p className="text-sm mt-1">Any organization processing EU residents' data</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("gdpr")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "gdpr"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "gdpr"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3 space-y-2">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Requirements:</span>
+                              <span className="text-sm">Consent management, data subject rights (access/erasure), 72-hour breach notification</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Penalties:</span>
+                              <span className="text-sm">Up to 4% global revenue or €20M</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* CCPA/CPRA */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">CCPA/CPRA (California, USA)</h5>
+                              <p className="text-sm mt-1">Businesses operating in California meeting certain thresholds</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("ccpa")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "ccpa"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "ccpa"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3 space-y-2">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Requirements:</span>
+                              <span className="text-sm">Consumer opt-out of data sales, disclosure of data collection practices</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Penalties:</span>
+                              <span className="text-sm">$2,500−7,500 per violation + private lawsuits</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* PIPEDA */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">PIPEDA (Canada)</h5>
+                              <p className="text-sm mt-1">Private sector organizations collecting personal data</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("pipeda")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "pipeda"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "pipeda"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3 space-y-2">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Requirements:</span>
+                              <span className="text-sm">Consent for data collection, breach reporting to Privacy Commissioner</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Penalties:</span>
+                              <span className="text-sm">Up to CAD 100,000 per violation</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    {/* Healthcare-specific Tab */}
+                    <TabsContent value="healthcare" className="space-y-4 pt-4">
+                      <div className="space-y-4">
+                        <h4 className="font-medium text-lg">Healthcare-Specific Regulations</h4>
+                        
+                        {/* HIPAA */}
+                        <div className="border p-4 rounded-md bg-blue-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">HIPAA (Health Insurance Portability and Accountability Act - USA)</h5>
+                              <p className="text-sm mt-1">Covered entities and business associates handling PHI</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("hipaa")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "hipaa"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "hipaa"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3 space-y-2">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Security Rule:</span>
+                              <span className="text-sm">Safeguards for ePHI (encryption, access controls)</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Breach Notification:</span>
+                              <span className="text-sm">Report within 60 days</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Penalties:</span>
+                              <span className="text-sm">Up to $1.5M/year per violation</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* HITRUST CSF */}
+                        <div className="border p-4 rounded-md bg-blue-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">HITRUST CSF</h5>
+                              <p className="text-sm mt-1">Certification aligning with HIPAA/ISO 27001</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("hitrust")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "hitrust"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "hitrust"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
                         </div>
                         
                         {/* 21 CFR Part 11 */}
@@ -2624,16 +2814,137 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               <span className="text-sm">Secure by design for connected devices</span>
                             </div>
                           </div>
-              
-              {/* Financial Sector Tab */}
-              <TabsContent value="financial" className="space-y-4 pt-4">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Financial Sector Regulations</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Select regulations applicable to financial organizations.
-                  </p>
-                </div>
-              </TabsContent>
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    {/* Financial Sector Tab */}
+                    <TabsContent value="financial" className="space-y-4 pt-4">
+                      <div className="space-y-4">
+                        <h4 className="font-medium text-lg">Financial Sector Regulations</h4>
+                        
+                        {/* PCI-DSS */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">PCI-DSS (Global)</h5>
+                              <p className="text-sm mt-1">Any entity processing credit card payments</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("pci-dss")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "pci-dss"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "pci-dss"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3 space-y-2">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Requirements:</span>
+                              <span className="text-sm">Secure cardholder data, quarterly vulnerability scans</span>
+                            </div>
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Penalties:</span>
+                              <span className="text-sm">Fines up to $100K/month + revoked processing</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* GLBA */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">GLBA (Gramm-Leach-Bliley Act - USA)</h5>
+                              <p className="text-sm mt-1">Financial institutions in the USA</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("glba")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "glba"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "glba"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Safeguards Rule:</span>
+                              <span className="text-sm">Protect customer financial data</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* SOX */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">SOX (Sarbanes-Oxley - USA)</h5>
+                              <p className="text-sm mt-1">Public companies</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("sox")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "sox"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "sox"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Section 404:</span>
+                              <span className="text-sm">IT controls for financial reporting</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* PSD2 */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">PSD2 (EU)</h5>
+                              <p className="text-sm mt-1">Payment service providers in EU</p>
+                            </div>
                             <FormField
                               control={form.control}
                               name="regulatoryRequirements"
@@ -2662,26 +2973,177 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               <span className="text-sm">Multi-factor auth for payments</span>
                             </div>
                           </div>
-              
-              {/* Government & Critical Infrastructure Tab */}
-              <TabsContent value="government" className="space-y-4 pt-4">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Government & Critical Infrastructure</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Select regulations for government contractors and critical infrastructure.
-                  </p>
-                </div>
-              </TabsContent>
-              
-              {/* Industry-specific Tab */}
-              <TabsContent value="industry" className="space-y-4 pt-4">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Industry-Specific Regulations</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Select regulations specific to your industry sector.
-                  </p>
-                </div>
-              </TabsContent>
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    {/* Government & Critical Infrastructure Tab */}
+                    <TabsContent value="government" className="space-y-4 pt-4">
+                      <div className="space-y-4">
+                        <h4 className="font-medium text-lg">Government & Critical Infrastructure</h4>
+                        
+                        {/* NIST SP 800-171 */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">NIST SP 800-171 (USA)</h5>
+                              <p className="text-sm mt-1">DoD contractors</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("nist-800-171")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "nist-800-171"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "nist-800-171"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Requirements:</span>
+                              <span className="text-sm">Protect CUI (Controlled Unclassified Information)</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* CMMC 2.0 */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">CMMC 2.0 (USA)</h5>
+                              <p className="text-sm mt-1">Defense contractors</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("cmmc")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "cmmc"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "cmmc"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Level 2:</span>
+                              <span className="text-sm">110 controls for defense contractors</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* NIS2 Directive */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">NIS2 Directive (EU)</h5>
+                              <p className="text-sm mt-1">EU critical infrastructure operators</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("nis2")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "nis2"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "nis2"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Requirements:</span>
+                              <span className="text-sm">Incident reporting within 24 hours</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    {/* Industry-specific Tab */}
+                    <TabsContent value="industry" className="space-y-4 pt-4">
+                      <div className="space-y-4">
+                        <h4 className="font-medium text-lg">Industry-Specific Regulations</h4>
+                        
+                        {/* FISMA */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">FISMA (USA Federal Agencies)</h5>
+                              <p className="text-sm mt-1">Government agencies and contractors</p>
+                            </div>
+                            <FormField
+                              control={form.control}
+                              name="regulatoryRequirements"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-center space-x-2 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("fisma")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "fisma"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "fisma"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <div className="mt-3">
+                            <div className="flex gap-2">
+                              <span className="font-medium text-sm">Requirements:</span>
+                              <span className="text-sm">NIST-based security controls</span>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* NERC CIP */}
+                        <div className="border p-4 rounded-md bg-gray-50 mb-6">
+                          <div className="flex justify-between items-start">
+                            <div>
+                              <h5 className="font-medium">NERC CIP (North American Electric Grid)</h5>
+                              <p className="text-sm mt-1">Electricity providers in North America</p>
+                            </div>
                             <FormField
                               control={form.control}
                               name="regulatoryRequirements"
