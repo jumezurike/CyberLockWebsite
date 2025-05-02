@@ -237,7 +237,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
                 
       {/* Healthcare-specific Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Healthcare-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for Healthcare)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+          Healthcare-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for Healthcare)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -439,7 +442,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
       
       {/* Government & Critical Infrastructure Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Government & Critical Infrastructure Standards <span className="text-sm font-normal text-red-600">(Mandatory for government/CI)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+          Government & Critical Infrastructure Standards <span className="text-sm font-normal text-red-600">(Mandatory for government/CI)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -557,7 +563,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
       
       {/* Financial & Payment Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Financial & Payment Standards <span className="text-sm font-normal text-red-600">(Mandatory for financial sector)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+          Financial & Payment Standards <span className="text-sm font-normal text-red-600">(Mandatory for financial sector)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -647,7 +656,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
       
       {/* Cloud & Data Privacy Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Cloud & Data Privacy Standards <span className="text-sm font-normal text-red-600">(Mandatory for relevant sectors)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+          Cloud & Data Privacy Standards <span className="text-sm font-normal text-red-600">(Mandatory for relevant sectors)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -737,7 +749,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
 
       {/* Industry-specific Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Industry-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for specific industries)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+          Industry-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for specific industries)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -827,7 +842,10 @@ export function StandardsContent({ form }: StandardsContentProps) {
       
       {/* Emerging & Regional Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Emerging & Regional Standards <span className="text-sm font-normal text-red-600">(Mandatory for specific regions)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+          Emerging & Regional Standards <span className="text-sm font-normal text-red-600">(Mandatory for specific regions)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
