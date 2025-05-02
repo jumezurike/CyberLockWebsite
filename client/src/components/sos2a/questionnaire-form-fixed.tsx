@@ -417,7 +417,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="adversarial">9. Adversarial</TabsTrigger>
-                <TabsTrigger value="isms">10. ISMS</TabsTrigger>
+                <TabsTrigger value="isms">10. Information Security Management System (ISMS)</TabsTrigger>
                 <TabsTrigger value="contact">11. Contact</TabsTrigger>
                 <TabsTrigger value="review">Review</TabsTrigger>
               </TabsList>

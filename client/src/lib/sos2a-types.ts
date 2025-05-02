@@ -91,6 +91,12 @@ export interface Sos2aFormData {
   ismsPlans?: string[];
   ismsProcedures?: string[];
   ismsProcesses?: string[];
+  ismsLeadership?: {
+    executiveSupport?: boolean;
+    ciso?: boolean;
+    boardReporting?: boolean;
+    securityCommittee?: boolean;
+  };
   
   // 11. Contact and Confirmation
   contactInfo: ContactInfo;
