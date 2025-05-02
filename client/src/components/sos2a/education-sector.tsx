@@ -18,6 +18,21 @@ interface EducationSectorProps {
 export function EducationSector({ form }: EducationSectorProps) {
   return (
     <div className="space-y-8">
+      {/* Color-coded Legend */}
+      <div className="flex flex-wrap justify-center gap-6 mb-6 p-3 bg-gray-50 rounded-md">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-red-600"></div>
+          <span className="text-sm font-medium">Standards (Mandatory)</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-green-600"></div>
+          <span className="text-sm font-medium">Guidelines (Optional)</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-blue-600"></div>
+          <span className="text-sm font-medium">Healthcare-Specific</span>
+        </div>
+      </div>
       {/* Education Sector Compliance */}
       <div>
         <h4 className="font-medium text-lg border-b pb-2 mb-4 text-green-600">
