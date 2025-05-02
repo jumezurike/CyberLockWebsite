@@ -627,7 +627,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="adversarial">9. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
                 <TabsTrigger value="isms">10. Information Security Management System (ISMS)</TabsTrigger>
                 <TabsTrigger value="contact">11. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review" className="bg-primary text-primary-foreground hover:bg-primary/90">12. Review & Submit</TabsTrigger>
+                <TabsTrigger value="review" className="bg-[#7936b0] text-white hover:bg-[#6b2aa2]">12. Review & Submit</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
@@ -2786,7 +2786,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Click the button below to submit your completed questionnaire. Our security experts will review your information and contact you to schedule the next steps in your assessment process.
                   </p>
                   <div className="flex justify-center w-full">
-                    <Button type="submit" className="bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-lg py-4 w-full">Submit Questionnaire</Button>
+                    <Button type="submit" className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white font-medium text-lg py-4 w-full">Submit Questionnaire</Button>
                   </div>
                 </div>
               </TabsContent>
