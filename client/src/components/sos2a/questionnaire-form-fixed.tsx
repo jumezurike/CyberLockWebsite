@@ -391,16 +391,19 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
             <Tabs defaultValue="business" className="w-full">
-              <TabsList className="grid grid-cols-6 mb-6">
+              <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
-                <TabsTrigger value="infrastructure">2-3. Infrastructure Mode of Operation</TabsTrigger>
+                <TabsTrigger value="infrastructure">2. Infrastructure Mode</TabsTrigger>
+                <TabsTrigger value="baseline">3. Baseline Config</TabsTrigger>
                 <TabsTrigger value="security">4. Security Controls</TabsTrigger>
+              </TabsList>
+              <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="compliance">5. Compliance</TabsTrigger>
                 <TabsTrigger value="regulatory">6. Regulatory</TabsTrigger>
                 <TabsTrigger value="standards">7. Standards & Guidelines</TabsTrigger>
-              </TabsList>
-              <TabsList className="grid grid-cols-5 mb-6">
                 <TabsTrigger value="acq-tools">8. ACQ Tools</TabsTrigger>
+              </TabsList>
+              <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="adversarial">9. Adversarial</TabsTrigger>
                 <TabsTrigger value="isms">10. ISMS</TabsTrigger>
                 <TabsTrigger value="contact">11. Contact</TabsTrigger>
@@ -595,10 +598,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Infrastructure Mode of Operation Tab */}
+              {/* 2. Infrastructure Mode of Operation Tab */}
               <TabsContent value="infrastructure" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Infrastructure Mode of Operation</h3>
+                  <h3 className="font-medium mb-4">2. Infrastructure Mode of Operation</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the infrastructure and operational modes that apply to your organization.
                   </p>
@@ -707,115 +710,191 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     />
                   </div>
                 </div>
-                
+              </TabsContent>
+              
+              {/* 3. Baseline Configuration Tab */}
+              <TabsContent value="baseline" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Security Measures & Concerns</h3>
+                  <h3 className="font-medium mb-4">3. Baseline Configuration</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Indicate the security measures implemented in your organization and your primary concerns.
+                    Define your organization's baseline security configuration and measures.
                   </p>
                   
-                  <div className="space-y-4">
-                    <FormField
-                      control={form.control}
-                      name="securityMeasures"
-                      render={() => (
-                        <FormItem>
-                          <div className="mb-4">
-                            <FormLabel>Current Security Measures</FormLabel>
-                            <FormDescription>
-                              Select all security measures currently implemented
-                            </FormDescription>
-                          </div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {securityMeasureOptions.map((option) => (
-                              <FormField
-                                key={option.id}
-                                control={form.control}
-                                name="securityMeasures"
-                                render={({ field }) => {
-                                  return (
-                                    <FormItem
-                                      key={option.id}
-                                      className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
-                                    >
-                                      <FormControl>
-                                        <Checkbox
-                                          checked={field.value?.includes(option.id)}
-                                          onCheckedChange={(checked) => {
-                                            return checked
-                                              ? field.onChange([...field.value, option.id])
-                                              : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== option.id
-                                                )
-                                              );
-                                          }}
-                                        />
-                                      </FormControl>
-                                      <FormLabel className="font-normal">
-                                        {option.label}
-                                      </FormLabel>
-                                    </FormItem>
-                                  );
-                                }}
-                              />
-                            ))}
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Basic Security Measures</h4>
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="securityMeasures"
+                          render={() => (
+                            <FormItem>
+                              <div className="mb-4">
+                                <FormLabel>Current Security Measures</FormLabel>
+                                <FormDescription>
+                                  Select all security measures currently implemented
+                                </FormDescription>
+                              </div>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {securityMeasureOptions.map((option) => (
+                                  <FormField
+                                    key={option.id}
+                                    control={form.control}
+                                    name="securityMeasures"
+                                    render={({ field }) => {
+                                      return (
+                                        <FormItem
+                                          key={option.id}
+                                          className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                                        >
+                                          <FormControl>
+                                            <Checkbox
+                                              checked={field.value?.includes(option.id)}
+                                              onCheckedChange={(checked) => {
+                                                return checked
+                                                  ? field.onChange([...field.value, option.id])
+                                                  : field.onChange(
+                                                    field.value?.filter(
+                                                      (value) => value !== option.id
+                                                    )
+                                                  );
+                                              }}
+                                            />
+                                          </FormControl>
+                                          <FormLabel className="font-normal">
+                                            {option.label}
+                                          </FormLabel>
+                                        </FormItem>
+                                      );
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="primaryConcerns"
+                          render={() => (
+                            <FormItem>
+                              <div className="mb-4">
+                                <FormLabel>Primary Security Concerns</FormLabel>
+                                <FormDescription>
+                                  Select your organization's primary security concerns
+                                </FormDescription>
+                              </div>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {primaryConcernOptions.map((option) => (
+                                  <FormField
+                                    key={option.id}
+                                    control={form.control}
+                                    name="primaryConcerns"
+                                    render={({ field }) => {
+                                      return (
+                                        <FormItem
+                                          key={option.id}
+                                          className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                                        >
+                                          <FormControl>
+                                            <Checkbox
+                                              checked={field.value?.includes(option.id)}
+                                              onCheckedChange={(checked) => {
+                                                return checked
+                                                  ? field.onChange([...field.value, option.id])
+                                                  : field.onChange(
+                                                    field.value?.filter(
+                                                      (value) => value !== option.id
+                                                    )
+                                                  );
+                                              }}
+                                            />
+                                          </FormControl>
+                                          <FormLabel className="font-normal">
+                                            {option.label}
+                                          </FormLabel>
+                                        </FormItem>
+                                      );
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
                     
-                    <FormField
-                      control={form.control}
-                      name="primaryConcerns"
-                      render={() => (
-                        <FormItem>
-                          <div className="mb-4">
-                            <FormLabel>Primary Security Concerns</FormLabel>
-                            <FormDescription>
-                              Select your organization's primary security concerns
-                            </FormDescription>
-                          </div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {primaryConcernOptions.map((option) => (
-                              <FormField
-                                key={option.id}
-                                control={form.control}
-                                name="primaryConcerns"
-                                render={({ field }) => {
-                                  return (
-                                    <FormItem
-                                      key={option.id}
-                                      className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
-                                    >
-                                      <FormControl>
-                                        <Checkbox
-                                          checked={field.value?.includes(option.id)}
-                                          onCheckedChange={(checked) => {
-                                            return checked
-                                              ? field.onChange([...field.value, option.id])
-                                              : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== option.id
-                                                )
-                                              );
-                                          }}
-                                        />
-                                      </FormControl>
-                                      <FormLabel className="font-normal">
-                                        {option.label}
-                                      </FormLabel>
-                                    </FormItem>
-                                  );
-                                }}
-                              />
-                            ))}
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Configuration Management</h4>
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="configManagement.documented"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Documented Configuration Baseline</FormLabel>
+                                <FormDescription>
+                                  Organization has documented baseline configurations for all systems
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="configManagement.reviewed"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Regular Configuration Review</FormLabel>
+                                <FormDescription>
+                                  Organization regularly reviews and updates baseline configurations
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="configManagement.automated"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Automated Configuration Management</FormLabel>
+                                <FormDescription>
+                                  Organization employs automated tools for configuration management
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </TabsContent>
@@ -823,7 +902,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 4. Security Controls Framework Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">4. Security Control Framework</h3>
+                  <h3 className="font-medium mb-4">4. Security Controls Framework</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select security frameworks by domain (Operations, Management, Technology, People).
                   </p>
