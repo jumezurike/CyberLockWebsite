@@ -619,10 +619,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="acq-tools">8. Relevant ACQ Tools</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
-                <TabsTrigger value="adversarial">9. Adversarial Insight</TabsTrigger>
+                <TabsTrigger value="adversarial">9. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
                 <TabsTrigger value="isms">10. Information Security Management System (ISMS)</TabsTrigger>
                 <TabsTrigger value="contact">11. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review">Review</TabsTrigger>
+                <TabsTrigger value="review">12. Review</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
@@ -2707,7 +2707,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Review Tab */}
               <TabsContent value="review" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Review Your Questionnaire</h3>
+                  <h3 className="font-medium mb-4">12. Review Your Questionnaire</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Please review your responses before submitting. After submission, an expert will review your information for the interview and matrix population phase.
                   </p>
