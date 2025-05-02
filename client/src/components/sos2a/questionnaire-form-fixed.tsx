@@ -622,7 +622,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Business Information Tab */}
               <TabsContent value="business" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Business Information</h3>
+                  <h3 className="font-medium mb-4">1. Business Information</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Please provide details about your business, which will help us understand 
                     your organization's security needs.
@@ -2707,11 +2707,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </p>
                   
                   <div className="space-y-6">
-                    <Card className="bg-gray-50">
-                      <CardHeader>
-                        <CardTitle className="text-base font-medium">Business Information Summary</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-2 text-sm">
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <h4 className="text-base font-medium mb-3">Business Information Summary</h4>
+                      <div className="space-y-2 text-sm">
                         <div className="grid grid-cols-2 gap-2">
                           <div className="font-medium">Business Name:</div>
                           <div>{form.getValues("businessName")}</div>
@@ -2722,14 +2720,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <div className="font-medium">Employee Count:</div>
                           <div>{form.getValues("employeeCount")}</div>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </div>
 
-                    <Card className="bg-gray-50">
-                      <CardHeader>
-                        <CardTitle className="text-base font-medium">Infrastructure & Security</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-2 text-sm">
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <h4 className="text-base font-medium mb-3">Infrastructure & Security</h4>
+                      <div className="space-y-2 text-sm">
                         <div className="grid grid-cols-2 gap-2">
                           <div className="font-medium">Operation Mode:</div>
                           <div>{form.getValues("operationMode").join(", ")}</div>
@@ -2737,14 +2733,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <div className="font-medium">Internet Presence:</div>
                           <div>{form.getValues("internetPresence").join(", ")}</div>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </div>
 
-                    <Card className="bg-gray-50">
-                      <CardHeader>
-                        <CardTitle className="text-base font-medium">Compliance Requirements</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-2 text-sm">
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <h4 className="text-base font-medium mb-3">Compliance Requirements</h4>
+                      <div className="space-y-2 text-sm">
                         <div className="grid grid-cols-2 gap-2">
                           <div className="font-medium">Selected Frameworks:</div>
                           <div>{form.getValues("complianceRequirements.frameworks").length > 0 ? 
@@ -2756,18 +2750,18 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 form.getValues("complianceRequirements.healthcare").join(", ") : 
                                 "None selected"}</div>
                         </div>
-                      </CardContent>
-                    </Card>
+                      </div>
+                    </div>
 
-                    <Card className="bg-gray-50">
-                      <CardHeader>
-                        <CardTitle className="text-base font-medium">Report Type</CardTitle>
-                      </CardHeader>
-                      <CardContent className="space-y-2 text-sm">
-                        <div className="font-medium">Selected Report Type:</div>
-                        <div>{form.getValues("reportType") === "preliminary" ? "Preliminary Assessment" : "Comprehensive Assessment"}</div>
-                      </CardContent>
-                    </Card>
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <h4 className="text-base font-medium mb-3">Assessment Type</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="font-medium">Selected Assessment Type:</div>
+                          <div>{form.getValues("reportType") === "preliminary" ? "Preliminary Assessment" : "Comprehensive Assessment"}</div>
+                        </div>
+                      </div>
+                    </div>
                     
                     <div className="border-t pt-4 text-sm text-muted-foreground">
                       <p>By submitting this form, you confirm that all information provided is accurate to the best of your knowledge.</p>
