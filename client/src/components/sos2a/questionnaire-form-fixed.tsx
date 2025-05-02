@@ -391,12 +391,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
             <Tabs defaultValue="business" className="w-full">
+              <TabsList className="grid grid-cols-6 mb-6">
+                <TabsTrigger value="business">1. Business Info</TabsTrigger>
+                <TabsTrigger value="infrastructure">2-3. Infrastructure Mode of Operation</TabsTrigger>
+                <TabsTrigger value="security">4. Security Controls</TabsTrigger>
+                <TabsTrigger value="compliance">5. Compliance</TabsTrigger>
+                <TabsTrigger value="regulatory">6. Regulatory</TabsTrigger>
+                <TabsTrigger value="standards">7. Standards & Guidelines</TabsTrigger>
+              </TabsList>
               <TabsList className="grid grid-cols-5 mb-6">
-                <TabsTrigger value="business">Business Information</TabsTrigger>
-                <TabsTrigger value="infrastructure">Infrastructure & Security</TabsTrigger>
-                <TabsTrigger value="regulatory">Regulatory Requirements</TabsTrigger>
-                <TabsTrigger value="standards">Standards & Guidelines</TabsTrigger>
-                <TabsTrigger value="contact">Contact & Confirmation</TabsTrigger>
+                <TabsTrigger value="acq-tools">8. ACQ Tools</TabsTrigger>
+                <TabsTrigger value="adversarial">9. Adversarial</TabsTrigger>
+                <TabsTrigger value="isms">10. ISMS</TabsTrigger>
+                <TabsTrigger value="contact">11. Contact</TabsTrigger>
+                <TabsTrigger value="review">Review</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
@@ -587,7 +595,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Infrastructure & Security Tab */}
+              {/* Infrastructure Mode of Operation Tab */}
               <TabsContent value="infrastructure" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">Infrastructure Mode of Operation</h3>
@@ -812,10 +820,219 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Regulatory Requirements Tab */}
+              {/* 4. Security Controls Framework Tab */}
+              <TabsContent value="security" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">4. Security Control Framework</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select security frameworks by domain (Operations, Management, Technology, People).
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Operations Domain</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {operationalFrameworks.map((framework) => (
+                          <FormField
+                            key={framework.id}
+                            control={form.control}
+                            name="frameworks.operations"
+                            render={({ field }) => (
+                              <FormItem
+                                key={framework.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(framework.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, framework.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== framework.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {framework.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Management Domain</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {managementFrameworks.map((framework) => (
+                          <FormField
+                            key={framework.id}
+                            control={form.control}
+                            name="frameworks.management"
+                            render={({ field }) => (
+                              <FormItem
+                                key={framework.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(framework.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, framework.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== framework.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {framework.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Technology Domain</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {technologyFrameworks.map((framework) => (
+                          <FormField
+                            key={framework.id}
+                            control={form.control}
+                            name="frameworks.technology"
+                            render={({ field }) => (
+                              <FormItem
+                                key={framework.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(framework.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, framework.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== framework.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {framework.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">People Domain</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {peopleFrameworks.map((framework) => (
+                          <FormField
+                            key={framework.id}
+                            control={form.control}
+                            name="frameworks.people"
+                            render={({ field }) => (
+                              <FormItem
+                                key={framework.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(framework.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, framework.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== framework.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {framework.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              {/* 5. Compliance Tab */}
+              <TabsContent value="compliance" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">5. Compliance Requirements</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select compliance frameworks, standards, and regulations relevant to your organization.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Compliance Frameworks</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {complianceFrameworkOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="complianceRequirements.frameworks"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              {/* 6. Regulatory Requirements Tab */}
               <TabsContent value="regulatory" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Regulatory Requirements</h3>
+                  <h3 className="font-medium mb-4">6. Regulatory Requirements</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select all regulatory requirements applicable to your organization.
                   </p>
@@ -824,15 +1041,351 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Standards & Guidelines Tab */}
+              {/* 7. Standards & Guidelines Tab */}
               <TabsContent value="standards" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Standards & Guidelines</h3>
+                  <h3 className="font-medium mb-4">7. Standards & Guidelines</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the standards and guidelines relevant to your organization.
                   </p>
                   
                   <StandardsContent form={form} />
+                </div>
+              </TabsContent>
+              
+              {/* 8. ACQ Tools Tab */}
+              <TabsContent value="acq-tools" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">8. Assessment, Checklist & Questionnaire (ACQ) Tools</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select the assessment tools and questionnaires relevant to your organization.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Assessment Tools</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {assessmentOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="relevantACQTools.assessments"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Checklist Tools</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {checklistOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="relevantACQTools.checklists"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Questionnaire Tools</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {questionnaireOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="relevantACQTools.questionnaires"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              {/* 9. Adversarial Insight Tab */}
+              <TabsContent value="adversarial" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">9. Adversarial Insight</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select options related to OS hardening and threat actor analysis.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">OS Hardening</h4>
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="osHardening.stig"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">STIG</FormLabel>
+                                <FormDescription>
+                                  Security Technical Implementation Guides
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="osHardening.scap"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">SCAP</FormLabel>
+                                <FormDescription>
+                                  Security Content Automation Protocol
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              {/* 10. ISMS Tab */}
+              <TabsContent value="isms" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">10. Information Security Management System (ISMS)</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select ISMS implementation options and related documents.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="ismsImplementation"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>ISMS Implementation Status</FormLabel>
+                          <Select 
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select implementation status" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="none">None - Not Implemented</SelectItem>
+                              <SelectItem value="planning">Planning Phase</SelectItem>
+                              <SelectItem value="partial">Partially Implemented</SelectItem>
+                              <SelectItem value="implemented">Fully Implemented</SelectItem>
+                              <SelectItem value="certified">Implemented and Certified</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormDescription>
+                            Indicate the current implementation state of your Information Security Management System
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Policies</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {policyOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="ismsPolicies"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Procedures</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {procedureOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="ismsProcedures"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Plans</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {planOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="ismsPlans"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </TabsContent>
               
