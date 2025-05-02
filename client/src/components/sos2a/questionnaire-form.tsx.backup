@@ -2091,7 +2091,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Select all regulatory requirements applicable to your organization.
                   </p>
                   
-                  <div className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="regulatoryRequirements"
+                    render={() => (
+                      <FormItem>
+                        <div className="space-y-6">
                           {/* Global Data Protection */}
                           <div>
                             <h4 className="font-medium text-lg border-b pb-2 mb-4">Global Data Protection Regulations</h4>
