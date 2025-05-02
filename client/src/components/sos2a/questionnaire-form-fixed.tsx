@@ -366,16 +366,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const assessmentOptions = assessmentTools.assessments.map((assessment) => ({
     id: assessment.id,
     label: assessment.name,
+    purpose: assessment.purpose,
+    applicability: assessment.applicability
   }));
   
   const checklistOptions = assessmentTools.checklists.map((checklist) => ({
     id: checklist.id,
     label: checklist.name,
+    purpose: checklist.purpose,
+    applicability: checklist.applicability
   }));
   
   const questionnaireOptions = assessmentTools.questionnaires.map((questionnaire) => ({
     id: questionnaire.id,
     label: questionnaire.name,
+    purpose: questionnaire.purpose,
+    applicability: questionnaire.applicability
   }));
   
   const handleIndustryChange = (value: string) => {
