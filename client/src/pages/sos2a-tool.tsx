@@ -153,10 +153,24 @@ export default function Sos2aTool() {
         ? 75  // Preliminary report (75% complete)
         : 100; // Comprehensive report (100% complete)
   
+  // Show review modal state
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
   // Handle form submission
   const handleQuestionnaireSubmit = (data: Sos2aFormData) => {
+    // First show the review modal
     setFormData(data);
+    setShowReviewModal(true);
+  };
+  
+  // Handle final submission after review
+  const handleFinalSubmit = () => {
+    setShowReviewModal(false);
     setStep('matrix');
+    toast({
+      title: "Assessment submitted",
+      description: "Your assessment has been received. Proceeding to the matrix analysis.",
+    });
   };
   
   // Generate scorecard data with the 12 standard parameters
