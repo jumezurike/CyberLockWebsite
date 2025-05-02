@@ -277,12 +277,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   });
   
   const handleSubmit = form.handleSubmit((data: Sos2aFormData) => {
+    // Debug logs to check form submission
+    console.log("Form submitted", data);
+    console.log("EULA status:", eulaAccepted);
+    
     // Update the EULA acceptance state in the form data
     const updatedData = {
       ...data,
       eulaAccepted: eulaAccepted
     };
-    onSubmit(updatedData);
+    console.log("Calling parent onSubmit with data");
+    try {
+      onSubmit(updatedData);
+      console.log("Parent onSubmit completed");
+    } catch (error) {
+      console.error("Error in form submission:", error);
+    }
   });
   
   const operationModes = [
@@ -2734,58 +2744,402 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </p>
                   
                   <div className="space-y-6">
+                    {/* Section 1: Business Information */}
                     <div className="border rounded-md p-4 bg-gray-50">
-                      <h4 className="text-base font-medium mb-3">Business Information Summary</h4>
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">1. Business Information</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => {
+                            const element = document.querySelector('[data-value="business"]');
+                            if (element instanceof HTMLElement) {
+                              element.click();
+                            }
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </div>
                       <div className="space-y-2 text-sm">
                         <div className="grid grid-cols-2 gap-2">
                           <div className="font-medium">Business Name:</div>
                           <div>{form.getValues("businessName")}</div>
+                          
+                          <div className="font-medium">Business Address:</div>
+                          <div>{form.getValues("businessAddress")}</div>
+                          
+                          <div className="font-medium">Location:</div>
+                          <div>{[
+                            form.getValues("businessLocation.state"),
+                            form.getValues("businessLocation.country"),
+                            form.getValues("businessLocation.zipCode")
+                          ].filter(Boolean).join(", ")}</div>
                           
                           <div className="font-medium">Industry:</div>
                           <div>{form.getValues("industry") === "other" ? form.getValues("customIndustry") : form.getValues("industry")}</div>
                           
                           <div className="font-medium">Employee Count:</div>
                           <div>{form.getValues("employeeCount")}</div>
+                          
+                          <div className="font-medium">Business Services:</div>
+                          <div>{form.getValues("businessServices")}</div>
                         </div>
                       </div>
                     </div>
 
+                    {/* Section 2-3: Infrastructure and Configuration */}
                     <div className="border rounded-md p-4 bg-gray-50">
-                      <h4 className="text-base font-medium mb-3">Infrastructure & Security</h4>
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">2-3. Infrastructure & Configuration</h4>
+                        <div className="space-x-2">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => document.querySelector('[data-value="infrastructure"]')?.click()}
+                          >
+                            Edit Infrastructure
+                          </Button>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => document.querySelector('[data-value="baseline"]')?.click()}
+                          >
+                            Edit Configuration
+                          </Button>
+                        </div>
+                      </div>
                       <div className="space-y-2 text-sm">
                         <div className="grid grid-cols-2 gap-2">
                           <div className="font-medium">Operation Mode:</div>
-                          <div>{form.getValues("operationMode").join(", ")}</div>
+                          <div>{form.getValues("operationMode").join(", ") || "None selected"}</div>
                           
                           <div className="font-medium">Internet Presence:</div>
-                          <div>{form.getValues("internetPresence").join(", ")}</div>
+                          <div>{form.getValues("internetPresence").join(", ") || "None selected"}</div>
+                          
+                          <div className="font-medium">Configuration Management:</div>
+                          <div>{form.getValues("configurationManagement") || "Not specified"}</div>
+                          
+                          <div className="font-medium">System Hardening Approach:</div>
+                          <div>{form.getValues("systemHardeningApproach") || "Not specified"}</div>
+                          
+                          <div className="font-medium">CIS Benchmark & Version:</div>
+                          <div>{form.getValues("primaryCisBenchmark") ? `${form.getValues("primaryCisBenchmark")} ${form.getValues("cisVersion") || ""}` : "Not specified"}</div>
+                          
+                          <div className="font-medium">CIS Benchmarks:</div>
+                          <div>{form.getValues("cisBenchmarks")?.length > 0 ? form.getValues("cisBenchmarks").join(", ") : "None selected"}</div>
                         </div>
                       </div>
                     </div>
 
+                    {/* Section 4: Security Control Framework */}
                     <div className="border rounded-md p-4 bg-gray-50">
-                      <h4 className="text-base font-medium mb-3">Compliance Requirements</h4>
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">4. Security Control Framework</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => document.querySelector('[data-value="security"]')?.click()}
+                        >
+                          Edit
+                        </Button>
+                      </div>
                       <div className="space-y-2 text-sm">
                         <div className="grid grid-cols-2 gap-2">
-                          <div className="font-medium">Selected Frameworks:</div>
+                          <div className="font-medium">Security Measures:</div>
+                          <div>{form.getValues("securityMeasures").length > 0 ? form.getValues("securityMeasures").join(", ") : "None selected"}</div>
+                          
+                          <div className="font-medium">Primary Concerns:</div>
+                          <div>{form.getValues("primaryConcerns").length > 0 ? form.getValues("primaryConcerns").join(", ") : "None selected"}</div>
+                          
+                          <div className="font-medium">Operations Frameworks:</div>
+                          <div>{form.getValues("frameworks.operations").length > 0 ? form.getValues("frameworks.operations").join(", ") : "None selected"}</div>
+                          
+                          <div className="font-medium">Management Frameworks:</div>
+                          <div>{form.getValues("frameworks.management").length > 0 ? form.getValues("frameworks.management").join(", ") : "None selected"}</div>
+                          
+                          <div className="font-medium">Technology Frameworks:</div>
+                          <div>{form.getValues("frameworks.technology").length > 0 ? form.getValues("frameworks.technology").join(", ") : "None selected"}</div>
+                          
+                          <div className="font-medium">People Frameworks:</div>
+                          <div>{form.getValues("frameworks.people").length > 0 ? form.getValues("frameworks.people").join(", ") : "None selected"}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Section 5-7: Compliance, Regulatory, Standards */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">5-7. Compliance & Standards</h4>
+                        <div className="space-x-2">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => document.querySelector('[data-value="compliance"]')?.click()}
+                          >
+                            Edit Compliance
+                          </Button>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => document.querySelector('[data-value="regulatory"]')?.click()}
+                          >
+                            Edit Regulatory
+                          </Button>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => document.querySelector('[data-value="standards"]')?.click()}
+                          >
+                            Edit Standards
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="font-medium">Compliance Frameworks:</div>
                           <div>{form.getValues("complianceRequirements.frameworks").length > 0 ? 
                                 form.getValues("complianceRequirements.frameworks").join(", ") : 
                                 "None selected"}</div>
                                 
-                          <div className="font-medium">Healthcare Regulations:</div>
-                          <div>{form.getValues("complianceRequirements.healthcare")?.length > 0 ? 
-                                form.getValues("complianceRequirements.healthcare").join(", ") : 
+                          <div className="font-medium">Compliance Standards:</div>
+                          <div>{form.getValues("complianceRequirements.standards").length > 0 ? 
+                                form.getValues("complianceRequirements.standards").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Compliance Requirements:</div>
+                          <div>{form.getValues("complianceRequirements.compliance").length > 0 ? 
+                                form.getValues("complianceRequirements.compliance").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Regulatory Requirements:</div>
+                          <div>{form.getValues("regulatoryRequirements")?.length > 0 ? 
+                                form.getValues("regulatoryRequirements").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Healthcare Standards:</div>
+                          <div>{form.getValues("healthcareStandards")?.length > 0 ? 
+                                form.getValues("healthcareStandards").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Guidelines:</div>
+                          <div>{form.getValues("complianceRequirements.guidelines")?.length > 0 ? 
+                                form.getValues("complianceRequirements.guidelines").join(", ") : 
                                 "None selected"}</div>
                         </div>
                       </div>
                     </div>
 
+                    {/* Section 8: ACQ Tools */}
                     <div className="border rounded-md p-4 bg-gray-50">
-                      <h4 className="text-base font-medium mb-3">Assessment Type</h4>
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">8. Assessment, Checklist & Questionnaire Tools</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => document.querySelector('[data-value="acq-tools"]')?.click()}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="font-medium">Assessments:</div>
+                          <div>{form.getValues("relevantACQTools.assessments")?.length > 0 ? 
+                                form.getValues("relevantACQTools.assessments").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Checklists:</div>
+                          <div>{form.getValues("relevantACQTools.checklists")?.length > 0 ? 
+                                form.getValues("relevantACQTools.checklists").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Questionnaires:</div>
+                          <div>{form.getValues("relevantACQTools.questionnaires")?.length > 0 ? 
+                                form.getValues("relevantACQTools.questionnaires").join(", ") : 
+                                "None selected"}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Section 9: Adversarial Insight */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">9. Adversarial Insight (MITRE ATT&CK)</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => document.querySelector('[data-value="adversarial"]')?.click()}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="font-medium">STIG Implementation:</div>
+                          <div>{form.getValues("osHardening.stig") ? "Yes" : "No"}</div>
+                          
+                          <div className="font-medium">SCAP Implementation:</div>
+                          <div>{form.getValues("osHardening.scap") ? "Yes" : "No"}</div>
+                          
+                          <div className="font-medium">OS Hardening Guidelines:</div>
+                          <div>{form.getValues("osHardening.guidelines")?.length > 0 ? 
+                                form.getValues("osHardening.guidelines").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">MITRE ATT&CK Techniques:</div>
+                          <div>{form.getValues("adversarialInsights.mitreAttackIds")?.length > 0 ? 
+                                form.getValues("adversarialInsights.mitreAttackIds").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Threat Actors:</div>
+                          <div>{form.getValues("threatActors")?.length > 0 ? 
+                                form.getValues("threatActors").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Threat Actor Types:</div>
+                          <div>{form.getValues("threatActorTypes")?.length > 0 ? 
+                                form.getValues("threatActorTypes").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">MITRE Tactics:</div>
+                          <div>{form.getValues("mitreTactics")?.length > 0 ? 
+                                form.getValues("mitreTactics").join(", ") : 
+                                "None selected"}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Section 10: ISMS */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">10. Information Security Management System (ISMS)</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => document.querySelector('[data-value="isms"]')?.click()}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="font-medium">ISMS Implementation Status:</div>
+                          <div>{form.getValues("ismsImplementation") || "Not specified"}</div>
+                          
+                          <div className="font-medium">ISMS Policies:</div>
+                          <div>{form.getValues("ismsPolicies")?.length > 0 ? 
+                                form.getValues("ismsPolicies").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">ISMS Plans:</div>
+                          <div>{form.getValues("ismsPlans")?.length > 0 ? 
+                                form.getValues("ismsPlans").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">ISMS Procedures:</div>
+                          <div>{form.getValues("ismsProcedures")?.length > 0 ? 
+                                form.getValues("ismsProcedures").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">ISMS Processes:</div>
+                          <div>{form.getValues("ismsProcesses")?.length > 0 ? 
+                                form.getValues("ismsProcesses").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Executive Support:</div>
+                          <div>{form.getValues("ismsLeadership.executiveSupport") ? "Yes" : "No"}</div>
+                          
+                          <div className="font-medium">CISO Appointed:</div>
+                          <div>{form.getValues("ismsLeadership.ciso") ? "Yes" : "No"}</div>
+                          
+                          <div className="font-medium">Board Reporting:</div>
+                          <div>{form.getValues("ismsLeadership.boardReporting") ? "Yes" : "No"}</div>
+                          
+                          <div className="font-medium">Security Committee:</div>
+                          <div>{form.getValues("ismsLeadership.securityCommittee") ? "Yes" : "No"}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Section 11: Contact Information */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">11. Contact Information</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => document.querySelector('[data-value="contact"]')?.click()}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="font-medium">Contact Name:</div>
+                          <div>{form.getValues("contactInfo.name")}</div>
+                          
+                          <div className="font-medium">Point of Contact:</div>
+                          <div>{form.getValues("contactInfo.pointOfContact")}</div>
+                          
+                          <div className="font-medium">Contact Email:</div>
+                          <div>{form.getValues("contactInfo.contactEmail")}</div>
+                          
+                          <div className="font-medium">Email:</div>
+                          <div>{form.getValues("contactInfo.email")}</div>
+                          
+                          <div className="font-medium">Phone:</div>
+                          <div>{form.getValues("contactInfo.phone")}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Assessment Type */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">Assessment Type</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => document.querySelector('[data-value="contact"]')?.click()}
+                        >
+                          Edit
+                        </Button>
+                      </div>
                       <div className="space-y-2 text-sm">
                         <div className="grid grid-cols-2 gap-2">
                           <div className="font-medium">Selected Assessment Type:</div>
                           <div>{form.getValues("reportType") === "preliminary" ? "Preliminary Assessment" : "Comprehensive Assessment"}</div>
+                          
+                          <div className="font-medium">Availability for Interview:</div>
+                          <div>{form.getValues("availabilityConfirmation") ? "Confirmed" : "Not confirmed"}</div>
+                          
+                          <div className="font-medium">Referral Permission:</div>
+                          <div>{form.getValues("referralPermission") ? "Yes" : "No"}</div>
                         </div>
                       </div>
                     </div>
@@ -2817,6 +3171,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       type="submit" 
                       className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white font-medium text-lg py-4 w-full"
                       disabled={!eulaAccepted}
+                      onClick={() => {
+                        console.log("Submit button clicked directly");
+                        console.log("Form is valid:", form.formState.isValid);
+                        console.log("Form errors:", form.formState.errors);
+                        
+                        // If there are validation errors, display them
+                        if (Object.keys(form.formState.errors).length > 0) {
+                          console.error("Form validation errors:", form.formState.errors);
+                        }
+                      }}
                     >
                       Submit Questionnaire
                     </Button>

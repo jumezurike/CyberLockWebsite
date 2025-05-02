@@ -158,9 +158,16 @@ export default function Sos2aTool() {
 
   // Handle form submission
   const handleQuestionnaireSubmit = (data: Sos2aFormData) => {
+    console.log("Parent component received form submission", data);
     // First show the review modal
     setFormData(data);
     setShowReviewModal(true);
+    
+    // Show toast for testing
+    toast({
+      title: "Form received",
+      description: "Your form data has been received successfully.",
+    });
   };
   
   // Handle final submission after review
