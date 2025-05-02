@@ -2801,8 +2801,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Click the button below to submit your completed questionnaire. Our security experts will review your information and contact you to schedule the next steps in your assessment process.
                   </p>
+                  
+                  <div className="mb-6">
+                    <EulaAgreement 
+                      isChecked={eulaAccepted}
+                      onCheckChange={(checked) => {
+                        setEulaAccepted(checked);
+                        form.setValue("eulaAccepted", checked);
+                      }}
+                    />
+                  </div>
+                  
                   <div className="flex justify-center w-full">
-                    <Button type="submit" className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white font-medium text-lg py-4 w-full">Submit Questionnaire</Button>
+                    <Button 
+                      type="submit" 
+                      className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white font-medium text-lg py-4 w-full"
+                      disabled={!eulaAccepted}
+                    >
+                      Submit Questionnaire
+                    </Button>
                   </div>
                 </div>
               </TabsContent>

@@ -130,6 +130,9 @@ export interface Sos2aFormData {
   reportType: 'preliminary' | 'comprehensive';
   availabilityConfirmation: boolean;
   referralPermission: boolean;
+  
+  // Legal agreements
+  eulaAccepted: boolean;
 }
 
 export interface SecurityRisk {
