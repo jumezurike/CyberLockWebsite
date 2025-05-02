@@ -615,7 +615,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="adversarial">9. Adversarial Insight</TabsTrigger>
                 <TabsTrigger value="isms">10. Information Security Management System (ISMS)</TabsTrigger>
-                <TabsTrigger value="contact">11. Contact</TabsTrigger>
+                <TabsTrigger value="contact">11. Contact Confirmation</TabsTrigger>
                 <TabsTrigger value="review">Review</TabsTrigger>
               </TabsList>
               
@@ -2505,9 +2505,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Contact and Confirmation Tab */}
               <TabsContent value="contact" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Contact Information</h3>
+                  <h3 className="font-medium mb-4">11. Contact Confirmation</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Provide contact details for follow-up and report delivery.
+                    Provide contact details for follow-up and select your assessment type.
                   </p>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
