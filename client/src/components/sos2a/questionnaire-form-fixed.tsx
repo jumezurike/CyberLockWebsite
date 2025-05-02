@@ -411,7 +411,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="compliance">5. Compliance</TabsTrigger>
-                <TabsTrigger value="regulatory">6. Regulatory</TabsTrigger>
+                <TabsTrigger value="regulatory">6. Regulatory Requirements</TabsTrigger>
                 <TabsTrigger value="standards">7. Standards & Guidelines</TabsTrigger>
                 <TabsTrigger value="acq-tools">8. ACQ Tools</TabsTrigger>
               </TabsList>
