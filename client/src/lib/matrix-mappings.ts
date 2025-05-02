@@ -705,14 +705,15 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
       
       // Add standard checklists based on infrastructure type
       checklists: infraType === 'website' ?
-                 ["GDPR Compliance Checklist", "CCPA Compliance Checklist"] :
+                 assessmentTools.checklists.filter(item => item.id === "ccpa-checklist" || item.id === "gdpr-compliance").map(item => item.name) :
                  (infraType === 'cloud-servers' ?
-                 ["CIS Controls Self-Assessment Tool (CSAT)", "SOX IT General Controls (ITGC) Questionnaire"] :
+                 assessmentTools.checklists.filter(item => item.id === "cis-csat" || item.id === "sox-itgc").map(item => item.name) :
                  []),
       
       // Add questionnaires based on infrastructure type
       questionnaires: infraType === 'commercial-internet' || infraType === 'website' ?
-                     ["PCI DSS Questionnaire", "Data Privacy Questionnaire"] :
+                     assessmentTools.questionnaires.filter(item => 
+                       item.id.startsWith("saq-") || item.id === "gdpr-compliance").map(item => item.name).slice(0, 3) :
                      [],
     },
     isms: {

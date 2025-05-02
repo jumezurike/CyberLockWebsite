@@ -18,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
@@ -876,63 +877,54 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         
                         <FormField
                           control={form.control}
-                          name="configManagement.documented"
-                          render={({ field }: any) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                              <div className="space-y-1 leading-none">
-                                <FormLabel>Documented Configuration Baseline</FormLabel>
-                                <FormDescription>
-                                  Organization has documented baseline configurations for all systems
-                                </FormDescription>
+                          name="configurationManagement"
+                          render={({ field }) => (
+                            <FormItem className="space-y-4">
+                              <div className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
+                                <FormControl>
+                                  <RadioGroup
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                    className="flex flex-col space-y-1"
+                                  >
+                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                      <FormControl>
+                                        <RadioGroupItem value="documented" />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        Documented Configuration Baseline
+                                      </FormLabel>
+                                    </FormItem>
+                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                      <FormControl>
+                                        <RadioGroupItem value="reviewed" />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        Regular Configuration Review
+                                      </FormLabel>
+                                    </FormItem>
+                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                      <FormControl>
+                                        <RadioGroupItem value="automated" />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        Automated Configuration Management
+                                      </FormLabel>
+                                    </FormItem>
+                                    <FormItem className="flex items-center space-x-3 space-y-0">
+                                      <FormControl>
+                                        <RadioGroupItem value="none" />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        No Configuration Management
+                                      </FormLabel>
+                                    </FormItem>
+                                  </RadioGroup>
+                                </FormControl>
                               </div>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="configManagement.reviewed"
-                          render={({ field }: any) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                              <div className="space-y-1 leading-none">
-                                <FormLabel>Regular Configuration Review</FormLabel>
-                                <FormDescription>
-                                  Organization regularly reviews and updates baseline configurations
-                                </FormDescription>
-                              </div>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="configManagement.automated"
-                          render={({ field }: any) => (
-                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                              <div className="space-y-1 leading-none">
-                                <FormLabel>Automated Configuration Management</FormLabel>
-                                <FormDescription>
-                                  Organization employs automated tools for configuration management
-                                </FormDescription>
-                              </div>
+                              <FormDescription>
+                                Configuration Management ensures systems are set up consistently and securely.
+                              </FormDescription>
                             </FormItem>
                           )}
                         />
@@ -1010,13 +1002,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
                                 <FormControl>
                                   <Checkbox
-                                    checked={field.value?.includes("windows")}
+                                    checked={Array.isArray(field.value) && field.value.includes("windows")}
                                     onCheckedChange={(checked) => {
+                                      const currentValue = Array.isArray(field.value) ? field.value : [];
                                       const updatedValue = checked
-                                        ? [...(field.value || []), "windows"]
-                                        : (field.value || [])?.filter(
-                                            (value) => value !== "windows"
-                                          );
+                                        ? [...currentValue, "windows"]
+                                        : currentValue.filter(value => value !== "windows");
                                       field.onChange(updatedValue);
                                     }}
                                   />
