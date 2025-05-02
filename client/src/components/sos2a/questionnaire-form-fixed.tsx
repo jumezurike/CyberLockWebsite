@@ -24,6 +24,11 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 
+// Helper function to safely handle potentially undefined arrays
+function safeArray<T>(arr: T[] | undefined): T[] {
+  return arr || [];
+}
+
 const formSchema = z.object({
   // 1. Business Information
   businessName: z.string().min(2, "Business name is required"),
