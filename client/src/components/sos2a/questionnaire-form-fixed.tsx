@@ -85,7 +85,7 @@ const formSchema = z.object({
     questionnaires: z.array(z.string()).optional(),
   }).optional(),
   
-  // 9. Adversarial Insight
+  // 9. Adversarial Insight (MITRE ATT&CK)
   osHardening: z.object({
     stig: z.boolean(),
     scap: z.boolean(),
@@ -95,6 +95,15 @@ const formSchema = z.object({
     mitreAttackIds: z.array(z.string()),
   }),
   threatActors: z.array(z.string()).optional(),
+  mitreTactics: z.array(z.string()).optional(),
+  threatActorTypes: z.array(z.string()).optional(),
+  
+  // Additional Regulatory Content
+  educationRequirements: z.array(z.string()).optional(),
+  cloudRequirements: z.array(z.string()).optional(),
+  cyberRequirements: z.array(z.string()).optional(),
+  esgRequirements: z.array(z.string()).optional(),
+  bestPracticeFrameworks: z.array(z.string()).optional(),
   
   // 10. ISMS
   ismsImplementation: z.string().optional(),
@@ -197,6 +206,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         mitreAttackIds: [],
       },
       threatActors: [],
+      mitreTactics: [],
+      threatActorTypes: [],
+      
+      // Additional Regulatory Content
+      educationRequirements: [],
+      cloudRequirements: [],
+      cyberRequirements: [],
+      esgRequirements: [],
+      bestPracticeFrameworks: [],
       
       // 10. ISMS
       ismsImplementation: "",
