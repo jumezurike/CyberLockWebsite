@@ -403,6 +403,17 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       form.setValue("contactInfo.contactEmail", contactEmail);
     }
   };
+  
+  // Helper function to safely handle array operations with checkboxes
+  const handleCheckboxArrayChange = (currentValues: string[] | undefined, optionId: string, checked: boolean): string[] => {
+    if (checked) {
+      // Add the item to the array, safely handling undefined by providing empty array default
+      return [...(currentValues || []), optionId];
+    } else {
+      // Remove the item from the array, safely handling undefined
+      return (currentValues || []).filter(value => value !== optionId);
+    }
+  };
 
   return (
     <Card className="w-full">
