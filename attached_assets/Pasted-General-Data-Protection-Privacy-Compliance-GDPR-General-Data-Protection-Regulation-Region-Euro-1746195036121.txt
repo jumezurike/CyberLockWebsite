@@ -1,0 +1,154 @@
+General Data Protection & Privacy Compliance
+GDPR (General Data Protection Regulation)
+
+Region: European Union
+
+Purpose: Protect personal data privacy.
+
+CCPA (California Consumer Privacy Act)
+
+Region: California, USA
+
+Purpose: Personal data privacy protection and consumer rights.
+
+HIPAA (Health Insurance Portability and Accountability Act)
+
+Region: United States
+
+Purpose: Health data privacy and security.
+
+2. Financial Sector Compliance
+PCI DSS (Payment Card Industry Data Security Standard)
+
+Region: Global
+
+Purpose: Security of credit/debit card transactions.
+
+GLBA (Gramm-Leach-Bliley Act)
+
+Region: United States
+
+Purpose: Privacy of consumer financial information.
+
+SOX (Sarbanes-Oxley Act)
+
+Region: United States
+
+Purpose: Financial transparency and accuracy.
+
+3. Cybersecurity and Information Security Compliance
+ISO/IEC 27001
+
+Region: International
+
+Purpose: Comprehensive information security management.
+
+SOC 1, SOC 2, SOC 3 (System and Organization Controls)
+
+Region: Global
+
+Purpose: Controls relevant to security, availability, processing integrity, confidentiality, and privacy.
+
+NIST Cybersecurity Framework (CSF)
+
+Region: United States, widely adopted internationally
+
+Purpose: Standardized cybersecurity risk management framework.
+
+NIST SP 800-53 & NIST SP 800-171
+
+Region: Primarily U.S. government and contractors
+
+Purpose: Information security controls for federal agencies and contractors.
+
+CMMC (Cybersecurity Maturity Model Certification)
+
+Region: U.S. Department of Defense contractors
+
+Purpose: Protect federal contract information and controlled unclassified information.
+
+CIS Controls (Center for Internet Security)
+
+Region: Global
+
+Purpose: Prioritized cybersecurity best practices.
+
+4. Healthcare and Life Sciences Compliance
+HITECH Act (Health Information Technology for Economic and Clinical Health Act)
+
+Region: United States
+
+Purpose: Enhances HIPAA, encouraging electronic health records and security standards.
+
+FDA 21 CFR Part 11
+
+Region: United States
+
+Purpose: Electronic records and signatures compliance for FDA-regulated industries.
+
+5. Government and Public Sector Compliance
+FedRAMP (Federal Risk and Authorization Management Program)
+
+Region: U.S. Federal Agencies
+
+Purpose: Security assessment for cloud services used by the government.
+
+FISMA (Federal Information Security Management Act)
+
+Region: U.S. Federal Government
+
+Purpose: Information security for federal data and IT systems.
+
+6. Education Sector Compliance
+FERPA (Family Educational Rights and Privacy Act)
+
+Region: United States
+
+Purpose: Privacy and security of student educational records.
+
+7. Cloud Security Compliance
+CSA STAR (Cloud Security Alliance - Security Trust Assurance and Risk)
+
+Region: Global
+
+Purpose: Assurance and transparency for cloud computing security.
+
+8. Industry-Specific & Regional Compliance
+COPPA (Children’s Online Privacy Protection Act)
+
+Region: United States
+
+Purpose: Protecting the privacy of children online.
+
+PIPEDA (Personal Information Protection and Electronic Documents Act)
+
+Region: Canada
+
+Purpose: Personal data privacy and electronic records protection.
+
+LGPD (Lei Geral de Proteção de Dados)
+
+Region: Brazil
+
+Purpose: Data protection and privacy law similar to GDPR.
+
+Australia Privacy Act (APP - Australian Privacy Principles)
+
+Region: Australia
+
+Purpose: Personal information management and protection.
+
+9. Environmental & Social Compliance (often relevant to IT organizations)
+ESG (Environmental, Social, and Governance) standards
+
+Region: Global
+
+Purpose: Sustainability and corporate social responsibility reporting.
+
+Additional Best-Practice Frameworks (not compliance per se, but often adopted):
+ITIL (Information Technology Infrastructure Library)
+
+COBIT (Control Objectives for Information and Related Technologies)
+
+OWASP (Open Web Application Security Project) Top 10
+

@@ -322,7 +322,10 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
       
       {/* Industry-specific */}
       <div>
-        <h4 className="font-medium text-lg border-b pb-2 mb-4">Industry-Specific Regulations</h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-green-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+          Industry-Specific Regulations <span className="text-sm font-normal">(Guidelines)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             key="iec-62443"
