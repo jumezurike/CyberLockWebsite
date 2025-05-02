@@ -1,0 +1,112 @@
+Global Data Protection Regulations
+GDPR (General Data Protection Regulation - EU)
+
+Requirements: Consent management, data subject rights (access/erasure), 72-hour breach notification
+
+Penalties: Up to 4% global revenue or €20M
+
+Scope: Any organization processing EU residents' data
+
+CCPA/CPRA (California, USA)
+
+Requirements: Consumer opt-out of data sales, disclosure of data collection practices
+
+Penalties: 
+2,500−7,500 per violation + private lawsuits
+
+PIPEDA (Canada)
+
+Requirements: Consent for data collection, breach reporting to Privacy Commissioner
+
+Penalties: Up to CAD 100,000 per violation
+
+2. Healthcare-Specific Regulations
+HIPAA (Health Insurance Portability and Accountability Act - USA)
+
+Security Rule: Safeguards for ePHI (encryption, access controls)
+
+Breach Notification: Report within 60 days
+
+Penalties: Up to $1.5M/year per violation
+
+HITRUST CSF *(Certification aligning with HIPAA/ISO 27001)*
+
+21 CFR Part 11 (FDA - USA)
+
+Requirements: Audit trails, electronic signatures for medical devices
+
+Medical Device Regulation (MDR - EU)
+
+Cybersecurity: Secure by design for connected devices
+
+3. Financial Sector Regulations
+PCI-DSS (Global)
+
+Requirements: Secure cardholder data, quarterly vulnerability scans
+
+Penalties: Fines up to $100K/month + revoked processing
+
+GLBA (Gramm-Leach-Bliley Act - USA)
+
+Safeguards Rule: Protect customer financial data
+
+SOX (Sarbanes-Oxley - USA)
+
+Section 404: IT controls for financial reporting
+
+PSD2 (EU)
+
+Strong Customer Authentication (SCA): Multi-factor auth for payments
+
+4. Government & Critical Infrastructure
+NIST SP 800-171 (USA)
+
+Requirements: Protect CUI (Controlled Unclassified Information)
+
+Mandatory for: DoD contractors
+
+CMMC 2.0 (USA)
+
+Level 2: 110 controls for defense contractors
+
+NIS2 Directive (EU)
+
+Requirements: Incident reporting within 24 hours
+
+5. Industry-Specific Regulations
+FISMA (USA Federal Agencies)
+
+Requirements: NIST-based security controls
+
+NERC CIP (North American Electric Grid)
+
+CIP-004: Personnel training for critical systems
+
+TISAX (Automotive - EU)
+
+Requirements: Secure prototype data, supply chain audits
+
+6. Emerging Regulations
+DORA (EU Digital Operational Resilience Act)
+
+Requirements: Financial sector cyber resilience testing (2025 enforcement)
+
+SEC Cybersecurity Rules (USA - 2023)
+
+Requirements: Public companies must disclose incidents in 8-K filings
+
+China's DSL (Data Security Law)
+
+Requirements: Data classification based on national importance
+
+Key Compliance Tools
+Mapping Tools: NIST CSF ↔ HIPAA Crosswalk
+
+Automation: Drata, Vanta, OneTrust
+
+Penalty Comparison Table
+Regulation	Maximum Fine	Jurisdiction
+GDPR	€20M or 4% revenue	EU/Global
+HIPAA	$1.5M/year	USA
+PCI-DSS	$100K/month	Global
+CCPA	$7,500/violation	California
