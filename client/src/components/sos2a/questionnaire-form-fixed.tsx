@@ -23,6 +23,7 @@ import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
+import { EulaAgreement } from "./eula-agreement";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -147,6 +148,11 @@ const formSchema = z.object({
     message: "You must confirm your availability for the interview",
   }),
   referralPermission: z.boolean(),
+  
+  // Legal agreements
+  eulaAccepted: z.boolean().refine(val => val === true, {
+    message: "You must accept the End User License Agreement",
+  }),
 });
 
 interface QuestionnaireFormProps {
@@ -154,6 +160,8 @@ interface QuestionnaireFormProps {
 }
 
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
+  const [eulaAccepted, setEulaAccepted] = useState(false);
+  
   const form = useForm<Sos2aFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -262,11 +270,19 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       reportType: 'preliminary',
       availabilityConfirmation: false,
       referralPermission: false,
+      
+      // Legal agreements
+      eulaAccepted: false,
     },
   });
   
   const handleSubmit = form.handleSubmit((data: Sos2aFormData) => {
-    onSubmit(data);
+    // Update the EULA acceptance state in the form data
+    const updatedData = {
+      ...data,
+      eulaAccepted: eulaAccepted
+    };
+    onSubmit(updatedData);
   });
   
   const operationModes = [
