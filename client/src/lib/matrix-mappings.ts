@@ -305,40 +305,45 @@ export const commonVulnerabilities = {
 
 // Define assessment tools categorized by type and relevance
 export const assessmentTools = {
-  // Restructured to match the specific ACQ Tool categories
+  // Restructured to match the specific ACQ Tool categories based on comprehensive framework information
   
   // Category 1: Assessments - For comprehensive evaluations
   assessments: [
-    { id: "hipaa-sra", name: "HIPAA Security Risk Assessment (SRA) Tool" },
-    { id: "nist-csf-assessment", name: "NIST Cybersecurity Framework Self-Assessment Tool" },
-    { id: "iso-27001-assessment", name: "ISO 27001 Self-Assessment Questionnaire (Annex A Controls)" },
-    { id: "hitrust-mycsf", name: "HITRUST MyCSF Self-Assessment" },
-    { id: "fedramp-saq", name: "FedRAMP Security Assessment Questionnaire (SAQ)" },
-    { id: "soc2-readiness", name: "SOC 2 Readiness Questionnaire (Security, Availability, Confidentiality, Processing Integrity, Privacy)" }
+    { id: "hipaa-sra", name: "HIPAA Security Risk Assessment (SRA) Tool", purpose: "Protected Health Information (PHI) security", applicability: "Healthcare providers, insurers, business associates" },
+    { id: "nist-csf-assessment", name: "NIST Cybersecurity Framework Self-Assessment", purpose: "Cyber risk management", applicability: "Critical infrastructure, federal agencies" },
+    { id: "iso-27001-assessment", name: "ISO 27001 Self-Assessment Questionnaire", purpose: "Information Security Management System (ISMS)", applicability: "Organizations of all sizes" },
+    { id: "soc2-readiness", name: "SOC 2 Readiness Questionnaire", purpose: "Trust services criteria (security, availability, confidentiality)", applicability: "Cloud service providers, SaaS companies" },
+    { id: "cis-csat", name: "CIS Controls Self-Assessment Tool (CSAT)", purpose: "Foundational cybersecurity practices", applicability: "All organizations" },
+    { id: "fedramp-saq", name: "FedRAMP Security Assessment Questionnaire", purpose: "Cloud security for U.S. government", applicability: "Cloud service providers" },
+    { id: "hitrust-mycsf", name: "HITRUST MyCSF Self-Assessment", purpose: "Healthcare-specific security framework", applicability: "Healthcare organizations" }
   ],
   
   // Category 2: Checklists - For verification and validation
   checklists: [
-    { id: "ferpa-checklist", name: "FERPA Compliance Checklist" },
-    { id: "glba-safeguards", name: "GLBA Safeguards Rule Self-Assessment" },
-    { id: "fisma-checklist", name: "FISMA Compliance Checklist" },
-    { id: "ccpa-checklist", name: "CCPA Compliance Checklist" },
-    { id: "cis-csat", name: "CIS Controls Self-Assessment Tool (CSAT)" },
-    { id: "sox-itgc", name: "SOX IT General Controls (ITGC) Questionnaire" }
+    { id: "ccpa-checklist", name: "CCPA Compliance Checklist", purpose: "California consumer privacy", applicability: "Businesses handling CA resident data" },
+    { id: "ferpa-checklist", name: "FERPA Compliance Checklist", purpose: "Education records privacy", applicability: "Educational institutions" },
+    { id: "fisma-checklist", name: "FISMA Compliance Checklist", purpose: "Federal information security", applicability: "Federal agencies, contractors" },
+    { id: "glba-safeguards", name: "GLBA Safeguards Rule Self-Assessment", purpose: "Financial information protection", applicability: "Financial institutions" },
+    { id: "nydfs-cybersecurity", name: "NYDFS Cybersecurity Self-Assessment", purpose: "Financial services cybersecurity", applicability: "NY-regulated financial institutions" },
+    { id: "sox-itgc", name: "SOX IT General Controls (ITGC) Questionnaire", purpose: "Financial reporting IT controls", applicability: "Public companies" }
   ],
   
-  // Category 3: Questionnaires - For specific information gathering
+  // Category 3: Questionnaires - PCI-DSS and other specialized questionnaires
   questionnaires: [
-    { id: "saq-a", name: "SAQ A (Card-not-present Merchants)" },
-    { id: "saq-b", name: "SAQ B (Merchants with Imprint-only or Standalone Terminals)" },
-    { id: "saq-c", name: "SAQ C (Merchants with Payment Application Systems)" },
-    { id: "saq-b-ip", name: "SAQ B-IP (Merchants with Standalone IP-Connected Terminals)" },
-    { id: "saq-a-ep", name: "SAQ A-EP (E-commerce Merchants with Third-Party Processing)" },
-    { id: "saq-c-vt", name: "SAQ C-VT (Merchants with Virtual Terminals)" },
-    { id: "saq-d-merchant", name: "SAQ D (Merchant)" },
-    { id: "saq-p2pe-hw", name: "SAQ P2PE-HW (Hardware Payment Terminal P2PE)" },
-    { id: "gdpr-compliance", name: "GDPR Compliance Questionnaire (Articles 5-30)" },
-    { id: "nydfs-cybersecurity", name: "NYDFS Cybersecurity Self-Assessment Tool" }
+    // PCI-DSS SAQs (Payment Card Industry Data Security Standard)
+    { id: "saq-a", name: "PCI-DSS SAQ A", purpose: "Payment security", applicability: "Card-not-present merchants, third-party processing" },
+    { id: "saq-a-ep", name: "PCI-DSS SAQ A-EP", purpose: "Payment security", applicability: "E-commerce merchants with third-party processing" },
+    { id: "saq-b", name: "PCI-DSS SAQ B", purpose: "Payment security", applicability: "Merchants with imprint-only or standalone terminals" },
+    { id: "saq-b-ip", name: "PCI-DSS SAQ B-IP", purpose: "Payment security", applicability: "Merchants with standalone IP-connected terminals" },
+    { id: "saq-c", name: "PCI-DSS SAQ C", purpose: "Payment security", applicability: "Merchants with payment application systems" },
+    { id: "saq-c-vt", name: "PCI-DSS SAQ C-VT", purpose: "Payment security", applicability: "Merchants with virtual terminals" },
+    { id: "saq-d-merchant", name: "PCI-DSS SAQ D (Merchant)", purpose: "Payment security", applicability: "All merchants not eligible for other SAQs" },
+    { id: "saq-p2pe-hw", name: "PCI-DSS SAQ P2PE-HW", purpose: "Payment security", applicability: "Hardware payment terminal P2PE" },
+    
+    // Other regulatory questionnaires
+    { id: "gdpr-compliance", name: "GDPR Compliance Questionnaire", purpose: "EU data protection", applicability: "Organizations processing EU citizen data" },
+    { id: "hipaa-privacy", name: "HIPAA Privacy Rule Questionnaire", purpose: "PHI privacy practices", applicability: "Healthcare organizations, business associates" },
+    { id: "hipaa-breach", name: "HIPAA Breach Notification Assessment", purpose: "Breach notification readiness", applicability: "Healthcare organizations" }
   ],
 
   // Keeping the original structure for backward compatibility
