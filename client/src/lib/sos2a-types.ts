@@ -54,6 +54,7 @@ export interface Sos2aFormData {
   
   // 3. Configuration Baseline
   configurationManagement?: string;
+  systemHardeningApproach?: string;
   cisBenchmarks?: string[];
   configBaseline?: string; // Added for dropdown selection
   primaryCisBenchmark?: string; // Added for dropdown selection

@@ -45,6 +45,9 @@ const formSchema = z.object({
   
   // 3. Configuration Baseline
   configurationManagement: z.string().optional(),
+  systemHardeningApproach: z.string().optional(),
+  primaryCisBenchmark: z.string().optional(),
+  cisVersion: z.string().optional(),
   cisBenchmarks: z.array(z.string()).optional(),
   
   // 4. Security Control Framework
@@ -167,6 +170,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       operationMode: [],
       internetPresence: [],
       configurationManagement: "",
+      systemHardeningApproach: "",
+      primaryCisBenchmark: "",
+      cisVersion: "",
       cisBenchmarks: [],
       
       // 4. Security Control Framework
@@ -1113,7 +1119,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       <div className="space-y-4">
                         <FormField
                           control={form.control}
-                          name="osHardening"
+                          name="systemHardeningApproach"
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>System Hardening Approach</FormLabel>
