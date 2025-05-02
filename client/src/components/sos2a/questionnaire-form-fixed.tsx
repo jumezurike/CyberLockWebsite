@@ -63,6 +63,10 @@ const formSchema = z.object({
     standards: z.array(z.string()),
     compliance: z.array(z.string()),
     regulations: z.array(z.string()),
+    guidelines: z.array(z.string()).optional(),
+    healthcare: z.array(z.string()).optional(),
+    financial: z.array(z.string()).optional(),
+    industrySpecific: z.array(z.string()).optional(),
   }),
   
   // 6. Regulatory Requirements
@@ -181,6 +185,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         standards: [],
         compliance: [],
         regulations: [],
+        guidelines: [],
+        healthcare: [],
+        financial: [],
+        industrySpecific: [],
       },
       regulatoryRequirements: [],
       healthcareStandards: [],
@@ -337,12 +345,165 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   ];
   
   // Compliance, standards, frameworks
+  // Healthcare-specific regulations
+  const healthcareRegulationOptions = [
+    { 
+      id: "hipaa", 
+      label: "HIPAA (USA)", 
+      description: "Health Insurance Portability and Accountability Act",
+      details: "Security Rule: Safeguards for ePHI, Breach Notification: Report within 60 days",
+      type: "healthcare"
+    },
+    { 
+      id: "hitech", 
+      label: "HITECH (USA)", 
+      description: "Health Information Technology for Economic and Clinical Health Act",
+      type: "healthcare"
+    },
+    { 
+      id: "hitrust", 
+      label: "HITRUST CSF", 
+      description: "Certification framework aligning with HIPAA/ISO 27001",
+      type: "healthcare"
+    },
+    { 
+      id: "21cfr-part11", 
+      label: "21 CFR Part 11 (FDA)", 
+      description: "Audit trails, electronic signatures for medical devices",
+      type: "healthcare"
+    },
+    { 
+      id: "mdr-eu", 
+      label: "Medical Device Regulation (EU)", 
+      description: "Secure by design for connected medical devices",
+      type: "healthcare"
+    },
+  ];
+  
+  // Financial & payment regulations
+  const financialRegulationOptions = [
+    { 
+      id: "pci-dss", 
+      label: "PCI-DSS (Global)", 
+      description: "Payment Card Industry Data Security Standard",
+      details: "Secure cardholder data, quarterly vulnerability scans",
+      type: "standard"
+    },
+    { 
+      id: "glba", 
+      label: "GLBA (USA)", 
+      description: "Gramm-Leach-Bliley Act - financial data protection",
+      details: "Safeguards Rule: Protect customer financial data",
+      type: "standard"
+    },
+    { 
+      id: "sox", 
+      label: "SOX (USA)", 
+      description: "Sarbanes-Oxley - financial reporting controls",
+      details: "Section 404: IT controls for financial reporting",
+      type: "standard"
+    },
+    { 
+      id: "psd2", 
+      label: "PSD2 (EU)", 
+      description: "Payment Services Directive 2",
+      details: "Strong Customer Authentication (SCA): Multi-factor auth for payments",
+      type: "standard"
+    },
+  ];
+  
+  // Industry-specific regulations
+  const industrySpecificRegulationOptions = [
+    { 
+      id: "nerc-cip", 
+      label: "NERC CIP", 
+      description: "North American Electric Grid",
+      details: "CIP-004: Personnel training for critical systems",
+      type: "standard"
+    },
+    { 
+      id: "tisax", 
+      label: "TISAX (Automotive - EU)", 
+      description: "Trusted Information Security Assessment Exchange",
+      details: "Secure prototype data, supply chain audits",
+      type: "standard"
+    },
+    { 
+      id: "iec-62443", 
+      label: "IEC 62443", 
+      description: "Industrial control systems (ICS) security",
+      type: "standard"
+    },
+    { 
+      id: "fips-140", 
+      label: "FIPS 140-2/3", 
+      description: "Cryptographic module validation",
+      type: "standard"
+    },
+  ];
+  
+  // General compliance frameworks
   const complianceFrameworkOptions = [
-    { id: "iso-27001", label: "ISO 27001" },
-    { id: "nist-csf", label: "NIST CSF" },
-    { id: "cis-csc", label: "CIS CSC" },
-    { id: "cmmc", label: "CMMC" },
-    { id: "cyber-ess-uk", label: "Cyber Essentials (UK)" },
+    { 
+      id: "iso-27001", 
+      label: "ISO 27001", 
+      description: "Information Security Management System (ISMS)",
+      type: "standard"
+    },
+    { 
+      id: "iso-27002", 
+      label: "ISO 27002", 
+      description: "Controls for information security",
+      type: "standard"
+    },
+    { 
+      id: "nist-csf", 
+      label: "NIST CSF", 
+      description: "Risk management (Identify, Protect, Detect, Respond, Recover)",
+      type: "standard"
+    },
+    { 
+      id: "nist-800-53", 
+      label: "NIST SP 800-53", 
+      description: "Security controls for federal systems (used beyond government)",
+      type: "standard"
+    },
+    { 
+      id: "cis-csc", 
+      label: "CIS Controls", 
+      description: "18 prioritized security best practices",
+      type: "standard"
+    },
+    { 
+      id: "soc-2", 
+      label: "SOC 2", 
+      description: "Security, Availability, Confidentiality (for cloud/services)",
+      type: "standard"
+    },
+    { 
+      id: "cmmc", 
+      label: "CMMC", 
+      description: "Cybersecurity Maturity Model Certification (U.S. defense)",
+      type: "standard"
+    },
+    { 
+      id: "cyber-ess-uk", 
+      label: "Cyber Essentials (UK)", 
+      description: "UK government-backed cybersecurity certification",
+      type: "guideline"
+    },
+    { 
+      id: "fisma", 
+      label: "FISMA", 
+      description: "U.S. federal agency security (aligned with NIST)",
+      type: "standard"
+    },
+    { 
+      id: "fedramp", 
+      label: "FedRAMP", 
+      description: "Cloud security for U.S. government",
+      type: "standard"
+    },
   ];
   
   const policyOptions = [
@@ -1237,37 +1398,255 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Select compliance frameworks, standards, and regulations relevant to your organization.
                   </p>
                   
-                  <div className="space-y-6">
+                  {/* Color-coded Legend */}
+                  <div className="flex flex-wrap justify-center gap-6 mb-6 p-3 bg-gray-50 rounded-md">
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-red-600"></div>
+                      <span className="text-sm font-medium">Standards (Mandatory)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-green-600"></div>
+                      <span className="text-sm font-medium">Guidelines (Optional)</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-4 h-4 rounded-full bg-blue-600"></div>
+                      <span className="text-sm font-medium">Healthcare-Specific</span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-8">
+                    {/* Universal Security Frameworks */}
                     <div>
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Compliance Frameworks</h4>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+                        <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+                        Universal Security Frameworks <span className="text-sm font-normal">(Standards)</span>
+                      </h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {complianceFrameworkOptions.map((option) => (
+                          option.type === "standard" && (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="complianceRequirements.frameworks"
+                              render={({ field }) => (
+                                <FormItem
+                                  key={option.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(option.id)}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([...(field.value || []), option.id])
+                                          : field.onChange(
+                                              field.value?.filter(
+                                                (value) => value !== option.id
+                                              ) || []
+                                            );
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{option.label}</FormLabel>
+                                    <FormDescription>
+                                      {option.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          )
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Optional Guidelines */}
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4 text-green-600">
+                        <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+                        Security Framework Guidelines <span className="text-sm font-normal">(Optional)</span>
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {complianceFrameworkOptions.map((option) => (
+                          option.type === "guideline" && (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="complianceRequirements.guidelines"
+                              render={({ field }) => (
+                                <FormItem
+                                  key={option.id}
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-green-50"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(option.id)}
+                                      onCheckedChange={(checked) => {
+                                        return checked
+                                          ? field.onChange([...(field.value || []), option.id])
+                                          : field.onChange(
+                                              field.value?.filter(
+                                                (value) => value !== option.id
+                                              ) || []
+                                            );
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{option.label}</FormLabel>
+                                    <FormDescription>
+                                      {option.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          )
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Healthcare-Specific */}
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">
+                        <span className="inline-block w-3 h-3 rounded-full bg-blue-600 mr-2"></span>
+                        Healthcare-Specific Regulations <span className="text-sm font-normal">(Industry-Specific)</span>
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {healthcareRegulationOptions.map((option) => (
                           <FormField
                             key={option.id}
                             control={form.control}
-                            name="complianceRequirements.frameworks"
+                            name="complianceRequirements.healthcare"
                             render={({ field }) => (
                               <FormItem
                                 key={option.id}
-                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-blue-50"
                               >
                                 <FormControl>
                                   <Checkbox
                                     checked={field.value?.includes(option.id)}
                                     onCheckedChange={(checked) => {
                                       return checked
-                                        ? field.onChange([...field.value, option.id])
+                                        ? field.onChange([...(field.value || []), option.id])
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            )
+                                            ) || []
                                           );
                                     }}
                                   />
                                 </FormControl>
-                                <FormLabel className="font-normal">
-                                  {option.label}
-                                </FormLabel>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel className="font-medium">{option.label}</FormLabel>
+                                  <FormDescription>
+                                    {option.description}
+                                    {option.details && (
+                                      <div className="mt-2 text-xs">
+                                        <span className="block">{option.details}</span>
+                                      </div>
+                                    )}
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Financial & Payment */}
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+                        <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+                        Financial & Payment Regulations <span className="text-sm font-normal">(Standards)</span>
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {financialRegulationOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="complianceRequirements.financial"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...(field.value || []), option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            ) || []
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel className="font-medium">{option.label}</FormLabel>
+                                  <FormDescription>
+                                    {option.description}
+                                    {option.details && (
+                                      <div className="mt-2 text-xs">
+                                        <span className="block">{option.details}</span>
+                                      </div>
+                                    )}
+                                  </FormDescription>
+                                </div>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Industry-Specific */}
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+                        <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+                        Industry-Specific Regulations <span className="text-sm font-normal">(Standards)</span>
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {industrySpecificRegulationOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="complianceRequirements.industrySpecific"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...(field.value || []), option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            ) || []
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <div className="space-y-1 leading-none">
+                                  <FormLabel className="font-medium">{option.label}</FormLabel>
+                                  <FormDescription>
+                                    {option.description}
+                                    {option.details && (
+                                      <div className="mt-2 text-xs">
+                                        <span className="block">{option.details}</span>
+                                      </div>
+                                    )}
+                                  </FormDescription>
+                                </div>
                               </FormItem>
                             )}
                           />

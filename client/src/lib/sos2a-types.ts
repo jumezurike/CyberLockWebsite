@@ -20,6 +20,10 @@ export interface ComplianceRequirements {
   standards: string[]; // ISO, ANSI, etc.
   compliance: string[]; // HIPAA, PCI-DSS, etc.
   regulations: string[]; // CCPA, GDPR, etc.
+  guidelines: string[]; // Guidelines (optional) for security
+  healthcare: string[]; // Healthcare-specific regulations (HIPAA, HITECH, etc.)
+  financial: string[]; // Financial/payment regulations (PCI-DSS, SOX, etc.)
+  industrySpecific: string[]; // Industry-specific regulations (NERC CIP, TISAX, etc.)
 }
 
 export interface PolicyDocuments {
