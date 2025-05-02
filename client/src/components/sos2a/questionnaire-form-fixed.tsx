@@ -410,13 +410,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="security">4. Security Control vs Framework</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
-                <TabsTrigger value="compliance">5. Compliance</TabsTrigger>
+                <TabsTrigger value="compliance">5. Compliance Requirements</TabsTrigger>
                 <TabsTrigger value="regulatory">6. Regulatory Requirements</TabsTrigger>
                 <TabsTrigger value="standards">7. Standards & Guidelines</TabsTrigger>
                 <TabsTrigger value="acq-tools">8. ACQ Tools</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
-                <TabsTrigger value="adversarial">9. Adversarial</TabsTrigger>
+                <TabsTrigger value="adversarial">9. Adversarial Insight</TabsTrigger>
                 <TabsTrigger value="isms">10. Information Security Management System (ISMS)</TabsTrigger>
                 <TabsTrigger value="contact">11. Contact</TabsTrigger>
                 <TabsTrigger value="review">Review</TabsTrigger>

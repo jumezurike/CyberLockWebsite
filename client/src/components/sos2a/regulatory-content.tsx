@@ -23,6 +23,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
         <h4 className="font-medium text-lg border-b pb-2 mb-4">Global Data Protection Regulations</h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
+            key="gdpr"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
@@ -55,6 +56,7 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
           />
           
           <FormField
+            key="ccpa"
             control={form.control}
             name="regulatoryRequirements"
             render={({ field }) => (
