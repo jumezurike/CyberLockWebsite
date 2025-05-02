@@ -20,7 +20,7 @@ export function StandardsContent({ form }: StandardsContentProps) {
     <div className="space-y-8">
       {/* Universal Security Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4">Universal Security Standards</h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4">Universal Security Standards <span className="text-sm font-normal text-red-600">(Mandatory)</span></h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
@@ -82,7 +82,7 @@ export function StandardsContent({ form }: StandardsContentProps) {
                 
       {/* Healthcare-specific Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">Healthcare-specific Standards</h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">Healthcare-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for Healthcare)</span></h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
