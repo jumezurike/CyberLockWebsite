@@ -414,7 +414,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="compliance">5. Compliance Requirements</TabsTrigger>
                 <TabsTrigger value="regulatory">6. Regulatory Requirements</TabsTrigger>
                 <TabsTrigger value="standards">7. Standards & Guidelines</TabsTrigger>
-                <TabsTrigger value="acq-tools">8. ACQ Tools</TabsTrigger>
+                <TabsTrigger value="acq-tools">8. Relevant ACQ Tools</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="adversarial">9. Adversarial Insight</TabsTrigger>
@@ -1361,10 +1361,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* 8. ACQ Tools Tab */}
+              {/* 8. Relevant ACQ Tools Tab */}
               <TabsContent value="acq-tools" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">8. Assessment, Checklist & Questionnaire (ACQ) Tools</h3>
+                  <h3 className="font-medium mb-4">8. Relevant Assessment, Checklist & Questionnaire (ACQ) Tools</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the assessment tools and questionnaires relevant to your organization.
                   </p>
