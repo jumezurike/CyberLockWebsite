@@ -2227,7 +2227,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     <TabsList className="grid w-full grid-cols-6">
                       <TabsTrigger value="universal">Universal Security</TabsTrigger>
                       <TabsTrigger value="healthcare" className="bg-blue-50">Healthcare-specific</TabsTrigger>
-                      <TabsTrigger value="financial">Financial</TabsTrigger>
+                      <TabsTrigger value="financial">Financial & Payment</TabsTrigger>
                       <TabsTrigger value="privacy">Cloud & Data Privacy</TabsTrigger>
                       <TabsTrigger value="government">Government & Critical Infrastructure</TabsTrigger>
                       <TabsTrigger value="regional">Emerging & Regional</TabsTrigger>
@@ -2370,6 +2370,384 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           {/* Loop through universal guidelines */}
                           {standardsAndGuidelinesLibrary.universalGuidelines.map((guideline) => (
+                            <FormField
+                              key={guideline.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(guideline.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), guideline.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== guideline.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{guideline.name}</FormLabel>
+                                    <FormDescription>
+                                      {guideline.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    {/* Healthcare-specific Standards & Guidelines Tab */}
+                    <TabsContent value="healthcare" className="space-y-4 pt-4">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="h-3 w-3 rounded-full bg-primary"></div>
+                        <span className="text-sm font-medium">Standards (Mandatory)</span>
+                        <div className="h-3 w-3 rounded-full bg-secondary ml-4"></div>
+                        <span className="text-sm font-medium">Guidelines (Voluntary)</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-4">
+                        <h4 className="font-medium">Healthcare-specific Standards</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through healthcare standards */}
+                          {standardsAndGuidelinesLibrary.healthcare.map((standard) => (
+                            <FormField
+                              key={standard.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-primary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(standard.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), standard.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== standard.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{standard.name}</FormLabel>
+                                    <FormDescription>
+                                      {standard.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                        
+                        <h4 className="font-medium mt-4">Healthcare-specific Guidelines</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through healthcare guidelines */}
+                          {standardsAndGuidelinesLibrary.healthcareGuidelines.map((guideline) => (
+                            <FormField
+                              key={guideline.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(guideline.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), guideline.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== guideline.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{guideline.name}</FormLabel>
+                                    <FormDescription>
+                                      {guideline.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    {/* Financial & Payment Standards & Guidelines Tab */}
+                    <TabsContent value="financial" className="space-y-4 pt-4">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="h-3 w-3 rounded-full bg-primary"></div>
+                        <span className="text-sm font-medium">Standards (Mandatory)</span>
+                        <div className="h-3 w-3 rounded-full bg-secondary ml-4"></div>
+                        <span className="text-sm font-medium">Guidelines (Voluntary)</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-4">
+                        <h4 className="font-medium">Financial & Payment Standards</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through financial standards */}
+                          {standardsAndGuidelinesLibrary.financial.map((standard) => (
+                            <FormField
+                              key={standard.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-primary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(standard.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), standard.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== standard.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{standard.name}</FormLabel>
+                                    <FormDescription>
+                                      {standard.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                        
+                        <h4 className="font-medium mt-4">Financial & Payment Guidelines</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through operational guidelines since there are no specific financial guidelines */}
+                          {standardsAndGuidelinesLibrary.operationalGuidelines.map((guideline) => (
+                            <FormField
+                              key={guideline.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(guideline.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), guideline.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== guideline.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{guideline.name}</FormLabel>
+                                    <FormDescription>
+                                      {guideline.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    {/* Cloud & Data Privacy Standards & Guidelines Tab */}
+                    <TabsContent value="privacy" className="space-y-4 pt-4">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="h-3 w-3 rounded-full bg-primary"></div>
+                        <span className="text-sm font-medium">Standards (Mandatory)</span>
+                        <div className="h-3 w-3 rounded-full bg-secondary ml-4"></div>
+                        <span className="text-sm font-medium">Guidelines (Voluntary)</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-4">
+                        <h4 className="font-medium">Cloud & Data Privacy Standards</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through privacy standards */}
+                          {standardsAndGuidelinesLibrary.privacy.map((standard) => (
+                            <FormField
+                              key={standard.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-primary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(standard.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), standard.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== standard.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{standard.name}</FormLabel>
+                                    <FormDescription>
+                                      {standard.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                        
+                        <h4 className="font-medium mt-4">Cloud & Data Privacy Guidelines</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through privacy guidelines */}
+                          {standardsAndGuidelinesLibrary.privacyGuidelines.map((guideline) => (
+                            <FormField
+                              key={guideline.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(guideline.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), guideline.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== guideline.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{guideline.name}</FormLabel>
+                                    <FormDescription>
+                                      {guideline.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                          
+                          {/* Add cloud specific guidelines */}
+                          {standardsAndGuidelinesLibrary.cloudGuidelines.map((guideline) => (
+                            <FormField
+                              key={guideline.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(guideline.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), guideline.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== guideline.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{guideline.name}</FormLabel>
+                                    <FormDescription>
+                                      {guideline.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    {/* Government & Critical Infrastructure Standards & Guidelines Tab */}
+                    <TabsContent value="government" className="space-y-4 pt-4">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="h-3 w-3 rounded-full bg-primary"></div>
+                        <span className="text-sm font-medium">Standards (Mandatory)</span>
+                        <div className="h-3 w-3 rounded-full bg-secondary ml-4"></div>
+                        <span className="text-sm font-medium">Guidelines (Voluntary)</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-4">
+                        <h4 className="font-medium">Government & Critical Infrastructure Standards</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through government standards */}
+                          {standardsAndGuidelinesLibrary.government.map((standard) => (
+                            <FormField
+                              key={standard.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-primary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(standard.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), standard.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== standard.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{standard.name}</FormLabel>
+                                    <FormDescription>
+                                      {standard.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                        
+                        <h4 className="font-medium mt-4">Government & Critical Infrastructure Guidelines</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through government guidelines */}
+                          {standardsAndGuidelinesLibrary.governmentGuidelines.map((guideline) => (
                             <FormField
                               key={guideline.id}
                               control={form.control}
