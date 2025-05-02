@@ -1388,18 +1388,26 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     checked={field.value?.includes(option.id)}
                                     onCheckedChange={(checked) => {
                                       return checked
-                                        ? field.onChange([...field.value, option.id])
+                                        ? field.onChange([...(field.value || []), option.id])
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            )
+                                            ) || []
                                           );
                                     }}
                                   />
                                 </FormControl>
-                                <FormLabel className="font-normal">
-                                  {option.label}
-                                </FormLabel>
+                                <div className="space-y-1">
+                                  <FormLabel className="font-normal">
+                                    {option.label}
+                                  </FormLabel>
+                                  {option.purpose && (
+                                    <p className="text-xs text-muted-foreground">
+                                      {option.purpose}
+                                      {option.applicability && ` • ${option.applicability}`}
+                                    </p>
+                                  )}
+                                </div>
                               </FormItem>
                             )}
                           />
@@ -1425,18 +1433,26 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     checked={field.value?.includes(option.id)}
                                     onCheckedChange={(checked) => {
                                       return checked
-                                        ? field.onChange([...field.value, option.id])
+                                        ? field.onChange([...(field.value || []), option.id])
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            )
+                                            ) || []
                                           );
                                     }}
                                   />
                                 </FormControl>
-                                <FormLabel className="font-normal">
-                                  {option.label}
-                                </FormLabel>
+                                <div className="space-y-1">
+                                  <FormLabel className="font-normal">
+                                    {option.label}
+                                  </FormLabel>
+                                  {option.purpose && (
+                                    <p className="text-xs text-muted-foreground">
+                                      {option.purpose}
+                                      {option.applicability && ` • ${option.applicability}`}
+                                    </p>
+                                  )}
+                                </div>
                               </FormItem>
                             )}
                           />
@@ -1462,18 +1478,26 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     checked={field.value?.includes(option.id)}
                                     onCheckedChange={(checked) => {
                                       return checked
-                                        ? field.onChange([...field.value, option.id])
+                                        ? field.onChange([...(field.value || []), option.id])
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            )
+                                            ) || []
                                           );
                                     }}
                                   />
                                 </FormControl>
-                                <FormLabel className="font-normal">
-                                  {option.label}
-                                </FormLabel>
+                                <div className="space-y-1">
+                                  <FormLabel className="font-normal">
+                                    {option.label}
+                                  </FormLabel>
+                                  {option.purpose && (
+                                    <p className="text-xs text-muted-foreground">
+                                      {option.purpose}
+                                      {option.applicability && ` • ${option.applicability}`}
+                                    </p>
+                                  )}
+                                </div>
                               </FormItem>
                             )}
                           />
