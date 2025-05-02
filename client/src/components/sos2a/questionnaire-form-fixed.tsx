@@ -627,7 +627,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="adversarial">9. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
                 <TabsTrigger value="isms">10. Information Security Management System (ISMS)</TabsTrigger>
                 <TabsTrigger value="contact">11. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review">12. Review</TabsTrigger>
+                <TabsTrigger value="review" className="bg-primary text-primary-foreground hover:bg-primary/90">12. Review & Submit</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
@@ -2712,9 +2712,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Review Tab */}
               <TabsContent value="review" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">12. Review Your Questionnaire</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Please review your responses before submitting. After submission, an expert will review your information for the interview and matrix population phase.
+                  <h3 className="font-medium mb-4">12. Review & Submit Your Questionnaire</h3>
+                  <p className="text-sm mb-4">
+                    <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
                   </p>
                   
                   <div className="space-y-6">
@@ -2781,7 +2781,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button type="submit" className="mt-4">Submit Questionnaire</Button>
+                  <Button type="submit" className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-lg px-6 py-5">Submit Questionnaire</Button>
                 </div>
               </TabsContent>
             </Tabs>
