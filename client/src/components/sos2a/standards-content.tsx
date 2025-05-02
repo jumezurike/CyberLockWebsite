@@ -18,9 +18,24 @@ interface StandardsContentProps {
 export function StandardsContent({ form }: StandardsContentProps) {
   return (
     <div className="space-y-8">
+      {/* Color-coded Legend */}
+      <div className="flex flex-wrap gap-6 mb-6 p-3 bg-gray-50 rounded-md">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-red-600"></div>
+          <span className="text-sm font-medium">Standards (Mandatory)</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-green-600"></div>
+          <span className="text-sm font-medium">Guidelines (Optional)</span>
+        </div>
+      </div>
+      
       {/* Universal Security Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">Universal Security Standards <span className="text-sm font-normal text-red-600">(Mandatory)</span></h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+          Universal Security Standards <span className="text-sm font-normal text-red-600">(Mandatory)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}

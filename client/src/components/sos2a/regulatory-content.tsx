@@ -18,9 +18,24 @@ interface RegulatoryContentProps {
 export function RegulatoryContent({ form }: RegulatoryContentProps) {
   return (
     <div className="space-y-8">
+      {/* Color-coded Legend */}
+      <div className="flex flex-wrap gap-6 mb-6 p-3 bg-gray-50 rounded-md">
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-red-600"></div>
+          <span className="text-sm font-medium">Standards (Mandatory)</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-green-600"></div>
+          <span className="text-sm font-medium">Guidelines (Optional)</span>
+        </div>
+      </div>
+      
       {/* Global Data Protection */}
       <div>
-        <h4 className="font-medium text-lg border-b pb-2 mb-4">Global Data Protection Regulations</h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-green-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+          Global Data Protection Regulations <span className="text-sm font-normal">(Guidelines)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             key="gdpr"
@@ -91,7 +106,10 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
       
       {/* Healthcare Specific */}
       <div>
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">Healthcare-Specific Regulations</h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-blue-600 mr-2"></span>
+          Healthcare-Specific Regulations <span className="text-sm font-normal">(Industry-Specific)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             key="hipaa"
@@ -158,7 +176,10 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
       
       {/* Financial & Payment */}
       <div>
-        <h4 className="font-medium text-lg border-b pb-2 mb-4">Financial & Payment Regulations</h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-green-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
+          Financial & Payment Regulations <span className="text-sm font-normal">(Guidelines)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             key="pci-dss"
@@ -228,7 +249,10 @@ export function RegulatoryContent({ form }: RegulatoryContentProps) {
       
       {/* Government & Critical Infrastructure */}
       <div>
-        <h4 className="font-medium text-lg border-b pb-2 mb-4">Government & Critical Infrastructure</h4>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
+          Government & Critical Infrastructure <span className="text-sm font-normal">(Mandatory)</span>
+        </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             key="nist-800-171"
