@@ -51,6 +51,9 @@ export interface Sos2aFormData {
   // 3. Configuration Baseline
   configurationManagement?: string;
   cisBenchmarks?: string[];
+  configBaseline?: string; // Added for dropdown selection
+  primaryCisBenchmark?: string; // Added for dropdown selection
+  cisVersion?: string; // Added for version selection
   
   // 4. Security Control Framework
   securityMeasures: string[];
@@ -80,16 +83,26 @@ export interface Sos2aFormData {
     questionnaires?: string[];
   };
   
-  // 9. Adversarial Insight
+  // 9. Adversarial Insight (MITRE ATT&CK)
   osHardening: {
     stig: boolean;
     scap: boolean;
     guidelines: string[];
   };
+  // Enhanced MITRE ATT&CK fields
+  mitreTactics?: string[]; // MITRE ATT&CK Tactics with TA IDs
+  threatActorTypes?: string[]; // Different types of threat actors
   adversarialInsights: {
     mitreAttackIds: string[];
   };
   threatActors?: string[];
+  
+  // Additional Regulatory Content
+  educationRequirements?: string[]; // Education sector regulatory requirements
+  cloudRequirements?: string[]; // Cloud security requirements
+  cyberRequirements?: string[]; // Cybersecurity standard requirements
+  esgRequirements?: string[]; // Environmental & Social Governance requirements
+  bestPracticeFrameworks?: string[]; // Best practice frameworks (ITIL, COBIT, OWASP)
   
   // 10. ISMS
   ismsImplementation?: string;
