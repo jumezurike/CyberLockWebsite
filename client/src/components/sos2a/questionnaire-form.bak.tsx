@@ -15,7 +15,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
-import { StandardsContent } from "./standards-content";
 
 const formSchema = z.object({
   // 1. Business Information
@@ -2104,10 +2103,106 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the standards and guidelines relevant to your organization.
                   </p>
-                  
-                  <StandardsContent form={form} />
-                </div>
-              </TabsContent>
+                              <FormField
+                                control={form.control}
+                                name="regulatoryRequirements"
+                                render={({ field }) => (
+                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes("gdpr")}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), "gdpr"]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== "gdpr"
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                      <FormLabel className="font-medium">GDPR (EU)</FormLabel>
+                                      <FormDescription>
+                                        General Data Protection Regulation
+                                        <div className="mt-2 text-xs">
+                                          <span className="block"><strong>Applies to:</strong> Any organization processing EU residents' data</span>
+                                          <span className="block"><strong>Penalties:</strong> Up to 4% global revenue or €20M</span>
+                                        </div>
+                                      </FormDescription>
+                                    </div>
+                                  </FormItem>
+                                )}
+                              />
+                              
+                              <FormField
+                                control={form.control}
+                                name="regulatoryRequirements"
+                                render={({ field }) => (
+                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes("ccpa")}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), "ccpa"]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== "ccpa"
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                      <FormLabel className="font-medium">CCPA/CPRA (California)</FormLabel>
+                                      <FormDescription>
+                                        California Consumer Privacy Act
+                                        <div className="mt-2 text-xs">
+                                          <span className="block"><strong>Applies to:</strong> Businesses in California meeting certain thresholds</span>
+                                        </div>
+                                      </FormDescription>
+                                    </div>
+                                  </FormItem>
+                                )}
+                              />
+                              
+                              <FormField
+                                control={form.control}
+                                name="regulatoryRequirements"
+                                render={({ field }) => (
+                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes("pipeda")}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), "pipeda"]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== "pipeda"
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <div className="space-y-1 leading-none">
+                                      <FormLabel className="font-medium">PIPEDA (Canada)</FormLabel>
+                                      <FormDescription>
+                                        Personal Information Protection and Electronic Documents Act
+                                      </FormDescription>
+                                    </div>
+                                  </FormItem>
+                                )}
+                              />
+                            </div>
+                          </div>
+                          
+                          {/* Healthcare Specific */}
+                          <div>
+                            <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">Healthcare-Specific Regulations</h4>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              <FormField
+                                control={form.control}
+                                name="regulatoryRequirements"
                                 render={({ field }) => (
                                   <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-blue-50">
                                     <FormControl>
