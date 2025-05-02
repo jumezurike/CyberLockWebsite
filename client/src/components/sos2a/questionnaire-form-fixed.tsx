@@ -2780,8 +2780,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                 </div>
                 
-                <div className="flex justify-center">
-                  <Button type="submit" className="mt-4 bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-lg px-10 py-5 w-1/2">Submit Questionnaire</Button>
+                <div className="border rounded-md p-4 mt-4">
+                  <h4 className="text-base font-medium mb-2">Final Step: Submit Your Assessment</h4>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Click the button below to submit your completed questionnaire. Our security experts will review your information and contact you to schedule the next steps in your assessment process.
+                  </p>
+                  <div className="flex justify-center">
+                    <Button type="submit" className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-lg px-10 py-5 w-3/4">Submit Questionnaire</Button>
+                  </div>
                 </div>
               </TabsContent>
             </Tabs>
