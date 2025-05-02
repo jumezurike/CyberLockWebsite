@@ -2224,13 +2224,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </p>
                   
                   <Tabs defaultValue="universal" className="w-full">
-                    <TabsList className="grid w-full grid-cols-6">
+                    <TabsList className="grid w-full grid-cols-7">
                       <TabsTrigger value="universal">Universal Security</TabsTrigger>
                       <TabsTrigger value="healthcare" className="bg-blue-50">Healthcare-specific</TabsTrigger>
                       <TabsTrigger value="financial">Financial & Payment</TabsTrigger>
                       <TabsTrigger value="privacy">Cloud & Data Privacy</TabsTrigger>
                       <TabsTrigger value="government">Government & Critical Infrastructure</TabsTrigger>
                       <TabsTrigger value="regional">Emerging & Regional</TabsTrigger>
+                      <TabsTrigger value="industry">Industry-specific</TabsTrigger>
                     </TabsList>
                     
                     {/* Regional Standards & Guidelines Tab */}
@@ -2779,6 +2780,241 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               )}
                             />
                           ))}
+                        </div>
+                      </div>
+                    </TabsContent>
+                    
+                    {/* Industry-specific Standards & Guidelines Tab */}
+                    <TabsContent value="industry" className="space-y-4 pt-4">
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className="h-3 w-3 rounded-full bg-primary"></div>
+                        <span className="text-sm font-medium">Standards (Mandatory)</span>
+                        <div className="h-3 w-3 rounded-full bg-secondary ml-4"></div>
+                        <span className="text-sm font-medium">Guidelines (Voluntary)</span>
+                      </div>
+                      
+                      <div className="grid grid-cols-1 gap-4">
+                        <h4 className="font-medium">Industry-specific Standards</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Loop through industry standards */}
+                          {standardsAndGuidelinesLibrary.industry.map((standard) => (
+                            <FormField
+                              key={standard.id}
+                              control={form.control}
+                              name="healthcareStandards"
+                              render={({ field }) => (
+                                <FormItem
+                                  className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-primary/5"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(standard.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), standard.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== standard.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <div className="space-y-1 leading-none">
+                                    <FormLabel className="font-medium">{standard.name}</FormLabel>
+                                    <FormDescription>
+                                      {standard.description}
+                                    </FormDescription>
+                                  </div>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                        
+                        <h4 className="font-medium mt-4">Industry-specific Guidelines</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Industrial Control Systems Guidelines */}
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={false}
+                                onCheckedChange={(checked) => {
+                                  // Implementation would be added here
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="font-medium">IEC 62443 (Industrial Control Systems - ICS)</FormLabel>
+                              <FormDescription>
+                                Guide to ICS Security - Network segmentation, secure remote access, and ICS incident response.
+                                Implement "zone and conduit" architectures per IEC 62443-3-3.
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                          
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={false}
+                                onCheckedChange={(checked) => {
+                                  // Implementation would be added here
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="font-medium">CISA ICS Defense-in-Depth Strategies</FormLabel>
+                              <FormDescription>
+                                Layered protections (physical, network, endpoint).
+                                Deploy unidirectional gateways for OT/IT boundary protection.
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                          
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={false}
+                                onCheckedChange={(checked) => {
+                                  // Implementation would be added here
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="font-medium">ISA/IEC 62443 Cybersecurity Lifecycle Guide</FormLabel>
+                              <FormDescription>
+                                Secure development for ICS components (62443-4-1).
+                                Apply secure coding practices to PLCs/RTUs.
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                          
+                          {/* Automotive Industry Guidelines */}
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={false}
+                                onCheckedChange={(checked) => {
+                                  // Implementation would be added here
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="font-medium">ENX TISAX Assessment Guide (Automotive)</FormLabel>
+                              <FormDescription>
+                                Prototype data protection, supplier audits.
+                                Encrypt design files and restrict access via VDR (Virtual Data Rooms).
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                          
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={false}
+                                onCheckedChange={(checked) => {
+                                  // Implementation would be added here
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="font-medium">Auto-ISAC Best Practices for Vehicle Cybersecurity</FormLabel>
+                              <FormDescription>
+                                ECU hardening, OTA update security.
+                                Code signing for firmware updates.
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                          
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={false}
+                                onCheckedChange={(checked) => {
+                                  // Implementation would be added here
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="font-medium">ISO/SAE 21434 Practical Implementation Guide</FormLabel>
+                              <FormDescription>
+                                Threat modeling for connected vehicles.
+                                Conduct TARA (Threat Analysis and Risk Assessment).
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                          
+                          {/* Cryptographic Modules Guidelines */}
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={false}
+                                onCheckedChange={(checked) => {
+                                  // Implementation would be added here
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="font-medium">NIST CMVP Implementation Guidance (FIPS 140-2/3)</FormLabel>
+                              <FormDescription>
+                                Validating cryptographic modules (HSMs, TLS stacks).
+                                Use FIPS-approved algorithms (AES-256, SHA-384).
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                          
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={false}
+                                onCheckedChange={(checked) => {
+                                  // Implementation would be added here
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="font-medium">CIS Cryptographic Benchmark</FormLabel>
+                              <FormDescription>
+                                Configuring FIPS-compliant OS/apps (e.g., Windows/Linux).
+                                Enable FIPS mode in OS group policies.
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                          
+                          <FormItem
+                            className="flex flex-row items-start space-x-3 space-y-0 p-3 border rounded-md bg-secondary/5"
+                          >
+                            <FormControl>
+                              <Checkbox
+                                checked={false}
+                                onCheckedChange={(checked) => {
+                                  // Implementation would be added here
+                                }}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel className="font-medium">Cloud Security Alliance FIPS Guidance</FormLabel>
+                              <FormDescription>
+                                FIPS in cloud (AWS KMS, Azure Key Vault).
+                                Use "FIPS-only" flags in cloud service configurations.
+                              </FormDescription>
+                            </div>
+                          </FormItem>
                         </div>
                       </div>
                     </TabsContent>
