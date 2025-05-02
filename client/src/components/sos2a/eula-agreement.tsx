@@ -122,7 +122,7 @@ export function EulaAgreement({ isChecked, onCheckChange }: EulaAgreementProps) 
 
             <h3 className="font-semibold">12. CONTACT INFORMATION</h3>
             <p>
-              If you have any questions about this EULA, please contact us at legal@cyberlockx.xyz.
+              If you have any questions about this EULA, please contact us at info@cyberlockx.xyz.
             </p>
           </div>
           
