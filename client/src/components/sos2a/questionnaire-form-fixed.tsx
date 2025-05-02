@@ -2613,14 +2613,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
                 
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Report Type & Confirmation</h3>
+                  <h3 className="font-medium mb-4">Assessment Type Selection</h3>
                   <div className="space-y-6">
                     <FormField
                       control={form.control}
                       name="reportType"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Assessment Type</FormLabel>
+                          <FormLabel>Select Assessment Type</FormLabel>
                           <Select 
                             onValueChange={field.onChange}
                             defaultValue={field.value}
@@ -2636,8 +2636,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </SelectContent>
                           </Select>
                           <FormDescription>
-                            Preliminary assessment provides a quick overview, while comprehensive assessment offers 
-                            detailed analysis with tailored recommendations.
+                            <strong>Preliminary Assessment:</strong> Includes interview, matrix population, threat modeling, and qualitative assessment with recommendations.
+                            <br />
+                            <strong>Comprehensive Assessment:</strong> Evidence-based evaluation with detailed report and tailored remediation strategies.
                           </FormDescription>
                           <FormMessage />
                         </FormItem>
@@ -2700,9 +2701,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Review Tab */}
               <TabsContent value="review" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Review Your Assessment</h3>
+                  <h3 className="font-medium mb-4">Review Your Questionnaire</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Please review your responses before submitting the assessment. You can go back to any section to make changes if needed.
+                    Please review your responses before submitting. After submission, an expert will review your information for the interview and matrix population phase.
                   </p>
                   
                   <div className="space-y-6">
@@ -2775,7 +2776,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button type="submit" className="mt-4">Submit Assessment</Button>
+                  <Button type="submit" className="mt-4">Submit Questionnaire</Button>
                 </div>
               </TabsContent>
             </Tabs>
