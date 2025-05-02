@@ -67,6 +67,10 @@ export interface Sos2aFormData {
   healthcareStandards?: string[];
   healthcareGuidelines?: string[];
   securityGuidelines?: string[];
+  governmentGuidelines?: string[];
+  privacyGuidelines?: string[];
+  cloudIotGuidelines?: string[];
+  operationalGuidelines?: string[];
   policyDocuments: PolicyDocuments;
   
   // 8. Relevant ACQ Tool (Assessment, Checklist, Questionnaire)
