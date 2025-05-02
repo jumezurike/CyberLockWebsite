@@ -241,9 +241,9 @@ export function StandardsContent({ form }: StandardsContentProps) {
                 
       {/* Healthcare-specific Standards */}
       <div className="mb-6">
-        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
-          <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
-          Healthcare-specific Standards <span className="text-sm font-normal text-red-600">(Mandatory for Healthcare)</span>
+        <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">
+          <span className="inline-block w-3 h-3 rounded-full bg-blue-600 mr-2"></span>
+          Healthcare-specific Standards <span className="text-sm font-normal text-blue-600">(Mandatory for Healthcare)</span>
         </h4>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
