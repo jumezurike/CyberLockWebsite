@@ -3282,7 +3282,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     {/* Section 5-7: Compliance, Regulatory, Standards */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">5-7. Compliance & Standards</h4>
+                        <h4 className="text-base font-medium">5-7. Compliance, Standards & Guidelines</h4>
                         <div className="space-x-2">
                           <Button 
                             type="button" 
@@ -3310,6 +3310,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             onClick={() => document.querySelector('[data-value="standards"]')?.click()}
                           >
                             Edit Standards
+                          </Button>
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            size="sm"
+                            className="text-xs"
+                            onClick={() => {
+                              // Find the standards tab and click it first
+                              document.querySelector('[data-value="standards"]')?.click();
+                              // Then scroll to guidelines section
+                              setTimeout(() => {
+                                const guidelinesSection = document.getElementById('guidelines-section');
+                                if (guidelinesSection) {
+                                  guidelinesSection.scrollIntoView({ behavior: 'smooth' });
+                                }
+                              }, 100);
+                            }}
+                          >
+                            Edit Guidelines
                           </Button>
                         </div>
                       </div>

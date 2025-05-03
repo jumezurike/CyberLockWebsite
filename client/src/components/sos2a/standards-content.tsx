@@ -938,7 +938,7 @@ export function StandardsContent({ form }: StandardsContentProps) {
       </div>
       
       {/* Guidelines Section */}
-      <div className="mt-8">
+      <div className="mt-8" id="guidelines-section">
         <h4 className="font-medium text-lg border-b pb-2 mb-4 text-green-600">
           <span className="inline-block w-3 h-3 rounded-full bg-green-600 mr-2"></span>
           Security Guidelines <span className="text-sm font-normal text-green-600">(Optional)</span>
