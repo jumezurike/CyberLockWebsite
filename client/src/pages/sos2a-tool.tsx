@@ -182,8 +182,8 @@ export default function Sos2aTool() {
   
   // Generate scorecard data with the 12 standard parameters
   const generateScorecardData = (data: MatrixItem[], reportType: 'preliminary' | 'comprehensive') => {
-    // Each parameter has equal weight of 8.33%
-    const standardWeight = 8.33;
+    // Each parameter has equal weight of 10%
+    const standardWeight = 10;
     
     // Function to generate a score based on reportType and implementation status
     const generateScore = (baseScore: number): number => {
@@ -201,86 +201,73 @@ export default function Sos2aTool() {
       return Math.max(0, Math.min(100, finalScore));
     };
     
-    // Start with base scores for each parameter
-    const phishingScore = generateScore(data.some(item => 
-      item.operationControls.implemented && 
-      item.operationControls.frameworks.includes('Security Awareness Training')
+    // Question 2 - Operation Security
+    const operationSecurityScore = generateScore(data.some(item => 
+      item.operationControls.implemented 
     ) ? 70 : 40);
     
-    const securityAwarenessScore = generateScore(data.some(item => 
-      item.operationControls.implemented && 
-      item.educationAwareness
+    // Question 3 - Management Security
+    const managementSecurityScore = generateScore(data.some(item => 
+      item.managementControls.implemented
     ) ? 65 : 35);
     
-    // Check if any infrastructure types are related to external/internet presence
-    const internetRelatedInfra = ['E-commerce', 'Marketing Website', 'Web Application', 'Cloud Services'];
-    const externalFootprintScore = generateScore(data.some(item => 
-      item.technologyControls.implemented && 
-      (item.technologyControls.frameworks.includes('External Scanning') || 
-       internetRelatedInfra.some(infraType => item.infraType.includes(infraType)))
+    // Question 4 - Technology Security
+    const technologySecurityScore = generateScore(data.some(item => 
+      item.technologyControls.implemented
     ) ? 60 : 30);
     
-    const darkWebScore = generateScore(data.some(item => 
-      item.operationControls.implemented && 
-      item.mitreTactics.includes('Intelligence Gathering')
+    // Question 5 - People Security
+    const peopleSecurityScore = generateScore(data.some(item => 
+      item.peopleControls.implemented
     ) ? 55 : 25);
     
-    const endpointSecurityScore = generateScore(data.some(item => 
-      item.technologyControls.implemented && 
-      item.technologyControls.frameworks.includes('Endpoint Protection')
+    // Question 6 - Standards & Frameworks
+    const standardsScore = generateScore(data.some(item => 
+      item.standards.nistCsf || 
+      item.standards.iso27001 || 
+      item.standards.cisCsc
     ) ? 75 : 45);
     
-    const cloudSecurityScore = generateScore(data.some(item => 
-      item.technologyControls.implemented && 
-      item.technologyControls.frameworks.includes('Cloud Security')
-    ) ? 65 : 40);
-    
-    const dataSecurityScore = generateScore(data.some(item => 
-      item.managementControls.implemented && 
-      item.managementControls.frameworks.includes('Data Protection')
-    ) ? 70 : 45);
-    
-    const browserSecurityScore = generateScore(data.some(item => 
-      item.technologyControls.implemented && 
-      item.technologyControls.frameworks.includes('Browser Security')
-    ) ? 60 : 35);
-    
-    const emailProtectionScore = generateScore(data.some(item => 
-      item.technologyControls.implemented && 
-      item.technologyControls.frameworks.includes('Email Security')
-    ) ? 70 : 40);
-    
-    const compliancesScore = generateScore(data.some(item => 
+    // Question 7 - Compliance Requirements
+    const complianceScore = generateScore(data.some(item => 
       item.complianceStandards.pciDss || 
       item.complianceStandards.hipaa || 
       item.complianceStandards.gdpr
-    ) ? 65 : 30);
+    ) ? 65 : 40);
     
+    // Question 8 - Regulatory Requirements
     const regulatoryScore = generateScore(data.some(item => 
       item.regulatoryRequirements.pciDss || 
       item.regulatoryRequirements.hipaa || 
       item.regulatoryRequirements.gdpr
-    ) ? 60 : 25);
+    ) ? 70 : 45);
     
-    const frameworksScore = generateScore(data.some(item => 
-      item.standards.nistCsf || 
-      item.standards.iso27001 || 
-      item.standards.cisCsc
-    ) ? 70 : 35);
+    // Question 9 - ISMS (Information Security Management System)
+    const ismsScore = generateScore(data.some(item => 
+      item.ismsImplemented
+    ) ? 60 : 35);
+    
+    // Question 10 - Risk Management
+    const riskManagementScore = generateScore(data.some(item => 
+      item.riskManagementProcess
+    ) ? 70 : 40);
+    
+    // Education & Awareness
+    const educationAwarenessScore = generateScore(data.some(item => 
+      item.educationAwareness
+    ) ? 65 : 30);
     
     return [
-      { parameter: "Phishing screening", weight: standardWeight, score: phishingScore },
-      { parameter: "Security awareness", weight: standardWeight, score: securityAwarenessScore },
-      { parameter: "External footprints", weight: standardWeight, score: externalFootprintScore },
-      { parameter: "Dark web", weight: standardWeight, score: darkWebScore },
-      { parameter: "Endpoint security", weight: standardWeight, score: endpointSecurityScore },
-      { parameter: "Cloud security", weight: standardWeight, score: cloudSecurityScore },
-      { parameter: "Data security", weight: standardWeight, score: dataSecurityScore },
-      { parameter: "Browser security", weight: standardWeight, score: browserSecurityScore },
-      { parameter: "Email protection", weight: standardWeight, score: emailProtectionScore },
-      { parameter: "Compliances", weight: standardWeight, score: compliancesScore },
-      { parameter: "Regulatory requirements", weight: standardWeight, score: regulatoryScore },
-      { parameter: "Frameworks", weight: standardWeight, score: frameworksScore },
+      { parameter: "Operation Security", weight: standardWeight, score: operationSecurityScore },
+      { parameter: "Management Security", weight: standardWeight, score: managementSecurityScore },
+      { parameter: "Technology Security", weight: standardWeight, score: technologySecurityScore },
+      { parameter: "People Security", weight: standardWeight, score: peopleSecurityScore },
+      { parameter: "Standards & Frameworks", weight: standardWeight, score: standardsScore },
+      { parameter: "Compliance Requirements", weight: standardWeight, score: complianceScore },
+      { parameter: "Regulatory Requirements", weight: standardWeight, score: regulatoryScore },
+      { parameter: "Information Security Management", weight: standardWeight, score: ismsScore },
+      { parameter: "Risk Management Process", weight: standardWeight, score: riskManagementScore },
+      { parameter: "Education & Awareness", weight: standardWeight, score: educationAwarenessScore },
     ];
   };
 
