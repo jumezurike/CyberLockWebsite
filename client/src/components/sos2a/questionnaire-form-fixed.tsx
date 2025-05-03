@@ -3340,9 +3340,34 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 form.getValues("healthcareStandards").join(", ") : 
                                 "None selected"}</div>
                                 
-                          <div className="font-medium">Guidelines:</div>
-                          <div>{form.getValues("complianceRequirements.guidelines")?.length > 0 ? 
-                                form.getValues("complianceRequirements.guidelines").join(", ") : 
+                          <div className="font-medium">Security Guidelines:</div>
+                          <div>{form.getValues("securityGuidelines")?.length > 0 ? 
+                                form.getValues("securityGuidelines").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Healthcare Guidelines:</div>
+                          <div>{form.getValues("healthcareGuidelines")?.length > 0 ? 
+                                form.getValues("healthcareGuidelines").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Privacy Guidelines:</div>
+                          <div>{form.getValues("privacyGuidelines")?.length > 0 ? 
+                                form.getValues("privacyGuidelines").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Government Guidelines:</div>
+                          <div>{form.getValues("governmentGuidelines")?.length > 0 ? 
+                                form.getValues("governmentGuidelines").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Cloud/IoT Guidelines:</div>
+                          <div>{form.getValues("cloudIotGuidelines")?.length > 0 ? 
+                                form.getValues("cloudIotGuidelines").join(", ") : 
+                                "None selected"}</div>
+                                
+                          <div className="font-medium">Operational Guidelines:</div>
+                          <div>{form.getValues("operationalGuidelines")?.length > 0 ? 
+                                form.getValues("operationalGuidelines").join(", ") : 
                                 "None selected"}</div>
                         </div>
                       </div>
