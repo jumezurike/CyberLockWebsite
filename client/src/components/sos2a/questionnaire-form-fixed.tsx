@@ -56,6 +56,8 @@ const formSchema = z.object({
   configurationManagement: z.string().optional(),
   systemHardeningApproach: z.string().optional(),
   operatingSystems: z.array(z.string()).optional(),
+  customOperatingSystem: z.string().optional(),
+  showCustomOperatingSystem: z.boolean().optional(),
   primaryCisBenchmark: z.string().optional(),
   cisVersion: z.string().optional(),
   cisBenchmarks: z.array(z.string()).optional(),
@@ -192,6 +194,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       configurationManagement: "",
       systemHardeningApproach: "",
       operatingSystems: [],
+      customOperatingSystem: "",
+      showCustomOperatingSystem: false,
       primaryCisBenchmark: "",
       cisVersion: "",
       cisBenchmarks: [],
@@ -652,6 +656,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     // Mobile OS
     { id: "android-enterprise", label: "Android (Enterprise)", category: "Mobile OS" },
     { id: "ios-enterprise", label: "iOS (Enterprise)", category: "Mobile OS" },
+    
+    // Legacy/Other OS
+    { id: "other-os", label: "Other/Legacy OS", category: "Legacy/Other" },
   ];
   
   const assessmentOptions = assessmentTools.assessments.map((assessment) => ({
@@ -1409,6 +1416,41 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         ))}
                                     </div>
                                   </div>
+                                  
+                                  {/* Legacy/Other OS Section */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Legacy/Other Operating Systems</h4>
+                                    <div className="grid grid-cols-1 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Legacy/Other")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValue = checked
+                                                    ? [...(field.value || []), os.id]
+                                                    : (field.value || []).filter(value => value !== os.id);
+                                                  field.onChange(newValue);
+                                                  
+                                                  // Show/hide custom OS field based on checkbox
+                                                  if (os.id === "other-os") {
+                                                    form.setValue("showCustomOperatingSystem", checked);
+                                                    if (!checked) {
+                                                      form.setValue("customOperatingSystem", "");
+                                                    }
+                                                  }
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
                               <FormDescription className="mt-2">
@@ -1418,6 +1460,26 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </FormItem>
                           )}
                         />
+                        
+                        {/* Custom OS input field that appears when "Other/Legacy OS" is checked */}
+                        {form.watch("showCustomOperatingSystem") && (
+                          <FormField
+                            control={form.control}
+                            name="customOperatingSystem"
+                            render={({ field }) => (
+                              <FormItem className="mt-4">
+                                <FormLabel>Legacy/Custom Operating System</FormLabel>
+                                <FormDescription className="mb-2">
+                                  Please specify the legacy or custom operating system(s) used in your environment
+                                </FormDescription>
+                                <FormControl>
+                                  <Input placeholder="Enter your legacy or custom operating system" {...field} />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
                       </div>
                     </div>
                     
