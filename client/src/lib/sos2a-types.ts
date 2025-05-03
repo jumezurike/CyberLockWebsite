@@ -38,6 +38,7 @@ export interface Sos2aFormData {
   businessName: string;
   businessAddress: string;
   businessLocation: {
+    city: string;
     state: string;
     country: string;
     zipCode?: string;
@@ -50,6 +51,8 @@ export interface Sos2aFormData {
   
   // 2. Infrastructure Mode of Operation
   operationMode: string[];
+  customOperationMode?: string;
+  showCustomOperationMode?: boolean;
   internetPresence: string[];
   
   // 3. Configuration Baseline

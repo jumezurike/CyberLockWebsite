@@ -48,6 +48,8 @@ const formSchema = z.object({
   
   // 2. Infrastructure Mode of Operation
   operationMode: z.array(z.string()).min(1, "At least one operation mode is required"),
+  customOperationMode: z.string().optional(),
+  showCustomOperationMode: z.boolean().optional(),
   internetPresence: z.array(z.string()).min(1, "At least one internet presence is required"),
   
   // 3. Configuration Baseline
@@ -184,6 +186,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       
       // 2-3. Infrastructure and Configuration
       operationMode: [],
+      customOperationMode: "",
+      showCustomOperationMode: false,
       internetPresence: [],
       configurationManagement: "",
       systemHardeningApproach: "",
@@ -967,13 +971,18 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         <Checkbox
                                           checked={field.value?.includes(mode.id)}
                                           onCheckedChange={(checked) => {
-                                            return checked
-                                              ? field.onChange([...field.value, mode.id])
-                                              : field.onChange(
-                                                field.value?.filter(
+                                            const newValue = checked
+                                              ? [...field.value, mode.id]
+                                              : field.value?.filter(
                                                   (value) => value !== mode.id
-                                                )
-                                              );
+                                                );
+                                            
+                                            // Set the showCustomOperationMode based on whether "other" is selected
+                                            if (mode.id === 'other') {
+                                              form.setValue('showCustomOperationMode', checked);
+                                            }
+                                            
+                                            return field.onChange(newValue);
                                           }}
                                         />
                                       </FormControl>
@@ -990,6 +999,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         </FormItem>
                       )}
                     />
+                    
+                    {form.watch('showCustomOperationMode') && (
+                      <FormField
+                        control={form.control}
+                        name="customOperationMode"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Other Operation Mode</FormLabel>
+                            <FormDescription className="mb-2">
+                              Please specify the other operation mode(s) used in your environment
+                            </FormDescription>
+                            <FormControl>
+                              <Input placeholder="Enter other operation mode" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
                     
                     <FormField
                       control={form.control}
@@ -1018,13 +1046,18 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         <Checkbox
                                           checked={field.value?.includes(option.id)}
                                           onCheckedChange={(checked) => {
-                                            return checked
-                                              ? field.onChange([...field.value, option.id])
-                                              : field.onChange(
-                                                field.value?.filter(
+                                            const newValue = checked
+                                              ? [...field.value, option.id]
+                                              : field.value?.filter(
                                                   (value) => value !== option.id
-                                                )
-                                              );
+                                                );
+                                            
+                                            // Set the showCustomOperationMode based on whether "other" is selected
+                                            if (option.id === 'other') {
+                                              form.setValue('showCustomOperationMode', checked);
+                                            }
+                                            
+                                            return field.onChange(newValue);
                                           }}
                                         />
                                       </FormControl>
