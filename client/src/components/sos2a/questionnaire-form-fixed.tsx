@@ -35,6 +35,7 @@ const formSchema = z.object({
   businessName: z.string().min(2, "Business name is required"),
   businessAddress: z.string().min(5, "Business address is required"),
   businessLocation: z.object({
+    city: z.string().min(2, "City is required"),
     state: z.string().min(2, "State is required"),
     country: z.string().min(2, "Country is required"),
     zipCode: z.string().optional(),
@@ -170,6 +171,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       businessName: "",
       businessAddress: "",
       businessLocation: {
+        city: "",
         state: "",
         country: "",
         zipCode: "",
@@ -847,7 +849,21 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     />
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                    <FormField
+                      control={form.control}
+                      name="businessLocation.city"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>City</FormLabel>
+                          <FormControl>
+                            <Input placeholder="City" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
                     <FormField
                       control={form.control}
                       name="businessLocation.state"
@@ -861,7 +877,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         </FormItem>
                       )}
                     />
-                    
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
                     <FormField
                       control={form.control}
                       name="businessLocation.country"
