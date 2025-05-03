@@ -52,6 +52,7 @@ const formSchema = z.object({
   // 3. Configuration Baseline
   configurationManagement: z.string().optional(),
   systemHardeningApproach: z.string().optional(),
+  operatingSystems: z.array(z.string()).optional(),
   primaryCisBenchmark: z.string().optional(),
   cisVersion: z.string().optional(),
   cisBenchmarks: z.array(z.string()).optional(),
@@ -184,6 +185,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       internetPresence: [],
       configurationManagement: "",
       systemHardeningApproach: "",
+      operatingSystems: [],
       primaryCisBenchmark: "",
       cisVersion: "",
       cisBenchmarks: [],
@@ -1200,6 +1202,166 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               </Select>
                               <FormDescription className="mt-2">
                                 Configuration baselines define the secure state all systems should maintain.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="operatingSystems"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Operating Systems</FormLabel>
+                              <FormDescription className="mb-2">
+                                Select the operating systems used in your environment
+                              </FormDescription>
+                              <div className="border rounded-md p-4 max-h-80 overflow-y-auto">
+                                <div className="space-y-6">
+                                  {/* Windows OS Section */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Windows</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Windows Server" || os.category === "Windows Client")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValue = checked
+                                                    ? [...(field.value || []), os.id]
+                                                    : (field.value || []).filter(value => value !== os.id);
+                                                  field.onChange(newValue);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Linux Distributions */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Linux Distributions</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => 
+                                          os.category === "Red Hat Family" || 
+                                          os.category === "Debian Family" || 
+                                          os.category === "SUSE Family" || 
+                                          os.category === "Other Linux"
+                                        )
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValue = checked
+                                                    ? [...(field.value || []), os.id]
+                                                    : (field.value || []).filter(value => value !== os.id);
+                                                  field.onChange(newValue);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Unix-Based OS */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Unix-Based OS</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Unix-Based OS")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValue = checked
+                                                    ? [...(field.value || []), os.id]
+                                                    : (field.value || []).filter(value => value !== os.id);
+                                                  field.onChange(newValue);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Cloud/Container OS */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Cloud/Container OS</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Cloud/Container OS")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValue = checked
+                                                    ? [...(field.value || []), os.id]
+                                                    : (field.value || []).filter(value => value !== os.id);
+                                                  field.onChange(newValue);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Network/Embedded OS & Mobile OS */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Network/Embedded OS & Mobile</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Network/Embedded OS" || os.category === "Mobile OS")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValue = checked
+                                                    ? [...(field.value || []), os.id]
+                                                    : (field.value || []).filter(value => value !== os.id);
+                                                  field.onChange(newValue);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <FormDescription className="mt-2">
+                                CIS benchmarks and security configurations will be customized based on your OS selection.
                               </FormDescription>
                               <FormMessage />
                             </FormItem>
