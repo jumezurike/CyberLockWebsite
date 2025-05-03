@@ -28,34 +28,46 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
   }));
   
   // Create radar chart data for the five SOS²A components
-  const radarData = [
-    {
-      subject: "Qualitative Assessment",
-      A: report.reportType === 'comprehensive' ? 80 : 65,
-      fullMark: 100,
+  const sos2aComponents = [
+    { 
+      name: "Qualitative Assessment", 
+      score: report.rasbitaScore?.categories?.identify || 0,
+      fullMark: 100 
     },
-    {
-      subject: "Quantitative Analysis",
-      A: report.reportType === 'comprehensive' ? 75 : 0, // Not available in preliminary
-      fullMark: 100,
+    { 
+      name: "Quantitative Analysis", 
+      score: report.rasbitaScore?.categories?.protect || 0,
+      fullMark: 100 
     },
-    {
-      subject: "RASBITA CBA",
-      A: report.rasbitaScore?.total || 50,
-      fullMark: 100,
+    { 
+      name: "RASBITA Cost-Benefit", 
+      score: report.rasbitaScore?.categories?.detect || 0,
+      fullMark: 100 
     },
-    {
-      subject: "RASBITA G&M",
-      A: (report.rasbitaScore?.categories?.govern || 0) * 100,
-      fullMark: 100,
+    { 
+      name: "RASBITA Gov & Mgmt", 
+      score: report.rasbitaScore?.categories?.govern || 0,
+      fullMark: 100 
     },
-    {
-      subject: "Architecture Threat Modeling",
-      // Check if architecture diagrams were provided, otherwise mark as "Not Assessed"
-      A: report.reportType === 'comprehensive' ? 70 : 40, 
+    { 
+      name: "Architecture Threat Modeling",
+      // Check if architecture diagrams were provided, otherwise mark as N/A
+      score: report.matrixData && report.matrixData.some(item => 
+        item.technologyControls?.frameworks?.includes("architecture")
+      ) ? (report.rasbitaScore?.categories?.respond || 0) : 0,
       fullMark: 100,
-    },
+      notAssessed: !(report.matrixData && report.matrixData.some(item => 
+        item.technologyControls?.frameworks?.includes("architecture")
+      ))
+    }
   ];
+  // Format components for radar chart
+  const radarData = sos2aComponents.map(component => ({
+    subject: component.name,
+    A: component.score,
+    fullMark: component.fullMark,
+    notAssessed: component.notAssessed || false
+  }));
 
   // Colors for the pie chart
   const COLORS = [
@@ -169,8 +181,8 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
             {radarData.map((item, index) => (
               <div key={index} className="p-2 border rounded">
                 <div className="font-medium">{item.subject}</div>
-                <div className={`${getScoreColor(item.A)} font-bold mt-1`}>
-                  {item.A === 0 ? "Not Assessed" : `${item.A}%`}
+                <div className={`${item.notAssessed ? 'text-gray-500' : getScoreColor(item.A)} font-bold mt-1`}>
+                  {item.notAssessed ? "Cannot be assessed" : item.A === 0 ? "Not Available" : `${item.A}%`}
                 </div>
               </div>
             ))}
@@ -187,8 +199,40 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
           <p className="text-sm text-gray-600">
             {reportType === 'comprehensive' 
               ? "This scorecard reflects quantitative measurements based on 6 months of evidence collection, showing the actual state of your security controls and their effectiveness across all five SOS²A components."
-              : "This preliminary scorecard is based on declared controls and assessment answers, providing an initial view of potential security posture without verification. Some components may be marked as 'Not Assessed' if required information was not provided."}
+              : "This preliminary scorecard is based on declared controls and assessment answers, providing an initial view of potential security posture without verification. Some components may be marked as 'Not Available' or 'Cannot be assessed' if required information was not provided."}
           </p>
+          
+          {/* Architecture Diagram Explanation */}
+          {radarData.some(item => item.notAssessed) && (
+            <div className="mt-3 p-3 bg-gray-50 border rounded-md">
+              <h5 className="text-sm font-semibold mb-1">Architecture Threat Modeling Component</h5>
+              <p className="text-xs text-gray-600">
+                The Architecture Threat Modeling component requires uploaded architecture diagrams to be assessed. Without these diagrams, this component is marked as "Cannot be assessed" and is excluded from the overall score calculation. Your final score is calculated as an average of the available components only.
+              </p>
+            </div>
+          )}
+          
+          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="border rounded-md p-3">
+              <h5 className="text-sm font-semibold">SOS²A 5-Component Score</h5>
+              <p className="text-xs text-gray-600 mt-1">
+                SOS²A uses five integrated components to provide a 500% view of your security posture, where each component contributes 100%. This provides a more comprehensive assessment than traditional single-dimension security tools.
+              </p>
+            </div>
+            <div className="border rounded-md p-3">
+              <h5 className="text-sm font-semibold">Report Types</h5>
+              <div className="grid grid-cols-2 gap-2 mt-1">
+                <div className="text-xs">
+                  <span className="font-medium">Preliminary:</span> 
+                  <p className="text-gray-600">Quick assessment based on questionnaire responses</p>
+                </div>
+                <div className="text-xs">
+                  <span className="font-medium">Comprehensive:</span> 
+                  <p className="text-gray-600">Detailed assessment with evidence collection and verification</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>
