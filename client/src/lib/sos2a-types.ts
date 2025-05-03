@@ -62,6 +62,9 @@ export interface Sos2aFormData {
   configBaseline?: string; // Added for dropdown selection
   primaryCisBenchmark?: string; // Added for dropdown selection
   cisVersion?: string; // Added for version selection
+  operatingSystems?: string[]; // List of selected operating systems
+  customOperatingSystem?: string; // Custom/legacy OS input
+  showCustomOperatingSystem?: boolean; // Controls visibility of custom OS field
   
   // 4. Security Control Framework
   securityMeasures: string[];
