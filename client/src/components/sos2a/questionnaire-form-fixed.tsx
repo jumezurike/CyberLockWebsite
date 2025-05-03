@@ -599,9 +599,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "windows-server-2019", label: "Windows Server 2019", category: "Windows Server" },
     { id: "windows-server-2016", label: "Windows Server 2016", category: "Windows Server" },
     { id: "windows-server-2012-r2", label: "Windows Server 2012 R2", category: "Windows Server" },
+    { id: "other-windows-server", label: "Other Windows Server", category: "Windows Server" },
     { id: "windows-11", label: "Windows 11", category: "Windows Client" },
     { id: "windows-10", label: "Windows 10", category: "Windows Client" },
     { id: "windows-8.1", label: "Windows 8.1", category: "Windows Client" },
+    { id: "other-windows-client", label: "Other Windows Client", category: "Windows Client" },
     
     // Linux Distributions
     { id: "rhel-9", label: "Red Hat Enterprise Linux (RHEL) 9", category: "Red Hat Family" },
@@ -612,6 +614,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "oracle-linux-9", label: "Oracle Linux 9", category: "Red Hat Family" },
     { id: "oracle-linux-8", label: "Oracle Linux 8", category: "Red Hat Family" },
     { id: "oracle-linux-7", label: "Oracle Linux 7", category: "Red Hat Family" },
+    { id: "other-redhat", label: "Other Red Hat Family OS", category: "Red Hat Family" },
     
     { id: "debian-12", label: "Debian 12", category: "Debian Family" },
     { id: "debian-11", label: "Debian 11", category: "Debian Family" },
@@ -619,10 +622,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "ubuntu-22.04", label: "Ubuntu 22.04 LTS", category: "Debian Family" },
     { id: "ubuntu-20.04", label: "Ubuntu 20.04 LTS", category: "Debian Family" },
     { id: "ubuntu-18.04", label: "Ubuntu 18.04 LTS", category: "Debian Family" },
+    { id: "other-debian", label: "Other Debian Family OS", category: "Debian Family" },
     
     { id: "sles-15", label: "SUSE Linux Enterprise Server (SLES) 15", category: "SUSE Family" },
     { id: "sles-12", label: "SUSE Linux Enterprise Server (SLES) 12", category: "SUSE Family" },
     { id: "opensuse-leap-15", label: "openSUSE Leap 15", category: "SUSE Family" },
+    { id: "other-suse", label: "Other SUSE Family OS", category: "SUSE Family" },
     
     { id: "amazon-linux-2023", label: "Amazon Linux 2023", category: "Other Linux" },
     { id: "amazon-linux-2", label: "Amazon Linux 2", category: "Other Linux" },
@@ -631,6 +636,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "rocky-linux-9", label: "Rocky Linux 9", category: "Other Linux" },
     { id: "rocky-linux-8", label: "Rocky Linux 8", category: "Other Linux" },
     { id: "fedora-latest", label: "Fedora (Latest)", category: "Other Linux" },
+    { id: "other-linux", label: "Other Linux Distribution", category: "Other Linux" },
     
     // Unix-Based OS
     { id: "ibm-aix-7.2", label: "IBM AIX 7.2", category: "Unix-Based OS" },
@@ -638,6 +644,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "solaris-11.4", label: "Solaris 11.4", category: "Unix-Based OS" },
     { id: "solaris-11.3", label: "Solaris 11.3", category: "Unix-Based OS" },
     { id: "hp-ux-11i-v3", label: "HP-UX 11i v3", category: "Unix-Based OS" },
+    { id: "other-unix", label: "Other Unix OS", category: "Unix-Based OS" },
     
     // Cloud/Container OS
     { id: "gcp-compute-engine", label: "Google Compute Engine (GCE)", category: "Cloud/Container OS" },
@@ -646,19 +653,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "aws-ami", label: "Amazon Machine Image (AMI)", category: "Cloud/Container OS" },
     { id: "docker", label: "Docker", category: "Cloud/Container OS" },
     { id: "kubernetes", label: "Kubernetes", category: "Cloud/Container OS" },
+    { id: "other-cloud", label: "Other Cloud/Container Platform", category: "Cloud/Container OS" },
     
     // Network/Embedded OS
     { id: "cisco-ios", label: "Cisco IOS (Router/Switch OS)", category: "Network/Embedded OS" },
     { id: "vmware-esxi-8", label: "VMware ESXi 8.0", category: "Network/Embedded OS" },
     { id: "vmware-esxi-7", label: "VMware ESXi 7.0", category: "Network/Embedded OS" },
     { id: "pfsense", label: "PfSense (Firewall OS)", category: "Network/Embedded OS" },
+    { id: "other-network", label: "Other Network/Embedded OS", category: "Network/Embedded OS" },
     
     // Mobile OS
     { id: "android-enterprise", label: "Android (Enterprise)", category: "Mobile OS" },
     { id: "ios-enterprise", label: "iOS (Enterprise)", category: "Mobile OS" },
+    { id: "other-mobile", label: "Other Mobile OS", category: "Mobile OS" },
     
     // Legacy/Other OS
-    { id: "other-os", label: "Other/Legacy OS", category: "Legacy/Other" },
+    { id: "mainframe", label: "Mainframe OS", category: "Legacy/Other" },
+    { id: "as400", label: "AS/400", category: "Legacy/Other" },
+    { id: "dos", label: "DOS-based systems", category: "Legacy/Other" },
+    { id: "other-legacy", label: "Other Legacy System", category: "Legacy/Other" },
   ];
   
   const assessmentOptions = assessmentTools.assessments.map((assessment) => ({
@@ -711,6 +724,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       // Remove the item from the array, safely handling undefined
       return (currentValues || []).filter(value => value !== optionId);
     }
+  };
+  
+  // Handle operating system selection including "Other" options
+  const handleOsCheckboxChange = (currentValues: string[] | undefined, os: { id: string, label: string, category: string }, checked: boolean) => {
+    const newValues = handleCheckboxArrayChange(currentValues, os.id, checked);
+    
+    // Handle the "Other" OS options to show/hide the custom input field
+    if (os.id.startsWith('other-') && checked) {
+      form.setValue("showCustomOperatingSystem", true);
+    } else if (os.id.startsWith('other-') && !checked) {
+      // If unchecking an "Other" option, check if any other "other-" options are still selected
+      const otherOsStillSelected = newValues.some(id => id.startsWith('other-'));
+      if (!otherOsStillSelected) {
+        form.setValue("showCustomOperatingSystem", false);
+        form.setValue("customOperatingSystem", "");
+      }
+    }
+    
+    return newValues;
   };
 
   return (
