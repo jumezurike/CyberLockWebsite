@@ -1321,10 +1321,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                               <Checkbox
                                                 checked={field.value?.includes(os.id)}
                                                 onCheckedChange={(checked) => {
-                                                  const newValue = checked
-                                                    ? [...(field.value || []), os.id]
-                                                    : (field.value || []).filter(value => value !== os.id);
-                                                  field.onChange(newValue);
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
                                                 }}
                                               />
                                             </FormControl>
@@ -1353,10 +1351,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                               <Checkbox
                                                 checked={field.value?.includes(os.id)}
                                                 onCheckedChange={(checked) => {
-                                                  const newValue = checked
-                                                    ? [...(field.value || []), os.id]
-                                                    : (field.value || []).filter(value => value !== os.id);
-                                                  field.onChange(newValue);
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
                                                 }}
                                               />
                                             </FormControl>
@@ -1380,10 +1376,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                               <Checkbox
                                                 checked={field.value?.includes(os.id)}
                                                 onCheckedChange={(checked) => {
-                                                  const newValue = checked
-                                                    ? [...(field.value || []), os.id]
-                                                    : (field.value || []).filter(value => value !== os.id);
-                                                  field.onChange(newValue);
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
                                                 }}
                                               />
                                             </FormControl>
@@ -1407,10 +1401,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                               <Checkbox
                                                 checked={field.value?.includes(os.id)}
                                                 onCheckedChange={(checked) => {
-                                                  const newValue = checked
-                                                    ? [...(field.value || []), os.id]
-                                                    : (field.value || []).filter(value => value !== os.id);
-                                                  field.onChange(newValue);
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
                                                 }}
                                               />
                                             </FormControl>
@@ -1434,10 +1426,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                               <Checkbox
                                                 checked={field.value?.includes(os.id)}
                                                 onCheckedChange={(checked) => {
-                                                  const newValue = checked
-                                                    ? [...(field.value || []), os.id]
-                                                    : (field.value || []).filter(value => value !== os.id);
-                                                  field.onChange(newValue);
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
                                                 }}
                                               />
                                             </FormControl>
@@ -1461,18 +1451,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                               <Checkbox
                                                 checked={field.value?.includes(os.id)}
                                                 onCheckedChange={(checked) => {
-                                                  const newValue = checked
-                                                    ? [...(field.value || []), os.id]
-                                                    : (field.value || []).filter(value => value !== os.id);
-                                                  field.onChange(newValue);
-                                                  
-                                                  // Show/hide custom OS field based on checkbox
-                                                  if (os.id === "other-os") {
-                                                    form.setValue("showCustomOperatingSystem", checked);
-                                                    if (!checked) {
-                                                      form.setValue("customOperatingSystem", "");
-                                                    }
-                                                  }
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
                                                 }}
                                               />
                                             </FormControl>
@@ -1493,19 +1473,24 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           )}
                         />
                         
-                        {/* Custom OS input field that appears when "Other/Legacy OS" is checked */}
+                        {/* Custom OS input field that appears when any "Other" OS option is checked */}
                         {form.watch("showCustomOperatingSystem") && (
                           <FormField
                             control={form.control}
                             name="customOperatingSystem"
                             render={({ field }) => (
                               <FormItem className="mt-4">
-                                <FormLabel>Legacy/Custom Operating System</FormLabel>
+                                <FormLabel>Custom Operating System Details</FormLabel>
                                 <FormDescription className="mb-2">
-                                  Please specify the legacy or custom operating system(s) used in your environment
+                                  Please provide details about any custom, legacy, or other operating systems you selected above. 
+                                  Include version numbers, edition information, and any special configurations.
                                 </FormDescription>
                                 <FormControl>
-                                  <Input placeholder="Enter your legacy or custom operating system" {...field} />
+                                  <Textarea 
+                                    placeholder="Example: 'Other Windows Server' - Windows Server 2003 R2 Standard, still used for legacy application X. 'Other Unix OS' - HP-UX 11i v2 running on critical financial systems." 
+                                    className="min-h-[100px]"
+                                    {...field} 
+                                  />
                                 </FormControl>
                                 <FormMessage />
                               </FormItem>
