@@ -301,6 +301,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "commercial-internet", label: "Commercial Internet" },
     { id: "dedicated-connection", label: "Dedicated Connection" },
     { id: "satellite", label: "Satellite" },
+    { id: "ai-applications", label: "AI Applications (ChatGPT, Mistral, DeepSeek, etc.)" },
     { id: "other", label: "Other" },
   ];
   
@@ -577,6 +578,72 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "remote-work", label: "Remote Work Guidelines" },
     { id: "data-security", label: "Data Security Guidelines" },
     { id: "physical-security", label: "Physical Security Guidelines" },
+  ];
+  
+  // Operating System options for baseline configuration
+  const operatingSystemOptions = [
+    // Windows OS
+    { id: "windows-server-2022", label: "Windows Server 2022", category: "Windows Server" },
+    { id: "windows-server-2019", label: "Windows Server 2019", category: "Windows Server" },
+    { id: "windows-server-2016", label: "Windows Server 2016", category: "Windows Server" },
+    { id: "windows-server-2012-r2", label: "Windows Server 2012 R2", category: "Windows Server" },
+    { id: "windows-11", label: "Windows 11", category: "Windows Client" },
+    { id: "windows-10", label: "Windows 10", category: "Windows Client" },
+    { id: "windows-8.1", label: "Windows 8.1", category: "Windows Client" },
+    
+    // Linux Distributions
+    { id: "rhel-9", label: "Red Hat Enterprise Linux (RHEL) 9", category: "Red Hat Family" },
+    { id: "rhel-8", label: "Red Hat Enterprise Linux (RHEL) 8", category: "Red Hat Family" },
+    { id: "rhel-7", label: "Red Hat Enterprise Linux (RHEL) 7", category: "Red Hat Family" },
+    { id: "centos-8-stream", label: "CentOS 8 Stream", category: "Red Hat Family" },
+    { id: "centos-7", label: "CentOS 7", category: "Red Hat Family" },
+    { id: "oracle-linux-9", label: "Oracle Linux 9", category: "Red Hat Family" },
+    { id: "oracle-linux-8", label: "Oracle Linux 8", category: "Red Hat Family" },
+    { id: "oracle-linux-7", label: "Oracle Linux 7", category: "Red Hat Family" },
+    
+    { id: "debian-12", label: "Debian 12", category: "Debian Family" },
+    { id: "debian-11", label: "Debian 11", category: "Debian Family" },
+    { id: "debian-10", label: "Debian 10", category: "Debian Family" },
+    { id: "ubuntu-22.04", label: "Ubuntu 22.04 LTS", category: "Debian Family" },
+    { id: "ubuntu-20.04", label: "Ubuntu 20.04 LTS", category: "Debian Family" },
+    { id: "ubuntu-18.04", label: "Ubuntu 18.04 LTS", category: "Debian Family" },
+    
+    { id: "sles-15", label: "SUSE Linux Enterprise Server (SLES) 15", category: "SUSE Family" },
+    { id: "sles-12", label: "SUSE Linux Enterprise Server (SLES) 12", category: "SUSE Family" },
+    { id: "opensuse-leap-15", label: "openSUSE Leap 15", category: "SUSE Family" },
+    
+    { id: "amazon-linux-2023", label: "Amazon Linux 2023", category: "Other Linux" },
+    { id: "amazon-linux-2", label: "Amazon Linux 2", category: "Other Linux" },
+    { id: "almalinux-9", label: "AlmaLinux 9", category: "Other Linux" },
+    { id: "almalinux-8", label: "AlmaLinux 8", category: "Other Linux" },
+    { id: "rocky-linux-9", label: "Rocky Linux 9", category: "Other Linux" },
+    { id: "rocky-linux-8", label: "Rocky Linux 8", category: "Other Linux" },
+    { id: "fedora-latest", label: "Fedora (Latest)", category: "Other Linux" },
+    
+    // Unix-Based OS
+    { id: "ibm-aix-7.2", label: "IBM AIX 7.2", category: "Unix-Based OS" },
+    { id: "ibm-aix-7.1", label: "IBM AIX 7.1", category: "Unix-Based OS" },
+    { id: "solaris-11.4", label: "Solaris 11.4", category: "Unix-Based OS" },
+    { id: "solaris-11.3", label: "Solaris 11.3", category: "Unix-Based OS" },
+    { id: "hp-ux-11i-v3", label: "HP-UX 11i v3", category: "Unix-Based OS" },
+    
+    // Cloud/Container OS
+    { id: "gcp-compute-engine", label: "Google Compute Engine (GCE)", category: "Cloud/Container OS" },
+    { id: "azure-vm-linux", label: "Azure Virtual Machines (Linux)", category: "Cloud/Container OS" },
+    { id: "azure-vm-windows", label: "Azure Virtual Machines (Windows)", category: "Cloud/Container OS" },
+    { id: "aws-ami", label: "Amazon Machine Image (AMI)", category: "Cloud/Container OS" },
+    { id: "docker", label: "Docker", category: "Cloud/Container OS" },
+    { id: "kubernetes", label: "Kubernetes", category: "Cloud/Container OS" },
+    
+    // Network/Embedded OS
+    { id: "cisco-ios", label: "Cisco IOS (Router/Switch OS)", category: "Network/Embedded OS" },
+    { id: "vmware-esxi-8", label: "VMware ESXi 8.0", category: "Network/Embedded OS" },
+    { id: "vmware-esxi-7", label: "VMware ESXi 7.0", category: "Network/Embedded OS" },
+    { id: "pfsense", label: "PfSense (Firewall OS)", category: "Network/Embedded OS" },
+    
+    // Mobile OS
+    { id: "android-enterprise", label: "Android (Enterprise)", category: "Mobile OS" },
+    { id: "ios-enterprise", label: "iOS (Enterprise)", category: "Mobile OS" },
   ];
   
   const assessmentOptions = assessmentTools.assessments.map((assessment) => ({
