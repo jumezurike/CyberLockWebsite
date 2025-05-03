@@ -168,6 +168,44 @@ interface QuestionnaireFormProps {
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
   
+  // Helper function to handle OS checkbox changes
+  const handleOsCheckboxChange = (currentValues: string[] = [], os: any, isChecked: boolean): string[] => {
+    let newValues = [...(currentValues || [])];
+    
+    if (isChecked) {
+      // Add the selected OS
+      newValues.push(os.id);
+    } else {
+      // Remove the OS if unchecked
+      newValues = newValues.filter(id => id !== os.id);
+    }
+    
+    // Check if any "Other" OS option is selected
+    const hasOtherOs = newValues.some(id => 
+      id === "other-windows-server" || 
+      id === "other-windows-client" || 
+      id === "other-rhel" || 
+      id === "other-debian" || 
+      id === "other-linux" || 
+      id === "other-unix" || 
+      id === "other-cloud" || 
+      id === "other-container" || 
+      id === "other-network" || 
+      id === "other-mobile" || 
+      id === "other-os"
+    );
+    
+    // When we return, the form will update - so we need to set the "showCustomOperatingSystem" field
+    setTimeout(() => {
+      form.setValue("showCustomOperatingSystem", hasOtherOs);
+      if (!hasOtherOs) {
+        form.setValue("customOperatingSystem", "");
+      }
+    }, 0);
+    
+    return newValues;
+  };
+  
   const form = useForm<Sos2aFormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -726,24 +764,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     }
   };
   
-  // Handle operating system selection including "Other" options
-  const handleOsCheckboxChange = (currentValues: string[] | undefined, os: { id: string, label: string, category: string }, checked: boolean) => {
-    const newValues = handleCheckboxArrayChange(currentValues, os.id, checked);
-    
-    // Handle the "Other" OS options to show/hide the custom input field
-    if (os.id.startsWith('other-') && checked) {
-      form.setValue("showCustomOperatingSystem", true);
-    } else if (os.id.startsWith('other-') && !checked) {
-      // If unchecking an "Other" option, check if any other "other-" options are still selected
-      const otherOsStillSelected = newValues.some(id => id.startsWith('other-'));
-      if (!otherOsStillSelected) {
-        form.setValue("showCustomOperatingSystem", false);
-        form.setValue("customOperatingSystem", "");
-      }
-    }
-    
-    return newValues;
-  };
+  // We already have a handleOsCheckboxChange function defined above
 
   return (
     <Card className="w-full">
@@ -3179,11 +3200,35 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <div className="font-medium">Operation Mode:</div>
                           <div>{form.getValues("operationMode").join(", ") || "None selected"}</div>
                           
+                          {form.getValues("showCustomOperationMode") && (
+                            <>
+                              <div className="font-medium">Custom Operation Mode:</div>
+                              <div>{form.getValues("customOperationMode") || "Not specified"}</div>
+                            </>
+                          )}
+                          
                           <div className="font-medium">Internet Presence:</div>
                           <div>{form.getValues("internetPresence").join(", ") || "None selected"}</div>
                           
                           <div className="font-medium">Configuration Management:</div>
                           <div>{form.getValues("configurationManagement") || "Not specified"}</div>
+                          
+                          <div className="font-medium">Operating Systems:</div>
+                          <div className="text-xs">
+                            {form.getValues("operatingSystems")?.length > 0 
+                              ? form.getValues("operatingSystems").map(osId => {
+                                  const os = operatingSystemOptions.find(o => o.id === osId);
+                                  return os ? os.label : osId;
+                                }).join(", ") 
+                              : "None selected"}
+                          </div>
+                          
+                          {form.getValues("showCustomOperatingSystem") && (
+                            <>
+                              <div className="font-medium">Custom OS Details:</div>
+                              <div className="text-xs">{form.getValues("customOperatingSystem") || "Not specified"}</div>
+                            </>
+                          )}
                           
                           <div className="font-medium">System Hardening Approach:</div>
                           <div>{form.getValues("systemHardeningApproach") || "Not specified"}</div>
