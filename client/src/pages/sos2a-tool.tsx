@@ -163,10 +163,10 @@ export default function Sos2aTool() {
     setFormData(data);
     setShowReviewModal(true);
     
-    // Show toast for testing
+    // Show informative toast with clear next steps
     toast({
-      title: "Form received",
-      description: "Your form data has been received successfully.",
+      title: "Questionnaire received",
+      description: "Please review your submission details before proceeding to the next step.",
     });
   };
   
@@ -175,8 +175,8 @@ export default function Sos2aTool() {
     setShowReviewModal(false);
     setStep('matrix');
     toast({
-      title: "Assessment submitted",
-      description: "Your assessment has been received. Proceeding to the matrix analysis.",
+      title: "Assessment confirmed",
+      description: "Moving to Interview & Matrix Population step. This is where our expert system will apply industry-specific knowledge to your assessment.",
     });
   };
   
@@ -1307,6 +1307,61 @@ export default function Sos2aTool() {
   
   return (
     <div className="container mx-auto py-8">
+      {/* Assessment Submission Confirmation Modal */}
+      {showReviewModal && formData && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-full max-w-2xl p-6 shadow-xl">
+            <h2 className="text-2xl font-bold mb-4 text-[#7936b0]">Assessment Submission Confirmation</h2>
+            
+            <div className="border rounded-md p-4 mb-4 bg-gray-50">
+              <h3 className="font-medium mb-2">Assessment Details</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-medium">Business Name:</span> {formData.businessName}
+                </div>
+                <div>
+                  <span className="font-medium">Industry:</span> {formData.industry}
+                </div>
+                <div>
+                  <span className="font-medium">Report Type:</span> {formData.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'}
+                </div>
+                <div>
+                  <span className="font-medium">Contact:</span> {formData.contactInfo.name}
+                </div>
+              </div>
+            </div>
+            
+            <div className="mb-6">
+              <h3 className="font-medium mb-2">Next Steps in Your Assessment</h3>
+              <p className="text-sm mb-2">
+                Your assessment questionnaire has been successfully submitted. Here's what happens next:
+              </p>
+              <ol className="text-sm list-decimal pl-5 space-y-1">
+                <li>You will now proceed to the <strong>Interview & Matrix Population</strong> step</li>
+                <li>We'll review parameters from sections 2-10 of your questionnaire</li>
+                <li>Our expert system will apply industry-specific knowledge to your organization's needs</li>
+                <li>Additional interviews may be conducted to gather more detailed information</li>
+                <li>A final assessment report will be generated based on all collected data</li>
+              </ol>
+            </div>
+            
+            <div className="flex justify-end gap-4">
+              <Button 
+                variant="outline" 
+                onClick={() => setShowReviewModal(false)}
+              >
+                Cancel
+              </Button>
+              <Button 
+                className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white" 
+                onClick={handleFinalSubmit}
+              >
+                Proceed to Matrix Analysis
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
       <Card className="mb-8">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
