@@ -3282,7 +3282,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     {/* Section 5-7: Compliance, Regulatory, Standards */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">5-7. Compliance, Standards & Guidelines</h4>
+                        <h4 className="text-base font-medium">5-7. Compliance & Standards</h4>
                         <div className="space-x-2">
                           <Button 
                             type="button" 
