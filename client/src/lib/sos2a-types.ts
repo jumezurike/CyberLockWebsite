@@ -134,6 +134,8 @@ export interface Sos2aFormData {
   // Report options
   matrixData: any | null; // Using any here since matrix data can be complex and varied
   reportType: 'preliminary' | 'comprehensive';
+  preliminaryReportId?: string; // Reference to preliminary report ID (required for comprehensive reports)
+  remediationStrategies?: Array<{issue: string; strategy: string}>; // Remediation strategies from preliminary report
   availabilityConfirmation: boolean;
   referralPermission: boolean;
   
@@ -418,6 +420,7 @@ export interface AssessmentReport {
   id: string;
   businessId: string;
   reportType: 'preliminary' | 'comprehensive';
+  preliminaryReportId?: string; // Reference to preliminary report ID (required for comprehensive reports)
   createdAt: string;
   securityScore: number;
   businessLocation: {
@@ -425,6 +428,7 @@ export interface AssessmentReport {
     country: string;
     zipCode?: string;
   };
+  remediationStrategies?: Array<{issue: string; strategy: string}>; // Remediation strategies from preliminary report
   industry: string;
   businessServices: string;
   operationModes: string[];

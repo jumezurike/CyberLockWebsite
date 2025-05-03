@@ -13,6 +13,11 @@ import {
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 
+// Helper to generate a unique ID for the preliminary report
+const generateUniqueId = () => {
+  return 'prelim_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
+};
+
 interface PreliminaryReportProps {
   formData: Sos2aFormData;
   updateFormData: (data: Partial<Sos2aFormData>) => void;
@@ -404,7 +409,22 @@ export default function PreliminaryReport({
         </Button>
         <Button 
           onClick={() => {
-            updateFormData({ reportType: "preliminary" });
+            // Generate a unique ID for this preliminary report
+            const preliminaryReportId = generateUniqueId();
+            
+            // Extract remediation strategies from risk findings
+            const remediationStrategies = riskFindings.map(finding => ({
+              issue: finding.title,
+              strategy: `Remediate the ${finding.severity.toLowerCase()} risk: ${finding.description}`
+            }));
+            
+            // Update form data with preliminary report info
+            updateFormData({ 
+              reportType: "preliminary",
+              preliminaryReportId,
+              remediationStrategies
+            });
+            
             onNext();
           }} 
           className="bg-secondary hover:bg-orange-600"

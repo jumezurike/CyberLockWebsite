@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { AlertTriangle, Clock, Lock, ArrowRight } from "lucide-react";
+import { AlertTriangle, Clock, Lock, ArrowRight, AlertCircle } from "lucide-react";
 import { Sos2aFormData } from "@/lib/sos2a-types";
 import { Link } from "wouter";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 interface ComprehensiveReportProps {
   formData: Sos2aFormData;
@@ -14,10 +15,59 @@ export default function ComprehensiveReport({
   onPrev
 }: ComprehensiveReportProps) {
   const businessName = formData.businessName || "Your Business";
+  
+  // Check if preliminary report exists
+  const hasPreliminaryReport = !!formData.preliminaryReportId;
+  const hasRemediationStrategies = formData.remediationStrategies && formData.remediationStrategies.length > 0;
+  
+  // If no preliminary report, show error and return
+  if (!hasPreliminaryReport) {
+    return (
+      <div>
+        <h2 className="text-2xl font-semibold mb-6 text-primary">Step 4: Comprehensive Report</h2>
+        
+        <Alert variant="destructive" className="mb-6">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Prerequisite Missing</AlertTitle>
+          <AlertDescription>
+            A preliminary report must be completed before generating a comprehensive report.
+            The remediation and mitigation strategies from the preliminary report are required
+            for the comprehensive assessment.
+          </AlertDescription>
+        </Alert>
+        
+        <div className="flex justify-start mt-6">
+          <Button variant="default" onClick={onPrev}>
+            Return to Generate Preliminary Report
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
       <h2 className="text-2xl font-semibold mb-6 text-primary">Step 4: Comprehensive Report</h2>
+      
+      {hasRemediationStrategies && (
+        <Card className="mb-6 border-green-200">
+          <CardContent className="pt-6">
+            <h3 className="text-lg font-semibold mb-4 text-green-700">Remediation Strategies from Preliminary Report</h3>
+            <p className="text-sm text-neutral-600 mb-4">
+              These remediation strategies from your preliminary report (ID: {formData.preliminaryReportId}) 
+              will be integrated into your comprehensive assessment:
+            </p>
+            <ul className="space-y-2 mb-4">
+              {formData.remediationStrategies?.map((item, index) => (
+                <li key={index} className="bg-green-50 p-3 rounded border border-green-100">
+                  <p className="font-medium text-sm text-green-800">{item.issue}</p>
+                  <p className="text-sm text-green-700">{item.strategy}</p>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
+      )}
       
       <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-6">
         <div className="flex items-start">
