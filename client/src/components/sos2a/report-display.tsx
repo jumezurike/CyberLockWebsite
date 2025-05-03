@@ -42,6 +42,16 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <CardDescription>
                 Generated on {formatDate(report.createdAt)}
               </CardDescription>
+              {report.reportType === 'preliminary' && (
+                <div className="mt-2 text-sm text-blue-600">
+                  This is a preliminary assessment. For a comprehensive assessment with deeper analysis and evidence-based scoring, proceed to the comprehensive assessment path.
+                </div>
+              )}
+              {report.reportType === 'comprehensive' && (
+                <div className="mt-2 text-sm text-green-600">
+                  This comprehensive assessment includes evidence collected over a 6+ month period and provides a more accurate view of your security posture.
+                </div>
+              )}
             </div>
             <div className="flex flex-col items-center bg-primary/10 p-3 rounded-md">
               <span className="text-2xl font-bold text-primary">{report.securityScore}%</span>

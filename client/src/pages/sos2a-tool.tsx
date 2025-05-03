@@ -178,6 +178,20 @@ export default function Sos2aTool() {
       title: "Assessment confirmed",
       description: "Moving to Interview & Matrix Population step. This is where our expert system will apply industry-specific knowledge to your assessment.",
     });
+    
+    // Check if user provided architecture diagrams
+    const hasArchitectureDiagrams = formData?.hasArchitectureDiagrams === true;
+    
+    if (!hasArchitectureDiagrams) {
+      // If no diagrams, show informative toast about threat modeling component
+      setTimeout(() => {
+        toast({
+          title: "Architecture Diagrams Not Provided",
+          description: "The Architecture Threat Modeling component will be marked as 'Not Assessed' in your report. You can upload diagrams later for a more complete assessment.",
+          duration: 6000,
+        });
+      }, 3000);
+    }
   };
   
   // Generate scorecard data with the 12 standard parameters

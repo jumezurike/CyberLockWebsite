@@ -58,6 +58,10 @@ export interface Sos2aFormData {
   // 3. Configuration Baseline
   configurationManagement?: string;
   systemHardeningApproach?: string;
+  
+  // Architecture Diagrams for Threat Modeling
+  hasArchitectureDiagrams?: boolean;
+  architectureDiagramFiles?: File[];
   cisBenchmarks?: string[];
   configBaseline?: string; // Added for dropdown selection
   primaryCisBenchmark?: string; // Added for dropdown selection
@@ -166,6 +170,8 @@ export interface MatrixItem {
   risks: string[];
   vulnerabilities: string[];
   educationAwareness: boolean;
+  ismsImplemented: boolean;
+  riskManagementProcess: boolean;
   relevantACQTools?: {
     assessments?: string[];
     checklists?: string[];
@@ -196,6 +202,12 @@ export interface MatrixItem {
       scap: boolean;
       implemented: boolean;
     };
+  };
+  peopleControls: {
+    frameworks: string[];
+    applicable: boolean;
+    implemented: boolean;
+    gaps: string[];
   };
   complianceStandards: {
     pciDss: boolean;
