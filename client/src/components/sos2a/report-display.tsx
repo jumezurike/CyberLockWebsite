@@ -387,7 +387,11 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <TabsContent value="scorecard" className="space-y-4 pt-4">
               {/* Only display scorecard if the report has it */}
               {report.scorecard ? (
-                <Scorecard scorecard={report.scorecard} reportType={report.reportType} />
+                <Scorecard 
+                  scorecard={report.scorecard} 
+                  reportType={report.reportType} 
+                  report={report}
+                />
               ) : (
                 <div className="p-4 text-center">
                   <p className="text-muted-foreground">Scorecard data is not available for this report.</p>
