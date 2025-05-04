@@ -23,6 +23,7 @@ export default function LightbulbCapture() {
     { id: 'security', name: 'Cybersecurity Insight' },
     { id: 'ai-ml', name: 'Secure AI-ML' },
     { id: 'low-resource', name: 'Low-Resource Language Model' },
+    { id: 'adversarial', name: 'Adversarial Insight (MITRE ATT&CK)' },
     { id: 'process', name: 'Process Improvement' },
     { id: 'technical', name: 'Technical Solution' },
     { id: 'threat', name: 'Threat Intelligence' },

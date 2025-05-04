@@ -21,6 +21,7 @@ export default function LightbulbInsights() {
     { id: 'security', name: 'Cybersecurity Insight' },
     { id: 'ai-ml', name: 'Secure AI-ML' },
     { id: 'low-resource', name: 'Low-Resource Language Model' },
+    { id: 'adversarial', name: 'Adversarial Insight (MITRE ATT&CK)' },
     { id: 'process', name: 'Process Improvement' },
     { id: 'technical', name: 'Technical Solution' },
     { id: 'threat', name: 'Threat Intelligence' },
@@ -127,6 +128,7 @@ export default function LightbulbInsights() {
       case 'security': return 'bg-blue-100 text-blue-700';
       case 'ai-ml': return 'bg-indigo-100 text-indigo-700';
       case 'low-resource': return 'bg-cyan-100 text-cyan-700';
+      case 'adversarial': return 'bg-orange-100 text-orange-700';
       case 'process': return 'bg-green-100 text-green-700';
       case 'technical': return 'bg-purple-100 text-purple-700';
       case 'threat': return 'bg-red-100 text-red-700';
