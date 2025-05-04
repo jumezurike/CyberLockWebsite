@@ -376,7 +376,65 @@ export default function PricingSection() {
                       </div>
                     )}
                     
-                    <h4 className="font-semibold mb-3">Optional Add-ons:</h4>
+                    <div className="flex justify-between items-center mb-3">
+                      <h4 className="font-semibold">Optional Add-ons:</h4>
+                      <div className="flex gap-3">
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            // Create a new object with all addons checked
+                            const allAddons: Record<string, boolean> = {};
+                            plan.addons.forEach(addon => {
+                              allAddons[addon.id] = true;
+                            });
+                            
+                            // Update selected addons for this plan
+                            setSelectedAddons(prev => ({
+                              ...prev,
+                              [planId]: allAddons
+                            }));
+                            
+                            // Show notification
+                            setShowAutoSelectNotification(prev => ({
+                              ...prev,
+                              [planId]: true
+                            }));
+                            
+                            // Hide notification after 5 seconds
+                            setTimeout(() => {
+                              setShowAutoSelectNotification(prev => ({
+                                ...prev,
+                                [planId]: false
+                              }));
+                            }, 5000);
+                          }}
+                          className="text-xs text-blue-600 hover:text-blue-800 underline"
+                        >
+                          Check All
+                        </button>
+                        <button 
+                          type="button"
+                          onClick={() => {
+                            // Update selected addons for this plan to empty object
+                            setSelectedAddons(prev => ({
+                              ...prev,
+                              [planId]: {}
+                            }));
+                          }}
+                          className="text-xs text-red-600 hover:text-red-800 underline"
+                        >
+                          Clear All
+                        </button>
+                      </div>
+                    </div>
+                    
+                    {showAutoSelectNotification[planId] && (
+                      <div className="mb-3 p-2 bg-green-50 border border-green-200 rounded text-green-700 text-sm">
+                        <p><Check className="inline-block h-4 w-4 mr-1" />Recommended services selected based on your infrastructure.</p>
+                        <p className="text-xs mt-1">You can customize your selections below as needed.</p>
+                      </div>
+                    )}
+                    
                     <div className="space-y-3">
                       {plan.addons.map((addon) => (
                         <div key={addon.id} className="flex justify-between items-center">
