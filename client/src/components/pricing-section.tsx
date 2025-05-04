@@ -113,13 +113,19 @@ export default function PricingSection() {
       })
       .filter((addon): addon is { id: string, label: string, price: string } => addon !== null);
     
-    // Calculate total amount (plan price + addons)
+    // Calculate infrastructure costs
+    const serverTotal = parseInt(serverCount[selectedPlan] || "0") * 65; // $65/server/month
+    const endpointTotal = parseInt(endpointCount[selectedPlan] || "0") * 45; // $45/endpoint/month
+    const appTotal = parseInt(appCount[selectedPlan] || "0") * 55; // $55/application/month
+    const infraCost = serverTotal + endpointTotal + appTotal;
+    
+    // Calculate total amount (plan price + addons + infrastructure costs)
     const basePlanPrice = parseFloat(plan.price);
     const addonsTotal = selectedAddonsList.reduce(
       (sum, addon) => sum + (addon ? parseFloat(addon.price) : 0), 
       0
     );
-    const totalAmount = (basePlanPrice + addonsTotal).toFixed(2);
+    const totalAmount = (basePlanPrice + addonsTotal + infraCost).toFixed(2);
     
     // Create URL query params for checkout
     const params = new URLSearchParams();
@@ -132,11 +138,8 @@ export default function PricingSection() {
     params.set('endpointCount', endpointCount[selectedPlan]);
     params.set('appCount', appCount[selectedPlan]);
     
-    // Add the pricing calculations based on infrastructure counts
-    const serverCost = parseInt(serverCount[selectedPlan] || "0") * 65; // $65/server/month
-    const endpointCost = parseInt(endpointCount[selectedPlan] || "0") * 45; // $45/endpoint/month
-    const appCost = parseInt(appCount[selectedPlan] || "0") * 55; // $55/application/month
-    params.set('infraCost', (serverCost + endpointCost + appCost).toString());
+    // Add the infrastructure cost to checkout parameters
+    params.set('infraCost', infraCost.toString());
     
     if (selectedAddonsList.length > 0) {
       params.set('addons', encodeURIComponent(JSON.stringify(selectedAddonsList)));
