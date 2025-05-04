@@ -332,7 +332,9 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
               </div>
               <div className="grid grid-cols-3 gap-2 text-center text-sm">
                 {["Govern", "Identify", "Protect", "Detect", "Respond", "Recover"].map((item, index) => {
-                  const percentScore = report.rasbitaCategories?.[item.toLowerCase()] || 0;
+                  // Correctly type-check to ensure we get the right property
+                  const categoryKey = item.toLowerCase() as keyof typeof report.rasbitaCategories;
+                  const percentScore = report.rasbitaCategories?.[categoryKey] || 0;
                   const tierScore = Math.min(4, Math.max(0, Math.round(percentScore / 25)));
                   return (
                     <div key={index} className="p-2 border rounded">
@@ -374,24 +376,96 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
             </div>
           )}
           
-          <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="border rounded-md p-3">
-              <h5 className="text-sm font-semibold">SOS²A 5-Component Score</h5>
-              <p className="text-xs text-gray-600 mt-1">
-                SOS²A uses five integrated components to provide a 500% view of your security posture, where each component contributes 100%. This provides a more comprehensive assessment than traditional single-dimension security tools.
-              </p>
+          <div className="mt-3">
+            <div className="border rounded-md p-3 mb-4">
+              <h5 className="text-sm font-semibold mb-2">SOS²A 5-Component Methodology (500% Comprehensive View)</h5>
+              <div className="text-xs text-gray-700 space-y-3">
+                <div>
+                  <span className="font-semibold text-primary">1. Qualitative Assessment (100%)</span>
+                  <p className="mt-1">
+                    {reportType === 'comprehensive' ? 
+                    "Refined based on actual evidence with more accurate scoring of each parameter and direct comparison to preliminary assessment." : 
+                    "Initial assessment based on interview responses, providing a baseline view of security practices."}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-semibold text-primary">2. Quantitative Analysis (100%)</span>
+                  <p className="mt-1">
+                    {reportType === 'comprehensive' ? 
+                    "Deep scan using professional tools with detailed analysis of all 12 parameters, trend analysis showing changes over time, and performance metrics with statistical significance." : 
+                    "Preliminary scan of the 12 key security parameters based on available evidence and declaration."}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-semibold text-primary">3. RASBITA Cost-Benefit Analysis (100%)</span>
+                  <p className="mt-1">
+                    {reportType === 'comprehensive' ? 
+                    "Comprehensive financial impact modeling with actual incident costs (if any occurred), detailed resource allocation analysis, and return on security investment calculations." : 
+                    "Initial cost-benefit analysis based on industry benchmarks and estimated risk levels."}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-semibold text-primary">4. RASBITA Governance & Management (100%)</span>
+                  <p className="mt-1">
+                    {reportType === 'comprehensive' ? 
+                    "Detailed NIST CSF 2.0 radar analysis with maturity progression over time, governance structure effectiveness evaluation, and management control efficacy assessment." : 
+                    "Baseline governance assessment using NIST CSF 2.0 framework with initial maturity levels."}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-semibold text-primary">5. Architecture Threat Modeling (100%)</span>
+                  <p className="mt-1">
+                    {reportType === 'comprehensive' ? 
+                    "Thorough data flow diagram analysis with comprehensive STRIDE threat modeling, validated mitigation strategies, and architectural security validation." : 
+                    "Initial review of architecture diagrams if provided, with basic threat identification."}
+                    {radarData.some(item => item.notAssessed) && 
+                    " (Note: This component requires architecture diagrams to be assessed and is currently marked as 'Cannot be assessed'.)"}
+                  </p>
+                </div>
+              </div>
             </div>
-            <div className="border rounded-md p-3">
-              <h5 className="text-sm font-semibold">Report Types</h5>
-              <div className="grid grid-cols-2 gap-2 mt-1">
-                <div className="text-xs">
-                  <span className="font-medium">Preliminary:</span> 
-                  <p className="text-gray-600">Quick assessment based on questionnaire responses</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="border rounded-md p-3">
+                <h5 className="text-sm font-semibold">Report Types Explained</h5>
+                <div className="grid grid-cols-1 gap-2 mt-2">
+                  <div className="text-xs">
+                    <span className="font-medium inline-flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"></path>
+                      </svg>
+                      Preliminary Assessment:
+                    </span> 
+                    <p className="text-gray-600 mt-1">
+                      A quick assessment that includes all five components with light scanning. It provides an initial view based on questionnaire responses, helpful for initial planning but pending verification.
+                    </p>
+                  </div>
+                  <div className="text-xs mt-2">
+                    <span className="font-medium inline-flex items-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                      </svg>
+                      Comprehensive Assessment:
+                    </span>
+                    <p className="text-gray-600 mt-1">
+                      A thorough evaluation with deep scanning across all five components, based on 6 months of evidence collection using SOC monitoring, incident response tracking, and security tools, providing validated security posture.
+                    </p>
+                  </div>
                 </div>
-                <div className="text-xs">
-                  <span className="font-medium">Comprehensive:</span> 
-                  <p className="text-gray-600">Detailed assessment with evidence collection and verification</p>
-                </div>
+              </div>
+              <div className="border rounded-md p-3">
+                <h5 className="text-sm font-semibold">Scoring Benefits</h5>
+                <p className="text-xs text-gray-600 mt-2">
+                  The SOS²A methodology provides a unique 500% comprehensive view (5 components x 100% each) of your security posture, far more detailed than traditional single-dimension assessments. This approach ensures:
+                </p>
+                <ul className="text-xs text-gray-600 mt-2 space-y-1 list-disc ml-4">
+                  <li>Complete coverage of all security aspects</li>
+                  <li>Clear indication when components cannot be assessed</li>
+                  <li>Accurate final scoring using only available components</li>
+                  <li>Actionable insights across qualitative and quantitative metrics</li>
+                  <li>Financial impact analysis for justified security investments</li>
+                </ul>
               </div>
             </div>
           </div>
