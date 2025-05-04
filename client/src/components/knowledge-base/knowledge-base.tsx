@@ -517,40 +517,42 @@ export function KnowledgeBase({ title = "Knowledge Base", description }: Knowled
     },
     {
       id: 'automated-response',
-      title: 'Proactive Threat Hunting & Automated Response',
+      title: 'Human-First Threat Hunting & Response',
       content: (
         <div className="space-y-4">
           <p>
-            CyberLockX combines AI-Human driven threat hunting with automated response capabilities to reduce dependency 
-            on AI or human analysts, accelerate incident response with less false positives while retaining the emotional 
-            intelligence. This increases efficiency, protection, response while reducing burn-out for humans who remain 
-            in the forefront of our process strategy.
+            CyberLockX implements a Human-AI driven approach where humans always lead the process. We enhance human capabilities 
+            with AI assistance, not the other way around. This approach ensures sustainability and necessary grounding while 
+            reducing dependency on fully automated systems, accelerating incident response with fewer false positives, and 
+            preserving the critical emotional intelligence that only humans can provide. The result is increased efficiency, 
+            enhanced protection, and faster response times while significantly reducing burnout for our human analysts who 
+            remain firmly at the forefront of our process strategy.
           </p>
           
-          <h4 className="font-medium">Automated Response Capabilities:</h4>
+          <h4 className="font-medium">Human-Guided Response Capabilities:</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-2">
             <div className="bg-white p-3 rounded border">
-              <h5 className="text-sm font-medium">Session Freezing</h5>
+              <h5 className="text-sm font-medium">Supervised Session Control</h5>
               <p className="text-xs text-muted-foreground">
-                Immediately pauses suspicious user sessions while maintaining system state for investigation.
+                Human analysts direct the pausing of suspicious sessions while preserving evidence for thorough investigation.
               </p>
             </div>
             <div className="bg-white p-3 rounded border">
-              <h5 className="text-sm font-medium">Step-Up Authentication</h5>
+              <h5 className="text-sm font-medium">Adaptive Authentication</h5>
               <p className="text-xs text-muted-foreground">
-                Dynamically requires additional verification when unusual behavior is detected.
+                Human security experts determine when and how to require additional verification based on context and risk assessment.
               </p>
             </div>
             <div className="bg-white p-3 rounded border">
-              <h5 className="text-sm font-medium">Automatic Access Revocation</h5>
+              <h5 className="text-sm font-medium">Credential Protection</h5>
               <p className="text-xs text-muted-foreground">
-                Revokes compromised credentials and access tokens to prevent lateral movement.
+                Human-validated decisions to revoke suspicious access, preventing lateral movement with expert judgment.
               </p>
             </div>
           </div>
           
           <div className="bg-green-50 p-4 rounded-md border border-green-100 mt-4">
-            <h4 className="font-medium text-green-800">Benefits of AI-Human Collaboration</h4>
+            <h4 className="font-medium text-green-800">Benefits of Human-First Security</h4>
             <ul className="list-disc pl-5 text-sm text-green-700 mt-2">
               <li>Rapid response to threats (seconds versus hours)</li>
               <li>Consistent enforcement of security policies with human oversight</li>
