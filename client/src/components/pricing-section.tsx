@@ -58,6 +58,48 @@ export default function PricingSection() {
     }));
   };
   
+  // State for auto-select notification
+  const [showAutoSelectNotification, setShowAutoSelectNotification] = useState<Record<string, boolean>>({
+    basic: false,
+    professional: false,
+    business: false
+  });
+  
+  // Helper function to auto-select relevant add-ons based on infrastructure inputs
+  const autoSelectRelevantAddons = (planId: string) => {
+    const serverValue = parseInt(serverCount[planId] || "0");
+    const endpointValue = parseInt(endpointCount[planId] || "0");
+    const appValue = parseInt(appCount[planId] || "0");
+    
+    // Only auto-select if they have at least one infrastructure component
+    if (serverValue > 0 || endpointValue > 0 || appValue > 0) {
+      // Auto-select monitoring add-on if any infrastructure components are selected
+      setSelectedAddons(prev => ({
+        ...prev,
+        [planId]: {
+          ...prev[planId],
+          "monitoring": true,         // "Continuous Monitoring & Incident Response"
+          "policy": true,             // "Policies, Processes, Procedures, and Plans continuous development"
+          "annual": true              // "Annual Security Posture Update & Assessment"
+        }
+      }));
+      
+      // Show notification
+      setShowAutoSelectNotification(prev => ({
+        ...prev,
+        [planId]: true
+      }));
+      
+      // Hide notification after 5 seconds
+      setTimeout(() => {
+        setShowAutoSelectNotification(prev => ({
+          ...prev,
+          [planId]: false
+        }));
+      }, 5000);
+    }
+  };
+
   const handleServerCountChange = (planId: string, count: string) => {
     // Only allow numeric input
     if (/^\d*$/.test(count)) {
@@ -65,6 +107,11 @@ export default function PricingSection() {
         ...prev,
         [planId]: count
       }));
+      
+      // Auto-select relevant add-ons if count is greater than 0
+      if (parseInt(count) > 0) {
+        autoSelectRelevantAddons(planId);
+      }
     }
   };
   
@@ -75,6 +122,11 @@ export default function PricingSection() {
         ...prev,
         [planId]: count
       }));
+      
+      // Auto-select relevant add-ons if count is greater than 0
+      if (parseInt(count) > 0) {
+        autoSelectRelevantAddons(planId);
+      }
     }
   };
   
@@ -85,6 +137,11 @@ export default function PricingSection() {
         ...prev,
         [planId]: count
       }));
+      
+      // Auto-select relevant add-ons if count is greater than 0
+      if (parseInt(count) > 0) {
+        autoSelectRelevantAddons(planId);
+      }
     }
   };
   
@@ -310,6 +367,14 @@ export default function PricingSection() {
                         />
                       </div>
                     </div>
+                    
+                    {/* Auto-select notification */}
+                    {showAutoSelectNotification[planId] && (
+                      <div className="mt-3 p-2 bg-green-50 border border-green-200 rounded text-green-700 text-sm">
+                        <Check className="inline-block h-4 w-4 mr-1" />
+                        Recommended services have been auto-selected for your infrastructure.
+                      </div>
+                    )}
                     
                     <h4 className="font-semibold mb-3">Optional Add-ons:</h4>
                     <div className="space-y-3">
