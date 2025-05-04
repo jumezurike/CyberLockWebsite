@@ -148,7 +148,57 @@ export default function Sos2aTool() {
   const [searchToDate, setSearchToDate] = useState<string>("");
   const [isSearching, setIsSearching] = useState(false);
   
+  // State for form persistence
+  const [hasSavedData, setHasSavedData] = useState<boolean>(false);
+  
   const { toast } = useToast();
+  
+  // Load saved form data from localStorage on component mount
+  useEffect(() => {
+    const savedFormData = localStorage.getItem('sos2a_form_data');
+    const savedMatrixData = localStorage.getItem('sos2a_matrix_data');
+    const savedStep = localStorage.getItem('sos2a_current_step');
+    
+    if (savedFormData) {
+      try {
+        const parsedData = JSON.parse(savedFormData);
+        // Only set saved data if it's not null and has a businessName
+        if (parsedData && parsedData.businessName) {
+          setFormData(parsedData);
+          setHasSavedData(true);
+          
+          // Show toast notification about saved data
+          toast({
+            title: "Saved Data Restored",
+            description: "Your previous form data has been loaded. You can continue where you left off.",
+          });
+        }
+      } catch (error) {
+        console.error("Error parsing saved form data:", error);
+        // If there's an error, clear the invalid data
+        localStorage.removeItem('sos2a_form_data');
+      }
+    }
+    
+    if (savedMatrixData) {
+      try {
+        const parsedMatrix = JSON.parse(savedMatrixData);
+        if (parsedMatrix && Array.isArray(parsedMatrix)) {
+          setMatrixData(parsedMatrix);
+        }
+      } catch (error) {
+        console.error("Error parsing saved matrix data:", error);
+        localStorage.removeItem('sos2a_matrix_data');
+      }
+    }
+    
+    if (savedStep) {
+      const validSteps = ['questionnaire', 'matrix', 'report'];
+      if (validSteps.includes(savedStep)) {
+        setStep(savedStep as 'questionnaire' | 'matrix' | 'report');
+      }
+    }
+  }, []);
   
   // Progress percentage based on current step and report type
   const isComprehensive = formData?.reportType === 'comprehensive';
@@ -163,11 +213,48 @@ export default function Sos2aTool() {
   // Show review modal state
   const [showReviewModal, setShowReviewModal] = useState(false);
 
+  // Save form data to localStorage
+  const saveFormDataToLocalStorage = (data: Sos2aFormData) => {
+    try {
+      localStorage.setItem('sos2a_form_data', JSON.stringify(data));
+      localStorage.setItem('sos2a_current_step', 'questionnaire');
+    } catch (error) {
+      console.error("Error saving form data to localStorage:", error);
+    }
+  };
+  
+  // Save matrix data to localStorage
+  const saveMatrixDataToLocalStorage = (data: MatrixItem[]) => {
+    try {
+      localStorage.setItem('sos2a_matrix_data', JSON.stringify(data));
+      localStorage.setItem('sos2a_current_step', 'matrix');
+    } catch (error) {
+      console.error("Error saving matrix data to localStorage:", error);
+    }
+  };
+  
+  // Clear saved data from localStorage
+  const clearSavedData = () => {
+    localStorage.removeItem('sos2a_form_data');
+    localStorage.removeItem('sos2a_matrix_data');
+    localStorage.removeItem('sos2a_current_step');
+    setHasSavedData(false);
+  };
+
+  // Auto-save form data as it's being filled out
+  useEffect(() => {
+    if (formData) {
+      saveFormDataToLocalStorage(formData);
+    }
+  }, [formData]);
+  
   // Handle form submission
   const handleQuestionnaireSubmit = (data: Sos2aFormData) => {
     console.log("Parent component received form submission", data);
     // First show the review modal
     setFormData(data);
+    // Save to localStorage
+    saveFormDataToLocalStorage(data);
     setShowReviewModal(true);
     
     // Show informative toast with clear next steps
@@ -181,6 +268,9 @@ export default function Sos2aTool() {
   const handleFinalSubmit = () => {
     setShowReviewModal(false);
     setStep('matrix');
+    // Update the current step in localStorage
+    localStorage.setItem('sos2a_current_step', 'matrix');
+    
     toast({
       title: "Assessment confirmed",
       description: "Moving to Interview & Matrix Population step. This is where our expert system will apply industry-specific knowledge to your assessment.",
@@ -295,6 +385,8 @@ export default function Sos2aTool() {
   // Handle matrix submission
   const handleMatrixSubmit = async (data: MatrixItem[]) => {
     setMatrixData(data);
+    // Save matrix data to localStorage
+    saveMatrixDataToLocalStorage(data);
     
     const reportType = formData?.reportType || 'preliminary';
     
@@ -387,6 +479,13 @@ export default function Sos2aTool() {
     setMatrixData(null);
     setReport(null);
     setSelectedAssessmentId("");
+    // Clear all saved data from localStorage
+    clearSavedData();
+    
+    toast({
+      title: "Starting Over",
+      description: "All saved data has been cleared. You can now begin a new assessment.",
+    });
   };
   
   // Search for assessments based on filters
