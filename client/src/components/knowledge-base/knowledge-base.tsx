@@ -521,8 +521,10 @@ export function KnowledgeBase({ title = "Knowledge Base", description }: Knowled
       content: (
         <div className="space-y-4">
           <p>
-            CyberLockX combines AI-driven threat hunting with automated response capabilities to reduce dependency 
-            on human analysts and accelerate incident response.
+            CyberLockX combines AI-Human driven threat hunting with automated response capabilities to reduce dependency 
+            on AI or human analysts, accelerate incident response with less false positives while retaining the emotional 
+            intelligence. This increases efficiency, protection, response while reducing burn-out for humans who remain 
+            in the forefront of our process strategy.
           </p>
           
           <h4 className="font-medium">Automated Response Capabilities:</h4>
@@ -548,13 +550,16 @@ export function KnowledgeBase({ title = "Knowledge Base", description }: Knowled
           </div>
           
           <div className="bg-green-50 p-4 rounded-md border border-green-100 mt-4">
-            <h4 className="font-medium text-green-800">Benefits of Automation</h4>
+            <h4 className="font-medium text-green-800">Benefits of AI-Human Collaboration</h4>
             <ul className="list-disc pl-5 text-sm text-green-700 mt-2">
               <li>Rapid response to threats (seconds versus hours)</li>
-              <li>Consistent enforcement of security policies</li>
-              <li>Reduced alert fatigue for security teams</li>
-              <li>24/7 protection regardless of staff availability</li>
+              <li>Consistent enforcement of security policies with human oversight</li>
+              <li>Reduced alert fatigue and burnout for security teams</li>
+              <li>24/7 protection with human intelligence in the loop</li>
               <li>Detailed forensic data collection during incidents</li>
+              <li>Emotional intelligence applied to complex security decisions</li>
+              <li>Decreased false positives compared to purely automated systems</li>
+              <li>Improved analyst job satisfaction with reduced mundane tasks</li>
             </ul>
           </div>
         </div>
