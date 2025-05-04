@@ -20,6 +20,8 @@ import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfService from "@/pages/terms-of-service";
 import DataUsePolicy from "@/pages/data-use-policy";
 import KnowledgeBasePage from "@/pages/knowledge-base";
+import LightbulbMomentsPage from "@/pages/lightbulb-moments";
+import LightbulbCapture from "@/components/knowledge-share/lightbulb-capture";
 import Checkout from "@/pages/checkout";
 import PaymentSuccess from "@/pages/payment-success";
 import PaymentError from "@/pages/payment-error";
@@ -53,6 +55,7 @@ function Router() {
           <Route path="/terms-of-service" component={TermsOfService} />
           <Route path="/data-use-policy" component={DataUsePolicy} />
           <Route path="/knowledge-base" component={KnowledgeBasePage} />
+          <Route path="/lightbulb-moments" component={LightbulbMomentsPage} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/payment-error" component={PaymentError} />
@@ -72,6 +75,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
+        <LightbulbCapture />
       </TooltipProvider>
     </QueryClientProvider>
   );
