@@ -1477,6 +1477,17 @@ export default function Sos2aTool() {
     return Math.min(score, 100);
   };
   
+  // Set document title based on current step
+  useEffect(() => {
+    if (step === 'questionnaire') {
+      document.title = "HOS²A - Questionnaire";
+    } else if (step === 'matrix') {
+      document.title = "HOS²A - Matrix Population";
+    } else if (step === 'report') {
+      document.title = "HOS²A - Assessment Report";
+    }
+  }, [step]);
+
   return (
     <div className="container mx-auto py-8">
       {/* Assessment Submission Confirmation Modal */}
@@ -1691,6 +1702,27 @@ export default function Sos2aTool() {
       {/* Step 1: Inquiry & Questionnaire */}
       {step === 'questionnaire' && (
         <div className="questionnaire-container">
+          {/* Show saved data notification when there's saved data */}
+          {hasSavedData && (
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md flex justify-between items-center">
+              <div>
+                <h3 className="text-blue-800 font-medium">Your assessment data has been restored</h3>
+                <p className="text-blue-600 text-sm">Your previous form data was automatically loaded. You can continue where you left off.</p>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  if (confirm("Are you sure you want to clear all saved data and start fresh?")) {
+                    clearSavedData();
+                    handleStartOver();
+                  }
+                }}
+              >
+                Clear & Start Fresh
+              </Button>
+            </div>
+          )}
           <QuestionnaireForm onSubmit={handleQuestionnaireSubmit} />
         </div>
       )}
@@ -1698,6 +1730,32 @@ export default function Sos2aTool() {
       {/* Step 2: Matrix Population */}
       {step === 'matrix' && formData && (
         <div className="matrix-container">
+          {/* Show saved matrix data notification */}
+          {matrixData && (
+            <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-md flex justify-between items-center">
+              <div>
+                <h3 className="text-blue-800 font-medium">Your matrix data has been restored</h3>
+                <p className="text-blue-600 text-sm">You can continue working on your previous matrix population data.</p>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  if (confirm("Are you sure you want to clear the matrix data and start this step fresh?")) {
+                    localStorage.removeItem('sos2a_matrix_data');
+                    setMatrixData(null);
+                    
+                    toast({
+                      title: "Matrix data cleared",
+                      description: "Your matrix data has been cleared. You can start this step fresh.",
+                    });
+                  }
+                }}
+              >
+                Clear Matrix Data
+              </Button>
+            </div>
+          )}
           <MatrixForm 
             operationModes={formData.operationMode}
             internetPresence={formData.internetPresence}
