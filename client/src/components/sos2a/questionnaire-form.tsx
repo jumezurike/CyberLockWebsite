@@ -3850,7 +3850,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Select threat actors and techniques most relevant to your university or educational institution.
+                    Select threat actors and techniques most relevant to your organization's infrastructure operation mode.
                   </p>
                   
                   <FormField

@@ -2477,7 +2477,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">9. Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Select the most relevant MITRE ATT&CK tactics and techniques for your threat model.
+                    Select the most relevant MITRE ATT&CK tactics and techniques based on your infrastructure operation mode.
                   </p>
                   
                   <div className="space-y-6">
