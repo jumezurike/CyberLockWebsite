@@ -368,34 +368,95 @@ export default function Sos2aTool() {
       item.educationAwareness
     ) ? 65 : 30);
     
-    // Additional parameters to complete the 12-parameter set
-    // Phishing Screening
+    // Scores for the 12 proven threats used in quantitative analysis
+    
+    // 1. Phishing Screening
     const phishingScreeningScore = generateScore(data.some(item => 
       item.technologyControls?.frameworks?.includes('email_security')
     ) ? 65 : 35);
     
-    // External Footprints
+    // 2. Security Awareness 
+    const securityAwarenessScore = generateScore(data.some(item => 
+      item.educationAwareness
+    ) ? 65 : 30);
+    
+    // 3. External Footprints
     const externalFootprintsScore = generateScore(data.some(item => 
       item.technologyControls?.frameworks?.includes('perimeter_security') ||
       item.technologyControls?.frameworks?.includes('network_security')
     ) ? 70 : 45);
     
+    // 4. Dark Web
+    const darkWebScore = generateScore(data.some(item => 
+      item.risks.includes('data_breach') || 
+      item.vulnerabilities.includes('credential_exposure')
+    ) ? 45 : 25);
+    
+    // 5. Endpoint Security
+    const endpointSecurityScore = generateScore(data.some(item => 
+      item.technologyControls?.frameworks?.includes('endpoint_protection') ||
+      item.technologyControls?.frameworks?.includes('device_security')
+    ) ? 80 : 40);
+    
+    // 6. Cloud Security
+    const cloudSecurityScore = generateScore(data.some(item => 
+      item.technologyControls?.frameworks?.includes('cloud_security')
+    ) ? 58 : 30);
+    
+    // 7. Data Security
+    const dataSecurityScore = generateScore(data.some(item => 
+      item.technologyControls?.frameworks?.includes('data_protection') ||
+      item.technologyControls?.frameworks?.includes('encryption')
+    ) ? 71 : 35);
+    
+    // 8. Browser Security
+    const browserSecurityScore = generateScore(data.some(item => 
+      item.technologyControls?.frameworks?.includes('web_security')
+    ) ? 62 : 30);
+    
+    // 9. Email Protection
+    const emailProtectionScore = generateScore(data.some(item => 
+      item.technologyControls?.frameworks?.includes('email_security') ||
+      item.technologyControls?.frameworks?.includes('spam_protection')
+    ) ? 75 : 40);
+    
+    // 10. Compliances
+    const compliancesScore = generateScore(data.some(item => 
+      item.complianceStandards.pciDss || 
+      item.complianceStandards.hipaa || 
+      item.complianceStandards.gdpr ||
+      item.complianceStandards.soc2
+    ) ? 65 : 40);
+    
+    // 11. Regulatory Requirements
+    const regulatoryRequirementsScore = generateScore(data.some(item => 
+      item.regulatoryRequirements.pciDss || 
+      item.regulatoryRequirements.hipaa || 
+      item.regulatoryRequirements.gdpr ||
+      item.regulatoryRequirements.fisma
+    ) ? 70 : 45);
+    
+    // 12. Frameworks
+    const frameworksScore = generateScore(data.some(item => 
+      item.standards.nistCsf || 
+      item.standards.iso27001 || 
+      item.standards.cisCsc
+    ) ? 75 : 45);
+    
     return [
-      // Original 10 parameters
-      { parameter: "Operation Security", weight: standardWeight, score: operationSecurityScore },
-      { parameter: "Management Security", weight: standardWeight, score: managementSecurityScore },
-      { parameter: "Technology Security", weight: standardWeight, score: technologySecurityScore },
-      { parameter: "People Security", weight: standardWeight, score: peopleSecurityScore },
-      { parameter: "Standards & Frameworks", weight: standardWeight, score: standardsScore },
-      { parameter: "Compliance Requirements", weight: standardWeight, score: complianceScore },
-      { parameter: "Regulatory Requirements", weight: standardWeight, score: regulatoryScore },
-      { parameter: "Information Security Management", weight: standardWeight, score: ismsScore },
-      { parameter: "Risk Management Process", weight: standardWeight, score: riskManagementScore },
-      { parameter: "Education & Awareness", weight: standardWeight, score: educationAwarenessScore },
-      
-      // Additional parameters to complete the 12-parameter set
+      // The 12 proven threats used in quantitative analysis
       { parameter: "Phishing Screening", weight: standardWeight, score: phishingScreeningScore },
-      { parameter: "External Footprints", weight: standardWeight, score: externalFootprintsScore }
+      { parameter: "Security Awareness", weight: standardWeight, score: securityAwarenessScore },
+      { parameter: "External Footprints", weight: standardWeight, score: externalFootprintsScore },
+      { parameter: "Dark Web", weight: standardWeight, score: darkWebScore },
+      { parameter: "Endpoint Security", weight: standardWeight, score: endpointSecurityScore },
+      { parameter: "Cloud Security", weight: standardWeight, score: cloudSecurityScore },
+      { parameter: "Data Security", weight: standardWeight, score: dataSecurityScore },
+      { parameter: "Browser Security", weight: standardWeight, score: browserSecurityScore },
+      { parameter: "Email Protection", weight: standardWeight, score: emailProtectionScore },
+      { parameter: "Compliances", weight: standardWeight, score: compliancesScore },
+      { parameter: "Regulatory Requirements", weight: standardWeight, score: regulatoryRequirementsScore },
+      { parameter: "Frameworks", weight: standardWeight, score: frameworksScore }
     ];
   };
 
