@@ -5,7 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AssessmentReport } from "@/lib/sos2a-types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, FileText, Download, Calendar, Clock } from "lucide-react";
+import { AlertCircle, FileText, Download, Calendar, Clock, AlertTriangle, Shield, CheckCircle2 } from "lucide-react";
+import { formatDistanceToNow, differenceInDays, parseISO } from "date-fns";
 import Scorecard from "./scorecard";
 
 interface ReportDisplayProps {
@@ -15,6 +16,7 @@ interface ReportDisplayProps {
 
 export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
   const [evidenceDialog, setEvidenceDialog] = useState(false);
+  const [lifecycleDialog, setLifecycleDialog] = useState(false);
   
   // Format date
   const formatDate = (dateString: string) => {
@@ -28,6 +30,57 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
     });
   };
   
+  // Calculate and format assessment age
+  const getAssessmentAge = (): number => {
+    // Use the age property if available, otherwise calculate it
+    if (report.age !== undefined) {
+      return report.age;
+    }
+    
+    return differenceInDays(new Date(), parseISO(report.createdAt));
+  };
+  
+  // Format age for display
+  const formatAssessmentAge = (): string => {
+    return formatDistanceToNow(parseISO(report.createdAt), { addSuffix: true });
+  };
+  
+  // Get appropriate icon and color based on assessment age
+  const getAgeStatusInfo = (): { icon: React.ReactNode, color: string, label: string } => {
+    const age = getAssessmentAge();
+    
+    if (age <= 30) {
+      return { 
+        icon: <CheckCircle2 className="h-5 w-5" />, 
+        color: "text-green-600",
+        label: "Current"
+      };
+    }
+    
+    if (age <= 90) {
+      return { 
+        icon: <Shield className="h-5 w-5" />, 
+        color: "text-blue-600",
+        label: "Recent"
+      };
+    }
+    
+    if (age <= 180) {
+      return { 
+        icon: <AlertCircle className="h-5 w-5" />, 
+        color: "text-amber-600",
+        label: "Aging"
+      };
+    }
+    
+    return { 
+      icon: <AlertTriangle className="h-5 w-5" />, 
+      color: "text-red-600",
+      label: "Outdated"
+    };
+  };
+  
+  const ageInfo = getAgeStatusInfo();
   const isComprehensiveReport = report.reportType === 'comprehensive';
   
   return (
@@ -42,6 +95,22 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <CardDescription>
                 Generated on {formatDate(report.createdAt)}
               </CardDescription>
+              
+              {/* Assessment Age Information */}
+              <div className={`mt-1 flex items-center gap-1 ${ageInfo.color}`}>
+                {ageInfo.icon}
+                <span className="text-xs font-medium">
+                  {ageInfo.label}: {formatAssessmentAge()}
+                </span>
+                <button
+                  type="button"
+                  className="ml-1 text-xs underline hover:text-primary"
+                  onClick={() => setEvidenceDialog(true)}
+                >
+                  Assessment Lifecycle Info
+                </button>
+              </div>
+              
               {report.reportType === 'preliminary' && (
                 <div className="mt-2 text-sm text-blue-600">
                   This is a preliminary assessment. For a comprehensive assessment with deeper analysis and evidence-based scoring, proceed to the comprehensive assessment path.
