@@ -140,7 +140,7 @@ export default function PricingSection() {
       ],
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$250 one time" },
-        { id: "monitoring", label: "Continuous Monitoring & Response", price: "$65/device/month" },
+        { id: "monitoring", label: "Continuous Monitoring & Incident Response", price: "$65/device/month" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$25/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$300" }
       ]
@@ -162,7 +162,7 @@ export default function PricingSection() {
       ],
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$750 one time" },
-        { id: "monitoring", label: "Continuous Monitoring & Response", price: "$65/device/month" },
+        { id: "monitoring", label: "Continuous Monitoring & Incident Response", price: "$65/device/month" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$50/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$600" },
         { id: "admin", label: "Administrative and maintenance fees", price: "$250" }
@@ -186,7 +186,7 @@ export default function PricingSection() {
       ],
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$2250 one time" },
-        { id: "monitoring", label: "Continuous Monitoring & Response", price: "$65/device/month" },
+        { id: "monitoring", label: "Continuous Monitoring & Incident Response", price: "$65/device/month" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$100/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" },
         { id: "admin", label: "Administrative and maintenance fees", price: "$250" }
