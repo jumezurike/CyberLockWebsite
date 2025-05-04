@@ -1,0 +1,47 @@
+import pandas as pd
+
+# Define the compliance matrix data
+data = {
+    "Standard Category": [
+        "Universal Security Standards", "Universal Security Standards", "Universal Security Standards",
+        "Universal Security Standards", "Universal Security Standards", "Universal Security Standards", "Universal Security Standards",
+        "Healthcare-Specific Standards", "Healthcare-Specific Standards", "Healthcare-Specific Standards",
+        "Healthcare-Specific Standards", "Healthcare-Specific Standards", "Healthcare-Specific Standards",
+        "Healthcare-Specific Standards", "Healthcare-Specific Standards",
+        "Government & Critical Infrastructure", "Government & Critical Infrastructure",
+        "Government & Critical Infrastructure", "Government & Critical Infrastructure",
+        "Financial & Payment Standards", "Financial & Payment Standards", "Financial & Payment Standards",
+        "Cloud & Data Privacy", "Cloud & Data Privacy", "Cloud & Data Privacy",
+        "Industry-Specific Standards", "Industry-Specific Standards", "Industry-Specific Standards",
+        "Emerging & Regional Standards", "Emerging & Regional Standards", "Emerging & Regional Standards"
+    ],
+    "Standard": [
+        "ISO 27001", "ISO 27002", "NIST CSF", "NIST SP 800-53", "CIS Controls", "SOC 2", "PCI-DSS",
+        "HIPAA Security Rule", "HITRUST CSF", "HIPAA Privacy Rule", "21 CFR Part 11", "GDPR", "NIST SP 800-66",
+        "DICOM Security", "HL7 FHIR Security",
+        "FISMA", "FedRAMP", "CMMC", "NERC CIP",
+        "GLBA", "SOX", "PSD2",
+        "ISO 27701", "CCPA", "SOC 1",
+        "IEC 62443", "TISAX", "FIPS 140-2/3",
+        "CCCS 33", "ENS", "MEITI"
+    ],
+    "CyberLockX Alignment": [
+        "ISMS framework via ECSMID + SOS²A", "Controls mapped in real-time via SOS²A",
+        "Risk-based controls built into SOS²A", "Low/mod baseline controls supported",
+        "18 control mapping through ECSMID", "Supports SOC 2 Type II audit trails", "Secure browser + payments module",
+        "Encrypts PHI, audit logs via Secure Docs", "Mapped to HITRUST through NIST+ISO", "Data access logging & control",
+        "Electronic signature + audit trails", "GDPR-compliant workflows & user rights", "Guide mapped in SOS²A",
+        "Encryption of medical imaging files", "Secure API gateways for HL7 FHIR",
+        "Mapped to NIST controls", "Browser-based FedRAMP-ready isolation", "CMMC practices (access, audit, update)", "Critical asset protection via SIEVVE",
+        "Data encryption + financial data controls", "Audit logs, access control", "Secure session + MFA for EU",
+        "Privacy by design + access controls", "Supports CCPA rights & disclosures", "SSAE 18-aligned logs",
+        "Protects ICS via browser isolation", "TISAX-level access control enforcement", "FIPS 140-validated encryption",
+        "Framework ready in modular design", "Supports ENS mapping", "Aligns with critical infra protection"
+    ]
+}
+
+# Create the DataFrame
+compliance_matrix = pd.DataFrame(data)
+
+# Display the matrix to the user
+import ace_tools as tools; tools.display_dataframe_to_user(name="CyberLockX Compliance Matrix", dataframe=compliance_matrix)
