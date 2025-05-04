@@ -368,7 +368,20 @@ export default function Sos2aTool() {
       item.educationAwareness
     ) ? 65 : 30);
     
+    // Additional parameters to complete the 12-parameter set
+    // Phishing Screening
+    const phishingScreeningScore = generateScore(data.some(item => 
+      item.technologyControls?.frameworks?.includes('email_security')
+    ) ? 65 : 35);
+    
+    // External Footprints
+    const externalFootprintsScore = generateScore(data.some(item => 
+      item.technologyControls?.frameworks?.includes('perimeter_security') ||
+      item.technologyControls?.frameworks?.includes('network_security')
+    ) ? 70 : 45);
+    
     return [
+      // Original 10 parameters
       { parameter: "Operation Security", weight: standardWeight, score: operationSecurityScore },
       { parameter: "Management Security", weight: standardWeight, score: managementSecurityScore },
       { parameter: "Technology Security", weight: standardWeight, score: technologySecurityScore },
@@ -379,6 +392,10 @@ export default function Sos2aTool() {
       { parameter: "Information Security Management", weight: standardWeight, score: ismsScore },
       { parameter: "Risk Management Process", weight: standardWeight, score: riskManagementScore },
       { parameter: "Education & Awareness", weight: standardWeight, score: educationAwarenessScore },
+      
+      // Additional parameters to complete the 12-parameter set
+      { parameter: "Phishing Screening", weight: standardWeight, score: phishingScreeningScore },
+      { parameter: "External Footprints", weight: standardWeight, score: externalFootprintsScore }
     ];
   };
 
