@@ -532,6 +532,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   
   // General compliance frameworks
   const complianceFrameworkOptions = [
+    // Universal Security Standards
     { 
       id: "iso-27001", 
       label: "ISO 27001", 
@@ -569,16 +570,62 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       type: "standard"
     },
     { 
+      id: "pci-dss-comp", 
+      label: "PCI-DSS", 
+      description: "Payment Card Industry Data Security Standard",
+      type: "standard"
+    },
+    
+    // Healthcare-Specific Standards
+    { 
+      id: "hipaa-security", 
+      label: "HIPAA Security Rule", 
+      description: "Security standards for electronic protected health information",
+      type: "healthcare"
+    },
+    { 
+      id: "hitrust-csf", 
+      label: "HITRUST CSF", 
+      description: "Healthcare-focused security framework",
+      type: "healthcare"
+    },
+    { 
+      id: "hipaa-privacy", 
+      label: "HIPAA Privacy Rule", 
+      description: "Standards for individually identifiable health information",
+      type: "healthcare"
+    },
+    { 
+      id: "21-cfr-part-11", 
+      label: "21 CFR Part 11", 
+      description: "Electronic records and signatures in clinical trials",
+      type: "healthcare"
+    },
+    { 
+      id: "nist-800-66", 
+      label: "NIST SP 800-66", 
+      description: "Implementing HIPAA Security Rule",
+      type: "healthcare"
+    },
+    { 
+      id: "dicom-security", 
+      label: "DICOM Security", 
+      description: "Security for medical imaging",
+      type: "healthcare"
+    },
+    { 
+      id: "hl7-fhir-security", 
+      label: "HL7 FHIR Security", 
+      description: "Security for healthcare data exchange",
+      type: "healthcare"
+    },
+    
+    // Government & Critical Infrastructure
+    { 
       id: "cmmc", 
       label: "CMMC", 
       description: "Cybersecurity Maturity Model Certification (U.S. defense)",
       type: "standard"
-    },
-    { 
-      id: "cyber-ess-uk", 
-      label: "Cyber Essentials (UK)", 
-      description: "UK government-backed cybersecurity certification",
-      type: "guideline"
     },
     { 
       id: "fisma", 
@@ -591,6 +638,86 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       label: "FedRAMP", 
       description: "Cloud security for U.S. government",
       type: "standard"
+    },
+    { 
+      id: "nerc-cip-comp", 
+      label: "NERC CIP", 
+      description: "Critical infrastructure protection for power grid",
+      type: "standard"
+    },
+    
+    // Financial & Payment Standards (additional ones beyond PCI-DSS)
+    { 
+      id: "sox-comp", 
+      label: "SOX", 
+      description: "Sarbanes-Oxley Act financial controls",
+      type: "standard"
+    },
+    { 
+      id: "psd2-comp", 
+      label: "PSD2", 
+      description: "Payment Services Directive 2 (EU)",
+      type: "standard"
+    },
+    
+    // Cloud & Data Privacy
+    { 
+      id: "iso-27701", 
+      label: "ISO 27701", 
+      description: "Privacy information management extension to ISO 27001",
+      type: "standard"
+    },
+    { 
+      id: "soc-1", 
+      label: "SOC 1", 
+      description: "Controls relevant to financial reporting",
+      type: "standard"
+    },
+    
+    // Industry-Specific Standards
+    { 
+      id: "iec-62443-comp", 
+      label: "IEC 62443", 
+      description: "Industrial automation and control systems security",
+      type: "standard"
+    },
+    { 
+      id: "tisax-comp", 
+      label: "TISAX", 
+      description: "Trusted Information Security Assessment Exchange (automotive)",
+      type: "standard"
+    },
+    { 
+      id: "fips-140-comp", 
+      label: "FIPS 140-2/3", 
+      description: "Security requirements for cryptographic modules",
+      type: "standard"
+    },
+    
+    // Emerging & Regional Standards
+    { 
+      id: "cccs-33", 
+      label: "CCCS 33", 
+      description: "Canadian Centre for Cyber Security baseline controls",
+      type: "standard"
+    },
+    { 
+      id: "ens", 
+      label: "ENS", 
+      description: "Esquema Nacional de Seguridad (Spanish National Security Framework)",
+      type: "standard"
+    },
+    { 
+      id: "meiti", 
+      label: "MEITI", 
+      description: "Middle East Information Technology Infrastructure",
+      type: "standard"
+    },
+    { 
+      id: "cyber-ess-uk", 
+      label: "Cyber Essentials (UK)", 
+      description: "UK government-backed cybersecurity certification",
+      type: "guideline"
     },
   ];
   
