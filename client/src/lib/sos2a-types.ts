@@ -54,6 +54,8 @@ export interface Sos2aFormData {
   customOperationMode?: string;
   showCustomOperationMode?: boolean;
   internetPresence: string[];
+  primaryConcerns: string[];
+  vulnerabilities: string[];
   
   // 3. Configuration Baseline
   configurationManagement?: string;
