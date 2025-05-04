@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Sos2aFormData, MatrixItem, AssessmentReport } from "@/lib/sos2a-types";
+import { format, formatDistanceToNow, formatDistance, differenceInDays, parseISO } from "date-fns";
 import QuestionnaireForm from "@/components/sos2a/questionnaire-form-fixed";
 import MatrixForm from "@/components/sos2a/matrix-form";
 import ReportDisplay from "@/components/sos2a/report-display";
@@ -214,6 +215,36 @@ export default function Sos2aTool() {
   
   // Show review modal state
   const [showReviewModal, setShowReviewModal] = useState(false);
+  
+  // Helper functions for assessment lifecycle tracking
+  
+  // Calculate age of assessment in days
+  const calculateAssessmentAge = (createdAt: string): number => {
+    try {
+      return differenceInDays(new Date(), parseISO(createdAt));
+    } catch (error) {
+      console.error("Error calculating assessment age:", error);
+      return 0;
+    }
+  };
+  
+  // Format assessment age for display
+  const formatAssessmentAge = (createdAt: string): string => {
+    try {
+      return formatDistanceToNow(parseISO(createdAt), { addSuffix: true });
+    } catch (error) {
+      console.error("Error formatting assessment age:", error);
+      return "Unknown";
+    }
+  };
+  
+  // Get a badge color based on assessment age
+  const getAgeBadgeColor = (age: number): string => {
+    if (age <= 30) return "bg-green-100 text-green-800"; // Less than a month
+    if (age <= 90) return "bg-blue-100 text-blue-800"; // 1-3 months
+    if (age <= 180) return "bg-yellow-100 text-yellow-800"; // 3-6 months
+    return "bg-red-100 text-red-800"; // More than 6 months
+  };
 
   // Save form data to localStorage
   const saveFormDataToLocalStorage = (data: Sos2aFormData) => {
@@ -488,6 +519,8 @@ export default function Sos2aTool() {
       businessId: data[0].infraType + '-' + Date.now(),
       reportType: reportType,
       createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      age: 0, // New report, age is 0 days
       securityScore: calculateSecurityScore(data),
       businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
       industry: formData?.industry || "Unknown",
@@ -1773,11 +1806,20 @@ export default function Sos2aTool() {
                           No saved assessments found
                         </div>
                       ) : (
-                        savedAssessments.map((assessment) => (
-                          <SelectItem key={assessment.id} value={assessment.id.toString()}>
-                            {new Date(assessment.createdAt).toLocaleDateString()} - {assessment.businessName || 'Unknown'} ({assessment.reportType})
-                          </SelectItem>
-                        ))
+                        savedAssessments.map((assessment) => {
+                          // Calculate and format the age for display
+                          const age = calculateAssessmentAge(assessment.createdAt);
+                          const ageDisplay = formatAssessmentAge(assessment.createdAt);
+                          
+                          return (
+                            <SelectItem key={assessment.id} value={assessment.id.toString()}>
+                              {format(parseISO(assessment.createdAt), 'MMM d, yyyy')} - {assessment.businessName || 'Unknown'} ({assessment.reportType}) 
+                              <span className="ml-2 px-1.5 py-0.5 text-xs rounded-full inline-flex items-center" style={{backgroundColor: getAgeBadgeColor(age)}}>
+                                {ageDisplay}
+                              </span>
+                            </SelectItem>
+                          );
+                        })
                       )}
                     </SelectContent>
                   </Select>
