@@ -537,43 +537,50 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       id: "iso-27001", 
       label: "ISO 27001", 
       description: "Information Security Management System (ISMS)",
-      type: "standard"
+      type: "standard",
+      family: "Universal Security Standards"
     },
     { 
       id: "iso-27002", 
       label: "ISO 27002", 
       description: "Controls for information security",
-      type: "standard"
+      type: "standard",
+      family: "Universal Security Standards"
     },
     { 
       id: "nist-csf", 
       label: "NIST CSF", 
       description: "Risk management (Identify, Protect, Detect, Respond, Recover)",
-      type: "standard"
+      type: "standard",
+      family: "Universal Security Standards"
     },
     { 
       id: "nist-800-53", 
       label: "NIST SP 800-53", 
       description: "Security controls for federal systems (used beyond government)",
-      type: "standard"
+      type: "standard",
+      family: "Universal Security Standards"
     },
     { 
       id: "cis-csc", 
       label: "CIS Controls", 
       description: "18 prioritized security best practices",
-      type: "standard"
+      type: "standard",
+      family: "Universal Security Standards"
     },
     { 
       id: "soc-2", 
       label: "SOC 2", 
       description: "Security, Availability, Confidentiality (for cloud/services)",
-      type: "standard"
+      type: "standard",
+      family: "Universal Security Standards"
     },
     { 
       id: "pci-dss-comp", 
       label: "PCI-DSS", 
       description: "Payment Card Industry Data Security Standard",
-      type: "standard"
+      type: "standard",
+      family: "Universal Security Standards"
     },
     
     // Healthcare-Specific Standards
@@ -581,43 +588,50 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       id: "hipaa-security", 
       label: "HIPAA Security Rule", 
       description: "Security standards for electronic protected health information",
-      type: "healthcare"
+      type: "healthcare",
+      family: "Healthcare-Specific Standards"
     },
     { 
       id: "hitrust-csf", 
       label: "HITRUST CSF", 
       description: "Healthcare-focused security framework",
-      type: "healthcare"
+      type: "healthcare",
+      family: "Healthcare-Specific Standards"
     },
     { 
       id: "hipaa-privacy", 
       label: "HIPAA Privacy Rule", 
       description: "Standards for individually identifiable health information",
-      type: "healthcare"
+      type: "healthcare",
+      family: "Healthcare-Specific Standards"
     },
     { 
       id: "21-cfr-part-11", 
       label: "21 CFR Part 11", 
       description: "Electronic records and signatures in clinical trials",
-      type: "healthcare"
+      type: "healthcare",
+      family: "Healthcare-Specific Standards"
     },
     { 
       id: "nist-800-66", 
       label: "NIST SP 800-66", 
       description: "Implementing HIPAA Security Rule",
-      type: "healthcare"
+      type: "healthcare",
+      family: "Healthcare-Specific Standards"
     },
     { 
       id: "dicom-security", 
       label: "DICOM Security", 
       description: "Security for medical imaging",
-      type: "healthcare"
+      type: "healthcare",
+      family: "Healthcare-Specific Standards"
     },
     { 
       id: "hl7-fhir-security", 
       label: "HL7 FHIR Security", 
       description: "Security for healthcare data exchange",
-      type: "healthcare"
+      type: "healthcare",
+      family: "Healthcare-Specific Standards"
     },
     
     // Government & Critical Infrastructure
@@ -625,25 +639,29 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       id: "cmmc", 
       label: "CMMC", 
       description: "Cybersecurity Maturity Model Certification (U.S. defense)",
-      type: "standard"
+      type: "standard",
+      family: "Government & Critical Infrastructure"
     },
     { 
       id: "fisma", 
       label: "FISMA", 
       description: "U.S. federal agency security (aligned with NIST)",
-      type: "standard"
+      type: "standard",
+      family: "Government & Critical Infrastructure"
     },
     { 
       id: "fedramp", 
       label: "FedRAMP", 
       description: "Cloud security for U.S. government",
-      type: "standard"
+      type: "standard",
+      family: "Government & Critical Infrastructure"
     },
     { 
       id: "nerc-cip-comp", 
       label: "NERC CIP", 
       description: "Critical infrastructure protection for power grid",
-      type: "standard"
+      type: "standard",
+      family: "Government & Critical Infrastructure"
     },
     
     // Financial & Payment Standards (additional ones beyond PCI-DSS)
@@ -651,13 +669,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       id: "sox-comp", 
       label: "SOX", 
       description: "Sarbanes-Oxley Act financial controls",
-      type: "standard"
+      type: "standard",
+      family: "Financial & Payment Standards"
     },
     { 
       id: "psd2-comp", 
       label: "PSD2", 
       description: "Payment Services Directive 2 (EU)",
-      type: "standard"
+      type: "standard",
+      family: "Financial & Payment Standards"
     },
     
     // Cloud & Data Privacy
@@ -665,13 +685,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       id: "iso-27701", 
       label: "ISO 27701", 
       description: "Privacy information management extension to ISO 27001",
-      type: "standard"
+      type: "standard",
+      family: "Cloud & Data Privacy"
+    },
+    { 
+      id: "ccpa-comp", 
+      label: "CCPA", 
+      description: "California Consumer Privacy Act",
+      type: "standard",
+      family: "Cloud & Data Privacy"
     },
     { 
       id: "soc-1", 
       label: "SOC 1", 
       description: "Controls relevant to financial reporting",
-      type: "standard"
+      type: "standard",
+      family: "Cloud & Data Privacy"
     },
     
     // Industry-Specific Standards
@@ -679,19 +708,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       id: "iec-62443-comp", 
       label: "IEC 62443", 
       description: "Industrial automation and control systems security",
-      type: "standard"
+      type: "standard",
+      family: "Industry-Specific Standards"
     },
     { 
       id: "tisax-comp", 
       label: "TISAX", 
       description: "Trusted Information Security Assessment Exchange (automotive)",
-      type: "standard"
+      type: "standard",
+      family: "Industry-Specific Standards"
     },
     { 
       id: "fips-140-comp", 
       label: "FIPS 140-2/3", 
       description: "Security requirements for cryptographic modules",
-      type: "standard"
+      type: "standard",
+      family: "Industry-Specific Standards"
     },
     
     // Emerging & Regional Standards
@@ -699,25 +731,29 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       id: "cccs-33", 
       label: "CCCS 33", 
       description: "Canadian Centre for Cyber Security baseline controls",
-      type: "standard"
+      type: "standard",
+      family: "Emerging & Regional Standards"
     },
     { 
       id: "ens", 
       label: "ENS", 
       description: "Esquema Nacional de Seguridad (Spanish National Security Framework)",
-      type: "standard"
+      type: "standard",
+      family: "Emerging & Regional Standards"
     },
     { 
       id: "meiti", 
       label: "MEITI", 
       description: "Middle East Information Technology Infrastructure",
-      type: "standard"
+      type: "standard",
+      family: "Emerging & Regional Standards"
     },
     { 
       id: "cyber-ess-uk", 
       label: "Cyber Essentials (UK)", 
       description: "UK government-backed cybersecurity certification",
-      type: "guideline"
+      type: "guideline",
+      family: "Emerging & Regional Standards"
     },
   ];
   
