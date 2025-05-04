@@ -2774,6 +2774,34 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           control={form.control}
                           name="mitreTactics"
                           render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-blue-50">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes("TA0007")}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), "TA0007"]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== "TA0007"
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-medium">Discovery (TA0007)</FormLabel>
+                                <FormDescription>
+                                  Gaining knowledge about the system and internal network
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="mitreTactics"
+                          render={({ field }) => (
                             <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md">
                               <FormControl>
                                 <Checkbox
@@ -2850,6 +2878,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             <li>• Brute Force (T1110)</li>
                             <li>• OS Credential Dumping (T1003)</li>
                             <li>• Input Capture (T1056)</li>
+                          </ul>
+                        </div>
+                        
+                        <div className="rounded-md border p-4">
+                          <h5 className="font-medium">Discovery (TA0007)</h5>
+                          <ul className="mt-2 space-y-1 text-sm">
+                            <li>• Network Service Scanning (T1046)</li>
+                            <li>• Account Discovery (T1087)</li>
+                            <li>• Permission Groups Discovery (T1069)</li>
                           </ul>
                         </div>
                         
