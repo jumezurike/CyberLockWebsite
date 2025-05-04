@@ -314,43 +314,43 @@ export default function Sos2aTool() {
     
     // Question 2 - Operation Security
     const operationSecurityScore = generateScore(data.some(item => 
-      item.operationControls.implemented 
+      item.operationControls?.implemented 
     ) ? 70 : 40);
     
     // Question 3 - Management Security
     const managementSecurityScore = generateScore(data.some(item => 
-      item.managementControls.implemented
+      item.managementControls?.implemented
     ) ? 65 : 35);
     
     // Question 4 - Technology Security
     const technologySecurityScore = generateScore(data.some(item => 
-      item.technologyControls.implemented
+      item.technologyControls?.implemented
     ) ? 60 : 30);
     
     // Question 5 - People Security
     const peopleSecurityScore = generateScore(data.some(item => 
-      item.peopleControls.implemented
+      item.peopleControls?.implemented
     ) ? 55 : 25);
     
     // Question 6 - Standards & Frameworks
     const standardsScore = generateScore(data.some(item => 
-      item.standards.nistCsf || 
-      item.standards.iso27001 || 
-      item.standards.cisCsc
+      item.standards?.nistCsf || 
+      item.standards?.iso27001 || 
+      item.standards?.cisCsc
     ) ? 75 : 45);
     
     // Question 7 - Compliance Requirements
     const complianceScore = generateScore(data.some(item => 
-      item.complianceStandards.pciDss || 
-      item.complianceStandards.hipaa || 
-      item.complianceStandards.gdpr
+      item.complianceStandards?.pciDss || 
+      item.complianceStandards?.hipaa || 
+      item.complianceStandards?.gdpr
     ) ? 65 : 40);
     
     // Question 8 - Regulatory Requirements
     const regulatoryScore = generateScore(data.some(item => 
-      item.regulatoryRequirements.pciDss || 
-      item.regulatoryRequirements.hipaa || 
-      item.regulatoryRequirements.gdpr
+      item.regulatoryRequirements?.pciDss || 
+      item.regulatoryRequirements?.hipaa || 
+      item.regulatoryRequirements?.gdpr
     ) ? 70 : 45);
     
     // Question 9 - ISMS (Information Security Management System)
@@ -388,8 +388,8 @@ export default function Sos2aTool() {
     
     // 4. Dark Web
     const darkWebScore = generateScore(data.some(item => 
-      item.risks.includes('data_breach') || 
-      item.vulnerabilities.includes('credential_exposure')
+      item.risks?.includes('data_breach') || 
+      item.vulnerabilities?.includes('credential_exposure')
     ) ? 45 : 25);
     
     // 5. Endpoint Security
@@ -422,25 +422,25 @@ export default function Sos2aTool() {
     
     // 10. Compliances
     const compliancesScore = generateScore(data.some(item => 
-      item.complianceStandards.pciDss || 
-      item.complianceStandards.hipaa || 
-      item.complianceStandards.gdpr ||
-      item.complianceStandards.soc2
+      item.complianceStandards?.pciDss || 
+      item.complianceStandards?.hipaa || 
+      item.complianceStandards?.gdpr ||
+      item.complianceStandards?.soc2
     ) ? 65 : 40);
     
     // 11. Regulatory Requirements
     const regulatoryRequirementsScore = generateScore(data.some(item => 
-      item.regulatoryRequirements.pciDss || 
-      item.regulatoryRequirements.hipaa || 
-      item.regulatoryRequirements.gdpr ||
-      item.regulatoryRequirements.fisma
+      item.regulatoryRequirements?.pciDss || 
+      item.regulatoryRequirements?.hipaa || 
+      item.regulatoryRequirements?.gdpr ||
+      item.regulatoryRequirements?.fisma
     ) ? 70 : 45);
     
     // 12. Frameworks
     const frameworksScore = generateScore(data.some(item => 
-      item.standards.nistCsf || 
-      item.standards.iso27001 || 
-      item.standards.cisCsc
+      item.standards?.nistCsf || 
+      item.standards?.iso27001 || 
+      item.standards?.cisCsc
     ) ? 75 : 45);
     
     return [
