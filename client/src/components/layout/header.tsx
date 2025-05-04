@@ -130,6 +130,11 @@ export default function Header() {
                     Dashboard
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/lightbulb-moments" className="text-neutral-100 hover:text-secondary cursor-pointer">
+                    Lightbulb Moments
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Link href="/rasbita" className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 mr-2 rounded-md shadow-sm transition duration-150 ease-in-out flex items-center">
@@ -190,6 +195,9 @@ export default function Header() {
           </a>
           <Link href="/dashboard" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium pl-6">
             Dashboard
+          </Link>
+          <Link href="/lightbulb-moments" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium pl-6">
+            Lightbulb Moments
           </Link>
           <Link href="/rasbita" onClick={closeMobileMenu} className="bg-red-600 hover:bg-red-700 text-white block text-center mt-3 px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">

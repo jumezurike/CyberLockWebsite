@@ -63,6 +63,8 @@ function Router() {
         </Switch>
         {/* Add direct navigation for testing */}
         <DirectNavigation />
+        {/* Add lightbulb capture interface */}
+        <LightbulbCapture />
       </main>
       <Footer />
     </div>
@@ -75,7 +77,6 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
-        <LightbulbCapture />
       </TooltipProvider>
     </QueryClientProvider>
   );
