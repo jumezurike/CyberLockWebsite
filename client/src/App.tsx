@@ -19,6 +19,7 @@ import ThreatModelingSimple from "@/pages/threat-modeling-simple";
 import PrivacyPolicy from "@/pages/privacy-policy";
 import TermsOfService from "@/pages/terms-of-service";
 import DataUsePolicy from "@/pages/data-use-policy";
+import KnowledgeBasePage from "@/pages/knowledge-base";
 import Checkout from "@/pages/checkout";
 import PaymentSuccess from "@/pages/payment-success";
 import PaymentError from "@/pages/payment-error";
@@ -51,6 +52,7 @@ function Router() {
           <Route path="/privacy-policy" component={PrivacyPolicy} />
           <Route path="/terms-of-service" component={TermsOfService} />
           <Route path="/data-use-policy" component={DataUsePolicy} />
+          <Route path="/knowledge-base" component={KnowledgeBasePage} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/payment-error" component={PaymentError} />
