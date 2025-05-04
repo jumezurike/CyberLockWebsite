@@ -2088,50 +2088,111 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                   
                   <div className="space-y-8">
-                    {/* Universal Security Frameworks */}
+                    {/* Security Frameworks by Family */}
                     <div>
                       <h4 className="font-medium text-lg border-b pb-2 mb-4 text-red-600">
                         <span className="inline-block w-3 h-3 rounded-full bg-red-600 mr-2"></span>
-                        Universal Security Frameworks <span className="text-sm font-normal">(Standards)</span>
+                        Security Frameworks <span className="text-sm font-normal">(Standards)</span>
                       </h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {complianceFrameworkOptions.map((option) => (
-                          option.type === "standard" && (
-                            <FormField
-                              key={option.id}
-                              control={form.control}
-                              name="complianceRequirements.frameworks"
-                              render={({ field }) => (
-                                <FormItem
+                      
+                      {/* Group standards by family */}
+                      {Array.from(new Set(complianceFrameworkOptions
+                          .filter(option => option.type === "standard" && option.family)
+                          .map(option => option.family)))
+                        .sort()
+                        .map(family => (
+                          <div key={family} className="mb-6">
+                            <h5 className="font-medium text-md border-b pb-1 mb-3 text-primary">
+                              {family}
+                            </h5>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {complianceFrameworkOptions
+                                .filter(option => option.type === "standard" && option.family === family)
+                                .map((option) => (
+                                  <FormField
+                                    key={option.id}
+                                    control={form.control}
+                                    name="complianceRequirements.frameworks"
+                                    render={({ field }) => (
+                                      <FormItem
+                                        key={option.id}
+                                        className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(option.id)}
+                                            onCheckedChange={(checked) => {
+                                              return checked
+                                                ? field.onChange([...(field.value || []), option.id])
+                                                : field.onChange(
+                                                    field.value?.filter(
+                                                      (value) => value !== option.id
+                                                    ) || []
+                                                  );
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <div className="space-y-1 leading-none">
+                                          <FormLabel className="font-medium">{option.label}</FormLabel>
+                                          <FormDescription>
+                                            {option.description}
+                                          </FormDescription>
+                                        </div>
+                                      </FormItem>
+                                    )}
+                                  />
+                                ))}
+                            </div>
+                          </div>
+                        ))
+                      }
+                      
+                      {/* Handle standards without a family (backwards compatibility) */}
+                      {complianceFrameworkOptions.filter(option => option.type === "standard" && !option.family).length > 0 && (
+                        <div className="mb-6">
+                          <h5 className="font-medium text-md border-b pb-1 mb-3 text-primary">
+                            Other Standards
+                          </h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {complianceFrameworkOptions
+                              .filter(option => option.type === "standard" && !option.family)
+                              .map((option) => (
+                                <FormField
                                   key={option.id}
-                                  className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50"
-                                >
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes(option.id)}
-                                      onCheckedChange={(checked) => {
-                                        return checked
-                                          ? field.onChange([...(field.value || []), option.id])
-                                          : field.onChange(
-                                              field.value?.filter(
-                                                (value) => value !== option.id
-                                              ) || []
-                                            );
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <div className="space-y-1 leading-none">
-                                    <FormLabel className="font-medium">{option.label}</FormLabel>
-                                    <FormDescription>
-                                      {option.description}
-                                    </FormDescription>
-                                  </div>
-                                </FormItem>
-                              )}
-                            />
-                          )
-                        ))}
-                      </div>
+                                  control={form.control}
+                                  name="complianceRequirements.frameworks"
+                                  render={({ field }) => (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([...(field.value || []), option.id])
+                                              : field.onChange(
+                                                  field.value?.filter(
+                                                    (value) => value !== option.id
+                                                  ) || []
+                                                );
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <div className="space-y-1 leading-none">
+                                        <FormLabel className="font-medium">{option.label}</FormLabel>
+                                        <FormDescription>
+                                          {option.description}
+                                        </FormDescription>
+                                      </div>
+                                    </FormItem>
+                                  )}
+                                />
+                              ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                     
                     {/* Optional Guidelines */}
