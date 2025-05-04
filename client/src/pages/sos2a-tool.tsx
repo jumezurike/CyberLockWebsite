@@ -515,7 +515,7 @@ export default function Sos2aTool() {
       // We already calculated RASBITA score above, reuse it for consistency
       // The rasbitaCategories property is already in the format expected by the RasbitaReport type
       
-      const response = await apiRequest("POST", "/api/assessments", {
+      const assessmentData = {
         businessName: formData?.businessName || "Unknown",
         industry: formData?.industry || "Unknown",
         businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
@@ -527,20 +527,36 @@ export default function Sos2aTool() {
         rasbitaScore: JSON.stringify(calculatedRasbitaScore),
         rasbitaCategories: JSON.stringify(rasbitaCategories),
         createdAt: new Date().toISOString()
-      });
+      };
+      
+      console.log("Saving assessment data:", assessmentData);
+      
+      const response = await apiRequest("POST", "/api/assessments", assessmentData);
       
       if (!response.ok) {
         throw new Error("Failed to save assessment");
       }
+      
+      // Show a success message
+      toast({
+        title: "Assessment Saved",
+        description: "Your assessment has been successfully saved to the database and can be accessed from the Assessment History section.",
+      });
       
       // Refresh the list of saved assessments
       const assessmentsResponse = await apiRequest("GET", "/api/assessments");
       if (assessmentsResponse.ok) {
         const assessments = await assessmentsResponse.json();
         setSavedAssessments(assessments);
+        console.log("Fetched saved assessments:", assessments);
       }
     } catch (error) {
       console.error("Error saving assessment:", error);
+      toast({
+        title: "Save Error",
+        description: "There was an error saving your assessment. Please try again or check the console for details.",
+        variant: "destructive",
+      });
     }
   };
   
