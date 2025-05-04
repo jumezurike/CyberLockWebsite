@@ -516,6 +516,68 @@ export function KnowledgeBase({ title = "Knowledge Base", description }: Knowled
       ),
     },
     {
+      id: 'knowledge-sharing',
+      title: 'Human-AI Knowledge Sharing Philosophy',
+      content: (
+        <div className="space-y-4">
+          <p>
+            At CyberLockX, we believe in a continuous, bidirectional knowledge exchange between human experts and AI systems. 
+            This philosophy forms the foundation of our approach to cybersecurity and ensures that the collective intelligence 
+            of our organization continuously grows and evolves.
+          </p>
+          
+          <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 my-4">
+            <h4 className="font-medium text-blue-800 mb-2">Our Knowledge Sharing Principles</h4>
+            <ul className="list-disc pl-5 text-sm text-blue-700">
+              <li><span className="font-medium">Human Insights First:</span> All "light bulb moments" and expert insights from our security professionals are systematically captured and preserved</li>
+              <li><span className="font-medium">Contextual Documentation:</span> We document not just what was discovered, but the human reasoning and context behind it</li>
+              <li><span className="font-medium">Accessible Knowledge:</span> Human knowledge is structured to be accessible both to other humans and AI systems</li>
+              <li><span className="font-medium">Continuous Learning:</span> Our AI systems are designed to learn from human expertise rather than replace it</li>
+              <li><span className="font-medium">Ethical Transparency:</span> We maintain clear boundaries between human-generated and AI-supported insights</li>
+            </ul>
+          </div>
+          
+          <h4 className="font-medium">The Knowledge Sharing Process</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-3">
+            <div className="bg-white p-4 rounded border relative">
+              <div className="absolute -top-3 left-4 bg-primary text-white text-xs font-bold py-1 px-2 rounded">From Human to AI</div>
+              <p className="text-sm text-muted-foreground mt-3">
+                Security analysts document discoveries, intuitive leaps, and expert judgments in structured knowledge templates. 
+                These capture the analyst's reasoning process, contextual awareness, and experiential factors that influenced 
+                their decisions. This human knowledge is then formalized and made available to augment AI systems.
+              </p>
+            </div>
+            
+            <div className="bg-white p-4 rounded border relative">
+              <div className="absolute -top-3 left-4 bg-primary text-white text-xs font-bold py-1 px-2 rounded">From AI to Human</div>
+              <p className="text-sm text-muted-foreground mt-3">
+                AI systems process and analyze vast amounts of security data, identifying patterns and potential relationships. 
+                These observations are presented to human experts who validate, contextualize, and determine the significance 
+                of the findings. The human evaluation is then fed back into the knowledge system.
+              </p>
+            </div>
+          </div>
+          
+          <p className="text-sm mt-4">
+            This constant cycle of knowledge exchange ensures that our AI systems benefit from irreplaceable human intuition and 
+            expertise, while our human analysts can leverage the pattern recognition and processing capabilities of AI. The result 
+            is a security operation that combines the best of both worlds – human creativity, ethical judgment, and contextual 
+            understanding enhanced by AI's speed, consistency, and analytical power.
+          </p>
+          
+          <div className="bg-amber-50 p-4 rounded-md border border-amber-100 mt-4">
+            <h4 className="font-medium text-amber-800">Real-World Impact</h4>
+            <p className="text-sm text-amber-700 mt-2">
+              This knowledge sharing approach has enabled CyberLockX to identify advanced threats that would have been missed by 
+              either humans or AI operating independently. By preserving and leveraging the human "light bulb moments" – those 
+              flashes of insight that come from experience and intuition – we've built a security system that grows more effective 
+              with each security incident and investigation.
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
       id: 'automated-response',
       title: 'Human-First Threat Hunting & Response',
       content: (
