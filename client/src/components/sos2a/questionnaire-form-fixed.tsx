@@ -760,6 +760,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const policyOptions = [
     { id: "acceptable-use", label: "Acceptable Use Policy" },
     { id: "information-security", label: "Information Security Policy" },
+    { id: "system-security", label: "System Security Plan (SSP)" },
     { id: "password", label: "Password Policy" },
     { id: "data-classification", label: "Data Classification Policy" },
     { id: "remote-work", label: "Remote Work Policy" },
