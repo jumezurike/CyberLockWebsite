@@ -51,6 +51,8 @@ const formSchema = z.object({
   customOperationMode: z.string().optional(),
   showCustomOperationMode: z.boolean().optional(),
   internetPresence: z.array(z.string()).min(1, "At least one internet presence is required"),
+  primaryConcerns: z.array(z.string()),
+  vulnerabilities: z.array(z.string()),
   
   // 3. Configuration Baseline
   configurationManagement: z.string().optional(),
@@ -64,7 +66,6 @@ const formSchema = z.object({
   
   // 4. Security Control Framework
   securityMeasures: z.array(z.string()),
-  primaryConcerns: z.array(z.string()),
   frameworks: z.object({
     operations: z.array(z.string()),
     management: z.array(z.string()),
@@ -229,6 +230,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       customOperationMode: "",
       showCustomOperationMode: false,
       internetPresence: [],
+      primaryConcerns: [],
+      vulnerabilities: [],
       configurationManagement: "",
       systemHardeningApproach: "",
       operatingSystems: [],
@@ -240,7 +243,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       
       // 4. Security Control Framework
       securityMeasures: [],
-      primaryConcerns: [],
       frameworks: {
         operations: [],
         management: [],
