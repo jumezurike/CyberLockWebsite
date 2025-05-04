@@ -74,7 +74,6 @@ export interface Sos2aFormData {
   
   // 4. Security Control Framework
   securityMeasures: string[];
-  primaryConcerns: string[];
   frameworks: FrameworkSelection;
   
   // 5. Compliance
