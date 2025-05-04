@@ -729,6 +729,12 @@ export default function Sos2aTool() {
         }
       }
       
+      // Calculate assessment age in days
+      const assessmentAge = calculateAssessmentAge(assessment.createdAt);
+      
+      // Update the assessment with calculated age
+      assessment.age = assessmentAge;
+      
       // Set the report
       setReport(assessment);
       setStep('report');
