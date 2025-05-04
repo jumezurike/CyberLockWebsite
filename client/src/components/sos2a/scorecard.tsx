@@ -236,41 +236,118 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
         
         {/* NIST CSF 2.0 Radar Chart for RASBITA Governance & Management */}
         <div className="mt-6 border-t pt-6">
-          <h4 className="text-lg font-semibold mb-4">NIST CSF 2.0 Framework Alignment</h4>
-          <div className="h-[400px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={[
-                { subject: "Govern", A: report.rasbitaCategories?.govern || 0, fullMark: 100 },
-                { subject: "Identify", A: report.rasbitaCategories?.identify || 0, fullMark: 100 },
-                { subject: "Protect", A: report.rasbitaCategories?.protect || 0, fullMark: 100 },
-                { subject: "Detect", A: report.rasbitaCategories?.detect || 0, fullMark: 100 },
-                { subject: "Respond", A: report.rasbitaCategories?.respond || 0, fullMark: 100 },
-                { subject: "Recover", A: report.rasbitaCategories?.recover || 0, fullMark: 100 }
-              ]}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" />
-                <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                <Radar
-                  name="Framework Alignment"
-                  dataKey="A"
-                  stroke="#00C49F"
-                  fill="#00C49F"
-                  fillOpacity={0.6}
-                />
-                <Tooltip formatter={(value) => `${value}%`} />
-                <Legend />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mt-4 text-center text-sm">
-            {["Govern", "Identify", "Protect", "Detect", "Respond", "Recover"].map((item, index) => (
-              <div key={index} className="p-2 border rounded">
-                <div className="font-medium">{item}</div>
-                <div className={`${getScoreColor(report.rasbitaCategories?.[item.toLowerCase()] || 0)} font-bold mt-1`}>
-                  {report.rasbitaCategories?.[item.toLowerCase()] ? `${report.rasbitaCategories[item.toLowerCase()]}%` : "N/A"}
+          <h4 className="text-lg font-semibold mb-4">NIST CSF 2.0 Framework Alignment (0-4 Tier Maturity)</h4>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart cx="50%" cy="50%" outerRadius="80%" data={[
+                  { 
+                    subject: "Govern", 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.govern || 0) / 25))), 
+                    fullMark: 4 
+                  },
+                  { 
+                    subject: "Identify", 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.identify || 0) / 25))), 
+                    fullMark: 4 
+                  },
+                  { 
+                    subject: "Protect", 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.protect || 0) / 25))), 
+                    fullMark: 4 
+                  },
+                  { 
+                    subject: "Detect", 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.detect || 0) / 25))), 
+                    fullMark: 4 
+                  },
+                  { 
+                    subject: "Respond", 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.respond || 0) / 25))), 
+                    fullMark: 4 
+                  },
+                  { 
+                    subject: "Recover", 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.recover || 0) / 25))), 
+                    fullMark: 4 
+                  }
+                ]}>
+                  <PolarGrid />
+                  <PolarAngleAxis dataKey="subject" />
+                  <PolarRadiusAxis 
+                    angle={90} 
+                    domain={[0, 4]} 
+                    tickCount={5} 
+                    tick={(props) => {
+                      const { x, y, payload } = props;
+                      return (
+                        <g transform={`translate(${x},${y})`}>
+                          <text
+                            textAnchor="middle"
+                            fill="#666"
+                            fontSize={12}
+                          >
+                            {`Tier ${payload.value}`}
+                          </text>
+                        </g>
+                      );
+                    }}
+                  />
+                  <Radar
+                    name="Maturity Tier"
+                    dataKey="A"
+                    stroke="#00C49F"
+                    fill="#00C49F"
+                    fillOpacity={0.6}
+                  />
+                  <Tooltip 
+                    formatter={(value) => `Tier ${value}`} 
+                    labelFormatter={(name) => `${name}`}
+                  />
+                  <Legend />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+            <div>
+              <div className="p-3 border rounded mb-4">
+                <h5 className="text-sm font-medium mb-2">NIST CSF Maturity Tier Legend</h5>
+                <div className="space-y-2 text-xs">
+                  <div className="flex items-start">
+                    <div className="font-semibold w-16">Tier 1:</div>
+                    <div>Partial - Risk management practices are not formalized and managed in an ad hoc manner.</div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="font-semibold w-16">Tier 2:</div>
+                    <div>Risk Informed - Risk management practices are approved but may not be established as organizational policy.</div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="font-semibold w-16">Tier 3:</div>
+                    <div>Repeatable - Organization-wide risk management practices are formally approved and expressed as policy.</div>
+                  </div>
+                  <div className="flex items-start">
+                    <div className="font-semibold w-16">Tier 4:</div>
+                    <div>Adaptive - Organization adapts cybersecurity practices based on lessons learned and predictive indicators.</div>
+                  </div>
                 </div>
               </div>
-            ))}
+              <div className="grid grid-cols-3 gap-2 text-center text-sm">
+                {["Govern", "Identify", "Protect", "Detect", "Respond", "Recover"].map((item, index) => {
+                  const percentScore = report.rasbitaCategories?.[item.toLowerCase()] || 0;
+                  const tierScore = Math.min(4, Math.max(0, Math.round(percentScore / 25)));
+                  return (
+                    <div key={index} className="p-2 border rounded">
+                      <div className="font-medium">{item}</div>
+                      <div className={`${getScoreColor(percentScore)} font-bold mt-1`}>
+                        Tier {tierScore}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {percentScore}%
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
         
