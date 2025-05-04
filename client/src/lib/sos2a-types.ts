@@ -434,6 +434,8 @@ export interface AssessmentReport {
   reportType: 'preliminary' | 'comprehensive';
   preliminaryReportId?: string; // Reference to preliminary report ID (required for comprehensive reports)
   createdAt: string;
+  updatedAt?: string; // Last modification date
+  age?: number; // Age of the assessment in days
   securityScore: number;
   businessLocation: {
     state: string;
