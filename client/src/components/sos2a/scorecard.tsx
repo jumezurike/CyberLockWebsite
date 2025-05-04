@@ -189,6 +189,46 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
           </div>
         </div>
         
+        {/* NIST CSF 2.0 Radar Chart for RASBITA Governance & Management */}
+        <div className="mt-6 border-t pt-6">
+          <h4 className="text-lg font-semibold mb-4">NIST CSF 2.0 Framework Alignment</h4>
+          <div className="h-[400px]">
+            <ResponsiveContainer width="100%" height="100%">
+              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={[
+                { subject: "Govern", A: report.rasbitaCategories?.govern || 0, fullMark: 100 },
+                { subject: "Identify", A: report.rasbitaCategories?.identify || 0, fullMark: 100 },
+                { subject: "Protect", A: report.rasbitaCategories?.protect || 0, fullMark: 100 },
+                { subject: "Detect", A: report.rasbitaCategories?.detect || 0, fullMark: 100 },
+                { subject: "Respond", A: report.rasbitaCategories?.respond || 0, fullMark: 100 },
+                { subject: "Recover", A: report.rasbitaCategories?.recover || 0, fullMark: 100 }
+              ]}>
+                <PolarGrid />
+                <PolarAngleAxis dataKey="subject" />
+                <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                <Radar
+                  name="Framework Alignment"
+                  dataKey="A"
+                  stroke="#00C49F"
+                  fill="#00C49F"
+                  fillOpacity={0.6}
+                />
+                <Tooltip formatter={(value) => `${value}%`} />
+                <Legend />
+              </RadarChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-2 mt-4 text-center text-sm">
+            {["Govern", "Identify", "Protect", "Detect", "Respond", "Recover"].map((item, index) => (
+              <div key={index} className="p-2 border rounded">
+                <div className="font-medium">{item}</div>
+                <div className={`${getScoreColor(report.rasbitaCategories?.[item.toLowerCase()] || 0)} font-bold mt-1`}>
+                  {report.rasbitaCategories?.[item.toLowerCase()] ? `${report.rasbitaCategories[item.toLowerCase()]}%` : "N/A"}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        
         {/* Additional context for scorecard */}
         <div className="mt-4 border-t pt-4">
           <h4 className="text-sm font-semibold mb-2">
