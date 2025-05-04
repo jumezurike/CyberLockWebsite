@@ -1388,7 +1388,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
                           {/* Website Vulnerabilities */}
                           <div className="mb-4">
-                            <h4 className="text-sm font-medium mb-2">Website Vulnerabilities</h4>
+                            <h4 className="text-sm font-medium text-orange-600 mb-2">Website Vulnerabilities</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {vulnerabilitiesOptions
                                 .filter(v => v.category === 'web')
@@ -1429,7 +1429,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
                           {/* End Device Security Vulnerabilities */}
                           <div>
-                            <h4 className="text-sm font-medium mb-2">End Device Security Vulnerabilities</h4>
+                            <h4 className="text-sm font-medium text-orange-600 mb-2">End Device Security Vulnerabilities</h4>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                               {vulnerabilitiesOptions
                                 .filter(v => v.category === 'eds')
