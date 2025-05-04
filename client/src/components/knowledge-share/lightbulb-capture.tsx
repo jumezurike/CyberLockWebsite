@@ -20,7 +20,7 @@ export default function LightbulbCapture() {
   const [successAnimation, setSuccessAnimation] = useState(false);
 
   const categories = [
-    { id: 'security', name: 'Security Insight' },
+    { id: 'security', name: 'Cybersecurity Insight' },
     { id: 'process', name: 'Process Improvement' },
     { id: 'technical', name: 'Technical Solution' },
     { id: 'threat', name: 'Threat Intelligence' },

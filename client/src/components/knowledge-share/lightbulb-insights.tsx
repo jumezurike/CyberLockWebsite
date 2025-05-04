@@ -18,7 +18,7 @@ export default function LightbulbInsights() {
   const [isLoading, setIsLoading] = useState(true);
 
   const categories = [
-    { id: 'security', name: 'Security Insight' },
+    { id: 'security', name: 'Cybersecurity Insight' },
     { id: 'process', name: 'Process Improvement' },
     { id: 'technical', name: 'Technical Solution' },
     { id: 'threat', name: 'Threat Intelligence' },
