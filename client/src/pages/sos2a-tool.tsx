@@ -141,6 +141,13 @@ export default function Sos2aTool() {
   const [savedAssessments, setSavedAssessments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedAssessmentId, setSelectedAssessmentId] = useState<string>("");
+  
+  // Search state
+  const [searchCompanyName, setSearchCompanyName] = useState<string>("");
+  const [searchFromDate, setSearchFromDate] = useState<string>("");
+  const [searchToDate, setSearchToDate] = useState<string>("");
+  const [isSearching, setIsSearching] = useState(false);
+  
   const { toast } = useToast();
   
   // Progress percentage based on current step and report type
@@ -380,6 +387,71 @@ export default function Sos2aTool() {
     setMatrixData(null);
     setReport(null);
     setSelectedAssessmentId("");
+  };
+  
+  // Search for assessments based on filters
+  const handleSearchAssessments = async () => {
+    setIsSearching(true);
+    try {
+      // Build query parameters
+      const params = new URLSearchParams();
+      if (searchCompanyName) params.append('companyName', searchCompanyName);
+      if (searchFromDate) params.append('fromDate', searchFromDate);
+      if (searchToDate) params.append('toDate', searchToDate);
+      
+      const queryString = params.toString();
+      const endpoint = queryString ? `/api/assessments?${queryString}` : '/api/assessments';
+      
+      const response = await apiRequest("GET", endpoint);
+      
+      if (!response.ok) {
+        throw new Error("Failed to search assessments");
+      }
+      
+      const assessments = await response.json();
+      setSavedAssessments(assessments);
+      
+      // Show feedback to user
+      toast({
+        title: assessments.length > 0 ? "Search Results" : "No matches found",
+        description: assessments.length > 0 
+          ? `Found ${assessments.length} assessment(s) matching your criteria.` 
+          : "Try broadening your search criteria.",
+      });
+      
+    } catch (error) {
+      console.error("Error searching assessments:", error);
+      toast({
+        title: "Search Error",
+        description: "An error occurred while searching. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSearching(false);
+    }
+  };
+  
+  // Clear all search filters and show all assessments
+  const handleClearSearch = async () => {
+    setSearchCompanyName("");
+    setSearchFromDate("");
+    setSearchToDate("");
+    
+    setIsLoading(true);
+    try {
+      const response = await apiRequest("GET", "/api/assessments");
+      
+      if (!response.ok) {
+        throw new Error("Failed to fetch all assessments");
+      }
+      
+      const assessments = await response.json();
+      setSavedAssessments(assessments);
+    } catch (error) {
+      console.error("Error fetching all assessments:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   // Fetch saved assessments on component mount
@@ -1370,9 +1442,68 @@ export default function Sos2aTool() {
           </CardTitle>
         </CardHeader>
         <CardContent>
+          {/* Assessment Search */}
+          <div className="mb-6 border rounded-lg p-4 bg-gray-50">
+            <h2 className="text-md font-medium mb-3">Search Assessments</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              {/* Company Name Search */}
+              <div>
+                <label className="text-sm font-medium mb-1 block">Company Name</label>
+                <input 
+                  type="text" 
+                  value={searchCompanyName}
+                  onChange={(e) => setSearchCompanyName(e.target.value)}
+                  placeholder="Enter company name"
+                  className="w-full px-3 py-2 border rounded-md"
+                />
+              </div>
+              
+              {/* From Date */}
+              <div>
+                <label className="text-sm font-medium mb-1 block">From Date</label>
+                <input 
+                  type="date" 
+                  value={searchFromDate}
+                  onChange={(e) => setSearchFromDate(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md"
+                />
+              </div>
+              
+              {/* To Date */}
+              <div>
+                <label className="text-sm font-medium mb-1 block">To Date</label>
+                <input 
+                  type="date" 
+                  value={searchToDate}
+                  onChange={(e) => setSearchToDate(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-md"
+                />
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-2">
+              <Button 
+                onClick={handleClearSearch}
+                variant="outline"
+                disabled={isSearching || (!searchCompanyName && !searchFromDate && !searchToDate)}
+              >
+                Clear
+              </Button>
+              <Button 
+                onClick={handleSearchAssessments}
+                disabled={isSearching || (!searchCompanyName && !searchFromDate && !searchToDate)}
+                className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white"
+              >
+                {isSearching ? 'Searching...' : 'Search'}
+              </Button>
+            </div>
+          </div>
+          
           {/* Saved Assessments Selector */}
           <div className="flex items-center justify-between mb-6 gap-4">
             <div className="flex-1">
+              <label className="text-sm font-medium mb-1 block">Assessment History</label>
               <Select 
                 value={selectedAssessmentId} 
                 onValueChange={(value) => setSelectedAssessmentId(value)}
@@ -1384,13 +1515,13 @@ export default function Sos2aTool() {
                 <SelectContent>
                   {savedAssessments.map((assessment) => (
                     <SelectItem key={assessment.id} value={assessment.id.toString()}>
-                      {new Date(assessment.createdAt).toLocaleDateString()} - {assessment.industry || 'Unknown'} ({assessment.reportType})
+                      {new Date(assessment.createdAt).toLocaleDateString()} - {assessment.businessName || 'Unknown'} ({assessment.reportType})
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex gap-2">
+            <div className="flex gap-2 items-end">
               <Button 
                 onClick={() => loadAssessment(selectedAssessmentId)}
                 disabled={!selectedAssessmentId || isLoading}
@@ -1415,15 +1546,15 @@ export default function Sos2aTool() {
                   Delete
                 </Button>
               )}
+              
+              <Button 
+                onClick={handleStartOver}
+                disabled={isLoading}
+                variant="secondary"
+              >
+                Start New Assessment
+              </Button>
             </div>
-            
-            <Button 
-              onClick={handleStartOver}
-              disabled={isLoading}
-              variant="secondary"
-            >
-              Start New Assessment
-            </Button>
           </div>
 
           <div className="space-y-4">

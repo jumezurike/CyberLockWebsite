@@ -13,9 +13,16 @@ import {
   type RasbitaReport 
 } from "@shared/schema";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { eq, sql, desc } from "drizzle-orm";
 
 // Interface for storage operations
+// Interface for assessment search parameters
+export interface AssessmentSearchParams {
+  companyName?: string;
+  fromDate?: Date;
+  toDate?: Date;
+}
+
 export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
@@ -24,6 +31,7 @@ export interface IStorage {
   
   // Assessment operations
   getAllAssessments(): Promise<Assessment[]>;
+  searchAssessments(params: AssessmentSearchParams): Promise<Assessment[]>;
   getAssessment(id: number): Promise<Assessment | undefined>;
   createAssessment(assessment: InsertAssessment): Promise<Assessment>;
   updateAssessment(id: number, assessment: InsertAssessment): Promise<Assessment | undefined>;
@@ -75,6 +83,53 @@ export class DatabaseStorage implements IStorage {
   // Assessment operations
   async getAllAssessments(): Promise<Assessment[]> {
     return await db.select().from(assessments);
+  }
+  
+  async searchAssessments(params: AssessmentSearchParams): Promise<Assessment[]> {
+    let conditions = [];
+    
+    // Filter by company name if provided (case insensitive partial match)
+    if (params.companyName) {
+      conditions.push(
+        sql`LOWER(${assessments.businessName}) LIKE LOWER(${'%' + params.companyName + '%'})`
+      );
+    }
+    
+    // Filter by date range if provided
+    if (params.fromDate) {
+      conditions.push(
+        sql`${assessments.createdAt} >= ${params.fromDate}`
+      );
+    }
+    
+    if (params.toDate) {
+      // Add one day to include the end date fully
+      const toDatePlusOneDay = new Date(params.toDate);
+      toDatePlusOneDay.setDate(toDatePlusOneDay.getDate() + 1);
+      
+      conditions.push(
+        sql`${assessments.createdAt} < ${toDatePlusOneDay}`
+      );
+    }
+    
+    // If we have conditions, add them to the query
+    if (conditions.length > 0) {
+      // Combine all conditions with AND
+      const whereClause = conditions.reduce((acc, condition) => {
+        if (acc === null) return condition;
+        return sql`${acc} AND ${condition}`;
+      }, null as any);
+      
+      return await db.select()
+        .from(assessments)
+        .where(whereClause)
+        .orderBy(desc(assessments.createdAt));
+    }
+    
+    // If no conditions, return all assessments ordered by most recent first
+    return await db.select()
+      .from(assessments)
+      .orderBy(desc(assessments.createdAt));
   }
 
   async getAssessment(id: number): Promise<Assessment | undefined> {

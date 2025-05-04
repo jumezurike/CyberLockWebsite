@@ -18,8 +18,22 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Get all assessments (for a user)
   app.get("/api/assessments", async (req, res) => {
     try {
-      const assessments = await storage.getAllAssessments();
-      res.json(assessments);
+      const { companyName, fromDate, toDate } = req.query;
+      
+      // If search parameters are provided, use filtered search
+      if (companyName || fromDate || toDate) {
+        const searchParams = {
+          companyName: companyName as string || undefined,
+          fromDate: fromDate ? new Date(fromDate as string) : undefined,
+          toDate: toDate ? new Date(toDate as string) : undefined,
+        };
+        const assessments = await storage.searchAssessments(searchParams);
+        res.json(assessments);
+      } else {
+        // Otherwise get all assessments
+        const assessments = await storage.getAllAssessments();
+        res.json(assessments);
+      }
     } catch (error) {
       console.error("Error fetching assessments:", error);
       res.status(500).json({ error: "Failed to fetch assessments" });
