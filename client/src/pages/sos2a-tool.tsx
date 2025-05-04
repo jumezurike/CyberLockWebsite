@@ -1647,117 +1647,194 @@ export default function Sos2aTool() {
         </CardHeader>
         <CardContent>
           {/* Assessment Search */}
-          <div className="mb-6 border rounded-lg p-4 bg-gray-50">
-            <h2 className="text-md font-medium mb-3">Search Assessments</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-              {/* Company Name Search */}
-              <div>
-                <label className="text-sm font-medium mb-1 block">Company Name</label>
-                <input 
-                  type="text" 
-                  value={searchCompanyName}
-                  onChange={(e) => setSearchCompanyName(e.target.value)}
-                  placeholder="Enter company name"
-                  className="w-full px-3 py-2 border rounded-md"
-                />
-              </div>
-              
-              {/* From Date */}
-              <div>
-                <label className="text-sm font-medium mb-1 block">From Date</label>
-                <input 
-                  type="date" 
-                  value={searchFromDate}
-                  onChange={(e) => setSearchFromDate(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md"
-                />
-              </div>
-              
-              {/* To Date */}
-              <div>
-                <label className="text-sm font-medium mb-1 block">To Date</label>
-                <input 
-                  type="date" 
-                  value={searchToDate}
-                  onChange={(e) => setSearchToDate(e.target.value)}
-                  className="w-full px-3 py-2 border rounded-md"
-                />
-              </div>
+          <div className="mb-6 border rounded-lg shadow-sm overflow-hidden">
+            <div className="bg-blue-50 p-3 border-b flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-blue-600">
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.3-4.3"></path>
+              </svg>
+              <h2 className="text-lg font-medium text-blue-700">Search Assessments</h2>
             </div>
             
-            <div className="flex justify-end gap-2">
-              <Button 
-                onClick={handleClearSearch}
-                variant="outline"
-                disabled={isSearching || (!searchCompanyName && !searchFromDate && !searchToDate)}
-              >
-                Clear
-              </Button>
-              <Button 
-                onClick={handleSearchAssessments}
-                disabled={isSearching || (!searchCompanyName && !searchFromDate && !searchToDate)}
-                className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white"
-              >
-                {isSearching ? 'Searching...' : 'Search'}
-              </Button>
+            <div className="p-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                {/* Company Name Search */}
+                <div>
+                  <Label className="text-sm font-medium mb-1 block">Company Name</Label>
+                  <Input 
+                    type="text" 
+                    value={searchCompanyName}
+                    onChange={(e) => setSearchCompanyName(e.target.value)}
+                    placeholder="Enter company name"
+                    className="w-full"
+                  />
+                </div>
+                
+                {/* From Date */}
+                <div>
+                  <Label className="text-sm font-medium mb-1 block">From Date</Label>
+                  <Input 
+                    type="date" 
+                    value={searchFromDate}
+                    onChange={(e) => setSearchFromDate(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+                
+                {/* To Date */}
+                <div>
+                  <Label className="text-sm font-medium mb-1 block">To Date</Label>
+                  <Input 
+                    type="date" 
+                    value={searchToDate}
+                    onChange={(e) => setSearchToDate(e.target.value)}
+                    className="w-full"
+                  />
+                </div>
+              </div>
+              
+              <div className="flex justify-end gap-2">
+                <Button 
+                  onClick={handleClearSearch}
+                  variant="outline"
+                  size="sm"
+                  disabled={isSearching || (!searchCompanyName && !searchFromDate && !searchToDate)}
+                  className="h-9"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                    <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"></path>
+                    <path d="m14.5 9-5 5"></path>
+                    <path d="m9.5 9 5 5"></path>
+                  </svg>
+                  Clear
+                </Button>
+                <Button 
+                  onClick={handleSearchAssessments}
+                  disabled={isSearching || (!searchCompanyName && !searchFromDate && !searchToDate)}
+                  className="bg-primary text-white hover:bg-primary/90 h-9"
+                  size="sm"
+                >
+                  {isSearching ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Searching...
+                    </>
+                  ) : (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.3-4.3"></path>
+                      </svg>
+                      Search
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </div>
           
-          {/* Saved Assessments Selector */}
-          <div className="flex items-center justify-between mb-6 gap-4">
-            <div className="flex-1">
-              <label className="text-sm font-medium mb-1 block">Assessment History</label>
-              <Select 
-                value={selectedAssessmentId} 
-                onValueChange={(value) => setSelectedAssessmentId(value)}
-                disabled={isLoading}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Load a saved assessment" />
-                </SelectTrigger>
-                <SelectContent>
-                  {savedAssessments.map((assessment) => (
-                    <SelectItem key={assessment.id} value={assessment.id.toString()}>
-                      {new Date(assessment.createdAt).toLocaleDateString()} - {assessment.businessName || 'Unknown'} ({assessment.reportType})
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="flex gap-2 items-end">
-              <Button 
-                onClick={() => loadAssessment(selectedAssessmentId)}
-                disabled={!selectedAssessmentId || isLoading}
-                variant="outline"
-              >
-                Load Report
-              </Button>
-              
-              {selectedAssessmentId && (
-                <Button 
-                  onClick={() => deleteAssessment(selectedAssessmentId)}
-                  disabled={isLoading}
-                  variant="destructive"
-                  className="px-3"
-                  title="Delete selected assessment"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
-                    <path d="M3 6h18"></path>
-                    <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
-                    <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
-                  </svg>
-                  Delete
-                </Button>
+          {/* Saved Assessments Section */}
+          <div className="mb-6 border rounded-lg shadow-sm">
+            <div className="bg-primary/10 p-3 border-b flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-primary">
+                <path d="M12 8v4l3 3"></path>
+                <circle cx="12" cy="12" r="10"></circle>
+              </svg>
+              <h2 className="text-lg font-medium">Assessment History</h2>
+              {savedAssessments.length > 0 && (
+                <span className="ml-2 px-2 py-0.5 bg-primary/20 text-primary text-xs rounded-full">
+                  {savedAssessments.length} {savedAssessments.length === 1 ? 'report' : 'reports'}
+                </span>
               )}
-              
-              <Button 
-                onClick={handleStartOver}
-                disabled={isLoading}
-                variant="secondary"
-              >
-                Start New Assessment
-              </Button>
+            </div>
+            
+            <div className="p-4">
+              <div className="flex items-center justify-between gap-4 flex-col md:flex-row">
+                <div className="w-full md:flex-1">
+                  <label className="text-sm font-medium mb-1 block">
+                    Select a saved assessment to view
+                  </label>
+                  <Select 
+                    value={selectedAssessmentId} 
+                    onValueChange={(value) => setSelectedAssessmentId(value)}
+                    disabled={isLoading}
+                  >
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={savedAssessments.length > 0 ? "Load a saved assessment" : "No saved assessments found"} />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {savedAssessments.length === 0 ? (
+                        <div className="p-2 text-center text-muted-foreground text-sm">
+                          No saved assessments found
+                        </div>
+                      ) : (
+                        savedAssessments.map((assessment) => (
+                          <SelectItem key={assessment.id} value={assessment.id.toString()}>
+                            {new Date(assessment.createdAt).toLocaleDateString()} - {assessment.businessName || 'Unknown'} ({assessment.reportType})
+                          </SelectItem>
+                        ))
+                      )}
+                    </SelectContent>
+                  </Select>
+                  
+                  {savedAssessments.length === 0 && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Complete an assessment to have it saved in your history
+                    </p>
+                  )}
+                </div>
+                <div className="flex gap-2 w-full md:w-auto justify-end">
+                  <Button 
+                    onClick={() => loadAssessment(selectedAssessmentId)}
+                    disabled={!selectedAssessmentId || isLoading}
+                    variant="outline"
+                    size="sm"
+                    className="h-9"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Load Report
+                  </Button>
+                  
+                  {selectedAssessmentId && (
+                    <Button 
+                      onClick={() => deleteAssessment(selectedAssessmentId)}
+                      disabled={isLoading}
+                      variant="destructive"
+                      size="sm"
+                      className="h-9"
+                      title="Delete selected assessment"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                        <path d="M3 6h18"></path>
+                        <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"></path>
+                        <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path>
+                      </svg>
+                      Delete
+                    </Button>
+                  )}
+                  
+                  <Button 
+                    onClick={handleStartOver}
+                    disabled={isLoading}
+                    variant="secondary"
+                    size="sm"
+                    className="h-9"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg>
+                    Start New
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
 
