@@ -12,6 +12,207 @@ export function KnowledgeBase({ title = "Knowledge Base", description }: Knowled
 
   const knowledgeItems = [
     {
+      id: 'compliance-matrix',
+      title: 'CyberLockX Compliance Matrix',
+      content: (
+        <div className="space-y-4">
+          <p className="text-muted-foreground">
+            CyberLockX aligns with multiple industry standards and regulations, providing comprehensive compliance coverage across various sectors.
+          </p>
+          
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Standard Category</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Standard</th>
+                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">CyberLockX Alignment</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {/* Universal Security Standards */}
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Universal Security Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ISO 27001</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">ISMS framework via ECSMID + SOS²A</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Universal Security Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ISO 27002</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Controls mapped in real-time via SOS²A</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Universal Security Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">NIST CSF</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Risk-based controls built into SOS²A</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Universal Security Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">NIST SP 800-53</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Low/mod baseline controls supported</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Universal Security Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">CIS Controls</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">18 control mapping through ECSMID</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Universal Security Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">SOC 2</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Supports SOC 2 Type II audit trails</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Universal Security Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PCI-DSS</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Secure browser + payments module</td>
+                </tr>
+                
+                {/* Healthcare-Specific Standards */}
+                <tr className="bg-blue-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Healthcare-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">HIPAA Security Rule</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Encrypts PHI, audit logs via Secure Docs</td>
+                </tr>
+                <tr className="bg-blue-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Healthcare-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">HITRUST CSF</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Mapped to HITRUST through NIST+ISO</td>
+                </tr>
+                <tr className="bg-blue-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Healthcare-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">HIPAA Privacy Rule</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Data access logging & control</td>
+                </tr>
+                <tr className="bg-blue-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Healthcare-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">21 CFR Part 11</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Electronic signature + audit trails</td>
+                </tr>
+                <tr className="bg-blue-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Healthcare-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">GDPR</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">GDPR-compliant workflows & user rights</td>
+                </tr>
+                <tr className="bg-blue-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Healthcare-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">NIST SP 800-66</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Guide mapped in SOS²A</td>
+                </tr>
+                <tr className="bg-blue-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Healthcare-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">DICOM Security</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Encryption of medical imaging files</td>
+                </tr>
+                <tr className="bg-blue-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Healthcare-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">HL7 FHIR Security</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Secure API gateways for HL7 FHIR</td>
+                </tr>
+                
+                {/* Government & Critical Infrastructure */}
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Government & Critical Infrastructure</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">FISMA</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Mapped to NIST controls</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Government & Critical Infrastructure</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">FedRAMP</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Browser-based FedRAMP-ready isolation</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Government & Critical Infrastructure</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">CMMC</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">CMMC practices (access, audit, update)</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Government & Critical Infrastructure</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">NERC CIP</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Critical asset protection via SIEVVE</td>
+                </tr>
+                
+                {/* Financial & Payment Standards */}
+                <tr className="bg-green-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Financial & Payment Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">GLBA</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Data encryption + financial data controls</td>
+                </tr>
+                <tr className="bg-green-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Financial & Payment Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">SOX</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Audit logs, access control</td>
+                </tr>
+                <tr className="bg-green-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Financial & Payment Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">PSD2</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Secure session + MFA for EU</td>
+                </tr>
+                
+                {/* Cloud & Data Privacy */}
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cloud & Data Privacy</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ISO 27701</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Privacy by design + access controls</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cloud & Data Privacy</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">CCPA</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Supports CCPA rights & disclosures</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Cloud & Data Privacy</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">SOC 1</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">SSAE 18-aligned logs</td>
+                </tr>
+                
+                {/* Industry-Specific Standards */}
+                <tr className="bg-yellow-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Industry-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">IEC 62443</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Protects ICS via browser isolation</td>
+                </tr>
+                <tr className="bg-yellow-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Industry-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">TISAX</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">TISAX-level access control enforcement</td>
+                </tr>
+                <tr className="bg-yellow-50">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Industry-Specific Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">FIPS 140-2/3</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">FIPS 140-validated encryption</td>
+                </tr>
+                
+                {/* Emerging & Regional Standards */}
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Emerging & Regional Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">CCCS 33</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Framework ready in modular design</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Emerging & Regional Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">ENS</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Supports ENS mapping</td>
+                </tr>
+                <tr>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">Emerging & Regional Standards</td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">MEITI</td>
+                  <td className="px-6 py-4 text-sm text-gray-500">Aligns with critical infra protection</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="bg-primary/5 p-4 rounded-md mt-6">
+            <h4 className="font-medium">Industry Coverage</h4>
+            <p className="text-sm mt-1">
+              CyberLockX's compliance coverage spans multiple industries, with particular depth in Healthcare 
+              (8 standards), Universal Security (7 standards), and Government/Critical Infrastructure (4 standards).
+            </p>
+          </div>
+        </div>
+      ),
+    },
+    {
       id: 'competitive-advantages',
       title: 'CyberLockX Competitive Advantages',
       content: (
@@ -367,11 +568,9 @@ export function KnowledgeBase({ title = "Knowledge Base", description }: Knowled
         // Always search in title
         const titleMatch = item.title.toLowerCase().includes(searchQuery.toLowerCase());
         
-        // For string content, search in content
+        // For content, we can only search in string content
+        // React nodes cannot be searched directly, so we only search in titles
         let contentMatch = false;
-        if (typeof item.content === 'string') {
-          contentMatch = item.content.toLowerCase().includes(searchQuery.toLowerCase());
-        }
         
         return titleMatch || contentMatch;
       })

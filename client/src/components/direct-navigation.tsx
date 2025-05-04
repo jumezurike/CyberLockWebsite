@@ -36,6 +36,9 @@ export default function DirectNavigation() {
             <Link href="/threat-modeling-full">
               <span className="text-blue-600 hover:underline cursor-pointer">Threat Modeling (4-Step STRIDE)</span>
             </Link>
+            <Link href="/knowledge-base">
+              <span className="text-blue-600 hover:underline cursor-pointer">Knowledge Base</span>
+            </Link>
             <Link href="/about-us">
               <span className="text-blue-600 hover:underline cursor-pointer">About Us</span>
             </Link>
