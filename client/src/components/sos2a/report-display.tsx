@@ -105,7 +105,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <button
                   type="button"
                   className="ml-1 text-xs underline hover:text-primary"
-                  onClick={() => setEvidenceDialog(true)}
+                  onClick={() => setLifecycleDialog(true)}
                 >
                   Assessment Lifecycle Info
                 </button>
@@ -1639,6 +1639,159 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <Calendar className="mr-2 h-4 w-4" />
               Schedule Now
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Assessment Lifecycle Dialog */}
+      <Dialog open={lifecycleDialog} onOpenChange={setLifecycleDialog}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Assessment Lifecycle Information</DialogTitle>
+            <DialogDescription>
+              Understanding the lifecycle stage of your security assessment helps determine its current validity and actionability.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            {/* Assessment Age Information */}
+            <div className="rounded-md border p-4 bg-gray-50">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-muted-foreground" />
+                  <h3 className="font-medium">Assessment Age</h3>
+                </div>
+                <div className={`px-2 py-1 rounded-full text-xs font-medium ${ageInfo.color} bg-opacity-20`}>
+                  {ageInfo.label}
+                </div>
+              </div>
+              
+              <div className="mt-2 space-y-1 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Created:</span>
+                  <span className="font-medium">{formatDate(report.createdAt)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Age:</span>
+                  <span className="font-medium">{getAssessmentAge()} days ({formatAssessmentAge()})</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-muted-foreground">Type:</span>
+                  <span className="font-medium capitalize">{report.reportType}</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Assessment Lifecycle Stages */}
+            <div>
+              <h3 className="text-sm font-medium mb-2">Assessment Lifecycle Stages</h3>
+              <div className="space-y-3">
+                <div className={`p-3 rounded-md border ${getAssessmentAge() <= 30 ? 'bg-green-50 border-green-200' : 'bg-gray-50'}`}>
+                  <div className="flex items-start gap-2">
+                    <CheckCircle2 className="h-5 w-5 mt-0.5 text-green-600" />
+                    <div>
+                      <h4 className="text-sm font-medium">Current (0-30 days)</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Assessment is current and provides an accurate reflection of your security posture. All findings and recommendations are relevant and should be acted upon.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className={`p-3 rounded-md border ${getAssessmentAge() > 30 && getAssessmentAge() <= 90 ? 'bg-blue-50 border-blue-200' : 'bg-gray-50'}`}>
+                  <div className="flex items-start gap-2">
+                    <Shield className="h-5 w-5 mt-0.5 text-blue-600" />
+                    <div>
+                      <h4 className="text-sm font-medium">Recent (31-90 days)</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Assessment is still largely valid. Minor changes in your environment may have occurred. Review high-priority recommendations and consider updating soon.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className={`p-3 rounded-md border ${getAssessmentAge() > 90 && getAssessmentAge() <= 180 ? 'bg-amber-50 border-amber-200' : 'bg-gray-50'}`}>
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="h-5 w-5 mt-0.5 text-amber-600" />
+                    <div>
+                      <h4 className="text-sm font-medium">Aging (91-180 days)</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Assessment is beginning to age. Significant changes may have occurred in your threat landscape. Consider performing a new assessment within the next quarter.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className={`p-3 rounded-md border ${getAssessmentAge() > 180 ? 'bg-red-50 border-red-200' : 'bg-gray-50'}`}>
+                  <div className="flex items-start gap-2">
+                    <AlertTriangle className="h-5 w-5 mt-0.5 text-red-600" />
+                    <div>
+                      <h4 className="text-sm font-medium">Outdated (180+ days)</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Assessment is outdated. Your environment has likely changed substantially, and new threats have emerged. Performing a new assessment is strongly recommended.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Evidence Collection Information */}
+            {report.reportType === 'comprehensive' && (
+              <div className="border-t pt-4 mt-4">
+                <h3 className="text-sm font-medium mb-2">Evidence Collection Methodology</h3>
+                <div className="space-y-3">
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                        <path d="M12 2a10 10 0 1 0 10 10H12V2z"></path>
+                        <path d="M21.18 8.02c-1-2.3-2.85-4.17-5.16-5.18"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-medium">SIEM Data Analysis</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Security Information and Event Management (SIEM) tools collect and analyze log data from network devices, servers, and applications.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                        <path d="M2 16.1A5 5 0 0 1 5.9 20M2 12.05A9 9 0 0 1 9.95 20M2 8V6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-6"></path>
+                        <line x1="2" y1="20" x2="2.01" y2="20"></line>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-medium">Network Flow Analysis</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Network flow analyzers monitor traffic patterns to identify unauthorized access and data exfiltration.
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-3">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-primary">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                      </svg>
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-medium">Vulnerability Assessment</h4>
+                      <p className="text-xs text-muted-foreground">
+                        Regular vulnerability scans identify security weaknesses in infrastructure, applications, and endpoints.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <DialogFooter>
+            <Button onClick={() => setLifecycleDialog(false)}>Close</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

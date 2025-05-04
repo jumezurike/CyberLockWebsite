@@ -240,10 +240,10 @@ export default function Sos2aTool() {
   
   // Get a badge color based on assessment age
   const getAgeBadgeColor = (age: number): string => {
-    if (age <= 30) return "bg-green-100 text-green-800"; // Less than a month
-    if (age <= 90) return "bg-blue-100 text-blue-800"; // 1-3 months
-    if (age <= 180) return "bg-yellow-100 text-yellow-800"; // 3-6 months
-    return "bg-red-100 text-red-800"; // More than 6 months
+    if (age <= 30) return "rgba(22, 163, 74, 0.2)"; // Current (green)
+    if (age <= 90) return "rgba(37, 99, 235, 0.2)"; // Recent (blue)
+    if (age <= 180) return "rgba(251, 191, 36, 0.2)"; // Aging (amber)
+    return "rgba(220, 38, 38, 0.8)"; // Outdated (red, more opaque)
   };
 
   // Save form data to localStorage
@@ -1820,7 +1820,13 @@ export default function Sos2aTool() {
                           return (
                             <SelectItem key={assessment.id} value={assessment.id.toString()}>
                               {format(parseISO(assessment.createdAt), 'MMM d, yyyy')} - {assessment.businessName || 'Unknown'} ({assessment.reportType}) 
-                              <span className="ml-2 px-1.5 py-0.5 text-xs rounded-full inline-flex items-center" style={{backgroundColor: getAgeBadgeColor(age)}}>
+                              <span className="ml-2 px-1.5 py-0.5 text-xs rounded-full inline-flex items-center" 
+                                style={{
+                                  backgroundColor: getAgeBadgeColor(age), 
+                                  color: age > 180 ? '#fff' : age > 90 ? '#713f12' : age > 30 ? '#1e40af' : '#166534',
+                                  fontWeight: 'medium'
+                                }}>
+                                {age <= 30 ? '✓ ' : age <= 90 ? '⚫ ' : age <= 180 ? '⚠ ' : '! '}
                                 {ageDisplay}
                               </span>
                             </SelectItem>
