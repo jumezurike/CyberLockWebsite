@@ -156,36 +156,81 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
           </div>
         </div>
         
-        {/* SOS²A Five Components Radar Chart */}
+        {/* SOS²A Five Components Pie Chart */}
         <div className="mt-6 border-t pt-6">
           <h4 className="text-lg font-semibold mb-4">SOS²A Five Components Assessment</h4>
-          <div className="h-[400px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
-                <PolarGrid />
-                <PolarAngleAxis dataKey="subject" />
-                <PolarRadiusAxis angle={90} domain={[0, 100]} />
-                <Radar
-                  name="Security Score"
-                  dataKey="A"
-                  stroke="#8884d8"
-                  fill="#8884d8"
-                  fillOpacity={0.6}
-                />
-                <Tooltip formatter={(value) => `${value}%`} />
-                <Legend />
-              </RadarChart>
-            </ResponsiveContainer>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-2 mt-4 text-center text-sm">
-            {radarData.map((item, index) => (
-              <div key={index} className="p-2 border rounded">
-                <div className="font-medium">{item.subject}</div>
-                <div className={`${item.notAssessed ? 'text-gray-500' : getScoreColor(item.A)} font-bold mt-1`}>
-                  {item.notAssessed ? "Cannot be assessed" : item.A === 0 ? "Not Available" : `${item.A}%`}
-                </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="h-[400px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={sos2aComponents.map(comp => ({
+                      name: comp.name,
+                      value: comp.score,
+                      notAssessed: comp.notAssessed || false
+                    }))}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={true}
+                    outerRadius={150}
+                    fill="#8884d8"
+                    dataKey="value"
+                    nameKey="name"
+                    label={({ name, value, percent }) => 
+                      `${name}: ${value}%`
+                    }
+                  >
+                    {sos2aComponents.map((entry, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={COLORS[index % COLORS.length]} 
+                        opacity={entry.notAssessed ? 0.3 : 1}
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    formatter={(value) => `${value}%`} 
+                    labelFormatter={(name) => `${name}`}
+                  />
+                  <Legend
+                    layout="vertical"
+                    verticalAlign="middle"
+                    align="right"
+                    wrapperStyle={{
+                      paddingLeft: 20
+                    }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+            <div>
+              <div className="grid grid-cols-1 gap-3 mt-4 text-sm">
+                {sos2aComponents.map((item, index) => (
+                  <div key={index} className="p-3 border rounded flex items-center">
+                    <div 
+                      className="w-4 h-4 rounded-full mr-3" 
+                      style={{ backgroundColor: COLORS[index % COLORS.length], opacity: item.notAssessed ? 0.3 : 1 }}
+                    ></div>
+                    <div className="flex-1">
+                      <div className="font-medium">{item.name}</div>
+                      <div className="flex justify-between items-center mt-1">
+                        <div className={`${item.notAssessed ? 'text-gray-500' : getScoreColor(item.score)} font-bold`}>
+                          {item.notAssessed ? "Cannot be assessed" : item.score === 0 ? "Not Available" : `${item.score}%`}
+                        </div>
+                        {!item.notAssessed && item.score > 0 && (
+                          <div className="w-24 bg-gray-200 rounded-full h-2.5">
+                            <div 
+                              className={`h-2.5 rounded-full ${getScoreColor(item.score).replace('text-', 'bg-')}`}
+                              style={{ width: `${item.score}%` }}
+                            ></div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
           </div>
         </div>
         
