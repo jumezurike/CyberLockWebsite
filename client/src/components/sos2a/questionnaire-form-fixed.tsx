@@ -395,6 +395,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "iot", label: "IoT Device Security" },
   ];
   
+  // Vulnerability options categorized by type
+  const vulnerabilitiesOptions = [
+    // Website vulnerabilities
+    { id: "weak-auth-web", label: "Weak Authentication and Access Control - Website", category: "web" },
+    { id: "unpatched-web", label: "Unpatched Software and Plugins - Website", category: "web" },
+    { id: "insecure-uploads", label: "Insecure File Uploads - Website", category: "web" },
+    { id: "xss", label: "Cross-Site Scripting (XSS) - Website", category: "web" },
+    { id: "unsecured-apis", label: "Unsecured APIs - Website", category: "web" },
+    { id: "misconfigured-servers", label: "Misconfigured Servers - Website", category: "web" },
+    { id: "third-party-deps", label: "Third-Party Dependencies - Website", category: "web" },
+    { id: "sql-injection", label: "SQL Injection - Website", category: "web" },
+    
+    // End Device Security (EDS) vulnerabilities
+    { id: "unpatched-os", label: "Unpatched OS or Software - EDS", category: "eds" },
+    { id: "mdm-misconfig", label: "Misconfigured MDM Policies Causing Data Exposure - EDS", category: "eds" },
+    { id: "weak-auth-eds", label: "Weak Authentication Methods - EDS", category: "eds" },
+    { id: "unsecured-byod", label: "Unsecured BYOD Devices - EDS", category: "eds" },
+    { id: "default-creds", label: "Default Credentials on Devices - EDS", category: "eds" },
+    { id: "removable-media", label: "Unsecured Removable Media - EDS", category: "eds" },
+  ];
+  
   // Security Frameworks by domain
   const operationalFrameworks = [
     { id: "nist-csf", label: "NIST CSF" },
