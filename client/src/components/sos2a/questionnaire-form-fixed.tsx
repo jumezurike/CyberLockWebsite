@@ -2477,7 +2477,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">9. Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Select the most relevant MITRE ATT&CK tactics and techniques based on your infrastructure operation mode.
+                    <span className="text-orange-600 font-medium">Note: This section focuses on MITRE ATT&CK for infrastructure operations - separate from STRIDE Architecture Threat Modeling.</span> Select the most relevant MITRE ATT&CK tactics and techniques based on your infrastructure operation mode.
                   </p>
                   
                   <div className="space-y-6">
@@ -2938,9 +2938,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                     
                     <div className="mt-8 border-t pt-8">
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Architecture Threat Modeling</h4>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Architecture Threat Modeling (STRIDE)</h4>
                       <p className="text-sm text-muted-foreground mb-4">
-                        Architecture diagrams are essential for comprehensive threat modeling using the STRIDE methodology. Upload any existing architecture diagrams to enhance your security assessment.
+                        <span className="text-orange-600 font-medium">Note: This is separate from MITRE ATT&CK and uses the STRIDE methodology.</span> Architecture diagrams are essential for comprehensive threat modeling using the STRIDE methodology. Upload any existing architecture diagrams to enhance your security assessment.
                       </p>
                       
                       <FormField
@@ -3020,7 +3020,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       <div className="mt-4">
                         <h5 className="font-medium mb-2">Architecture Threat Modeling Impact</h5>
                         <p className="text-sm text-muted-foreground mb-4">
-                          Architecture diagram analysis enables comprehensive threat modeling using the STRIDE methodology (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege).
+                          <span className="text-orange-600 font-medium">This uses the STRIDE methodology, which is distinct from MITRE ATT&CK:</span> Architecture diagram analysis enables comprehensive threat modeling through STRIDE (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege).
                         </p>
                         <div className="bg-purple-50 rounded-md p-3 border border-purple-100">
                           <p className="text-sm text-purple-800">
