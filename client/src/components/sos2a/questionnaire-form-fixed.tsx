@@ -1685,98 +1685,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div>
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Architecture Diagrams for Threat Modeling</h4>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Architecture diagrams are essential for comprehensive threat modeling. Upload any existing architecture diagrams to enhance your security assessment.
-                      </p>
-                      
-                      <FormField
-                        control={form.control}
-                        name="hasArchitectureDiagrams"
-                        render={({ field }) => (
-                          <FormItem className="mb-4">
-                            <FormControl>
-                              <div className="flex items-center space-x-2">
-                                <Checkbox 
-                                  checked={field.value} 
-                                  onCheckedChange={field.onChange}
-                                />
-                                <FormLabel className="font-medium">
-                                  We have architecture diagrams available for this assessment
-                                </FormLabel>
-                              </div>
-                            </FormControl>
-                            <FormDescription className="ml-6 mt-1">
-                              Architecture diagrams enable the Architecture Threat Modeling component of SOS²A assessment
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      {form.watch("hasArchitectureDiagrams") && (
-                        <div className="ml-6 mb-6 p-4 border border-dashed rounded-md bg-muted/50">
-                          <h5 className="font-medium mb-2">Upload Architecture Diagrams</h5>
-                          <p className="text-sm text-muted-foreground mb-3">
-                            Upload diagrams in PNG, JPG, PDF format. Include network diagrams, data flow diagrams, application architecture, etc.
-                          </p>
-                          <div className="flex items-center justify-center w-full">
-                            <label htmlFor="architecture-diagrams" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/30">
-                              <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                                <svg className="w-8 h-8 mb-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
-                                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
-                                </svg>
-                                <p className="mb-1 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
-                                <p className="text-xs text-gray-500">PNG, JPG, PDF (MAX. 10MB per file)</p>
-                              </div>
-                              <input 
-                                id="architecture-diagrams" 
-                                type="file" 
-                                className="hidden" 
-                                accept=".png,.jpg,.jpeg,.pdf"
-                                multiple
-                                onChange={(e) => {
-                                  if (e.target.files && e.target.files.length > 0) {
-                                    const fileArray = Array.from(e.target.files);
-                                    form.setValue('architectureDiagramFiles', fileArray);
-                                  }
-                                }}
-                              />
-                            </label>
-                          </div>
-                          
-                          {/* Display uploaded files */}
-                          {form.watch('architectureDiagramFiles') && form.watch('architectureDiagramFiles').length > 0 && (
-                            <div className="mt-4">
-                              <h6 className="text-sm font-medium mb-2">Uploaded Diagrams:</h6>
-                              <ul className="text-sm space-y-1">
-                                {Array.from(form.watch('architectureDiagramFiles')).map((file, index) => (
-                                  <li key={index} className="flex items-center space-x-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    <span>{file.name} ({(file.size / 1024).toFixed(1)} KB)</span>
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                          )}
-                        </div>
-                      )}
-                      
-                      <div className="mt-8">
-                        <h5 className="font-medium mb-2">Architecture Threat Modeling Impact</h5>
-                        <p className="text-sm text-muted-foreground mb-4">
-                          Architecture diagram analysis enables comprehensive threat modeling using the STRIDE methodology (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege).
-                        </p>
-                        <div className="bg-purple-50 rounded-md p-3 border border-purple-100">
-                          <p className="text-sm text-purple-800">
-                            <span className="font-medium">Note:</span> If no architecture diagrams are provided, the Architecture Threat Modeling component will be marked as "Cannot be assessed" in your report. Your final score will be calculated based on the remaining components.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+
                     
                     <div>
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">OS / System Hardening</h4>
@@ -3025,6 +2934,99 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </FormItem>
                           )}
                         />
+                      </div>
+                    </div>
+                    
+                    <div className="mt-8 border-t pt-8">
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Architecture Threat Modeling</h4>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Architecture diagrams are essential for comprehensive threat modeling using the STRIDE methodology. Upload any existing architecture diagrams to enhance your security assessment.
+                      </p>
+                      
+                      <FormField
+                        control={form.control}
+                        name="hasArchitectureDiagrams"
+                        render={({ field }) => (
+                          <FormItem className="mb-4">
+                            <FormControl>
+                              <div className="flex items-center space-x-2">
+                                <Checkbox 
+                                  checked={field.value} 
+                                  onCheckedChange={field.onChange}
+                                />
+                                <FormLabel className="font-medium">
+                                  We have architecture diagrams available for this assessment
+                                </FormLabel>
+                              </div>
+                            </FormControl>
+                            <FormDescription className="ml-6 mt-1">
+                              Architecture diagrams enable the Architecture Threat Modeling component of SOS²A assessment
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      {form.watch("hasArchitectureDiagrams") && (
+                        <div className="ml-6 mb-6 p-4 border border-dashed rounded-md bg-muted/50">
+                          <h5 className="font-medium mb-2">Upload Architecture Diagrams</h5>
+                          <p className="text-sm text-muted-foreground mb-3">
+                            Upload diagrams in PNG, JPG, PDF format. Include network diagrams, data flow diagrams, application architecture, etc.
+                          </p>
+                          <div className="flex items-center justify-center w-full">
+                            <label htmlFor="architecture-diagrams" className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer hover:bg-muted/30">
+                              <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg className="w-8 h-8 mb-3 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                </svg>
+                                <p className="mb-1 text-sm text-gray-500"><span className="font-semibold">Click to upload</span> or drag and drop</p>
+                                <p className="text-xs text-gray-500">PNG, JPG, PDF (MAX. 10MB per file)</p>
+                              </div>
+                              <input 
+                                id="architecture-diagrams" 
+                                type="file" 
+                                className="hidden" 
+                                accept=".png,.jpg,.jpeg,.pdf"
+                                multiple
+                                onChange={(e) => {
+                                  if (e.target.files && e.target.files.length > 0) {
+                                    const fileArray = Array.from(e.target.files);
+                                    form.setValue('architectureDiagramFiles', fileArray);
+                                  }
+                                }}
+                              />
+                            </label>
+                          </div>
+                          
+                          {/* Display uploaded files */}
+                          {form.watch('architectureDiagramFiles') && form.watch('architectureDiagramFiles').length > 0 && (
+                            <div className="mt-4">
+                              <h6 className="text-sm font-medium mb-2">Uploaded Diagrams:</h6>
+                              <ul className="text-sm space-y-1">
+                                {Array.from(form.watch('architectureDiagramFiles')).map((file, index) => (
+                                  <li key={index} className="flex items-center space-x-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                    </svg>
+                                    <span>{file.name} ({(file.size / 1024).toFixed(1)} KB)</span>
+                                  </li>
+                                ))}
+                              </ul>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      
+                      <div className="mt-4">
+                        <h5 className="font-medium mb-2">Architecture Threat Modeling Impact</h5>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Architecture diagram analysis enables comprehensive threat modeling using the STRIDE methodology (Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege).
+                        </p>
+                        <div className="bg-purple-50 rounded-md p-3 border border-purple-100">
+                          <p className="text-sm text-purple-800">
+                            <span className="font-medium">Note:</span> If no architecture diagrams are provided, the Architecture Threat Modeling component will be marked as "Cannot be assessed" in your report. Your final score will be calculated based on the remaining components.
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
