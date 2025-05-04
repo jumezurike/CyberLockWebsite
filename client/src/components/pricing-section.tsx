@@ -31,7 +31,12 @@ export default function PricingSection() {
     professional: {},
     business: {}
   });
-  const [deviceCount, setDeviceCount] = useState<Record<string, string>>({
+  const [serverCount, setServerCount] = useState<Record<string, string>>({
+    basic: "0",
+    professional: "0",
+    business: "0"
+  });
+  const [endpointCount, setEndpointCount] = useState<Record<string, string>>({
     basic: "0",
     professional: "0",
     business: "0"
@@ -53,10 +58,20 @@ export default function PricingSection() {
     }));
   };
   
-  const handleDeviceCountChange = (planId: string, count: string) => {
+  const handleServerCountChange = (planId: string, count: string) => {
     // Only allow numeric input
     if (/^\d*$/.test(count)) {
-      setDeviceCount(prev => ({
+      setServerCount(prev => ({
+        ...prev,
+        [planId]: count
+      }));
+    }
+  };
+  
+  const handleEndpointCountChange = (planId: string, count: string) => {
+    // Only allow numeric input
+    if (/^\d*$/.test(count)) {
+      setEndpointCount(prev => ({
         ...prev,
         [planId]: count
       }));
@@ -112,9 +127,16 @@ export default function PricingSection() {
     params.set('planName', plan.name);
     params.set('amount', totalAmount);
     
-    // Add the device and application counts to the checkout parameters
-    params.set('deviceCount', deviceCount[selectedPlan]);
+    // Add the infrastructure counts to the checkout parameters
+    params.set('serverCount', serverCount[selectedPlan]);
+    params.set('endpointCount', endpointCount[selectedPlan]);
     params.set('appCount', appCount[selectedPlan]);
+    
+    // Add the pricing calculations based on infrastructure counts
+    const serverCost = parseInt(serverCount[selectedPlan] || "0") * 65; // $65/server/month
+    const endpointCost = parseInt(endpointCount[selectedPlan] || "0") * 45; // $45/endpoint/month
+    const appCost = parseInt(appCount[selectedPlan] || "0") * 55; // $55/application/month
+    params.set('infraCost', (serverCost + endpointCost + appCost).toString());
     
     if (selectedAddonsList.length > 0) {
       params.set('addons', encodeURIComponent(JSON.stringify(selectedAddonsList)));
@@ -238,21 +260,43 @@ export default function PricingSection() {
                   </ul>
                   
                   <div className="mt-6 pt-6 border-t border-neutral-200">
-                    <h4 className="font-semibold mb-3">System Information:</h4>
+                    <h4 className="font-semibold mb-3">Infrastructure Information:</h4>
                     <div className="space-y-3 mb-5">
                       <div className="flex justify-between items-center">
-                        <label htmlFor={`${planId}-device-count`} className="text-sm font-medium">Number of Endpoints/Devices:</label>
+                        <div>
+                          <label htmlFor={`${planId}-server-count`} className="text-sm font-medium">Server (Physical or Virtual)</label>
+                          <p className="text-xs text-gray-500">$65/server/month</p>
+                        </div>
                         <input 
                           type="text" 
-                          id={`${planId}-device-count`} 
+                          id={`${planId}-server-count`} 
                           className="w-20 px-2 py-1 border rounded text-right"
-                          value={deviceCount[planId]}
-                          onChange={(e) => handleDeviceCountChange(planId, e.target.value)}
+                          value={serverCount[planId]}
+                          onChange={(e) => handleServerCountChange(planId, e.target.value)}
                           placeholder="0"
                         />
                       </div>
+                      
                       <div className="flex justify-between items-center">
-                        <label htmlFor={`${planId}-app-count`} className="text-sm font-medium">Number of Applications:</label>
+                        <div>
+                          <label htmlFor={`${planId}-endpoint-count`} className="text-sm font-medium">End-point (Subject accessing server)</label>
+                          <p className="text-xs text-gray-500">$45/endpoint/month</p>
+                        </div>
+                        <input 
+                          type="text" 
+                          id={`${planId}-endpoint-count`} 
+                          className="w-20 px-2 py-1 border rounded text-right"
+                          value={endpointCount[planId]}
+                          onChange={(e) => handleEndpointCountChange(planId, e.target.value)}
+                          placeholder="0"
+                        />
+                      </div>
+                      
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <label htmlFor={`${planId}-app-count`} className="text-sm font-medium">Application (Business Functionality)</label>
+                          <p className="text-xs text-gray-500">$55/application/month</p>
+                        </div>
                         <input 
                           type="text" 
                           id={`${planId}-app-count`} 
