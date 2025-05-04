@@ -575,6 +575,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       type: "standard"
     },
     { 
+      id: "cyber-ess-uk", 
+      label: "Cyber Essentials (UK)", 
+      description: "UK government-backed cybersecurity certification",
+      type: "guideline"
+    },
+    { 
       id: "fisma", 
       label: "FISMA", 
       description: "U.S. federal agency security (aligned with NIST)",
