@@ -21,6 +21,8 @@ export default function LightbulbCapture() {
 
   const categories = [
     { id: 'security', name: 'Cybersecurity Insight' },
+    { id: 'ai-ml', name: 'Secure AI-ML' },
+    { id: 'low-resource', name: 'Low-Resource Language Model' },
     { id: 'process', name: 'Process Improvement' },
     { id: 'technical', name: 'Technical Solution' },
     { id: 'threat', name: 'Threat Intelligence' },
