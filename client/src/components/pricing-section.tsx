@@ -31,6 +31,16 @@ export default function PricingSection() {
     professional: {},
     business: {}
   });
+  const [deviceCount, setDeviceCount] = useState<Record<string, string>>({
+    basic: "0",
+    professional: "0",
+    business: "0"
+  });
+  const [appCount, setAppCount] = useState<Record<string, string>>({
+    basic: "0",
+    professional: "0",
+    business: "0"
+  });
   const [, setLocation] = useLocation();
 
   const handleAddonChange = (planId: string, addonId: string, checked: boolean) => {
@@ -41,6 +51,26 @@ export default function PricingSection() {
         [addonId]: checked
       }
     }));
+  };
+  
+  const handleDeviceCountChange = (planId: string, count: string) => {
+    // Only allow numeric input
+    if (/^\d*$/.test(count)) {
+      setDeviceCount(prev => ({
+        ...prev,
+        [planId]: count
+      }));
+    }
+  };
+  
+  const handleAppCountChange = (planId: string, count: string) => {
+    // Only allow numeric input
+    if (/^\d*$/.test(count)) {
+      setAppCount(prev => ({
+        ...prev,
+        [planId]: count
+      }));
+    }
   };
   
   const proceedToCheckout = () => {
@@ -82,6 +112,10 @@ export default function PricingSection() {
     params.set('planName', plan.name);
     params.set('amount', totalAmount);
     
+    // Add the device and application counts to the checkout parameters
+    params.set('deviceCount', deviceCount[selectedPlan]);
+    params.set('appCount', appCount[selectedPlan]);
+    
     if (selectedAddonsList.length > 0) {
       params.set('addons', encodeURIComponent(JSON.stringify(selectedAddonsList)));
     }
@@ -107,7 +141,7 @@ export default function PricingSection() {
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$250 one time" },
         { id: "monitoring", label: "Continuous Monitoring & Response", price: "$65/device/month" },
-        { id: "policy", label: "Policy and standard development", price: "$25/month" },
+        { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$25/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$300" }
       ]
     },
@@ -129,7 +163,7 @@ export default function PricingSection() {
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$750 one time" },
         { id: "monitoring", label: "Continuous Monitoring & Response", price: "$65/device/month" },
-        { id: "policy", label: "Policy and standard development", price: "$50/month" },
+        { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$50/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$600" },
         { id: "admin", label: "Administrative and maintenance fees", price: "$250" }
       ]
@@ -153,7 +187,7 @@ export default function PricingSection() {
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$2250 one time" },
         { id: "monitoring", label: "Continuous Monitoring & Response", price: "$65/device/month" },
-        { id: "policy", label: "Policy and standard development", price: "$100/month" },
+        { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$100/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" },
         { id: "admin", label: "Administrative and maintenance fees", price: "$250" }
       ]
@@ -204,6 +238,32 @@ export default function PricingSection() {
                   </ul>
                   
                   <div className="mt-6 pt-6 border-t border-neutral-200">
+                    <h4 className="font-semibold mb-3">System Information:</h4>
+                    <div className="space-y-3 mb-5">
+                      <div className="flex justify-between items-center">
+                        <label htmlFor={`${planId}-device-count`} className="text-sm font-medium">Number of Endpoints/Devices:</label>
+                        <input 
+                          type="text" 
+                          id={`${planId}-device-count`} 
+                          className="w-20 px-2 py-1 border rounded text-right"
+                          value={deviceCount[planId]}
+                          onChange={(e) => handleDeviceCountChange(planId, e.target.value)}
+                          placeholder="0"
+                        />
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <label htmlFor={`${planId}-app-count`} className="text-sm font-medium">Number of Applications:</label>
+                        <input 
+                          type="text" 
+                          id={`${planId}-app-count`} 
+                          className="w-20 px-2 py-1 border rounded text-right"
+                          value={appCount[planId]}
+                          onChange={(e) => handleAppCountChange(planId, e.target.value)}
+                          placeholder="0"
+                        />
+                      </div>
+                    </div>
+                    
                     <h4 className="font-semibold mb-3">Optional Add-ons:</h4>
                     <div className="space-y-3">
                       {plan.addons.map((addon) => (
