@@ -293,8 +293,8 @@ export default function Sos2aTool() {
   
   // Generate scorecard data with the 12 standard parameters
   const generateScorecardData = (data: MatrixItem[], reportType: 'preliminary' | 'comprehensive') => {
-    // Each parameter has equal weight of 10%
-    const standardWeight = 10;
+    // Using 8.33% as weight since we have 12 parameters (adding up to 100%)
+    const standardWeight = 8.33;
     
     // Function to generate a score based on reportType and implementation status
     const generateScore = (baseScore: number): number => {
