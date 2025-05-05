@@ -3908,7 +3908,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    {/* Section 4: Configuration Baseline */}
+                    {/* Section 4: Baseline Configuration */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
                         <h4 className="text-base font-medium">4. Configuration Baseline</h4>
@@ -3996,7 +3996,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     {/* Section 6-8: Compliance, Regulatory, Standards */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">6-8. Compliance & Standards</h4>
+                        <h4 className="text-base font-medium">6-8. Compliance, Regulatory & Standards</h4>
                         <div className="space-x-2">
                           <Button 
                             type="button" 
@@ -4106,10 +4106,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 9: ACQ Tools */}
+                    {/* Section 8: ACQ Tools */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">9. Assessment, Checklist & Questionnaire Tools</h4>
+                        <h4 className="text-base font-medium">8. Assessment, Checklist & Questionnaire Tools</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
@@ -4140,10 +4140,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 10: Adversarial Insight */}
+                    {/* Section 9: Adversarial Insight */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">10. Adversarial Insight (MITRE ATT&CK)</h4>
+                        <h4 className="text-base font-medium">9. Adversarial Insight (MITRE ATT&CK)</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
@@ -4190,10 +4190,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 11: ISMS */}
+                    {/* Section 10: ISMS */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">11. Information Security Management System (ISMS)</h4>
+                        <h4 className="text-base font-medium">10. Information Security Management System (ISMS)</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
