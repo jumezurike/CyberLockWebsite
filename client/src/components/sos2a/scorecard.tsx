@@ -27,37 +27,66 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
     weight: item.weight
   }));
   
-  // Create radar chart data for the five SOS²A components
+  // Create radar chart data for all SOS²A components (sections 2-10)
   const sos2aComponents = [
+    // Section 2: Business Information Assessment
     { 
-      name: "Qualitative Assessment", 
+      name: "Business Information", 
       score: report.rasbitaScore?.categories?.identify || 0,
       fullMark: 100 
     },
+    // Section 3: Infrastructure Mode Assessment
     { 
-      name: "Quantitative Analysis", 
+      name: "Infrastructure Mode", 
       score: report.rasbitaScore?.categories?.protect || 0,
       fullMark: 100 
     },
+    // Section 4: Configuration Baseline
     { 
-      name: "RASBITA Cost-Benefit", 
+      name: "Configuration Baseline", 
       score: report.rasbitaScore?.categories?.detect || 0,
       fullMark: 100 
     },
+    // Section 5: Security Control Framework
     { 
-      name: "RASBITA Gov & Mgmt", 
+      name: "Security Controls", 
       score: report.rasbitaScore?.categories?.govern || 0,
       fullMark: 100 
     },
+    // Section 6: Compliance Requirements
     { 
-      name: "Architecture Threat Modeling",
-      // Check if architecture diagrams were provided, otherwise mark as N/A
+      name: "Compliance", 
+      score: report.rasbitaScore?.categories?.respond || 0,
+      fullMark: 100 
+    },
+    // Section 7: Regulatory Requirements
+    { 
+      name: "Regulatory",
+      score: report.rasbitaScore?.categories?.recover || 0,
+      fullMark: 100
+    },
+    // Section 8: Standards
+    { 
+      name: "Standards", 
+      score: report.rasbitaScore?.categories?.identify || 0,
+      fullMark: 100 
+    },
+    // Section 9: MITRE ATT&CK / Adversarial Insight
+    { 
+      name: "Adversarial Insight", 
+      score: report.rasbitaScore?.categories?.detect || 0,
+      fullMark: 100 
+    },
+    // Section 10: ISMS Implementation
+    { 
+      name: "ISMS Implementation",
+      // Check if ISMS data was provided, otherwise mark as N/A
       score: report.matrixData && report.matrixData.some(item => 
-        item.technologyControls?.frameworks?.includes("architecture")
-      ) ? (report.rasbitaScore?.categories?.respond || 0) : 0,
+        item.isms?.implementation
+      ) ? (report.rasbitaScore?.categories?.govern || 0) : 0,
       fullMark: 100,
       notAssessed: !(report.matrixData && report.matrixData.some(item => 
-        item.technologyControls?.frameworks?.includes("architecture")
+        item.isms?.implementation
       ))
     }
   ];
@@ -156,9 +185,9 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
           </div>
         </div>
         
-        {/* SOS²A Five Components Pie Chart */}
+        {/* SOS²A Components Pie Chart (Sections 2-10) */}
         <div className="mt-6 border-t pt-6">
-          <h4 className="text-lg font-semibold mb-4">SOS²A Five Components Assessment</h4>
+          <h4 className="text-lg font-semibold mb-4">SOS²A Complete Assessment (Sections 2-10)</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
@@ -362,7 +391,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
           </h4>
           <p className="text-sm text-gray-600">
             {reportType === 'comprehensive' 
-              ? "This scorecard reflects quantitative measurements based on 6 months of evidence collection, showing the actual state of your security controls and their effectiveness across all five SOS²A components."
+              ? "This scorecard reflects quantitative measurements based on 6 months of evidence collection, showing the actual state of your security controls and their effectiveness across all nine SOS²A assessment sections (2-10)."
               : "This preliminary scorecard is based on declared controls and assessment answers, providing an initial view of potential security posture without verification. Some components may be marked as 'Not Available' or 'Cannot be assessed' if required information was not provided."}
           </p>
           
@@ -378,7 +407,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
           
           <div className="mt-3">
             <div className="border rounded-md p-3 mb-4">
-              <h5 className="text-sm font-semibold mb-2">SOS²A 5-Component Methodology (500% Comprehensive View)</h5>
+              <h5 className="text-sm font-semibold mb-2">SOS²A 9-Section Assessment Methodology (Sections 2-10)</h5>
               <div className="text-xs text-gray-700 space-y-3">
                 <div>
                   <span className="font-semibold text-primary">1. Qualitative Assessment (100%)</span>
@@ -437,7 +466,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
                       Preliminary Assessment:
                     </span> 
                     <p className="text-gray-600 mt-1">
-                      A quick assessment that includes all five components with light scanning. It provides an initial view based on questionnaire responses, helpful for initial planning but pending verification.
+                      A quick assessment that includes all nine sections (2-10) with light scanning. It provides an initial view based on questionnaire responses, helpful for initial planning but pending verification.
                     </p>
                   </div>
                   <div className="text-xs mt-2">
@@ -449,7 +478,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
                       Comprehensive Assessment:
                     </span>
                     <p className="text-gray-600 mt-1">
-                      A thorough evaluation with deep scanning across all five components, based on 6 months of evidence collection using SOC monitoring, incident response tracking, and security tools, providing validated security posture.
+                      A thorough evaluation with deep scanning across all nine sections (2-10), based on 6 months of evidence collection using SOC monitoring, incident response tracking, and security tools, providing validated security posture.
                     </p>
                   </div>
                 </div>
@@ -457,7 +486,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
               <div className="border rounded-md p-3">
                 <h5 className="text-sm font-semibold">Scoring Benefits</h5>
                 <p className="text-xs text-gray-600 mt-2">
-                  The SOS²A methodology provides a unique 500% comprehensive view (5 components x 100% each) of your security posture, far more detailed than traditional single-dimension assessments. This approach ensures:
+                  The SOS²A methodology provides a comprehensive view of your security posture across nine distinct assessment sections (2-10), delivering a much more detailed analysis than traditional single-dimension assessments. This approach ensures:
                 </p>
                 <ul className="text-xs text-gray-600 mt-2 space-y-1 list-disc ml-4">
                   <li>Complete coverage of all security aspects</li>
