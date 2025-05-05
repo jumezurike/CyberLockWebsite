@@ -60,6 +60,10 @@ function Router() {
           <Route path="/lightbulb-moments" component={LightbulbMomentsPage} />
           <Route path="/parameter-mapping" component={ParameterMappingPage} />
           <Route path="/browser-baseline" component={BrowserBaselinePage} />
+          <Route path="/device-inventory" component={() => import("./pages/device-inventory").then(module => {
+            const DeviceInventoryPage = module.default;
+            return <DeviceInventoryPage />;
+          })} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/payment-error" component={PaymentError} />
