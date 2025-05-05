@@ -1555,49 +1555,40 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     If your organization operates a website, select any potential vulnerabilities that might exist in your web infrastructure.
                   </FormDescription>
                   
-                  <FormField
-                    control={form.control}
-                    name="websiteVulnerabilities"
-                    render={() => (
-                      <FormItem>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                          {websiteVulnerabilityOptions.map((option) => (
-                            <FormField
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    {websiteVulnerabilityOptions.map((option) => (
+                      <FormField
+                        key={option.id}
+                        control={form.control}
+                        name="websiteVulnerabilities"
+                        render={({ field }) => {
+                          return (
+                            <FormItem
                               key={option.id}
-                              control={form.control}
-                              name="websiteVulnerabilities"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={option.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(option.id)}
-                                        onCheckedChange={(checked) => {
-                                          const updatedValue = checked
-                                            ? [...(field.value || []), option.id]
-                                            : (field.value || [])?.filter(
-                                                (value) => value !== option.id
-                                              );
-                                          field.onChange(updatedValue);
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      {option.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                );
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                              className="flex flex-row items-start space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes(option.id)}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), option.id]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== option.id
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                {option.label}
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
 
                 {/* End Device Vulnerabilities Section */}
@@ -1607,49 +1598,40 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Select any potential vulnerabilities related to your organization's end-user devices (computers, mobile devices, etc.).
                   </FormDescription>
                   
-                  <FormField
-                    control={form.control}
-                    name="endDeviceVulnerabilities"
-                    render={() => (
-                      <FormItem>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                          {endDeviceVulnerabilityOptions.map((option) => (
-                            <FormField
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                    {endDeviceVulnerabilityOptions.map((option) => (
+                      <FormField
+                        key={option.id}
+                        control={form.control}
+                        name="endDeviceVulnerabilities"
+                        render={({ field }) => {
+                          return (
+                            <FormItem
                               key={option.id}
-                              control={form.control}
-                              name="endDeviceVulnerabilities"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={option.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(option.id)}
-                                        onCheckedChange={(checked) => {
-                                          const updatedValue = checked
-                                            ? [...(field.value || []), option.id]
-                                            : (field.value || [])?.filter(
-                                                (value) => value !== option.id
-                                              );
-                                          field.onChange(updatedValue);
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      {option.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                );
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                              className="flex flex-row items-start space-x-3 space-y-0"
+                            >
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes(option.id)}
+                                  onCheckedChange={(checked) => {
+                                    const updatedValue = checked
+                                      ? [...(field.value || []), option.id]
+                                      : (field.value || [])?.filter(
+                                          (value) => value !== option.id
+                                        );
+                                    field.onChange(updatedValue);
+                                  }}
+                                />
+                              </FormControl>
+                              <FormLabel className="font-normal">
+                                {option.label}
+                              </FormLabel>
+                            </FormItem>
+                          );
+                        }}
+                      />
+                    ))}
+                  </div>
                 </div>
 
                 {/* Conditional Notice Based on Infrastructure Mode */}

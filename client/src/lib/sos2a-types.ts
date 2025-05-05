@@ -58,6 +58,7 @@ export interface Sos2aFormData {
   vulnerabilities: string[];
   
   // 3. Security Risks & Vulnerabilities
+  securityRisks?: string[];
   websiteVulnerabilities?: string[];
   endDeviceVulnerabilities?: string[];
   
