@@ -1,6 +1,7 @@
 import React from 'react';
 import { KnowledgeItem } from './knowledge-item';
 import { Search } from 'lucide-react';
+import { ParameterMappingTable } from '../sos2a/parameter-mapping-table';
 
 export interface KnowledgeBaseProps {
   title?: string;
