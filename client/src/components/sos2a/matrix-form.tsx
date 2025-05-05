@@ -227,69 +227,338 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
             </div>
           </div>
           
-          {/* Main tabs for different categories */}
-          <Tabs defaultValue="risks" className="w-full">
+          {/* Main tabs for the 10 gap analysis parameters */}
+          <Tabs defaultValue="accessControl" className="w-full">
             <TabsList className="grid grid-cols-5 mb-4">
-              <TabsTrigger value="risks">Risks & Vulnerabilities</TabsTrigger>
-              <TabsTrigger value="controls">Security Controls</TabsTrigger>
-              <TabsTrigger value="compliance">Compliance & Standards</TabsTrigger>
-              <TabsTrigger value="mitre">MITRE ATT&CK</TabsTrigger>
-              <TabsTrigger value="policies">Policy Documents</TabsTrigger>
+              <TabsTrigger value="accessControl">Access Control</TabsTrigger>
+              <TabsTrigger value="dataProtection">Data Protection</TabsTrigger>
+              <TabsTrigger value="securityAwareness">Security Awareness</TabsTrigger>
+              <TabsTrigger value="incidentResponse">Incident Response</TabsTrigger>
+              <TabsTrigger value="networkSecurity">Network Security</TabsTrigger>
+            </TabsList>
+            <TabsList className="grid grid-cols-5 mb-4">
+              <TabsTrigger value="applicationSecurity">Application Security</TabsTrigger>
+              <TabsTrigger value="thirdPartyManagement">Third Party Management</TabsTrigger>
+              <TabsTrigger value="assetManagement">Asset Management</TabsTrigger>
+              <TabsTrigger value="securityGovernance">Security Governance</TabsTrigger>
+              <TabsTrigger value="complianceManagement">Compliance Management</TabsTrigger>
             </TabsList>
             
-            {/* Risks & Vulnerabilities Tab */}
-            <TabsContent value="risks">
-              <div className="grid grid-cols-2 gap-8">
+            {/* Access Control Tab */}
+            <TabsContent value="accessControl">
+              <div className="space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Security Risks</h3>
-                  <ScrollArea className="h-[300px] rounded-md border p-4">
-                    <ul className="space-y-2">
-                      {currentItem.risks.map((risk, index) => (
-                        <li key={index} className="flex items-start">
-                          <span className="mr-2">•</span>
-                          <span>{risk}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </ScrollArea>
+                  <h3 className="text-lg font-semibold mb-4">Access Control Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ac-user-access-management" 
+                            checked={currentItem.accessControl?.userAccessManagement || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                accessControl: {
+                                  ...currentItem.accessControl || {},
+                                  userAccessManagement: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ac-user-access-management">User Access Management</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ac-privilege-management" 
+                            checked={currentItem.accessControl?.privilegeManagement || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                accessControl: {
+                                  ...currentItem.accessControl || {},
+                                  privilegeManagement: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ac-privilege-management">Privilege Management</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ac-mfa" 
+                            checked={currentItem.accessControl?.multiFactorAuth || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                accessControl: {
+                                  ...currentItem.accessControl || {},
+                                  multiFactorAuth: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ac-mfa">Multi-Factor Authentication</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ac-password-policy" 
+                            checked={currentItem.accessControl?.passwordPolicy || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                accessControl: {
+                                  ...currentItem.accessControl || {},
+                                  passwordPolicy: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ac-password-policy">Password Policy</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="flex items-center gap-4">
+                        <Label>
+                          Not Implemented
+                          <div className="flex items-center gap-1 mt-1">
+                            <Checkbox 
+                              id="ac-not-implemented" 
+                              checked={currentItem.accessControl?.implementationLevel === 0}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  const updatedItem = { 
+                                    ...currentItem, 
+                                    accessControl: {
+                                      ...currentItem.accessControl || {},
+                                      implementationLevel: 0
+                                    }
+                                  };
+                                  updateMatrixItem(currentInfraIndex, updatedItem);
+                                }
+                              }}
+                            />
+                            <span className="text-sm">Level 0</span>
+                          </div>
+                        </Label>
+                        
+                        <Label>
+                          Initial
+                          <div className="flex items-center gap-1 mt-1">
+                            <Checkbox 
+                              id="ac-initial" 
+                              checked={currentItem.accessControl?.implementationLevel === 1}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  const updatedItem = { 
+                                    ...currentItem, 
+                                    accessControl: {
+                                      ...currentItem.accessControl || {},
+                                      implementationLevel: 1
+                                    }
+                                  };
+                                  updateMatrixItem(currentInfraIndex, updatedItem);
+                                }
+                              }}
+                            />
+                            <span className="text-sm">Level 1</span>
+                          </div>
+                        </Label>
+                        
+                        <Label>
+                          Developing
+                          <div className="flex items-center gap-1 mt-1">
+                            <Checkbox 
+                              id="ac-developing" 
+                              checked={currentItem.accessControl?.implementationLevel === 2}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  const updatedItem = { 
+                                    ...currentItem, 
+                                    accessControl: {
+                                      ...currentItem.accessControl || {},
+                                      implementationLevel: 2
+                                    }
+                                  };
+                                  updateMatrixItem(currentInfraIndex, updatedItem);
+                                }
+                              }}
+                            />
+                            <span className="text-sm">Level 2</span>
+                          </div>
+                        </Label>
+                        
+                        <Label>
+                          Defined
+                          <div className="flex items-center gap-1 mt-1">
+                            <Checkbox 
+                              id="ac-defined" 
+                              checked={currentItem.accessControl?.implementationLevel === 3}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  const updatedItem = { 
+                                    ...currentItem, 
+                                    accessControl: {
+                                      ...currentItem.accessControl || {},
+                                      implementationLevel: 3
+                                    }
+                                  };
+                                  updateMatrixItem(currentInfraIndex, updatedItem);
+                                }
+                              }}
+                            />
+                            <span className="text-sm">Level 3</span>
+                          </div>
+                        </Label>
+                        
+                        <Label>
+                          Managed
+                          <div className="flex items-center gap-1 mt-1">
+                            <Checkbox 
+                              id="ac-managed" 
+                              checked={currentItem.accessControl?.implementationLevel === 4}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  const updatedItem = { 
+                                    ...currentItem, 
+                                    accessControl: {
+                                      ...currentItem.accessControl || {},
+                                      implementationLevel: 4
+                                    }
+                                  };
+                                  updateMatrixItem(currentInfraIndex, updatedItem);
+                                }
+                              }}
+                            />
+                            <span className="text-sm">Level 4</span>
+                          </div>
+                        </Label>
+                        
+                        <Label>
+                          Optimized
+                          <div className="flex items-center gap-1 mt-1">
+                            <Checkbox 
+                              id="ac-optimized" 
+                              checked={currentItem.accessControl?.implementationLevel === 5}
+                              onCheckedChange={(checked) => {
+                                if (checked) {
+                                  const updatedItem = { 
+                                    ...currentItem, 
+                                    accessControl: {
+                                      ...currentItem.accessControl || {},
+                                      implementationLevel: 5
+                                    }
+                                  };
+                                  updateMatrixItem(currentInfraIndex, updatedItem);
+                                }
+                              }}
+                            />
+                            <span className="text-sm">Level 5</span>
+                          </div>
+                        </Label>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.accessControl?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  accessControl: {
+                                    ...currentItem.accessControl || {},
+                                    gaps: currentItem.accessControl?.gaps?.filter((_, i) => i !== index) || []
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="ac-gap" 
+                          placeholder="Add a gap in access control..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  accessControl: {
+                                    ...currentItem.accessControl || {},
+                                    gaps: [...(currentItem.accessControl?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('ac-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                accessControl: {
+                                  ...currentItem.accessControl || {},
+                                  gaps: [...(currentItem.accessControl?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                
                 <div>
-                  <h3 className="text-lg font-semibold mb-4">Vulnerabilities</h3>
-                  <ScrollArea className="h-[300px] rounded-md border p-4">
-                    <ul className="space-y-2">
-                      {currentItem.vulnerabilities.map((vuln, index) => (
-                        <li key={index} className="flex items-start">
-                          <span className="mr-2">•</span>
-                          <span>{vuln}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </ScrollArea>
-                </div>
-              </div>
-              
-              <div className="mt-8">
-                <h3 className="text-lg font-semibold mb-4">Education & Awareness</h3>
-                <div className="flex items-center space-x-4">
-                  <Switch 
-                    id="education-awareness" 
-                    checked={currentItem.educationAwareness}
-                    onCheckedChange={handleEducationAwarenessChange}
-                  />
-                  <Label htmlFor="education-awareness">
-                    {currentItem.educationAwareness 
-                      ? "Education & Awareness programs are implemented" 
-                      : "Education & Awareness programs are not implemented"}
-                  </Label>
-                </div>
-              </div>
-              
-              <div className="mt-8">
-                <h3 className="text-lg font-semibold mb-4">Relevant Questionnaires</h3>
-                <div className="flex flex-wrap gap-2">
-                  {currentItem.relevantQuestionnaires.map((q, index) => (
-                    <Badge key={index} variant="outline">{q}</Badge>
-                  ))}
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about access control implementation..."
+                      value={currentItem.accessControl?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          accessControl: {
+                            ...currentItem.accessControl || {},
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
                 </div>
               </div>
             </TabsContent>
