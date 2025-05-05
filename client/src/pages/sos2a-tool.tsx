@@ -18,19 +18,19 @@ import { GapAnalysisResult } from "@/lib/gap-analysis-types";
 
 // Sample scorecard data for testing
 const sampleScorecardData = [
-  { parameter: "Phishing screening", weight: 7.69, score: 65 },
-  { parameter: "Security awareness", weight: 7.69, score: 72 },
-  { parameter: "External footprints", weight: 7.69, score: 48 },
-  { parameter: "Dark web", weight: 7.69, score: 35 },
-  { parameter: "Endpoint security", weight: 7.69, score: 80 },
-  { parameter: "Cloud security", weight: 7.69, score: 58 },
-  { parameter: "Data security", weight: 7.69, score: 71 },
-  { parameter: "Browser security", weight: 7.69, score: 62 },
-  { parameter: "Email protection", weight: 7.69, score: 75 },
-  { parameter: "Compliances", weight: 7.69, score: 54 },
-  { parameter: "Regulatory requirements", weight: 7.69, score: 42 },
-  { parameter: "Frameworks", weight: 7.69, score: 65 },
-  { parameter: "Device inventory", weight: 7.69, score: 70 },
+  { parameter: "Phishing screening", weight: 8.33, score: 65 },
+  { parameter: "Security awareness", weight: 8.33, score: 72 },
+  { parameter: "External footprints", weight: 8.33, score: 48 },
+  { parameter: "Dark web", weight: 8.33, score: 35 },
+  { parameter: "Endpoint security", weight: 8.33, score: 80 },
+  { parameter: "Cloud security", weight: 8.33, score: 58 },
+  { parameter: "Data security", weight: 8.33, score: 71 },
+  { parameter: "Browser security", weight: 8.33, score: 62 },
+  { parameter: "Email protection", weight: 8.33, score: 75 },
+  { parameter: "Compliances", weight: 8.33, score: 54 },
+  { parameter: "Regulatory requirements", weight: 8.33, score: 42 },
+  { parameter: "Frameworks", weight: 8.33, score: 65 },
+  { parameter: "Device inventory", weight: 8.33, score: 70 },
 ];
 
 // Sample report for testing purposes
@@ -332,8 +332,8 @@ export default function Sos2aTool() {
   
   // Generate scorecard data with the 12 standard parameters
   const generateScorecardData = (data: MatrixItem[], reportType: 'preliminary' | 'comprehensive') => {
-    // Using 7.69% as weight since we have 13 parameters (adding up to 100%)
-    const standardWeight = 7.69;
+    // Using 8.33% as weight since we have 12 parameters (adding up to 100%)
+    const standardWeight = 8.33;
     
     // Function to generate a score based on reportType and implementation status
     const generateScore = (baseScore: number): number => {
