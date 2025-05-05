@@ -21,6 +21,7 @@ import TermsOfService from "@/pages/terms-of-service";
 import DataUsePolicy from "@/pages/data-use-policy";
 import KnowledgeBasePage from "@/pages/knowledge-base";
 import LightbulbMomentsPage from "@/pages/lightbulb-moments";
+import ParameterMappingPage from "@/pages/parameter-mapping";
 import LightbulbCapture from "@/components/knowledge-share/lightbulb-capture";
 import Checkout from "@/pages/checkout";
 import PaymentSuccess from "@/pages/payment-success";
@@ -56,6 +57,7 @@ function Router() {
           <Route path="/data-use-policy" component={DataUsePolicy} />
           <Route path="/knowledge-base" component={KnowledgeBasePage} />
           <Route path="/lightbulb-moments" component={LightbulbMomentsPage} />
+          <Route path="/parameter-mapping" component={ParameterMappingPage} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/payment-error" component={PaymentError} />

@@ -39,6 +39,9 @@ export default function DirectNavigation() {
             <Link href="/knowledge-base">
               <span className="text-blue-600 hover:underline cursor-pointer">Knowledge Base</span>
             </Link>
+            <Link href="/parameter-mapping">
+              <span className="text-blue-600 hover:underline cursor-pointer">Parameter Mapping</span>
+            </Link>
             <Link href="/about-us">
               <span className="text-blue-600 hover:underline cursor-pointer">About Us</span>
             </Link>

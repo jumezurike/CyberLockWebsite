@@ -13,6 +13,61 @@ export function KnowledgeBase({ title = "Knowledge Base", description }: Knowled
 
   const knowledgeItems = [
     {
+      id: 'parameter-mapping',
+      title: 'SOS²A Parameter Mapping',
+      content: (
+        <div className="space-y-4">
+          <p className="text-muted-foreground">
+            The SOS²A parameter mapping framework demonstrates the relationships between security domains 
+            and the 10 default assessment parameters, creating a comprehensive multi-dimensional analysis framework.
+          </p>
+          
+          <div className="mt-6 mb-8">
+            <ParameterMappingTable view="security-to-sos" />
+          </div>
+          
+          <div className="bg-blue-50 p-4 rounded-lg border border-blue-100 my-4">
+            <h4 className="font-medium text-blue-800 mb-2">The 10 Default SOS²A Parameters</h4>
+            <ol className="list-decimal pl-5 text-sm text-blue-700">
+              <li><span className="font-medium">Infrastructure Mode of Operation:</span> The underlying technology environment that impacts security controls</li>
+              <li><span className="font-medium">Security Risks & Vulnerabilities:</span> Identified threats and exploitable weaknesses in security posture</li>
+              <li><span className="font-medium">Baseline Configuration:</span> Standard secure settings forming the foundation of security</li>
+              <li><span className="font-medium">Security Control vs Framework:</span> Alignment between controls and recognized frameworks</li>
+              <li><span className="font-medium">Compliance Requirements:</span> Standards and best practices for certification</li>
+              <li><span className="font-medium">Regulatory Requirements:</span> Legal obligations to avoid penalties</li>
+              <li><span className="font-medium">Standards & Guidelines:</span> Technical specifications from security authorities</li>
+              <li><span className="font-medium">Relevant ACQ Tools:</span> Security tools that support assessment and compliance</li>
+              <li><span className="font-medium">Adversarial Insight (MITRE ATT&CK):</span> Threat actor tactics informing defenses</li>
+              <li><span className="font-medium">Information Security Management System (ISMS):</span> Systematic approach to managing information security</li>
+            </ol>
+          </div>
+          
+          <h4 className="font-medium">Relevance Levels</h4>
+          <p className="mb-2">The mapping uses four levels to indicate the strength of relationship between parameters:</p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div className="bg-red-700 text-white p-2 rounded">
+              <span className="font-medium">Critical:</span> Essential relationship with fundamental impact
+            </div>
+            <div className="bg-orange-500 text-white p-2 rounded">
+              <span className="font-medium">High:</span> Strong relationship with significant impact
+            </div>
+            <div className="bg-yellow-400 p-2 rounded">
+              <span className="font-medium">Medium:</span> Moderate relationship with notable impact
+            </div>
+            <div className="bg-blue-200 p-2 rounded">
+              <span className="font-medium">Low:</span> Minor relationship with limited impact
+            </div>
+          </div>
+          
+          <p className="mt-4">
+            This parameter mapping framework enhances gap analysis by providing a structured way to evaluate 
+            security domains across multiple dimensions. It helps identify blind spots in security programs 
+            and ensures comprehensive coverage across all critical relationships.
+          </p>
+        </div>
+      ),
+    },
+    {
       id: 'compliance-matrix',
       title: 'CyberLockX Compliance Matrix',
       content: (
