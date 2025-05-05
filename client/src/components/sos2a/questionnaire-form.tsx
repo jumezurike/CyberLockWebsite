@@ -43,6 +43,8 @@ const formSchema = z.object({
   // 4. Security Control Framework
   securityMeasures: z.array(z.string()),
   primaryConcerns: z.array(z.string()),
+  websiteVulnerabilities: z.array(z.string()).optional(),
+  endDeviceVulnerabilities: z.array(z.string()).optional(),
   frameworks: z.object({
     operations: z.array(z.string()),
     management: z.array(z.string()),
@@ -147,6 +149,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       // 4. Security Control Framework
       securityMeasures: [],
       primaryConcerns: [],
+      websiteVulnerabilities: [],
+      endDeviceVulnerabilities: [],
       frameworks: {
         operations: [],
         management: [],
@@ -262,6 +266,28 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "byod", label: "BYOD Security" },
     { id: "third-party", label: "Third-Party/Vendor Risk" },
     { id: "iot", label: "IoT Device Security" },
+  ];
+  
+  // Website vulnerabilities
+  const websiteVulnerabilityOptions = [
+    { id: "weak-auth-web", label: "Weak Authentication and Access Control - Website" },
+    { id: "unpatched-web", label: "Unpatched Software and Plugins - Website" },
+    { id: "insecure-uploads", label: "Insecure File Uploads - Website" },
+    { id: "xss", label: "Cross-Site Scripting (XSS) - Website" },
+    { id: "unsecured-api", label: "Unsecured APIs - Website" },
+    { id: "misconfigured-server", label: "Misconfigured Servers - Website" },
+    { id: "third-party-deps", label: "Third-Party Dependencies - Website" },
+    { id: "sql-injection", label: "SQL Injection - Website" },
+  ];
+  
+  // End device security vulnerabilities
+  const endDeviceVulnerabilityOptions = [
+    { id: "unpatched-os", label: "Unpatched OS or Software - EDS" },
+    { id: "misconfigured-mdm", label: "Misconfigured MDM Policies Causing Data Exposure - EDS" },
+    { id: "weak-auth-eds", label: "Weak Authentication Methods - EDS" },
+    { id: "unsecured-byod", label: "Unsecured BYOD Devices - EDS" },
+    { id: "default-creds", label: "Default Credentials on Devices - EDS" },
+    { id: "unsecured-media", label: "Unsecured Removable Media - EDS" },
   ];
   
   // Security Frameworks by domain
