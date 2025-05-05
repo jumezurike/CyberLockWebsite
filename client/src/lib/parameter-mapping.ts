@@ -2,11 +2,23 @@
  * SOS²A Parameter Mapping
  * 
  * This file contains the formal mapping between the 10 security parameters
- * used in gap analysis and the 9 original framework parameters.
+ * used in gap analysis and the 10 default SOS²A parameters.
  * 
  * This mapping demonstrates how each security domain intersects with the
  * fundamental assessment parameters, creating a multi-dimensional
  * analysis framework.
+ * 
+ * The 10 default SOS²A parameters are:
+ * 1. Infrastructure Mode of Operation
+ * 2. Security Risks & Vulnerabilities
+ * 3. Baseline Configuration
+ * 4. Security Control vs Framework
+ * 5. Compliance Requirements
+ * 6. Regulatory Requirements
+ * 7. Standards & Guidelines
+ * 8. Relevant ACQ Tools
+ * 9. Adversarial Insight (MITRE ATT&CK)
+ * 10. Information Security Management System (ISMS)
  */
 
 import { MatrixItem } from "./sos2a-types";
@@ -81,6 +93,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'high',
         description: 'Maps to Initial Access (TA0001) and Privilege Escalation (TA0004) tactics'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Access control is a core component of ISMS frameworks; policies for managing access rights and privileges are required'
       }
     ]
   },
@@ -132,6 +149,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'high',
         description: 'Maps to Collection (TA0009) and Exfiltration (TA0010) tactics'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Data protection is a cornerstone of ISMS programs; requires defined processes for handling, storing, and protecting sensitive information'
       }
     ]
   },
@@ -183,6 +205,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'high',
         description: 'Maps to Social Engineering precursors to Initial Access (TA0001)'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Security awareness is a required component of ISMS; ISO 27001 specifically mandates awareness training'
       }
     ]
   },
