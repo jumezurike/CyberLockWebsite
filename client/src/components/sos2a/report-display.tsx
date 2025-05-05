@@ -165,51 +165,51 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="grid grid-cols-3 gap-2 text-xs text-center mb-4">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Inquiry & Questionnaire</p>
-                      <p className="text-xs text-green-600">Data Collection</p>
+                      <p className="font-medium text-green-700">1. Inquiry & Questionnaire</p>
+                      <p className="text-xs text-green-600">Initial Data Collection</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Interview & Questionnaire</p>
+                      <p className="font-medium text-green-700">2. Interview & Matrix Population</p>
                       <p className="text-xs text-green-600">Stakeholder Input</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Matrix Population</p>
+                      <p className="font-medium text-green-700">3. Matrix Population</p>
                       <p className="text-xs text-green-600">Infrastructure Data</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-xs text-center mb-4">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">RASBITA Governance</p>
-                      <p className="text-xs text-green-600">Security Management</p>
+                      <p className="font-medium text-green-700">4. RASBITA Governance</p>
+                      <p className="text-xs text-green-600">Cybersecurity Governance Maturity</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">RASBITA Score</p>
+                      <p className="font-medium text-green-700">5. RASBITA Score</p>
                       <p className="text-xs text-green-600">Cost-Benefit Analysis</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Gap Analysis</p>
+                      <p className="font-medium text-green-700">6. Gap Analysis</p>
                       <p className="text-xs text-green-600">Security Parameters</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-xs text-center">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Architecture Analysis</p>
+                      <p className="font-medium text-green-700">7. Architecture Analysis</p>
                       <p className="text-xs text-green-600">Threat Modeling</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">8</div>
-                      <p className="text-muted-foreground">Preliminary Report</p>
+                      <p className="text-muted-foreground">8. Preliminary Report</p>
                       <p className="text-xs text-muted-foreground">Qualitative Assessment</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">9</div>
-                      <p className="text-muted-foreground">Comprehensive Report</p>
+                      <p className="text-muted-foreground">9. Comprehensive Report</p>
                       <p className="text-xs text-muted-foreground">Quantitative Analysis</p>
                     </div>
                   </div>
@@ -251,51 +251,51 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="grid grid-cols-3 gap-2 text-xs text-center mb-4">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Inquiry & Questionnaire</p>
-                      <p className="text-xs text-green-600">Data Collection</p>
+                      <p className="font-medium text-green-700">1. Inquiry & Questionnaire</p>
+                      <p className="text-xs text-green-600">Initial Data Collection</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Interview & Questionnaire</p>
+                      <p className="font-medium text-green-700">2. Interview & Matrix Population</p>
                       <p className="text-xs text-green-600">Stakeholder Input</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Matrix Population</p>
+                      <p className="font-medium text-green-700">3. Matrix Population</p>
                       <p className="text-xs text-green-600">Infrastructure Data</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-xs text-center mb-4">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">RASBITA Governance</p>
-                      <p className="text-xs text-green-600">Security Management</p>
+                      <p className="font-medium text-green-700">4. RASBITA Governance</p>
+                      <p className="text-xs text-green-600">Cybersecurity Governance Maturity</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">RASBITA Score</p>
+                      <p className="font-medium text-green-700">5. RASBITA Score</p>
                       <p className="text-xs text-green-600">Cost-Benefit Analysis</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Gap Analysis</p>
+                      <p className="font-medium text-green-700">6. Gap Analysis</p>
                       <p className="text-xs text-green-600">Security Parameters</p>
                     </div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-xs text-center">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Architecture Analysis</p>
+                      <p className="font-medium text-green-700">7. Architecture Analysis</p>
                       <p className="text-xs text-green-600">Threat Modeling</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">Preliminary Report</p>
+                      <p className="font-medium text-green-700">8. Preliminary Report</p>
                       <p className="text-xs text-green-600">Qualitative Assessment</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mx-auto">9</div>
-                      <p className="font-medium">Comprehensive Report</p>
+                      <p className="font-medium">9. Comprehensive Report</p>
                       <p className="text-xs text-green-600">Quantitative Analysis</p>
                     </div>
                   </div>
