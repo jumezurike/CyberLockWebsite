@@ -432,18 +432,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   
   // End device vulnerability options specifically for the form
   const endDeviceVulnerabilityOptions = [
-    { id: "unpatched-os", label: "Unpatched operating systems" },
-    { id: "outdated-browser", label: "Outdated browsers or applications" },
-    { id: "weak-passwords", label: "Weak or reused passwords" },
-    { id: "no-device-encryption", label: "Lack of full-disk encryption" },
-    { id: "no-endpoint-protection", label: "Missing endpoint protection software" },
-    { id: "no-mdm", label: "No Mobile Device Management (MDM) solution" },
-    { id: "byod-risks", label: "Unmanaged personal devices (BYOD risks)" },
-    { id: "admin-access", label: "Excessive administrative privileges" },
-    { id: "no-patching-policy", label: "No formal patching policy/process" },
-    { id: "no-device-inventory", label: "Missing device inventory/asset management" },
-    { id: "public-wifi", label: "Use of unsecured public WiFi" },
-    { id: "removable-media", label: "Unrestricted use of removable media" },
+    { id: "unpatched-os", label: "Unpatched OS or Software - EDS" },
+    { id: "mdm-misconfig", label: "Misconfigured MDM Policies Causing Data Exposure - EDS" },
+    { id: "weak-auth-eds", label: "Weak Authentication Methods - EDS" },
+    { id: "unsecured-byod", label: "Unsecured BYOD Devices - EDS" },
+    { id: "default-creds", label: "Default Credentials on Devices - EDS" },
+    { id: "removable-media", label: "Unsecured Removable Media - EDS" },
   ];
   
   // Security Frameworks by domain
