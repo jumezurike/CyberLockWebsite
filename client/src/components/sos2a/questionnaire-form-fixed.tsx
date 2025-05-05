@@ -3831,30 +3831,19 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 2-3: Infrastructure and Configuration */}
+                    {/* Section 2: Infrastructure Mode of Operation */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">2-3. Infrastructure & Configuration</h4>
-                        <div className="space-x-2">
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            size="sm"
-                            className="text-xs"
-                            onClick={() => document.querySelector('[data-value="infrastructure"]')?.click()}
-                          >
-                            Edit Infrastructure
-                          </Button>
-                          <Button 
-                            type="button" 
-                            variant="outline" 
-                            size="sm"
-                            className="text-xs"
-                            onClick={() => document.querySelector('[data-value="baseline"]')?.click()}
-                          >
-                            Edit Configuration
-                          </Button>
-                        </div>
+                        <h4 className="text-base font-medium">2. Infrastructure Mode of Operation</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => document.querySelector('[data-value="infrastructure"]')?.click()}
+                        >
+                          Edit Infrastructure
+                        </Button>
                       </div>
                       <div className="space-y-2 text-sm">
                         <div className="grid grid-cols-2 gap-2">
@@ -3870,7 +3859,71 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           
                           <div className="font-medium">Internet Presence:</div>
                           <div>{form.getValues("internetPresence").join(", ") || "None selected"}</div>
-                          
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Section 3: Security Risks & Vulnerabilities */}
+                    <div className="border rounded-md p-4 bg-orange-50 border-orange-200">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">3. Security Risks & Vulnerabilities</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => document.querySelector('[data-value="risks"]')?.click()}
+                        >
+                          Edit Risks
+                        </Button>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="grid grid-cols-2 gap-2">
+                          <div className="font-medium">Primary Security Concerns:</div>
+                          <div>{form.getValues("primaryConcerns")?.length > 0 ? 
+                              form.getValues("primaryConcerns").join(", ") : 
+                              "None selected"}</div>
+                              
+                          <div className="font-medium">Security Risks:</div>
+                          <div>{form.getValues("securityRisks")?.length > 0 ? 
+                              form.getValues("securityRisks").join(", ") : 
+                              "None selected"}</div>
+                              
+                          <div className="font-medium">Website Vulnerabilities:</div>
+                          <div>{form.getValues("websiteVulnerabilities")?.length > 0 ? 
+                              form.getValues("websiteVulnerabilities").map(vulnId => {
+                                const vuln = websiteVulnerabilityOptions.find(v => v.id === vulnId);
+                                return vuln ? vuln.label : vulnId;
+                              }).join(", ") : 
+                              "None identified"}</div>
+                              
+                          <div className="font-medium">End Device Vulnerabilities:</div>
+                          <div>{form.getValues("endDeviceVulnerabilities")?.length > 0 ? 
+                              form.getValues("endDeviceVulnerabilities").map(vulnId => {
+                                const vuln = endDeviceVulnerabilityOptions.find(v => v.id === vulnId);
+                                return vuln ? vuln.label : vulnId;
+                              }).join(", ") : 
+                              "None identified"}</div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Section 4: Configuration Baseline */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">4. Configuration Baseline</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          className="text-xs"
+                          onClick={() => document.querySelector('[data-value="baseline"]')?.click()}
+                        >
+                          Edit Configuration
+                        </Button>
+                      </div>
+                      <div className="space-y-2 text-sm">
+                        <div className="grid grid-cols-2 gap-2">
                           <div className="font-medium">Configuration Management:</div>
                           <div>{form.getValues("configurationManagement") || "Not specified"}</div>
                           
@@ -3903,10 +3956,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 4: Security Control Framework */}
+                    {/* Section 5: Security Control Framework */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">4. Security Control Framework</h4>
+                        <h4 className="text-base font-medium">5. Security Control Framework</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
@@ -3940,10 +3993,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 5-7: Compliance, Regulatory, Standards */}
+                    {/* Section 6-8: Compliance, Regulatory, Standards */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">5-7. Compliance & Standards</h4>
+                        <h4 className="text-base font-medium">6-8. Compliance & Standards</h4>
                         <div className="space-x-2">
                           <Button 
                             type="button" 
@@ -4053,10 +4106,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 8: ACQ Tools */}
+                    {/* Section 9: ACQ Tools */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">8. Assessment, Checklist & Questionnaire Tools</h4>
+                        <h4 className="text-base font-medium">9. Assessment, Checklist & Questionnaire Tools</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
@@ -4087,10 +4140,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 9: Adversarial Insight */}
+                    {/* Section 10: Adversarial Insight */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">9. Adversarial Insight (MITRE ATT&CK)</h4>
+                        <h4 className="text-base font-medium">10. Adversarial Insight (MITRE ATT&CK)</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
@@ -4137,10 +4190,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 10: ISMS */}
+                    {/* Section 11: ISMS */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">10. Information Security Management System (ISMS)</h4>
+                        <h4 className="text-base font-medium">11. Information Security Management System (ISMS)</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
@@ -4191,10 +4244,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 11: Contact Information */}
+                    {/* Section 12: Contact Information */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">11. Contact Information</h4>
+                        <h4 className="text-base font-medium">12. Contact Information</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
