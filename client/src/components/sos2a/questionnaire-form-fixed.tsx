@@ -1376,56 +1376,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       )}
                     />
                     
-                    {/* Primary Security Concerns moved from Baseline Configuration to Infrastructure Mode */}
-                    <FormField
-                      control={form.control}
-                      name="primaryConcerns"
-                      render={() => (
-                        <FormItem>
-                          <div className="mt-6 mb-4">
-                            <FormLabel>Primary Security Concerns</FormLabel>
-                            <FormDescription>
-                              Select your organization's primary security concerns
-                            </FormDescription>
-                          </div>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {primaryConcernOptions.map((option) => (
-                              <FormField
-                                key={option.id}
-                                control={form.control}
-                                name="primaryConcerns"
-                                render={({ field }) => {
-                                  return (
-                                    <FormItem
-                                      key={option.id}
-                                      className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
-                                    >
-                                      <FormControl>
-                                        <Checkbox
-                                          checked={field.value?.includes(option.id)}
-                                          onCheckedChange={(checked) => {
-                                            const newValue = checked
-                                              ? [...field.value, option.id]
-                                              : field.value?.filter(
-                                                  (value) => value !== option.id
-                                                );
-                                            return field.onChange(newValue);
-                                          }}
-                                        />
-                                      </FormControl>
-                                      <FormLabel className="font-normal">
-                                        {option.label}
-                                      </FormLabel>
-                                    </FormItem>
-                                  );
-                                }}
-                              />
-                            ))}
-                          </div>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                    {/* Primary Security Concerns section removed as it is redundant - now only in Security Risks & Vulnerabilities tab */}
                     
                     {/* Notice about vulnerabilities being moved */}
                     <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
