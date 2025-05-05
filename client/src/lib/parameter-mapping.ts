@@ -1,5 +1,5 @@
 /**
- * SOS²A Parameter Mapping
+ * Default Parameter Mapping
  * 
  * This file contains the formal mapping between the 10 security parameters
  * used in gap analysis and the 10 default SOS²A parameters.

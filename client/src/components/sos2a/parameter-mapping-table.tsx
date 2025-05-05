@@ -228,7 +228,7 @@ export default function ParameterMappingSection() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-6">SOS²A Parameter Mapping</h1>
+      <h1 className="text-2xl font-bold mb-6">Default Parameter Mapping</h1>
       
       <div className="mb-6">
         <div className="flex gap-4 mb-4">
