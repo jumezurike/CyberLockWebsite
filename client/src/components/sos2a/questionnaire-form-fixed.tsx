@@ -440,6 +440,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "removable-media", label: "Unsecured Removable Media - EDS" },
   ];
   
+  // Security Risk options
+  const securityRiskOptions = [
+    { id: "phishing-spoofing-web", label: "Phishing & Spoofing - Website" },
+    { id: "social-engineering-socmed", label: "Social Engineering - SocMedia" },
+    { id: "impersonation-socmed", label: "Impersonation - SocMed" },
+    { id: "data-privacy-socmed", label: "Data Privacy Violation - SocMed" },
+    { id: "data-breaches-web", label: "Data Breaches - Website" },
+    { id: "sql-injection-web", label: "SQL Injection - Website" },
+    { id: "ddos-web", label: "DDoS Attacks - Website" },
+    { id: "reputation-socmed", label: "Reputational Damages - SocMed" },
+    { id: "account-hijack-socmed", label: "Account Hijacking - SocMed" },
+    { id: "malware-hacking-web", label: "Malware & Hacking - Website" },
+  ];
+  
   // Security Frameworks by domain
   const operationalFrameworks = [
     { id: "nist-csf", label: "NIST CSF" },
@@ -1569,6 +1583,58 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   />
                 </div>
 
+                {/* Security Risks Section */}
+                <div className="border rounded-md p-4 mb-6 bg-blue-50 border-blue-200">
+                  <h3 className="font-medium mb-4">Security Risks</h3>
+                  <FormDescription className="mb-4">
+                    Select the specific security risks that are most relevant to your organization's online presence.
+                  </FormDescription>
+                  
+                  <FormField
+                    control={form.control}
+                    name="securityRisks"
+                    render={() => (
+                      <FormItem>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          {securityRiskOptions.map((option) => (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="securityRisks"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={option.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), option.id]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== option.id
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
                 {/* Website Vulnerabilities Section */}
                 <div className="border rounded-md p-4 mb-6 bg-orange-50 border-orange-200">
                   <h3 className="font-medium mb-4">Website Vulnerabilities</h3>
