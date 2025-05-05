@@ -31,17 +31,17 @@ export default function ReverseSimplifiedMappingTable() {
     {
       parameter: "Compliance Requirements",
       domains: ["Compliance Management", "Third-Party Management"],
-      explanation: "Ensures operational processes meet laws and industry frameworks (HIPAA, PCI-DSS, etc.)."
+      explanation: "Ensures operational processes meet laws and industry frameworks (HIPAA, PCI-DSS, CMMC, etc.)."
     },
     {
       parameter: "Regulatory Requirements",
       domains: ["Compliance Management", "Third-Party Management"],
-      explanation: "Focuses on actual regulations (e.g., HIPAA, CCPA, GDPR) and their legal implications."
+      explanation: "Focuses on actual regulations (e.g., HIPAA, CCPA, GDPR, DFARS) and their legal implications."
     },
     {
       parameter: "Standards & Guidelines",
       domains: ["Data Protection", "Application Security"],
-      explanation: "Aligns with security best practices like OWASP, CIS, ISO 27002."
+      explanation: "Aligns with security best practices like OWASP, CIS, ISO 27002, NIST 800-171."
     },
     {
       parameter: "Relevant ACQ Tools",

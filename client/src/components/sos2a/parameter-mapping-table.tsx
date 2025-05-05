@@ -310,7 +310,7 @@ export default function ParameterMappingSection() {
           It ensures that your cybersecurity core domains are:
           
           • Tied to real-world threats (MITRE)
-          • Aligned to frameworks (NIST, ISO, HIPAA)
+          • Aligned to frameworks (NIST, ISO, HIPAA, DFARS, CMMC)
           • Tracked and auditable for leadership and compliance
         </p>
       </div>

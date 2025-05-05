@@ -51,12 +51,12 @@ export default function SimplifiedMappingTable() {
     {
       domain: "Security Governance",
       parameters: ["ISMS", "Security Control vs Framework"],
-      explanation: "Ensures policy, leadership, and risk strategy align with control frameworks (e.g., NIST, ISO)."
+      explanation: "Ensures policy, leadership, and risk strategy align with control frameworks (e.g., NIST, ISO, DFARS)."
     },
     {
       domain: "Compliance Management",
       parameters: ["Compliance Requirements", "Regulatory Requirements"],
-      explanation: "Ensures controls meet HIPAA, GDPR, CMMC, etc., and are documented and auditable."
+      explanation: "Ensures controls meet HIPAA, GDPR, DFARS, CMMC, etc., and are documented and auditable."
     }
   ];
 
