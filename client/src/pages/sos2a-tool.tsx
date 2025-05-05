@@ -482,8 +482,14 @@ export default function Sos2aTool() {
       item.standards?.cisCsc
     ) ? 75 : 45);
     
+    // 13. Device Inventory
+    const deviceInventoryScore = generateScore(data.some(item => 
+      item.technologyControls?.frameworks?.includes('device_inventory') ||
+      item.technologyControls?.frameworks?.includes('asset_management')
+    ) ? 70 : 40);
+    
     return [
-      // The 12 proven threats used in quantitative analysis
+      // The 13 parameters used in quantitative analysis
       { parameter: "Phishing Screening", weight: standardWeight, score: phishingScreeningScore },
       { parameter: "Security Awareness", weight: standardWeight, score: securityAwarenessScore },
       { parameter: "External Footprints", weight: standardWeight, score: externalFootprintsScore },
@@ -495,7 +501,8 @@ export default function Sos2aTool() {
       { parameter: "Email Protection", weight: standardWeight, score: emailProtectionScore },
       { parameter: "Compliances", weight: standardWeight, score: compliancesScore },
       { parameter: "Regulatory Requirements", weight: standardWeight, score: regulatoryRequirementsScore },
-      { parameter: "Frameworks", weight: standardWeight, score: frameworksScore }
+      { parameter: "Frameworks", weight: standardWeight, score: frameworksScore },
+      { parameter: "Device Inventory", weight: standardWeight, score: deviceInventoryScore }
     ];
   };
 
