@@ -1247,73 +1247,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   )}
                 </div>
                 
-                <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">
-                    {form.watch('industry') === 'healthcare' 
-                      ? "Healthcare Security Priorities" 
-                      : "Security Priorities"}
-                  </h3>
-                  <FormField
-                    control={form.control}
-                    name="primaryConcerns"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-4">
-                          <FormLabel className="text-base">
-                            {form.watch('industry') === 'healthcare'
-                              ? "Select your healthcare organization's primary security concerns"
-                              : "Select your organization's primary security concerns"}
-                          </FormLabel>
-                          <FormDescription>
-                            This helps us prioritize recommendations based on your most pressing concerns.
-                          </FormDescription>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {primaryConcernOptions.map((option) => (
-                            <FormField
-                              key={option.id}
-                              control={form.control}
-                              name="primaryConcerns"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={option.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(option.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...field.value, option.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== option.id
-                                                )
-                                              );
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      {option.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                );
-                              }}
-                            />
-                          ))}
-                        </div>
-                        {form.watch('industry') === 'healthcare' && (
-                          <FormDescription className="mt-4 text-amber-500">
-                            Note: For healthcare organizations, data breach prevention and ransomware protection are critical concerns given the sensitive nature of PHI.
-                          </FormDescription>
-                        )}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+
                 
                 <div className="border rounded-md p-4 mb-6">
                   <h3 className="font-medium mb-4">
