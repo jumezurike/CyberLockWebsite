@@ -62,12 +62,12 @@ export default function ReverseSimplifiedMappingTable() {
 
   return (
     <div className="w-full overflow-x-auto">
-      <h2 className="text-xl font-semibold mb-4">SOS²A Parameters → Cybersecurity Domains</h2>
+      <h2 className="text-xl font-semibold mb-4">SOS²A Parameters → Cybersecurity Core Domains</h2>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr className="bg-gray-100">
             <th className="px-4 py-2 border text-left w-1/5">SOS²A Parameter</th>
-            <th className="px-4 py-2 border text-left w-2/5">Mapped Cybersecurity Domains</th>
+            <th className="px-4 py-2 border text-left w-2/5">Mapped Cybersecurity Core Domains</th>
             <th className="px-4 py-2 border text-left w-2/5">Explanation</th>
           </tr>
         </thead>

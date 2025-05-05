@@ -66,7 +66,7 @@ export default function SimplifiedMappingTable() {
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr className="bg-gray-100">
-            <th className="px-4 py-2 border text-left w-1/5">Cybersecurity Domain</th>
+            <th className="px-4 py-2 border text-left w-1/5">Cybersecurity Core Domain</th>
             <th className="px-4 py-2 border text-left w-2/5">Mapped SOS²A Parameters</th>
             <th className="px-4 py-2 border text-left w-2/5">Explanation</th>
           </tr>
