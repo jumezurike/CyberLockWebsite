@@ -16,6 +16,7 @@ import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
+import BrowserInventoryForm from "./browser-inventory-form-new";
 
 // Define vulnerability options
 const websiteVulnerabilityOptions = [
@@ -4167,8 +4168,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </p>
                   
                   <div className="mt-4">
-                    {/* Import and use the BrowserInventoryForm component */}
-                    {React.createElement(require('./browser-inventory-form-new').default)}
+                    {/* Browser inventory component */}
+                    <BrowserInventoryForm />
                   </div>
                 </div>
               </TabsContent>
