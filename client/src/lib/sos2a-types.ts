@@ -57,6 +57,10 @@ export interface Sos2aFormData {
   primaryConcerns: string[];
   vulnerabilities: string[];
   
+  // 3. Security Risks & Vulnerabilities
+  websiteVulnerabilities?: string[];
+  endDeviceVulnerabilities?: string[];
+  
   // 3. Configuration Baseline
   configurationManagement?: string;
   systemHardeningApproach?: string;
