@@ -4057,10 +4057,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 8: ACQ Tools */}
+                    {/* Section 9: ACQ Tools */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">8. Assessment, Checklist & Questionnaire Tools</h4>
+                        <h4 className="text-base font-medium">9. Relevant ACQ Tools</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
@@ -4091,10 +4091,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 9: Adversarial Insight */}
+                    {/* Section 10: Adversarial Insight */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">9. Adversarial Insight (MITRE ATT&CK)</h4>
+                        <h4 className="text-base font-medium">10. Adversarial Insight (MITRE ATT&CK)</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
