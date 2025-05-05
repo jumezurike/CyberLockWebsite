@@ -1,8 +1,8 @@
 import React from 'react';
 import { securityParameterMappings } from '@/lib/parameter-mapping';
 import { reverseParameterMappings } from '@/lib/reverse-parameter-mapping';
-import SimplifiedMappingTable from '@/components/sos2a/simplified-mapping-table';
-import ReverseSimplifiedMappingTable from '@/components/sos2a/reverse-simplified-mapping-table';
+import SimplifiedMappingTable from './simplified-mapping-table';
+import ReverseSimplifiedMappingTable from './reverse-simplified-mapping-table';
 
 interface MappingTableProps {
   view: 'security-to-sos' | 'sos-to-security';

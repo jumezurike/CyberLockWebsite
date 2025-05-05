@@ -62,7 +62,7 @@ export default function SimplifiedMappingTable() {
 
   return (
     <div className="w-full overflow-x-auto">
-      <h2 className="text-xl font-semibold mb-4">Cybersecurity Domains → SOS²A Parameters</h2>
+      <h2 className="text-xl font-semibold mb-4">Cybersecurity Core Domains → SOS²A Parameters</h2>
       <table className="min-w-full bg-white border border-gray-200">
         <thead>
           <tr className="bg-gray-100">
