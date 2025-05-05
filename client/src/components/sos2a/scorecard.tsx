@@ -30,25 +30,25 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
   // Create radar chart data for the 5 components
   const radarData = [
     { 
-      subject: "Risk Assessment", 
+      subject: "Qualitative Assessment", 
       A: report.rasbitaScore?.categories?.risk || 0,
       fullMark: 100,
       notAssessed: false 
     },
     { 
-      subject: "Security Controls", 
+      subject: "Quantitative Analysis", 
       A: report.rasbitaScore?.categories?.securityControls || 0,
       fullMark: 100,
       notAssessed: false 
     },
     { 
-      subject: "Architecture Analysis", 
+      subject: "RASBITA Cost-Benefit Analysis", 
       A: report.rasbitaScore?.categories?.architecture || 0,
       fullMark: 100,
       notAssessed: !report.architectureDiagramsProvided
     },
     { 
-      subject: "RASBITA Metrics", 
+      subject: "RASBITA Governance & Management", 
       A: ((report.rasbitaScore?.categories?.govern || 0) + 
          (report.rasbitaScore?.categories?.identify || 0) + 
          (report.rasbitaScore?.categories?.protect || 0)) / 3,
@@ -56,7 +56,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
       notAssessed: false 
     },
     { 
-      subject: "Resiliency", 
+      subject: "Architecture Threat Modeling", 
       A: ((report.rasbitaScore?.categories?.detect || 0) + 
          (report.rasbitaScore?.categories?.respond || 0) + 
          (report.rasbitaScore?.categories?.recover || 0)) / 3,
