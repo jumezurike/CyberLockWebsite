@@ -615,12 +615,27 @@ export default function Sos2aTool() {
       // We already calculated RASBITA score above, reuse it for consistency
       // The rasbitaCategories property is already in the format expected by the RasbitaReport type
       
+      // Make sure we have the required contact info
+      if (!formData?.contactInfo || !formData.contactInfo.name || !formData.contactInfo.email || !formData.contactInfo.phone) {
+        console.error("Missing required contact information:", formData?.contactInfo);
+        throw new Error("Missing required contact information");
+      }
+      
+      // Make sure we have the required employee count
+      if (!formData?.employeeCount) {
+        console.error("Missing required employee count");
+        throw new Error("Missing required employee count");
+      }
+      
       const assessmentData = {
         businessName: formData?.businessName || "Unknown",
         industry: formData?.industry || "Unknown",
-        businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
+        employeeCount: formData?.employeeCount,
+        contactInfo: formData?.contactInfo,
         reportType: reportType,
         securityScore: Math.round(result.overallScore.percentage),
+        securityMeasures: formData?.securityMeasures || [],
+        primaryConcerns: formData?.primaryConcerns || [],
         findings: JSON.stringify(combinedFindings),
         recommendations: JSON.stringify({
           immediate: criticalRecommendations.length > 0 ? criticalRecommendations : defaultRecommendations.immediate,
@@ -639,7 +654,25 @@ export default function Sos2aTool() {
       const response = await apiRequest("POST", "/api/assessments", assessmentData);
       
       if (!response.ok) {
-        throw new Error("Failed to save assessment");
+        // Get the detailed error message from the response if possible
+        let errorMessage = "Failed to save assessment";
+        try {
+          const errorData = await response.json();
+          console.error("Server error response:", errorData);
+          errorMessage = errorData.error || errorMessage;
+          
+          // Log validation errors if they exist
+          if (errorData.details) {
+            console.error("Validation errors:", errorData.details);
+          }
+        } catch (e) {
+          console.error("Error parsing error response:", e);
+        }
+        
+        throw new Error(errorMessage);
+      } else {
+        const savedData = await response.json();
+        console.log("Assessment saved successfully:", savedData);
       }
       
       // Show a success message
@@ -654,12 +687,14 @@ export default function Sos2aTool() {
         const assessments = await assessmentsResponse.json();
         setSavedAssessments(assessments);
         console.log("Fetched saved assessments:", assessments);
+      } else {
+        console.error("Failed to fetch saved assessments after saving");
       }
     } catch (error) {
       console.error("Error saving assessment:", error);
       toast({
         title: "Save Error",
-        description: "There was an error saving your assessment. Please try again or check the console for details.",
+        description: error instanceof Error ? error.message : "There was an error saving your assessment. Please try again or check the console for details.",
         variant: "destructive",
       });
     }

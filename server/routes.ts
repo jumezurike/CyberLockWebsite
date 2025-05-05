@@ -57,16 +57,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create a new assessment
   app.post("/api/assessments", async (req, res) => {
     try {
-      const validatedData = insertAssessmentSchema.parse(req.body);
+      console.log("Received assessment data:", JSON.stringify(req.body, null, 2));
+      
+      // Validate the request data
+      let validatedData;
+      try {
+        validatedData = insertAssessmentSchema.parse(req.body);
+      } catch (validationError) {
+        if (validationError instanceof ZodError) {
+          console.error("Assessment validation error:", validationError.errors);
+          return res.status(400).json({ 
+            error: "Validation error", 
+            details: validationError.errors,
+            receivedData: {
+              businessName: req.body.businessName,
+              industry: req.body.industry,
+              employeeCount: req.body.employeeCount,
+              contactInfo: req.body.contactInfo,
+              reportType: req.body.reportType
+            }
+          });
+        }
+        throw validationError;
+      }
+      
+      // Create the assessment
+      console.log("Validated assessment data:", validatedData);
       const newAssessment = await storage.createAssessment(validatedData);
+      console.log("Assessment created successfully:", newAssessment.id);
       res.status(201).json(newAssessment);
     } catch (error) {
-      if (error instanceof ZodError) {
-        res.status(400).json({ error: "Validation error", details: error.errors });
-      } else {
-        console.error("Error creating assessment:", error);
-        res.status(500).json({ error: "Failed to create assessment" });
-      }
+      console.error("Error creating assessment:", error);
+      res.status(500).json({ 
+        error: "Failed to create assessment", 
+        message: error instanceof Error ? error.message : "Unknown error",
+        stack: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined
+      });
     }
   });
 
