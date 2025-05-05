@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Sos2aFormData, MatrixItem, AssessmentReport } from "@/lib/sos2a-types";
+import { Sos2aFormData, MatrixItem, AssessmentReport, SecurityRisk } from "@/lib/sos2a-types";
 import { format, formatDistanceToNow, formatDistance, differenceInDays, parseISO } from "date-fns";
 import QuestionnaireForm from "@/components/sos2a/questionnaire-form-fixed";
 import MatrixForm from "@/components/sos2a/matrix-form";
@@ -504,10 +504,34 @@ export default function Sos2aTool() {
     // Save matrix data to localStorage
     saveMatrixDataToLocalStorage(data);
     
+    // Proceed to gap analysis step
+    setStep('gap-analysis');
+    localStorage.setItem('sos2a_current_step', 'gap-analysis');
+    
+    toast({
+      title: "Matrix Completion Successful",
+      description: "Moving to Gap Analysis step to identify security deficits in your organization.",
+    });
+  };
+  
+  // Handle gap analysis completion
+  const handleGapAnalysisComplete = async (result: GapAnalysisResult) => {
+    // Store the gap analysis results
+    setGapAnalysisResult(result);
+    
+    if (!formData || !matrixData) {
+      toast({
+        title: "Error Generating Report",
+        description: "Missing required data for report generation. Please complete previous steps.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     const reportType = formData?.reportType || 'preliminary';
     
-    // Generate the report based on the form and matrix data
-    const calculatedRasbitaScore = calculateRasbitaScore(data, formData);
+    // Generate the report based on the form, matrix data, and gap analysis
+    const calculatedRasbitaScore = calculateRasbitaScore(matrixData, formData);
     
     // Create the rasbitaCategories property in the format expected by the RasbitaReport type
     const rasbitaCategories = {
@@ -519,30 +543,66 @@ export default function Sos2aTool() {
       recover: calculatedRasbitaScore.categories.recover
     };
     
+    // Extract high-priority recommendations from gap analysis
+    const criticalRecommendations = result.prioritizedRecommendations
+      .filter(rec => rec.priority === 'Critical')
+      .map(rec => rec.recommendation);
+    
+    const highRecommendations = result.prioritizedRecommendations
+      .filter(rec => rec.priority === 'High')
+      .map(rec => rec.recommendation);
+    
+    const mediumRecommendations = result.prioritizedRecommendations
+      .filter(rec => rec.priority === 'Medium')
+      .map(rec => rec.recommendation);
+    
+    const defaultRecommendations = generateRecommendations(matrixData);
+    
+    // Combine gap analysis findings with existing findings
+    const gapFindings: SecurityRisk[] = Object.entries(result.parameterScores)
+      .flatMap(([parameter, data]) => 
+        data.gaps.slice(0, 3).map(gap => ({
+          severity: gap.percentageImpact >= 3 ? 'High' as const : 
+                   gap.percentageImpact >= 1 ? 'Medium' as const : 'Low' as const,
+          title: `${parameter}: ${gap.controlName}`,
+          description: gap.nextSteps
+        }))
+      );
+    
+    const combinedFindings: SecurityRisk[] = [
+      ...gapFindings,
+      ...identifySecurityRisks(matrixData)
+    ].slice(0, 10); // Limit to top 10 findings
+    
+    // Generate the report with gap analysis data
     const generatedReport: AssessmentReport = {
       id: 'report-' + Date.now(),
-      businessId: data[0].infraType + '-' + Date.now(),
+      businessId: matrixData[0]?.infraType + '-' + Date.now() || 'business-' + Date.now(),
       reportType: reportType,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       age: 0, // New report, age is 0 days
-      securityScore: calculateSecurityScore(data),
+      securityScore: Math.round(result.overallScore.percentage), // Use gap analysis score
       businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
       industry: formData?.industry || "Unknown",
       businessServices: formData?.businessServices || "Unknown",
       operationModes: formData?.operationMode || [],
       internetPresence: formData?.internetPresence || [],
-      findings: identifySecurityRisks(data),
-      vulnerabilities: categorizeLVulnerabilities(data),
-      recommendations: generateRecommendations(data),
-      frameworkGaps: identifyFrameworkGaps(data),
-      complianceStatus: evaluateComplianceStatus(data),
-      policyDocumentStatus: evaluatePolicyDocumentStatus(data),
-      osHardeningStatus: evaluateOsHardeningStatus(data),
-      ismsStatus: evaluateIsmsStatus(data, formData),
-      mitreAttackCoverage: evaluateMitreAttackCoverage(data),
-      matrixData: data,
-      scorecard: generateScorecardData(data, reportType),
+      findings: combinedFindings,
+      vulnerabilities: categorizeLVulnerabilities(matrixData),
+      recommendations: {
+        immediate: criticalRecommendations.length > 0 ? criticalRecommendations : defaultRecommendations.immediate,
+        shortTerm: highRecommendations.length > 0 ? highRecommendations : defaultRecommendations.shortTerm,
+        longTerm: mediumRecommendations.length > 0 ? mediumRecommendations : defaultRecommendations.longTerm
+      },
+      frameworkGaps: identifyFrameworkGaps(matrixData),
+      complianceStatus: evaluateComplianceStatus(matrixData),
+      policyDocumentStatus: evaluatePolicyDocumentStatus(matrixData),
+      osHardeningStatus: evaluateOsHardeningStatus(matrixData),
+      ismsStatus: evaluateIsmsStatus(matrixData, formData),
+      mitreAttackCoverage: evaluateMitreAttackCoverage(matrixData),
+      matrixData: matrixData,
+      scorecard: generateScorecardData(matrixData, reportType),
       rasbitaScore: calculatedRasbitaScore,
       rasbitaCategories: rasbitaCategories
     };
@@ -560,10 +620,15 @@ export default function Sos2aTool() {
         industry: formData?.industry || "Unknown",
         businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
         reportType: reportType,
-        securityScore: calculateSecurityScore(data),
-        findings: JSON.stringify(identifySecurityRisks(data)),
-        recommendations: JSON.stringify(generateRecommendations(data)),
-        matrixData: JSON.stringify(data),
+        securityScore: Math.round(result.overallScore.percentage),
+        findings: JSON.stringify(combinedFindings),
+        recommendations: JSON.stringify({
+          immediate: criticalRecommendations.length > 0 ? criticalRecommendations : defaultRecommendations.immediate,
+          shortTerm: highRecommendations.length > 0 ? highRecommendations : defaultRecommendations.shortTerm,
+          longTerm: mediumRecommendations.length > 0 ? mediumRecommendations : defaultRecommendations.longTerm
+        }),
+        matrixData: JSON.stringify(matrixData),
+        gapAnalysis: JSON.stringify(result),
         rasbitaScore: JSON.stringify(calculatedRasbitaScore),
         rasbitaCategories: JSON.stringify(rasbitaCategories),
         createdAt: new Date().toISOString()
@@ -603,7 +668,8 @@ export default function Sos2aTool() {
   // Go back to previous step
   const handleBack = () => {
     if (step === 'matrix') setStep('questionnaire');
-    if (step === 'report') setStep('matrix');
+    if (step === 'gap-analysis') setStep('matrix');
+    if (step === 'report') setStep('gap-analysis');
   };
   
   // Handle starting over
