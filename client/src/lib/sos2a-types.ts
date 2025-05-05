@@ -186,6 +186,8 @@ export interface MatrixItem {
   relevantQuestionnaires?: string[]; // Maintaining for backward compatibility
   // New field for recommended standards from standardsLibrary (with healthcare highlighting)
   recommendedStandards?: Array<{id: string, name: string, isHealthcareRelevant: boolean}>;
+  
+  // Original control categories (maintaining for backward compatibility)
   operationControls: {
     frameworks: string[];
     applicable: boolean;
@@ -214,6 +216,107 @@ export interface MatrixItem {
     applicable: boolean;
     implemented: boolean;
     gaps: string[];
+  };
+  
+  // 10 Security Parameters for Gap Analysis
+  accessControl?: {
+    userAccessManagement: boolean;
+    privilegeManagement: boolean;
+    multiFactorAuth: boolean;
+    passwordPolicy: boolean;
+    implementationLevel: number; // 0-5 (Not Implemented to Optimized)
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  dataProtection?: {
+    dataEncryption: boolean;
+    dataClassification: boolean;
+    dataBackup: boolean;
+    dataDeletion: boolean;
+    implementationLevel: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  securityAwareness?: {
+    trainingProgram: boolean;
+    phishingSimulations: boolean;
+    securityCulture: boolean;
+    incidentReporting: boolean;
+    implementationLevel: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  incidentResponse?: {
+    irPlan: boolean;
+    irTeam: boolean;
+    irTesting: boolean;
+    forensicCapabilities: boolean;
+    implementationLevel: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  networkSecurity?: {
+    firewalls: boolean;
+    segmentation: boolean;
+    intrusionDetection: boolean;
+    wirelessSecurity: boolean;
+    implementationLevel: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  applicationSecurity?: {
+    secureCoding: boolean;
+    vulnerabilityScanning: boolean;
+    patchManagement: boolean;
+    secureDeployment: boolean;
+    implementationLevel: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  thirdPartyManagement?: {
+    vendorAssessment: boolean;
+    contractualRequirements: boolean;
+    ongoingMonitoring: boolean;
+    offboardingProcess: boolean;
+    implementationLevel: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  assetManagement?: {
+    inventoryManagement: boolean;
+    assetClassification: boolean;
+    endOfLifeManagement: boolean;
+    assetTracking: boolean;
+    implementationLevel: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  securityGovernance?: {
+    securityPolicies: boolean;
+    riskAssessment: boolean;
+    complianceManagement: boolean;
+    securityRoles: boolean;
+    implementationLevel: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  complianceManagement?: {
+    regulatoryMapping: boolean;
+    complianceMonitoring: boolean;
+    auditPreparation: boolean;
+    remediationTracking: boolean;
+    implementationLevel: number;
+    gaps?: string[];
+    notes?: string;
   };
   complianceStandards: {
     pciDss: boolean;
