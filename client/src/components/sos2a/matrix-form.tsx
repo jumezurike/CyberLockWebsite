@@ -563,6 +563,1314 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
               </div>
             </TabsContent>
             
+            {/* Data Protection Tab */}
+            <TabsContent value="dataProtection">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Data Protection Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="dp-data-encryption" 
+                            checked={currentItem.dataProtection?.dataEncryption || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                dataProtection: {
+                                  ...currentItem.dataProtection || {},
+                                  dataEncryption: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="dp-data-encryption">Data Encryption</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="dp-data-classification" 
+                            checked={currentItem.dataProtection?.dataClassification || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                dataProtection: {
+                                  ...currentItem.dataProtection || {},
+                                  dataClassification: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="dp-data-classification">Data Classification</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="dp-data-backup" 
+                            checked={currentItem.dataProtection?.dataBackup || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                dataProtection: {
+                                  ...currentItem.dataProtection || {},
+                                  dataBackup: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="dp-data-backup">Data Backup</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="dp-data-deletion" 
+                            checked={currentItem.dataProtection?.dataDeletion || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                dataProtection: {
+                                  ...currentItem.dataProtection || {},
+                                  dataDeletion: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="dp-data-deletion">Data Deletion</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        {[0, 1, 2, 3, 4, 5].map((level) => (
+                          <div 
+                            key={level}
+                            className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
+                              currentItem.dataProtection?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            }`}
+                            onClick={() => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                dataProtection: {
+                                  ...currentItem.dataProtection || {},
+                                  implementationLevel: level
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          >
+                            <div className="text-center">
+                              <p className="text-sm font-semibold">{level}</p>
+                              <p className="text-xs">
+                                {level === 0 && 'Not Implemented'}
+                                {level === 1 && 'Initial'}
+                                {level === 2 && 'Repeatable'}
+                                {level === 3 && 'Defined'}
+                                {level === 4 && 'Managed'}
+                                {level === 5 && 'Optimized'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.dataProtection?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  dataProtection: {
+                                    ...currentItem.dataProtection,
+                                    gaps: currentItem.dataProtection.gaps.filter((_, i) => i !== index)
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="dp-gap" 
+                          placeholder="Add a gap in data protection..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  dataProtection: {
+                                    ...currentItem.dataProtection || {
+                                      gaps: []
+                                    },
+                                    gaps: [...(currentItem.dataProtection?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('dp-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                dataProtection: {
+                                  ...currentItem.dataProtection || {
+                                    gaps: []
+                                  },
+                                  gaps: [...(currentItem.dataProtection?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about data protection implementation..."
+                      value={currentItem.dataProtection?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          dataProtection: {
+                            ...currentItem.dataProtection || {
+                              gaps: []
+                            },
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Security Awareness Tab */}
+            <TabsContent value="securityAwareness">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Security Awareness Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="sa-training-program" 
+                            checked={currentItem.securityAwareness?.trainingProgram || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityAwareness: {
+                                  ...currentItem.securityAwareness || {},
+                                  trainingProgram: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="sa-training-program">Training Program</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="sa-phishing-simulations" 
+                            checked={currentItem.securityAwareness?.phishingSimulations || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityAwareness: {
+                                  ...currentItem.securityAwareness || {},
+                                  phishingSimulations: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="sa-phishing-simulations">Phishing Simulations</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="sa-security-culture" 
+                            checked={currentItem.securityAwareness?.securityCulture || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityAwareness: {
+                                  ...currentItem.securityAwareness || {},
+                                  securityCulture: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="sa-security-culture">Security Culture</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="sa-incident-reporting" 
+                            checked={currentItem.securityAwareness?.incidentReporting || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityAwareness: {
+                                  ...currentItem.securityAwareness || {},
+                                  incidentReporting: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="sa-incident-reporting">Incident Reporting</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        {[0, 1, 2, 3, 4, 5].map((level) => (
+                          <div 
+                            key={level}
+                            className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
+                              currentItem.securityAwareness?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            }`}
+                            onClick={() => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityAwareness: {
+                                  ...currentItem.securityAwareness || {},
+                                  implementationLevel: level
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          >
+                            <div className="text-center">
+                              <p className="text-sm font-semibold">{level}</p>
+                              <p className="text-xs">
+                                {level === 0 && 'Not Implemented'}
+                                {level === 1 && 'Initial'}
+                                {level === 2 && 'Repeatable'}
+                                {level === 3 && 'Defined'}
+                                {level === 4 && 'Managed'}
+                                {level === 5 && 'Optimized'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.securityAwareness?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  securityAwareness: {
+                                    ...currentItem.securityAwareness,
+                                    gaps: currentItem.securityAwareness.gaps.filter((_, i) => i !== index)
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="sa-gap" 
+                          placeholder="Add a gap in security awareness..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  securityAwareness: {
+                                    ...currentItem.securityAwareness || {
+                                      gaps: []
+                                    },
+                                    gaps: [...(currentItem.securityAwareness?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('sa-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityAwareness: {
+                                  ...currentItem.securityAwareness || {
+                                    gaps: []
+                                  },
+                                  gaps: [...(currentItem.securityAwareness?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about security awareness implementation..."
+                      value={currentItem.securityAwareness?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          securityAwareness: {
+                            ...currentItem.securityAwareness || {
+                              gaps: []
+                            },
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Incident Response Tab */}
+            <TabsContent value="incidentResponse">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Incident Response Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ir-plan" 
+                            checked={currentItem.incidentResponse?.irPlan || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                incidentResponse: {
+                                  ...currentItem.incidentResponse || {},
+                                  irPlan: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ir-plan">Incident Response Plan</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ir-team" 
+                            checked={currentItem.incidentResponse?.irTeam || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                incidentResponse: {
+                                  ...currentItem.incidentResponse || {},
+                                  irTeam: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ir-team">Incident Response Team</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ir-testing" 
+                            checked={currentItem.incidentResponse?.irTesting || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                incidentResponse: {
+                                  ...currentItem.incidentResponse || {},
+                                  irTesting: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ir-testing">IR Testing/Exercises</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ir-forensic" 
+                            checked={currentItem.incidentResponse?.forensicCapabilities || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                incidentResponse: {
+                                  ...currentItem.incidentResponse || {},
+                                  forensicCapabilities: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ir-forensic">Forensic Capabilities</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        {[0, 1, 2, 3, 4, 5].map((level) => (
+                          <div 
+                            key={level}
+                            className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
+                              currentItem.incidentResponse?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            }`}
+                            onClick={() => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                incidentResponse: {
+                                  ...currentItem.incidentResponse || {},
+                                  implementationLevel: level
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          >
+                            <div className="text-center">
+                              <p className="text-sm font-semibold">{level}</p>
+                              <p className="text-xs">
+                                {level === 0 && 'Not Implemented'}
+                                {level === 1 && 'Initial'}
+                                {level === 2 && 'Repeatable'}
+                                {level === 3 && 'Defined'}
+                                {level === 4 && 'Managed'}
+                                {level === 5 && 'Optimized'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.incidentResponse?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  incidentResponse: {
+                                    ...currentItem.incidentResponse,
+                                    gaps: currentItem.incidentResponse.gaps.filter((_, i) => i !== index)
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="ir-gap" 
+                          placeholder="Add a gap in incident response..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  incidentResponse: {
+                                    ...currentItem.incidentResponse || {
+                                      gaps: []
+                                    },
+                                    gaps: [...(currentItem.incidentResponse?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('ir-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                incidentResponse: {
+                                  ...currentItem.incidentResponse || {
+                                    gaps: []
+                                  },
+                                  gaps: [...(currentItem.incidentResponse?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about incident response implementation..."
+                      value={currentItem.incidentResponse?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          incidentResponse: {
+                            ...currentItem.incidentResponse || {
+                              gaps: []
+                            },
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Network Security Tab */}
+            <TabsContent value="networkSecurity">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Network Security Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ns-firewalls" 
+                            checked={currentItem.networkSecurity?.firewalls || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                networkSecurity: {
+                                  ...currentItem.networkSecurity || {},
+                                  firewalls: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ns-firewalls">Firewalls</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ns-segmentation" 
+                            checked={currentItem.networkSecurity?.segmentation || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                networkSecurity: {
+                                  ...currentItem.networkSecurity || {},
+                                  segmentation: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ns-segmentation">Network Segmentation</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ns-ids" 
+                            checked={currentItem.networkSecurity?.intrusionDetection || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                networkSecurity: {
+                                  ...currentItem.networkSecurity || {},
+                                  intrusionDetection: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ns-ids">Intrusion Detection</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="ns-wireless" 
+                            checked={currentItem.networkSecurity?.wirelessSecurity || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                networkSecurity: {
+                                  ...currentItem.networkSecurity || {},
+                                  wirelessSecurity: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="ns-wireless">Wireless Security</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        {[0, 1, 2, 3, 4, 5].map((level) => (
+                          <div 
+                            key={level}
+                            className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
+                              currentItem.networkSecurity?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            }`}
+                            onClick={() => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                networkSecurity: {
+                                  ...currentItem.networkSecurity || {},
+                                  implementationLevel: level
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          >
+                            <div className="text-center">
+                              <p className="text-sm font-semibold">{level}</p>
+                              <p className="text-xs">
+                                {level === 0 && 'Not Implemented'}
+                                {level === 1 && 'Initial'}
+                                {level === 2 && 'Repeatable'}
+                                {level === 3 && 'Defined'}
+                                {level === 4 && 'Managed'}
+                                {level === 5 && 'Optimized'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.networkSecurity?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  networkSecurity: {
+                                    ...currentItem.networkSecurity,
+                                    gaps: currentItem.networkSecurity.gaps.filter((_, i) => i !== index)
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="ns-gap" 
+                          placeholder="Add a gap in network security..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  networkSecurity: {
+                                    ...currentItem.networkSecurity || {
+                                      gaps: []
+                                    },
+                                    gaps: [...(currentItem.networkSecurity?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('ns-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                networkSecurity: {
+                                  ...currentItem.networkSecurity || {
+                                    gaps: []
+                                  },
+                                  gaps: [...(currentItem.networkSecurity?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about network security implementation..."
+                      value={currentItem.networkSecurity?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          networkSecurity: {
+                            ...currentItem.networkSecurity || {
+                              gaps: []
+                            },
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Application Security Tab */}
+            <TabsContent value="applicationSecurity">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Application Security Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="as-secure-coding" 
+                            checked={currentItem.applicationSecurity?.secureCoding || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                applicationSecurity: {
+                                  ...currentItem.applicationSecurity || {},
+                                  secureCoding: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="as-secure-coding">Secure Coding Practices</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="as-vulnerability-scanning" 
+                            checked={currentItem.applicationSecurity?.vulnerabilityScanning || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                applicationSecurity: {
+                                  ...currentItem.applicationSecurity || {},
+                                  vulnerabilityScanning: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="as-vulnerability-scanning">Vulnerability Scanning</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="as-patch-management" 
+                            checked={currentItem.applicationSecurity?.patchManagement || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                applicationSecurity: {
+                                  ...currentItem.applicationSecurity || {},
+                                  patchManagement: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="as-patch-management">Patch Management</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="as-secure-deployment" 
+                            checked={currentItem.applicationSecurity?.secureDeployment || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                applicationSecurity: {
+                                  ...currentItem.applicationSecurity || {},
+                                  secureDeployment: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="as-secure-deployment">Secure Deployment</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        {[0, 1, 2, 3, 4, 5].map((level) => (
+                          <div 
+                            key={level}
+                            className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
+                              currentItem.applicationSecurity?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            }`}
+                            onClick={() => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                applicationSecurity: {
+                                  ...currentItem.applicationSecurity || {},
+                                  implementationLevel: level
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          >
+                            <div className="text-center">
+                              <p className="text-sm font-semibold">{level}</p>
+                              <p className="text-xs">
+                                {level === 0 && 'Not Implemented'}
+                                {level === 1 && 'Initial'}
+                                {level === 2 && 'Repeatable'}
+                                {level === 3 && 'Defined'}
+                                {level === 4 && 'Managed'}
+                                {level === 5 && 'Optimized'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.applicationSecurity?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  applicationSecurity: {
+                                    ...currentItem.applicationSecurity,
+                                    gaps: currentItem.applicationSecurity.gaps.filter((_, i) => i !== index)
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="as-gap" 
+                          placeholder="Add a gap in application security..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  applicationSecurity: {
+                                    ...currentItem.applicationSecurity || {
+                                      gaps: []
+                                    },
+                                    gaps: [...(currentItem.applicationSecurity?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('as-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                applicationSecurity: {
+                                  ...currentItem.applicationSecurity || {
+                                    gaps: []
+                                  },
+                                  gaps: [...(currentItem.applicationSecurity?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about application security implementation..."
+                      value={currentItem.applicationSecurity?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          applicationSecurity: {
+                            ...currentItem.applicationSecurity || {
+                              gaps: []
+                            },
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Third Party Management Tab */}
+            <TabsContent value="thirdPartyManagement">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Third Party Management Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="tpm-vendor-assessment" 
+                            checked={currentItem.thirdPartyManagement?.vendorAssessment || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                thirdPartyManagement: {
+                                  ...currentItem.thirdPartyManagement || {},
+                                  vendorAssessment: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="tpm-vendor-assessment">Vendor Assessment</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="tpm-contractual-requirements" 
+                            checked={currentItem.thirdPartyManagement?.contractualRequirements || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                thirdPartyManagement: {
+                                  ...currentItem.thirdPartyManagement || {},
+                                  contractualRequirements: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="tpm-contractual-requirements">Contractual Requirements</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="tpm-ongoing-monitoring" 
+                            checked={currentItem.thirdPartyManagement?.ongoingMonitoring || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                thirdPartyManagement: {
+                                  ...currentItem.thirdPartyManagement || {},
+                                  ongoingMonitoring: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="tpm-ongoing-monitoring">Ongoing Monitoring</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="tpm-offboarding-process" 
+                            checked={currentItem.thirdPartyManagement?.offboardingProcess || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                thirdPartyManagement: {
+                                  ...currentItem.thirdPartyManagement || {},
+                                  offboardingProcess: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="tpm-offboarding-process">Offboarding Process</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        {[0, 1, 2, 3, 4, 5].map((level) => (
+                          <div 
+                            key={level}
+                            className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
+                              currentItem.thirdPartyManagement?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            }`}
+                            onClick={() => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                thirdPartyManagement: {
+                                  ...currentItem.thirdPartyManagement || {},
+                                  implementationLevel: level
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          >
+                            <div className="text-center">
+                              <p className="text-sm font-semibold">{level}</p>
+                              <p className="text-xs">
+                                {level === 0 && 'Not Implemented'}
+                                {level === 1 && 'Initial'}
+                                {level === 2 && 'Repeatable'}
+                                {level === 3 && 'Defined'}
+                                {level === 4 && 'Managed'}
+                                {level === 5 && 'Optimized'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.thirdPartyManagement?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  thirdPartyManagement: {
+                                    ...currentItem.thirdPartyManagement,
+                                    gaps: currentItem.thirdPartyManagement.gaps.filter((_, i) => i !== index)
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="tpm-gap" 
+                          placeholder="Add a gap in third party management..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  thirdPartyManagement: {
+                                    ...currentItem.thirdPartyManagement || {
+                                      gaps: []
+                                    },
+                                    gaps: [...(currentItem.thirdPartyManagement?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('tpm-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                thirdPartyManagement: {
+                                  ...currentItem.thirdPartyManagement || {
+                                    gaps: []
+                                  },
+                                  gaps: [...(currentItem.thirdPartyManagement?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about third party management implementation..."
+                      value={currentItem.thirdPartyManagement?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          thirdPartyManagement: {
+                            ...currentItem.thirdPartyManagement || {
+                              gaps: []
+                            },
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
             {/* Security Controls Tab */}
             <TabsContent value="controls">
               <div className="space-y-8">
