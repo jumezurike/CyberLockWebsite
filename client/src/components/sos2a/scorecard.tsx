@@ -7,15 +7,6 @@ import {
 } from 'recharts';
 import { ScorecardItem, AssessmentReport } from '@/lib/sos2a-types';
 
-// Define type for the NIST CSF categories
-type NistCsfCategory = 'govern' | 'identify' | 'protect' | 'detect' | 'respond' | 'recover';
-
-// Define the item type for category mapping
-interface CategoryItem {
-  key: NistCsfCategory;
-  name: string;
-}
-
 interface ScorecardProps {
   scorecard: ScorecardItem[];
   reportType: 'preliminary' | 'comprehensive';
@@ -36,82 +27,48 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
     weight: item.weight
   }));
   
-  // Create radar chart data for all SOS²A components (sections 2-10)
-  const sos2aComponents = [
-    // Section 2: Business Information Assessment
+  // Create radar chart data for the 5 components
+  const radarData = [
     { 
-      name: "Business Information", 
-      score: report.rasbitaScore?.categories?.identify || 0,
-      fullMark: 100 
-    },
-    // Section 3: Infrastructure Mode Assessment
-    { 
-      name: "Infrastructure Mode", 
-      score: report.rasbitaScore?.categories?.protect || 0,
-      fullMark: 100 
-    },
-    // Section 4: Configuration Baseline
-    { 
-      name: "Configuration Baseline", 
-      score: report.rasbitaScore?.categories?.detect || 0,
-      fullMark: 100 
-    },
-    // Section 5: Security Control Framework
-    { 
-      name: "Security Controls", 
-      score: report.rasbitaScore?.categories?.govern || 0,
-      fullMark: 100 
-    },
-    // Section 6: Compliance Requirements
-    { 
-      name: "Compliance", 
-      score: report.rasbitaScore?.categories?.respond || 0,
-      fullMark: 100 
-    },
-    // Section 7: Regulatory Requirements
-    { 
-      name: "Regulatory",
-      score: report.rasbitaScore?.categories?.recover || 0,
-      fullMark: 100
-    },
-    // Section 8: Standards
-    { 
-      name: "Standards", 
-      score: report.rasbitaScore?.categories?.identify || 0,
-      fullMark: 100 
-    },
-    // Section 9: MITRE ATT&CK / Adversarial Insight
-    { 
-      name: "Adversarial Insight", 
-      score: report.rasbitaScore?.categories?.detect || 0,
-      fullMark: 100 
-    },
-    // Section 10: ISMS Implementation
-    { 
-      name: "ISMS Implementation",
-      // Check if ISMS data was provided, otherwise mark as N/A
-      score: report.matrixData && report.matrixData.some(item => 
-        item.isms?.implementation
-      ) ? (report.rasbitaScore?.categories?.govern || 0) : 0,
+      subject: "Risk Assessment", 
+      A: report.rasbitaScore?.categories?.risk || 0,
       fullMark: 100,
-      notAssessed: !(report.matrixData && report.matrixData.some(item => 
-        item.isms?.implementation
-      ))
+      notAssessed: false 
+    },
+    { 
+      subject: "Security Controls", 
+      A: report.rasbitaScore?.categories?.securityControls || 0,
+      fullMark: 100,
+      notAssessed: false 
+    },
+    { 
+      subject: "Architecture Analysis", 
+      A: report.rasbitaScore?.categories?.architecture || 0,
+      fullMark: 100,
+      notAssessed: !report.architectureDiagramsProvided
+    },
+    { 
+      subject: "RASBITA Metrics", 
+      A: ((report.rasbitaScore?.categories?.govern || 0) + 
+         (report.rasbitaScore?.categories?.identify || 0) + 
+         (report.rasbitaScore?.categories?.protect || 0)) / 3,
+      fullMark: 100,
+      notAssessed: false 
+    },
+    { 
+      subject: "Resiliency", 
+      A: ((report.rasbitaScore?.categories?.detect || 0) + 
+         (report.rasbitaScore?.categories?.respond || 0) + 
+         (report.rasbitaScore?.categories?.recover || 0)) / 3,
+      fullMark: 100,
+      notAssessed: false 
     }
   ];
-  // Format components for radar chart
-  const radarData = sos2aComponents.map(component => ({
-    subject: component.name,
-    A: component.score,
-    fullMark: component.fullMark,
-    notAssessed: component.notAssessed || false
-  }));
 
   // Colors for the pie chart
   const COLORS = [
     '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', 
-    '#82ca9d', '#ffc658', '#8dd1e1', '#a4de6c', '#d0ed57',
-    '#83a6ed', '#8884d8'
+    '#82ca9d', '#ffc658', '#8dd1e1', '#a4de6c', '#d0ed57'
   ];
 
   // Function to determine status color based on score
@@ -180,86 +137,59 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
                 <Tooltip formatter={(value) => `${value}%`} />
                 <Legend 
                   verticalAlign="bottom" 
-                  height={60} 
+                  height={36} 
                   wrapperStyle={{ 
-                    paddingTop: 30, 
-                    marginTop: 15,
+                    paddingTop: 20, 
+                    marginTop: 10,
                     borderTop: '1px solid #f0f0f0' 
                   }}
-                  iconSize={10}
-                  iconType="circle"
                 />
               </PieChart>
             </ResponsiveContainer>
           </div>
         </div>
         
-        {/* SOS²A Components Pie Chart (Sections 2-10) */}
+        {/* Component Radar Chart */}
         <div className="mt-6 border-t pt-6">
-          <h4 className="text-lg font-semibold mb-4">SOS²A Complete Assessment (Sections 2-10)</h4>
+          <h4 className="text-lg font-semibold mb-4">SOS²A Component Analysis</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="h-[400px]">
               <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={sos2aComponents.map(comp => ({
-                      name: comp.name,
-                      value: comp.score,
-                      notAssessed: comp.notAssessed || false
-                    }))}
-                    cx="50%"
-                    cy="50%"
-                    labelLine={true}
-                    outerRadius={150}
+                <RadarChart outerRadius={150} width={500} height={500} data={radarData}>
+                  <PolarGrid />
+                  <PolarAngleAxis dataKey="subject" tick={{ fill: '#666', fontSize: 12 }} />
+                  <PolarRadiusAxis angle={90} domain={[0, 100]} />
+                  <Radar
+                    name="Score"
+                    dataKey="A"
+                    stroke="#8884d8"
                     fill="#8884d8"
-                    dataKey="value"
-                    nameKey="name"
-                    label={({ name, value, percent }) => 
-                      `${name}: ${value}%`
-                    }
-                  >
-                    {sos2aComponents.map((entry, index) => (
-                      <Cell 
-                        key={`cell-${index}`} 
-                        fill={COLORS[index % COLORS.length]} 
-                        opacity={entry.notAssessed ? 0.3 : 1}
-                      />
-                    ))}
-                  </Pie>
-                  <Tooltip 
-                    formatter={(value) => `${value}%`} 
-                    labelFormatter={(name) => `${name}`}
+                    fillOpacity={0.6}
                   />
-                  <Legend
-                    layout="vertical"
-                    verticalAlign="middle"
-                    align="right"
-                    wrapperStyle={{
-                      paddingLeft: 20
-                    }}
-                  />
-                </PieChart>
+                  <Tooltip formatter={(value) => `${value}%`} />
+                  <Legend />
+                </RadarChart>
               </ResponsiveContainer>
             </div>
             <div>
               <div className="grid grid-cols-1 gap-3 mt-4 text-sm">
-                {sos2aComponents.map((item, index) => (
+                {radarData.map((item, index) => (
                   <div key={index} className="p-3 border rounded flex items-center">
                     <div 
                       className="w-4 h-4 rounded-full mr-3" 
                       style={{ backgroundColor: COLORS[index % COLORS.length], opacity: item.notAssessed ? 0.3 : 1 }}
                     ></div>
                     <div className="flex-1">
-                      <div className="font-medium">{item.name}</div>
+                      <div className="font-medium">{item.subject}</div>
                       <div className="flex justify-between items-center mt-1">
-                        <div className={`${item.notAssessed ? 'text-gray-500' : getScoreColor(item.score)} font-bold`}>
-                          {item.notAssessed ? "Cannot be assessed" : item.score === 0 ? "Not Available" : `${item.score}%`}
+                        <div className={`${item.notAssessed ? 'text-gray-500' : getScoreColor(item.A)} font-bold`}>
+                          {item.notAssessed ? "Cannot be assessed" : `${item.A.toFixed(1)}%`}
                         </div>
-                        {!item.notAssessed && item.score > 0 && (
+                        {!item.notAssessed && (
                           <div className="w-24 bg-gray-200 rounded-full h-2.5">
                             <div 
-                              className={`h-2.5 rounded-full ${getScoreColor(item.score).replace('text-', 'bg-')}`}
-                              style={{ width: `${item.score}%` }}
+                              className={`h-2.5 rounded-full ${getScoreColor(item.A).replace('text-', 'bg-')}`}
+                              style={{ width: `${item.A}%` }}
                             ></div>
                           </div>
                         )}
@@ -272,7 +202,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
           </div>
         </div>
         
-        {/* NIST CSF 2.0 Radar Chart for RASBITA Governance & Management */}
+        {/* NIST CSF 2.0 Radar Chart */}
         <div className="mt-6 border-t pt-6">
           <h4 className="text-lg font-semibold mb-4">NIST CSF 2.0 Framework Alignment (0-4 Tier Maturity)</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -281,32 +211,32 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
                 <RadarChart cx="50%" cy="50%" outerRadius="80%" data={[
                   { 
                     subject: "Govern", 
-                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.govern || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaScore?.categories?.govern || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Identify", 
-                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.identify || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaScore?.categories?.identify || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Protect", 
-                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.protect || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaScore?.categories?.protect || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Detect", 
-                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.detect || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaScore?.categories?.detect || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Respond", 
-                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.respond || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaScore?.categories?.respond || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Recover", 
-                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.recover || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaScore?.categories?.recover || 0) / 25))), 
                     fullMark: 4 
                   }
                 ]}>
@@ -369,20 +299,14 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 text-center text-sm">
-                {[
-                  { key: "govern" as NistCsfCategory, name: "Govern" },
-                  { key: "identify" as NistCsfCategory, name: "Identify" }, 
-                  { key: "protect" as NistCsfCategory, name: "Protect" },
-                  { key: "detect" as NistCsfCategory, name: "Detect" },
-                  { key: "respond" as NistCsfCategory, name: "Respond" },
-                  { key: "recover" as NistCsfCategory, name: "Recover" }
-                ].map((item: CategoryItem, index) => {
-                  const percentScore = (report.rasbitaScore?.categories as any)?.[item.key] || 0;
+                {["Govern", "Identify", "Protect", "Detect", "Respond", "Recover"].map((item, index) => {
+                  // Correctly type-check to ensure we get the right property
+                  const categoryKey = item.toLowerCase();
+                  const percentScore = report.rasbitaScore?.categories?.[categoryKey] || 0;
                   const tierScore = Math.min(4, Math.max(0, Math.round(percentScore / 25)));
-                  
                   return (
                     <div key={index} className="p-2 border rounded">
-                      <div className="font-medium">{item.name}</div>
+                      <div className="font-medium">{item}</div>
                       <div className={`${getScoreColor(percentScore)} font-bold mt-1`}>
                         Tier {tierScore}
                       </div>
@@ -406,64 +330,64 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
           </h4>
           <p className="text-sm text-gray-600">
             {reportType === 'comprehensive' 
-              ? "This scorecard reflects quantitative measurements based on 6 months of evidence collection, showing the actual state of your security controls and their effectiveness across all nine SOS²A assessment sections (2-10)."
+              ? "This scorecard reflects quantitative measurements based on 6 months of evidence collection, showing the actual state of your security controls and their effectiveness."
               : "This preliminary scorecard is based on declared controls and assessment answers, providing an initial view of potential security posture without verification. Some components may be marked as 'Not Available' or 'Cannot be assessed' if required information was not provided."}
           </p>
           
           {/* Architecture Diagram Explanation */}
           {radarData.some(item => item.notAssessed) && (
             <div className="mt-3 p-3 bg-gray-50 border rounded-md">
-              <h5 className="text-sm font-semibold mb-1">Architecture Threat Modeling Component</h5>
+              <h5 className="text-sm font-semibold mb-1">Architecture Analysis Component</h5>
               <p className="text-xs text-gray-600">
-                The Architecture Threat Modeling component requires uploaded architecture diagrams to be assessed. Without these diagrams, this component is marked as "Cannot be assessed" and is excluded from the overall score calculation. Your final score is calculated as an average of the available components only.
+                The Architecture Analysis component requires uploaded architecture diagrams to be assessed. Without these diagrams, this component is marked as "Cannot be assessed" and is excluded from the overall score calculation. Your final score is calculated as an average of the available components only.
               </p>
             </div>
           )}
           
           <div className="mt-3">
             <div className="border rounded-md p-3 mb-4">
-              <h5 className="text-sm font-semibold mb-2">SOS²A 9-Section Assessment Methodology (Sections 2-10)</h5>
+              <h5 className="text-sm font-semibold mb-2">SOS²A 5-Component Assessment Methodology</h5>
               <div className="text-xs text-gray-700 space-y-3">
                 <div>
-                  <span className="font-semibold text-primary">1. Qualitative Assessment (100%)</span>
+                  <span className="font-semibold text-primary">1. Risk Assessment (100%)</span>
                   <p className="mt-1">
                     {reportType === 'comprehensive' ? 
-                    "Refined based on actual evidence with more accurate scoring of each parameter and direct comparison to preliminary assessment." : 
-                    "Initial assessment based on interview responses, providing a baseline view of security practices."}
+                    "Comprehensive risk assessment with detailed impact analysis based on actual threat intelligence and vulnerability scan data." : 
+                    "Initial risk assessment based on questionnaire responses and industry benchmark data."}
                   </p>
                 </div>
                 <div>
-                  <span className="font-semibold text-primary">2. Quantitative Analysis (100%)</span>
+                  <span className="font-semibold text-primary">2. Security Controls (100%)</span>
                   <p className="mt-1">
                     {reportType === 'comprehensive' ? 
-                    "Deep scan using professional tools with detailed analysis of all 12 parameters, trend analysis showing changes over time, and performance metrics with statistical significance." : 
-                    "Preliminary scan of the 12 key security parameters based on available evidence and declaration."}
+                    "Validated security controls with effectiveness measurements, mapped to industry frameworks and regulatory requirements." : 
+                    "Declared security controls without validation, providing baseline view of intended security measures."}
                   </p>
                 </div>
                 <div>
-                  <span className="font-semibold text-primary">3. RASBITA Cost-Benefit Analysis (100%)</span>
+                  <span className="font-semibold text-primary">3. Architecture Analysis (100%)</span>
                   <p className="mt-1">
                     {reportType === 'comprehensive' ? 
-                    "Comprehensive financial impact modeling with actual incident costs (if any occurred), detailed resource allocation analysis, and return on security investment calculations." : 
-                    "Initial cost-benefit analysis based on industry benchmarks and estimated risk levels."}
-                  </p>
-                </div>
-                <div>
-                  <span className="font-semibold text-primary">4. RASBITA Governance & Management (100%)</span>
-                  <p className="mt-1">
-                    {reportType === 'comprehensive' ? 
-                    "Detailed NIST CSF 2.0 radar analysis with maturity progression over time, governance structure effectiveness evaluation, and management control efficacy assessment." : 
-                    "Baseline governance assessment using NIST CSF 2.0 framework with initial maturity levels."}
-                  </p>
-                </div>
-                <div>
-                  <span className="font-semibold text-primary">5. Architecture Threat Modeling (100%)</span>
-                  <p className="mt-1">
-                    {reportType === 'comprehensive' ? 
-                    "Thorough data flow diagram analysis with comprehensive STRIDE threat modeling, validated mitigation strategies, and architectural security validation." : 
-                    "Initial review of architecture diagrams if provided, with basic threat identification."}
-                    {radarData.some(item => item.notAssessed) && 
+                    "Thorough architecture assessment with security flow analysis, attack surface enumeration, and configuration review." : 
+                    "Initial architecture review based on provided documentation without detailed validation."}
+                    {radarData.some(item => item.subject === "Architecture Analysis" && item.notAssessed) && 
                     " (Note: This component requires architecture diagrams to be assessed and is currently marked as 'Cannot be assessed'.)"}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-semibold text-primary">4. RASBITA Metrics (100%)</span>
+                  <p className="mt-1">
+                    {reportType === 'comprehensive' ? 
+                    "Detailed RASBITA metrics with historical trend analysis, risk-adjusted return calculations, and governance maturity assessment." : 
+                    "Baseline RASBITA measurements establishing initial cybersecurity governance posture."}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-semibold text-primary">5. Resiliency (100%)</span>
+                  <p className="mt-1">
+                    {reportType === 'comprehensive' ? 
+                    "Comprehensive resiliency assessment with incident response capabilities validation, recovery time objectives, and continuity planning verification." : 
+                    "Initial resiliency review based on declared detection, response, and recovery measures without validation."}
                   </p>
                 </div>
               </div>
@@ -481,7 +405,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
                       Preliminary Assessment:
                     </span> 
                     <p className="text-gray-600 mt-1">
-                      A quick assessment that includes all nine sections (2-10) with light scanning. It provides an initial view based on questionnaire responses, helpful for initial planning but pending verification.
+                      A quick assessment that includes all five components with light scanning. It provides an initial view based on questionnaire responses, helpful for initial planning but pending verification.
                     </p>
                   </div>
                   <div className="text-xs mt-2">
@@ -493,7 +417,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
                       Comprehensive Assessment:
                     </span>
                     <p className="text-gray-600 mt-1">
-                      A thorough evaluation with deep scanning across all nine sections (2-10), based on 6 months of evidence collection using SOC monitoring, incident response tracking, and security tools, providing validated security posture.
+                      A thorough evaluation with deep scanning across all five components, based on 6 months of evidence collection using SOC monitoring, incident response tracking, and security tools, providing validated security posture.
                     </p>
                   </div>
                 </div>
@@ -501,7 +425,7 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
               <div className="border rounded-md p-3">
                 <h5 className="text-sm font-semibold">Scoring Benefits</h5>
                 <p className="text-xs text-gray-600 mt-2">
-                  The SOS²A methodology provides a comprehensive view of your security posture across nine distinct assessment sections (2-10), delivering a much more detailed analysis than traditional single-dimension assessments. This approach ensures:
+                  The SOS²A methodology provides a comprehensive view of your security posture across five distinct components, delivering a much more detailed analysis than traditional single-dimension assessments. This approach ensures:
                 </p>
                 <ul className="text-xs text-gray-600 mt-2 space-y-1 list-disc ml-4">
                   <li>Complete coverage of all security aspects</li>
