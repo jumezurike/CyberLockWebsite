@@ -1871,6 +1871,660 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
               </div>
             </TabsContent>
             
+            {/* Asset Management Tab */}
+            <TabsContent value="assetManagement">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Asset Management Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="am-inventory-management" 
+                            checked={currentItem.assetManagement?.inventoryManagement || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                assetManagement: {
+                                  ...currentItem.assetManagement || {},
+                                  inventoryManagement: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="am-inventory-management">Inventory Management</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="am-asset-classification" 
+                            checked={currentItem.assetManagement?.assetClassification || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                assetManagement: {
+                                  ...currentItem.assetManagement || {},
+                                  assetClassification: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="am-asset-classification">Asset Classification</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="am-end-of-life" 
+                            checked={currentItem.assetManagement?.endOfLifeManagement || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                assetManagement: {
+                                  ...currentItem.assetManagement || {},
+                                  endOfLifeManagement: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="am-end-of-life">End-of-Life Management</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="am-asset-tracking" 
+                            checked={currentItem.assetManagement?.assetTracking || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                assetManagement: {
+                                  ...currentItem.assetManagement || {},
+                                  assetTracking: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="am-asset-tracking">Asset Tracking</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        {[0, 1, 2, 3, 4, 5].map((level) => (
+                          <div 
+                            key={level}
+                            className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
+                              currentItem.assetManagement?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            }`}
+                            onClick={() => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                assetManagement: {
+                                  ...currentItem.assetManagement || {},
+                                  implementationLevel: level
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          >
+                            <div className="text-center">
+                              <p className="text-sm font-semibold">{level}</p>
+                              <p className="text-xs">
+                                {level === 0 && 'Not Implemented'}
+                                {level === 1 && 'Initial'}
+                                {level === 2 && 'Repeatable'}
+                                {level === 3 && 'Defined'}
+                                {level === 4 && 'Managed'}
+                                {level === 5 && 'Optimized'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.assetManagement?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  assetManagement: {
+                                    ...currentItem.assetManagement,
+                                    gaps: currentItem.assetManagement.gaps.filter((_, i) => i !== index)
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="am-gap" 
+                          placeholder="Add a gap in asset management..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  assetManagement: {
+                                    ...currentItem.assetManagement || {
+                                      gaps: []
+                                    },
+                                    gaps: [...(currentItem.assetManagement?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('am-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                assetManagement: {
+                                  ...currentItem.assetManagement || {
+                                    gaps: []
+                                  },
+                                  gaps: [...(currentItem.assetManagement?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about asset management implementation..."
+                      value={currentItem.assetManagement?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          assetManagement: {
+                            ...currentItem.assetManagement || {
+                              gaps: []
+                            },
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Security Governance Tab */}
+            <TabsContent value="securityGovernance">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Security Governance Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="sg-security-policies" 
+                            checked={currentItem.securityGovernance?.securityPolicies || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityGovernance: {
+                                  ...currentItem.securityGovernance || {},
+                                  securityPolicies: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="sg-security-policies">Security Policies</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="sg-risk-assessment" 
+                            checked={currentItem.securityGovernance?.riskAssessment || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityGovernance: {
+                                  ...currentItem.securityGovernance || {},
+                                  riskAssessment: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="sg-risk-assessment">Risk Assessment</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="sg-compliance-management" 
+                            checked={currentItem.securityGovernance?.complianceManagement || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityGovernance: {
+                                  ...currentItem.securityGovernance || {},
+                                  complianceManagement: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="sg-compliance-management">Compliance Management</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="sg-security-roles" 
+                            checked={currentItem.securityGovernance?.securityRoles || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityGovernance: {
+                                  ...currentItem.securityGovernance || {},
+                                  securityRoles: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="sg-security-roles">Security Roles</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        {[0, 1, 2, 3, 4, 5].map((level) => (
+                          <div 
+                            key={level}
+                            className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
+                              currentItem.securityGovernance?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            }`}
+                            onClick={() => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityGovernance: {
+                                  ...currentItem.securityGovernance || {},
+                                  implementationLevel: level
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          >
+                            <div className="text-center">
+                              <p className="text-sm font-semibold">{level}</p>
+                              <p className="text-xs">
+                                {level === 0 && 'Not Implemented'}
+                                {level === 1 && 'Initial'}
+                                {level === 2 && 'Repeatable'}
+                                {level === 3 && 'Defined'}
+                                {level === 4 && 'Managed'}
+                                {level === 5 && 'Optimized'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.securityGovernance?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  securityGovernance: {
+                                    ...currentItem.securityGovernance,
+                                    gaps: currentItem.securityGovernance.gaps.filter((_, i) => i !== index)
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="sg-gap" 
+                          placeholder="Add a gap in security governance..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  securityGovernance: {
+                                    ...currentItem.securityGovernance || {
+                                      gaps: []
+                                    },
+                                    gaps: [...(currentItem.securityGovernance?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('sg-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityGovernance: {
+                                  ...currentItem.securityGovernance || {
+                                    gaps: []
+                                  },
+                                  gaps: [...(currentItem.securityGovernance?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about security governance implementation..."
+                      value={currentItem.securityGovernance?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          securityGovernance: {
+                            ...currentItem.securityGovernance || {
+                              gaps: []
+                            },
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Compliance Management Tab */}
+            <TabsContent value="complianceManagement">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Compliance Management Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="cm-regulatory-mapping" 
+                            checked={currentItem.complianceManagement?.regulatoryMapping || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceManagement: {
+                                  ...currentItem.complianceManagement || {},
+                                  regulatoryMapping: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="cm-regulatory-mapping">Regulatory Mapping</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="cm-compliance-monitoring" 
+                            checked={currentItem.complianceManagement?.complianceMonitoring || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceManagement: {
+                                  ...currentItem.complianceManagement || {},
+                                  complianceMonitoring: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="cm-compliance-monitoring">Compliance Monitoring</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="cm-audit-preparation" 
+                            checked={currentItem.complianceManagement?.auditPreparation || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceManagement: {
+                                  ...currentItem.complianceManagement || {},
+                                  auditPreparation: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="cm-audit-preparation">Audit Preparation</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="cm-remediation-tracking" 
+                            checked={currentItem.complianceManagement?.remediationTracking || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceManagement: {
+                                  ...currentItem.complianceManagement || {},
+                                  remediationTracking: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="cm-remediation-tracking">Remediation Tracking</Label>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Implementation Level</h4>
+                      <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
+                        {[0, 1, 2, 3, 4, 5].map((level) => (
+                          <div 
+                            key={level}
+                            className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
+                              currentItem.complianceManagement?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            }`}
+                            onClick={() => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceManagement: {
+                                  ...currentItem.complianceManagement || {},
+                                  implementationLevel: level
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          >
+                            <div className="text-center">
+                              <p className="text-sm font-semibold">{level}</p>
+                              <p className="text-xs">
+                                {level === 0 && 'Not Implemented'}
+                                {level === 1 && 'Initial'}
+                                {level === 2 && 'Repeatable'}
+                                {level === 3 && 'Defined'}
+                                {level === 4 && 'Managed'}
+                                {level === 5 && 'Optimized'}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium mb-2">Implementation Gaps</h4>
+                      <div className="flex flex-wrap gap-2 mb-2">
+                        {currentItem.complianceManagement?.gaps?.map((gap, index) => (
+                          <Badge key={index} variant="secondary" className="gap-2">
+                            {gap}
+                            <button 
+                              className="text-xs hover:text-primary"
+                              onClick={() => {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  complianceManagement: {
+                                    ...currentItem.complianceManagement,
+                                    gaps: currentItem.complianceManagement.gaps.filter((_, i) => i !== index)
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                              }}
+                            >
+                              ✕
+                            </button>
+                          </Badge>
+                        ))}
+                      </div>
+                      <div className="flex gap-2">
+                        <Input 
+                          id="cm-gap" 
+                          placeholder="Add a gap in compliance management..."
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const inputValue = (e.target as HTMLInputElement).value;
+                              if (inputValue.trim()) {
+                                const updatedItem = { 
+                                  ...currentItem, 
+                                  complianceManagement: {
+                                    ...currentItem.complianceManagement || {
+                                      gaps: []
+                                    },
+                                    gaps: [...(currentItem.complianceManagement?.gaps || []), inputValue]
+                                  }
+                                };
+                                updateMatrixItem(currentInfraIndex, updatedItem);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                        <Button 
+                          variant="outline"
+                          onClick={(e) => {
+                            const input = document.getElementById('cm-gap') as HTMLInputElement;
+                            const inputValue = input.value;
+                            if (inputValue.trim()) {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceManagement: {
+                                  ...currentItem.complianceManagement || {
+                                    gaps: []
+                                  },
+                                  gaps: [...(currentItem.complianceManagement?.gaps || []), inputValue]
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                              input.value = '';
+                            }
+                          }}
+                        >
+                          Add
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Notes</h3>
+                  <div className="rounded-md border p-4">
+                    <textarea
+                      className="w-full h-24 p-2 border rounded"
+                      placeholder="Enter notes about compliance management implementation..."
+                      value={currentItem.complianceManagement?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          complianceManagement: {
+                            ...currentItem.complianceManagement || {
+                              gaps: []
+                            },
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
             {/* Security Controls Tab */}
             <TabsContent value="controls">
               <div className="space-y-8">
