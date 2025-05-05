@@ -498,9 +498,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
                 <TabsTrigger value="questionnaires" className="flex-shrink-0">10. Relevant ACQ Tools</TabsTrigger>
                 <TabsTrigger value="adversarial" className="flex-shrink-0">11. Adversarial Insight</TabsTrigger>
-                <TabsTrigger value="isms" className="flex-shrink-0">12. Information Security Management System</TabsTrigger>
-                <TabsTrigger value="contact" className="flex-shrink-0">13. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review" className="flex-shrink-0">14. Review & Submit</TabsTrigger>
+                <TabsTrigger value="deviceInventory" className="flex-shrink-0">12. Device Inventory</TabsTrigger>
+                <TabsTrigger value="isms" className="flex-shrink-0">13. Information Security Management System</TabsTrigger>
+                <TabsTrigger value="contact" className="flex-shrink-0">14. Contact Confirmation</TabsTrigger>
+                <TabsTrigger value="review" className="flex-shrink-0">15. Review & Submit</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
