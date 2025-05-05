@@ -88,7 +88,7 @@ export default function RelationshipStrengthMappingTable() {
       parameters: [
         { name: "Baseline Configuration", strength: 'High' },
         { name: "Security Risks & Vulnerabilities", strength: 'Medium' },
-        { name: "Infrastructure Mode of Operation", strength: 'Low' }
+        { name: "Infrastructure Mode of Operation", strength: 'Medium' }
       ],
       explanation: "Protects devices with EDR, patching, and configuration management."
     },
@@ -199,7 +199,7 @@ export function ReverseRelationshipStrengthMappingTable() {
       parameter: "Infrastructure Mode of Operation",
       domains: [
         { name: "Network Security", strength: 'High' },
-        { name: "Endpoint Security", strength: 'Low' },
+        { name: "Endpoint Security", strength: 'Medium' },
         { name: "Asset Management", strength: 'Medium' }
       ],
       explanation: "How systems and networks are architected, deployed, and maintained."
