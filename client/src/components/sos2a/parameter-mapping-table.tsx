@@ -119,11 +119,11 @@ export function ParameterMappingTable({ view }: MappingTableProps) {
     
     return (
       <div className="overflow-x-auto">
-        <h2 className="text-xl font-bold mb-4">Security Parameters to SOS²A Parameters Mapping</h2>
+        <h2 className="text-xl font-bold mb-4">Cybersecurity Core Domains to SOS²A Parameters Mapping</h2>
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
-              <th className="sticky left-0 bg-gray-100 px-4 py-2 border">Security Parameter</th>
+              <th className="sticky left-0 bg-gray-100 px-4 py-2 border">Cybersecurity Domain</th>
               {sosParameters.map((param, index) => (
                 <th key={index} className="px-4 py-2 border whitespace-nowrap text-sm">{param}</th>
               ))}
@@ -172,7 +172,7 @@ export function ParameterMappingTable({ view }: MappingTableProps) {
     
     return (
       <div className="overflow-x-auto">
-        <h2 className="text-xl font-bold mb-4">SOS²A Parameters to Security Parameters Mapping</h2>
+        <h2 className="text-xl font-bold mb-4">SOS²A Parameters to Cybersecurity Domains Mapping</h2>
         <table className="min-w-full bg-white border border-gray-300">
           <thead>
             <tr className="bg-gray-100">
@@ -242,7 +242,7 @@ export default function ParameterMappingSection() {
                 : 'bg-gray-200'
             }`}
           >
-            Security → SOS²A
+            Cybersecurity Domains → SOS²A
           </button>
           <button
             onClick={() => setActiveView('sos-to-security')}
@@ -252,7 +252,7 @@ export default function ParameterMappingSection() {
                 : 'bg-gray-200'
             }`}
           >
-            SOS²A → Security
+            SOS²A → Cybersecurity Domains
           </button>
         </div>
         
@@ -272,8 +272,8 @@ export default function ParameterMappingSection() {
       <div className="prose max-w-none">
         <h2>Understanding the Mapping</h2>
         <p>
-          This table shows the relationship between the 10 default SOS²A parameters and the 10 security 
-          parameters used in gap analysis. The relevance level indicates the strength of the relationship 
+          This table shows the relationship between the 10 default SOS²A parameters and the 10 cybersecurity 
+          domains used in gap analysis. The relevance level indicates the strength of the relationship 
           between each pair of parameters.
         </p>
         
@@ -287,16 +287,16 @@ export default function ParameterMappingSection() {
         
         <h3>How to Use This Mapping</h3>
         <p>
-          Use this mapping to understand how security domains and assessment parameters interact:
+          Use this mapping to understand how cybersecurity domains and assessment parameters interact:
         </p>
         <ul>
           <li>
-            <strong>Security → SOS²A view</strong>: See how each security domain is evaluated across 
+            <strong>Cybersecurity Domains → SOS²A view</strong>: See how each cybersecurity domain is evaluated across 
             the 10 default assessment parameters. This helps understand the assessment coverage for 
             each security area.
           </li>
           <li>
-            <strong>SOS²A → Security view</strong>: See which security domains are most impacted by 
+            <strong>SOS²A → Cybersecurity Domains view</strong>: See which cybersecurity domains are most impacted by 
             each assessment parameter. This helps prioritize improvements based on assessment findings.
           </li>
         </ul>
