@@ -44,7 +44,7 @@ export function performGapAnalysisWithParameterizedScoring(
   };
   
   // Get expert requirements for each parameter
-  const expertRequirements = {};
+  const expertRequirements: Record<GapAnalysisParameter, ParameterRequirement[]> = {} as Record<GapAnalysisParameter, ParameterRequirement[]>;
   for (const parameter of assessmentParameters) {
     expertRequirements[parameter] = getExpertRequirementsForParameter(
       parameter, 
@@ -54,7 +54,7 @@ export function performGapAnalysisWithParameterizedScoring(
   }
   
   // Extract user responses for each parameter
-  const userImplementations = {};
+  const userImplementations: Record<GapAnalysisParameter, UserImplementation[]> = {} as Record<GapAnalysisParameter, UserImplementation[]>;
   for (const parameter of assessmentParameters) {
     userImplementations[parameter] = extractUserImplementationsForParameter(
       parameter, 
@@ -63,7 +63,17 @@ export function performGapAnalysisWithParameterizedScoring(
   }
   
   // Calculate score and identify gaps for each parameter
-  const parameterResults = {};
+  const parameterResults: Record<GapAnalysisParameter, {
+    earnedPercentage: number;
+    maxPercentage: number;
+    gaps: GapItem[];
+    recommendations: string[];
+  }> = {} as Record<GapAnalysisParameter, {
+    earnedPercentage: number;
+    maxPercentage: number;
+    gaps: GapItem[];
+    recommendations: string[];
+  }>;
   let overallPercentage = 0;
   
   for (const parameter of assessmentParameters) {
@@ -84,7 +94,7 @@ export function performGapAnalysisWithParameterizedScoring(
       
       // Check if requirement is implemented
       const matchingImplementation = parameterImplementations.find(
-        impl => impl.controlId === requirement.controlId
+        (impl: UserImplementation) => impl.controlId === requirement.controlId
       );
       
       if (!matchingImplementation) {
@@ -343,14 +353,20 @@ function generateParameterRecommendations(
  * Generate prioritized recommendations across all parameters
  */
 function generatePrioritizedRecommendations(
-  parameterResults: any, 
+  parameterResults: Record<GapAnalysisParameter, {
+    earnedPercentage: number;
+    maxPercentage: number;
+    gaps: GapItem[];
+    recommendations: string[];
+  }>, 
   organizationProfile: any
 ): PrioritizedRecommendation[] {
-  const allGaps: GapItem[] = [];
+  const allGaps: (GapItem & { parameter: string })[] = [];
   
   // Collect all gaps across parameters
   Object.keys(parameterResults).forEach(parameter => {
-    parameterResults[parameter].gaps.forEach(gap => {
+    const param = parameter as GapAnalysisParameter;
+    parameterResults[param].gaps.forEach((gap: GapItem) => {
       allGaps.push({
         ...gap,
         parameter

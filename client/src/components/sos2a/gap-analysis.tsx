@@ -295,8 +295,7 @@ export default function GapAnalysis({ formData, onComplete }: GapAnalysisProps) 
                             </span>
                             <Progress 
                               value={data.earnedPercentage * 10} 
-                              className="w-24"
-                              indicatorClassName={getScoreBgColor(data.earnedPercentage * 10)}
+                              className={`w-24 ${getScoreBgColor(data.earnedPercentage * 10)}`}
                             />
                           </div>
                         </TableCell>

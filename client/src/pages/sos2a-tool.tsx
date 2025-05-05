@@ -3,6 +3,7 @@ import { Sos2aFormData, MatrixItem, AssessmentReport } from "@/lib/sos2a-types";
 import { format, formatDistanceToNow, formatDistance, differenceInDays, parseISO } from "date-fns";
 import QuestionnaireForm from "@/components/sos2a/questionnaire-form-fixed";
 import MatrixForm from "@/components/sos2a/matrix-form";
+import GapAnalysis from "@/components/sos2a/gap-analysis";
 import ReportDisplay from "@/components/sos2a/report-display";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Progress } from "@/components/ui/progress";
@@ -13,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { apiRequest } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
+import { GapAnalysisResult } from "@/lib/gap-analysis-types";
 
 // Sample scorecard data for testing
 const sampleScorecardData = [
@@ -137,9 +139,10 @@ const sampleReport: AssessmentReport = {
 
 export default function Sos2aTool() {
   // State for multi-step form
-  const [step, setStep] = useState<'questionnaire' | 'matrix' | 'report'>('questionnaire'); // Start at questionnaire (first step)
+  const [step, setStep] = useState<'questionnaire' | 'matrix' | 'gap-analysis' | 'report'>('questionnaire'); // Start at questionnaire (first step)
   const [formData, setFormData] = useState<Sos2aFormData | null>(null);
   const [matrixData, setMatrixData] = useState<MatrixItem[] | null>(null);
+  const [gapAnalysisResult, setGapAnalysisResult] = useState<GapAnalysisResult | null>(null);
   const [report, setReport] = useState<AssessmentReport | null>(null); // Don't use sample report by default
   const [savedAssessments, setSavedAssessments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -196,9 +199,9 @@ export default function Sos2aTool() {
     }
     
     if (savedStep) {
-      const validSteps = ['questionnaire', 'matrix', 'report'];
+      const validSteps = ['questionnaire', 'matrix', 'gap-analysis', 'report'];
       if (validSteps.includes(savedStep)) {
-        setStep(savedStep as 'questionnaire' | 'matrix' | 'report');
+        setStep(savedStep as 'questionnaire' | 'matrix' | 'gap-analysis' | 'report');
       }
     }
   }, []);
@@ -206,12 +209,14 @@ export default function Sos2aTool() {
   // Progress percentage based on current step and report type
   const isComprehensive = formData?.reportType === 'comprehensive';
   const progressPercentage = step === 'questionnaire' 
-    ? 25 
+    ? 20 
     : step === 'matrix' 
-      ? 50 
-      : (step === 'report' && !isComprehensive)
-        ? 75  // Preliminary report (75% complete)
-        : 100; // Comprehensive report (100% complete)
+      ? 40 
+      : step === 'gap-analysis'
+        ? 60
+        : (step === 'report' && !isComprehensive)
+          ? 80  // Preliminary report (80% complete)
+          : 100; // Comprehensive report (100% complete)
   
   // Show review modal state
   const [showReviewModal, setShowReviewModal] = useState(false);
