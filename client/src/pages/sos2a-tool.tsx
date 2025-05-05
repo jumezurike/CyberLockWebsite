@@ -1689,6 +1689,8 @@ export default function Sos2aTool() {
       document.title = "HOS²A - Questionnaire";
     } else if (step === 'matrix') {
       document.title = "HOS²A - Matrix Population";
+    } else if (step === 'gap-analysis') {
+      document.title = "HOS²A - Gap Analysis";
     } else if (step === 'report') {
       document.title = "HOS²A - Assessment Report";
     }
@@ -1974,15 +1976,18 @@ export default function Sos2aTool() {
                 1. Inquiry & Questionnaire
               </div>
               <div className={`${step === 'matrix' ? 'text-primary font-medium' : ''}`}>
-                2. Interview & Matrix Population (Gap Analysis)
+                2. Interview & Matrix Population
+              </div>
+              <div className={`${step === 'gap-analysis' ? 'text-primary font-medium' : ''}`}>
+                3. Gap Analysis
               </div>
               {isComprehensive ? (
                 <div className={`${step === 'report' ? 'text-primary font-medium' : ''}`}>
-                  3. Preliminary Report → 4. Comprehensive Report
+                  4. Preliminary Report → 5. Comprehensive Report
                 </div>
               ) : (
                 <div className={`${step === 'report' ? 'text-primary font-medium' : ''}`}>
-                  3. Preliminary Report
+                  4. Preliminary Report
                 </div>
               )}
             </div>
@@ -2063,7 +2068,22 @@ export default function Sos2aTool() {
         </div>
       )}
       
-      {/* Step 3: Report Display */}
+      {/* Step 3: Gap Analysis */}
+      {step === 'gap-analysis' && formData && (
+        <div className="gap-analysis-container">
+          <GapAnalysis 
+            formData={formData} 
+            onComplete={handleGapAnalysisComplete} 
+          />
+          <div className="flex justify-between mt-6">
+            <Button onClick={handleBack} variant="outline">
+              Back to Matrix
+            </Button>
+          </div>
+        </div>
+      )}
+      
+      {/* Step 4: Report Display */}
       {step === 'report' && report && (
         <div className="report-container">
           <ReportDisplay report={report} onBack={handleBack} />
