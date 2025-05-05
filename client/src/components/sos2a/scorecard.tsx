@@ -349,45 +349,45 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
               <h5 className="text-sm font-semibold mb-2">SOS²A 5-Component Assessment Methodology</h5>
               <div className="text-xs text-gray-700 space-y-3">
                 <div>
-                  <span className="font-semibold text-primary">1. Risk Assessment (100%)</span>
+                  <span className="font-semibold text-primary">1. Qualitative Assessment (100%)</span>
                   <p className="mt-1">
                     {reportType === 'comprehensive' ? 
-                    "Comprehensive risk assessment with detailed impact analysis based on actual threat intelligence and vulnerability scan data." : 
-                    "Initial risk assessment based on questionnaire responses and industry benchmark data."}
+                    "Refined based on actual evidence, more accurate scoring of each 10 parameters, comparison to preliminary assessment." : 
+                    "Initial qualitative assessment based on questionnaire responses and industry benchmark data."}
                   </p>
                 </div>
                 <div>
-                  <span className="font-semibold text-primary">2. Security Controls (100%)</span>
+                  <span className="font-semibold text-primary">2. Quantitative Analysis (100%)</span>
                   <p className="mt-1">
                     {reportType === 'comprehensive' ? 
-                    "Validated security controls with effectiveness measurements, mapped to industry frameworks and regulatory requirements." : 
-                    "Declared security controls without validation, providing baseline view of intended security measures."}
+                    "Professional scanning tool results, detailed analysis of all 12 parameters, trend analysis showing changes over time, performance metrics with statistical significance." : 
+                    "Initial quantitative analysis providing baseline view of security measurements without deep validation."}
                   </p>
                 </div>
                 <div>
-                  <span className="font-semibold text-primary">3. Architecture Analysis (100%)</span>
+                  <span className="font-semibold text-primary">3. RASBITA Cost-Benefit Analysis (100%)</span>
                   <p className="mt-1">
                     {reportType === 'comprehensive' ? 
-                    "Thorough architecture assessment with security flow analysis, attack surface enumeration, and configuration review." : 
-                    "Initial architecture review based on provided documentation without detailed validation."}
-                    {radarData.some(item => item.subject === "Architecture Analysis" && item.notAssessed) && 
+                    "Comprehensive financial impact modeling, actual incident costs (if any occurred), detailed resource allocation analysis, return on security investment calculations." : 
+                    "Initial RASBITA cost-benefit analysis based on provided documentation without detailed validation."}
+                    {radarData.some(item => item.subject === "RASBITA Cost-Benefit Analysis" && item.notAssessed) && 
                     " (Note: This component requires architecture diagrams to be assessed and is currently marked as 'Cannot be assessed'.)"}
                   </p>
                 </div>
                 <div>
-                  <span className="font-semibold text-primary">4. RASBITA Metrics (100%)</span>
+                  <span className="font-semibold text-primary">4. RASBITA Governance & Management (100%)</span>
                   <p className="mt-1">
                     {reportType === 'comprehensive' ? 
-                    "Detailed RASBITA metrics with historical trend analysis, risk-adjusted return calculations, and governance maturity assessment." : 
-                    "Baseline RASBITA measurements establishing initial cybersecurity governance posture."}
+                    "Detailed NIST CSF 2.0 radar analysis, maturity progression over time, governance structure effectiveness evaluation, management control efficacy assessment." : 
+                    "Baseline RASBITA governance & management measurements establishing initial cybersecurity governance posture."}
                   </p>
                 </div>
                 <div>
-                  <span className="font-semibold text-primary">5. Resiliency (100%)</span>
+                  <span className="font-semibold text-primary">5. Architecture Threat Modeling (100%)</span>
                   <p className="mt-1">
                     {reportType === 'comprehensive' ? 
-                    "Comprehensive resiliency assessment with incident response capabilities validation, recovery time objectives, and continuity planning verification." : 
-                    "Initial resiliency review based on declared detection, response, and recovery measures without validation."}
+                    "Thorough data flow diagram analysis, comprehensive STRIDE threat modeling, validated mitigation strategies, architectural security validation." : 
+                    "Initial architecture threat modeling review based on declared measures without validation."}
                   </p>
                 </div>
               </div>
