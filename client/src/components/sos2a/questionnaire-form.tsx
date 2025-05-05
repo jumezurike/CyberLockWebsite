@@ -430,19 +430,21 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
           Complete this questionnaire to begin your assessment
         </CardDescription>
         <div className="mt-4 text-sm text-muted-foreground">
-          <p className="mb-2">Our 11-step assessment process:</p>
+          <p className="mb-2">Our 13-step assessment process:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-left">
             <div>1. Business Information</div>
             <div>2. Infrastructure Mode</div>
             <div>3. Configuration Baseline</div>
-            <div>4. Security Control Framework</div>
-            <div>5. Compliance</div>
-            <div>6. Regulatory Requirements</div>
-            <div>7. Standards & Guidelines</div>
-            <div>8. Relevant ACQ Tool</div>
-            <div>9. Adversarial Insight</div>
-            <div>10. Information Security Management System (ISMS)</div>
-            <div>11. Contact & Confirmation</div>
+            <div>4. Security Controls</div>
+            <div>5. Security Risks & Vulnerabilities</div>
+            <div>6. Security Frameworks</div>
+            <div>7. Compliance</div>
+            <div>8. Regulatory Requirements</div>
+            <div>9. Standards & Guidelines</div>
+            <div>10. Relevant ACQ Tool</div>
+            <div>11. Adversarial Insight</div>
+            <div>12. Information Security Management System (ISMS)</div>
+            <div>13. Contact & Confirmation</div>
           </div>
         </div>
       </CardHeader>
@@ -454,14 +456,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="business" className="flex-shrink-0">1. Business Information</TabsTrigger>
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
                 <TabsTrigger value="configuration" className="flex-shrink-0">3. Configuration Baseline</TabsTrigger>
-                <TabsTrigger value="security" className="flex-shrink-0">4. Security Controls vs Framework</TabsTrigger>
-                <TabsTrigger value="compliance" className="flex-shrink-0">5. Compliance</TabsTrigger>
-                <TabsTrigger value="regulatory" className="flex-shrink-0">6. Regulatory Requirements</TabsTrigger>
-                <TabsTrigger value="standards" className="flex-shrink-0">7. Standards & Guidelines</TabsTrigger>
-                <TabsTrigger value="questionnaires" className="flex-shrink-0">8. Relevant ACQ Tool</TabsTrigger>
-                <TabsTrigger value="adversarial" className="flex-shrink-0">9. Adversarial Insight</TabsTrigger>
-                <TabsTrigger value="isms" className="flex-shrink-0">10. Information Security Management System</TabsTrigger>
-                <TabsTrigger value="contact" className="flex-shrink-0">11. Contact & Confirmation</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">4. Security Controls</TabsTrigger>
+                <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">5. Security Risks & Vulnerabilities</TabsTrigger>
+                <TabsTrigger value="frameworks" className="flex-shrink-0">6. Security Frameworks</TabsTrigger>
+                <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance</TabsTrigger>
+                <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
+                <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
+                <TabsTrigger value="questionnaires" className="flex-shrink-0">10. Relevant ACQ Tool</TabsTrigger>
+                <TabsTrigger value="adversarial" className="flex-shrink-0">11. Adversarial Insight</TabsTrigger>
+                <TabsTrigger value="isms" className="flex-shrink-0">12. Information Security Management System</TabsTrigger>
+                <TabsTrigger value="contact" className="flex-shrink-0">13. Contact & Confirmation</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
