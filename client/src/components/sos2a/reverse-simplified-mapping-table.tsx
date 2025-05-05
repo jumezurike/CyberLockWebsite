@@ -10,17 +10,17 @@ export default function ReverseSimplifiedMappingTable() {
   const mappingData: ReverseMappingItem[] = [
     {
       parameter: "Infrastructure Mode of Operation",
-      domains: ["Network Security", "Asset Management"],
+      domains: ["Network Security", "Asset Management", "Endpoint Security"],
       explanation: "Covers how infrastructure is built, segmented, and monitored (e.g., secure cloud, on-prem)."
     },
     {
       parameter: "Security Risks & Vulnerabilities",
-      domains: ["Access Control", "Incident Response", "Application Security"],
-      explanation: "Risk is reduced by limiting access, preparing for incidents, and securing code."
+      domains: ["Access Control", "Incident Response", "Application Security", "Endpoint Security"],
+      explanation: "Risk is reduced by limiting access, preparing for incidents, securing code, and hardening endpoints."
     },
     {
       parameter: "Baseline Configuration",
-      domains: ["Data Protection", "Network Security"],
+      domains: ["Data Protection", "Network Security", "Endpoint Security"],
       explanation: "Default security settings (firewalls, encryption, device hardening) to reduce exposure."
     },
     {
@@ -45,8 +45,8 @@ export default function ReverseSimplifiedMappingTable() {
     },
     {
       parameter: "Relevant ACQ Tools",
-      domains: ["Asset Management", "Security Governance"],
-      explanation: "Ensures tools are being tracked, approved, and governed (e.g., vulnerability scanners, EDR)."
+      domains: ["Asset Management", "Security Governance", "Endpoint Security"],
+      explanation: "Ensures tools are being tracked, approved, and governed (e.g., vulnerability scanners, EDR, endpoint protection)."
     },
     {
       parameter: "Adversarial Insight (MITRE ATT&CK)",

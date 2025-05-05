@@ -34,6 +34,11 @@ export default function SimplifiedMappingTable() {
       explanation: "Involves firewall, segmentation, and monitoring tied to secure network infrastructure setup."
     },
     {
+      domain: "Endpoint Security",
+      parameters: ["Baseline Configuration", "Security Risks & Vulnerabilities", "Infrastructure Mode of Operation"],
+      explanation: "Protects devices with EDR, patching, configuration management, and access controls."
+    },
+    {
       domain: "Application Security",
       parameters: ["Security Control vs Framework", "Standards & Guidelines"],
       explanation: "Aligns secure code and vulnerability scanning with OWASP, NIST, etc."
