@@ -677,6 +677,7 @@ export default function Sos2aTool() {
     setStep('questionnaire');
     setFormData(null);
     setMatrixData(null);
+    setGapAnalysisResult(null);
     setReport(null);
     setSelectedAssessmentId("");
     // Clear all saved data from localStorage
