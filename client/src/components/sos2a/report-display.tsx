@@ -150,19 +150,19 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="flex mb-2 items-center justify-between">
                     <div>
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-primary text-white">
-                        Step 3 of 5
+                        Step 6 of 8
                       </span>
                     </div>
                     <div className="text-right">
                       <span className="text-xs font-semibold inline-block text-primary">
-                        60% Complete
+                        75% Complete
                       </span>
                     </div>
                   </div>
                   <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                    <div style={{ width: "60%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+                    <div style={{ width: "75%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
                   </div>
-                  <div className="grid grid-cols-5 gap-2 text-xs text-center">
+                  <div className="grid grid-cols-4 gap-2 text-xs text-center mb-4">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">Inquiry & Questionnaire</p>
@@ -171,7 +171,24 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">Matrix Population</p>
-                      <p className="text-xs text-green-600">Gap Analysis</p>
+                      <p className="text-xs text-green-600">Infrastructure Data</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">RASBITA Governance</p>
+                      <p className="text-xs text-green-600">Security Management</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">RASBITA Score</p>
+                      <p className="text-xs text-green-600">Cost-Benefit Analysis</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2 text-xs text-center">
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">Gap Analysis</p>
+                      <p className="text-xs text-green-600">Security Parameters</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
@@ -179,14 +196,14 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <p className="text-xs text-green-600">Threat Modeling</p>
                     </div>
                     <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">4</div>
+                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">7</div>
                       <p className="text-muted-foreground">Preliminary Report</p>
                       <p className="text-xs text-muted-foreground">Qualitative Assessment</p>
                     </div>
                     <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">5</div>
+                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">8</div>
                       <p className="text-muted-foreground">Comprehensive Report</p>
-                      <p className="text-xs text-muted-foreground">With Evidence Collection</p>
+                      <p className="text-xs text-muted-foreground">Quantitative Analysis</p>
                     </div>
                   </div>
                 </div>
@@ -212,7 +229,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="flex mb-2 items-center justify-between">
                     <div>
                       <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-green-500 text-white">
-                        Step 5 of 5
+                        Step 8 of 8
                       </span>
                     </div>
                     <div className="text-right">
@@ -224,7 +241,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
                     <div style={{ width: "100%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"></div>
                   </div>
-                  <div className="grid grid-cols-5 gap-2 text-xs text-center">
+                  <div className="grid grid-cols-4 gap-2 text-xs text-center mb-4">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">Inquiry & Questionnaire</p>
@@ -233,7 +250,24 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">Matrix Population</p>
-                      <p className="text-xs text-green-600">Gap Analysis</p>
+                      <p className="text-xs text-green-600">Infrastructure Data</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">RASBITA Governance</p>
+                      <p className="text-xs text-green-600">Security Management</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">RASBITA Score</p>
+                      <p className="text-xs text-green-600">Cost-Benefit Analysis</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2 text-xs text-center">
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-green-700">Gap Analysis</p>
+                      <p className="text-xs text-green-600">Security Parameters</p>
                     </div>
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
@@ -243,12 +277,12 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">Preliminary Report</p>
-                      <p className="text-xs text-green-600">Remediation Plan</p>
+                      <p className="text-xs text-green-600">Qualitative Assessment</p>
                     </div>
                     <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mx-auto">5</div>
+                      <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mx-auto">8</div>
                       <p className="font-medium">Comprehensive Report</p>
-                      <p className="text-xs text-green-600">Evidence-Based</p>
+                      <p className="text-xs text-green-600">Quantitative Analysis</p>
                     </div>
                   </div>
                 </div>
