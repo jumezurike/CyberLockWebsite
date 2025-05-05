@@ -1,6 +1,7 @@
 import React from 'react';
 import { securityParameterMappings } from '@/lib/parameter-mapping';
 import { reverseParameterMappings } from '@/lib/reverse-parameter-mapping';
+import SimplifiedMappingTable from './simplified-mapping-table';
 
 interface MappingTableProps {
   view: 'security-to-sos' | 'sos-to-security';
@@ -259,6 +260,10 @@ export default function ParameterMappingSection() {
         </div>
       </div>
       
+      <div className="mb-8">
+        <SimplifiedMappingTable />
+      </div>
+
       <div className="prose max-w-none">
         <h2>Understanding the Mapping</h2>
         <p>
