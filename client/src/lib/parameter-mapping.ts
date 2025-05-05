@@ -34,15 +34,15 @@ export interface ParameterMapping {
   description: string;
   frameworkMappings: {
     parameterName: string;
-    relevance: 'high' | 'medium' | 'low';
+    relevance: 'critical' | 'high' | 'medium' | 'low';
     description: string;
   }[];
 }
 
 /**
- * Comprehensive mapping between security parameters and framework parameters
+ * Comprehensive mapping between security parameters and default SOS²A parameters
  * The mapping shows how each security domain intersects with and is evaluated through
- * the lens of the original assessment framework parameters.
+ * the lens of the 10 default SOS²A parameters.
  */
 export const securityParameterMappings: ParameterMapping[] = [
   {
@@ -56,7 +56,7 @@ export const securityParameterMappings: ParameterMapping[] = [
       },
       {
         parameterName: 'Security Risks & Vulnerabilities',
-        relevance: 'high',
+        relevance: 'critical',
         description: 'Unauthorized access is a primary risk; weak authentication is a common vulnerability'
       },
       {
@@ -112,7 +112,7 @@ export const securityParameterMappings: ParameterMapping[] = [
       },
       {
         parameterName: 'Security Risks & Vulnerabilities',
-        relevance: 'high',
+        relevance: 'critical',
         description: 'Data breaches are a critical risk; unencrypted data storage is a severe vulnerability'
       },
       {
@@ -261,6 +261,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'high',
         description: 'Uses the entire ATT&CK framework to model detection and response capabilities'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Incident management is a required process within ISMS; ISO 27001 A.16 mandates incident response procedures'
       }
     ]
   },
@@ -312,6 +317,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'high',
         description: 'Maps to Network-based tactics like Lateral Movement (TA0008) and Command and Control (TA0011)'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Network security is a core component of ISMS frameworks; ISO 27001 A.13 mandates network security controls'
       }
     ]
   },
@@ -363,6 +373,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'high',
         description: 'Maps to Exploitation tactics (Initial Access, Execution, Privilege Escalation)'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Secure systems development and acquisition is a core ISMS domain in ISO 27001 A.14'
       }
     ]
   },
@@ -414,6 +429,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'medium',
         description: 'Maps to Supply Chain Compromise techniques in Initial Access (T1195)'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Supplier relationships are a specific control domain in ISO 27001 A.15, requiring formal supplier security policies'
       }
     ]
   },
@@ -465,6 +485,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'medium',
         description: 'Relates to Discovery tactics (TA0007) where attackers map organizational assets'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Asset management is a fundamental ISMS requirement in ISO 27001 A.8, covering inventory and classification'
       }
     ]
   },
@@ -516,6 +541,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'low',
         description: 'Limited direct mapping, but indirectly supports defense against all tactics'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'critical',
+        description: 'Security governance is the foundation of ISMS; ISO 27001 clauses 4-10 define the core governance mechanisms'
       }
     ]
   },
@@ -545,7 +575,7 @@ export const securityParameterMappings: ParameterMapping[] = [
       },
       {
         parameterName: 'Compliance Requirements',
-        relevance: 'high',
+        relevance: 'critical',
         description: 'Self-referential: the process of managing compliance with standards'
       },
       {
@@ -567,6 +597,11 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Adversarial Insight (MITRE ATT&CK)',
         relevance: 'low',
         description: 'Limited direct mapping, but compliance gaps can indicate exploitable weaknesses'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Compliance monitoring and evaluation is a core component of ISMS; ISO 27001 requires internal audits and management reviews'
       }
     ]
   }
