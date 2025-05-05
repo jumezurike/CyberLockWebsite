@@ -4190,10 +4190,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
 
-                    {/* Section 10: ISMS */}
+                    {/* Section 11: ISMS */}
                     <div className="border rounded-md p-4 bg-gray-50">
                       <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">10. Information Security Management System (ISMS)</h4>
+                        <h4 className="text-base font-medium">11. Information Security Management System (ISMS)</h4>
                         <Button 
                           type="button" 
                           variant="outline" 
