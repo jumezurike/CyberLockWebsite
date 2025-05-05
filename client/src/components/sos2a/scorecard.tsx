@@ -7,6 +7,15 @@ import {
 } from 'recharts';
 import { ScorecardItem, AssessmentReport } from '@/lib/sos2a-types';
 
+// Define type for the NIST CSF categories
+type NistCsfCategory = 'govern' | 'identify' | 'protect' | 'detect' | 'respond' | 'recover';
+
+// Define the item type for category mapping
+interface CategoryItem {
+  key: NistCsfCategory;
+  name: string;
+}
+
 interface ScorecardProps {
   scorecard: ScorecardItem[];
   reportType: 'preliminary' | 'comprehensive';
@@ -272,32 +281,32 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
                 <RadarChart cx="50%" cy="50%" outerRadius="80%" data={[
                   { 
                     subject: "Govern", 
-                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.govern || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.govern || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Identify", 
-                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.identify || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.identify || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Protect", 
-                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.protect || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.protect || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Detect", 
-                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.detect || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.detect || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Respond", 
-                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.respond || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.respond || 0) / 25))), 
                     fullMark: 4 
                   },
                   { 
                     subject: "Recover", 
-                    A: Math.min(4, Math.max(0, Math.round((report.rasbitaCategories?.recover || 0) / 25))), 
+                    A: Math.min(4, Math.max(0, Math.round(((report.rasbitaScore?.categories as any)?.recover || 0) / 25))), 
                     fullMark: 4 
                   }
                 ]}>
@@ -360,14 +369,20 @@ export default function Scorecard({ scorecard, reportType, report }: ScorecardPr
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 text-center text-sm">
-                {["Govern", "Identify", "Protect", "Detect", "Respond", "Recover"].map((item, index) => {
-                  // Correctly type-check to ensure we get the right property
-                  const categoryKey = item.toLowerCase() as keyof typeof report.rasbitaCategories;
-                  const percentScore = report.rasbitaCategories?.[categoryKey] || 0;
+                {[
+                  { key: "govern" as NistCsfCategory, name: "Govern" },
+                  { key: "identify" as NistCsfCategory, name: "Identify" }, 
+                  { key: "protect" as NistCsfCategory, name: "Protect" },
+                  { key: "detect" as NistCsfCategory, name: "Detect" },
+                  { key: "respond" as NistCsfCategory, name: "Respond" },
+                  { key: "recover" as NistCsfCategory, name: "Recover" }
+                ].map((item: CategoryItem, index) => {
+                  const percentScore = (report.rasbitaScore?.categories as any)?.[item.key] || 0;
                   const tierScore = Math.min(4, Math.max(0, Math.round(percentScore / 25)));
+                  
                   return (
                     <div key={index} className="p-2 border rounded">
-                      <div className="font-medium">{item}</div>
+                      <div className="font-medium">{item.name}</div>
                       <div className={`${getScoreColor(percentScore)} font-bold mt-1`}>
                         Tier {tierScore}
                       </div>
