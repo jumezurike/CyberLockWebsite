@@ -309,27 +309,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "iot", label: "IoT Device Security" },
   ];
   
-  // Website vulnerabilities
-  const websiteVulnerabilityOptions = [
-    { id: "weak-auth-web", label: "Weak Authentication and Access Control - Website" },
-    { id: "unpatched-web", label: "Unpatched Software and Plugins - Website" },
-    { id: "insecure-uploads", label: "Insecure File Uploads - Website" },
-    { id: "xss", label: "Cross-Site Scripting (XSS) - Website" },
+  // End device vulnerabilities 
+  const endDeviceVulnerabilityOptions = [
+    { id: "outdated-os", label: "Outdated operating systems" },
+    { id: "no-encryption", label: "Missing disk encryption" },
+    { id: "weak-passwords", label: "Weak authentication/password policies" },
+    { id: "no-endpoint", label: "No endpoint protection/antivirus" },
     { id: "unsecured-api", label: "Unsecured APIs - Website" },
     { id: "misconfigured-server", label: "Misconfigured Servers - Website" },
     { id: "third-party-deps", label: "Third-Party Dependencies - Website" },
     { id: "sql-injection", label: "SQL Injection - Website" },
   ];
   
-  // End device security vulnerabilities
-  const endDeviceVulnerabilityOptions = [
-    { id: "unpatched-os", label: "Unpatched OS or Software - EDS" },
-    { id: "misconfigured-mdm", label: "Misconfigured MDM Policies Causing Data Exposure - EDS" },
-    { id: "weak-auth-eds", label: "Weak Authentication Methods - EDS" },
-    { id: "unsecured-byod", label: "Unsecured BYOD Devices - EDS" },
-    { id: "default-creds", label: "Default Credentials on Devices - EDS" },
-    { id: "unsecured-media", label: "Unsecured Removable Media - EDS" },
-  ];
+  // Adding more options to the endDeviceVulnerabilityOptions
+  // defined at the top of the file
   
   // Security Frameworks by domain
   const operationalFrameworks = [
