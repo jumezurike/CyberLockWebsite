@@ -855,10 +855,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
               </TabsContent>
               
-              {/* Configuration Baseline Tab */}
+              {/* Baseline Configuration Tab */}
               <TabsContent value="configuration" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">4. Configuration Baseline</h3>
+                  <h3 className="font-medium mb-4">4. Baseline Configuration</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Define your organization's configuration baseline to help assess security posture.
                   </p>
