@@ -2231,7 +2231,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 5. Compliance Tab */}
               <TabsContent value="compliance" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">5. Compliance Requirements</h3>
+                  <h3 className="font-medium mb-4">6. Compliance Requirements</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select compliance frameworks, standards, and regulations relevant to your organization.
                   </p>
@@ -2559,7 +2559,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 6. Regulatory Requirements Tab */}
               <TabsContent value="regulatory" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">6. Regulatory Requirements</h3>
+                  <h3 className="font-medium mb-4">7. Regulatory Requirements</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select all regulatory requirements applicable to your organization.
                   </p>
@@ -2571,7 +2571,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 7. Standards & Guidelines Tab */}
               <TabsContent value="standards" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">7. Standards & Guidelines</h3>
+                  <h3 className="font-medium mb-4">8. Standards & Guidelines</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the standards and guidelines relevant to your organization.
                   </p>
@@ -2583,7 +2583,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 8. Relevant ACQ Tools Tab */}
               <TabsContent value="acq-tools" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">8. Relevant Assessment, Checklist & Questionnaire (ACQ) Tools</h3>
+                  <h3 className="font-medium mb-4">9. Relevant Assessment, Checklist & Questionnaire (ACQ) Tools</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the assessment tools and questionnaires relevant to your organization.
                   </p>
