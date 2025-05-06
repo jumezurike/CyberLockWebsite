@@ -311,6 +311,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         description: 'Major standards (PCI DSS, HIPAA, etc.) have specific access control requirements'
       },
       {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'high',
+        description: 'Standards require robust identity management (PCI DSS 8.1, HIPAA 164.308(a)(4))'
+      },
+      {
         securityParameter: 'networkSecurity',
         relevance: 'high',
         description: 'Standards have network security requirements (PCI DSS network segments, firewalls)'
@@ -372,6 +377,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         description: 'Regulations mandate access controls (HIPAA 164.312(a), GDPR Article 32)'
       },
       {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'high',
+        description: 'Regulations mandate identity verification and least privilege (GDPR, HIPAA, SOX)'
+      },
+      {
         securityParameter: 'securityGovernance',
         relevance: 'high',
         description: 'Regulations require governance processes (GDPR accountability principle, HIPAA)'
@@ -411,6 +421,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         securityParameter: 'accessControl',
         relevance: 'high',
         description: 'References standards like NIST 800-53 AC controls and ISO 27001 A.9 controls'
+      },
+      {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'high',
+        description: 'References standards like NIST 800-63 (Digital Identity), ISO 27001 A.9.2, and NIST SP 800-207 (Zero Trust)'
       },
       {
         securityParameter: 'dataProtection',
@@ -489,6 +504,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         description: 'Identifies tools for encryption testing, DLP assessment, and data classification'
       },
       {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'high',
+        description: 'Identifies tools for identity governance, privileged access management, and identity lifecycle'
+      },
+      {
         securityParameter: 'accessControl',
         relevance: 'medium',
         description: 'Identifies tools for IAM assessment, authentication testing, and privilege audit'
@@ -528,6 +548,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         securityParameter: 'accessControl',
         relevance: 'high',
         description: 'Maps to Initial Access (TA0001) and Privilege Escalation (TA0004) tactics'
+      },
+      {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'critical',
+        description: 'Maps to Credential Access (TA0006), Privilege Escalation (TA0004), and Initial Access (TA0001) tactics'
       },
       {
         securityParameter: 'dataProtection',
