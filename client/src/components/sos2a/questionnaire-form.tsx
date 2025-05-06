@@ -1227,7 +1227,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Device Inventory Tab */}
               <TabsContent value="deviceInventory" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6 bg-green-50">
-                  <h3 className="font-medium mb-2">5. Device Inventory Management</h3>
+                  <h3 className="font-medium mb-4">5. Device Inventory Management</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and assess your organization's hardware assets. This comprehensive inventory helps identify 
                     vulnerabilities, prioritize security controls, and ensure compliance with regulatory requirements.
