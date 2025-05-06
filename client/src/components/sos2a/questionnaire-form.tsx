@@ -1906,49 +1906,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 )}
               </TabsContent>
 
-              {/* Security Controls vs Framework Tab */}
-              <TabsContent value="security" className="space-y-6">
-                <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">6. Security Controls vs Framework</h3>
-                  <FormDescription className="mb-4">
-                    This section helps us identify if your organization is applying security controls properly across 
-                    the four main domains (Operations, Management, Technology, and People), with a focus on your 
-                    specific industry requirements.
-                  </FormDescription>
-                  
-                  {form.watch('industry') === 'healthcare' && (
-                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                      <h4 className="text-sm font-medium text-blue-800 mb-1">Healthcare Industry Focus</h4>
-                      <p className="text-sm text-blue-700">
-                        Healthcare organizations have specific framework requirements related to patient data protection, 
-                        HIPAA compliance, medical device security, and clinical systems integrity. We'll help identify the most 
-                        appropriate frameworks for your healthcare organization.
-                      </p>
-                    </div>
-                  )}
-                  
-                  {form.watch('industry') === 'finance' && (
-                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                      <h4 className="text-sm font-medium text-blue-800 mb-1">Finance Industry Focus</h4>
-                      <p className="text-sm text-blue-700">
-                        Financial organizations need to address PCI DSS, SOX compliance, and financial fraud protection. 
-                        We'll help identify the most appropriate frameworks for your financial institution.
-                      </p>
-                    </div>
-                  )}
-                  
-                  {form.watch('industry') && !['healthcare', 'finance'].includes(form.watch('industry')) && (
-                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                      <h4 className="text-sm font-medium text-blue-800 mb-1">Industry-Specific Guidance</h4>
-                      <p className="text-sm text-blue-700">
-                        Different industries have unique security requirements. Based on your {form.watch('industry')} industry 
-                        selection, we'll help identify the most appropriate frameworks and controls for your organization.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
-              
+
               {/* Compliance Tab */}
               <TabsContent value="compliance" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
