@@ -1907,7 +1907,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               </TabsContent>
 
               {/* Security Controls vs Framework Tab */}
-              <TabsContent value="frameworks" className="space-y-6">
+              <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
                   <h3 className="font-medium mb-4">6. Security Controls vs Framework</h3>
                   <FormDescription className="mb-4">
