@@ -2337,7 +2337,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Standards & Guidelines Tab */}
               <TabsContent value="standards" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Standards & Guidelines</h3>
+                  <h3 className="font-medium mb-4">9. Standards & Guidelines</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the standards and guidelines relevant to your organization.
                   </p>
