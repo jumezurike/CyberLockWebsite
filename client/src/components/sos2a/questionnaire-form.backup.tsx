@@ -1243,7 +1243,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Security Risks & Vulnerabilities Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">6. Security Controls vs Framework</h3>
+                  <h3 className="font-medium mb-4">Security Controls vs Framework</h3>
                   <FormDescription className="mb-4">
                     This section helps us identify if your organization is applying security controls properly across the four main domains (Operations, Management, Technology, and People), with a focus on your specific industry requirements.
                   </FormDescription>
