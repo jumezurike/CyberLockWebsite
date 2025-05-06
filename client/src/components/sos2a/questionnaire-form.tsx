@@ -4158,20 +4158,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Device Inventory Tab */}
-              <TabsContent value="deviceInventory" className="space-y-6">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Device Inventory</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Track browsers and devices across your organization to identify potential security risks.
-                  </p>
-                  
-                  <div className="mt-4">
-                    {/* Browser inventory component */}
-                    <BrowserInventoryForm />
-                  </div>
-                </div>
-              </TabsContent>
+{/* Device Inventory Tab is now implemented below */}
               
               {/* Information Security Management System (ISMS) Tab */}
               <TabsContent value="isms" className="space-y-6">
