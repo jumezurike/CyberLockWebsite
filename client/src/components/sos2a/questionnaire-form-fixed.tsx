@@ -365,7 +365,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "commercial-internet", label: "Commercial Internet" },
     { id: "dedicated-connection", label: "Dedicated Connection" },
     { id: "satellite", label: "Satellite" },
-    { id: "ai-applications", label: "AI Applications (ChatGPT, Mistral, DeepSeek, etc.)" },
+    { id: "ai-applications", label: "AI-Powered Modems/Routers application (ChatGPT, Grog, Copilot, Watson, Meta)" },
     { id: "other", label: "Other" },
   ];
   
