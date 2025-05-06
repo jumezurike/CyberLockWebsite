@@ -502,7 +502,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="adversarial" className="flex-shrink-0">10. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
                 <TabsTrigger value="isms" className="flex-shrink-0">11. Information Security Management System (ISMS)</TabsTrigger>
                 <TabsTrigger value="contact" className="flex-shrink-0">12. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review" className="flex-shrink-0">13. Review & Submit</TabsTrigger>
+                <TabsTrigger value="review" className="flex-shrink-0">13. Review & Submit Your Questionnaire</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}

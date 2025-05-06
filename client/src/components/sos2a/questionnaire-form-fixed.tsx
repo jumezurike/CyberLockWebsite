@@ -1026,7 +1026,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="contact">12. Contact Confirmation</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
-                <TabsTrigger value="review" className="bg-[#7936b0] text-white hover:bg-[#6b2aa2]">13. Review & Submit</TabsTrigger>
+                <TabsTrigger value="review" className="bg-[#7936b0] text-white hover:bg-[#6b2aa2]">13. Review & Submit Your Questionnaire</TabsTrigger>
                 <TabsTrigger value="" disabled></TabsTrigger>
                 <TabsTrigger value="" disabled></TabsTrigger>
                 <TabsTrigger value="" disabled></TabsTrigger>
