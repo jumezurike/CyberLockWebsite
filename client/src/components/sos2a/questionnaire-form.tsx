@@ -465,21 +465,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
           Complete this questionnaire to begin your assessment
         </CardDescription>
         <div className="mt-4 text-sm text-muted-foreground">
-          <p className="mb-2">Our 13-step assessment process:</p>
+          <p className="mb-2">Our 14-step assessment process:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-left">
             <div>1. Business Info</div>
             <div>2. Infrastructure Mode</div>
             <div>3. Security Risks & Vulnerabilities</div>
             <div>4. Baseline Config</div>
-            <div>5. Security Control vs Framework</div>
-            <div>6. Compliance Requirements</div>
-            <div>7. Regulatory Requirements</div>
-            <div>8. Standards & Guidelines</div>
-            <div>9. Relevant ACQ Tools</div>
-            <div>10. Adversarial Insight (MITRE ATT&CK)</div>
-            <div>11. Information Security Management System (ISMS)</div>
-            <div>12. Contact Confirmation</div>
-            <div>13. Review & Submit Your Questionnaire</div>
+            <div>5. Device Inventory</div>
+            <div>6. Security Control vs Framework</div>
+            <div>7. Compliance Requirements</div>
+            <div>8. Regulatory Requirements</div>
+            <div>9. Standards & Guidelines</div>
+            <div>10. Relevant ACQ Tools</div>
+            <div>11. Adversarial Insight (MITRE ATT&CK)</div>
+            <div>12. Information Security Management System (ISMS)</div>
+            <div>13. Contact Confirmation</div>
+            <div>14. Review & Submit Your Questionnaire</div>
           </div>
         </div>
       </CardHeader>
@@ -493,15 +494,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
                 <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
                 <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
-                <TabsTrigger value="security" className="flex-shrink-0">5. Security Control vs Framework</TabsTrigger>
-                <TabsTrigger value="compliance" className="flex-shrink-0">6. Compliance Requirements</TabsTrigger>
-                <TabsTrigger value="regulatory" className="flex-shrink-0">7. Regulatory Requirements</TabsTrigger>
-                <TabsTrigger value="standards" className="flex-shrink-0">8. Standards & Guidelines</TabsTrigger>
-                <TabsTrigger value="questionnaires" className="flex-shrink-0">9. Relevant ACQ Tools</TabsTrigger>
-                <TabsTrigger value="adversarial" className="flex-shrink-0">10. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
-                <TabsTrigger value="isms" className="flex-shrink-0">11. Information Security Management System (ISMS)</TabsTrigger>
-                <TabsTrigger value="contact" className="flex-shrink-0">12. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review" className="flex-shrink-0">13. Review & Submit Your Questionnaire</TabsTrigger>
+                <TabsTrigger value="deviceInventory" className="flex-shrink-0">5. Device Inventory</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">6. Security Control vs Framework</TabsTrigger>
+                <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
+                <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
+                <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
+                <TabsTrigger value="questionnaires" className="flex-shrink-0">10. Relevant ACQ Tools</TabsTrigger>
+                <TabsTrigger value="adversarial" className="flex-shrink-0">11. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
+                <TabsTrigger value="isms" className="flex-shrink-0">12. Information Security Management System (ISMS)</TabsTrigger>
+                <TabsTrigger value="contact" className="flex-shrink-0">13. Contact Confirmation</TabsTrigger>
+                <TabsTrigger value="review" className="flex-shrink-0">14. Review & Submit Your Questionnaire</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}

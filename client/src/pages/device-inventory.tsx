@@ -75,14 +75,14 @@ export default function DeviceInventoryPage() {
       <div className="border-t border-gray-200 pt-8 mt-8">
         <h2 className="text-xl font-semibold mb-4">Device Inventory Parameter</h2>
         <p className="text-gray-700 mb-4">
-          Device Inventory is now included as the 11th Default Parameter in the SOS²A assessment framework.
+          Device Inventory is now included as the 5th step in the SOS²A assessment framework.
           This parameter captures endpoint assets, network components, IoT devices, and other hardware that
           may introduce security risks to your organization.
         </p>
         
         <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
           <div className="flex items-start">
-            <span className="bg-blue-100 text-blue-800 font-medium mr-3 px-2.5 py-0.5 rounded-full">11</span>
+            <span className="bg-blue-100 text-blue-800 font-medium mr-3 px-2.5 py-0.5 rounded-full">5</span>
             <div>
               <h3 className="font-semibold text-lg">Device Inventory</h3>
               <p className="text-gray-700 mt-1">
