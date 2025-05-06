@@ -16,7 +16,7 @@ import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
-// BrowserInventoryFormNew import removed since Device Inventory tab was removed
+import BrowserInventoryFormNew from "./browser-inventory-form-new";
 
 // Define vulnerability options
 const websiteVulnerabilityOptions = [
@@ -486,8 +486,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       <CardContent>
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
-            <Tabs defaultValue="deviceInventory" className="w-full">
-              {/* Setting defaultValue to deviceInventory to test if it works */}
+            <Tabs defaultValue="business" className="w-full">
+              {/* Using business as the default tab */}
               <TabsList className="flex flex-wrap mb-4 overflow-x-auto">
                 <TabsTrigger value="business" className="flex-shrink-0">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
@@ -1053,6 +1053,49 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               
               {/* Configuration Baseline Tab */}
               <TabsContent value="configuration" className="space-y-6">
+                <div className="border border-green-200 rounded-md p-4 mb-6 bg-green-50">
+                  <div className="flex justify-between items-start">
+                    <div>
+                      <h3 className="font-medium mb-2">Device Inventory Management</h3>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Tracking your organization's hardware inventory is a foundational component of effective cybersecurity.
+                      </p>
+                    </div>
+                    <a 
+                      href="/device-inventory" 
+                      target="_blank"
+                      rel="noopener noreferrer" 
+                      className="inline-flex items-center px-3 py-1.5 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition"
+                    >
+                      Manage Device Inventory
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className="h-4 w-4 ml-1" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
+                        />
+                      </svg>
+                    </a>
+                  </div>
+                  <p className="text-sm mb-3">
+                    This comprehensive inventory helps identify vulnerabilities, prioritize security controls, and ensure
+                    compliance with regulatory requirements.
+                  </p>
+                  <div className="flex items-center text-sm font-medium text-green-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
+                    Click the button above to open the Device Inventory tool in a new tab
+                  </div>
+                </div>
+                
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">Configuration Baseline</h3>
                   <p className="text-sm text-muted-foreground mb-4">
