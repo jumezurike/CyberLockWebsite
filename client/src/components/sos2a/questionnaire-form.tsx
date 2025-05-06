@@ -855,6 +855,375 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
               </TabsContent>
               
+              {/* Configuration Baseline Tab */}
+              <TabsContent value="configuration" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Configuration Baseline</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Define your organization's configuration baseline to help assess security posture.
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="configurationManagement"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Configuration Management Approach</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select configuration approach" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="ad-hoc">Ad-hoc (No formal configuration management)</SelectItem>
+                            <SelectItem value="documented">Documented configurations</SelectItem>
+                            <SelectItem value="automated">Automated configuration management</SelectItem>
+                            <SelectItem value="compliance-driven">Compliance-driven configuration</SelectItem>
+                            <SelectItem value="continuous">Continuous configuration validation</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">OS / System Hardening</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    System hardening is critical for protecting applications and systems. These practices help secure operating systems and configure them properly.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <FormField
+                      control={form.control}
+                      name="configurationManagement"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Configuration Management Approach</FormLabel>
+                          <FormDescription className="mb-2">
+                            How does your organization manage and maintain secure configurations across systems?
+                          </FormDescription>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select configuration management approach" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="ad-hoc">Ad-hoc (No formal configuration management)</SelectItem>
+                              <SelectItem value="documented">Documented configurations</SelectItem>
+                              <SelectItem value="automated">Automated configuration management</SelectItem>
+                              <SelectItem value="compliance-driven">Compliance-driven configuration</SelectItem>
+                              <SelectItem value="continuous">Continuous configuration validation</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormDescription className="mt-2">
+                            An effective configuration management process ensures consistent application of security settings across all systems.
+                          </FormDescription>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="osHardening.stig"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              STIG (Security Technical Implementation Guides)
+                            </FormLabel>
+                            <FormDescription>
+                              Standard security configurations for different operating systems
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="osHardening.scap"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              SCAP (Security Content Automation Protocol)
+                            </FormLabel>
+                            <FormDescription>
+                              Automated vulnerability checking and policy compliance
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                    
+                    <FormField
+                      control={form.control}
+                      name="cisBenchmarks"
+                      render={() => (
+                        <FormItem>
+                          <FormLabel>CIS Benchmarks</FormLabel>
+                          <FormDescription className="mb-2">
+                            The Center for Internet Security (CIS) provides secure configuration guidelines. Select the benchmarks applicable to your organization:
+                          </FormDescription>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("windows")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "windows"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "windows"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Windows Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("linux")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "linux"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "linux"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Linux Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("macos")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "macos"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "macos"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS macOS Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("cloud")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "cloud"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "cloud"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Cloud Infrastructure Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("aws")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "aws"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "aws"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS AWS Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("azure")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "azure"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "azure"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Azure Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                            
+                            <FormField
+                              control={form.control}
+                              name="cisBenchmarks"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes("gcp")}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), "gcp"]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== "gcp"
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    CIS Google Cloud Platform Benchmark
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Browser & Web Application Security</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Modern web browsers and applications require specific configuration to maintain security while providing needed functionality.
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="browserSecurity"
+                    render={() => (
+                      <FormItem>
+                        <FormLabel>Browser Security Measures (select all that apply)</FormLabel>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          {[
+                            { id: "browser-updates", label: "Automated browser updates" },
+                            { id: "extension-control", label: "Browser extension controls/restrictions" },
+                            { id: "content-filtering", label: "Content filtering & safe browsing" },
+                            { id: "download-restrictions", label: "Download restrictions" },
+                            { id: "javascript-controls", label: "JavaScript security controls" },
+                            { id: "certificate-verification", label: "SSL/TLS certificate verification" },
+                            { id: "phishing-protection", label: "Anti-phishing protection" },
+                            { id: "password-management", label: "Secure password management policies" },
+                            { id: "browser-isolation", label: "Browser isolation technology" },
+                            { id: "csp-implementation", label: "Content Security Policy (CSP) implementation" },
+                          ].map((option) => (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="browserSecurity"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(option.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), option.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== option.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    {option.label}
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </TabsContent>
+              
               {/* Device Inventory Tab */}
               <TabsContent value="deviceInventory" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6 bg-green-50">
