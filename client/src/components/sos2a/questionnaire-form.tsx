@@ -16,7 +16,7 @@ import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
-import BrowserInventoryFormNew from "./browser-inventory-form-new";
+// BrowserInventoryFormNew import removed since Device Inventory tab was removed
 
 // Define vulnerability options
 const websiteVulnerabilityOptions = [
@@ -493,16 +493,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
                 <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
                 <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
-                <TabsTrigger value="deviceInventory" className="flex-shrink-0 bg-blue-50">5. Device Inventory</TabsTrigger>
-                <TabsTrigger value="security" className="flex-shrink-0">6. Security Control vs Framework</TabsTrigger>
-                <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
-                <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
-                <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
-                <TabsTrigger value="questionnaires" className="flex-shrink-0">10. Relevant ACQ Tools</TabsTrigger>
-                <TabsTrigger value="adversarial" className="flex-shrink-0">11. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
-                <TabsTrigger value="isms" className="flex-shrink-0">12. Information Security Management System (ISMS)</TabsTrigger>
-                <TabsTrigger value="contact" className="flex-shrink-0">13. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review" className="flex-shrink-0">14. Review & Submit</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">5. Security Control vs Framework</TabsTrigger>
+                <TabsTrigger value="compliance" className="flex-shrink-0">6. Compliance Requirements</TabsTrigger>
+                <TabsTrigger value="regulatory" className="flex-shrink-0">7. Regulatory Requirements</TabsTrigger>
+                <TabsTrigger value="standards" className="flex-shrink-0">8. Standards & Guidelines</TabsTrigger>
+                <TabsTrigger value="questionnaires" className="flex-shrink-0">9. Relevant ACQ Tools</TabsTrigger>
+                <TabsTrigger value="adversarial" className="flex-shrink-0">10. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
+                <TabsTrigger value="isms" className="flex-shrink-0">11. Information Security Management System (ISMS)</TabsTrigger>
+                <TabsTrigger value="contact" className="flex-shrink-0">12. Contact Confirmation</TabsTrigger>
+                <TabsTrigger value="review" className="flex-shrink-0">13. Review & Submit</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
@@ -4436,44 +4435,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               </TabsContent>
               
               {/* Device Inventory Tab */}
-              <TabsContent value="deviceInventory" className="space-y-6">
-                <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Device Inventory Tracking</h3>
-                  <p className="text-gray-700 mb-6">
-                    Tracking your organization's hardware inventory is a foundational component of effective cybersecurity.
-                    This comprehensive inventory helps identify vulnerabilities, prioritize security controls, and ensure
-                    complete coverage of your digital assets.
-                  </p>
-                  
-                  <div className="mb-6">
-                    <h4 className="text-sm font-medium mb-3">Why Device Inventory Matters</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="border p-3 rounded-md bg-blue-50">
-                        <div className="font-medium mb-1">Risk Assessment</div>
-                        <p className="text-sm text-gray-700">
-                          Accurate inventory enables proper risk assessment by identifying all potential attack vectors.
-                        </p>
-                      </div>
-                      <div className="border p-3 rounded-md bg-blue-50">
-                        <div className="font-medium mb-1">Compliance Requirements</div>
-                        <p className="text-sm text-gray-700">
-                          Most security frameworks require maintaining accurate hardware inventories.
-                        </p>
-                      </div>
-                      <div className="border p-3 rounded-md bg-blue-50">
-                        <div className="font-medium mb-1">Security Control Coverage</div>
-                        <p className="text-sm text-gray-700">
-                          Ensures security controls are applied to all devices, leaving no gaps in your security posture.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div>
-                    <BrowserInventoryFormNew />
-                  </div>
-                </div>
-              </TabsContent>
+
               
               {/* Contact & Confirmation Tab */}
               <TabsContent value="contact" className="space-y-6">
