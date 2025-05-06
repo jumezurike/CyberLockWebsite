@@ -3639,7 +3639,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Review Tab */}
               <TabsContent value="review" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">12. Review & Submit Your Questionnaire</h3>
+                  <h3 className="font-medium mb-4">13. Review & Submit Your Questionnaire</h3>
                   <p className="text-sm mb-4">
                     <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
                   </p>
