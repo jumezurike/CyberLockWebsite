@@ -1011,7 +1011,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure">2. Infrastructure Mode</TabsTrigger>
                 <TabsTrigger value="risks" className="bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
-                <TabsTrigger value="baseline">4. Baseline Configuration</TabsTrigger>
+                <TabsTrigger value="baseline">4. Baseline Config</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="security">5. Security Control vs Framework</TabsTrigger>
