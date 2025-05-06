@@ -616,6 +616,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         description: 'Access control is a core component of ISMS frameworks; policies for managing access rights are required'
       },
       {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'high',
+        description: 'Identity governance is a fundamental component of ISMS; ISO 27001 A.9.2 addresses user access management'
+      },
+      {
         securityParameter: 'incidentResponse',
         relevance: 'high',
         description: 'Incident management is a required process within ISMS; ISO 27001 A.16 mandates incident response procedures'
