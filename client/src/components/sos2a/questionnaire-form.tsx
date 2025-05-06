@@ -3948,7 +3948,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Relevant ACQ Tools Tab */}
               <TabsContent value="questionnaires" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Relevant ACQ Tool (Assessment, Checklist, Questionnaire)</h3>
+                  <h3 className="font-medium mb-4">10. Relevant ACQ Tool (Assessment, Checklist, Questionnaire)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the assessment tools, checklists, and questionnaires relevant to your healthcare organization.
                   </p>
@@ -4430,7 +4430,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Contact & Confirmation Tab */}
               <TabsContent value="contact" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Contact Information</h3>
+                  <h3 className="font-medium mb-4">13. Contact Confirmation</h3>
                   <div className="space-y-4">
                     <FormField
                       control={form.control}
@@ -4630,7 +4630,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Review & Submit Tab */}
               <TabsContent value="review" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">13. Review & Submit Your Questionnaire</h3>
+                  <h3 className="font-medium mb-4">14. Review & Submit Your Questionnaire</h3>
                   <p className="text-sm mb-4">
                     <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
                   </p>
