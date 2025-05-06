@@ -1952,7 +1952,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Compliance Tab */}
               <TabsContent value="compliance" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Compliance Requirements</h3>
+                  <h3 className="font-medium mb-4">7. Compliance Requirements</h3>
                   <div className="space-y-6">
                     <FormField
                       control={form.control}
