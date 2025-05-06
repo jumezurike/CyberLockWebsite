@@ -1712,7 +1712,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Security Risks & Vulnerabilities Tab */}
               <TabsContent value="risks" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6 bg-orange-50 border-orange-200">
-                  <h3 className="font-medium mb-4">Security Risks & Vulnerabilities</h3>
+                  <h3 className="font-medium mb-4">3. Security Risks & Vulnerabilities</h3>
                   <FormDescription className="mb-4">
                     This section helps us identify your organization's primary security concerns and specific vulnerabilities 
                     that may be present in your systems and infrastructure.
@@ -1909,7 +1909,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Security Controls vs Framework Tab */}
               <TabsContent value="frameworks" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Security Frameworks</h3>
+                  <h3 className="font-medium mb-4">6. Security Controls vs Framework</h3>
                   <FormDescription className="mb-4">
                     This section helps us identify if your organization is applying security controls properly across 
                     the four main domains (Operations, Management, Technology, and People), with a focus on your 
@@ -2685,7 +2685,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Standards & Guidelines Tab */}
               <TabsContent value="standards" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Standards & Guidelines</h3>
+                  <h3 className="font-medium mb-4">9. Standards & Guidelines</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the standards and guidelines relevant to your organization.
                   </p>
