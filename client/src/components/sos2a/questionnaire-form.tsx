@@ -1708,9 +1708,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* This section has been moved - now it's empty */}
-              
-              {/* Frameworks Tab */}
+              {/* Security Risks & Vulnerabilities Tab */}
               <TabsContent value="risks" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6 bg-orange-50 border-orange-200">
                   <h3 className="font-medium mb-4">Security Risks & Vulnerabilities</h3>
