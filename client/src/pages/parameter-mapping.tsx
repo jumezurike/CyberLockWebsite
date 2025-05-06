@@ -18,7 +18,7 @@ export default function ParameterMappingPage() {
           <li>It provides trackable, auditable information for leadership and compliance</li>
         </ol>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="mb-6">
           <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <h3 className="text-lg font-semibold mb-2">Browser Security Baseline</h3>
             <p className="mb-3">
@@ -30,34 +30,6 @@ export default function ParameterMappingPage() {
               className="inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
             >
               View Browser Security Controls
-              <svg 
-                xmlns="http://www.w3.org/2000/svg" 
-                className="h-4 w-4 ml-1" 
-                fill="none" 
-                viewBox="0 0 24 24" 
-                stroke="currentColor"
-              >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M14 5l7 7m0 0l-7 7m7-7H3" 
-                />
-              </svg>
-            </a>
-          </div>
-
-          <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-            <h3 className="text-lg font-semibold mb-2">Device Inventory Tracking</h3>
-            <p className="mb-3">
-              A comprehensive hardware inventory is essential for accurate risk assessment, 
-              compliance adherence, and ensuring consistent security control coverage across all assets.
-            </p>
-            <a 
-              href="/device-inventory" 
-              className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
-            >
-              Manage Device Inventory
               <svg 
                 xmlns="http://www.w3.org/2000/svg" 
                 className="h-4 w-4 ml-1" 

@@ -465,21 +465,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
           Complete this questionnaire to begin your assessment
         </CardDescription>
         <div className="mt-4 text-sm text-muted-foreground">
-          <p className="mb-2">Our 13-step assessment process:</p>
+          <p className="mb-2">Our 14-step assessment process:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-left">
             <div>1. Business Information</div>
             <div>2. Infrastructure Mode</div>
             <div>3. Configuration Baseline</div>
-            <div>4. Security Controls</div>
-            <div>5. Security Risks & Vulnerabilities</div>
-            <div>6. Security Frameworks</div>
-            <div>7. Compliance</div>
-            <div>8. Regulatory Requirements</div>
-            <div>9. Standards & Guidelines</div>
-            <div>10. Relevant ACQ Tool</div>
-            <div>11. Adversarial Insight</div>
-            <div>12. Information Security Management System (ISMS)</div>
-            <div>13. Contact & Confirmation</div>
+            <div>4. Device Inventory</div>
+            <div>5. Security Controls</div>
+            <div>6. Security Risks & Vulnerabilities</div>
+            <div>7. Security Frameworks</div>
+            <div>8. Compliance</div>
+            <div>9. Regulatory Requirements</div>
+            <div>10. Standards & Guidelines</div>
+            <div>11. Relevant ACQ Tool</div>
+            <div>12. Adversarial Insight</div>
+            <div>13. Information Security Management System (ISMS)</div>
+            <div>14. Contact & Confirmation</div>
           </div>
         </div>
       </CardHeader>
@@ -491,17 +492,18 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               <TabsList className="flex flex-wrap mb-4 overflow-x-auto">
                 <TabsTrigger value="business" className="flex-shrink-0">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
-                <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
-                <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
+                <TabsTrigger value="configuration" className="flex-shrink-0">3. Baseline Config</TabsTrigger>
+                <TabsTrigger value="deviceInventory" className="flex-shrink-0 bg-green-50">4. Device Inventory</TabsTrigger>
                 <TabsTrigger value="security" className="flex-shrink-0">5. Security Control vs Framework</TabsTrigger>
-                <TabsTrigger value="compliance" className="flex-shrink-0">6. Compliance Requirements</TabsTrigger>
-                <TabsTrigger value="regulatory" className="flex-shrink-0">7. Regulatory Requirements</TabsTrigger>
-                <TabsTrigger value="standards" className="flex-shrink-0">8. Standards & Guidelines</TabsTrigger>
-                <TabsTrigger value="questionnaires" className="flex-shrink-0">9. Relevant ACQ Tools</TabsTrigger>
-                <TabsTrigger value="adversarial" className="flex-shrink-0">10. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
-                <TabsTrigger value="isms" className="flex-shrink-0">11. Information Security Management System (ISMS)</TabsTrigger>
-                <TabsTrigger value="contact" className="flex-shrink-0">12. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review" className="flex-shrink-0">13. Review & Submit</TabsTrigger>
+                <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">6. Security Risks & Vulnerabilities</TabsTrigger>
+                <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
+                <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
+                <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
+                <TabsTrigger value="questionnaires" className="flex-shrink-0">10. Relevant ACQ Tools</TabsTrigger>
+                <TabsTrigger value="adversarial" className="flex-shrink-0">11. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
+                <TabsTrigger value="isms" className="flex-shrink-0">12. Information Security Management System (ISMS)</TabsTrigger>
+                <TabsTrigger value="contact" className="flex-shrink-0">13. Contact Confirmation</TabsTrigger>
+                <TabsTrigger value="review" className="flex-shrink-0">14. Review & Submit</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
@@ -690,6 +692,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </FormItem>
                   )}
                 />
+              </TabsContent>
+              
+              {/* Device Inventory Tab */}
+              <TabsContent value="deviceInventory" className="space-y-6">
+                <div className="border rounded-md p-4 mb-6 bg-green-50">
+                  <h3 className="font-medium mb-2">Device Inventory Management</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Track and assess your organization's hardware assets. This comprehensive inventory helps identify 
+                    vulnerabilities, prioritize security controls, and ensure compliance with regulatory requirements.
+                  </p>
+                  
+                  {/* Embed the BrowserInventoryFormNew component directly */}
+                  <div className="mt-4">
+                    <BrowserInventoryFormNew />
+                  </div>
+                </div>
               </TabsContent>
               
               {/* Infrastructure Tab */}
@@ -1053,49 +1071,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               
               {/* Configuration Baseline Tab */}
               <TabsContent value="configuration" className="space-y-6">
-                <div className="border border-green-200 rounded-md p-4 mb-6 bg-green-50">
-                  <div className="flex justify-between items-start">
-                    <div>
-                      <h3 className="font-medium mb-2">Device Inventory Management</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Tracking your organization's hardware inventory is a foundational component of effective cybersecurity.
-                      </p>
-                    </div>
-                    <a 
-                      href="/device-inventory" 
-                      target="_blank"
-                      rel="noopener noreferrer" 
-                      className="inline-flex items-center px-3 py-1.5 text-sm bg-green-600 text-white rounded hover:bg-green-700 transition"
-                    >
-                      Manage Device Inventory
-                      <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
-                        className="h-4 w-4 ml-1" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor"
-                      >
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          strokeWidth={2} 
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
-                        />
-                      </svg>
-                    </a>
-                  </div>
-                  <p className="text-sm mb-3">
-                    This comprehensive inventory helps identify vulnerabilities, prioritize security controls, and ensure
-                    compliance with regulatory requirements.
-                  </p>
-                  <div className="flex items-center text-sm font-medium text-green-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-                    </svg>
-                    Click the button above to open the Device Inventory tool in a new tab
-                  </div>
-                </div>
-                
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">Configuration Baseline</h3>
                   <p className="text-sm text-muted-foreground mb-4">
