@@ -858,7 +858,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Baseline Configuration Tab */}
               <TabsContent value="configuration" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">4. Baseline Configuration</h3>
+                  <h3 className="font-medium mb-4">4. Baseline Config</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Define your organization's configuration baseline to help assess security posture.
                   </p>
@@ -1227,7 +1227,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Device Inventory Tab */}
               <TabsContent value="deviceInventory" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6 bg-green-50">
-                  <h3 className="font-medium mb-4">5. Device Inventory Management</h3>
+                  <h3 className="font-medium mb-4">5. Device Inventory</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and assess your organization's hardware assets. This comprehensive inventory helps identify 
                     vulnerabilities, prioritize security controls, and ensure compliance with regulatory requirements.
@@ -3091,7 +3091,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Standards Tab */}
               <TabsContent value="standards" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">9. Standards & Guidelines Library</h3>
+                  <h3 className="font-medium mb-4">9. Standards & Guidelines</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select from our comprehensive library of standards (mandatory) and guidelines (voluntary recommendations) that apply to your organization.
                   </p>
