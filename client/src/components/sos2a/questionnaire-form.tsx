@@ -2640,15 +2640,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Standards & Guidelines Tab */}
-              <TabsContent value="standards" className="space-y-6">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">9. Standards & Guidelines</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Select the standards and guidelines relevant to your organization.
-                  </p>
-                </div>
-              </TabsContent>
+
               <TabsContent value="healthcare" className="space-y-4 pt-4">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">Healthcare-Specific Regulations</h3>
