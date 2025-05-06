@@ -4175,8 +4175,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-{/* Device Inventory Tab is now implemented below */}
-              
               {/* Information Security Management System (ISMS) Tab */}
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
