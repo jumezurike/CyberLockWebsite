@@ -2730,7 +2730,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 9. Adversarial Insight Tab */}
               <TabsContent value="adversarial" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">9. Adversarial Insight (MITRE ATT&CK)</h3>
+                  <h3 className="font-medium mb-4">10. Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     <span className="text-orange-600 font-medium">Note: This section focuses on MITRE ATT&CK for infrastructure operations - separate from STRIDE Architecture Threat Modeling.</span> Select the most relevant MITRE ATT&CK tactics and techniques based on your infrastructure operation mode.
                   </p>
