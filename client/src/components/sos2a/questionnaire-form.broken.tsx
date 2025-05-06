@@ -495,7 +495,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
                 <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
                 <TabsTrigger value="deviceInventory" className="flex-shrink-0">5. Device Inventory</TabsTrigger>
-                <TabsTrigger value="security" className="flex-shrink-0">6. Security Control vs Framework</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">6. Security Controls vs Frameworks</TabsTrigger>
                 <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
                 <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
                 <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
@@ -855,10 +855,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
               </TabsContent>
               
-              {/* Configuration Baseline Tab */}
+              {/* Baseline Configuration Tab */}
               <TabsContent value="configuration" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Configuration Baseline</h3>
+                  <h3 className="font-medium mb-4">4. Baseline Config</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Define your organization's configuration baseline to help assess security posture.
                   </p>
@@ -1227,7 +1227,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Device Inventory Tab */}
               <TabsContent value="deviceInventory" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6 bg-green-50">
-                  <h3 className="font-medium mb-2">5. Device Inventory Management</h3>
+                  <h3 className="font-medium mb-4">5. Device Inventory</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and assess your organization's hardware assets. This comprehensive inventory helps identify 
                     vulnerabilities, prioritize security controls, and ensure compliance with regulatory requirements.
@@ -1243,7 +1243,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Security Risks & Vulnerabilities Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Security Controls vs Framework</h3>
+                  <h3 className="font-medium mb-4">6. Security Controls vs Frameworks</h3>
                   <FormDescription className="mb-4">
                     This section helps us identify if your organization is applying security controls properly across the four main domains (Operations, Management, Technology, and People), with a focus on your specific industry requirements.
                   </FormDescription>
@@ -1712,7 +1712,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Security Risks & Vulnerabilities Tab */}
               <TabsContent value="risks" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6 bg-orange-50 border-orange-200">
-                  <h3 className="font-medium mb-4">Security Risks & Vulnerabilities</h3>
+                  <h3 className="font-medium mb-4">3. Security Risks & Vulnerabilities</h3>
                   <FormDescription className="mb-4">
                     This section helps us identify your organization's primary security concerns and specific vulnerabilities 
                     that may be present in your systems and infrastructure.
@@ -1906,53 +1906,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 )}
               </TabsContent>
 
-              {/* Security Controls vs Framework Tab */}
-              <TabsContent value="frameworks" className="space-y-6">
-                <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Security Frameworks</h3>
-                  <FormDescription className="mb-4">
-                    This section helps us identify if your organization is applying security controls properly across 
-                    the four main domains (Operations, Management, Technology, and People), with a focus on your 
-                    specific industry requirements.
-                  </FormDescription>
-                  
-                  {form.watch('industry') === 'healthcare' && (
-                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                      <h4 className="text-sm font-medium text-blue-800 mb-1">Healthcare Industry Focus</h4>
-                      <p className="text-sm text-blue-700">
-                        Healthcare organizations have specific framework requirements related to patient data protection, 
-                        HIPAA compliance, medical device security, and clinical systems integrity. We'll help identify the most 
-                        appropriate frameworks for your healthcare organization.
-                      </p>
-                    </div>
-                  )}
-                  
-                  {form.watch('industry') === 'finance' && (
-                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                      <h4 className="text-sm font-medium text-blue-800 mb-1">Finance Industry Focus</h4>
-                      <p className="text-sm text-blue-700">
-                        Financial organizations need to address PCI DSS, SOX compliance, and financial fraud protection. 
-                        We'll help identify the most appropriate frameworks for your financial institution.
-                      </p>
-                    </div>
-                  )}
-                  
-                  {form.watch('industry') && !['healthcare', 'finance'].includes(form.watch('industry')) && (
-                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
-                      <h4 className="text-sm font-medium text-blue-800 mb-1">Industry-Specific Guidance</h4>
-                      <p className="text-sm text-blue-700">
-                        Different industries have unique security requirements. Based on your {form.watch('industry')} industry 
-                        selection, we'll help identify the most appropriate frameworks and controls for your organization.
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </TabsContent>
-              
+
               {/* Compliance Tab */}
               <TabsContent value="compliance" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Compliance Requirements</h3>
+                  <h3 className="font-medium mb-4">7. Compliance Requirements</h3>
                   <div className="space-y-6">
                     <FormField
                       control={form.control}
@@ -2325,7 +2283,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Regulatory Requirements Tab - Using External Component */}
               <TabsContent value="regulatory" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Regulatory Requirements</h3>
+                  <h3 className="font-medium mb-4">8. Regulatory Requirements</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select all regulatory requirements applicable to your organization.
                   </p>
@@ -2682,15 +2640,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Standards & Guidelines Tab */}
-              <TabsContent value="standards" className="space-y-6">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Standards & Guidelines</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Select the standards and guidelines relevant to your organization.
-                  </p>
-                </div>
-              </TabsContent>
+
               <TabsContent value="healthcare" className="space-y-4 pt-4">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">Healthcare-Specific Regulations</h3>
@@ -3141,7 +3091,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Standards Tab */}
               <TabsContent value="standards" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Standards & Guidelines Library</h3>
+                  <h3 className="font-medium mb-4">9. Standards & Guidelines</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select from our comprehensive library of standards (mandatory) and guidelines (voluntary recommendations) that apply to your organization.
                   </p>
@@ -3948,7 +3898,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Relevant ACQ Tools Tab */}
               <TabsContent value="questionnaires" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Relevant ACQ Tool (Assessment, Checklist, Questionnaire)</h3>
+                  <h3 className="font-medium mb-4">10. Relevant ACQ Tools</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the assessment tools, checklists, and questionnaires relevant to your healthcare organization.
                   </p>
@@ -4430,7 +4380,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Contact & Confirmation Tab */}
               <TabsContent value="contact" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">Contact Information</h3>
+                  <h3 className="font-medium mb-4">13. Contact Confirmation</h3>
                   <div className="space-y-4">
                     <FormField
                       control={form.control}
@@ -4630,7 +4580,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Review & Submit Tab */}
               <TabsContent value="review" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">13. Review & Submit Your Questionnaire</h3>
+                  <h3 className="font-medium mb-4">14. Review & Submit Your Questionnaire</h3>
                   <p className="text-sm mb-4">
                     <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
                   </p>
