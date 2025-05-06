@@ -4449,9 +4449,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Device Inventory Tab */}
-
-              
               {/* Contact & Confirmation Tab */}
               <TabsContent value="contact" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
