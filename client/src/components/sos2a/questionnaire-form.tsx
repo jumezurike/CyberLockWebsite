@@ -4085,7 +4085,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Adversarial Insight Tab */}
               <TabsContent value="adversarial" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Adversarial Insight (MITRE ATT&CK)</h3>
+                  <h3 className="font-medium mb-4">11. Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select threat actors and techniques most relevant to your organization's infrastructure operation mode.
                   </p>
@@ -4156,7 +4156,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Information Security Management System (ISMS) Tab */}
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Information Security Management System (ISMS)</h3>
+                  <h3 className="font-medium mb-4">12. Information Security Management System (ISMS)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Provide information about your current Information Security Management System (ISMS) implementation.
                   </p>
