@@ -15,6 +15,49 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
+import { StandardsContent } from "./standards-content";
+import BrowserInventoryFormNew from "./browser-inventory-form-new";
+
+// Define vulnerability options
+const websiteVulnerabilityOptions = [
+  { id: "outdated-cms", label: "Outdated CMS (WordPress, Drupal, etc.)" },
+  { id: "weak-authentication", label: "Weak authentication mechanisms" },
+  { id: "no-ssl", label: "Missing or improperly configured SSL/TLS" },
+  { id: "insecure-file-uploads", label: "Insecure file upload functionality" },
+  { id: "sql-injection", label: "SQL injection vulnerabilities" },
+  { id: "xss", label: "Cross-site scripting (XSS) vulnerabilities" },
+  { id: "csrf", label: "Cross-site request forgery (CSRF) vulnerabilities" },
+  { id: "exposed-admin", label: "Exposed admin interfaces" },
+  { id: "outdated-plugins", label: "Outdated or vulnerable plugins/extensions" },
+  { id: "data-exposure", label: "Sensitive data exposure" },
+  { id: "no-waf", label: "No Web Application Firewall (WAF)" },
+  { id: "default-credentials", label: "Default credentials in use" },
+  { id: "form-validation", label: "Insufficient form validation" },
+  { id: "error-handling", label: "Improper error handling" },
+  { id: "api-vulnerabilities", label: "API security vulnerabilities" },
+  { id: "session-management", label: "Weak session management" },
+  { id: "other", label: "Other website vulnerabilities" }
+];
+
+const endDeviceVulnerabilityOptions = [
+  { id: "outdated-os", label: "Outdated operating systems" },
+  { id: "no-encryption", label: "Missing disk encryption" },
+  { id: "weak-passwords", label: "Weak authentication/password policies" },
+  { id: "no-endpoint", label: "No endpoint protection/antivirus" },
+  { id: "byod", label: "Unmanaged BYOD devices" },
+  { id: "admin-privileges", label: "Excessive administrative privileges" },
+  { id: "no-patching", label: "Inconsistent patching processes" },
+  { id: "insecure-configurations", label: "Insecure default configurations" },
+  { id: "no-mdm", label: "No Mobile Device Management (MDM)" },
+  { id: "lost-devices", label: "No process for lost/stolen devices" },
+  { id: "usb-ports", label: "Unrestricted USB ports/removable media" },
+  { id: "guest-access", label: "Unsecured guest device access" },
+  { id: "legacy-systems", label: "Legacy systems past end-of-support" },
+  { id: "remote-access", label: "Insecure remote access" },
+  { id: "personal-apps", label: "Unauthorized software/applications" },
+  { id: "social-engineering", label: "Staff vulnerable to social engineering" },
+  { id: "other", label: "Other end device vulnerabilities" }
+];
 
 const formSchema = z.object({
   // 1. Business Information
@@ -42,6 +85,8 @@ const formSchema = z.object({
   // 4. Security Control Framework
   securityMeasures: z.array(z.string()),
   primaryConcerns: z.array(z.string()),
+  websiteVulnerabilities: z.array(z.string()).optional(),
+  endDeviceVulnerabilities: z.array(z.string()).optional(),
   frameworks: z.object({
     operations: z.array(z.string()),
     management: z.array(z.string()),
@@ -146,6 +191,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       // 4. Security Control Framework
       securityMeasures: [],
       primaryConcerns: [],
+      websiteVulnerabilities: [],
+      endDeviceVulnerabilities: [],
       frameworks: {
         operations: [],
         management: [],
@@ -262,6 +309,21 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "third-party", label: "Third-Party/Vendor Risk" },
     { id: "iot", label: "IoT Device Security" },
   ];
+  
+  // End device vulnerabilities 
+  const endDeviceVulnerabilityOptions = [
+    { id: "outdated-os", label: "Outdated operating systems" },
+    { id: "no-encryption", label: "Missing disk encryption" },
+    { id: "weak-passwords", label: "Weak authentication/password policies" },
+    { id: "no-endpoint", label: "No endpoint protection/antivirus" },
+    { id: "unsecured-api", label: "Unsecured APIs - Website" },
+    { id: "misconfigured-server", label: "Misconfigured Servers - Website" },
+    { id: "third-party-deps", label: "Third-Party Dependencies - Website" },
+    { id: "sql-injection", label: "SQL Injection - Website" },
+  ];
+  
+  // Adding more options to the endDeviceVulnerabilityOptions
+  // defined at the top of the file
   
   // Security Frameworks by domain
   const operationalFrameworks = [
@@ -403,19 +465,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
           Complete this questionnaire to begin your assessment
         </CardDescription>
         <div className="mt-4 text-sm text-muted-foreground">
-          <p className="mb-2">Our 11-step assessment process:</p>
+          <p className="mb-2">Our 14-step assessment process:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-left">
-            <div>1. Business Information</div>
+            <div>1. Business Info</div>
             <div>2. Infrastructure Mode</div>
-            <div>3. Configuration Baseline</div>
-            <div>4. Security Control Framework</div>
-            <div>5. Compliance</div>
-            <div>6. Regulatory Requirements</div>
-            <div>7. Standards & Guidelines</div>
-            <div>8. Relevant ACQ Tool</div>
-            <div>9. Adversarial Insight</div>
-            <div>10. Information Security Management System (ISMS)</div>
-            <div>11. Contact & Confirmation</div>
+            <div>3. Security Risks & Vulnerabilities</div>
+            <div>4. Baseline Config</div>
+            <div>5. Device Inventory</div>
+            <div>6. Security Control vs Framework</div>
+            <div>7. Compliance Requirements</div>
+            <div>8. Regulatory Requirements</div>
+            <div>9. Standards & Guidelines</div>
+            <div>10. Relevant ACQ Tools</div>
+            <div>11. Adversarial Insight (MITRE ATT&CK)</div>
+            <div>12. Information Security Management System (ISMS)</div>
+            <div>13. Contact Confirmation</div>
+            <div>14. Review & Submit Your Questionnaire</div>
           </div>
         </div>
       </CardHeader>
@@ -423,18 +488,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
             <Tabs defaultValue="business" className="w-full">
+              {/* Using business as the default tab */}
               <TabsList className="flex flex-wrap mb-4 overflow-x-auto">
-                <TabsTrigger value="business" className="flex-shrink-0">1. Business Information</TabsTrigger>
+                <TabsTrigger value="business" className="flex-shrink-0">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
-                <TabsTrigger value="configuration" className="flex-shrink-0">3. Configuration Baseline</TabsTrigger>
-                <TabsTrigger value="security" className="flex-shrink-0">4. Security Controls vs Framework</TabsTrigger>
-                <TabsTrigger value="compliance" className="flex-shrink-0">5. Compliance</TabsTrigger>
-                <TabsTrigger value="regulatory" className="flex-shrink-0">6. Regulatory Requirements</TabsTrigger>
-                <TabsTrigger value="standards" className="flex-shrink-0">7. Standards & Guidelines</TabsTrigger>
-                <TabsTrigger value="questionnaires" className="flex-shrink-0">8. Relevant ACQ Tool</TabsTrigger>
-                <TabsTrigger value="adversarial" className="flex-shrink-0">9. Adversarial Insight</TabsTrigger>
-                <TabsTrigger value="isms" className="flex-shrink-0">10. Information Security Management System</TabsTrigger>
-                <TabsTrigger value="contact" className="flex-shrink-0">11. Contact & Confirmation</TabsTrigger>
+                <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
+                <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
+                <TabsTrigger value="deviceInventory" className="flex-shrink-0">5. Device Inventory</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">6. Security Control vs Framework</TabsTrigger>
+                <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
+                <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
+                <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
+                <TabsTrigger value="questionnaires" className="flex-shrink-0">10. Relevant ACQ Tools</TabsTrigger>
+                <TabsTrigger value="adversarial" className="flex-shrink-0">11. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
+                <TabsTrigger value="isms" className="flex-shrink-0">12. Information Security Management System (ISMS)</TabsTrigger>
+                <TabsTrigger value="contact" className="flex-shrink-0">13. Contact Confirmation</TabsTrigger>
+                <TabsTrigger value="review" className="flex-shrink-0">14. Review & Submit Your Questionnaire</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
@@ -783,7 +852,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     )}
                   />
                 </div>
-                
 
               </TabsContent>
               
@@ -1084,99 +1152,95 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     />
                                   </FormControl>
                                   <FormLabel className="font-normal">
-                                    CIS Google Cloud Benchmark
-                                  </FormLabel>
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <FormField
-                              control={form.control}
-                              name="cisBenchmarks"
-                              render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes("kubernetes")}
-                                      onCheckedChange={(checked) => {
-                                        const updatedValue = checked
-                                          ? [...(field.value || []), "kubernetes"]
-                                          : (field.value || [])?.filter(
-                                              (value) => value !== "kubernetes"
-                                            );
-                                        field.onChange(updatedValue);
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    CIS Kubernetes Benchmark
-                                  </FormLabel>
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <FormField
-                              control={form.control}
-                              name="cisBenchmarks"
-                              render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes("docker")}
-                                      onCheckedChange={(checked) => {
-                                        const updatedValue = checked
-                                          ? [...(field.value || []), "docker"]
-                                          : (field.value || [])?.filter(
-                                              (value) => value !== "docker"
-                                            );
-                                        field.onChange(updatedValue);
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    CIS Docker Benchmark
-                                  </FormLabel>
-                                </FormItem>
-                              )}
-                            />
-                            
-                            <FormField
-                              control={form.control}
-                              name="cisBenchmarks"
-                              render={({ field }) => (
-                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                                  <FormControl>
-                                    <Checkbox
-                                      checked={field.value?.includes("hipaa")}
-                                      onCheckedChange={(checked) => {
-                                        const updatedValue = checked
-                                          ? [...(field.value || []), "hipaa"]
-                                          : (field.value || [])?.filter(
-                                              (value) => value !== "hipaa"
-                                            );
-                                        field.onChange(updatedValue);
-                                      }}
-                                    />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    CIS HIPAA Benchmark
+                                    CIS Google Cloud Platform Benchmark
                                   </FormLabel>
                                 </FormItem>
                               )}
                             />
                           </div>
-                          <FormDescription className="mt-3 text-amber-500">
-                            Note: Organizations with compliance requirements should consider industry-specific CIS Benchmarks relevant to their operations.
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
                   </div>
                 </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">Browser & Web Application Security</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Modern web browsers and applications require specific configuration to maintain security while providing needed functionality.
+                  </p>
+                  
+                  <FormField
+                    control={form.control}
+                    name="browserSecurity"
+                    render={() => (
+                      <FormItem>
+                        <FormLabel>Browser Security Measures (select all that apply)</FormLabel>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          {[
+                            { id: "browser-updates", label: "Automated browser updates" },
+                            { id: "extension-control", label: "Browser extension controls/restrictions" },
+                            { id: "content-filtering", label: "Content filtering & safe browsing" },
+                            { id: "download-restrictions", label: "Download restrictions" },
+                            { id: "javascript-controls", label: "JavaScript security controls" },
+                            { id: "certificate-verification", label: "SSL/TLS certificate verification" },
+                            { id: "phishing-protection", label: "Anti-phishing protection" },
+                            { id: "password-management", label: "Secure password management policies" },
+                            { id: "browser-isolation", label: "Browser isolation technology" },
+                            { id: "csp-implementation", label: "Content Security Policy (CSP) implementation" },
+                          ].map((option) => (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="browserSecurity"
+                              render={({ field }) => (
+                                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={field.value?.includes(option.id)}
+                                      onCheckedChange={(checked) => {
+                                        const updatedValue = checked
+                                          ? [...(field.value || []), option.id]
+                                          : (field.value || [])?.filter(
+                                              (value) => value !== option.id
+                                            );
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal">
+                                    {option.label}
+                                  </FormLabel>
+                                </FormItem>
+                              )}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </TabsContent>
               
-              {/* Security Controls vs Framework Tab */}
+              {/* Device Inventory Tab */}
+              <TabsContent value="deviceInventory" className="space-y-6">
+                <div className="border rounded-md p-4 mb-6 bg-green-50">
+                  <h3 className="font-medium mb-2">5. Device Inventory Management</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Track and assess your organization's hardware assets. This comprehensive inventory helps identify 
+                    vulnerabilities, prioritize security controls, and ensure compliance with regulatory requirements.
+                  </p>
+                  
+                  {/* Embed the BrowserInventoryFormNew component directly */}
+                  <div className="mt-4">
+                    <BrowserInventoryFormNew />
+                  </div>
+                </div>
+              </TabsContent>
+              
+              {/* Security Risks & Vulnerabilities Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
                   <h3 className="font-medium mb-4">Security Controls vs Framework</h3>
@@ -1216,73 +1280,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   )}
                 </div>
                 
-                <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">
-                    {form.watch('industry') === 'healthcare' 
-                      ? "Healthcare Security Priorities" 
-                      : "Security Priorities"}
-                  </h3>
-                  <FormField
-                    control={form.control}
-                    name="primaryConcerns"
-                    render={() => (
-                      <FormItem>
-                        <div className="mb-4">
-                          <FormLabel className="text-base">
-                            {form.watch('industry') === 'healthcare'
-                              ? "Select your healthcare organization's primary security concerns"
-                              : "Select your organization's primary security concerns"}
-                          </FormLabel>
-                          <FormDescription>
-                            This helps us prioritize recommendations based on your most pressing concerns.
-                          </FormDescription>
-                        </div>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          {primaryConcernOptions.map((option) => (
-                            <FormField
-                              key={option.id}
-                              control={form.control}
-                              name="primaryConcerns"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={option.id}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(option.id)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...field.value, option.id])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== option.id
-                                                )
-                                              );
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="font-normal">
-                                      {option.label}
-                                    </FormLabel>
-                                  </FormItem>
-                                );
-                              }}
-                            />
-                          ))}
-                        </div>
-                        {form.watch('industry') === 'healthcare' && (
-                          <FormDescription className="mt-4 text-amber-500">
-                            Note: For healthcare organizations, data breach prevention and ransomware protection are critical concerns given the sensitive nature of PHI.
-                          </FormDescription>
-                        )}
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+
                 
                 <div className="border rounded-md p-4 mb-6">
                   <h3 className="font-medium mb-4">
@@ -1711,6 +1709,246 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
+              {/* Security Risks & Vulnerabilities Tab */}
+              <TabsContent value="risks" className="space-y-6">
+                <div className="border rounded-md p-4 mb-6 bg-orange-50 border-orange-200">
+                  <h3 className="font-medium mb-4">Security Risks & Vulnerabilities</h3>
+                  <FormDescription className="mb-4">
+                    This section helps us identify your organization's primary security concerns and specific vulnerabilities 
+                    that may be present in your systems and infrastructure.
+                  </FormDescription>
+                  
+                  <FormField
+                    control={form.control}
+                    name="primaryConcerns"
+                    render={() => (
+                      <FormItem>
+                        <div className="mb-4">
+                          <FormLabel className="text-base">
+                            {form.watch('industry') === 'healthcare'
+                              ? "Select your healthcare organization's primary security concerns"
+                              : "Select your organization's primary security concerns"}
+                          </FormLabel>
+                          <FormDescription>
+                            This helps us prioritize recommendations based on your most pressing concerns.
+                          </FormDescription>
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {primaryConcernOptions.map((option) => (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="primaryConcerns"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={option.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          return checked
+                                            ? field.onChange([...field.value, option.id])
+                                            : field.onChange(
+                                                field.value?.filter(
+                                                  (value) => value !== option.id
+                                                )
+                                              );
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                        </div>
+                        {form.watch('industry') === 'healthcare' && (
+                          <FormDescription className="mt-4 text-amber-500">
+                            Note: For healthcare organizations, data breach prevention and ransomware protection are critical concerns given the sensitive nature of PHI.
+                          </FormDescription>
+                        )}
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* Website Vulnerabilities Section */}
+                <div className="border rounded-md p-4 mb-6 bg-orange-50 border-orange-200">
+                  <h3 className="font-medium mb-4">Website Vulnerabilities</h3>
+                  <FormDescription className="mb-4">
+                    If your organization operates a website, select any potential vulnerabilities that might exist in your web infrastructure.
+                  </FormDescription>
+                  
+                  <FormField
+                    control={form.control}
+                    name="websiteVulnerabilities"
+                    render={() => (
+                      <FormItem>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          {websiteVulnerabilityOptions.map((option) => (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="websiteVulnerabilities"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={option.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), option.id]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== option.id
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                {/* End Device Vulnerabilities Section */}
+                <div className="border rounded-md p-4 mb-6 bg-orange-50 border-orange-200">
+                  <h3 className="font-medium mb-4">End Device Security Vulnerabilities</h3>
+                  <FormDescription className="mb-4">
+                    Select any potential vulnerabilities related to your organization's end-user devices (computers, mobile devices, etc.).
+                  </FormDescription>
+                  
+                  <FormField
+                    control={form.control}
+                    name="endDeviceVulnerabilities"
+                    render={() => (
+                      <FormItem>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
+                          {endDeviceVulnerabilityOptions.map((option) => (
+                            <FormField
+                              key={option.id}
+                              control={form.control}
+                              name="endDeviceVulnerabilities"
+                              render={({ field }) => {
+                                return (
+                                  <FormItem
+                                    key={option.id}
+                                    className="flex flex-row items-start space-x-3 space-y-0"
+                                  >
+                                    <FormControl>
+                                      <Checkbox
+                                        checked={field.value?.includes(option.id)}
+                                        onCheckedChange={(checked) => {
+                                          const updatedValue = checked
+                                            ? [...(field.value || []), option.id]
+                                            : (field.value || [])?.filter(
+                                                (value) => value !== option.id
+                                              );
+                                          field.onChange(updatedValue);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormLabel className="font-normal">
+                                      {option.label}
+                                    </FormLabel>
+                                  </FormItem>
+                                );
+                              }}
+                            />
+                          ))}
+                        </div>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                {/* Conditional Notice Based on Infrastructure Mode */}
+                {form.watch('operationMode')?.includes('commercial-internet') && (
+                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-md mb-6">
+                    <h4 className="text-sm font-medium text-amber-800 mb-1">Commercial Internet Risk Alert</h4>
+                    <p className="text-sm text-amber-700">
+                      Using commercial internet introduces additional security concerns. We recommend implementing proper network 
+                      segmentation, strong firewall rules, and regular security assessments.
+                    </p>
+                  </div>
+                )}
+                
+                {form.watch('internetPresence')?.includes('website') && (
+                  <div className="p-4 bg-amber-50 border border-amber-200 rounded-md mb-6">
+                    <h4 className="text-sm font-medium text-amber-800 mb-1">Website Vulnerability Guidance</h4>
+                    <p className="text-sm text-amber-700">
+                      Operating a website increases your attack surface. Consider implementing Web Application Firewalls (WAF), 
+                      regular security scans, and secure coding practices to mitigate web-specific vulnerabilities.
+                    </p>
+                  </div>
+                )}
+              </TabsContent>
+
+              {/* Security Controls vs Framework Tab */}
+              <TabsContent value="frameworks" className="space-y-6">
+                <div className="border rounded-md p-4 mb-6">
+                  <h3 className="font-medium mb-4">Security Frameworks</h3>
+                  <FormDescription className="mb-4">
+                    This section helps us identify if your organization is applying security controls properly across 
+                    the four main domains (Operations, Management, Technology, and People), with a focus on your 
+                    specific industry requirements.
+                  </FormDescription>
+                  
+                  {form.watch('industry') === 'healthcare' && (
+                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                      <h4 className="text-sm font-medium text-blue-800 mb-1">Healthcare Industry Focus</h4>
+                      <p className="text-sm text-blue-700">
+                        Healthcare organizations have specific framework requirements related to patient data protection, 
+                        HIPAA compliance, medical device security, and clinical systems integrity. We'll help identify the most 
+                        appropriate frameworks for your healthcare organization.
+                      </p>
+                    </div>
+                  )}
+                  
+                  {form.watch('industry') === 'finance' && (
+                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                      <h4 className="text-sm font-medium text-blue-800 mb-1">Finance Industry Focus</h4>
+                      <p className="text-sm text-blue-700">
+                        Financial organizations need to address PCI DSS, SOX compliance, and financial fraud protection. 
+                        We'll help identify the most appropriate frameworks for your financial institution.
+                      </p>
+                    </div>
+                  )}
+                  
+                  {form.watch('industry') && !['healthcare', 'finance'].includes(form.watch('industry')) && (
+                    <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                      <h4 className="text-sm font-medium text-blue-800 mb-1">Industry-Specific Guidance</h4>
+                      <p className="text-sm text-blue-700">
+                        Different industries have unique security requirements. Based on your {form.watch('industry')} industry 
+                        selection, we'll help identify the most appropriate frameworks and controls for your organization.
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </TabsContent>
+              
               {/* Compliance Tab */}
               <TabsContent value="compliance" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
@@ -2099,110 +2337,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Standards & Guidelines Tab */}
               <TabsContent value="standards" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Standards & Guidelines</h3>
+                  <h3 className="font-medium mb-4">9. Standards & Guidelines</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the standards and guidelines relevant to your organization.
                   </p>
-                              <FormField
-                                control={form.control}
-                                name="regulatoryRequirements"
-                                render={({ field }) => (
-                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes("gdpr")}
-                                        onCheckedChange={(checked) => {
-                                          const updatedValue = checked
-                                            ? [...(field.value || []), "gdpr"]
-                                            : (field.value || [])?.filter(
-                                                (value) => value !== "gdpr"
-                                              );
-                                          field.onChange(updatedValue);
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                      <FormLabel className="font-medium">GDPR (EU)</FormLabel>
-                                      <FormDescription>
-                                        General Data Protection Regulation
-                                        <div className="mt-2 text-xs">
-                                          <span className="block"><strong>Applies to:</strong> Any organization processing EU residents' data</span>
-                                          <span className="block"><strong>Penalties:</strong> Up to 4% global revenue or €20M</span>
-                                        </div>
-                                      </FormDescription>
-                                    </div>
-                                  </FormItem>
-                                )}
-                              />
-                              
-                              <FormField
-                                control={form.control}
-                                name="regulatoryRequirements"
-                                render={({ field }) => (
-                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes("ccpa")}
-                                        onCheckedChange={(checked) => {
-                                          const updatedValue = checked
-                                            ? [...(field.value || []), "ccpa"]
-                                            : (field.value || [])?.filter(
-                                                (value) => value !== "ccpa"
-                                              );
-                                          field.onChange(updatedValue);
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                      <FormLabel className="font-medium">CCPA/CPRA (California)</FormLabel>
-                                      <FormDescription>
-                                        California Consumer Privacy Act
-                                        <div className="mt-2 text-xs">
-                                          <span className="block"><strong>Applies to:</strong> Businesses in California meeting certain thresholds</span>
-                                        </div>
-                                      </FormDescription>
-                                    </div>
-                                  </FormItem>
-                                )}
-                              />
-                              
-                              <FormField
-                                control={form.control}
-                                name="regulatoryRequirements"
-                                render={({ field }) => (
-                                  <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-gray-50">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes("pipeda")}
-                                        onCheckedChange={(checked) => {
-                                          const updatedValue = checked
-                                            ? [...(field.value || []), "pipeda"]
-                                            : (field.value || [])?.filter(
-                                                (value) => value !== "pipeda"
-                                              );
-                                          field.onChange(updatedValue);
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <div className="space-y-1 leading-none">
-                                      <FormLabel className="font-medium">PIPEDA (Canada)</FormLabel>
-                                      <FormDescription>
-                                        Personal Information Protection and Electronic Documents Act
-                                      </FormDescription>
-                                    </div>
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                          </div>
-                          
-                          {/* Healthcare Specific */}
-                          <div>
-                            <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-600">Healthcare-Specific Regulations</h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              <FormField
-                                control={form.control}
-                                name="regulatoryRequirements"
+                  
+                  <StandardsContent form={form} />
+                </div>
+              </TabsContent>
                                 render={({ field }) => (
                                   <FormItem className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-blue-50">
                                     <FormControl>
@@ -3943,9 +4085,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Adversarial Insight Tab */}
               <TabsContent value="adversarial" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Adversarial Insight (MITRE ATT&CK)</h3>
+                  <h3 className="font-medium mb-4">11. Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Select threat actors and techniques most relevant to your university or educational institution.
+                    Select threat actors and techniques most relevant to your organization's infrastructure operation mode.
                   </p>
                   
                   <FormField
@@ -4014,7 +4156,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Information Security Management System (ISMS) Tab */}
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Information Security Management System (ISMS)</h3>
+                  <h3 className="font-medium mb-4">12. Information Security Management System (ISMS)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Provide information about your current Information Security Management System (ISMS) implementation.
                   </p>
@@ -4476,6 +4618,97 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </FormLabel>
                             <FormDescription>
                               Your information will be anonymized if used for referrals
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </TabsContent>
+              
+              {/* Review & Submit Tab */}
+              <TabsContent value="review" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">13. Review & Submit Your Questionnaire</h3>
+                  <p className="text-sm mb-4">
+                    <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    {/* Section 1: Business Information */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">1. Business Information</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => document.querySelector('[value="business"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm font-medium">Business Name</p>
+                          <p className="text-sm">{form.watch('businessName') || 'Not provided'}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">Industry</p>
+                          <p className="text-sm">{form.watch('industry') || 'Not provided'}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">Number of Employees</p>
+                          <p className="text-sm">{form.watch('employeeCount') || 'Not provided'}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Section 2: Infrastructure */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">2. Infrastructure Mode</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => document.querySelector('[value="infrastructure"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Operation Modes</p>
+                        <ul className="list-disc list-inside text-sm">
+                          {form.watch('operationMode')?.map((mode: string) => (
+                            <li key={mode}>{mode}</li>
+                          )) || <li>None selected</li>}
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    {/* And so on for other sections... */}
+                  </div>
+                  
+                  <div className="border-t mt-6 pt-6">
+                    <FormField
+                      control={form.control}
+                      name="eulaAccepted"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              I agree to the <Link href="/terms" className="text-primary underline">Terms and Conditions</Link> and <Link href="/privacy" className="text-primary underline">Privacy Policy</Link>
+                            </FormLabel>
+                            <FormDescription>
+                              By submitting this questionnaire, you acknowledge that your responses will be used to generate a security assessment.
                             </FormDescription>
                           </div>
                         </FormItem>
