@@ -465,22 +465,21 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
           Complete this questionnaire to begin your assessment
         </CardDescription>
         <div className="mt-4 text-sm text-muted-foreground">
-          <p className="mb-2">Our 14-step assessment process:</p>
+          <p className="mb-2">Our 13-step assessment process:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-left">
-            <div>1. Business Information</div>
+            <div>1. Business Info</div>
             <div>2. Infrastructure Mode</div>
-            <div>3. Configuration Baseline</div>
-            <div>4. Device Inventory</div>
-            <div>5. Security Controls</div>
-            <div>6. Security Risks & Vulnerabilities</div>
-            <div>7. Security Frameworks</div>
-            <div>8. Compliance</div>
-            <div>9. Regulatory Requirements</div>
-            <div>10. Standards & Guidelines</div>
-            <div>11. Relevant ACQ Tool</div>
-            <div>12. Adversarial Insight</div>
-            <div>13. Information Security Management System (ISMS)</div>
-            <div>14. Contact & Confirmation</div>
+            <div>3. Security Risks & Vulnerabilities</div>
+            <div>4. Baseline Config</div>
+            <div>5. Security Control vs Framework</div>
+            <div>6. Compliance Requirements</div>
+            <div>7. Regulatory Requirements</div>
+            <div>8. Standards & Guidelines</div>
+            <div>9. Relevant ACQ Tools</div>
+            <div>10. Adversarial Insight (MITRE ATT&CK)</div>
+            <div>11. Information Security Management System (ISMS)</div>
+            <div>12. Contact Confirmation</div>
+            <div>13. Review & Submit Your Questionnaire</div>
           </div>
         </div>
       </CardHeader>
