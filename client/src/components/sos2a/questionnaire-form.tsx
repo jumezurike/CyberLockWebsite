@@ -492,10 +492,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               <TabsList className="flex flex-wrap mb-4 overflow-x-auto">
                 <TabsTrigger value="business" className="flex-shrink-0">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
-                <TabsTrigger value="configuration" className="flex-shrink-0">3. Baseline Config</TabsTrigger>
-                <TabsTrigger value="deviceInventory" className="flex-shrink-0 bg-green-50">4. Device Inventory</TabsTrigger>
-                <TabsTrigger value="security" className="flex-shrink-0">5. Security Control vs Framework</TabsTrigger>
-                <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">6. Security Risks & Vulnerabilities</TabsTrigger>
+                <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
+                <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
+                <TabsTrigger value="deviceInventory" className="flex-shrink-0 bg-green-50">5. Device Inventory</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">6. Security Control vs Framework</TabsTrigger>
                 <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
                 <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
                 <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
