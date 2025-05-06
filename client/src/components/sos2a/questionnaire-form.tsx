@@ -495,7 +495,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
                 <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
                 <TabsTrigger value="deviceInventory" className="flex-shrink-0">5. Device Inventory</TabsTrigger>
-                <TabsTrigger value="security" className="flex-shrink-0">6. Security Control vs Framework</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">6. Security Controls vs Frameworks</TabsTrigger>
                 <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
                 <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
                 <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
@@ -1243,7 +1243,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Security Risks & Vulnerabilities Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6">
-                  <h3 className="font-medium mb-4">6. Security Controls vs Framework</h3>
+                  <h3 className="font-medium mb-4">6. Security Controls vs Frameworks</h3>
                   <FormDescription className="mb-4">
                     This section helps us identify if your organization is applying security controls properly across the four main domains (Operations, Management, Technology, and People), with a focus on your specific industry requirements.
                   </FormDescription>
