@@ -694,22 +694,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 />
               </TabsContent>
               
-              {/* Device Inventory Tab */}
-              <TabsContent value="deviceInventory" className="space-y-6">
-                <div className="border rounded-md p-4 mb-6 bg-green-50">
-                  <h3 className="font-medium mb-2">Device Inventory Management</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Track and assess your organization's hardware assets. This comprehensive inventory helps identify 
-                    vulnerabilities, prioritize security controls, and ensure compliance with regulatory requirements.
-                  </p>
-                  
-                  {/* Embed the BrowserInventoryFormNew component directly */}
-                  <div className="mt-4">
-                    <BrowserInventoryFormNew />
-                  </div>
-                </div>
-              </TabsContent>
-              
               {/* Infrastructure Tab */}
               <TabsContent value="infrastructure" className="space-y-6">
                 <FormField
@@ -868,8 +852,23 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     )}
                   />
                 </div>
-                
 
+              </TabsContent>
+              
+              {/* Device Inventory Tab */}
+              <TabsContent value="deviceInventory" className="space-y-6">
+                <div className="border rounded-md p-4 mb-6 bg-green-50">
+                  <h3 className="font-medium mb-2">Device Inventory Management</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Track and assess your organization's hardware assets. This comprehensive inventory helps identify 
+                    vulnerabilities, prioritize security controls, and ensure compliance with regulatory requirements.
+                  </p>
+                  
+                  {/* Embed the BrowserInventoryFormNew component directly */}
+                  <div className="mt-4">
+                    <BrowserInventoryFormNew />
+                  </div>
+                </div>
               </TabsContent>
               
               {/* Security Risks & Vulnerabilities Tab */}
