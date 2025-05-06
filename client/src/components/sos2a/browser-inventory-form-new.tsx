@@ -51,7 +51,7 @@ interface BrowserData {
   lastUpdated: string;
 }
 
-export default function BrowserInventoryForm() {
+export default function BrowserInventoryFormNew() {
   const { toast } = useToast();
   const [browsers, setBrowsers] = useState<BrowserData[]>([]);
   const [formOpen, setFormOpen] = useState(false);
