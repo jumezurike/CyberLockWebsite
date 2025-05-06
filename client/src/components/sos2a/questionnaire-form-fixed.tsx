@@ -471,9 +471,17 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "nist-csf", label: "NIST CSF" },
     { id: "cis-csc", label: "CIS CSC" },
     { id: "cyber-ess-uk", label: "Cyber Essentials (UK)" },
+    { id: "iso-27001", label: "ISO/IEC 27001" },
+    { id: "sba-cybersecurity", label: "SBA Cybersecurity Guide" },
+    { id: "pci-dss", label: "PCI DSS" },
+    { id: "ftc-cybersecurity", label: "FTC Cybersecurity for SB" },
     { id: "cmmc", label: "CMMC" },
+    { id: "hipaa", label: "HIPAA" },
+    { id: "secure-sb", label: "SECURE SB (SCORE Initiative)" },
+    { id: "hitech-act", label: "HITECH Act" },
+    { id: "hitrust-csf", label: "HITRUST CSF" },
     { id: "mitre-attack", label: "MITRE ATT&CK" },
-    { id: "pci-dss", label: "PCI-DSS" },
+    { id: "cyber-readiness", label: "Cyber Readiness Institute" },
   ];
   
   const managementFrameworks = [
@@ -496,11 +504,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   
   const peopleFrameworks = [
     { id: "sans-security-awareness", label: "SANS Security Awareness" },
-    { id: "isaca-cism", label: "ISACA CISM" }, 
-    { id: "nist-nice", label: "NIST NICE Framework" },
-    { id: "iapp", label: "IAPP Privacy Certification" },
-    { id: "cyber-essentials-plus", label: "Cyber Essentials Plus" },
+    { id: "nistir-8286", label: "NISTIR 8286" },
     { id: "coso-erm", label: "COSO ERM" },
+    { id: "cyber-readiness-institute", label: "Cyber Readiness Institute" },
+    { id: "hipaa", label: "HIPAA" },
+    { id: "hitech-act", label: "HITECH Act" },
+    { id: "hitrust-csf", label: "HITRUST CSF" },
   ];
   
   // Compliance, standards, frameworks
