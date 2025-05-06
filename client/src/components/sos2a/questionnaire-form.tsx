@@ -467,20 +467,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         <div className="mt-4 text-sm text-muted-foreground">
           <p className="mb-2">Our 14-step assessment process:</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-1 text-left">
-            <div>1. Business Info</div>
+            <div>1. Business Information</div>
             <div>2. Infrastructure Mode</div>
-            <div>3. Security Risks & Vulnerabilities</div>
-            <div>4. Baseline Config</div>
-            <div>5. Device Inventory</div>
-            <div>6. Security Control vs Framework</div>
-            <div>7. Compliance Requirements</div>
-            <div>8. Regulatory Requirements</div>
-            <div>9. Standards & Guidelines</div>
-            <div>10. Relevant ACQ Tools</div>
-            <div>11. Adversarial Insight (MITRE ATT&CK)</div>
-            <div>12. Information Security Management System (ISMS)</div>
-            <div>13. Contact Confirmation</div>
-            <div>14. Review & Submit Your Questionnaire</div>
+            <div>3. Configuration Baseline</div>
+            <div>4. Device Inventory</div>
+            <div>5. Security Controls</div>
+            <div>6. Security Risks & Vulnerabilities</div>
+            <div>7. Security Frameworks</div>
+            <div>8. Compliance</div>
+            <div>9. Regulatory Requirements</div>
+            <div>10. Standards & Guidelines</div>
+            <div>11. Relevant ACQ Tool</div>
+            <div>12. Adversarial Insight</div>
+            <div>13. Information Security Management System (ISMS)</div>
+            <div>14. Contact & Confirmation</div>
           </div>
         </div>
       </CardHeader>
@@ -494,7 +494,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
                 <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
                 <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
-                <TabsTrigger value="deviceInventory" className="flex-shrink-0">5. Device Inventory</TabsTrigger>
+                <TabsTrigger value="deviceInventory" className="flex-shrink-0 bg-green-50">5. Device Inventory</TabsTrigger>
                 <TabsTrigger value="security" className="flex-shrink-0">6. Security Control vs Framework</TabsTrigger>
                 <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
                 <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
@@ -503,7 +503,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="adversarial" className="flex-shrink-0">11. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
                 <TabsTrigger value="isms" className="flex-shrink-0">12. Information Security Management System (ISMS)</TabsTrigger>
                 <TabsTrigger value="contact" className="flex-shrink-0">13. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review" className="flex-shrink-0">14. Review & Submit Your Questionnaire</TabsTrigger>
+                <TabsTrigger value="review" className="flex-shrink-0">14. Review & Submit</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
@@ -1227,7 +1227,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Device Inventory Tab */}
               <TabsContent value="deviceInventory" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6 bg-green-50">
-                  <h3 className="font-medium mb-2">5. Device Inventory Management</h3>
+                  <h3 className="font-medium mb-2">Device Inventory Management</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and assess your organization's hardware assets. This comprehensive inventory helps identify 
                     vulnerabilities, prioritize security controls, and ensure compliance with regulatory requirements.
@@ -1709,7 +1709,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Security Risks & Vulnerabilities Tab */}
+              {/* This section has been moved - now it's empty */}
+              
+              {/* Frameworks Tab */}
               <TabsContent value="risks" className="space-y-6">
                 <div className="border rounded-md p-4 mb-6 bg-orange-50 border-orange-200">
                   <h3 className="font-medium mb-4">Security Risks & Vulnerabilities</h3>
@@ -2337,7 +2339,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Standards & Guidelines Tab */}
               <TabsContent value="standards" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">9. Standards & Guidelines</h3>
+                  <h3 className="font-medium mb-4">Standards & Guidelines</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select the standards and guidelines relevant to your organization.
                   </p>
@@ -4085,7 +4087,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Adversarial Insight Tab */}
               <TabsContent value="adversarial" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">11. Adversarial Insight (MITRE ATT&CK)</h3>
+                  <h3 className="font-medium mb-4">Adversarial Insight (MITRE ATT&CK)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select threat actors and techniques most relevant to your organization's infrastructure operation mode.
                   </p>
@@ -4156,7 +4158,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Information Security Management System (ISMS) Tab */}
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">12. Information Security Management System (ISMS)</h3>
+                  <h3 className="font-medium mb-4">Information Security Management System (ISMS)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Provide information about your current Information Security Management System (ISMS) implementation.
                   </p>
@@ -4618,97 +4620,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </FormLabel>
                             <FormDescription>
                               Your information will be anonymized if used for referrals
-                            </FormDescription>
-                          </div>
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-              </TabsContent>
-              
-              {/* Review & Submit Tab */}
-              <TabsContent value="review" className="space-y-6">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">13. Review & Submit Your Questionnaire</h3>
-                  <p className="text-sm mb-4">
-                    <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
-                  </p>
-                  
-                  <div className="space-y-6">
-                    {/* Section 1: Business Information */}
-                    <div className="border rounded-md p-4 bg-gray-50">
-                      <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">1. Business Information</h4>
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => document.querySelector('[value="business"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
-                        >
-                          Edit
-                        </Button>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm font-medium">Business Name</p>
-                          <p className="text-sm">{form.watch('businessName') || 'Not provided'}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">Industry</p>
-                          <p className="text-sm">{form.watch('industry') || 'Not provided'}</p>
-                        </div>
-                        <div>
-                          <p className="text-sm font-medium">Number of Employees</p>
-                          <p className="text-sm">{form.watch('employeeCount') || 'Not provided'}</p>
-                        </div>
-                      </div>
-                    </div>
-                    
-                    {/* Section 2: Infrastructure */}
-                    <div className="border rounded-md p-4 bg-gray-50">
-                      <div className="flex justify-between items-center mb-3">
-                        <h4 className="text-base font-medium">2. Infrastructure Mode</h4>
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => document.querySelector('[value="infrastructure"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
-                        >
-                          Edit
-                        </Button>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium">Operation Modes</p>
-                        <ul className="list-disc list-inside text-sm">
-                          {form.watch('operationMode')?.map((mode: string) => (
-                            <li key={mode}>{mode}</li>
-                          )) || <li>None selected</li>}
-                        </ul>
-                      </div>
-                    </div>
-                    
-                    {/* And so on for other sections... */}
-                  </div>
-                  
-                  <div className="border-t mt-6 pt-6">
-                    <FormField
-                      control={form.control}
-                      name="eulaAccepted"
-                      render={({ field }) => (
-                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                          <FormControl>
-                            <Checkbox
-                              checked={field.value}
-                              onCheckedChange={field.onChange}
-                            />
-                          </FormControl>
-                          <div className="space-y-1 leading-none">
-                            <FormLabel>
-                              I agree to the <Link href="/terms" className="text-primary underline">Terms and Conditions</Link> and <Link href="/privacy" className="text-primary underline">Privacy Policy</Link>
-                            </FormLabel>
-                            <FormDescription>
-                              By submitting this questionnaire, you acknowledge that your responses will be used to generate a security assessment.
                             </FormDescription>
                           </div>
                         </FormItem>
