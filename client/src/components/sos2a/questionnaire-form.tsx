@@ -4625,6 +4625,97 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                 </div>
               </TabsContent>
+              
+              {/* Review & Submit Tab */}
+              <TabsContent value="review" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">13. Review & Submit Your Questionnaire</h3>
+                  <p className="text-sm mb-4">
+                    <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    {/* Section 1: Business Information */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">1. Business Information</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => document.querySelector('[value="business"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <p className="text-sm font-medium">Business Name</p>
+                          <p className="text-sm">{form.watch('businessName') || 'Not provided'}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">Industry</p>
+                          <p className="text-sm">{form.watch('industry') || 'Not provided'}</p>
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium">Number of Employees</p>
+                          <p className="text-sm">{form.watch('employeeCount') || 'Not provided'}</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Section 2: Infrastructure */}
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <div className="flex justify-between items-center mb-3">
+                        <h4 className="text-base font-medium">2. Infrastructure Mode</h4>
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => document.querySelector('[value="infrastructure"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium">Operation Modes</p>
+                        <ul className="list-disc list-inside text-sm">
+                          {form.watch('operationMode')?.map((mode: string) => (
+                            <li key={mode}>{mode}</li>
+                          )) || <li>None selected</li>}
+                        </ul>
+                      </div>
+                    </div>
+                    
+                    {/* And so on for other sections... */}
+                  </div>
+                  
+                  <div className="border-t mt-6 pt-6">
+                    <FormField
+                      control={form.control}
+                      name="eulaAccepted"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                          <FormControl>
+                            <Checkbox
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                          <div className="space-y-1 leading-none">
+                            <FormLabel>
+                              I agree to the <Link href="/terms" className="text-primary underline">Terms and Conditions</Link> and <Link href="/privacy" className="text-primary underline">Privacy Policy</Link>
+                            </FormLabel>
+                            <FormDescription>
+                              By submitting this questionnaire, you acknowledge that your responses will be used to generate a security assessment.
+                            </FormDescription>
+                          </div>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              </TabsContent>
             </Tabs>
             
             <Button type="submit" className="w-full">
