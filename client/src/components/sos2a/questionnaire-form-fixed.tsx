@@ -2071,7 +2071,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 4. Security Control vs Framework Tab */}
               <TabsContent value="security" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">4. Security Control vs Framework</h3>
+                  <h3 className="font-medium mb-4">5. Security Control vs Framework</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select security frameworks by domain (Operations, Management, Technology, People).
                   </p>
