@@ -500,7 +500,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "nist-nice", label: "NIST NICE Framework" },
     { id: "iapp", label: "IAPP Privacy Certification" },
     { id: "cyber-essentials-plus", label: "Cyber Essentials Plus" },
-    { id: "comp-tia-security", label: "CompTIA Security+" },
+    { id: "coso-erm", label: "COSO ERM" },
   ];
   
   // Compliance, standards, frameworks
