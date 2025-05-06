@@ -858,7 +858,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Configuration Baseline Tab */}
               <TabsContent value="configuration" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Configuration Baseline</h3>
+                  <h3 className="font-medium mb-4">4. Configuration Baseline</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Define your organization's configuration baseline to help assess security posture.
                   </p>
@@ -2325,7 +2325,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Regulatory Requirements Tab - Using External Component */}
               <TabsContent value="regulatory" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">Regulatory Requirements</h3>
+                  <h3 className="font-medium mb-4">8. Regulatory Requirements</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select all regulatory requirements applicable to your organization.
                   </p>
