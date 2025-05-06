@@ -486,13 +486,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       <CardContent>
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
-            <Tabs defaultValue="business" className="w-full">
+            <Tabs defaultValue="deviceInventory" className="w-full">
+              {/* Setting defaultValue to deviceInventory to test if it works */}
               <TabsList className="flex flex-wrap mb-4 overflow-x-auto">
                 <TabsTrigger value="business" className="flex-shrink-0">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
                 <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
                 <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
-                <TabsTrigger value="deviceInventory" className="flex-shrink-0">5. Device Inventory</TabsTrigger>
+                <TabsTrigger value="deviceInventory" className="flex-shrink-0 bg-blue-50">5. Device Inventory</TabsTrigger>
                 <TabsTrigger value="security" className="flex-shrink-0">6. Security Control vs Framework</TabsTrigger>
                 <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
                 <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
