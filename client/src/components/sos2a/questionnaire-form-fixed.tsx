@@ -487,19 +487,26 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const managementFrameworks = [
     { id: "nist-csf", label: "NIST CSF" },
     { id: "cis-csc", label: "CIS CSC" },
-    { id: "iso-27001", label: "ISO 27001" },
-    { id: "cobit", label: "COBIT" },
+    { id: "iso-27001", label: "ISO/IEC 27001" },
+    { id: "sba-cybersecurity", label: "SBA Cybersecurity Guide" },
+    { id: "ftc-cybersecurity", label: "FTC Cybersecurity for SB" },
     { id: "cmmc", label: "CMMC" },
-    { id: "itil", label: "ITIL" },
+    { id: "hipaa", label: "HIPAA" },
+    { id: "secure-sb", label: "SECURE SB (SCORE Initiative)" },
+    { id: "hitech-act", label: "HITECH Act" },
+    { id: "hitrust-csf", label: "HITRUST CSF" },
+    { id: "secure-sb-score", label: "SECURE SB (SCORE)" },
+    { id: "coso-erm", label: "COSO ERM" },
+    { id: "cyber-readiness", label: "Cyber Readiness Institute" },
   ];
   
   const technologyFrameworks = [
     { id: "nist-csf", label: "NIST CSF" },
     { id: "cis-csc", label: "CIS CSC" },
     { id: "cyber-ess-uk", label: "Cyber Essentials (UK)" },
-    { id: "cmmc", label: "CMMC" },
-    { id: "soc2", label: "SOC 2" },
-    { id: "nist-800-53", label: "NIST 800-53" },
+    { id: "pci-dss", label: "PCI DSS" },
+    { id: "mitre-attack", label: "MITRE ATT&CK" },
+    { id: "hitrust-csf", label: "HITRUST CSF" },
   ];
   
   const peopleFrameworks = [
