@@ -229,6 +229,16 @@ export interface MatrixItem {
     notes: string;
   };
   
+  identityAndAccessManagement: {
+    centralizedIdentityManagement: boolean;
+    roleBasedAccessControl: boolean;
+    justInTimeAccess: boolean;
+    privilegedAccessManagement: boolean;
+    implementationLevel: number; // 0-5 (Not Implemented to Optimized)
+    gaps: string[];
+    notes: string;
+  };
+  
   dataProtection: {
     dataEncryption: boolean;
     dataClassification: boolean;

@@ -26,7 +26,7 @@ import { MatrixItem } from "./sos2a-types";
 // Interface for the parameter mapping
 export interface ParameterMapping {
   securityParameter: keyof Pick<MatrixItem, 
-    'accessControl' | 'dataProtection' | 'securityAwareness' |
+    'accessControl' | 'identityAndAccessManagement' | 'dataProtection' | 'securityAwareness' |
     'incidentResponse' | 'networkSecurity' | 'applicationSecurity' |
     'thirdPartyManagement' | 'assetManagement' | 'securityGovernance' |
     'complianceManagement'
@@ -98,6 +98,62 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Access control is a core component of ISMS frameworks; policies for managing access rights and privileges are required'
+      }
+    ]
+  },
+  {
+    securityParameter: 'identityAndAccessManagement',
+    description: 'Comprehensive management of digital identities, permissions, and access rights across all systems and resources',
+    frameworkMappings: [
+      {
+        parameterName: 'Infrastructure Mode of Operation',
+        relevance: 'critical',
+        description: 'IAM architecture differs fundamentally by infrastructure (cloud IAM services vs. on-premises directory services)'
+      },
+      {
+        parameterName: 'Security Risks & Vulnerabilities',
+        relevance: 'critical',
+        description: 'Identity theft and privilege abuse are critical risks; improper rights management is a severe vulnerability'
+      },
+      {
+        parameterName: 'Baseline Configuration',
+        relevance: 'high',
+        description: 'Centralized identity stores, role definitions, and access policies form essential baselines'
+      },
+      {
+        parameterName: 'Security Control vs Framework',
+        relevance: 'high',
+        description: 'Core component in frameworks like ISO 27001 (A.9.2), NIST CSF (PR.AC-1), and NIST 800-53 (IA controls)'
+      },
+      {
+        parameterName: 'Compliance Requirements',
+        relevance: 'high',
+        description: 'Standards require robust identity management (PCI DSS 8.1, HIPAA 164.308(a)(4))'
+      },
+      {
+        parameterName: 'Regulatory Requirements',
+        relevance: 'high',
+        description: 'Regulations mandate identity verification and least privilege (GDPR, HIPAA, SOX)'
+      },
+      {
+        parameterName: 'Standards & Guidelines',
+        relevance: 'high',
+        description: 'References standards like NIST 800-63 (Digital Identity), ISO 27001 A.9.2, and NIST SP 800-207 (Zero Trust)'
+      },
+      {
+        parameterName: 'Relevant ACQ Tools',
+        relevance: 'high',
+        description: 'Identifies tools for directory service assessment, privilege mapping, and access certification'
+      },
+      {
+        parameterName: 'Adversarial Insight (MITRE ATT&CK)',
+        relevance: 'high',
+        description: 'Maps to Initial Access (TA0001), Credential Access (TA0006), and Privilege Escalation (TA0004) tactics'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'IAM is a fundamental component of ISMS; requires formal processes for identity lifecycle management'
       }
     ]
   },
