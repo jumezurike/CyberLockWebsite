@@ -3200,7 +3200,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 10. ISMS Tab */}
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">10. Information Security Management System (ISMS)</h3>
+                  <h3 className="font-medium mb-4">11. Information Security Management System (ISMS)</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select ISMS implementation options and related documents.
                   </p>
@@ -3443,7 +3443,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Contact and Confirmation Tab */}
               <TabsContent value="contact" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">11. Contact Confirmation</h3>
+                  <h3 className="font-medium mb-4">12. Contact Confirmation</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Provide contact details for follow-up and select your assessment type.
                   </p>
