@@ -24,7 +24,7 @@ import { MatrixItem } from "./sos2a-types";
 
 // Type for security parameter key
 type SecurityParameterKey = keyof Pick<MatrixItem, 
-  'accessControl' | 'dataProtection' | 'securityAwareness' |
+  'accessControl' | 'identityAndAccessManagement' | 'dataProtection' | 'securityAwareness' |
   'incidentResponse' | 'networkSecurity' | 'applicationSecurity' |
   'thirdPartyManagement' | 'assetManagement' | 'securityGovernance' |
   'complianceManagement'
@@ -65,6 +65,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         securityParameter: 'accessControl',
         relevance: 'high',
         description: 'Access control requirements vary based on infrastructure (cloud IAM vs. on-premises directory services)'
+      },
+      {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'critical',
+        description: 'IAM architecture differs fundamentally by infrastructure (cloud IAM services vs. on-premises directory services)'
       },
       {
         securityParameter: 'thirdPartyManagement',
@@ -111,6 +116,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         securityParameter: 'accessControl',
         relevance: 'critical',
         description: 'Unauthorized access is a primary risk; weak authentication is a common vulnerability'
+      },
+      {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'critical',
+        description: 'Identity theft and privilege abuse are critical risks; improper rights management is a severe vulnerability'
       },
       {
         securityParameter: 'dataProtection',
@@ -174,6 +184,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         description: 'Authentication settings, permission models, and privilege configurations form core baselines'
       },
       {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'high',
+        description: 'Centralized identity stores, role definitions, and access policies form essential baselines'
+      },
+      {
         securityParameter: 'dataProtection',
         relevance: 'high',
         description: 'Encryption standards, DLP configurations, and backup settings form key baselines'
@@ -223,6 +238,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         securityParameter: 'securityGovernance',
         relevance: 'high',
         description: 'Governance is central to frameworks like ISO 27001 (clauses 4-10) and NIST CSF (ID.GV)'
+      },
+      {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'high',
+        description: 'Core component in frameworks like ISO 27001 (A.9.2), NIST CSF (PR.AC-1), and NIST 800-53 (IA controls)'
       },
       {
         securityParameter: 'incidentResponse',
