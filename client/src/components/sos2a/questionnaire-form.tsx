@@ -494,16 +494,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="infrastructure" className="flex-shrink-0">2. Infrastructure Mode</TabsTrigger>
                 <TabsTrigger value="risks" className="flex-shrink-0 bg-orange-50">3. Security Risks & Vulnerabilities</TabsTrigger>
                 <TabsTrigger value="configuration" className="flex-shrink-0">4. Baseline Config</TabsTrigger>
-                <TabsTrigger value="deviceInventory" className="flex-shrink-0 bg-green-50">5. Device Inventory</TabsTrigger>
-                <TabsTrigger value="security" className="flex-shrink-0">6. Security Control vs Framework</TabsTrigger>
-                <TabsTrigger value="compliance" className="flex-shrink-0">7. Compliance Requirements</TabsTrigger>
-                <TabsTrigger value="regulatory" className="flex-shrink-0">8. Regulatory Requirements</TabsTrigger>
-                <TabsTrigger value="standards" className="flex-shrink-0">9. Standards & Guidelines</TabsTrigger>
-                <TabsTrigger value="questionnaires" className="flex-shrink-0">10. Relevant ACQ Tools</TabsTrigger>
-                <TabsTrigger value="adversarial" className="flex-shrink-0">11. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
-                <TabsTrigger value="isms" className="flex-shrink-0">12. Information Security Management System (ISMS)</TabsTrigger>
-                <TabsTrigger value="contact" className="flex-shrink-0">13. Contact Confirmation</TabsTrigger>
-                <TabsTrigger value="review" className="flex-shrink-0">14. Review & Submit</TabsTrigger>
+                <TabsTrigger value="security" className="flex-shrink-0">5. Security Control vs Framework</TabsTrigger>
+                <TabsTrigger value="compliance" className="flex-shrink-0">6. Compliance Requirements</TabsTrigger>
+                <TabsTrigger value="regulatory" className="flex-shrink-0">7. Regulatory Requirements</TabsTrigger>
+                <TabsTrigger value="standards" className="flex-shrink-0">8. Standards & Guidelines</TabsTrigger>
+                <TabsTrigger value="questionnaires" className="flex-shrink-0">9. Relevant ACQ Tools</TabsTrigger>
+                <TabsTrigger value="adversarial" className="flex-shrink-0">10. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
+                <TabsTrigger value="isms" className="flex-shrink-0">11. Information Security Management System (ISMS)</TabsTrigger>
+                <TabsTrigger value="contact" className="flex-shrink-0">12. Contact Confirmation</TabsTrigger>
+                <TabsTrigger value="review" className="flex-shrink-0">13. Review & Submit</TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
