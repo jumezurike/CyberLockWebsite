@@ -25,10 +25,11 @@ import ParameterMappingPage from "@/pages/parameter-mapping";
 import BrowserBaselinePage from "@/pages/browser-baseline";
 import LightbulbCapture from "@/components/knowledge-share/lightbulb-capture";
 import Checkout from "@/pages/checkout";
+import IdentityManagementPage from "@/pages/identity-management";
 import PaymentSuccess from "@/pages/payment-success";
 import PaymentError from "@/pages/payment-error";
 import DirectNavigation from "@/components/direct-navigation";
-import IdentityManagementPage from "@/pages/identity-management";
+
 import { useEffect } from "react";
 
 function Router() {

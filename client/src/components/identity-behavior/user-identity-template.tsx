@@ -1,265 +1,318 @@
-import { useState } from 'react';
-import { Download } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+import React from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Download, FileText, Shield, AlertTriangle, Users, Key } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 export default function UserIdentityTemplate() {
-  const [activeTab, setActiveTab] = useState('overview');
-  
-  const handleDownloadTemplate = () => {
-    const link = document.createElement('a');
-    link.href = '/templates/user-identity-template.csv';
-    link.setAttribute('download', 'user-identity-template.csv');
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  // Template data structure
+  const templateStructure = [
+    { field: 'user_id', description: 'Unique identifier for the user or identity', example: 'EMP001, SVC001', required: true, category: 'basic' },
+    { field: 'first_name', description: 'First name for human users or service name for non-human identities', example: 'John, Backup', required: true, category: 'basic' },
+    { field: 'last_name', description: 'Last name for human users or service identifier for non-human identities', example: 'Smith, Service', required: true, category: 'basic' },
+    { field: 'email', description: 'Email address or notification endpoint', example: 'john.smith@example.com', required: true, category: 'basic' },
+    { field: 'role', description: 'Job role or service function', example: 'IT Manager, Automated Process', required: true, category: 'basic' },
+    { field: 'department', description: 'Department or functional area', example: 'Information Technology, Finance', required: true, category: 'basic' },
+    { field: 'identity_type', description: 'Type of identity (human, machine, api, third-party)', example: 'human, machine, api, third-party', required: true, category: 'identity' },
+    { field: 'access_level', description: 'Level of access granted (standard, limited, admin, privileged)', example: 'standard, limited, admin, privileged', required: true, category: 'access' },
+    { field: 'mfa_enabled', description: 'Whether multi-factor authentication is enabled', example: 'yes, no', required: true, category: 'access' },
+    { field: 'mfa_type', description: 'Type of MFA used (app, sms, hardware token, etc.)', example: 'app, sms, hardware, api-key', required: false, category: 'access' },
+    { field: 'location', description: 'Primary physical or logical location', example: 'Headquarters, Data Center, Cloud', required: false, category: 'basic' },
+    { field: 'manager', description: 'Manager email or responsible party for the identity', example: 'jane.doe@example.com', required: false, category: 'basic' },
+    { field: 'employment_status', description: 'Status for humans or service status for non-humans', example: 'Full Time, Contractor, System, Service', required: false, category: 'basic' },
+    { field: 'last_password_change', description: 'Date of last credential rotation', example: '2025-04-15', required: false, category: 'security' },
+    { field: 'last_security_training', description: 'Date of last security awareness training (N/A for non-human)', example: '2025-03-01, N/A', required: false, category: 'security' },
+    { field: 'system_access', description: 'List of systems this identity can access', example: 'ERP, CRM, Finance Portal', required: false, category: 'access' },
+    { field: 'typical_login_hours', description: 'Normal hours of activity', example: '9:00-17:00', required: false, category: 'behavior' },
+    { field: 'login_anomaly_threshold', description: 'Sensitivity for login anomaly detection', example: 'low, medium, high', required: false, category: 'behavior' },
+    { field: 'inactive_account_days', description: 'Days before account is flagged as inactive', example: '30, 90, 365', required: false, category: 'security' },
+    { field: 'credential_exposure_check', description: 'Whether credential breach monitoring is enabled', example: 'yes, no', required: false, category: 'security' },
+    { field: 'session_timeout_minutes', description: 'Minutes before automatic session termination', example: '15, 30, 60', required: false, category: 'security' },
+    { field: 'privilege_escalation_alerts', description: 'Whether to alert on privilege escalation', example: 'yes, no', required: false, category: 'security' },
+    { field: 'federation_source', description: 'Identity federation or SSO source', example: 'Active Directory, Okta SSO, AWS IAM', required: false, category: 'identity' },
+  ];
+
+  const getCategoryBadge = (category: string) => {
+    switch (category) {
+      case 'basic':
+        return <Badge variant="outline" className="border-blue-500 text-blue-700">Basic Info</Badge>;
+      case 'identity':
+        return <Badge variant="outline" className="border-purple-500 text-purple-700">Identity</Badge>;
+      case 'access':
+        return <Badge variant="outline" className="border-green-500 text-green-700">Access</Badge>;
+      case 'security':
+        return <Badge variant="outline" className="border-red-500 text-red-700">Security</Badge>;
+      case 'behavior':
+        return <Badge variant="outline" className="border-amber-500 text-amber-700">Behavior</Badge>;
+      default:
+        return <Badge variant="outline">Other</Badge>;
+    }
   };
-  
+
   return (
-    <Card className="mb-8">
-      <CardHeader>
-        <CardTitle>Universal Identity Verification System (UIVS)</CardTitle>
-        <CardDescription>
-          Our patented identity management system for tracking and securing all identity types across your organization.
-        </CardDescription>
+    <Card className="mb-6">
+      <CardHeader className="pb-2">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div>
+            <CardTitle className="text-xl">Universal Identity Template</CardTitle>
+            <CardDescription>
+              Standard CSV format for importing all identity types into the UIVS platform
+            </CardDescription>
+          </div>
+          <Button onClick={() => {
+            const link = document.createElement('a');
+            link.href = '/templates/user-identity-template.csv';
+            link.setAttribute('download', 'user-identity-template.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+          }}>
+            <Download className="mr-2 h-4 w-4" />
+            Download Template
+          </Button>
+        </div>
       </CardHeader>
+      
       <CardContent>
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-3 mb-6">
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="template">Template Guide</TabsTrigger>
-            <TabsTrigger value="identity-types">Identity Types</TabsTrigger>
+        <Tabs defaultValue="structure">
+          <TabsList className="mb-4 w-full md:w-auto">
+            <TabsTrigger value="structure">
+              <FileText className="h-4 w-4 mr-2" />
+              Template Structure
+            </TabsTrigger>
+            <TabsTrigger value="best-practices">
+              <Shield className="h-4 w-4 mr-2" />
+              Best Practices
+            </TabsTrigger>
+            <TabsTrigger value="examples">
+              <Users className="h-4 w-4 mr-2" />
+              Example Identities
+            </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="overview" className="space-y-4">
-            <div className="prose max-w-none">
-              <h3 className="text-lg font-semibold">What is the Universal Identity Verification System?</h3>
-              <p>
-                The Universal Identity Verification System (UIVS) is CyberLockX's patented technology for managing 
-                and securing all identity types across your organization - human users, machine identities, API access, 
-                and third-party contractors. UIVS provides:
-              </p>
-              
-              <ul className="list-disc pl-5 space-y-2 my-4">
-                <li>
-                  <strong>Comprehensive Identity Tracking</strong> - Monitor all identity types in a unified system
-                </li>
-                <li>
-                  <strong>Behavior Analytics</strong> - Detect suspicious activity and anomalous patterns
-                </li>
-                <li>
-                  <strong>Access Governance</strong> - Apply least privilege principles across your organization
-                </li>
-                <li>
-                  <strong>Real-time Verification</strong> - Continuously validate identity authenticity
-                </li>
-                <li>
-                  <strong>Sovereign Identity Protection</strong> - Ensure identity data remains under your control
-                </li>
-              </ul>
-              
-              <div className="bg-blue-50 p-4 rounded-md border border-blue-100 my-4">
-                <h4 className="text-blue-800 font-medium mb-2">Why Identity Management Matters</h4>
-                <p className="text-blue-700 text-sm">
-                  According to industry research, over 80% of data breaches involve compromised or misused identities.
-                  By implementing proper identity management, you can significantly reduce your attack surface and 
-                  security risk exposure.
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex justify-end">
-              <Button 
-                onClick={handleDownloadTemplate}
-                className="flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Download CSV Template
-              </Button>
+          <TabsContent value="structure">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[200px]">Field</TableHead>
+                    <TableHead>Description</TableHead>
+                    <TableHead>Example</TableHead>
+                    <TableHead className="text-center">Required</TableHead>
+                    <TableHead>Category</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {templateStructure.map((field) => (
+                    <TableRow key={field.field}>
+                      <TableCell className="font-medium">{field.field}</TableCell>
+                      <TableCell>{field.description}</TableCell>
+                      <TableCell><code className="px-1 py-0.5 bg-muted rounded text-sm">{field.example}</code></TableCell>
+                      <TableCell className="text-center">
+                        {field.required ? (
+                          <Badge className="bg-blue-500">Required</Badge>
+                        ) : (
+                          <Badge variant="outline">Optional</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>{getCategoryBadge(field.category)}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
             </div>
           </TabsContent>
           
-          <TabsContent value="template" className="space-y-4">
-            <div className="prose max-w-none">
-              <h3 className="text-lg font-semibold">User Identity Template Guide</h3>
-              <p>
-                Our template follows a standardized format for importing user identities into the CyberLockX 
-                system. To successfully import your user data, please follow these guidelines:
-              </p>
-              
-              <div className="overflow-x-auto mt-4">
-                <table className="min-w-full border rounded-md">
-                  <thead className="bg-muted">
-                    <tr>
-                      <th className="p-2 text-left border-b">Field</th>
-                      <th className="p-2 text-left border-b">Description</th>
-                      <th className="p-2 text-left border-b">Required</th>
-                      <th className="p-2 text-left border-b">Example</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">User ID</td>
-                      <td className="p-2">Unique identifier for the user or identity</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">EMP001</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">First Name</td>
-                      <td className="p-2">First name or identity label</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">John</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">Last Name</td>
-                      <td className="p-2">Last name or secondary identifier</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">Doe</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">Email</td>
-                      <td className="p-2">Email address or contact endpoint</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">john.doe@example.com</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">Job Title</td>
-                      <td className="p-2">Role or function title</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">IT Manager</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">Department</td>
-                      <td className="p-2">Organizational department or group</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">Information Technology</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">Identity Type</td>
-                      <td className="p-2">Category of identity (human, machine, api, third-party)</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">human</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">Privilege Level</td>
-                      <td className="p-2">Level of access privileges (high, medium, low)</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">medium</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">Access Level</td>
-                      <td className="p-2">Specific access category (admin, standard, limited, etc.)</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">standard</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">MFA Enabled</td>
-                      <td className="p-2">Whether MFA is enabled (yes/no)</td>
-                      <td className="p-2">Yes</td>
-                      <td className="p-2 font-mono text-sm">yes</td>
-                    </tr>
-                    <tr className="border-b">
-                      <td className="p-2 font-medium">Contact Info</td>
-                      <td className="p-2">Secondary contact information</td>
-                      <td className="p-2">No</td>
-                      <td className="p-2 font-mono text-sm">555-123-4567</td>
-                    </tr>
-                    <tr>
-                      <td className="p-2 font-medium">Notes</td>
-                      <td className="p-2">Additional notes or comments</td>
-                      <td className="p-2">No</td>
-                      <td className="p-2 font-mono text-sm">Primary administrator</td>
-                    </tr>
-                  </tbody>
-                </table>
+          <TabsContent value="best-practices">
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-medium text-lg mb-2 flex items-center">
+                  <Shield className="mr-2 h-5 w-5 text-blue-500" />
+                  Universal Identity Management Best Practices
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Follow these guidelines when managing identities across your organization to ensure
+                  proper security, compliance, and operational efficiency.
+                </p>
               </div>
               
-              <div className="bg-amber-50 p-4 rounded-md border border-amber-100 mt-6">
-                <h4 className="text-amber-800 font-medium mb-2">Important Notes</h4>
-                <ul className="list-disc pl-5 space-y-1 text-amber-700 text-sm">
-                  <li>The first row of the CSV file must contain the column headers exactly as shown</li>
-                  <li>Use standard CSV format with commas as separators</li>
-                  <li>Dates should be in YYYY-MM-DD format</li>
-                  <li>The system will validate all entries during import</li>
-                  <li>Machine and API identities should include appropriate contact owners</li>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <Card className="border border-green-200 bg-green-50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">Data Quality</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <ul className="list-disc pl-5 space-y-1 text-sm">
+                      <li>Ensure all required fields are completed</li>
+                      <li>Use consistent naming conventions</li>
+                      <li>Validate email addresses and identifiers</li>
+                      <li>Keep data up-to-date with regular reviews</li>
+                      <li>Use ISO date format (YYYY-MM-DD)</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border border-blue-200 bg-blue-50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">Multi-factor Authentication</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <ul className="list-disc pl-5 space-y-1 text-sm">
+                      <li>Enable MFA for all human users</li>
+                      <li>Require hardware tokens for privileged access</li>
+                      <li>Use certificate-based authentication for machine identities</li>
+                      <li>Implement API keys with short rotation periods</li>
+                      <li>Track MFA enrollment status</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border border-purple-200 bg-purple-50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">Segregation of Duties</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <ul className="list-disc pl-5 space-y-1 text-sm">
+                      <li>Ensure no single identity has conflicting permissions</li>
+                      <li>Implement approval workflows for sensitive access</li>
+                      <li>Maintain separation between development and production</li>
+                      <li>Restrict third-party access to only required systems</li>
+                      <li>Document access justifications</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border border-red-200 bg-red-50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">Lifecycle Management</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <ul className="list-disc pl-5 space-y-1 text-sm">
+                      <li>Implement formal onboarding/offboarding processes</li>
+                      <li>Regularly audit inactive accounts</li>
+                      <li>Automatically disable accounts after inactivity</li>
+                      <li>Enforce credential rotation policies</li>
+                      <li>Maintain historical access records</li>
+                    </ul>
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <div className="mt-6">
+                <h4 className="font-medium flex items-center text-base">
+                  <AlertTriangle className="mr-2 h-5 w-5 text-amber-500" />
+                  Common Pitfalls to Avoid
+                </h4>
+                <ul className="list-disc pl-5 mt-2 space-y-1">
+                  <li className="text-gray-700">Using shared accounts instead of individual identities</li>
+                  <li className="text-gray-700">Failing to document service account ownership and purpose</li>
+                  <li className="text-gray-700">Neglecting non-human identities in security reviews</li>
+                  <li className="text-gray-700">Overlooking federation source security controls</li>
+                  <li className="text-gray-700">Inconsistent identity categorization across systems</li>
                 </ul>
               </div>
             </div>
-            
-            <div className="flex justify-end">
-              <Button 
-                onClick={handleDownloadTemplate}
-                className="flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Download CSV Template
-              </Button>
-            </div>
           </TabsContent>
           
-          <TabsContent value="identity-types" className="space-y-4">
-            <div className="prose max-w-none">
-              <h3 className="text-lg font-semibold">Understanding Identity Types</h3>
-              <p>
-                Modern organizations manage multiple identity types, each with unique security requirements.
-                CyberLockX's Universal Identity Verification System (UIVS) provides comprehensive protection
-                for all identity categories:
-              </p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                <div className="border rounded-md p-4">
-                  <h4 className="font-medium text-blue-700">Human Identities</h4>
-                  <p className="text-sm mt-2">
-                    Employee accounts, contractor accounts, and other human users. These require standard 
-                    authentication methods, behavioral monitoring, and security awareness training.
-                  </p>
-                </div>
-                
-                <div className="border rounded-md p-4">
-                  <h4 className="font-medium text-blue-700">Machine Identities</h4>
-                  <p className="text-sm mt-2">
-                    Service accounts, automated processes, and system identities. These require strict 
-                    privilege management, regular rotation of credentials, and detailed activity logging.
-                  </p>
-                </div>
-                
-                <div className="border rounded-md p-4">
-                  <h4 className="font-medium text-blue-700">API Identities</h4>
-                  <p className="text-sm mt-2">
-                    API keys, tokens, and authentication credentials for services. These require 
-                    robust rate limiting, access scoping, and regular validation checks.
-                  </p>
-                </div>
-                
-                <div className="border rounded-md p-4">
-                  <h4 className="font-medium text-blue-700">Third-Party Identities</h4>
-                  <p className="text-sm mt-2">
-                    Vendor accounts, partner access, and external system integrations. These require 
-                    strict access controls, thorough vetting, and isolated permission sets.
-                  </p>
-                </div>
-              </div>
-              
-              <div className="bg-blue-50 p-4 rounded-md border border-blue-100 mt-6">
-                <h4 className="text-blue-800 font-medium mb-2">Identity Behavior Monitoring</h4>
-                <p className="text-blue-700 text-sm">
-                  Our patented system tracks normal behavior patterns for each identity type and alerts 
-                  when anomalous activity is detected - such as access from unusual locations, at unusual times,
-                  or to unusual resources. This behavioral analysis provides an additional layer of security
-                  beyond traditional authentication methods.
+          <TabsContent value="examples">
+            <div className="space-y-6">
+              <div>
+                <h3 className="font-medium text-lg mb-2">Example Identities by Type</h3>
+                <p className="text-gray-600 mb-4">
+                  These examples demonstrate how to populate the template for different types of identities in your organization.
                 </p>
               </div>
-            </div>
-            
-            <div className="flex justify-end">
-              <Button 
-                onClick={handleDownloadTemplate}
-                className="flex items-center gap-2"
-              >
-                <Download className="h-4 w-4" />
-                Download CSV Template
-              </Button>
+              
+              <Tabs defaultValue="human">
+                <TabsList className="mb-4">
+                  <TabsTrigger value="human">Human Users</TabsTrigger>
+                  <TabsTrigger value="machine">Machine Identities</TabsTrigger>
+                  <TabsTrigger value="api">API Identities</TabsTrigger>
+                  <TabsTrigger value="third-party">Third-Party</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="human">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">Human User Example</CardTitle>
+                      <CardDescription>Standard employee or contractor identity</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <code className="text-xs block whitespace-pre-wrap bg-gray-50 p-3 rounded-md">
+{`user_id,first_name,last_name,email,role,department,identity_type,access_level,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source
+EMP001,John,Smith,john.smith@example.com,IT Manager,Information Technology,human,privileged,yes,app+sms,Headquarters,jane.doe@example.com,Full Time,2025-04-15,2025-03-01,"ERP, CRM, IT Admin Portal",9:00-17:00,medium,30,yes,60,yes,Active Directory
+`}
+                      </code>
+                    </CardContent>
+                    <CardFooter className="bg-blue-50 border-t border-blue-100 text-sm text-blue-800">
+                      <Key className="mr-2 h-4 w-4" />
+                      Human identities should always have MFA enabled and complete security awareness training.
+                    </CardFooter>
+                  </Card>
+                </TabsContent>
+                
+                <TabsContent value="machine">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">Machine Identity Example</CardTitle>
+                      <CardDescription>Automated service or system account</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <code className="text-xs block whitespace-pre-wrap bg-gray-50 p-3 rounded-md">
+{`user_id,first_name,last_name,email,role,department,identity_type,access_level,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source
+SVC001,Backup,Service,backup-service@system.internal,Automated Process,Operations,machine,standard,no,,Data Center,john.smith@example.com,System,2025-01-15,N/A,"Backup System, Storage Access",,low,365,no,0,yes,Local
+`}
+                      </code>
+                    </CardContent>
+                    <CardFooter className="bg-purple-50 border-t border-purple-100 text-sm text-purple-800">
+                      <Key className="mr-2 h-4 w-4" />
+                      Machine identities should always have a human owner and regular credential rotation.
+                    </CardFooter>
+                  </Card>
+                </TabsContent>
+                
+                <TabsContent value="api">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">API Identity Example</CardTitle>
+                      <CardDescription>Integration or service connection</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <code className="text-xs block whitespace-pre-wrap bg-gray-50 p-3 rounded-md">
+{`user_id,first_name,last_name,email,role,department,identity_type,access_level,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source
+API001,Payment,Gateway,api-monitor@example.com,External Service,Finance,api,limited,yes,api-key,Cloud,sarah.johnson@example.com,Service,2025-03-30,N/A,"Payment Processing System",,high,90,yes,15,yes,AWS IAM
+`}
+                      </code>
+                    </CardContent>
+                    <CardFooter className="bg-green-50 border-t border-green-100 text-sm text-green-800">
+                      <Key className="mr-2 h-4 w-4" />
+                      API identities should use short-lived tokens and have strict access controls.
+                    </CardFooter>
+                  </Card>
+                </TabsContent>
+                
+                <TabsContent value="third-party">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base">Third-Party Identity Example</CardTitle>
+                      <CardDescription>Vendor or external partner access</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <code className="text-xs block whitespace-pre-wrap bg-gray-50 p-3 rounded-md">
+{`user_id,first_name,last_name,email,role,department,identity_type,access_level,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source
+VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,"Ticketing System, Knowledge Base",9:00-20:00,medium,45,yes,20,yes,External IDP
+`}
+                      </code>
+                    </CardContent>
+                    <CardFooter className="bg-orange-50 border-t border-orange-100 text-sm text-orange-800">
+                      <Key className="mr-2 h-4 w-4" />
+                      Third-party identities should have the strictest monitoring and limited access durations.
+                    </CardFooter>
+                  </Card>
+                </TabsContent>
+              </Tabs>
             </div>
           </TabsContent>
         </Tabs>
