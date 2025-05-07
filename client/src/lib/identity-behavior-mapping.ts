@@ -3,6 +3,11 @@
     description: 'Monitoring and management of user identity behaviors, authentication practices, and access patterns across users and devices',
     securityDomainMappings: [
       {
+        securityParameter: 'deviceInventoryTracking',
+        relevance: 'critical',
+        description: 'Strong bidirectional relationship with Device Inventory Tracking; device-to-user association is crucial for proper identity governance'
+      },
+      {
         securityParameter: 'identityAndAccessManagement',
         relevance: 'critical',
         description: 'Identity behavior analytics is the core of modern IAM for detecting anomalies and ensuring proper user authentication'

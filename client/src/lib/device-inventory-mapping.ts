@@ -3,6 +3,11 @@
     description: 'Comprehensive inventory management of all hardware devices in the environment including laptops, phones, IoT devices, and servers',
     securityDomainMappings: [
       {
+        securityParameter: 'identityBehaviorHygiene',
+        relevance: 'critical',
+        description: 'Strong bidirectional relationship with Identity Behavior & Hygiene; device usage and authentication are core aspects of identity behavior'
+      },
+      {
         securityParameter: 'assetManagement',
         relevance: 'critical',
         description: 'Device inventory is the foundation of asset management; tracks device lifecycle from procurement through retirement; prevents missing/unpatched devices'

@@ -1,7 +1,7 @@
 /**
  * Default Parameter Mapping
  * 
- * This file contains the formal mapping between the 12 security parameters
+ * This file contains the formal mapping between the 12 cybersecurity core domains
  * used in gap analysis and the 12 default SOS²A parameters.
  * 
  * This mapping demonstrates how each security domain intersects with the
@@ -21,6 +21,20 @@
  * 10. Information Security Management System (ISMS)
  * 11. Device Inventory Tracking
  * 12. Identity Behavior & Hygiene
+ * 
+ * The 12 cybersecurity core domains are:
+ * 1. Access Control
+ * 2. Identity and Access Management (IAM)
+ * 3. Data Protection
+ * 4. Security Awareness
+ * 5. Incident Response
+ * 6. Network Security
+ * 7. Application Security
+ * 8. Third-Party Management
+ * 9. Asset Management
+ * 10. Security Governance
+ * 11. Compliance Management
+ * 12. Risk Management
  */
 
 import { MatrixItem } from "./sos2a-types";
@@ -42,9 +56,9 @@ export interface ParameterMapping {
 }
 
 /**
- * Comprehensive mapping between security parameters and default SOS²A parameters
+ * Comprehensive mapping between cybersecurity core domains and default SOS²A parameters
  * The mapping shows how each security domain intersects with and is evaluated through
- * the lens of the 10 default SOS²A parameters.
+ * the lens of the 12 default SOS²A parameters.
  */
 export const securityParameterMappings: ParameterMapping[] = [
   {
@@ -660,6 +674,138 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Compliance monitoring and evaluation is a core component of ISMS; ISO 27001 requires internal audits and management reviews'
+      }
+    ]
+  },
+  {
+    securityParameter: 'assetManagement',
+    description: 'Management of all IT assets (hardware, software, data) throughout their lifecycle from procurement to disposition',
+    frameworkMappings: [
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'critical',
+        description: 'Device inventory is the foundation of asset management; enables tracking of device lifecycle from procurement to retirement'
+      },
+      {
+        parameterName: 'Infrastructure Mode of Operation',
+        relevance: 'high',
+        description: 'Asset types and management approaches differ by infrastructure (cloud resources vs. on-premises equipment)'
+      },
+      {
+        parameterName: 'Security Risks & Vulnerabilities',
+        relevance: 'high',
+        description: 'Unmanaged assets are major security risks; missing devices create blind spots in security posture'
+      },
+      {
+        parameterName: 'Baseline Configuration',
+        relevance: 'high',
+        description: 'Asset management provides the foundation for configuration baselines and standard builds'
+      },
+      {
+        parameterName: 'Security Control vs Framework',
+        relevance: 'medium',
+        description: 'Maps to asset management domains in ISO 27001 (A.8) and NIST CSF (ID.AM)'
+      },
+      {
+        parameterName: 'Compliance Requirements',
+        relevance: 'high',
+        description: 'Standards require asset inventory and management (PCI DSS 2.4, HIPAA asset tracking)'
+      },
+      {
+        parameterName: 'Regulatory Requirements',
+        relevance: 'medium',
+        description: 'Regulations often require tracking of assets that store or process sensitive data'
+      },
+      {
+        parameterName: 'Standards & Guidelines',
+        relevance: 'medium',
+        description: 'References standards like NIST 800-53 CM controls and ISO 27001 A.8'
+      },
+      {
+        parameterName: 'Relevant ACQ Tools',
+        relevance: 'high',
+        description: 'Identifies tools for asset discovery, tracking, and management'
+      },
+      {
+        parameterName: 'Adversarial Insight (MITRE ATT&CK)',
+        relevance: 'medium',
+        description: 'Unmanaged assets are primary targets for attackers through Discovery (TA0007) tactics'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'high',
+        description: 'Asset management is a required component of ISMS frameworks; ISO 27001 requires an inventory of assets'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'Links between users and the devices they access; creates accountability for asset usage'
+      }
+    ]
+  },
+  {
+    securityParameter: 'identityAndAccessManagement',
+    description: 'Comprehensive management of digital identities, permissions, authentication, and access controls',
+    frameworkMappings: [
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'critical',
+        description: 'Core component of modern IAM; enables monitoring and analysis of identity behaviors for anomaly detection'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'critical',
+        description: 'Devices have identities that must be managed; enables enforcement of device-based access controls'
+      },
+      {
+        parameterName: 'Infrastructure Mode of Operation',
+        relevance: 'high',
+        description: 'Identity management approaches vary by infrastructure (cloud identity providers vs. on-premises directories)'
+      },
+      {
+        parameterName: 'Security Risks & Vulnerabilities',
+        relevance: 'critical',
+        description: 'Compromised identities and credential theft are primary attack vectors; improper authentication is a critical vulnerability'
+      },
+      {
+        parameterName: 'Baseline Configuration',
+        relevance: 'high',
+        description: 'Identity stores, MFA settings, and access control policies form essential security baselines'
+      },
+      {
+        parameterName: 'Security Control vs Framework',
+        relevance: 'high',
+        description: 'Maps to IAM domains in frameworks like NIST CSF (PR.AC), ISO 27001 (A.9)'
+      },
+      {
+        parameterName: 'Compliance Requirements',
+        relevance: 'high',
+        description: 'Standards mandate strong authentication and access controls (PCI DSS 8, HIPAA Security Rule)'
+      },
+      {
+        parameterName: 'Regulatory Requirements',
+        relevance: 'high',
+        description: 'Regulations focus on identity verification and authorization (GDPR, HIPAA)'
+      },
+      {
+        parameterName: 'Standards & Guidelines',
+        relevance: 'high',
+        description: 'References standards like NIST 800-63 (Digital Identity) and ISO 27001 A.9.2'
+      },
+      {
+        parameterName: 'Relevant ACQ Tools',
+        relevance: 'high',
+        description: 'Identifies tools for identity security assessment, privilege analysis, and access control testing'
+      },
+      {
+        parameterName: 'Adversarial Insight (MITRE ATT&CK)',
+        relevance: 'high',
+        description: 'Maps to Credential Access (TA0006), Privilege Escalation (TA0004), and Initial Access (TA0001) tactics'
+      },
+      {
+        parameterName: 'Information Security Management System (ISMS)',
+        relevance: 'critical',
+        description: 'Identity and access management is a cornerstone of ISMS; requires formal processes for identity lifecycle management'
       }
     ]
   }

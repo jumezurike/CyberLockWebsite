@@ -745,6 +745,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
     description: 'Comprehensive inventory management of all hardware devices in the environment including laptops, phones, IoT devices, and servers',
     securityDomainMappings: [
       {
+        securityParameter: 'identityBehaviorHygiene',
+        relevance: 'critical',
+        description: 'Strong bidirectional relationship with Identity Behavior & Hygiene; device usage and authentication are core aspects of identity behavior'
+      },
+      {
         securityParameter: 'assetManagement',
         relevance: 'critical',
         description: 'Device inventory is the foundation of asset management; tracks device lifecycle from procurement through retirement; prevents missing/unpatched devices'
@@ -804,6 +809,11 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
     sosParameter: 'Identity Behavior & Hygiene',
     description: 'Monitoring and management of user identity behaviors, authentication practices, and access patterns across users and devices',
     securityDomainMappings: [
+      {
+        securityParameter: 'deviceInventoryTracking',
+        relevance: 'critical',
+        description: 'Strong bidirectional relationship with Device Inventory Tracking; device-to-user association is crucial for proper identity governance'
+      },
       {
         securityParameter: 'identityAndAccessManagement',
         relevance: 'critical',
