@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "wouter";
-import { downloadInvestorBrief } from "@/lib/investor-brief-generator";
+import { generateInvestorBrief } from "@/lib/investor-brief-generator";
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
@@ -31,6 +31,7 @@ export default function EarlyAccess() {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedData, setSubmittedData] = useState<FormData | null>(null);
   
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -66,6 +67,7 @@ export default function EarlyAccess() {
         throw new Error(result.error || 'Failed to submit application');
       }
       
+      setSubmittedData(data);
       setSubmitted(true);
       toast({
         title: "Success!",
@@ -135,7 +137,11 @@ export default function EarlyAccess() {
                 Return to Homepage
               </Link>
               <button 
-                onClick={() => downloadInvestorBrief()} 
+                onClick={() => {
+                  if (submittedData) {
+                    generateInvestorBrief(submittedData);
+                  }
+                }} 
                 className="bg-transparent hover:bg-neutral-100 text-primary border border-primary px-6 py-3 rounded-lg font-medium"
               >
                 Download Investor Brief

@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertAssessmentSchema, insertEarlyAccessSubmissionSchema, insertRasbitaReportSchema } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
+import { initSendgrid, sendEarlyAccessNotification } from "./email-service";
 
 // Initialize Stripe with API key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -13,6 +14,9 @@ if (!process.env.STRIPE_SECRET_KEY) {
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Initialize SendGrid (optional, will warn but not fail if keys not available)
+  initSendgrid();
+  
   // API routes
   
   // Get all assessments (for a user)
@@ -189,6 +193,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const validatedData = insertEarlyAccessSubmissionSchema.parse(req.body);
       const submission = await storage.createEarlyAccessSubmission(validatedData);
+      
+      // Send email notification
+      try {
+        await sendEarlyAccessNotification({
+          fullName: validatedData.fullName,
+          email: validatedData.email,
+          company: validatedData.company,
+          phone: validatedData.phone,
+          companySize: validatedData.companySize,
+          industry: validatedData.industry,
+          interestedIn: validatedData.interestedIn,
+          investmentLevel: validatedData.investmentLevel,
+          additionalInfo: validatedData.additionalInfo
+        });
+        console.log('Email notification sent for submission ID:', submission.id);
+      } catch (emailError) {
+        console.error('Failed to send email notification:', emailError);
+        // Continue with response even if email fails
+      }
+      
       res.status(201).json({ 
         success: true, 
         message: "Your early access application has been submitted successfully", 
