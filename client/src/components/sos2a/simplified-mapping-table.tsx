@@ -10,62 +10,62 @@ export default function SimplifiedMappingTable() {
   const mappingData: MappingItem[] = [
     {
       domain: "Network Security",
-      parameters: ["Infrastructure Mode of Operation", "Baseline Configuration"],
+      parameters: ["Infrastructure Mode of Operation", "Baseline Configuration", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Covers how infrastructure is built, segmented, and monitored (e.g., secure cloud, on-prem)."
     },
     {
       domain: "Asset Management",
-      parameters: ["Infrastructure Mode of Operation", "Baseline Configuration"],
+      parameters: ["Infrastructure Mode of Operation", "Baseline Configuration", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Maintains awareness of all devices (OS, browsers, mobile, IoT) to ensure complete security coverage."
     },
     {
       domain: "Endpoint Security",
-      parameters: ["Baseline Configuration", "Security Risks & Vulnerabilities", "Infrastructure Mode of Operation"],
+      parameters: ["Baseline Configuration", "Security Risks & Vulnerabilities", "Infrastructure Mode of Operation", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Protects devices with EDR, patching, configuration management, and access controls."
     },
     {
       domain: "Access Control",
-      parameters: ["Security Risks & Vulnerabilities", "Adversarial Insight (MITRE ATT&CK)"],
+      parameters: ["Security Risks & Vulnerabilities", "Adversarial Insight (MITRE ATT&CK)", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Controls access to reduce risk of privilege misuse, phishing, lateral movement."
     },
     {
       domain: "Identity & Access Management (IAM)",
-      parameters: ["Baseline Configuration", "Security Risks & Vulnerabilities", "Adversarial Insight (MITRE ATT&CK)"],
+      parameters: ["Baseline Configuration", "Security Risks & Vulnerabilities", "Adversarial Insight (MITRE ATT&CK)", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Manages digital identities and ensures proper authentication and authorization across systems."
     },
     {
       domain: "Incident Response",
-      parameters: ["Security Risks & Vulnerabilities", "ISMS", "Adversarial Insight (MITRE ATT&CK)"],
+      parameters: ["Security Risks & Vulnerabilities", "ISMS", "Adversarial Insight (MITRE ATT&CK)", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Helps detect, respond to, and recover from cyber events; tracked under management systems."
     },
     {
       domain: "Application Security",
-      parameters: ["Security Control vs Framework", "Standards & Guidelines"],
+      parameters: ["Security Control vs Framework", "Standards & Guidelines", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Aligns secure code and vulnerability scanning with OWASP, NIST, etc."
     },
     {
       domain: "Data Protection",
-      parameters: ["Baseline Configuration", "Standards & Guidelines"],
+      parameters: ["Baseline Configuration", "Standards & Guidelines", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Enforces encryption, data classification, and storage/transmission protections."
     },
     {
       domain: "Security Awareness",
-      parameters: ["Adversarial Insight (MITRE ATT&CK)", "Information Security Management System (ISMS)"],
+      parameters: ["Adversarial Insight (MITRE ATT&CK)", "Information Security Management System (ISMS)", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Addresses social engineering and insider threats through training and governance."
     },
     {
       domain: "Security Governance",
-      parameters: ["ISMS", "Security Control vs Framework"],
+      parameters: ["ISMS", "Security Control vs Framework", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Ensures policy, leadership, and risk strategy align with control frameworks (e.g., NIST, ISO, DFARS)."
     },
     {
       domain: "Third-Party Management",
-      parameters: ["Regulatory Requirements", "Compliance Requirements"],
+      parameters: ["Regulatory Requirements", "Compliance Requirements", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Ensures vendors meet necessary laws and compliance frameworks like HIPAA, SOC 2, ISO."
     },
     {
       domain: "Compliance Management",
-      parameters: ["Compliance Requirements", "Regulatory Requirements"],
+      parameters: ["Compliance Requirements", "Regulatory Requirements", "Device Inventory Tracking", "Identity Behavior & Hygiene"],
       explanation: "Ensures controls meet HIPAA, GDPR, DFARS, CMMC, etc., and are documented and auditable."
     }
   ];
