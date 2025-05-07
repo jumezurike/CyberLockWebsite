@@ -1,9 +1,11 @@
-  {
+import { ReverseParameterMapping } from './reverse-parameter-mapping';
+
+export const deviceInventoryMapping: ReverseParameterMapping = {
     sosParameter: 'Device Inventory Tracking',
     description: 'Comprehensive inventory management of all hardware devices in the environment including laptops, phones, IoT devices, and servers',
     securityDomainMappings: [
       {
-        securityParameter: 'identityBehaviorHygiene',
+        securityParameter: 'assetManagement',
         relevance: 'critical',
         description: 'Strong synergistic relationship with Identity Behavior & Hygiene; tracks "what" while IBH tracks "who"; together they provide full asset-identity correlation'
       },
@@ -63,4 +65,4 @@
         description: 'Employees must understand device registration importance and risks of using unauthorized devices to prevent bypassing security controls'
       }
     ]
-  },
+};

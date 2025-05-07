@@ -1,9 +1,11 @@
-  {
+import { ReverseParameterMapping } from './reverse-parameter-mapping';
+
+export const identityBehaviorMapping: ReverseParameterMapping = {
     sosParameter: 'Identity Behavior & Hygiene',
     description: 'Monitoring and management of user identity behaviors, authentication practices, and access patterns across users and devices',
     securityDomainMappings: [
       {
-        securityParameter: 'deviceInventoryTracking',
+        securityParameter: 'assetManagement',
         relevance: 'critical',
         description: 'Strong synergistic relationship with Device Inventory Tracking; IBH tracks "who" while DIT tracks "what"; together they enable Zero Trust architecture'
       },
@@ -63,4 +65,4 @@
         description: 'Applications must enforce identity hygiene requirements like MFA and proper session management'
       }
     ]
-  }
+};
