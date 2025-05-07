@@ -114,6 +114,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Access control is a core component of ISMS frameworks; policies for managing access rights and privileges are required'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'high',
+        description: 'Device identity is a critical factor in access decisions and Zero Trust architecture'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'critical',
+        description: 'Identity hygiene directly impacts access control effectiveness through proper credential management and authorization'
       }
     ]
   },
@@ -170,6 +180,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'IAM is a fundamental component of ISMS; requires formal processes for identity lifecycle management'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'critical',
+        description: 'Devices have identities (certificates, MAC/IP, device IDs) that must be managed; enables enforcement of least privilege'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'critical',
+        description: 'Identity behavior analytics is the core of modern IAM for detecting anomalies and ensuring proper user authentication'
       }
     ]
   },
@@ -226,6 +246,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Data protection is a cornerstone of ISMS programs; requires defined processes for handling, storing, and protecting sensitive information'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'high',
+        description: 'Data protection is only possible when all devices storing or processing sensitive data are inventoried and managed'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'User behavior patterns can identify potential data exfiltration and improper data handling practices'
       }
     ]
   },
@@ -282,6 +312,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Security awareness is a required component of ISMS; ISO 27001 specifically mandates awareness training'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'medium',
+        description: 'Security awareness must include guidance on authorized devices and proper device usage'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'Security awareness directly shapes identity hygiene practices like password management and phishing awareness'
       }
     ]
   },
