@@ -227,21 +227,25 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
             </div>
           </div>
           
-          {/* Main tabs for the 10 gap analysis parameters */}
-          <Tabs defaultValue="accessControl" className="w-full">
-            <TabsList className="grid grid-cols-5 mb-4">
-              <TabsTrigger value="accessControl">Access Control</TabsTrigger>
-              <TabsTrigger value="dataProtection">Data Protection</TabsTrigger>
-              <TabsTrigger value="securityAwareness">Security Awareness</TabsTrigger>
-              <TabsTrigger value="incidentResponse">Incident Response</TabsTrigger>
-              <TabsTrigger value="networkSecurity">Network Security</TabsTrigger>
+          {/* Main tabs for the 12 SOS²A parameters */}
+          <Tabs defaultValue="infrastructureMode" className="w-full">
+            <TabsList className="grid grid-cols-4 mb-4">
+              <TabsTrigger value="infrastructureMode">Infrastructure Mode of Operation</TabsTrigger>
+              <TabsTrigger value="securityRisks">Security Risks & Vulnerabilities</TabsTrigger>
+              <TabsTrigger value="baselineConfig">Baseline Configuration</TabsTrigger>
+              <TabsTrigger value="securityControlFramework">Security Control vs Framework</TabsTrigger>
             </TabsList>
-            <TabsList className="grid grid-cols-5 mb-4">
-              <TabsTrigger value="applicationSecurity">Application Security</TabsTrigger>
-              <TabsTrigger value="thirdPartyManagement">Third Party Management</TabsTrigger>
-              <TabsTrigger value="assetManagement">Asset Management</TabsTrigger>
-              <TabsTrigger value="securityGovernance">Security Governance</TabsTrigger>
-              <TabsTrigger value="complianceManagement">Compliance Management</TabsTrigger>
+            <TabsList className="grid grid-cols-4 mb-4">
+              <TabsTrigger value="complianceRequirements">Compliance Requirements</TabsTrigger>
+              <TabsTrigger value="regulatoryRequirements">Regulatory Requirements</TabsTrigger>
+              <TabsTrigger value="standardsGuidelines">Standards & Guidelines</TabsTrigger>
+              <TabsTrigger value="relevantAcqTools">Relevant ACQ Tools</TabsTrigger>
+            </TabsList>
+            <TabsList className="grid grid-cols-4 mb-4">
+              <TabsTrigger value="adversarialInsight">Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
+              <TabsTrigger value="isms">Information Security Management System (ISMS)</TabsTrigger>
+              <TabsTrigger value="deviceInventory">Device Inventory Tracking</TabsTrigger>
+              <TabsTrigger value="identityBehavior">Identity Behavior & Hygiene</TabsTrigger>
             </TabsList>
             
             {/* Access Control Tab */}
