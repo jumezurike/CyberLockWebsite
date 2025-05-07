@@ -84,7 +84,7 @@ export default function SimplifiedMappingTable() {
         <tbody>
           {mappingData.map((item, index) => (
             <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : ''}>
-              <td className="px-4 py-2 border font-medium">{index + 1}. {item.domain}</td>
+              <td className="px-4 py-2 border font-medium">{item.domain}</td>
               <td className="px-4 py-2 border">
                 {item.parameters.map((param, i) => (
                   <div key={i} className="mb-1 last:mb-0">{param}</div>
