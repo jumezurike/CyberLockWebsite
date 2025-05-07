@@ -19,8 +19,8 @@
       },
       {
         securityParameter: 'identityAndAccessManagement',
-        relevance: 'high',
-        description: 'Devices have identities (certificates, MAC/IP, device IDs) that must be managed; enables enforcement of least privilege based on device trustworthiness'
+        relevance: 'critical',
+        description: 'Devices have identities (certificates, MAC/IP, device IDs) that must be managed; strongly interrelates with Identity Behavior & Hygiene; enables enforcement of least privilege'
       },
       {
         securityParameter: 'complianceManagement',
