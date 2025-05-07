@@ -659,4 +659,84 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
       }
     ]
   }
-];
+,  {
+    sosParameter: 'Device Inventory Tracking',
+    description: 'Comprehensive inventory management of all hardware devices in the environment',
+    securityDomainMappings: [
+      {
+        securityParameter: 'assetManagement',
+        relevance: 'critical',
+        description: 'Device inventory is the foundation of asset management; you cannot secure what you do not know exists'
+      },
+      {
+        securityParameter: 'networkSecurity',
+        relevance: 'high',
+        description: 'Network security depends on knowing all connected devices and their associated risks'
+      },
+      {
+        securityParameter: 'complianceManagement',
+        relevance: 'high',
+        description: 'Many compliance frameworks require complete device inventories (NIST, ISO, HIPAA)'
+      },
+      {
+        securityParameter: 'securityGovernance',
+        relevance: 'high',
+        description: 'Governance requires visibility into all assets and their roles in the organization'
+      },
+      {
+        securityParameter: 'dataProtection',
+        relevance: 'medium',
+        description: 'Understanding where organizational data resides requires knowledge of all devices'
+      },
+      {
+        securityParameter: 'accessControl',
+        relevance: 'medium',
+        description: 'Device-based access control requires complete device inventory and tracking'
+      },
+      {
+        securityParameter: 'incidentResponse',
+        relevance: 'high',
+        description: 'Effective incident response requires knowing all devices potentially affected by a security incident'
+      }
+    ]
+  },  {
+    sosParameter: 'Identity Behavior & Hygiene',
+    description: 'Monitoring and management of user identity behaviors, authentication practices, and access patterns',
+    securityDomainMappings: [
+      {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'critical',
+        description: 'Identity behavior analytics is a core component of modern IAM for anomaly detection'
+      },
+      {
+        securityParameter: 'accessControl',
+        relevance: 'high',
+        description: 'Identity hygiene directly impacts access control effectiveness through proper credential management'
+      },
+      {
+        securityParameter: 'securityAwareness',
+        relevance: 'high',
+        description: 'User behavior reflects security awareness; training affects identity hygiene practices'
+      },
+      {
+        securityParameter: 'incidentResponse',
+        relevance: 'high',
+        description: 'Identity anomaly detection is a key trigger for incident response; behavior analytics identify compromises'
+      },
+      {
+        securityParameter: 'dataProtection',
+        relevance: 'medium',
+        description: 'Identity hygiene impacts data access control and potential for unauthorized data exposure'
+      },
+      {
+        securityParameter: 'securityGovernance',
+        relevance: 'medium',
+        description: 'Governance includes identity lifecycle management policies and monitoring practices'
+      },
+      {
+        securityParameter: 'complianceManagement',
+        relevance: 'medium',
+        description: 'Compliance frameworks increasingly require monitoring of identity behaviors (NIST, ISO)'
+      }
+    ]
+  }];
