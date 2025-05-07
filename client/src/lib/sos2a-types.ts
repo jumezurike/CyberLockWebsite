@@ -347,6 +347,109 @@ export interface MatrixItem {
     gaps: string[];
   };
   
+  // 12 SOS²A Parameters
+  infrastructureMode?: {
+    cloud?: boolean;
+    hybrid?: boolean;
+    onPremises?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  securityRisks?: {
+    assessmentPerformed?: boolean;
+    vulnerabilitiesDocumented?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  baselineConfig?: {
+    documented?: boolean;
+    reviewed?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  securityControlFramework?: {
+    nist?: boolean;
+    iso27001?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  complianceRequirements?: {
+    hipaa?: boolean;
+    gdpr?: boolean;
+    pci?: boolean;
+    cmmc?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  // Rename this to avoid conflict with the existing property
+  regulatoryReqs?: {
+    dfars?: boolean;
+    nistsp800?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  standardsGuidelines?: {
+    fips?: boolean;
+    fedramp?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  relevantAcqTools?: {
+    sam?: boolean;
+    sbir?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  adversarialInsight?: {
+    mitreMapped?: boolean;
+    threatModeling?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  informationSecurityManagementSystem?: {
+    ismsImplemented?: boolean;
+    iso27001Compliant?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  deviceInventoryTracking?: {
+    inventorySystem?: boolean;
+    updatedRegularly?: boolean;
+    assetTagging?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
+  identityBehaviorHygiene?: {
+    userAwarnessTraining?: boolean;
+    passwordPolicy?: boolean;
+    mfaImplemented?: boolean;
+    implementationLevel?: number;
+    gaps?: string[];
+    notes?: string;
+  };
+  
   // 10 Security Parameters for Gap Analysis
   accessControl: {
     userAccessManagement: boolean;

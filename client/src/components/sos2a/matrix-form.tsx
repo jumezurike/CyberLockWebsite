@@ -248,6 +248,708 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
               <TabsTrigger value="identityBehavior">Identity Behavior & Hygiene</TabsTrigger>
             </TabsList>
             
+            {/* Infrastructure Mode of Operation Tab */}
+            <TabsContent value="infrastructureMode">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Infrastructure Mode of Operation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Infrastructure Type</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="infra-cloud" 
+                            checked={currentItem.infrastructureMode?.cloud || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                infrastructureMode: {
+                                  ...currentItem.infrastructureMode || {},
+                                  cloud: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="infra-cloud">Cloud-Based</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="infra-hybrid" 
+                            checked={currentItem.infrastructureMode?.hybrid || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                infrastructureMode: {
+                                  ...currentItem.infrastructureMode || {},
+                                  hybrid: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="infra-hybrid">Hybrid</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="infra-onprem" 
+                            checked={currentItem.infrastructureMode?.onPremises || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                infrastructureMode: {
+                                  ...currentItem.infrastructureMode || {},
+                                  onPremises: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="infra-onprem">On-Premises</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Security Risks & Vulnerabilities Tab */}
+            <TabsContent value="securityRisks">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Security Risks & Vulnerabilities</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Risk Assessment</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="risk-assessment-performed" 
+                            checked={currentItem.securityRisks?.assessmentPerformed || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityRisks: {
+                                  ...currentItem.securityRisks || {},
+                                  assessmentPerformed: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="risk-assessment-performed">Risk Assessment Performed</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="risk-vulnerabilities-documented" 
+                            checked={currentItem.securityRisks?.vulnerabilitiesDocumented || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityRisks: {
+                                  ...currentItem.securityRisks || {},
+                                  vulnerabilitiesDocumented: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="risk-vulnerabilities-documented">Vulnerabilities Documented</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Baseline Configuration Tab */}
+            <TabsContent value="baselineConfig">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Baseline Configuration</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Baselines</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="baseline-documented" 
+                            checked={currentItem.baselineConfig?.documented || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                baselineConfig: {
+                                  ...currentItem.baselineConfig || {},
+                                  documented: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="baseline-documented">Documented Baselines</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="baseline-reviewed" 
+                            checked={currentItem.baselineConfig?.reviewed || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                baselineConfig: {
+                                  ...currentItem.baselineConfig || {},
+                                  reviewed: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="baseline-reviewed">Regularly Reviewed</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Security Control vs Framework Tab */}
+            <TabsContent value="securityControlFramework">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Security Control vs Framework</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Framework Alignment</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="framework-nist" 
+                            checked={currentItem.securityControlFramework?.nist || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityControlFramework: {
+                                  ...currentItem.securityControlFramework || {},
+                                  nist: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="framework-nist">NIST Framework</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="framework-iso" 
+                            checked={currentItem.securityControlFramework?.iso27001 || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                securityControlFramework: {
+                                  ...currentItem.securityControlFramework || {},
+                                  iso27001: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="framework-iso">ISO 27001</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Compliance Requirements Tab */}
+            <TabsContent value="complianceRequirements">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Compliance Requirements</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Industry Specific</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="compliance-hipaa" 
+                            checked={currentItem.complianceRequirements?.hipaa || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceRequirements: {
+                                  ...currentItem.complianceRequirements || {},
+                                  hipaa: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="compliance-hipaa">HIPAA</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="compliance-gdpr" 
+                            checked={currentItem.complianceRequirements?.gdpr || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceRequirements: {
+                                  ...currentItem.complianceRequirements || {},
+                                  gdpr: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="compliance-gdpr">GDPR</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="compliance-pci" 
+                            checked={currentItem.complianceRequirements?.pci || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceRequirements: {
+                                  ...currentItem.complianceRequirements || {},
+                                  pci: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="compliance-pci">PCI DSS</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="compliance-cmmc" 
+                            checked={currentItem.complianceRequirements?.cmmc || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                complianceRequirements: {
+                                  ...currentItem.complianceRequirements || {},
+                                  cmmc: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="compliance-cmmc">CMMC</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Regulatory Requirements Tab */}
+            <TabsContent value="regulatoryRequirements">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Regulatory Requirements</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Regulations</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="reg-dfars" 
+                            checked={currentItem.regulatoryReqs?.dfars || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                regulatoryReqs: {
+                                  ...currentItem.regulatoryReqs || {},
+                                  dfars: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="reg-dfars">DFARS</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="reg-nistsp800" 
+                            checked={currentItem.regulatoryReqs?.nistsp800 || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                regulatoryReqs: {
+                                  ...currentItem.regulatoryReqs || {},
+                                  nistsp800: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="reg-nistsp800">NIST SP 800-171</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Standards & Guidelines Tab */}
+            <TabsContent value="standardsGuidelines">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Standards & Guidelines</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Adopted Standards</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="std-fips" 
+                            checked={currentItem.standardsGuidelines?.fips || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                standardsGuidelines: {
+                                  ...currentItem.standardsGuidelines || {},
+                                  fips: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="std-fips">FIPS</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="std-fedramp" 
+                            checked={currentItem.standardsGuidelines?.fedramp || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                standardsGuidelines: {
+                                  ...currentItem.standardsGuidelines || {},
+                                  fedramp: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="std-fedramp">FedRAMP</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Relevant ACQ Tools Tab */}
+            <TabsContent value="relevantAcqTools">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Relevant ACQ Tools</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Acquisition Tools</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="acq-sam" 
+                            checked={currentItem.relevantAcqTools?.sam || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                relevantAcqTools: {
+                                  ...currentItem.relevantAcqTools || {},
+                                  sam: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="acq-sam">SAM.gov Registration</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="acq-sbir" 
+                            checked={currentItem.relevantAcqTools?.sbir || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                relevantAcqTools: {
+                                  ...currentItem.relevantAcqTools || {},
+                                  sbir: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="acq-sbir">SBIR/STTR</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Adversarial Insight (MITRE ATT&CK) Tab */}
+            <TabsContent value="adversarialInsight">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Adversarial Insight (MITRE ATT&CK)</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Threat Intelligence</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="mitre-mapped" 
+                            checked={currentItem.adversarialInsight?.mitreMapped || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                adversarialInsight: {
+                                  ...currentItem.adversarialInsight || {},
+                                  mitreMapped: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="mitre-mapped">MITRE ATT&CK Mapped</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="threat-modeling" 
+                            checked={currentItem.adversarialInsight?.threatModeling || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                adversarialInsight: {
+                                  ...currentItem.adversarialInsight || {},
+                                  threatModeling: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="threat-modeling">Threat Modeling</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Information Security Management System (ISMS) Tab */}
+            <TabsContent value="isms">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Information Security Management System (ISMS)</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">ISMS Implementation</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="isms-implemented" 
+                            checked={currentItem.informationSecurityManagementSystem?.ismsImplemented || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                informationSecurityManagementSystem: {
+                                  ...currentItem.informationSecurityManagementSystem || {},
+                                  ismsImplemented: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="isms-implemented">ISMS Implemented</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="iso-compliant" 
+                            checked={currentItem.informationSecurityManagementSystem?.iso27001Compliant || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                informationSecurityManagementSystem: {
+                                  ...currentItem.informationSecurityManagementSystem || {},
+                                  iso27001Compliant: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="iso-compliant">ISO 27001 Compliant</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Device Inventory Tracking Tab */}
+            <TabsContent value="deviceInventory">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Device Inventory Tracking</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Inventory Management</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="inventory-system" 
+                            checked={currentItem.deviceInventoryTracking?.inventorySystem || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                deviceInventoryTracking: {
+                                  ...currentItem.deviceInventoryTracking || {},
+                                  inventorySystem: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="inventory-system">Inventory System</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="updated-regularly" 
+                            checked={currentItem.deviceInventoryTracking?.updatedRegularly || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                deviceInventoryTracking: {
+                                  ...currentItem.deviceInventoryTracking || {},
+                                  updatedRegularly: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="updated-regularly">Updated Regularly</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="asset-tagging" 
+                            checked={currentItem.deviceInventoryTracking?.assetTagging || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                deviceInventoryTracking: {
+                                  ...currentItem.deviceInventoryTracking || {},
+                                  assetTagging: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="asset-tagging">Asset Tagging</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Identity Behavior & Hygiene Tab */}
+            <TabsContent value="identityBehavior">
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Identity Behavior & Hygiene</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Identity Security</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="user-awareness" 
+                            checked={currentItem.identityBehaviorHygiene?.userAwarnessTraining || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                identityBehaviorHygiene: {
+                                  ...currentItem.identityBehaviorHygiene || {},
+                                  userAwarnessTraining: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="user-awareness">User Awareness Training</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="password-policies" 
+                            checked={currentItem.identityBehaviorHygiene?.passwordPolicy || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                identityBehaviorHygiene: {
+                                  ...currentItem.identityBehaviorHygiene || {},
+                                  passwordPolicy: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="password-policies">Password Policies</Label>
+                        </div>
+                        
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="mfa-implemented" 
+                            checked={currentItem.identityBehaviorHygiene?.mfaImplemented || false}
+                            onCheckedChange={(checked) => {
+                              const updatedItem = { 
+                                ...currentItem, 
+                                identityBehaviorHygiene: {
+                                  ...currentItem.identityBehaviorHygiene || {},
+                                  mfaImplemented: checked
+                                }
+                              };
+                              updateMatrixItem(currentInfraIndex, updatedItem);
+                            }}
+                          />
+                          <Label htmlFor="mfa-implemented">MFA Implemented</Label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
             {/* Access Control Tab */}
             <TabsContent value="accessControl">
               <div className="space-y-6">
