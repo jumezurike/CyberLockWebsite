@@ -78,7 +78,41 @@ export interface DeviceInventoryTracking {
 }
 
 export interface IdentityBehaviorHygiene {
-  // Will add once you provide the content for this section
+  // 1. Authentication Practices
+  passwordPolicyCompliance?: boolean;
+  passwordPolicyDetails?: string;
+  mfaStatus?: boolean;
+  mfaTypes?: string[];
+  biometricAuthentication?: boolean;
+  biometricTypes?: string[];
+  
+  // 2. Access Behavior
+  loginPatterns?: string;
+  remoteAccessFrequency?: string;
+  sessionDuration?: string;
+  abnormalAccessDetection?: boolean;
+  locationBasedAccess?: boolean;
+  
+  // 3. Identity Protection
+  identityProtectionTraining?: boolean;
+  trainingCompletionDate?: string;
+  phishingAwarenessLevel?: string;
+  securityIncidentHistory?: boolean;
+  incidentDetails?: string;
+  
+  // 4. Privileged Access Management
+  privilegedAccountInventory?: boolean;
+  justInTimeAccess?: boolean;
+  privilegeEscalationControls?: boolean;
+  adminAccountReview?: string;
+  separationOfDuties?: boolean;
+  
+  // 5. Identity Lifecycle Management
+  onboardingStatus?: string;
+  offboardingProcess?: boolean;
+  accessReviewFrequency?: string;
+  roleChanges?: boolean;
+  accountDormancyMonitoring?: boolean;
 }
 
 export interface Sos2aFormData {
