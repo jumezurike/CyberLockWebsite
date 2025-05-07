@@ -378,6 +378,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Incident management is a required process within ISMS; ISO 27001 A.16 mandates incident response procedures'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'high',
+        description: 'Comprehensive device inventory is essential for effective incident scoping, containment, and forensics'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'Identity behavior analytics enable detection of abnormal activities that indicate potential security incidents'
       }
     ]
   },
@@ -434,6 +444,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Network security is a core component of ISMS frameworks; ISO 27001 A.13 mandates network security controls'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'critical',
+        description: 'Complete network device inventory is essential for network security; unknown devices create unmanaged access points'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'Identity behavior patterns on networks help identify anomalous activities and potential lateral movement'
       }
     ]
   },
@@ -490,6 +510,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Secure systems development and acquisition is a core ISMS domain in ISO 27001 A.14'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'medium',
+        description: 'Application security requires tracking all devices that access or host applications to ensure proper protection'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'Identity behavior patterns are critical for detecting compromised accounts in web applications'
       }
     ]
   },
@@ -546,6 +576,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Supplier relationships are a specific control domain in ISO 27001 A.15, requiring formal supplier security policies'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'high',
+        description: 'Device inventory must include third-party managed devices accessing organizational systems'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'Third-party access must be monitored for abnormal identity behaviors indicative of compromised credentials'
       }
     ]
   },
@@ -602,6 +642,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Asset management is a fundamental ISMS requirement in ISO 27001 A.8, covering inventory and classification'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'critical',
+        description: 'Device inventory is the foundation of asset management; complete and accurate device inventory essential'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'Identity behaviors applied to asset usage identify suspicious access to critical assets'
       }
     ]
   },
@@ -658,6 +708,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'critical',
         description: 'Security governance is the foundation of ISMS; ISO 27001 clauses 4-10 define the core governance mechanisms'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'high',
+        description: 'Security governance must define policies for device inventory and management'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'Governance frameworks must establish policies for identity management and acceptable use'
       }
     ]
   },
@@ -714,6 +774,16 @@ export const securityParameterMappings: ParameterMapping[] = [
         parameterName: 'Information Security Management System (ISMS)',
         relevance: 'high',
         description: 'Compliance monitoring and evaluation is a core component of ISMS; ISO 27001 requires internal audits and management reviews'
+      },
+      {
+        parameterName: 'Device Inventory Tracking',
+        relevance: 'high',
+        description: 'Many compliance frameworks require accurate device inventory for demonstrating control over systems within scope'
+      },
+      {
+        parameterName: 'Identity Behavior & Hygiene',
+        relevance: 'high',
+        description: 'Identity management controls are essential compliance requirements in most regulatory frameworks'
       }
     ]
   },
