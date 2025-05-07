@@ -248,100 +248,156 @@ export default function IdentityManagementPage() {
         </TabsContent>
         
         <TabsContent value="identities">
-          <Card>
-            <CardHeader>
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div>
-                  <CardTitle>Identity Registry</CardTitle>
-                  <CardDescription>
-                    Manage all identity types in your organization through our DNA-protected registry
-                    <Badge variant="outline" className="ml-2 border-blue-500 text-blue-600">
-                      Government ID Verified
-                    </Badge>
-                  </CardDescription>
-                </div>
-                <div className="flex gap-2">
-                  <div className="relative">
-                    <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      placeholder="Search identities..."
-                      className="pl-8"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
+            <Card className="md:col-span-3">
+              <CardHeader>
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                  <div>
+                    <CardTitle>Identity Registry</CardTitle>
+                    <CardDescription>
+                      Manage all identity types in your organization through our DNA-protected registry
+                      <Badge variant="outline" className="ml-2 border-blue-500 text-blue-600">
+                        Government ID Verified
+                      </Badge>
+                    </CardDescription>
                   </div>
-                  <Button variant="outline">
-                    <Filter className="h-4 w-4 mr-2" />
-                    Filter
-                  </Button>
-                  <Button>
-                    <UserPlus className="h-4 w-4 mr-2" />
-                    Add New
-                  </Button>
+                  <div className="flex gap-2">
+                    <div className="relative">
+                      <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        placeholder="Search identities..."
+                        className="pl-8"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    </div>
+                    <Button variant="outline">
+                      <Filter className="h-4 w-4 mr-2" />
+                      Filter
+                    </Button>
+                    <Button>
+                      <UserPlus className="h-4 w-4 mr-2" />
+                      Add New
+                    </Button>
+                  </div>
                 </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr className="border-b">
-                      <th className="text-left py-3 px-4">ID</th>
-                      <th className="text-left py-3 px-4">Name</th>
-                      <th className="text-left py-3 px-4">Type</th>
-                      <th className="text-left py-3 px-4">Department</th>
-                      <th className="text-left py-3 px-4">Access Level</th>
-                      <th className="text-left py-3 px-4">Risk Level</th>
-                      <th className="text-left py-3 px-4">MFA</th>
-                      <th className="text-left py-3 px-4">Last Active</th>
-                      <th className="text-left py-3 px-4">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredIdentities.length > 0 ? (
-                      filteredIdentities.map((identity) => (
-                        <tr key={identity.id} className="border-b hover:bg-gray-50">
-                          <td className="py-3 px-4 font-medium">{identity.id}</td>
-                          <td className="py-3 px-4">
-                            <div className="flex flex-col">
-                              <span>{identity.name}</span>
-                              <span className="text-sm text-gray-500">{identity.email}</span>
-                            </div>
-                          </td>
-                          <td className="py-3 px-4">{getIdentityTypeBadge(identity.identityType)}</td>
-                          <td className="py-3 px-4">{identity.department}</td>
-                          <td className="py-3 px-4">{identity.accessLevel}</td>
-                          <td className="py-3 px-4">{getRiskLevelBadge(identity.riskLevel)}</td>
-                          <td className="py-3 px-4">
-                            {identity.mfaEnabled ? (
-                              <Badge variant="outline" className="border-green-500 text-green-700">Enabled</Badge>
-                            ) : (
-                              <Badge variant="outline" className="border-red-500 text-red-700">Disabled</Badge>
-                            )}
-                          </td>
-                          <td className="py-3 px-4">{identity.lastActive}</td>
-                          <td className="py-3 px-4">
-                            <div className="flex space-x-2">
-                              <Button variant="ghost" size="sm">
-                                <User className="h-4 w-4" />
-                              </Button>
-                              <Button variant="ghost" size="sm">Edit</Button>
-                            </div>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr className="border-b">
+                        <th className="text-left py-3 px-4">ID</th>
+                        <th className="text-left py-3 px-4">Name</th>
+                        <th className="text-left py-3 px-4">Type</th>
+                        <th className="text-left py-3 px-4">Department</th>
+                        <th className="text-left py-3 px-4">Access Level</th>
+                        <th className="text-left py-3 px-4">Risk Level</th>
+                        <th className="text-left py-3 px-4">MFA</th>
+                        <th className="text-left py-3 px-4">Last Active</th>
+                        <th className="text-left py-3 px-4">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredIdentities.length > 0 ? (
+                        filteredIdentities.map((identity) => (
+                          <tr key={identity.id} className="border-b hover:bg-gray-50">
+                            <td className="py-3 px-4 font-medium">{identity.id}</td>
+                            <td className="py-3 px-4">
+                              <div className="flex flex-col">
+                                <span>{identity.name}</span>
+                                <span className="text-sm text-gray-500">{identity.email}</span>
+                              </div>
+                            </td>
+                            <td className="py-3 px-4">{getIdentityTypeBadge(identity.identityType)}</td>
+                            <td className="py-3 px-4">{identity.department}</td>
+                            <td className="py-3 px-4">{identity.accessLevel}</td>
+                            <td className="py-3 px-4">{getRiskLevelBadge(identity.riskLevel)}</td>
+                            <td className="py-3 px-4">
+                              {identity.mfaEnabled ? (
+                                <Badge variant="outline" className="border-green-500 text-green-700">Enabled</Badge>
+                              ) : (
+                                <Badge variant="outline" className="border-red-500 text-red-700">Disabled</Badge>
+                              )}
+                            </td>
+                            <td className="py-3 px-4">{identity.lastActive}</td>
+                            <td className="py-3 px-4">
+                              <div className="flex space-x-2">
+                                <Button variant="ghost" size="sm">
+                                  <User className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="sm">Edit</Button>
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr>
+                          <td colSpan={9} className="py-4 text-center text-gray-500">
+                            No identities found matching your search
                           </td>
                         </tr>
-                      ))
-                    ) : (
-                      <tr>
-                        <td colSpan={9} className="py-4 text-center text-gray-500">
-                          No identities found matching your search
-                        </td>
-                      </tr>
-                    )}
-                  </tbody>
-                </table>
-              </div>
-            </CardContent>
-          </Card>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+            
+            {/* Selected identity profile panel */}
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg">Selected Profile</CardTitle>
+                <CardDescription>
+                  Secure verification for John Smith
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col items-center">
+                  <SecureProfileImage 
+                    userId="EMP001"
+                    userName="John Smith"
+                  />
+                  
+                  <div className="w-full mt-6">
+                    <div className="flex justify-between text-sm py-2 border-b">
+                      <span className="text-gray-500">ID:</span>
+                      <span className="font-medium">EMP001</span>
+                    </div>
+                    <div className="flex justify-between text-sm py-2 border-b">
+                      <span className="text-gray-500">Role:</span>
+                      <span className="font-medium">IT Manager</span>
+                    </div>
+                    <div className="flex justify-between text-sm py-2 border-b">
+                      <span className="text-gray-500">Access Level:</span>
+                      <span className="font-medium">Privileged</span>
+                    </div>
+                    <div className="flex justify-between text-sm py-2 border-b">
+                      <span className="text-gray-500">Risk Level:</span>
+                      <span className="font-medium text-amber-600">Medium</span>
+                    </div>
+                    
+                    <Button 
+                      variant="outline" 
+                      className="w-full mt-4"
+                      onClick={() => alert('This would download the secured profile image with embedded tracking data')}
+                    >
+                      <Download className="h-4 w-4 mr-2" />
+                      Download Secured Image
+                    </Button>
+                    
+                    <div className="mt-4 bg-blue-50 p-3 rounded-md border border-blue-200">
+                      <p className="text-xs text-blue-700">
+                        This image contains embedded security data using steganography. When shared, it allows tracking of image distribution while maintaining visual quality.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <DataNucleusAggregate />
         </TabsContent>
         
         <TabsContent value="import">
