@@ -271,7 +271,7 @@ export default function PricingSection() {
         { id: "monitoring", label: "Continuous Monitoring & Incident Response", price: "$65/device/month" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$100/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" },
-        { id: "admin", label: "Administrative and maintenance fees", price: "$250" }
+        { id: "admin", label: "Administrative and maintenance fees", price: "$350" }
       ]
     }
   ];
