@@ -253,9 +253,9 @@ export default function IdentityManagementPage() {
               <CardHeader>
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <CardTitle>Identity Registry</CardTitle>
+                    <CardTitle>Digital Data Nucleic Authority (DDNA)</CardTitle>
                     <CardDescription>
-                      Manage all identity types in your organization through our DNA-protected registry
+                      Central repository for DNA components that create intermediate identity representation
                       <Badge variant="outline" className="ml-2 border-blue-500 text-blue-600">
                         Government ID Verified
                       </Badge>
@@ -347,9 +347,9 @@ export default function IdentityManagementPage() {
             {/* Selected identity profile panel */}
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-lg">Selected Profile</CardTitle>
+                <CardTitle className="text-lg">DNA Component Profile</CardTitle>
                 <CardDescription>
-                  Secure verification for John Smith
+                  Advanced authentication factors for John Smith
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -361,12 +361,12 @@ export default function IdentityManagementPage() {
                   
                   <div className="w-full mt-6">
                     <div className="flex justify-between text-sm py-2 border-b">
-                      <span className="text-gray-500">ID:</span>
+                      <span className="text-gray-500">Identity ID:</span>
                       <span className="font-medium">EMP001</span>
                     </div>
                     <div className="flex justify-between text-sm py-2 border-b">
-                      <span className="text-gray-500">Role:</span>
-                      <span className="font-medium">IT Manager</span>
+                      <span className="text-gray-500">Factor Type:</span>
+                      <span className="font-medium">What You Are</span>
                     </div>
                     <div className="flex justify-between text-sm py-2 border-b">
                       <span className="text-gray-500">Access Level:</span>
@@ -375,6 +375,14 @@ export default function IdentityManagementPage() {
                     <div className="flex justify-between text-sm py-2 border-b">
                       <span className="text-gray-500">Risk Level:</span>
                       <span className="font-medium text-amber-600">Medium</span>
+                    </div>
+                    <div className="flex justify-between text-sm py-2 border-b">
+                      <span className="text-gray-500">Enabled Auth Factors:</span>
+                      <div className="flex gap-1">
+                        <Badge variant="outline" className="border-blue-500 text-blue-700">What You Are</Badge>
+                        <Badge variant="outline" className="border-green-500 text-green-700">What You Have</Badge>
+                        <Badge variant="outline" className="border-purple-500 text-purple-700">What You Know</Badge>
+                      </div>
                     </div>
                     
                     <Button 
@@ -388,7 +396,7 @@ export default function IdentityManagementPage() {
                     
                     <div className="mt-4 bg-blue-50 p-3 rounded-md border border-blue-200">
                       <p className="text-xs text-blue-700">
-                        This image contains embedded security data using steganography. When shared, it allows tracking of image distribution while maintaining visual quality.
+                        This image contains encrypted DNA components using steganography. When shared, it creates an intermediate identity representation for tracking while maintaining visual quality.
                       </p>
                     </div>
                   </div>
@@ -460,7 +468,7 @@ export default function IdentityManagementPage() {
               <CardHeader>
                 <CardTitle>Export Identities</CardTitle>
                 <CardDescription>
-                  Export your identity registry to a CSV file for backup or analysis.
+                  Export your DDNA repository data to a CSV file for backup or analysis.
                 </CardDescription>
               </CardHeader>
               <CardContent>
