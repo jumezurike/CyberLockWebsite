@@ -86,7 +86,10 @@ export default function IdentityManagementPage() {
       accessLevel: 'limited',
       riskLevel: 'high',
       mfaEnabled: true,
-      lastActive: '2025-05-06'
+      lastActive: '2025-05-06',
+      tokenId: 'pgw-api-c472e89a31b5',
+      sourceSystem: 'Payment Processing Platform',
+      contactOwner: 'Sarah Johnson'
     },
     {
       id: 'VEN001',
@@ -397,6 +400,29 @@ export default function IdentityManagementPage() {
                       </div>
                     </div>
                     
+                    {/* Machine/API-specific details section */}
+                    <div className="mt-4 bg-gray-50 p-3 rounded-md">
+                      <h4 className="font-medium mb-2 text-sm">Machine/API Identifiers</h4>
+                      <div className="space-y-2 text-xs">
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">IMEI/UUID:</span>
+                          <span className="font-mono">490154203237518</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Serial Number:</span>
+                          <span className="font-mono">SVR2025-BK-328</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">UID:</span>
+                          <span className="font-mono text-xs">a8f2e9d1-c6b7-4e5f-9a3b-2d1c8e7f6a5b</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-500">Contact Owner:</span>
+                          <span>John Smith</span>
+                        </div>
+                      </div>
+                    </div>
+                    
                     <Button 
                       variant="outline" 
                       className="w-full mt-4"
@@ -462,8 +488,8 @@ export default function IdentityManagementPage() {
                       <li>First row must contain column headers</li>
                       <li>User IDs must be unique</li>
                       <li>Required fields: User ID, First Name, Last Name, Email, Identity Type</li>
-                      <li>For machine identities, provide: contact owner, IMEI, serial number, UID</li>
-                      <li>For API identities, include: owner, UUID/token ID, source system</li>
+                      <li>For machine identities, provide: contact owner, IMEI, serial number, and unique identifier (UID)</li>
+                      <li>For API identities, include: contact owner, token ID, and source system information</li>
                       <li>For human identities, government ID fields are required for DNA integration</li>
                       <li>Government ID information will be validated during import</li>
                     </ul>
