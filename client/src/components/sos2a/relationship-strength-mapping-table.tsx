@@ -48,7 +48,7 @@ export default function RelationshipStrengthMappingTable() {
       explanation: "Establishes the overall security posture including NIST 800-171, DFARS, and HIPAA requirements."
     },
     {
-      domain: "Identity and Access Management",
+      domain: "Identity & Access Management (IAM)",
       parameters: [
         { name: "Identity Behavior & Hygiene", strength: 'High' },
         { name: "Device Inventory Tracking", strength: 'High' },
@@ -303,7 +303,7 @@ export function ReverseRelationshipStrengthMappingTable() {
     {
       parameter: "Device Inventory Tracking",
       domains: [
-        { name: "Identity and Access Management", strength: 'High' },
+        { name: "Identity & Access Management (IAM)", strength: 'High' },
         { name: "Asset Management", strength: 'High' },
         { name: "Endpoint Security", strength: 'High' },
         { name: "Network Security", strength: 'Medium' },
@@ -314,7 +314,7 @@ export function ReverseRelationshipStrengthMappingTable() {
     {
       parameter: "Identity Behavior & Hygiene",
       domains: [
-        { name: "Identity and Access Management", strength: 'High' },
+        { name: "Identity & Access Management (IAM)", strength: 'High' },
         { name: "Access Control", strength: 'High' },
         { name: "Security Awareness", strength: 'Medium' },
         { name: "Incident Response", strength: 'Medium' },
