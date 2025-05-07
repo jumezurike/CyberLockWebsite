@@ -32,7 +32,7 @@ import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
 import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
+import { CalendarIcon, Download } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Helper function to safely handle potentially undefined arrays
@@ -3661,7 +3661,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             document.body.removeChild(link);
                           }}
                         >
-                          <FileDownload className="h-4 w-4" />
+                          <Download className="h-4 w-4" />
                           Download Template
                         </Button>
                       </div>
