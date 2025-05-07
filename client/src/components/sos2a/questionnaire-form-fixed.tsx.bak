@@ -3759,7 +3759,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       />
                     </div>
                   </div>
-                  )}
                   
                   {/* 2. Classification Section */}
                   <div className="border rounded-md p-4 mb-6">

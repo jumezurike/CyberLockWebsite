@@ -115,6 +115,26 @@ export interface IdentityBehaviorHygiene {
   accountDormancyMonitoring?: boolean;
 }
 
+export interface DeviceInventoryItem {
+  id: string;
+  deviceType?: string;
+  makeModel?: string;
+  serialNumber?: string;
+  sensitivityLevel?: string;
+  networkZone?: string;
+  lastKnownLocation?: string;
+  owner?: string;
+  patchStatus?: string;
+  lastLoginDate?: string;
+  osVersion?: string;
+  securitySoftware?: string[];
+  authorizedUsers?: string[];
+  acquisitionDate?: string;
+  expectedLifespan?: string;
+  ownershipType?: string;
+  disposalPlan?: string;
+}
+
 export interface Sos2aFormData {
   // 1. Business Information
   businessName: string;
@@ -239,6 +259,10 @@ export interface Sos2aFormData {
   
   // Legal agreements
   eulaAccepted: boolean;
+  
+  // Device inventory list
+  deviceInventory?: DeviceInventoryItem[];
+  currentEditedDeviceIndex?: number;
 }
 
 export interface SecurityRisk {
