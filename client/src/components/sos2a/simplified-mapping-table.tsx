@@ -9,9 +9,39 @@ interface MappingItem {
 export default function SimplifiedMappingTable() {
   const mappingData: MappingItem[] = [
     {
+      domain: "Network Security",
+      parameters: ["Infrastructure Mode of Operation", "Baseline Configuration"],
+      explanation: "Covers how infrastructure is built, segmented, and monitored (e.g., secure cloud, on-prem)."
+    },
+    {
+      domain: "Asset Management",
+      parameters: ["Infrastructure Mode of Operation", "Device Inventory Tracking"],
+      explanation: "Maintains awareness of all devices (OS, browsers, mobile, IoT) to ensure complete security coverage."
+    },
+    {
+      domain: "Endpoint Security",
+      parameters: ["Baseline Configuration", "Security Risks & Vulnerabilities", "Infrastructure Mode of Operation"],
+      explanation: "Protects devices with EDR, patching, configuration management, and access controls."
+    },
+    {
       domain: "Access Control",
       parameters: ["Security Risks & Vulnerabilities", "Adversarial Insight (MITRE ATT&CK)"],
       explanation: "Controls access to reduce risk of privilege misuse, phishing, lateral movement."
+    },
+    {
+      domain: "Identity & Access Management (IAM)",
+      parameters: ["Identity, Behavior & Hygiene", "Adversarial Insight (MITRE ATT&CK)"],
+      explanation: "Monitors user identities and behaviors to enforce least privilege and detect anomalies."
+    },
+    {
+      domain: "Incident Response",
+      parameters: ["Security Risks & Vulnerabilities", "ISMS", "Adversarial Insight (MITRE ATT&CK)"],
+      explanation: "Helps detect, respond to, and recover from cyber events; tracked under management systems."
+    },
+    {
+      domain: "Application Security",
+      parameters: ["Security Control vs Framework", "Standards & Guidelines"],
+      explanation: "Aligns secure code and vulnerability scanning with OWASP, NIST, etc."
     },
     {
       domain: "Data Protection",
@@ -24,39 +54,14 @@ export default function SimplifiedMappingTable() {
       explanation: "Addresses social engineering and insider threats through training and governance."
     },
     {
-      domain: "Incident Response",
-      parameters: ["Security Risks & Vulnerabilities", "ISMS"],
-      explanation: "Helps detect, respond to, and recover from cyber events; tracked under management systems."
-    },
-    {
-      domain: "Network Security",
-      parameters: ["Infrastructure Mode of Operation", "Baseline Configuration"],
-      explanation: "Involves firewall, segmentation, and monitoring tied to secure network infrastructure setup."
-    },
-    {
-      domain: "Endpoint Security",
-      parameters: ["Baseline Configuration", "Security Risks & Vulnerabilities", "Infrastructure Mode of Operation"],
-      explanation: "Protects devices with EDR, patching, configuration management, and access controls."
-    },
-    {
-      domain: "Application Security",
-      parameters: ["Security Control vs Framework", "Standards & Guidelines"],
-      explanation: "Aligns secure code and vulnerability scanning with OWASP, NIST, etc."
+      domain: "Security Governance",
+      parameters: ["ISMS", "Security Control vs Framework"],
+      explanation: "Ensures policy, leadership, and risk strategy align with control frameworks (e.g., NIST, ISO, DFARS)."
     },
     {
       domain: "Third-Party Management",
       parameters: ["Regulatory Requirements", "Compliance Requirements"],
       explanation: "Ensures vendors meet necessary laws and compliance frameworks like HIPAA, SOC 2, ISO."
-    },
-    {
-      domain: "Asset Management",
-      parameters: ["Relevant ACQ Tools", "Infrastructure Mode of Operation"],
-      explanation: "Tracks hardware/software across the environment and uses asset discovery tools."
-    },
-    {
-      domain: "Security Governance",
-      parameters: ["ISMS", "Security Control vs Framework"],
-      explanation: "Ensures policy, leadership, and risk strategy align with control frameworks (e.g., NIST, ISO, DFARS)."
     },
     {
       domain: "Compliance Management",

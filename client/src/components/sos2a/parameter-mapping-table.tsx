@@ -272,7 +272,7 @@ export default function ParameterMappingSection() {
       <div className="prose max-w-none">
         <h2>Understanding the Mapping</h2>
         <p>
-          This table shows the relationship between the 10 default SOS²A parameters and the 10 cybersecurity 
+          This table shows the relationship between the 12 SOS²A parameters and the 12 cybersecurity 
           core domains used in gap analysis. The relevance level indicates the strength of the relationship 
           between each pair of parameters.
         </p>
@@ -292,7 +292,7 @@ export default function ParameterMappingSection() {
         <ul>
           <li>
             <strong>Cybersecurity Core Domains → SOS²A view</strong>: See how each cybersecurity core domain is evaluated across 
-            the 10 default assessment parameters. This helps understand the assessment coverage for 
+            the SOS²A parameters. This helps understand the assessment coverage for 
             each security area.
           </li>
           <li>

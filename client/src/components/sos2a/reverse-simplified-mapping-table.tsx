@@ -9,54 +9,64 @@ interface ReverseMappingItem {
 export default function ReverseSimplifiedMappingTable() {
   const mappingData: ReverseMappingItem[] = [
     {
-      parameter: "Infrastructure Mode of Operation",
+      parameter: "1. Infrastructure Mode of Operation",
       domains: ["Network Security", "Asset Management", "Endpoint Security"],
       explanation: "Covers how infrastructure is built, segmented, and monitored (e.g., secure cloud, on-prem)."
     },
     {
-      parameter: "Security Risks & Vulnerabilities",
+      parameter: "2. Security Risks & Vulnerabilities",
       domains: ["Access Control", "Incident Response", "Application Security", "Endpoint Security"],
       explanation: "Risk is reduced by limiting access, preparing for incidents, securing code, and hardening endpoints."
     },
     {
-      parameter: "Baseline Configuration",
+      parameter: "3. Baseline Configuration",
       domains: ["Data Protection", "Network Security", "Endpoint Security"],
       explanation: "Default security settings (firewalls, encryption, device hardening) to reduce exposure."
     },
     {
-      parameter: "Security Control vs Framework",
+      parameter: "4. Security Control vs Framework",
       domains: ["Application Security", "Security Governance"],
       explanation: "Connects technical controls to NIST, ISO, or SOC 2 frameworks; shows maturity."
     },
     {
-      parameter: "Compliance Requirements",
+      parameter: "5. Compliance Requirements",
       domains: ["Compliance Management", "Third-Party Management"],
       explanation: "Ensures operational processes meet laws and industry frameworks (HIPAA, PCI-DSS, CMMC, etc.)."
     },
     {
-      parameter: "Regulatory Requirements",
+      parameter: "6. Regulatory Requirements",
       domains: ["Compliance Management", "Third-Party Management"],
       explanation: "Focuses on actual regulations (e.g., HIPAA, CCPA, GDPR, DFARS) and their legal implications."
     },
     {
-      parameter: "Standards & Guidelines",
+      parameter: "7. Standards & Guidelines",
       domains: ["Data Protection", "Application Security"],
       explanation: "Aligns with security best practices like OWASP, CIS, ISO 27002, NIST 800-171."
     },
     {
-      parameter: "Relevant ACQ Tools",
+      parameter: "8. Relevant ACQ Tools",
       domains: ["Asset Management", "Security Governance", "Endpoint Security"],
       explanation: "Ensures tools are being tracked, approved, and governed (e.g., vulnerability scanners, EDR, endpoint protection)."
     },
     {
-      parameter: "Adversarial Insight (MITRE ATT&CK)",
-      domains: ["Access Control", "Security Awareness", "Incident Response"],
+      parameter: "9. Adversarial Insight (MITRE ATT&CK)",
+      domains: ["Access Control", "IAM", "Security Awareness", "Incident Response"],
       explanation: "Maps real attacker behavior to defenses, phishing simulation, lateral movement detection."
     },
     {
-      parameter: "Information Security Management System (ISMS)",
+      parameter: "10. Information Security Management System (ISMS)",
       domains: ["Security Governance", "Security Awareness", "Incident Response"],
       explanation: "Governance system that defines policies, risk posture, education, and monitoring for security."
+    },
+    {
+      parameter: "11. Device Inventory Tracking",
+      domains: ["Asset Management", "Endpoint Security", "Compliance Management"],
+      explanation: "Maintains awareness of all devices (OS, browsers, mobile, IoT) to ensure complete security coverage."
+    },
+    {
+      parameter: "12. Identity, Behavior & Hygiene",
+      domains: ["IAM", "Access Control", "Security Awareness"],
+      explanation: "Monitors user identities and behaviors to enforce least privilege and detect anomalies."
     }
   ];
 
