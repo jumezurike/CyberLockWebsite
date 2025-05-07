@@ -1,0 +1,119 @@
+1. Identity and Access Management (IAM) & Access Control
+Connection:
+
+Devices (laptops, phones, IoT, servers) have identities (certificates, MAC/IP, device IDs).
+
+IAM systems use device inventory to enforce policies (e.g., only corporate-managed devices can access sensitive data).
+
+Access Control relies on device trustworthiness (e.g., is the device compliant with security policies?).
+
+Impact:
+
+Poor device tracking = Unauthorized devices gaining access.
+
+Strong inventory hygiene = Better enforcement of least privilege.
+
+2. Network Security
+Connection:
+
+Network segmentation & NAC (Network Access Control) depend on knowing which devices are allowed on the network.
+
+Unknown/unmanaged devices can be automatically quarantined.
+
+Impact:
+
+Without device inventory, rogue devices (e.g., malware-infected laptops) can move laterally.
+
+3. Asset Management
+Connection:
+
+Device inventory is a subset of IT asset management (hardware, software, cloud instances).
+
+Tracks device lifecycle (procurement, deployment, retirement).
+
+Impact:
+
+Missing devices = Unpatched vulnerabilities, compliance failures.
+
+4. Compliance Management
+Connection:
+
+Regulations (GDPR, HIPAA, PCI DSS) require tracking devices that handle sensitive data.
+
+Audits demand proof of device controls (e.g., encryption, patch levels).
+
+Impact:
+
+No device inventory = Compliance violations, fines.
+
+5. Incident Response
+Connection:
+
+During a breach, responders need to know:
+
+Which devices were compromised?
+
+What data did they access?
+
+Forensic investigations rely on device logs and inventory records.
+
+Impact:
+
+Poor tracking slows down containment and recovery.
+
+6. Data Protection
+Connection:
+
+Data Loss Prevention (DLP) tools block unauthorized devices from accessing sensitive files.
+
+Encryption policies depend on knowing which devices store regulated data.
+
+Impact:
+
+Unaccounted devices = Data leaks (e.g., stolen laptops with customer info).
+
+7. Third-Party Management
+Connection:
+
+Vendor/contractor devices must be tracked and restricted.
+
+BYOD (Bring Your Own Device) policies rely on inventory controls.
+
+Impact:
+
+Unmanaged third-party devices = Supply chain attacks.
+
+8. Application Security
+Connection:
+
+Applications should only allow access from trusted devices.
+
+Device attestation (e.g., TPM checks) prevents unauthorized app access.
+
+Impact:
+
+Weak device controls = Credential theft, API abuse.
+
+9. Security Governance
+Connection:
+
+Policies must define how devices are classified, monitored, and retired.
+
+Risk assessments depend on knowing device exposure.
+
+Impact:
+
+Lack of governance = Shadow IT, uncontrolled device sprawl.
+
+10. Security Awareness
+Connection:
+
+Employees must understand:
+
+Why device registration matters.
+
+Risks of using unauthorized devices.
+
+Impact:
+
+Poor awareness = Employees bypassing security controls (e.g., using personal USB drives).

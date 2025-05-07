@@ -1,41 +1,61 @@
   {
     sosParameter: 'Device Inventory Tracking',
-    description: 'Comprehensive inventory management of all hardware devices in the environment',
+    description: 'Comprehensive inventory management of all hardware devices in the environment including laptops, phones, IoT devices, and servers',
     securityDomainMappings: [
       {
         securityParameter: 'assetManagement',
         relevance: 'critical',
-        description: 'Device inventory is the foundation of asset management; you cannot secure what you do not know exists'
+        description: 'Device inventory is the foundation of asset management; tracks device lifecycle from procurement through retirement; prevents missing/unpatched devices'
       },
       {
         securityParameter: 'networkSecurity',
+        relevance: 'critical',
+        description: 'Network segmentation & NAC depend on knowing which devices are permitted; allows quarantine of unknown devices; prevents lateral movement by rogue devices'
+      },
+      {
+        securityParameter: 'accessControl',
         relevance: 'high',
-        description: 'Network security depends on knowing all connected devices and their associated risks'
+        description: 'IAM systems use device inventory to enforce policies; ensures only authorized and compliant devices can access sensitive resources'
+      },
+      {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'high',
+        description: 'Devices have identities (certificates, MAC/IP, device IDs) that must be managed; enables enforcement of least privilege based on device trustworthiness'
       },
       {
         securityParameter: 'complianceManagement',
         relevance: 'high',
-        description: 'Many compliance frameworks require complete device inventories (NIST, ISO, HIPAA)'
-      },
-      {
-        securityParameter: 'securityGovernance',
-        relevance: 'high',
-        description: 'Governance requires visibility into all assets and their roles in the organization'
-      },
-      {
-        securityParameter: 'dataProtection',
-        relevance: 'medium',
-        description: 'Understanding where organizational data resides requires knowledge of all devices'
-      },
-      {
-        securityParameter: 'accessControl',
-        relevance: 'medium',
-        description: 'Device-based access control requires complete device inventory and tracking'
+        description: 'Regulations (GDPR, HIPAA, PCI DSS) require tracking devices that handle sensitive data; audits demand proof of device controls'
       },
       {
         securityParameter: 'incidentResponse',
         relevance: 'high',
-        description: 'Effective incident response requires knowing all devices potentially affected by a security incident'
+        description: 'During a breach, responders need to identify compromised devices and accessed data; forensic investigations rely on device logs and inventory records'
+      },
+      {
+        securityParameter: 'dataProtection',
+        relevance: 'high',
+        description: 'DLP tools block unauthorized devices from accessing sensitive files; encryption policies depend on knowing which devices store regulated data'
+      },
+      {
+        securityParameter: 'thirdPartyManagement',
+        relevance: 'medium',
+        description: 'Vendor/contractor devices must be tracked and restricted; BYOD policies rely on inventory controls to prevent supply chain attacks'
+      },
+      {
+        securityParameter: 'applicationSecurity',
+        relevance: 'medium',
+        description: 'Applications should only allow access from trusted devices; device attestation prevents unauthorized application access'
+      },
+      {
+        securityParameter: 'securityGovernance',
+        relevance: 'high',
+        description: 'Policies must define how devices are classified, monitored, and retired; risk assessments depend on knowing device exposure'
+      },
+      {
+        securityParameter: 'securityAwareness',
+        relevance: 'medium',
+        description: 'Employees must understand device registration importance and risks of using unauthorized devices to prevent bypassing security controls'
       }
     ]
   },
