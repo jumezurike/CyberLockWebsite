@@ -16,7 +16,7 @@ export default function HeroSection() {
               Healthcare Application Security Hub
             </h2>
             <p className="mb-8 text-neutral-200">
-              The only healthcare-focused platform that eliminates threats, automates compliance, and unifies clinical apps—with patented quantum-safe encryption and patient data protection at its core.
+              The only healthcare-focused platform that eliminates threats, automates compliance, and unifies clinical apps/devices—with patented quantum-safe encryption and patient data protection at its core.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="#demo" className="bg-secondary hover:bg-green-600 text-white py-3 px-6 rounded-md shadow-md transition duration-150 ease-in-out text-center font-medium">
@@ -56,7 +56,7 @@ export default function HeroSection() {
                     <i className="fas fa-layer-group text-white"></i>
                   </div>
                   <div>
-                    <h3 className="font-semibold">Unified Business Apps</h3>
+                    <h3 className="font-semibold">Unified Clinical Apps/Devices</h3>
                     <p className="text-sm text-neutral-200">Everything in one secure hub</p>
                   </div>
                 </div>
