@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Link } from "wouter";
+import { downloadInvestorBrief } from "@/lib/investor-brief-generator";
 
 const formSchema = z.object({
   fullName: z.string().min(2, { message: "Full name must be at least 2 characters." }),
@@ -133,9 +134,12 @@ export default function EarlyAccess() {
               <Link href="/" className="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium">
                 Return to Homepage
               </Link>
-              <a href="#" className="bg-transparent hover:bg-neutral-100 text-primary border border-primary px-6 py-3 rounded-lg font-medium">
+              <button 
+                onClick={() => downloadInvestorBrief()} 
+                className="bg-transparent hover:bg-neutral-100 text-primary border border-primary px-6 py-3 rounded-lg font-medium"
+              >
                 Download Investor Brief
-              </a>
+              </button>
             </div>
           </div>
         </div>
