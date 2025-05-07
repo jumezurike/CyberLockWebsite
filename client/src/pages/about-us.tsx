@@ -303,7 +303,7 @@ const AboutUs = () => {
                     <img 
                       src={christopherPhoto} 
                       alt="Christopher Amato" 
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-top"
                     />
                   </div>
                 </div>
