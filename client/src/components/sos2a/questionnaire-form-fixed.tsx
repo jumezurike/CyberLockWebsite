@@ -4501,6 +4501,80 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
+
+                  {/* Identity Management System Section */}
+                  <div className="mb-6 bg-blue-50 p-4 rounded-md border border-blue-100">
+                    <div className="flex items-center mb-2">
+                      <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        className="h-5 w-5 text-blue-600 mr-2" 
+                        fill="none" 
+                        viewBox="0 0 24 24" 
+                        stroke="currentColor"
+                      >
+                        <path 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          strokeWidth={2} 
+                          d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" 
+                        />
+                      </svg>
+                      <h4 className="font-medium text-blue-800">Universal Identity Verification System (UIVS)</h4>
+                    </div>
+                    <p className="text-sm text-blue-800 mb-4">
+                      For organizations with multiple users, we recommend using our Identity Management system to import 
+                      and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+                    </p>
+                    <div className="flex space-x-4">
+                      <Link href="/identity-management">
+                        <a className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                          <svg 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            className="h-4 w-4 mr-2" 
+                            fill="none" 
+                            viewBox="0 0 24 24" 
+                            stroke="currentColor"
+                          >
+                            <path 
+                              strokeLinecap="round" 
+                              strokeLinejoin="round" 
+                              strokeWidth={2} 
+                              d="M12 4v16m8-8H4" 
+                            />
+                          </svg>
+                          Manage User Identities
+                        </a>
+                      </Link>
+                      <button
+                        type="button"
+                        className="inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                        onClick={() => {
+                          const link = document.createElement('a');
+                          link.href = '/templates/user-identity-template.csv';
+                          link.setAttribute('download', 'user-identity-template.csv');
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }}
+                      >
+                        <svg 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          className="h-4 w-4 mr-2" 
+                          fill="none" 
+                          viewBox="0 0 24 24" 
+                          stroke="currentColor"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" 
+                          />
+                        </svg>
+                        Download Template
+                      </button>
+                    </div>
+                  </div>
                   
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">

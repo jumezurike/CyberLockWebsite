@@ -334,14 +334,14 @@ export default function IdentityManagementPage() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant={user.uivsStatus === 'verified' ? 'success' : 'outline'}>
+                        <Badge variant={user.uivsStatus === 'verified' ? 'default' : 'outline'}>
                           {user.uivsStatus}
                         </Badge>
                       </TableCell>
                       <TableCell>
                         <Badge variant={
                           user.privilegeLevel === 'high' ? 'destructive' : 
-                          user.privilegeLevel === 'medium' ? 'warning' : 'outline'
+                          user.privilegeLevel === 'medium' ? 'secondary' : 'outline'
                         }>
                           {user.privilegeLevel}
                         </Badge>
