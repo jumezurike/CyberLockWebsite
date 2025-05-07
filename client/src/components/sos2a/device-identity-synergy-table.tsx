@@ -1,10 +1,27 @@
 import React from 'react';
-import { deviceIdentitySynergies, synergisticSecurityBenefits } from '@/lib/device-identity-synergy';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 
 export default function DeviceIdentitySynergyTable() {
+  // Show only the top 3 synergies for simplicity
+  const topSynergies = [
+    {
+      deviceInventoryFunction: "Tracks what is in the environment",
+      identityBehaviorFunction: "Tracks who is in the environment",
+      synergisticOutcome: "Full asset + identity correlation"
+    },
+    {
+      deviceInventoryFunction: "Ensures devices are patched/secured",
+      identityBehaviorFunction: "Ensures identities follow least privilege",
+      synergisticOutcome: "Closes lateral movement risks"
+    },
+    {
+      deviceInventoryFunction: "Maps to CIS Control 1 (Inventory)",
+      identityBehaviorFunction: "Maps to CIS Control 5 (Account Mgmt)",
+      synergisticOutcome: "Comprehensive compliance coverage"
+    }
+  ];
+
   return (
     <Card className="mb-8">
       <CardHeader className="bg-muted/50">
@@ -18,7 +35,7 @@ export default function DeviceIdentitySynergyTable() {
           Device Inventory Tracking & Identity Behavior & Hygiene Synergy
         </CardTitle>
         <CardDescription>
-          Together, these two parameters create a powerful synergistic effect that enhances overall security posture.
+          These two parameters create a powerful synergistic effect that enhances overall security posture.
         </CardDescription>
       </CardHeader>
       <CardContent className="p-0">
@@ -31,7 +48,7 @@ export default function DeviceIdentitySynergyTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {deviceIdentitySynergies.map((synergy, index) => (
+            {topSynergies.map((synergy, index) => (
               <TableRow key={index} className={index % 2 === 0 ? 'bg-muted/10' : ''}>
                 <TableCell className="font-medium border-r border-muted">
                   {synergy.deviceInventoryFunction}
@@ -46,16 +63,10 @@ export default function DeviceIdentitySynergyTable() {
             ))}
           </TableBody>
         </Table>
-        
-        <div className="p-4 border-t border-muted">
-          <h3 className="text-lg font-semibold mb-3">Security Benefits</h3>
-          <div className="flex flex-wrap gap-2">
-            {synergisticSecurityBenefits.map((benefit, index) => (
-              <Badge key={index} variant="outline" className="px-3 py-1 text-sm bg-muted/20">
-                {benefit}
-              </Badge>
-            ))}
-          </div>
+        <div className="p-4 border-t border-muted text-center">
+          <p className="text-sm text-muted-foreground italic">
+            Full synergy details maintained in the knowledge base
+          </p>
         </div>
       </CardContent>
     </Card>
