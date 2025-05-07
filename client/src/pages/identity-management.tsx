@@ -9,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Upload, User, Users, UserPlus, Search, Filter, Download, ChevronLeft, AlertTriangle } from 'lucide-react';
 import UserIdentityTemplate from '@/components/identity-behavior/user-identity-template';
 import DataNucleusAggregate from '@/components/identity-behavior/data-nucleus-aggregate';
+import SecureProfileImage from '@/components/identity-behavior/secure-profile-image';
 import { Separator } from '@/components/ui/separator';
 
 interface IdentityUser {

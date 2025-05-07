@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Fingerprint, Shield, Database, UserCheck, AlertCircle, Key, Building, Calendar, Clock, Lock } from 'lucide-react';
+import { Fingerprint, Shield, Database, UserCheck, AlertCircle, Key, Building, Calendar, Clock, Lock, Image, History } from 'lucide-react';
 
 interface DNALayerProps {
   title: string;
@@ -177,6 +177,26 @@ export default function DataNucleusAggregate() {
           description: "Account deactivation and offboarding workflows" 
         }
       ]
+    },
+    {
+      title: "Visual Identity Verification",
+      icon: <Image className="h-5 w-5 text-violet-600" />,
+      color: "bg-violet-50 border-violet-200",
+      attributes: [
+        { 
+          name: "Color-Coded Profile Image", 
+          description: "Non-fungible cryptographically signed profile picture with embedded steganographic data",
+          criticalForIdentification: true
+        },
+        { 
+          name: "Image Modification History", 
+          description: "Immutable record of all changes to visual identity elements" 
+        },
+        { 
+          name: "Visual Hash Verification", 
+          description: "Cryptographic validation of image integrity and authenticity" 
+        }
+      ]
     }
   ];
 
@@ -230,14 +250,33 @@ export default function DataNucleusAggregate() {
           ))}
         </div>
         
-        <div className="mt-8 p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
-          <div className="flex items-start gap-3">
-            <Clock className="h-5 w-5 text-indigo-600 mt-0.5 flex-shrink-0" />
-            <div>
-              <h3 className="font-semibold text-indigo-700 mb-1">Continuous Identity Verification</h3>
-              <p className="text-sm text-gray-700">
-                The DNA continuously verifies all aspects of identity through a multi-layered approach. Government-issued ID creates the strong foundation that anchors the digital identity to a real-world, verifiable entity, enabling powerful accountability throughout the system.
-              </p>
+        <div className="mt-8 space-y-4">
+          <div className="p-4 bg-indigo-50 border border-indigo-200 rounded-lg">
+            <div className="flex items-start gap-3">
+              <Clock className="h-5 w-5 text-indigo-600 mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold text-indigo-700 mb-1">Continuous Identity Verification</h3>
+                <p className="text-sm text-gray-700">
+                  The DNA continuously verifies all aspects of identity through a multi-layered approach. Government-issued ID creates the strong foundation that anchors the digital identity to a real-world, verifiable entity, enabling powerful accountability throughout the system.
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          <div className="p-4 bg-violet-50 border border-violet-200 rounded-lg">
+            <div className="flex items-start gap-3">
+              <Image className="h-5 w-5 text-violet-600 mt-0.5 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold text-violet-700 mb-1">Color-Coded Non-Fungible Image Verification</h3>
+                <p className="text-sm text-gray-700">
+                  <span className="font-medium text-violet-800">🔒 Advanced Security Feature:</span> All identity profiles must include a color-coded non-fungible profile image that contains hidden encrypted data using steganography. This creates a cryptographically unique visual identifier that cannot be duplicated or transferred between identities. The embedded data can only be detected and verified through a specialized decryption process.
+                </p>
+                <div className="mt-2 bg-violet-100 p-2 rounded border border-violet-300">
+                  <p className="text-xs text-violet-700 italic">
+                    <History className="h-3 w-3 inline-block mr-1" /> All image changes are permanently recorded in an immutable ledger, creating a complete audit trail of visual identity modifications.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
