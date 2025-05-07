@@ -69,6 +69,14 @@ export interface DeviceInventoryTracking {
   lastNetworkCheckin?: string;
   deviceStatus?: string;
   deviceRiskScore?: number;
+  backupStatus?: boolean;
+  backupFrequency?: string;
+  backupType?: string;
+  backupLocation?: string;
+  backupFolder?: string;
+  backupRetentionPeriod?: string;
+  backupLastTested?: string;
+  backupDetails?: string; // For backward compatibility and free-form notes
   
   // 6. Lifecycle & Ownership
   procurementDate?: string;
@@ -133,6 +141,15 @@ export interface DeviceInventoryItem {
   expectedLifespan?: string;
   ownershipType?: string;
   disposalPlan?: string;
+  
+  // Enhanced backup details
+  backupStatus?: boolean;
+  backupFrequency?: string; // Daily, Weekly, Monthly, etc.
+  backupType?: string; // Full, Incremental, Differential
+  backupLocation?: string; // Local, Network, Cloud
+  backupFolder?: string; // Specific folder/path that is backed up
+  backupRetentionPeriod?: string; // How long backups are kept
+  backupLastTested?: string; // Date last tested for restoration
 }
 
 export interface Sos2aFormData {
