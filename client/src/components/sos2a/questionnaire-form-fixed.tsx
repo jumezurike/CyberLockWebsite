@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -15,6 +16,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -24,6 +30,9 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
