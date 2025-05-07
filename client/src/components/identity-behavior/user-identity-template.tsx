@@ -17,6 +17,8 @@ export default function UserIdentityTemplate() {
     { field: 'department', description: 'Department or functional area', example: 'Information Technology, Finance', required: true, category: 'basic' },
     { field: 'identity_type', description: 'Type of identity (human, machine, api, third-party)', example: 'human, machine, api, third-party', required: true, category: 'identity' },
     { field: 'access_level', description: 'Level of access granted (standard, limited, admin, privileged)', example: 'standard, limited, admin, privileged', required: true, category: 'access' },
+    { field: 'government_id_type', description: 'Type of government-issued ID for human user accountability', example: 'drivers_license, state_id, passport, not_applicable', required: true, category: 'identity' },
+    { field: 'government_id_issuing_authority', description: 'Authority that issued the government ID', example: 'CA-DMV, NY-DMV, US-State-Dept', required: true, category: 'identity' },
     { field: 'mfa_enabled', description: 'Whether multi-factor authentication is enabled', example: 'yes, no', required: true, category: 'access' },
     { field: 'mfa_type', description: 'Type of MFA used (app, sms, hardware token, etc.)', example: 'app, sms, hardware, api-key', required: false, category: 'access' },
     { field: 'location', description: 'Primary physical or logical location', example: 'Headquarters, Data Center, Cloud', required: false, category: 'basic' },
