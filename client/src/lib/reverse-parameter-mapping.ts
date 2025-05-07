@@ -697,6 +697,26 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         securityParameter: 'incidentResponse',
         relevance: 'high',
         description: 'Effective incident response requires knowing all devices potentially affected by a security incident'
+      },
+      {
+        securityParameter: 'identityAndAccessManagement',
+        relevance: 'critical',
+        description: 'Devices have identities that must be managed; enables enforcement of device-based access controls'
+      },
+      {
+        securityParameter: 'thirdPartyManagement',
+        relevance: 'high',
+        description: 'Device inventory must include third-party managed devices accessing organizational systems'
+      },
+      {
+        securityParameter: 'applicationSecurity',
+        relevance: 'medium',
+        description: 'Application security is enhanced by knowing the devices running or accessing applications'
+      },
+      {
+        securityParameter: 'securityAwareness',
+        relevance: 'medium',
+        description: 'Users need awareness of device security policies and approved vs. unapproved devices'
       }
     ]
   },  {
@@ -737,6 +757,26 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
         securityParameter: 'complianceManagement',
         relevance: 'medium',
         description: 'Compliance frameworks increasingly require monitoring of identity behaviors (NIST, ISO)'
+      },
+      {
+        securityParameter: 'networkSecurity',
+        relevance: 'high',
+        description: 'Identity behavior is crucial for detecting suspicious network activity and lateral movement'
+      },
+      {
+        securityParameter: 'thirdPartyManagement',
+        relevance: 'high',
+        description: 'Third-party access must be monitored for abnormal identity behaviors indicative of compromised credentials'
+      },
+      {
+        securityParameter: 'applicationSecurity',
+        relevance: 'high',
+        description: 'Application security requires monitoring identity behaviors for unauthorized access attempts'
+      },
+      {
+        securityParameter: 'assetManagement',
+        relevance: 'high',
+        description: 'Links between users and the devices they access; creates accountability for asset usage'
       }
     ]
   }
