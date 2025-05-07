@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import ParameterMappingSection from '../components/sos2a/parameter-mapping-table';
 import RelationshipStrengthMappingTable, { ReverseRelationshipStrengthMappingTable } from '../components/sos2a/relationship-strength-mapping-table';
+import DeviceIdentitySynergyTable from '../components/sos2a/device-identity-synergy-table';
 
 export default function ParameterMappingPage() {
   const [showRelationshipStrength, setShowRelationshipStrength] = useState(false);
@@ -31,6 +32,8 @@ export default function ParameterMappingPage() {
           </button>
         </div>
       </div>
+
+      <DeviceIdentitySynergyTable />
 
       {showRelationshipStrength ? (
         <div>

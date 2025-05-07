@@ -5,7 +5,7 @@
       {
         securityParameter: 'identityBehaviorHygiene',
         relevance: 'critical',
-        description: 'Strong bidirectional relationship with Identity Behavior & Hygiene; device usage and authentication are core aspects of identity behavior'
+        description: 'Strong synergistic relationship with Identity Behavior & Hygiene; tracks "what" while IBH tracks "who"; together they provide full asset-identity correlation'
       },
       {
         securityParameter: 'assetManagement',

@@ -5,7 +5,7 @@
       {
         securityParameter: 'deviceInventoryTracking',
         relevance: 'critical',
-        description: 'Strong bidirectional relationship with Device Inventory Tracking; device-to-user association is crucial for proper identity governance'
+        description: 'Strong synergistic relationship with Device Inventory Tracking; IBH tracks "who" while DIT tracks "what"; together they enable Zero Trust architecture'
       },
       {
         securityParameter: 'identityAndAccessManagement',

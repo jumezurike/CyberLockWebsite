@@ -747,7 +747,7 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
       {
         securityParameter: 'identityBehaviorHygiene',
         relevance: 'critical',
-        description: 'Strong bidirectional relationship with Identity Behavior & Hygiene; device usage and authentication are core aspects of identity behavior'
+        description: 'Strong synergistic relationship with Identity Behavior & Hygiene; tracks "what" while IBH tracks "who"; together they provide full asset-identity correlation'
       },
       {
         securityParameter: 'assetManagement',
@@ -812,7 +812,7 @@ export const reverseParameterMappings: ReverseParameterMapping[] = [
       {
         securityParameter: 'deviceInventoryTracking',
         relevance: 'critical',
-        description: 'Strong bidirectional relationship with Device Inventory Tracking; device-to-user association is crucial for proper identity governance'
+        description: 'Strong synergistic relationship with Device Inventory Tracking; IBH tracks "who" while DIT tracks "what"; together they enable Zero Trust architecture'
       },
       {
         securityParameter: 'identityAndAccessManagement',
