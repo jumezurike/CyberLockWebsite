@@ -8,6 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Upload, User, Users, UserPlus, Search, Filter, Download, ChevronLeft, AlertTriangle } from 'lucide-react';
 import UserIdentityTemplate from '@/components/identity-behavior/user-identity-template';
+import DataNucleusAggregate from '@/components/identity-behavior/data-nucleus-aggregate';
 import { Separator } from '@/components/ui/separator';
 
 interface IdentityUser {
@@ -251,7 +252,12 @@ export default function IdentityManagementPage() {
               <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                   <CardTitle>Identity Registry</CardTitle>
-                  <CardDescription>Manage all identity types in your organization</CardDescription>
+                  <CardDescription>
+                    Manage all identity types in your organization through our DNA-protected registry
+                    <Badge variant="outline" className="ml-2 border-blue-500 text-blue-600">
+                      Government ID Verified
+                    </Badge>
+                  </CardDescription>
                 </div>
                 <div className="flex gap-2">
                   <div className="relative">
@@ -380,6 +386,8 @@ export default function IdentityManagementPage() {
                       <li>User IDs must be unique</li>
                       <li>Required fields: User ID, First Name, Last Name, Email, Identity Type</li>
                       <li>For machine and API identities, provide a contact owner</li>
+                      <li>For human identities, government ID fields are required for DNA integration</li>
+                      <li>Government ID information will be validated during import</li>
                     </ul>
                   </div>
                   
@@ -428,9 +436,22 @@ export default function IdentityManagementPage() {
         </TabsContent>
         
         <TabsContent value="templates">
-          <UserIdentityTemplate />
+          <div className="space-y-8">
+            <div>
+              <h2 className="text-xl font-semibold mb-4">Data Nuclear Aggregate (DNA) Model</h2>
+              <p className="text-gray-600 mb-6">
+                The DNA approach forms the foundation of our identity verification system by aggregating all identity data into a comprehensive profile. Government-verified ID creates strong accountability and anchors digital identities to real-world entities.
+              </p>
+              <DataNucleusAggregate />
+            </div>
+            
+            <div>
+              <h2 className="text-xl font-semibold mb-4">User Identity Template</h2>
+              <UserIdentityTemplate />
+            </div>
+          </div>
           
-          <Card>
+          <Card className="mt-8">
             <CardHeader>
               <CardTitle>Additional Templates</CardTitle>
               <CardDescription>
