@@ -3648,7 +3648,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <Button type="button" variant="outline" className="flex-1">
                           Import CSV
                         </Button>
-                        <Button type="button" variant="outline" className="flex-1">
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          className="flex-1 flex items-center justify-center gap-2"
+                          onClick={() => {
+                            const link = document.createElement('a');
+                            link.href = '/templates/device-inventory-template.csv';
+                            link.setAttribute('download', 'device-inventory-template.csv');
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }}
+                        >
+                          <FileDownload className="h-4 w-4" />
                           Download Template
                         </Button>
                       </div>

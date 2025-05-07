@@ -1,0 +1,4 @@
+id,deviceType,makeModel,serialNumber,sensitivityLevel,networkZone,lastKnownLocation,owner,patchStatus,lastLoginDate,osVersion,securitySoftware,authorizedUsers,acquisitionDate,expectedLifespan,ownershipType,disposalPlan,backupStatus,backupFrequency,backupType,backupLocation,backupFolder,backupRetentionPeriod,backupLastTested
+DEV001,Laptop,Dell XPS 15,,,Internal,Office,IT Department,Up to date,,,Windows Defender,,,,,,,Daily,Full,Network,\\backups\devices,30 days,
+DEV002,Server,HP ProLiant DL380,,,DMZ,Server Room,Operations,Need patches,,,Symantec Endpoint Protection,,,,,,,Weekly,Incremental,Cloud,s3://backups/servers,1 year,
+DEV003,Mobile,iPhone 13,,,External,Remote,Sales,Up to date,,,MDM Solution,,,,,,,Monthly,Differential,Local,C:\backups,90 days,
