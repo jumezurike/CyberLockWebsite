@@ -1,14 +1,14 @@
 /**
  * Default Parameter Mapping
  * 
- * This file contains the formal mapping between the 10 security parameters
- * used in gap analysis and the 10 default SOS²A parameters.
+ * This file contains the formal mapping between the 12 security parameters
+ * used in gap analysis and the 12 default SOS²A parameters.
  * 
  * This mapping demonstrates how each security domain intersects with the
  * fundamental assessment parameters, creating a multi-dimensional
  * analysis framework.
  * 
- * The 10 default SOS²A parameters are:
+ * The 12 default SOS²A parameters are:
  * 1. Infrastructure Mode of Operation
  * 2. Security Risks & Vulnerabilities
  * 3. Baseline Configuration
@@ -19,6 +19,8 @@
  * 8. Relevant ACQ Tools
  * 9. Adversarial Insight (MITRE ATT&CK)
  * 10. Information Security Management System (ISMS)
+ * 11. Device Inventory Tracking
+ * 12. Identity Behavior & Hygiene
  */
 
 import { MatrixItem } from "./sos2a-types";
