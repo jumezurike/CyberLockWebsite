@@ -96,24 +96,27 @@ export default function RelationshipStrengthMappingTable() {
     {
       domain: "Endpoint Security",
       parameters: [
+        { name: "Device Inventory Tracking", strength: 'High' },
         { name: "Baseline Configuration", strength: 'High' },
         { name: "Security Risks & Vulnerabilities", strength: 'Medium' },
         { name: "Infrastructure Mode of Operation", strength: 'Medium' }
       ],
-      explanation: "Protects devices with EDR, patching, and configuration management."
+      explanation: "Protects devices with EDR, patching, configuration management, and comprehensive device inventory."
     },
     {
       domain: "Incident Response",
       parameters: [
         { name: "Security Risks & Vulnerabilities", strength: 'High' },
         { name: "Adversarial Insight (MITRE ATT&CK)", strength: 'High' },
-        { name: "Information Security Management System (ISMS)", strength: 'Medium' }
+        { name: "Information Security Management System (ISMS)", strength: 'Medium' },
+        { name: "Identity Behavior & Hygiene", strength: 'Medium' }
       ],
-      explanation: "Guides security breach detection, response, and recovery procedures."
+      explanation: "Guides security breach detection, response, and recovery procedures, including identity-based threat detection."
     },
     {
       domain: "Asset Management",
       parameters: [
+        { name: "Device Inventory Tracking", strength: 'High' },
         { name: "Baseline Configuration", strength: 'High' },
         { name: "Infrastructure Mode of Operation", strength: 'Medium' },
         { name: "Relevant ACQ Tools", strength: 'Medium' }
@@ -124,10 +127,11 @@ export default function RelationshipStrengthMappingTable() {
       domain: "Security Awareness",
       parameters: [
         { name: "Information Security Management System (ISMS)", strength: 'High' },
+        { name: "Identity Behavior & Hygiene", strength: 'Medium' },
         { name: "Adversarial Insight (MITRE ATT&CK)", strength: 'Medium' },
         { name: "Security Risks & Vulnerabilities", strength: 'Low' }
       ],
-      explanation: "Educates users on security threats, policies, and safe practices."
+      explanation: "Educates users on security threats, policies, safe practices, and identity hygiene requirements."
     },
     {
       domain: "Third-Party Management",
