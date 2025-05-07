@@ -33,6 +33,54 @@ export interface PolicyDocuments {
   guides: string[];
 }
 
+export interface DeviceInventoryTracking {
+  // 1. Identification
+  deviceId?: string;
+  makeModel?: string;
+  colorDescription?: string;
+  serialNumber?: string;
+  owner?: string;
+  deviceNickname?: string;
+  
+  // 2. Classification
+  deviceType?: string[];
+  endpointCategory?: string[];
+  operatingSystem?: string;
+  browsersInstalled?: string[];
+  
+  // 3. Network & Location
+  ipAddress?: string;
+  macAddress?: string;
+  networkZone?: string[];
+  lastKnownLocation?: string;
+  assignedDepartment?: string;
+  
+  // 4. Security Posture
+  encryptionStatus?: string[];
+  antivirusInstalled?: boolean;
+  firewallActive?: boolean;
+  patchStatus?: string;
+  securityComplianceLevel?: string[];
+  vpnMdmEnrollment?: boolean;
+  tpmPresent?: boolean;
+  
+  // 5. Usage & Monitoring
+  lastLoginDate?: string;
+  lastNetworkCheckin?: string;
+  deviceStatus?: string;
+  deviceRiskScore?: number;
+  
+  // 6. Lifecycle & Ownership
+  procurementDate?: string;
+  warrantyExpiration?: string;
+  deviceLifecycleStatus?: string;
+  assignedPolicies?: string[];
+}
+
+export interface IdentityBehaviorHygiene {
+  // Will add once you provide the content for this section
+}
+
 export interface Sos2aFormData {
   // 1. Business Information
   businessName: string;
@@ -138,7 +186,13 @@ export interface Sos2aFormData {
     securityCommittee?: boolean;
   };
   
-  // 11. Contact and Confirmation
+  // 11. Device Inventory Tracking
+  deviceInventoryTracking?: DeviceInventoryTracking;
+  
+  // 12. Identity Behavior & Hygiene
+  identityBehaviorHygiene?: IdentityBehaviorHygiene;
+  
+  // 13. Contact and Confirmation
   contactInfo: ContactInfo;
   
   // Report options

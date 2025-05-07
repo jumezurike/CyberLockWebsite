@@ -1023,12 +1023,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="acq-tools">9. Relevant ACQ Tools</TabsTrigger>
                 <TabsTrigger value="adversarial">10. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
                 <TabsTrigger value="isms">11. Information Security Management System (ISMS)</TabsTrigger>
-                <TabsTrigger value="contact">12. Contact Confirmation</TabsTrigger>
+                <TabsTrigger value="device-inventory">12. Device Inventory Tracking</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
-                <TabsTrigger value="review" className="bg-[#7936b0] text-white hover:bg-[#6b2aa2]">13. Review & Submit Your Questionnaire</TabsTrigger>
-                <TabsTrigger value="" disabled></TabsTrigger>
-                <TabsTrigger value="" disabled></TabsTrigger>
+                <TabsTrigger value="identity-behavior">13. Identity Behavior & Hygiene</TabsTrigger>
+                <TabsTrigger value="contact">14. Contact Confirmation</TabsTrigger>
+                <TabsTrigger value="review" className="bg-[#7936b0] text-white hover:bg-[#6b2aa2]">15. Review & Submit Your Questionnaire</TabsTrigger>
                 <TabsTrigger value="" disabled></TabsTrigger>
               </TabsList>
               
@@ -3443,7 +3443,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 12. Contact and Confirmation Tab */}
               <TabsContent value="contact" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">12. Contact Confirmation</h3>
+                  <h3 className="font-medium mb-4">14. Contact Confirmation</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Provide contact details for follow-up and select your assessment type.
                   </p>
@@ -3639,7 +3639,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Review Tab */}
               <TabsContent value="review" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">13. Review & Submit Your Questionnaire</h3>
+                  <h3 className="font-medium mb-4">15. Review & Submit Your Questionnaire</h3>
                   <p className="text-sm mb-4">
                     <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
                   </p>
