@@ -23,6 +23,14 @@ interface IdentityUser {
   riskLevel: string;
   mfaEnabled: boolean;
   lastActive: string;
+  // Machine/API specific identifiers
+  imei?: string;
+  serialNumber?: string;
+  uid?: string;
+  contactOwner?: string;
+  // API specific identifiers
+  tokenId?: string;
+  sourceSystem?: string;
 }
 
 export default function IdentityManagementPage() {
@@ -62,7 +70,11 @@ export default function IdentityManagementPage() {
       accessLevel: 'standard',
       riskLevel: 'low',
       mfaEnabled: false,
-      lastActive: '2025-05-06'
+      lastActive: '2025-05-06',
+      imei: '490154203237518',
+      serialNumber: 'SVR2025-BK-328',
+      uid: 'a8f2e9d1-c6b7-4e5f-9a3b-2d1c8e7f6a5b',
+      contactOwner: 'John Smith'
     },
     {
       id: 'API001',
@@ -255,7 +267,7 @@ export default function IdentityManagementPage() {
                   <div>
                     <CardTitle>Digital Data Nucleic Authority (DDNA)</CardTitle>
                     <CardDescription>
-                      Central repository for DNA components that create intermediate identity representation
+                      Digital Registry and central repository for DNA components 
                       <Badge variant="outline" className="ml-2 border-blue-500 text-blue-600">
                         Government ID Verified
                       </Badge>
@@ -450,7 +462,8 @@ export default function IdentityManagementPage() {
                       <li>First row must contain column headers</li>
                       <li>User IDs must be unique</li>
                       <li>Required fields: User ID, First Name, Last Name, Email, Identity Type</li>
-                      <li>For machine and API identities, provide a contact owner</li>
+                      <li>For machine identities, provide: contact owner, IMEI, serial number, UID</li>
+                      <li>For API identities, include: owner, UUID/token ID, source system</li>
                       <li>For human identities, government ID fields are required for DNA integration</li>
                       <li>Government ID information will be validated during import</li>
                     </ul>
@@ -528,7 +541,7 @@ export default function IdentityManagementPage() {
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-2">Machine Identity Template</h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Specialized template for tracking machine identities, service accounts, and system processes.
+                    Specialized template for tracking machine identities with IMEI, serial numbers, UIDs and hardware details.
                   </p>
                   <Button variant="outline" size="sm">
                     <Download className="h-4 w-4 mr-2" />
@@ -550,7 +563,7 @@ export default function IdentityManagementPage() {
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-2">API Identity Template</h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Template for tracking API keys, service tokens, and integration credentials.
+                    Template for tracking API keys, service tokens, UUIDs, and source system identifiers.
                   </p>
                   <Button variant="outline" size="sm">
                     <Download className="h-4 w-4 mr-2" />
