@@ -25,26 +25,26 @@ interface PricingPlan {
 }
 
 export default function PricingSection() {
-  const [selectedPlan, setSelectedPlan] = useState<string>("professional");
+  const [selectedPlan, setSelectedPlan] = useState<string>("clinics");
   const [selectedAddons, setSelectedAddons] = useState<Record<string, Record<string, boolean>>>({
-    basic: {},
-    professional: {},
-    business: {}
+    "small medical/health practices": {},
+    clinics: {},
+    "hospitals/healthtechs": {}
   });
   const [serverCount, setServerCount] = useState<Record<string, string>>({
-    basic: "0",
-    professional: "0",
-    business: "0"
+    "small medical/health practices": "0",
+    clinics: "0",
+    "hospitals/healthtechs": "0"
   });
   const [endpointCount, setEndpointCount] = useState<Record<string, string>>({
-    basic: "0",
-    professional: "0",
-    business: "0"
+    "small medical/health practices": "0",
+    clinics: "0",
+    "hospitals/healthtechs": "0"
   });
   const [appCount, setAppCount] = useState<Record<string, string>>({
-    basic: "0",
-    professional: "0",
-    business: "0"
+    "small medical/health practices": "0",
+    clinics: "0",
+    "hospitals/healthtechs": "0"
   });
   const [, setLocation] = useLocation();
 
@@ -60,9 +60,9 @@ export default function PricingSection() {
   
   // State for auto-select notification
   const [showAutoSelectNotification, setShowAutoSelectNotification] = useState<Record<string, boolean>>({
-    basic: false,
-    professional: false,
-    business: false
+    "small medical/health practices": false,
+    clinics: false,
+    "hospitals/healthtechs": false
   });
   
   // Helper function to auto-select relevant add-ons based on infrastructure inputs
@@ -208,9 +208,9 @@ export default function PricingSection() {
 
   const plans: PricingPlan[] = [
     {
-      name: "Basic",
+      name: "Small Medical/Health Practices",
       price: "29.99",
-      description: "Best for small teams up to 5 users",
+      description: "Best for small medical practices up to 5 users",
       features: [
         { included: true, text: "Addition of up to 5 users" },
         { included: true, text: "Secure Cloud (Google docs and sheets)" },
@@ -228,9 +228,9 @@ export default function PricingSection() {
       ]
     },
     {
-      name: "Professional",
+      name: "Clinics",
       price: "49.99",
-      description: "Ideal for growing teams up to 15 users",
+      description: "Ideal for growing clinics up to 15 users",
       isPopular: true,
       features: [
         { included: true, text: "Addition of up to 15 users" },
@@ -251,9 +251,9 @@ export default function PricingSection() {
       ]
     },
     {
-      name: "Business",
+      name: "Hospitals/HealthTechs",
       price: "99.99",
-      description: "Perfect for larger teams up to 50 users",
+      description: "Perfect for hospitals and health technology companies up to 50 users",
       features: [
         { included: true, text: "Addition of up to 50 users" },
         { included: true, text: "Secure Cloud (Google docs and sheets)" },
