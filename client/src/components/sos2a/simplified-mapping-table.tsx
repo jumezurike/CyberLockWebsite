@@ -30,7 +30,7 @@ export default function SimplifiedMappingTable() {
     },
     {
       domain: "Identity & Access Management (IAM)",
-      parameters: ["Identity, Behavior & Hygiene", "Adversarial Insight (MITRE ATT&CK)"],
+      parameters: ["Identity Behavior & Hygiene", "Adversarial Insight (MITRE ATT&CK)"],
       explanation: "Monitors user identities and behaviors to enforce least privilege and detect anomalies."
     },
     {

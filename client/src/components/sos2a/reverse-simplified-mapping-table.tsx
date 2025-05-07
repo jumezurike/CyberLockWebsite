@@ -64,7 +64,7 @@ export default function ReverseSimplifiedMappingTable() {
       explanation: "Maintains awareness of all devices (OS, browsers, mobile, IoT) to ensure complete security coverage."
     },
     {
-      parameter: "12. Identity, Behavior & Hygiene",
+      parameter: "12. Identity Behavior & Hygiene",
       domains: ["IAM", "Access Control", "Security Awareness"],
       explanation: "Monitors user identities and behaviors to enforce least privilege and detect anomalies."
     }
