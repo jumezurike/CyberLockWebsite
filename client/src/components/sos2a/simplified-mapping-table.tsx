@@ -15,7 +15,7 @@ export default function SimplifiedMappingTable() {
     },
     {
       domain: "Asset Management",
-      parameters: ["Infrastructure Mode of Operation", "Device Inventory Tracking"],
+      parameters: ["Infrastructure Mode of Operation", "Baseline Configuration"],
       explanation: "Maintains awareness of all devices (OS, browsers, mobile, IoT) to ensure complete security coverage."
     },
     {
@@ -30,8 +30,8 @@ export default function SimplifiedMappingTable() {
     },
     {
       domain: "Identity & Access Management (IAM)",
-      parameters: ["Identity Behavior & Hygiene", "Adversarial Insight (MITRE ATT&CK)"],
-      explanation: "Monitors user identities and behaviors to enforce least privilege and detect anomalies."
+      parameters: ["Baseline Configuration", "Security Risks & Vulnerabilities", "Adversarial Insight (MITRE ATT&CK)"],
+      explanation: "Manages digital identities and ensures proper authentication and authorization across systems."
     },
     {
       domain: "Incident Response",
