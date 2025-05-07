@@ -134,9 +134,12 @@ export default function RelationshipStrengthMappingTable() {
       parameters: [
         { name: "Regulatory Requirements", strength: 'High' },
         { name: "Compliance Requirements", strength: 'High' },
-        { name: "Security Control vs Framework", strength: 'Medium' }
+        { name: "Security Control vs Framework", strength: 'Medium' },
+        { name: "Device Inventory Tracking", strength: 'Medium' },
+        { name: "Identity Behavior & Hygiene", strength: 'Medium' },
+        { name: "Information Security Management System (ISMS)", strength: 'Medium' }
       ],
-      explanation: "Manages vendor/partner risk through assessments and contractual requirements."
+      explanation: "Manages vendor/partner risk through assessments, contractual requirements, and controls for third-party identities and devices."
     },
     {
       domain: "Compliance Management",
@@ -292,7 +295,8 @@ export function ReverseRelationshipStrengthMappingTable() {
       domains: [
         { name: "Security Governance", strength: 'High' }, 
         { name: "Security Awareness", strength: 'High' }, 
-        { name: "Incident Response", strength: 'Medium' }
+        { name: "Incident Response", strength: 'Medium' },
+        { name: "Third-Party Management", strength: 'Medium' }
       ],
       explanation: "Governance system that defines policies, risk posture, education, and monitoring for security."
     },
@@ -302,7 +306,8 @@ export function ReverseRelationshipStrengthMappingTable() {
         { name: "Identity and Access Management", strength: 'High' },
         { name: "Asset Management", strength: 'High' },
         { name: "Endpoint Security", strength: 'High' },
-        { name: "Network Security", strength: 'Medium' }
+        { name: "Network Security", strength: 'Medium' },
+        { name: "Third-Party Management", strength: 'Medium' }
       ],
       explanation: "Comprehensive tracking of hardware and software assets with detailed ownership and security posture information."
     },
@@ -312,7 +317,8 @@ export function ReverseRelationshipStrengthMappingTable() {
         { name: "Identity and Access Management", strength: 'High' },
         { name: "Access Control", strength: 'High' },
         { name: "Security Awareness", strength: 'Medium' },
-        { name: "Incident Response", strength: 'Medium' }
+        { name: "Incident Response", strength: 'Medium' },
+        { name: "Third-Party Management", strength: 'Medium' }
       ],
       explanation: "Monitors identity usage patterns, lifecycle management, and ensures proper authentication and authorization practices."
     }
