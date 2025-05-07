@@ -4133,23 +4133,189 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         )}
                       />
                       
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.backupDetails"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Backup Details</FormLabel>
-                            <FormControl>
-                              <Textarea 
-                                placeholder="Enter backup details (frequency, location, etc.)" 
-                                className="h-20"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      {/* Specific backup details fields */}
+                      <div className="border rounded-md p-4 my-4">
+                        <h5 className="font-medium mb-4">Enhanced Backup Details</h5>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.backupFrequency"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Backup Frequency</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select backup frequency" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="daily">Daily</SelectItem>
+                                    <SelectItem value="weekly">Weekly</SelectItem>
+                                    <SelectItem value="biweekly">Bi-weekly</SelectItem>
+                                    <SelectItem value="monthly">Monthly</SelectItem>
+                                    <SelectItem value="quarterly">Quarterly</SelectItem>
+                                    <SelectItem value="custom">Custom Schedule</SelectItem>
+                                    <SelectItem value="none">No Regular Backups</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.backupType"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Backup Type</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select backup type" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="full">Full Backup</SelectItem>
+                                    <SelectItem value="incremental">Incremental</SelectItem>
+                                    <SelectItem value="differential">Differential</SelectItem>
+                                    <SelectItem value="mirror">Mirror/Clone</SelectItem>
+                                    <SelectItem value="snapshot">Snapshot</SelectItem>
+                                    <SelectItem value="selective">Selective Files Only</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.backupLocation"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Backup Location</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select backup location" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="local">Local (Same Device)</SelectItem>
+                                    <SelectItem value="external">External Drive</SelectItem>
+                                    <SelectItem value="network">Network Storage/NAS</SelectItem>
+                                    <SelectItem value="cloud">Cloud Storage</SelectItem>
+                                    <SelectItem value="tape">Tape Backup</SelectItem>
+                                    <SelectItem value="offsite">Offsite Physical Location</SelectItem>
+                                    <SelectItem value="hybrid">Hybrid (Multiple Locations)</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.backupFolder"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Backup Folder/Path</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    placeholder="Enter specific backup folder or path" 
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  Specific files, folders, or paths that are backed up
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.backupRetentionPeriod"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Backup Retention Period</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select retention period" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="7days">7 Days</SelectItem>
+                                    <SelectItem value="30days">30 Days</SelectItem>
+                                    <SelectItem value="90days">90 Days</SelectItem>
+                                    <SelectItem value="6months">6 Months</SelectItem>
+                                    <SelectItem value="1year">1 Year</SelectItem>
+                                    <SelectItem value="7years">7 Years</SelectItem>
+                                    <SelectItem value="indefinite">Indefinite</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.backupLastTested"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Last Backup Restoration Test</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    type="date"
+                                    placeholder="Date last tested" 
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormDescription>
+                                  Date when backup restoration was last verified
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.backupDetails"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Additional Backup Notes</FormLabel>
+                              <FormControl>
+                                <Textarea 
+                                  placeholder="Enter any additional backup details or notes" 
+                                  className="h-20"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
                   
