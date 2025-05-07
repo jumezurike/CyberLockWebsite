@@ -48,6 +48,16 @@ export default function RelationshipStrengthMappingTable() {
       explanation: "Establishes the overall security posture including NIST 800-171, DFARS, and HIPAA requirements."
     },
     {
+      domain: "Identity and Access Management",
+      parameters: [
+        { name: "Identity Behavior & Hygiene", strength: 'High' },
+        { name: "Device Inventory Tracking", strength: 'High' },
+        { name: "Baseline Configuration", strength: 'High' },
+        { name: "Security Risks & Vulnerabilities", strength: 'Medium' }
+      ],
+      explanation: "Manages digital identities, authentication, and authorization across systems; ensures proper identity lifecycle management."
+    },
+    {
       domain: "Access Control",
       parameters: [
         { name: "Baseline Configuration", strength: 'High' },
@@ -285,6 +295,26 @@ export function ReverseRelationshipStrengthMappingTable() {
         { name: "Incident Response", strength: 'Medium' }
       ],
       explanation: "Governance system that defines policies, risk posture, education, and monitoring for security."
+    },
+    {
+      parameter: "Device Inventory Tracking",
+      domains: [
+        { name: "Identity and Access Management", strength: 'High' },
+        { name: "Asset Management", strength: 'High' },
+        { name: "Endpoint Security", strength: 'High' },
+        { name: "Network Security", strength: 'Medium' }
+      ],
+      explanation: "Comprehensive tracking of hardware and software assets with detailed ownership and security posture information."
+    },
+    {
+      parameter: "Identity Behavior & Hygiene",
+      domains: [
+        { name: "Identity and Access Management", strength: 'High' },
+        { name: "Access Control", strength: 'High' },
+        { name: "Security Awareness", strength: 'Medium' },
+        { name: "Incident Response", strength: 'Medium' }
+      ],
+      explanation: "Monitors identity usage patterns, lifecycle management, and ensures proper authentication and authorization practices."
     }
   ];
 
