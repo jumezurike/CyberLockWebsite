@@ -1,11 +1,11 @@
 import React from 'react';
 
 // Define relationship strength type
-type RelationshipStrength = 'High' | 'Medium' | 'Low';
+type RelationshipStrength = 'Critical' | 'High' | 'Medium' | 'Low';
 
 // Helper function to ensure type safety
 const asRelationshipStrength = (value: string): RelationshipStrength => {
-  if (value === 'High' || value === 'Medium' || value === 'Low') {
+  if (value === 'Critical' || value === 'High' || value === 'Medium' || value === 'Low') {
     return value as RelationshipStrength;
   }
   return 'Medium'; // Default fallback
@@ -24,6 +24,8 @@ interface DomainParameterMapping {
 // Use different colors based on strength
 const getStrengthColor = (strength: RelationshipStrength): string => {
   switch (strength) {
+    case 'Critical':
+      return 'bg-red-100 text-red-800';
     case 'High':
       return 'bg-green-100 text-green-800';
     case 'Medium':
@@ -39,19 +41,44 @@ export default function RelationshipStrengthMappingTable() {
   // Sample data with relationship strengths
   const mappingData: DomainParameterMapping[] = [
     {
+      domain: "Security Awareness",
+      parameters: [
+        { name: "Information Security Management System (ISMS)", strength: 'High' },
+        { name: "Adversarial Insight (MITRE ATT&CK)", strength: 'Medium' },
+        { name: "Security Risks & Vulnerabilities", strength: 'Low' }
+      ],
+      explanation: "Educates users on security threats, policies, and safe practices."
+    },
+    {
+      domain: "Asset Management",
+      parameters: [
+        { name: "Baseline Configuration", strength: 'High' },
+        { name: "Infrastructure Mode of Operation", strength: 'High' },
+        { name: "Relevant ACQ Tools", strength: 'Medium' }
+      ],
+      explanation: "Tracks hardware/software inventory, ownership, and lifecycle management."
+    },
+    {
       domain: "Security Governance",
       parameters: [
         { name: "Information Security Management System (ISMS)", strength: 'High' },
         { name: "Security Control vs Framework", strength: 'Medium' },
         { name: "Relevant ACQ Tools", strength: 'Low' }
       ],
-      explanation: "Establishes the overall security posture including NIST 800-171, DFARS, and HIPAA requirements."
+      explanation: "Establishes security policies, standards, and compliance oversight."
+    },
+    {
+      domain: "Compliance Management",
+      parameters: [
+        { name: "Compliance Requirements", strength: 'High' },
+        { name: "Regulatory Requirements", strength: 'High' },
+        { name: "Security Control vs Framework", strength: 'Medium' }
+      ],
+      explanation: "Ensures controls meet HIPAA, GDPR, DFARS, CMMC, etc., and are documented and auditable."
     },
     {
       domain: "Identity & Access Management (IAM)",
       parameters: [
-        { name: "Identity Behavior & Hygiene", strength: 'High' },
-        { name: "Device Inventory Tracking", strength: 'High' },
         { name: "Baseline Configuration", strength: 'High' },
         { name: "Security Risks & Vulnerabilities", strength: 'Medium' }
       ],
@@ -96,42 +123,20 @@ export default function RelationshipStrengthMappingTable() {
     {
       domain: "Endpoint Security",
       parameters: [
-        { name: "Device Inventory Tracking", strength: 'High' },
         { name: "Baseline Configuration", strength: 'High' },
         { name: "Security Risks & Vulnerabilities", strength: 'Medium' },
         { name: "Infrastructure Mode of Operation", strength: 'Medium' }
       ],
-      explanation: "Protects devices with EDR, patching, configuration management, and comprehensive device inventory."
+      explanation: "Protects devices with EDR, patching, and configuration management."
     },
     {
       domain: "Incident Response",
       parameters: [
         { name: "Security Risks & Vulnerabilities", strength: 'High' },
         { name: "Adversarial Insight (MITRE ATT&CK)", strength: 'High' },
-        { name: "Information Security Management System (ISMS)", strength: 'Medium' },
-        { name: "Identity Behavior & Hygiene", strength: 'Medium' }
+        { name: "Information Security Management System (ISMS)", strength: 'Medium' }
       ],
-      explanation: "Guides security breach detection, response, and recovery procedures, including identity-based threat detection."
-    },
-    {
-      domain: "Asset Management",
-      parameters: [
-        { name: "Device Inventory Tracking", strength: 'High' },
-        { name: "Baseline Configuration", strength: 'High' },
-        { name: "Infrastructure Mode of Operation", strength: 'Medium' },
-        { name: "Relevant ACQ Tools", strength: 'Medium' }
-      ],
-      explanation: "Tracks hardware/software inventory, ownership, and lifecycle management."
-    },
-    {
-      domain: "Security Awareness",
-      parameters: [
-        { name: "Information Security Management System (ISMS)", strength: 'High' },
-        { name: "Identity Behavior & Hygiene", strength: 'Medium' },
-        { name: "Adversarial Insight (MITRE ATT&CK)", strength: 'Medium' },
-        { name: "Security Risks & Vulnerabilities", strength: 'Low' }
-      ],
-      explanation: "Educates users on security threats, policies, safe practices, and identity hygiene requirements."
+      explanation: "Guides security breach detection, response, and recovery procedures."
     },
     {
       domain: "Third-Party Management",
@@ -139,20 +144,9 @@ export default function RelationshipStrengthMappingTable() {
         { name: "Regulatory Requirements", strength: 'High' },
         { name: "Compliance Requirements", strength: 'High' },
         { name: "Security Control vs Framework", strength: 'Medium' },
-        { name: "Device Inventory Tracking", strength: 'Medium' },
-        { name: "Identity Behavior & Hygiene", strength: 'Medium' },
         { name: "Information Security Management System (ISMS)", strength: 'Medium' }
       ],
-      explanation: "Manages vendor/partner risk through assessments, contractual requirements, and controls for third-party identities and devices."
-    },
-    {
-      domain: "Compliance Management",
-      parameters: [
-        { name: "Compliance Requirements", strength: 'High' },
-        { name: "Regulatory Requirements", strength: 'High' },
-        { name: "Security Control vs Framework", strength: 'Medium' }
-      ],
-      explanation: "Ensures controls meet HIPAA, GDPR, DFARS, CMMC, etc., and are documented and auditable."
+      explanation: "Manages vendor/partner risk through assessments, contractual requirements, and controls."
     }
   ];
 
@@ -162,6 +156,7 @@ export default function RelationshipStrengthMappingTable() {
       <div className="mb-3 flex items-center gap-4">
         <div className="text-sm">Relationship Strength:</div>
         <div className="flex items-center gap-2">
+          <span className="px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-800">Critical</span>
           <span className="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800">High</span>
           <span className="px-2 py-1 rounded text-xs font-medium bg-yellow-100 text-yellow-800">Medium</span>
           <span className="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-800">Low</span>
@@ -239,7 +234,8 @@ export function ReverseRelationshipStrengthMappingTable() {
         { name: "Data Protection", strength: 'High' },
         { name: "Application Security", strength: 'Medium' },
         { name: "Endpoint Security", strength: 'High' },
-        { name: "Asset Management", strength: 'High' }
+        { name: "Asset Management", strength: 'High' },
+        { name: "Identity & Access Management (IAM)", strength: 'High' }
       ],
       explanation: "Standardized security settings for systems, networks, and applications."
     },
@@ -303,28 +299,6 @@ export function ReverseRelationshipStrengthMappingTable() {
         { name: "Third-Party Management", strength: 'Medium' }
       ],
       explanation: "Governance system that defines policies, risk posture, education, and monitoring for security."
-    },
-    {
-      parameter: "Device Inventory Tracking",
-      domains: [
-        { name: "Identity & Access Management (IAM)", strength: 'High' },
-        { name: "Asset Management", strength: 'High' },
-        { name: "Endpoint Security", strength: 'High' },
-        { name: "Network Security", strength: 'Medium' },
-        { name: "Third-Party Management", strength: 'Medium' }
-      ],
-      explanation: "Comprehensive tracking of hardware and software assets with detailed ownership and security posture information."
-    },
-    {
-      parameter: "Identity Behavior & Hygiene",
-      domains: [
-        { name: "Identity & Access Management (IAM)", strength: 'High' },
-        { name: "Access Control", strength: 'High' },
-        { name: "Security Awareness", strength: 'Medium' },
-        { name: "Incident Response", strength: 'Medium' },
-        { name: "Third-Party Management", strength: 'Medium' }
-      ],
-      explanation: "Monitors identity usage patterns, lifecycle management, and ensures proper authentication and authorization practices."
     }
   ];
 
@@ -334,6 +308,7 @@ export function ReverseRelationshipStrengthMappingTable() {
       <div className="mb-3 flex items-center gap-4">
         <div className="text-sm">Relationship Strength:</div>
         <div className="flex items-center gap-2">
+          <span className="px-2 py-1 rounded text-xs font-medium bg-red-100 text-red-800">Critical</span>
           <span className="px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800">High</span>
           <span className="px-2 py-1 rounded text-xs font-medium bg-yellow-100 text-yellow-800">Medium</span>
           <span className="px-2 py-1 rounded text-xs font-medium bg-gray-100 text-gray-800">Low</span>
