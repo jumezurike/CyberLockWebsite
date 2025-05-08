@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { insertAssessmentSchema, insertEarlyAccessSubmissionSchema, insertRasbitaReportSchema } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
-import { initSendgrid, sendEarlyAccessNotification } from "./email-service";
+import { initMailgun, sendEarlyAccessNotification } from "./email-service";
 
 // Initialize Stripe with API key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -14,8 +14,8 @@ if (!process.env.STRIPE_SECRET_KEY) {
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function registerRoutes(app: Express): Promise<Server> {
-  // Initialize SendGrid (optional, will warn but not fail if keys not available)
-  initSendgrid();
+  // Initialize Mailgun (optional, will warn but not fail if keys not available)
+  initMailgun();
   
   // API routes
   
