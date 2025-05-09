@@ -90,14 +90,14 @@ export async function sendEarlyAccessNotification(submission: SubmissionEmailDat
     `;
 
     const data = {
-      from: `CyberLockX <noreply@${process.env.MAILGUN_DOMAIN}>`,
+      from: `CyberLockX Notifications <notifications@${process.env.MAILGUN_DOMAIN}>`,
       to: process.env.NOTIFICATION_EMAIL,
       subject: `New CyberLockX Early Access Request from ${submission.company}`,
       html: emailContent
     };
 
     console.log('Sending email with the following data:');
-    console.log('From:', `CyberLockX <noreply@${process.env.MAILGUN_DOMAIN}>`);
+    console.log('From:', `CyberLockX Notifications <notifications@${process.env.MAILGUN_DOMAIN}>`);
     console.log('To:', process.env.NOTIFICATION_EMAIL);
     console.log('Subject:', `New CyberLockX Early Access Request from ${submission.company}`);
     
