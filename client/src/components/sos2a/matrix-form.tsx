@@ -290,8 +290,8 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                               const updatedItem = { 
                                 ...currentItem, 
                                 infrastructureMode: {
-                                  ...currentItem.infrastructureMode,
-                                  gaps: currentItem.infrastructureMode.gaps.filter((_, i) => i !== index)
+                                  ...currentItem.infrastructureMode || {},
+                                  gaps: currentItem.infrastructureMode?.gaps?.filter((_, i) => i !== index) || []
                                 }
                               };
                               updateMatrixItem(currentInfraIndex, updatedItem);
@@ -472,8 +472,8 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                               const updatedItem = { 
                                 ...currentItem, 
                                 securityRisks: {
-                                  ...currentItem.securityRisks,
-                                  gaps: currentItem.securityRisks.gaps.filter((_, i) => i !== index)
+                                  ...currentItem.securityRisks || {},
+                                  gaps: currentItem.securityRisks?.gaps?.filter((_, i) => i !== index) || []
                                 }
                               };
                               updateMatrixItem(currentInfraIndex, updatedItem);
