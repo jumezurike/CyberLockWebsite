@@ -568,335 +568,119 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                 <h3 className="text-lg font-semibold mb-4">Information Security Management System (ISMS)</h3>
                 <div className="rounded-md border p-4">
                   <div className="mb-6">
-                    <h4 className="font-medium mb-2">The 4Ps of ISMS Implementation</h4>
+                    <h4 className="font-medium mb-2">ISMS Processes</h4>
                     
-                    <Accordion type="single" collapsible className="w-full">
-                      {/* People */}
-                      <AccordionItem value="people">
-                        <AccordionTrigger className="font-medium">People</AccordionTrigger>
-                        <AccordionContent>
-                          <div className="space-y-3">
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-people-roles" 
-                                checked={currentItem.ismsImplementation?.people?.rolesResponsibilitiesDefined || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      people: {
-                                        ...(currentItem.ismsImplementation?.people || {}),
-                                        rolesResponsibilitiesDefined: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-people-roles">Roles & Responsibilities Defined</Label>
-                            </div>
+                    <div className="space-y-3">
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-policy" 
+                          checked={currentItem.isms?.processes?.includes("Information Security Policy") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Information Security Policy"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Information Security Policy");
                             
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-people-awareness" 
-                                checked={currentItem.ismsImplementation?.people?.securityAwarenessDone || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      people: {
-                                        ...(currentItem.ismsImplementation?.people || {}),
-                                        securityAwarenessDone: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-people-awareness">Security Awareness Training</Label>
-                            </div>
-                            
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-people-competence" 
-                                checked={currentItem.ismsImplementation?.people?.competencyAssessed || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      people: {
-                                        ...(currentItem.ismsImplementation?.people || {}),
-                                        competencyAssessed: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-people-competence">Competency Assessment</Label>
-                            </div>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-policy">Information Security Policy</Label>
+                      </div>
                       
-                      {/* Processes */}
-                      <AccordionItem value="processes">
-                        <AccordionTrigger className="font-medium">Processes</AccordionTrigger>
-                        <AccordionContent>
-                          <div className="space-y-3">
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-process-policy" 
-                                checked={currentItem.ismsImplementation?.processes?.informationSecurityPolicy || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      processes: {
-                                        ...(currentItem.ismsImplementation?.processes || {}),
-                                        informationSecurityPolicy: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-process-policy">Information Security Policy</Label>
-                            </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-risk" 
+                          checked={currentItem.isms?.processes?.includes("Risk Assessment & Treatment") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Risk Assessment & Treatment"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Risk Assessment & Treatment");
                             
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-process-risk" 
-                                checked={currentItem.ismsImplementation?.processes?.riskAssessment || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      processes: {
-                                        ...(currentItem.ismsImplementation?.processes || {}),
-                                        riskAssessment: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-process-risk">Risk Assessment & Treatment</Label>
-                            </div>
-                            
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-process-incident" 
-                                checked={currentItem.ismsImplementation?.processes?.incidentManagement || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      processes: {
-                                        ...(currentItem.ismsImplementation?.processes || {}),
-                                        incidentManagement: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-process-incident">Incident Management</Label>
-                            </div>
-                            
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-process-continuity" 
-                                checked={currentItem.ismsImplementation?.processes?.businessContinuity || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      processes: {
-                                        ...(currentItem.ismsImplementation?.processes || {}),
-                                        businessContinuity: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-process-continuity">Business Continuity</Label>
-                            </div>
-                            
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-process-compliance" 
-                                checked={currentItem.ismsImplementation?.processes?.complianceManagement || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      processes: {
-                                        ...(currentItem.ismsImplementation?.processes || {}),
-                                        complianceManagement: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-process-compliance">Compliance Management</Label>
-                            </div>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-risk">Risk Assessment & Treatment</Label>
+                      </div>
                       
-                      {/* Products */}
-                      <AccordionItem value="products">
-                        <AccordionTrigger className="font-medium">Products</AccordionTrigger>
-                        <AccordionContent>
-                          <div className="space-y-3">
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-product-asset" 
-                                checked={currentItem.ismsImplementation?.products?.assetManagement || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      products: {
-                                        ...(currentItem.ismsImplementation?.products || {}),
-                                        assetManagement: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-product-asset">Asset Management</Label>
-                            </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-incident" 
+                          checked={currentItem.isms?.processes?.includes("Incident Management") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Incident Management"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Incident Management");
                             
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-product-access" 
-                                checked={currentItem.ismsImplementation?.products?.accessControl || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      products: {
-                                        ...(currentItem.ismsImplementation?.products || {}),
-                                        accessControl: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-product-access">Access Control Systems</Label>
-                            </div>
-                            
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-product-crypto" 
-                                checked={currentItem.ismsImplementation?.products?.cryptography || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      products: {
-                                        ...(currentItem.ismsImplementation?.products || {}),
-                                        cryptography: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-product-crypto">Cryptography</Label>
-                            </div>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-incident">Incident Management</Label>
+                      </div>
                       
-                      {/* Partners */}
-                      <AccordionItem value="partners">
-                        <AccordionTrigger className="font-medium">Partners</AccordionTrigger>
-                        <AccordionContent>
-                          <div className="space-y-3">
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-partners-supplier" 
-                                checked={currentItem.ismsImplementation?.partners?.supplierRelationships || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      partners: {
-                                        ...(currentItem.ismsImplementation?.partners || {}),
-                                        supplierRelationships: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-partners-supplier">Supplier Relationships</Label>
-                            </div>
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-continuity" 
+                          checked={currentItem.isms?.processes?.includes("Business Continuity") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Business Continuity"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Business Continuity");
                             
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-partners-service" 
-                                checked={currentItem.ismsImplementation?.partners?.serviceAgreements || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      partners: {
-                                        ...(currentItem.ismsImplementation?.partners || {}),
-                                        serviceAgreements: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-partners-service">Service Level Agreements</Label>
-                            </div>
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-continuity">Business Continuity</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-compliance" 
+                          checked={currentItem.isms?.processes?.includes("Compliance Management") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Compliance Management"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Compliance Management");
                             
-                            <div className="flex items-center space-x-3">
-                              <Checkbox 
-                                id="isms-partners-monitoring" 
-                                checked={currentItem.ismsImplementation?.partners?.partnerMonitoring || false}
-                                onCheckedChange={(checked) => {
-                                  const updatedItem = { 
-                                    ...currentItem, 
-                                    ismsImplementation: {
-                                      ...currentItem.ismsImplementation || {},
-                                      partners: {
-                                        ...(currentItem.ismsImplementation?.partners || {}),
-                                        partnerMonitoring: !!checked
-                                      }
-                                    }
-                                  };
-                                  updateMatrixItem(currentInfraIndex, updatedItem);
-                                }}
-                              />
-                              <Label htmlFor="isms-partners-monitoring">Partner Monitoring & Auditing</Label>
-                            </div>
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    </Accordion>
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-compliance">Compliance Management</Label>
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="mb-4">
@@ -906,13 +690,13 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                         <div 
                           key={level}
                           className={`rounded-md border p-2 cursor-pointer hover:border-primary hover:bg-primary/5 ${
-                            currentItem.ismsImplementation?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
+                            currentItem.informationSecurityManagementSystem?.implementationLevel === level ? 'border-primary bg-primary/10' : ''
                           }`}
                           onClick={() => {
                             const updatedItem = { 
                               ...currentItem, 
-                              ismsImplementation: {
-                                ...currentItem.ismsImplementation || {},
+                              informationSecurityManagementSystem: {
+                                ...currentItem.informationSecurityManagementSystem || {},
                                 implementationLevel: level
                               }
                             };
@@ -938,7 +722,7 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                   <div>
                     <h4 className="font-medium mb-2">Implementation Gaps</h4>
                     <div className="flex flex-wrap gap-2 mb-2">
-                      {currentItem.ismsImplementation?.gaps?.map((gap, index) => (
+                      {currentItem.informationSecurityManagementSystem?.gaps?.map((gap, index) => (
                         <Badge key={index} variant="secondary" className="gap-2">
                           {gap}
                           <button 
@@ -946,9 +730,9 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                             onClick={() => {
                               const updatedItem = { 
                                 ...currentItem, 
-                                ismsImplementation: {
-                                  ...currentItem.ismsImplementation || {},
-                                  gaps: currentItem.ismsImplementation?.gaps?.filter((_, i) => i !== index) || []
+                                informationSecurityManagementSystem: {
+                                  ...currentItem.informationSecurityManagementSystem || {},
+                                  gaps: currentItem.informationSecurityManagementSystem?.gaps?.filter((_, i) => i !== index) || []
                                 }
                               };
                               updateMatrixItem(currentInfraIndex, updatedItem);
@@ -969,11 +753,11 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                             if (inputValue.trim()) {
                               const updatedItem = { 
                                 ...currentItem, 
-                                ismsImplementation: {
-                                  ...currentItem.ismsImplementation || {
+                                informationSecurityManagementSystem: {
+                                  ...currentItem.informationSecurityManagementSystem || {
                                     gaps: []
                                   },
-                                  gaps: [...(currentItem.ismsImplementation?.gaps || []), inputValue]
+                                  gaps: [...(currentItem.informationSecurityManagementSystem?.gaps || []), inputValue]
                                 }
                               };
                               updateMatrixItem(currentInfraIndex, updatedItem);
@@ -990,11 +774,11 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                           if (inputValue.trim()) {
                             const updatedItem = { 
                               ...currentItem, 
-                              ismsImplementation: {
-                                ...currentItem.ismsImplementation || {
+                              informationSecurityManagementSystem: {
+                                ...currentItem.informationSecurityManagementSystem || {
                                   gaps: []
                                 },
-                                gaps: [...(currentItem.ismsImplementation?.gaps || []), inputValue]
+                                gaps: [...(currentItem.informationSecurityManagementSystem?.gaps || []), inputValue]
                               }
                             };
                             updateMatrixItem(currentInfraIndex, updatedItem);
