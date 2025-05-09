@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import ScoreCardVisualizations from "./scorecard-visualizations";
 
 interface MatrixFormProps {
   operationModes: string[];
@@ -26,6 +27,7 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
     generateInitialMatrixData(operationModes, internetPresence)
   );
   const [currentInfraIndex, setCurrentInfraIndex] = useState(0);
+  const [showScorecard, setShowScorecard] = useState(false);
   
   // Function to update a specific matrix item
   const updateMatrixItem = (index: number, updatedItem: MatrixItem) => {
@@ -566,8 +568,19 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
         
         <div className="mt-6 flex justify-between">
           <Button variant="outline" onClick={onBack}>Back</Button>
-          <Button onClick={() => onSubmit(matrixData)}>Save and Continue</Button>
+          <div className="flex space-x-2">
+            <Button 
+              variant="secondary" 
+              onClick={() => setShowScorecard(!showScorecard)}
+            >
+              {showScorecard ? "Hide Report" : "Generate Report"}
+            </Button>
+            <Button onClick={() => onSubmit(matrixData)}>Save and Continue</Button>
+          </div>
         </div>
+        
+        {/* SCORECARD Visualizations */}
+        {showScorecard && <ScoreCardVisualizations data={matrixData} />}
       </CardContent>
     </Card>
   );
