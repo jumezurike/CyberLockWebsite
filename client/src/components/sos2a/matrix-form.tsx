@@ -567,6 +567,45 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
               <div>
                 <h3 className="text-lg font-semibold mb-4">Information Security Management System (ISMS)</h3>
                 <div className="rounded-md border p-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div className="flex items-center space-x-3">
+                      <Switch 
+                        id="isms-implemented" 
+                        checked={currentItem.informationSecurityManagementSystem?.ismsImplemented || false}
+                        onCheckedChange={(checked) => {
+                          const updatedItem = { 
+                            ...currentItem, 
+                            informationSecurityManagementSystem: {
+                              ...currentItem.informationSecurityManagementSystem || {},
+                              ismsImplemented: checked
+                            }
+                          };
+                          updateMatrixItem(currentInfraIndex, updatedItem);
+                        }}
+                      />
+                      <Label htmlFor="isms-implemented">ISMS Implemented</Label>
+                    </div>
+                    
+                    <div className="flex items-center space-x-3">
+                      <Switch 
+                        id="isms-iso27001" 
+                        checked={currentItem.informationSecurityManagementSystem?.iso27001Compliant || false}
+                        onCheckedChange={(checked) => {
+                          const updatedItem = { 
+                            ...currentItem, 
+                            informationSecurityManagementSystem: {
+                              ...currentItem.informationSecurityManagementSystem || {},
+                              iso27001Compliant: checked
+                            }
+                          };
+                          updateMatrixItem(currentInfraIndex, updatedItem);
+                        }}
+                      />
+                      <Label htmlFor="isms-iso27001">ISO 27001 Compliant</Label>
+                    </div>
+                  </div>
+                  
+                  {/* ISMS Processes Section */}
                   <div className="mb-6">
                     <h4 className="font-medium mb-2">ISMS Processes</h4>
                     
@@ -684,7 +723,7 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                   </div>
                   
                   <div className="mb-4">
-                    <h4 className="font-medium mb-2">ISMS Implementation Level</h4>
+                    <h4 className="font-medium mb-2">Implementation Level</h4>
                     <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
                       {[0, 1, 2, 3, 4, 5].map((level) => (
                         <div 
@@ -708,8 +747,8 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                             <p className="text-xs">
                               {level === 0 && 'Not Implemented'}
                               {level === 1 && 'Initial'}
-                              {level === 2 && 'Managed'}
-                              {level === 3 && 'Defined'}
+                              {level === 2 && 'Defined'}
+                              {level === 3 && 'Managed'}
                               {level === 4 && 'Measured'}
                               {level === 5 && 'Optimized'}
                             </p>
@@ -789,6 +828,25 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                         Add
                       </Button>
                     </div>
+                  </div>
+                  
+                  <div className="mt-4">
+                    <h4 className="font-medium mb-2">Notes</h4>
+                    <textarea 
+                      className="w-full rounded-md border p-2 min-h-[100px]"
+                      value={currentItem.informationSecurityManagementSystem?.notes || ''}
+                      onChange={(e) => {
+                        const updatedItem = { 
+                          ...currentItem, 
+                          informationSecurityManagementSystem: {
+                            ...currentItem.informationSecurityManagementSystem || {},
+                            notes: e.target.value
+                          }
+                        };
+                        updateMatrixItem(currentInfraIndex, updatedItem);
+                      }}
+                      placeholder="Add notes about ISMS implementation..."
+                    ></textarea>
                   </div>
                 </div>
               </div>
