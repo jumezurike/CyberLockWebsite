@@ -10,7 +10,7 @@ export default function ThreatModelingSimple() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-purple-700 mb-2">RASBITA™ Threat Modeling</h1>
-        <p className="text-gray-600">Standalone Security Architecture Threat Assessment</p>
+        <p className="text-gray-600">Architecture Threat Modeling & Application Security</p>
       </div>
       
       <Card className="mb-8">

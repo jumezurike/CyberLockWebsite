@@ -33,13 +33,13 @@ export default function ThreatModelingPage() {
     <div className="container mx-auto px-4 py-8">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-purple-700 mb-2">RASBITA™ Threat Modeling</h1>
-        <p className="text-gray-600">Standalone Security Architecture Threat Assessment</p>
+        <p className="text-gray-600">Architecture Threat Modeling & Application Security</p>
       </div>
       
       {!showThreatModel ? (
         <Card className="bg-gradient-to-br from-purple-50 to-white border-purple-200">
           <CardHeader>
-            <CardTitle className="text-xl text-chart-4">Architecture Security Analysis</CardTitle>
+            <CardTitle className="text-xl text-chart-4">Architecture & Application Security Analysis</CardTitle>
             <CardDescription>
               Comprehensive threat modeling for healthcare applications and infrastructure
             </CardDescription>
@@ -152,7 +152,7 @@ export default function ThreatModelingPage() {
       ) : (
         <div className="space-y-6">
           <div className="flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-chart-4">Architectural Threat Assessment</h2>
+            <h2 className="text-xl font-semibold text-chart-4">Architecture & Application Security Assessment</h2>
             <div className="flex gap-2">
               <Button 
                 variant="outline" 
