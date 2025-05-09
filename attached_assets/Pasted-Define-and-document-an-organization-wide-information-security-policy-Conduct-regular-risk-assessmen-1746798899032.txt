@@ -1,0 +1,55 @@
+Define and document an organization-wide information security policy
+
+Conduct regular risk assessments (HIPAA Security Rule mandates this)
+
+Perform asset inventory and classification (especially of devices storing PHI)
+
+Establish access control rules and assign access based on least privilege
+
+Configure and manage identity and authentication systems (IAM, MFA)
+
+Apply encryption for data at rest and in transit (required for PHI protection)
+
+Implement secure baseline configurations for all systems and applications
+
+Monitor and manage system and software vulnerabilities
+
+Develop and execute a patch management process
+
+Install, configure, and update anti-malware and endpoint protection
+
+Segment the network and restrict internal lateral movement
+
+Implement firewall and intrusion detection/prevention systems
+
+Monitor logs and system activity using a SIEM or equivalent
+
+Conduct regular backups and verify recovery from backups
+
+Create and test a disaster recovery and business continuity strategy
+
+Document and practice incident response procedures (HIPAA breach reporting)
+
+Report, track, and respond to security incidents and breaches
+
+Secure physical access to offices, data centers, and critical assets (HIPAA Physical Safeguards)
+
+Conduct security testing on applications (e.g., SAST, DAST, penetration testing) (esp. EHRs)
+
+Evaluate and monitor the security of third-party service providers
+
+Formalize contracts and BAAs with third parties handling sensitive data (mandatory under HIPAA)
+
+Train employees on security awareness and acceptable use (required under HIPAA Training Rule)
+
+Simulate phishing attacks and evaluate user readiness
+
+Define data retention, archiving, and secure disposal rules
+
+Document and maintain change management and configuration control processes
+
+Align security controls with applicable regulations (HIPAA, PCI DSS, etc.)
+
+Continuously monitor cloud services for misconfigurations or exposures (for cloud-based EHRs)
+
+Establish a privacy management process aligned with data protection laws (e.g., HIPAA, GDPR)
