@@ -2143,21 +2143,30 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
             
             {/* Third Party Management Tab */}
             <TabsContent value="thirdPartyManagement">
-                            checked={currentItem.applicationSecurity?.secureCoding || false}
+              <div className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-4">Third Party Management Implementation</h3>
+                  <div className="rounded-md border p-4">
+                    <div className="mb-4">
+                      <h4 className="font-medium mb-2">Key Controls</h4>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-3">
+                          <Switch 
+                            id="tpm-vendor-assessment" 
+                            checked={currentItem.thirdPartyManagement?.vendorAssessment || false}
                             onCheckedChange={(checked) => {
                               const updatedItem = { 
                                 ...currentItem, 
-                                applicationSecurity: {
-                                  ...currentItem.applicationSecurity || {},
-                                  secureCoding: checked
+                                thirdPartyManagement: {
+                                  ...currentItem.thirdPartyManagement || {},
+                                  vendorAssessment: checked
                                 }
                               };
                               updateMatrixItem(currentInfraIndex, updatedItem);
                             }}
                           />
-                          <Label htmlFor="as-secure-coding">Secure Coding Practices</Label>
+                          <Label htmlFor="tpm-vendor-assessment">Vendor Assessment</Label>
                         </div>
-                        
                         <div className="flex items-center space-x-3">
                           <Switch 
                             id="as-vulnerability-scanning" 
