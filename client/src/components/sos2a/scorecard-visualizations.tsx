@@ -18,6 +18,8 @@ import {
 } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { frameworkMappings, getAutomationPercentage } from "@/lib/sos2a-framework-mappings";
+import { deepScanMappings } from "@/lib/deep-scan-mappings";
 
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
 
@@ -26,21 +28,21 @@ interface ScorecardVisualizationsProps {
 }
 
 export default function ScorecardVisualizations({ data }: ScorecardVisualizationsProps) {
-  // Sample data for visualizations
-  const qualitativeData = [
-    { name: "Infrastructure Mode", value: 85 },
-    { name: "Security Risks", value: 90 },
-    { name: "Baseline Config", value: 75 },
-    { name: "Security Controls", value: 80 },
-    { name: "Compliance Reqs", value: 95 },
-    { name: "Regulatory Reqs", value: 70 },
-    { name: "Standards", value: 88 },
-    { name: "ACQ Tools", value: 65 },
-    { name: "MITRE ATT&CK", value: 92 },
-    { name: "ISMS", value: 78 },
-    { name: "Device Inventory", value: 96 },
-    { name: "Identity Behavior", value: 82 },
-  ];
+  // Use the framework mappings for Pillar 1 visualization
+  const qualitativeData = frameworkMappings.map(mapping => ({
+    name: mapping.parameter.split(' ').slice(0, 2).join(' '),
+    fullName: mapping.parameter,
+    value: getAutomationPercentage(mapping.automationLevel),
+    automationLevel: mapping.automationLevel
+  }));
+
+  // Use deep scan mappings for Pillar 2 visualization
+  const deepScanData = deepScanMappings.map((scan, index) => ({
+    name: scan.parameter,
+    value: 25 + Math.floor(Math.random() * 35), // Randomized values between 25-60 for sample data
+    qualitativeAreas: scan.qualitativeAreas,
+    validationMethod: scan.validationMethod
+  }));
 
   const radarData = [
     { subject: "Identification", A: 120, B: 110, fullMark: 150 },
@@ -50,6 +52,7 @@ export default function ScorecardVisualizations({ data }: ScorecardVisualization
     { subject: "Recovery", A: 85, B: 90, fullMark: 150 },
   ];
 
+  // Updated pieData to use the 5 pillars
   const pieData = [
     { name: "Qualitative Assessment", value: 400 },
     { name: "Quantitative Analysis", value: 300 },
@@ -90,39 +93,53 @@ export default function ScorecardVisualizations({ data }: ScorecardVisualization
               <BarChart data={qualitativeData} layout="vertical">
                 <XAxis type="number" domain={[0, 100]} />
                 <YAxis type="category" dataKey="name" width={100} />
-                <Tooltip formatter={(value) => [`${value}%`, "Score"]} />
+                <Tooltip 
+                  formatter={(value, name, props) => [`${value}%`, props.payload.fullName]}
+                  labelFormatter={() => "Automation Level"}
+                />
                 <Legend />
-                <Bar dataKey="value" fill="#8884d8" name="Parameter Score (%)" />
+                <Bar dataKey="value" fill="#8884d8" name="Parameter Score (%)">
+                  {qualitativeData.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={entry.value >= 90 ? "#00C49F" : entry.value >= 80 ? "#FFBB28" : "#FF8042"}
+                    />
+                  ))}
+                </Bar>
               </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
 
         {/* Pillar 2: Quantitative Analysis */}
-        <Card>
+        <Card className="col-span-1 md:col-span-2">
           <CardHeader>
             <CardTitle>Pillar 2: Quantitative Analysis (Deep Scan 100%)</CardTitle>
             <CardDescription>Professional scanning tools with detailed analysis</CardDescription>
           </CardHeader>
           <CardContent className="h-80">
             <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  cx="50%"
-                  cy="50%"
-                  labelLine={false}
-                  outerRadius={80}
-                  fill="#8884d8"
-                  dataKey="value"
-                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                >
-                  {pieData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+              <BarChart data={deepScanData} layout="vertical">
+                <XAxis type="number" domain={[0, 100]} />
+                <YAxis type="category" dataKey="name" width={120} />
+                <Tooltip 
+                  formatter={(value, name, props) => [
+                    `${value}%`, 
+                    `${props.payload.name}`
+                  ]}
+                  labelFormatter={() => "Deep Scan Parameter"}
+                  cursor={{ fill: 'rgba(136, 132, 216, 0.1)' }}
+                />
+                <Legend />
+                <Bar dataKey="value" fill="#00C49F" name="Deep Scan Completion (%)">
+                  {deepScanData.map((entry, index) => (
+                    <Cell 
+                      key={`cell-${index}`} 
+                      fill={entry.value >= 50 ? "#00C49F" : entry.value >= 35 ? "#FFBB28" : "#FF8042"}
+                    />
                   ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
+                </Bar>
+              </BarChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>

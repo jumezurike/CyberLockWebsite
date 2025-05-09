@@ -1,0 +1,37 @@
+Mapping Deep Scan Parameters to Qualitative Analysis Proof
+Deep Scan Parameter (Quantitative)	Proof of Qualitative Assessment Area	How Deep Scanning Provides Proof & Validation
+1. Vulnerability & Patch Mgmt	- Security Risks & Vulnerabilities
+- Baseline Configuration	Provides quantitative CVE & vulnerability counts, patch levels, asset exposure, directly validating risks, vulnerabilities, and configuration baselines.
+2. Misconfigurations	- Baseline Configuration
+- Standards & Guidelines
+- Regulatory Requirements	Quantitative proof via configuration audits, compliance percentages against CIS or NIST baselines, demonstrating adherence to standards & regulatory requirements.
+3. Malware & Endpoint Security	- Security Risks & Vulnerabilities
+- Relevant ACQ Tools
+- Device Inventory Tracking	Endpoint security logs validate malware presence, device integrity, EDR effectiveness. Confirms inventory accuracy through endpoint detection.
+4. Credential Exposure & IAM	- Identity Behavior & Hygiene
+- Compliance Requirements
+- Standards & Guidelines	IAM audit logs quantitatively validate adherence to credential management standards, demonstrate identity hygiene, compliance with regulatory identity requirements.
+5. Phishing & Email Security	- Security Risks & Vulnerabilities
+- Security Control vs Framework
+- Regulatory Requirements	Phishing detection statistics quantify security control effectiveness, validate compliance with regulatory email security mandates.
+6. Cloud Security Posture	- Baseline Configuration
+- Standards & Guidelines
+- Compliance & Regulatory Requirements	Cloud Security Posture Management (CSPM) tools quantitatively validate adherence to cloud baselines, regulatory compliance, and alignment with industry standards.
+7. Network Exposure & Zero Trust	- Security Control vs Framework
+- Adversarial Insight (MITRE ATT&CK)
+- Baseline Configuration	Quantitative proof via network exposure scans, segmentation compliance, validating Zero Trust architecture effectiveness and mapping to adversarial attack vectors (MITRE ATT&CK).
+8. Data Security & Leakage	- Compliance Requirements
+- Regulatory Requirements
+- Information Security Management System (ISMS)	Data leakage scans & DLP logs provide quantifiable proof of adherence to data security policies, validating regulatory and compliance requirements within ISMS frameworks.
+9. Browser & Web Security	- Security Risks & Vulnerabilities
+- Standards & Guidelines
+- Relevant ACQ Tools	Web vulnerability reports quantitatively prove adherence to secure browser standards, validate relevant tools’ effectiveness, and identify web-based risks.
+10. Compliance & Frameworks	- Compliance Requirements
+- Regulatory Requirements
+- Standards & Guidelines	Automated GRC platform dashboards provide numerical evidence of adherence to compliance, regulatory frameworks (ISO, SOC2, HIPAA), and validate documented standards.
+11. Threat Intelligence	- Adversarial Insight (MITRE ATT&CK)
+- Security Risks & Vulnerabilities
+- Relevant ACQ Tools	Threat intelligence reports quantitatively validate adversarial threats, effectiveness of threat mitigation tools, and alignment to known adversarial patterns via MITRE ATT&CK.
+12. Security Awareness & Insider Risk	- Identity Behavior & Hygiene
+- Information Security Management System (ISMS)
+- Compliance Requirements	Insider risk analytics quantitatively verify effectiveness of security awareness programs, adherence to ISMS controls, validate behavior monitoring and insider threat policies.
