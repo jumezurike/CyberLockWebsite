@@ -142,7 +142,7 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
       </CardHeader>
       <CardContent>
         <div className="mb-6">
-          <h3 className="font-medium mb-2">Select Infrastructure Component</h3>
+          <h3 className="font-medium mb-2">Infrastructure Components (Internet Gateway & Footprint)</h3>
           <div className="flex flex-wrap gap-2">
             {matrixData.map((item, index) => (
               <Button
