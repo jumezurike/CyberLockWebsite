@@ -96,8 +96,19 @@ export async function sendEarlyAccessNotification(submission: SubmissionEmailDat
       html: emailContent
     };
 
-    await mg.messages.create(process.env.MAILGUN_DOMAIN, data);
-    return true;
+    console.log('Sending email with the following data:');
+    console.log('From:', `CyberLockX <noreply@${process.env.MAILGUN_DOMAIN}>`);
+    console.log('To:', process.env.NOTIFICATION_EMAIL);
+    console.log('Subject:', `New CyberLockX Early Access Request from ${submission.company}`);
+    
+    try {
+      const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, data);
+      console.log('Mailgun response:', result);
+      return true;
+    } catch (error) {
+      console.error('Detailed Mailgun error:', JSON.stringify(error, null, 2));
+      throw error;
+    }
   } catch (error) {
     console.error('Error sending email:', error);
     return false;
