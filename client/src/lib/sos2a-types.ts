@@ -316,6 +316,34 @@ export interface MatrixItem {
   // New field for recommended standards from standardsLibrary (with healthcare highlighting)
   recommendedStandards?: Array<{id: string, name: string, isHealthcareRelevant: boolean}>;
   
+  // ISMS Implementation using the 4Ps structure
+  ismsImplementation?: {
+    implementationLevel?: number;
+    gaps?: string[];
+    people?: {
+      rolesResponsibilitiesDefined?: boolean;
+      securityAwarenessDone?: boolean;
+      competencyAssessed?: boolean;
+    };
+    processes?: {
+      informationSecurityPolicy?: boolean;
+      riskAssessment?: boolean;
+      incidentManagement?: boolean;
+      businessContinuity?: boolean;
+      complianceManagement?: boolean;
+    };
+    products?: {
+      assetManagement?: boolean;
+      accessControl?: boolean;
+      cryptography?: boolean;
+    };
+    partners?: {
+      supplierRelationships?: boolean;
+      serviceAgreements?: boolean;
+      partnerMonitoring?: boolean;
+    };
+  };
+  
   // Original control categories (maintaining for backward compatibility)
   operationControls: {
     frameworks: string[];
