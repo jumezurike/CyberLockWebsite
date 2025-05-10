@@ -3370,6 +3370,43 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                     
                     <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {processOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="ismsProcesses"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, option.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Leadership</h4>
                       <div className="space-y-4">
                         <FormField
