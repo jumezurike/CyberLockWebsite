@@ -22,15 +22,43 @@ interface MatrixFormProps {
   onBack: () => void;
 }
 
+// Map of process IDs to their display labels
+const processIdToLabelMap: Record<string, string> = {
+  "info-security-policy": "Define Information Security Policy",
+  "risk-assessments": "Conduct Risk Assessments",
+  "asset-inventory": "Perform Asset Inventory",
+  "access-control": "Establish Access Control Rules",
+  "identity-management": "Configure Identity Management",
+  "data-encryption": "Apply Data Encryption",
+  "security-awareness": "Conduct Security Awareness Training",
+  "change-management": "Implement Change Management",
+  "vulnerability-scanning": "Conduct Vulnerability Scanning",
+  "incident-response": "Perform Security Incident Response",
+  "privileged-access": "Implement Privileged Access Management",
+  "security-audits": "Conduct Regular Security Audits",
+  "network-security": "Implement Network Security Controls",
+  "backup-recovery": "Implement Backup and Recovery Procedures",
+  "penetration-testing": "Conduct Penetration Testing",
+  "data-classification": "Implement Data Classification",
+  "vendor-risk": "Establish Vendor Risk Management",
+  "physical-security": "Implement Physical Security Controls",
+};
+
 export default function MatrixForm({ operationModes, internetPresence, ismsProcesses = [], onSubmit, onBack }: MatrixFormProps) {
   // Generate initial matrix data based on selected operation modes and internet presence
   const initialMatrixData = generateInitialMatrixData(operationModes, internetPresence);
+  
+  // Convert process IDs to their display labels
+  const processLabels = ismsProcesses.map(id => processIdToLabelMap[id] || id);
+  
+  console.log("Matrix Form received ISMS processes (IDs):", ismsProcesses);
+  console.log("Mapped to process labels:", processLabels);
   
   // Ensure each item has isms property initialized
   initialMatrixData.forEach(item => {
     if (!item.isms) {
       item.isms = {
-        processes: ismsProcesses || [],
+        processes: processLabels,
         implementation: "none",
         policies: [],
         plans: [],
@@ -38,7 +66,7 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
       };
     } else {
       // Update processes if they exist
-      item.isms.processes = ismsProcesses || [];
+      item.isms.processes = processLabels;
     }
   });
   

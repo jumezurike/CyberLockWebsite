@@ -290,6 +290,7 @@ export default function Sos2aTool() {
   // Handle form submission
   const handleQuestionnaireSubmit = (data: Sos2aFormData) => {
     console.log("Parent component received form submission", data);
+    console.log("ISMS Processes from questionnaire:", data.ismsProcesses);
     // First show the review modal
     setFormData(data);
     // Save to localStorage
