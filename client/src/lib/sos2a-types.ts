@@ -307,13 +307,6 @@ export interface MatrixItem {
   educationAwareness: boolean;
   ismsImplemented: boolean;
   riskManagementProcess: boolean;
-  isms?: {
-    processes?: string[];
-    implementation?: string;
-    policies?: string[];
-    plans?: string[];
-    procedures?: string[];
-  };
   relevantACQTools?: {
     assessments?: string[];
     checklists?: string[];
