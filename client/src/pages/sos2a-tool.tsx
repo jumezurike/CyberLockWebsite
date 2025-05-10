@@ -2190,6 +2190,7 @@ export default function Sos2aTool() {
           <MatrixForm 
             operationModes={formData.operationMode}
             internetPresence={formData.internetPresence}
+            ismsProcesses={formData.ismsProcesses}
             onSubmit={handleMatrixSubmit}
             onBack={handleBack}
           />

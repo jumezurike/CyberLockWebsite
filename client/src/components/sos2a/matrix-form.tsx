@@ -17,11 +17,12 @@ import ScoreCardVisualizations from "./scorecard-visualizations";
 interface MatrixFormProps {
   operationModes: string[];
   internetPresence: string[];
+  ismsProcesses?: string[];
   onSubmit: (matrixData: MatrixItem[]) => void;
   onBack: () => void;
 }
 
-export default function MatrixForm({ operationModes, internetPresence, onSubmit, onBack }: MatrixFormProps) {
+export default function MatrixForm({ operationModes, internetPresence, ismsProcesses = [], onSubmit, onBack }: MatrixFormProps) {
   // Generate initial matrix data based on selected operation modes and internet presence
   const initialMatrixData = generateInitialMatrixData(operationModes, internetPresence);
   
@@ -29,12 +30,15 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
   initialMatrixData.forEach(item => {
     if (!item.isms) {
       item.isms = {
-        processes: [],
+        processes: ismsProcesses || [],
         implementation: "none",
         policies: [],
         plans: [],
         procedures: []
       };
+    } else {
+      // Update processes if they exist
+      item.isms.processes = ismsProcesses || [];
     }
   });
   
