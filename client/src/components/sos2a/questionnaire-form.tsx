@@ -856,6 +856,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "data-security", label: "Data Security Plan" },
   ];
   
+  const processOptions = [
+    { id: "info-security-policy", label: "Define Information Security Policy" },
+    { id: "risk-assessments", label: "Conduct Risk Assessments" },
+    { id: "asset-inventory", label: "Perform Asset Inventory" },
+    { id: "access-control", label: "Establish Access Control Rules" },
+    { id: "identity-management", label: "Configure Identity Management" },
+    { id: "data-encryption", label: "Apply Data Encryption" },
+    { id: "security-awareness", label: "Conduct Security Awareness Training" },
+    { id: "change-management", label: "Implement Change Management" },
+    { id: "vulnerability-scanning", label: "Conduct Vulnerability Scanning" },
+    { id: "incident-response", label: "Perform Security Incident Response" },
+    { id: "privileged-access", label: "Implement Privileged Access Management" },
+    { id: "security-audits", label: "Conduct Regular Security Audits" },
+    { id: "network-security", label: "Implement Network Security Controls" },
+    { id: "backup-recovery", label: "Implement Backup and Recovery Procedures" },
+    { id: "penetration-testing", label: "Conduct Penetration Testing" },
+    { id: "data-classification", label: "Implement Data Classification" },
+    { id: "vendor-risk", label: "Establish Vendor Risk Management" },
+    { id: "physical-security", label: "Implement Physical Security Controls" },
+  ];
+  
   const guideOptions = [
     { id: "security-awareness", label: "Security Awareness Guidelines" },
     { id: "secure-coding", label: "Secure Coding Guidelines" },
