@@ -49,9 +49,12 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
   const initialMatrixData = generateInitialMatrixData(operationModes, internetPresence);
   
   // Convert process IDs to their display labels
-  const processLabels = ismsProcesses.map(id => processIdToLabelMap[id] || id);
+  // Make sure ismsProcesses is always an array
+  const safeIsmsProcesses = Array.isArray(ismsProcesses) ? ismsProcesses : [];
+  const processLabels = safeIsmsProcesses.map(id => processIdToLabelMap[id] || id);
   
   console.log("Matrix Form received ISMS processes (IDs):", ismsProcesses);
+  console.log("Using safe array:", safeIsmsProcesses);
   console.log("Mapped to process labels:", processLabels);
   
   // Ensure each item has isms property initialized
@@ -68,6 +71,9 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
       // Update processes if they exist
       item.isms.processes = processLabels;
     }
+    
+    // Add debug log for each item
+    console.log(`Matrix item ${item.id || 'unknown'} has ISMS processes:`, item.isms.processes);
   });
   
   const [matrixData, setMatrixData] = useState<MatrixItem[]>(initialMatrixData);

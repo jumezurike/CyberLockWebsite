@@ -344,6 +344,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     // Debug logs to check form submission
     console.log("Form submitted", data);
     console.log("EULA status:", eulaAccepted);
+    console.log("ISMS Processes selected in form:", data.ismsProcesses);
     
     // Update the EULA acceptance state in the form data
     const updatedData = {
