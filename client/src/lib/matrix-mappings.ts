@@ -695,6 +695,15 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
     risks: commonRisks[infraType as keyof typeof commonRisks] || [],
     vulnerabilities: commonVulnerabilities[infraType as keyof typeof commonVulnerabilities] || [],
     educationAwareness: educationAwarenessNeeded[infraType as keyof typeof educationAwarenessNeeded] || false,
+    ismsImplemented: false,
+    riskManagementProcess: false,
+    isms: {
+      processes: [],
+      implementation: "none",
+      policies: [],
+      plans: [],
+      procedures: []
+    },
     relevantQuestionnaires: relevantQuestionnaires[infraType as keyof typeof relevantQuestionnaires] || [],
     // Initialize with recommended standards from our library
     recommendedStandards: initialStandards,

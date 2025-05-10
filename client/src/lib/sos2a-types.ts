@@ -307,6 +307,13 @@ export interface MatrixItem {
   educationAwareness: boolean;
   ismsImplemented: boolean;
   riskManagementProcess: boolean;
+  isms?: {
+    processes?: string[];
+    implementation?: string;
+    policies?: string[];
+    plans?: string[];
+    procedures?: string[];
+  };
   relevantACQTools?: {
     assessments?: string[];
     checklists?: string[];
@@ -614,7 +621,8 @@ export interface MatrixItem {
     stigScap: boolean;
     guidelines: string[];
   };
-  isms: {
+  // Legacy isms moved to ismsDetails
+  ismsDetails: {
     implementation: string;
     // 1. Traditional 4Ps components (maintaining backward compatibility)
     policies: string[];
