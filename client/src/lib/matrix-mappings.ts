@@ -821,7 +821,23 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
       gaps: [],
       notes: "",
     },
-    // isms property moved to top level
+    // Add missing required properties
+    peopleControls: {
+      frameworks: [],
+      applicable: false,
+      implemented: false,
+      gaps: []
+    },
+    identityAndAccessManagement: {
+      centralizedIdentityManagement: false,
+      roleBasedAccessControl: false,
+      justInTimeAccess: false,
+      privilegedAccessManagement: false,
+      implementationLevel: 0,
+      gaps: [],
+      notes: "",
+    },
+    // Legacy ISMS details need to be initialized as well
     ismsDetails: {
       implementation: "none",
       policies: [],
