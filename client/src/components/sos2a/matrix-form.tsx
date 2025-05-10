@@ -23,15 +23,38 @@ interface MatrixFormProps {
 
 export default function MatrixForm({ operationModes, internetPresence, onSubmit, onBack }: MatrixFormProps) {
   // Generate initial matrix data based on selected operation modes and internet presence
-  const [matrixData, setMatrixData] = useState<MatrixItem[]>(
-    generateInitialMatrixData(operationModes, internetPresence)
-  );
+  const initialMatrixData = generateInitialMatrixData(operationModes, internetPresence);
+  
+  // Ensure each item has isms property initialized
+  initialMatrixData.forEach(item => {
+    if (!item.isms) {
+      item.isms = {
+        processes: [],
+        implementation: "none",
+        policies: [],
+        plans: [],
+        procedures: []
+      };
+    }
+  });
+  
+  const [matrixData, setMatrixData] = useState<MatrixItem[]>(initialMatrixData);
   const [currentInfraIndex, setCurrentInfraIndex] = useState(0);
   const [showScorecard, setShowScorecard] = useState(false);
   
   // Function to update a specific matrix item
   const updateMatrixItem = (index: number, updatedItem: MatrixItem) => {
     const newMatrixData = [...matrixData];
+    // Ensure isms object is initialized
+    if (!updatedItem.isms) {
+      updatedItem.isms = {
+        processes: [],
+        implementation: "none",
+        policies: [],
+        plans: [],
+        procedures: []
+      };
+    }
     newMatrixData[index] = updatedItem;
     setMatrixData(newMatrixData);
   };

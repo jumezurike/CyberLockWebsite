@@ -821,7 +821,8 @@ export function createMatrixItemForInfraMode(infraType: string): MatrixItem {
       gaps: [],
       notes: "",
     },
-    isms: {
+    // isms property moved to top level
+    ismsDetails: {
       implementation: "none",
       policies: [],
       plans: [],
