@@ -854,6 +854,271 @@ export default function MatrixForm({ operationModes, internetPresence, onSubmit,
                         />
                         <Label htmlFor="isms-process-6">Apply Data Encryption</Label>
                       </div>
+                      
+                      {/* New processes starting with #7 */}
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-7" 
+                          checked={currentItem.isms?.processes?.includes("Conduct Security Awareness Training") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Conduct Security Awareness Training"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Conduct Security Awareness Training");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-7">Conduct Security Awareness Training</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-8" 
+                          checked={currentItem.isms?.processes?.includes("Implement Change Management") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Implement Change Management"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Implement Change Management");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-8">Implement Change Management</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-9" 
+                          checked={currentItem.isms?.processes?.includes("Conduct Vulnerability Scanning") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Conduct Vulnerability Scanning"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Conduct Vulnerability Scanning");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-9">Conduct Vulnerability Scanning</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-10" 
+                          checked={currentItem.isms?.processes?.includes("Perform Security Incident Response") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Perform Security Incident Response"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Perform Security Incident Response");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-10">Perform Security Incident Response</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-11" 
+                          checked={currentItem.isms?.processes?.includes("Implement Privileged Access Management") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Implement Privileged Access Management"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Implement Privileged Access Management");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-11">Implement Privileged Access Management</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-12" 
+                          checked={currentItem.isms?.processes?.includes("Conduct Regular Security Audits") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Conduct Regular Security Audits"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Conduct Regular Security Audits");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-12">Conduct Regular Security Audits</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-13" 
+                          checked={currentItem.isms?.processes?.includes("Implement Network Security Controls") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Implement Network Security Controls"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Implement Network Security Controls");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-13">Implement Network Security Controls</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-14" 
+                          checked={currentItem.isms?.processes?.includes("Implement Backup and Recovery Procedures") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Implement Backup and Recovery Procedures"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Implement Backup and Recovery Procedures");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-14">Implement Backup and Recovery Procedures</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-15" 
+                          checked={currentItem.isms?.processes?.includes("Conduct Penetration Testing") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Conduct Penetration Testing"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Conduct Penetration Testing");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-15">Conduct Penetration Testing</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-16" 
+                          checked={currentItem.isms?.processes?.includes("Implement Data Classification") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Implement Data Classification"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Implement Data Classification");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-16">Implement Data Classification</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-17" 
+                          checked={currentItem.isms?.processes?.includes("Establish Vendor Risk Management") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Establish Vendor Risk Management"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Establish Vendor Risk Management");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-17">Establish Vendor Risk Management</Label>
+                      </div>
+                      
+                      <div className="flex items-center space-x-3">
+                        <Checkbox 
+                          id="isms-process-18" 
+                          checked={currentItem.isms?.processes?.includes("Implement Physical Security Controls") || false}
+                          onCheckedChange={(checked) => {
+                            const updatedProcesses = checked 
+                              ? [...(currentItem.isms?.processes || []), "Implement Physical Security Controls"]
+                              : (currentItem.isms?.processes || []).filter(p => p !== "Implement Physical Security Controls");
+                            
+                            const updatedItem = { 
+                              ...currentItem, 
+                              isms: {
+                                ...currentItem.isms || {},
+                                processes: updatedProcesses
+                              }
+                            };
+                            updateMatrixItem(currentInfraIndex, updatedItem);
+                          }}
+                        />
+                        <Label htmlFor="isms-process-18">Implement Physical Security Controls</Label>
+                      </div>
                     </div>
                   </div>
                   
