@@ -1044,7 +1044,24 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="acq-tools">9. Relevant ACQ Tools</TabsTrigger>
                 <TabsTrigger value="adversarial">10. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
-                <TabsTrigger value="isms">11. Information Security Management System (ISMS)</TabsTrigger>
+                <TabsTrigger 
+                value="isms" 
+                onClick={() => {
+                  setTimeout(() => {
+                    // Add debug info to browser console
+                    console.log("ISMS Tab clicked - looking for Processes section");
+                    const processesSection = document.getElementById("ismsProcessesSection");
+                    console.log("Processes section found:", !!processesSection);
+                    // Make the section extra visible
+                    if (processesSection) {
+                      processesSection.style.boxShadow = "0 0 20px rgba(213, 63, 140, 0.8)";
+                      processesSection.scrollIntoView({ behavior: "smooth" });
+                    }
+                  }, 500);
+                }}
+              >
+                11. Information Security Management System (ISMS)
+              </TabsTrigger>
                 <TabsTrigger value="device-inventory">12. Device Inventory Tracking</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
@@ -3223,6 +3240,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">11. Information Security Management System (ISMS)</h3>
+                  <div className="mb-4 p-2 bg-green-200 border border-green-500 rounded">
+                    <strong>DEBUG:</strong> ISMS Tab is now visible. All sections should appear in order.
+                  </div>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select ISMS implementation options and related documents.
                   </p>
@@ -3370,33 +3390,39 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    {/* COMPLETELY REWRITTEN ISMS PROCESSES SECTION - NO CONDITIONAL LOGIC */}
-                    <div style={{border: "5px solid red", padding: "15px", margin: "30px 0"}}>
-                      <h4 style={{fontSize: "24px", fontWeight: "bold", marginBottom: "15px", color: "red"}}>
-                        ISMS PROCESSES - TEST VERSION
-                      </h4>
-                      
-                      <div style={{marginBottom: "15px", backgroundColor: "lightpink", padding: "10px"}}>
-                        This is a static test of the ISMS Processes section with no React dynamics
-                      </div>
-                      
-                      <div style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px"}}>
-                        {[
-                          "Define Information Security Policy",
-                          "Conduct Risk Assessments",
-                          "Perform Asset Inventory",
-                          "Establish Access Control Rules"
-                        ].map((text, index) => (
-                          <div key={index} style={{
-                            border: "1px solid #ccc", 
-                            padding: "10px", 
-                            display: "flex", 
-                            alignItems: "center",
-                            backgroundColor: "white"
-                          }}>
-                            <input type="checkbox" id={`process${index}`} style={{marginRight: "10px"}} />
-                            <label htmlFor={`process${index}`}>{text}</label>
-                          </div>
+                    <div className="mt-6" id="ismsProcessesSection" style={{border: "2px solid #d53f8c", padding: "15px", margin: "20px 0", backgroundColor: "#fff5f7"}}>
+                      <h4 className="font-medium text-lg border-b border-pink-500 pb-2 mb-4">ISMS Processes</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {processOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="ismsProcesses"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-pink-300 rounded-md bg-white"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...(field.value || []), option.id])
+                                        : field.onChange(
+                                            (field.value || [])?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
                         ))}
                       </div>
                     </div>
