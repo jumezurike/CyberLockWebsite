@@ -3370,40 +3370,33 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    {/* START ISMS PROCESSES - SHOULD BE VISIBLE BETWEEN PLANS AND LEADERSHIP */}
-                    <div style={{padding: "10px", marginTop: "20px", marginBottom: "20px", backgroundColor: "#fff0f6"}}>
-                      <h4 className="font-medium text-lg border-b border-pink-500 pb-2 mb-4" style={{color: "#d53f8c"}}>ISMS Processes</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {processOptions.map((option) => (
-                          <FormField
-                            key={option.id}
-                            control={form.control}
-                            name="ismsProcesses"
-                            render={({ field }) => (
-                              <FormItem
-                                key={option.id}
-                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-pink-300 rounded-md bg-pink-50"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(option.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...field.value, option.id])
-                                        : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== option.id
-                                            )
-                                          );
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  {option.label}
-                                </FormLabel>
-                              </FormItem>
-                            )}
-                          />
+                    {/* COMPLETELY REWRITTEN ISMS PROCESSES SECTION - NO CONDITIONAL LOGIC */}
+                    <div style={{border: "5px solid red", padding: "15px", margin: "30px 0"}}>
+                      <h4 style={{fontSize: "24px", fontWeight: "bold", marginBottom: "15px", color: "red"}}>
+                        ISMS PROCESSES - TEST VERSION
+                      </h4>
+                      
+                      <div style={{marginBottom: "15px", backgroundColor: "lightpink", padding: "10px"}}>
+                        This is a static test of the ISMS Processes section with no React dynamics
+                      </div>
+                      
+                      <div style={{display: "grid", gridTemplateColumns: "1fr 1fr", gap: "10px"}}>
+                        {[
+                          "Define Information Security Policy",
+                          "Conduct Risk Assessments",
+                          "Perform Asset Inventory",
+                          "Establish Access Control Rules"
+                        ].map((text, index) => (
+                          <div key={index} style={{
+                            border: "1px solid #ccc", 
+                            padding: "10px", 
+                            display: "flex", 
+                            alignItems: "center",
+                            backgroundColor: "white"
+                          }}>
+                            <input type="checkbox" id={`process${index}`} style={{marginRight: "10px"}} />
+                            <label htmlFor={`process${index}`}>{text}</label>
+                          </div>
                         ))}
                       </div>
                     </div>
