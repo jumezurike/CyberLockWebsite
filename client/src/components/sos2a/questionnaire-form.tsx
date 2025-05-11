@@ -3370,8 +3370,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div className="mt-6">
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
+                    {/* START ISMS PROCESSES - SHOULD BE VISIBLE BETWEEN PLANS AND LEADERSHIP */}
+                    <div style={{padding: "10px", marginTop: "20px", marginBottom: "20px", backgroundColor: "#fff0f6"}}>
+                      <h4 className="font-medium text-lg border-b border-pink-500 pb-2 mb-4" style={{color: "#d53f8c"}}>ISMS Processes</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {processOptions.map((option) => (
                           <FormField
@@ -3381,7 +3382,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             render={({ field }) => (
                               <FormItem
                                 key={option.id}
-                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-pink-300 rounded-md bg-pink-50"
                               >
                                 <FormControl>
                                   <Checkbox
