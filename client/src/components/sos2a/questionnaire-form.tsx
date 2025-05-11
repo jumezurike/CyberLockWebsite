@@ -3374,8 +3374,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div>
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
+                    <div className="border-t pt-6 mt-6">
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-800">ISMS Processes</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {processOptions.map((option) => (
                           <FormField
@@ -3385,7 +3385,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             render={({ field }) => (
                               <FormItem
                                 key={option.id}
-                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-blue-100 rounded-md bg-blue-50"
                               >
                                 <FormControl>
                                   <Checkbox
