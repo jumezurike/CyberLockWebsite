@@ -344,7 +344,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     // Debug logs to check form submission
     console.log("Form submitted", data);
     console.log("EULA status:", eulaAccepted);
-    console.log("ISMS Processes selected in form:", data.ismsProcesses);
+    // ISMS Processes are now properly handled
     
     // Update the EULA acceptance state in the form data
     const updatedData = {
@@ -3223,10 +3223,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">11. Information Security Management System (ISMS)</h3>
-                  <div className="mb-4 p-3 bg-red-100 rounded-md">
-                    <p className="font-medium">DEBUG: ISMS Tab Content</p>
-                    <p className="text-sm">If you can see this, the ISMS tab is rendering properly</p>
-                  </div>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select ISMS implementation options and related documents.
                   </p>
@@ -3376,7 +3372,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     
                     {/* ISMS Processes Section */}
                     <div className="mt-8 pt-4 border-t border-blue-300">
-                      <h4 className="font-medium text-lg border-b border-blue-500 pb-2 mb-4 text-blue-800">ISMS Processes</h4>
+                      <h4 className="font-medium text-lg border-b border-blue-500 pb-2 mb-4">ISMS Processes</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {processOptions.map((option) => (
                           <FormField
@@ -5738,7 +5734,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 form.getValues("ismsProcedures").join(", ") : 
                                 "None selected"}</div>
                                 
-                          <div className="font-medium text-blue-800 border-b border-blue-300 pb-1 mt-4">ISMS Processes:</div>
+                          <div className="font-medium border-b border-blue-300 pb-1 mt-4">ISMS Processes:</div>
                           <div className="p-2 bg-blue-50 border border-blue-200 rounded-md mt-1">
                             {form.getValues("ismsProcesses")?.length > 0 ? 
                                 form.getValues("ismsProcesses").map(id => {
