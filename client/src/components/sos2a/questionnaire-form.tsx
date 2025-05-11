@@ -3374,8 +3374,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div className="border-t pt-6 mt-6">
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-800">ISMS Processes</h4>
+                    {/* ISMS Processes Section */}
+                    <div className="mt-8 pt-4 border-t border-blue-300">
+                      <h4 className="font-medium text-lg border-b border-blue-500 pb-2 mb-4 text-blue-800">ISMS Processes</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {processOptions.map((option) => (
                           <FormField
@@ -3385,7 +3386,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             render={({ field }) => (
                               <FormItem
                                 key={option.id}
-                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-blue-100 rounded-md bg-blue-50"
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-blue-200 rounded-md bg-blue-50"
                               >
                                 <FormControl>
                                   <Checkbox
@@ -5737,16 +5738,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 form.getValues("ismsProcedures").join(", ") : 
                                 "None selected"}</div>
                                 
-                          <div className="font-medium">ISMS Processes:</div>
-                          <div className="bg-blue-50 p-2 rounded mb-1 text-xs">
-                            Debug: Raw IDs: {form.getValues("ismsProcesses")?.join(", ") || "None"}
-                          </div>
-                          <div>{form.getValues("ismsProcesses")?.length > 0 ? 
+                          <div className="font-medium text-blue-800 border-b border-blue-300 pb-1 mt-4">ISMS Processes:</div>
+                          <div className="p-2 bg-blue-50 border border-blue-200 rounded-md mt-1">
+                            {form.getValues("ismsProcesses")?.length > 0 ? 
                                 form.getValues("ismsProcesses").map(id => {
                                   const option = processOptions.find(o => o.id === id);
                                   return option ? option.label : id;
                                 }).join(", ") : 
-                                "None selected"}</div>
+                                "None selected"}
+                          </div>
                                 
                           <div className="font-medium">Executive Support:</div>
                           <div>{form.getValues("ismsLeadership.executiveSupport") ? "Yes" : "No"}</div>
