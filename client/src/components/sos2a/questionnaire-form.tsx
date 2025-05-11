@@ -3374,34 +3374,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div className="p-4 bg-green-50 border border-green-200 rounded-md mb-6">
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
-                      {/* Debug messages */}
-                      <div className="mb-4 p-3 bg-yellow-100 rounded-md">
-                        <p className="text-sm font-semibold">Debug Info:</p>
-                        <p className="text-xs">Process options count: {processOptions.length}</p>
-                        <p className="text-xs">First few processes: {processOptions.slice(0, 3).map(p => p.label).join(", ")}...</p>
-                      </div>
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Procedures</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* Add static checkboxes first */}
-                        <div className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-white">
-                          <Checkbox id="static-process-1" />
-                          <label htmlFor="static-process-1" className="font-normal">
-                            Static Process 1 (Test)
-                          </label>
-                        </div>
-                        <div className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md bg-white">
-                          <Checkbox id="static-process-2" />
-                          <label htmlFor="static-process-2" className="font-normal">
-                            Static Process 2 (Test)
-                          </label>
-                        </div>
-                        {/* Now try the dynamic ones */}
-                        {processOptions.map((option) => (
+                        {procedureOptions.map((option) => (
                           <FormField
                             key={option.id}
                             control={form.control}
-                            name="ismsProcesses"
+                            name="ismsProcedures"
                             render={({ field }) => (
                               <FormItem
                                 key={option.id}
