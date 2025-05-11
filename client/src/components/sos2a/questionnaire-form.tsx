@@ -3396,8 +3396,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div className="mt-6" id="ismsProcessesSection">
+                    <div className="mt-6 p-3 border-2 border-blue-300 rounded-md" id="ismsProcessesSection">
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
+                      {console.log("Rendering ISMS Processes section with options:", processOptions)}
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {processOptions.map((option) => (
