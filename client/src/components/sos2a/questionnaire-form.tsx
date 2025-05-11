@@ -3375,13 +3375,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                     
                     <div>
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Procedures</h4>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {procedureOptions.map((option) => (
+                        {processOptions.map((option) => (
                           <FormField
                             key={option.id}
                             control={form.control}
-                            name="ismsProcedures"
+                            name="ismsProcesses"
                             render={({ field }) => (
                               <FormItem
                                 key={option.id}
