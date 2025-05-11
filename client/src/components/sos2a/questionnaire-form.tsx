@@ -3396,9 +3396,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div className="mt-6 p-3 border-2 border-blue-300 rounded-md" id="ismsProcessesSection">
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
-                      {console.log("Rendering ISMS Processes section with options:", processOptions)}
+                    <div className="mt-6 p-3 border-2 border-blue-300 rounded-md bg-blue-50" id="ismsProcessesSection">
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4 text-blue-800">ISMS Processes</h4>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {processOptions.map((option) => (
@@ -3413,6 +3412,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               >
                                 <FormControl>
                                   <Checkbox
+                                    id={`ismsProcess-${option.id}`}
                                     checked={field.value?.includes(option.id)}
                                     onCheckedChange={(checked) => {
                                       return checked
@@ -3425,7 +3425,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     }}
                                   />
                                 </FormControl>
-                                <FormLabel className="font-normal">
+                                <FormLabel 
+                                  htmlFor={`ismsProcess-${option.id}`} 
+                                  className="font-normal cursor-pointer"
+                                >
                                   {option.label}
                                 </FormLabel>
                               </FormItem>
