@@ -1054,10 +1054,18 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     console.log("ISMS Tab clicked - looking for Processes section");
                     const processesSection = document.getElementById("ismsProcessesSection");
                     console.log("Processes section found:", !!processesSection);
+                    console.log("Process options:", processOptions);
+                    console.log("ismsProcesses value:", form.getValues("ismsProcesses"));
+                    
                     // Make the section extra visible
                     if (processesSection) {
                       processesSection.style.boxShadow = "0 0 20px rgba(213, 63, 140, 0.8)";
+                      processesSection.style.border = "4px solid red";
+                      processesSection.style.padding = "20px";
+                      processesSection.style.background = "#ffeeee";
                       processesSection.scrollIntoView({ behavior: "smooth" });
+                    } else {
+                      console.error("ISMS Processes section not found in the DOM!");
                     }
                   }, 500);
                 }}
