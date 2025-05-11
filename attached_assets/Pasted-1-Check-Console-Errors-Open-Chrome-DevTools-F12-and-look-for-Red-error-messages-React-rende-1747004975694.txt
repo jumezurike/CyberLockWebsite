@@ -1,0 +1,99 @@
+1. Check Console Errors
+Open Chrome DevTools (F12) and look for:
+
+Red error messages (React rendering errors, missing components).
+
+Yellow warnings (key props, hydration mismatches).
+
+Network tab for failed API/data fetches (if the content depends on Tanstack Query).
+
+2. Verify Data Flow
+Tanstack Query Issue?
+Ensure your query is successful:
+
+tsx
+const { data, error, isLoading } = useQuery({
+  queryKey: ['yourKey'],
+  queryFn: fetchYourData,
+});
+
+if (isLoading) return <div>Loading...</div>;
+if (error) return <div>Error: {error.message}</div>;
+console.log(data); // Check if data exists
+If data is undefined, your backend might not be sending the expected response.
+
+3. Conditional Rendering Bugs
+Check for logical errors in rendering:
+
+tsx
+// BUG: Might hide content if `someCondition` is incorrectly set
+{someCondition && <YourComponent />}
+
+// FIX: Add a fallback for debugging
+{someCondition ? <YourComponent /> : <div>Condition false</div>}
+4. Styling Conflicts (Tailwind/Shadcn)
+Inspect the element (Right-Click → Inspect):
+
+Is the element hidden with hidden, opacity-0, or h-0?
+
+Does Shadcn/Radix UI require a portal or specific props? (e.g., DropdownMenuPortal)
+
+5. Routing Issue (Wouter)
+If the missing content is route-specific:
+
+tsx
+import { Route } from 'wouter';
+
+<Route path="/your-path">
+  <YourComponent /> {/* Check if this renders */}
+</Route>
+Verify the URL matches the route exactly.
+
+6. Hydration Mismatch (SSR/Next.js?)
+If using Next.js or SSR:
+
+Mismatches between server/client HTML can cause React to suppress content.
+
+Check for browser-only APIs (e.g., localStorage) used during render:
+
+tsx
+// BUG: This breaks SSR
+const [data, setData] = useState(localStorage.getItem('key'));
+
+// FIX: Use useEffect
+const [data, setData] = useState(null);
+useEffect(() => {
+  setData(localStorage.getItem('key'));
+}, []);
+7. Drizzle ORM/Backend Issue
+If the content relies on backend data:
+
+Check your API endpoint (http://localhost:your-port/api/route) in Postman or browser.
+
+Verify Drizzle queries:
+
+ts
+// Example: Are you returning data correctly?
+app.get('/api/data', async (req, res) => {
+  const data = await db.select().from(yourTable);
+  res.json(data); // Ensure this isn't empty
+});
+8. React Strict Mode
+In main.tsx/index.tsx, React.StrictMode can cause double-rendering, exposing subtle bugs. Temporarily disable it to test:
+
+tsx
+// Remove StrictMode wrapper
+root.render(<App />);
+9. Key Prop Collisions
+Dynamic lists without unique key props can cause rendering issues:
+
+tsx
+{items.map((item) => (
+  <div key={item.id}>{item.name}</div> {/* Ensure keys are unique */}
+))}
+10. Minimal Reproduction Test
+Create a new component with hardcoded data to isolate the issue:
+
+tsx
+const TestComponent = () => <div>Test Content</div>;
+// Replace the problematic section with this. Does it render?
