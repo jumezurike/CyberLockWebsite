@@ -3396,7 +3396,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div className="mt-6">
+                    <div className="mt-6" id="ismsProcessesSection">
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

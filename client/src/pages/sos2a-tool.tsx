@@ -1752,28 +1752,19 @@ export default function Sos2aTool() {
             variant="outline" 
             size="sm"
             onClick={() => {
-              setStep('questionnaire');
-              localStorage.setItem('sos2a_current_step', 'questionnaire');
-            }}
-          >
-            Go to Questionnaire
-          </Button>
-          <Button 
-            variant="outline" 
-            size="sm"
-            onClick={() => {
-              // Create a minimal form data if none exists
+              // Create minimal form data for questionnaire as well to ensure all sections are available
               if (!formData) {
-                const minimalFormData: Sos2aFormData = {
+                const minimalQuestFormData: Sos2aFormData = {
                   businessName: "Test Business",
                   businessAddress: "123 Test St",
                   operationMode: ["commercial-internet"],
                   internetPresence: ["website"],
                   reportType: "preliminary" as 'preliminary',
                   employeeCount: "10-50",
-                  industry: "Technology",
+                  industry: "Healthcare",
+                  primaryConcerns: [],
+                  vulnerabilities: [],
                   hasArchitectureDiagrams: false,
-                  // Required fields to pass type check
                   businessLocation: {
                     city: "Test City",
                     state: "CA",
@@ -1820,6 +1811,100 @@ export default function Sos2aTool() {
                     ciso: false,
                     boardReporting: false,
                     securityCommittee: false
+                  },
+                  osHardening: {
+                    stig: false,
+                    scap: false,
+                    guidelines: []
+                  },
+                  adversarialInsights: {
+                    mitreAttackIds: []
+                  },
+                  availabilityConfirmation: true,
+                  referralPermission: true,
+                  eulaAccepted: true,
+                  matrixData: null
+                };
+                setFormData(minimalQuestFormData);
+                saveFormDataToLocalStorage(minimalQuestFormData);
+              }
+              setStep('questionnaire');
+              localStorage.setItem('sos2a_current_step', 'questionnaire');
+            }}
+          >
+            Go to Questionnaire
+          </Button>
+          <Button 
+            variant="outline" 
+            size="sm"
+            onClick={() => {
+              // Create a minimal form data if none exists
+              if (!formData) {
+                const minimalFormData: Sos2aFormData = {
+                  businessName: "Test Business",
+                  businessAddress: "123 Test St",
+                  operationMode: ["commercial-internet"],
+                  internetPresence: ["website"],
+                  reportType: "preliminary" as 'preliminary',
+                  employeeCount: "10-50",
+                  industry: "Healthcare",
+                  primaryConcerns: [],
+                  vulnerabilities: [],
+                  hasArchitectureDiagrams: false,
+                  businessLocation: {
+                    city: "Test City",
+                    state: "CA",
+                    country: "USA"
+                  },
+                  businessServices: "Test Services",
+                  contactInfo: {
+                    name: "Test User",
+                    email: "test@example.com",
+                    pointOfContact: "Test User",
+                    contactEmail: "test@example.com",
+                    phone: "123-456-7890"
+                  },
+                  securityMeasures: [],
+                  frameworks: {
+                    operations: [],
+                    management: [],
+                    technology: [],
+                    people: []
+                  },
+                  complianceRequirements: {
+                    frameworks: [],
+                    standards: [],
+                    compliance: [],
+                    regulations: [],
+                    guidelines: [],
+                    healthcare: [],
+                    financial: [],
+                    industrySpecific: []
+                  },
+                  policyDocuments: {
+                    policies: [],
+                    procedures: [],
+                    plans: [],
+                    guides: []
+                  },
+                  // Add ISMS fields including processes
+                  ismsPolicies: [],
+                  ismsPlans: [],
+                  ismsProcedures: [],
+                  ismsProcesses: ["info-security-policy", "risk-assessments", "access-control"],
+                  ismsLeadership: {
+                    executiveSupport: false,
+                    ciso: false,
+                    boardReporting: false,
+                    securityCommittee: false
+                  },
+                  osHardening: {
+                    stig: false,
+                    scap: false,
+                    guidelines: []
+                  },
+                  adversarialInsights: {
+                    mitreAttackIds: []
                   },
                   availabilityConfirmation: true,
                   referralPermission: true,
