@@ -1810,6 +1810,17 @@ export default function Sos2aTool() {
                     plans: [],
                     guides: []
                   },
+                  // Add ISMS fields including processes
+                  ismsPolicies: [],
+                  ismsPlans: [],
+                  ismsProcedures: [],
+                  ismsProcesses: ["info-security-policy", "risk-assessments", "access-control"],
+                  ismsLeadership: {
+                    executiveSupport: false,
+                    ciso: false,
+                    boardReporting: false,
+                    securityCommittee: false
+                  },
                   availabilityConfirmation: true,
                   referralPermission: true,
                   eulaAccepted: true,
