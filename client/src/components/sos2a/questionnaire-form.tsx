@@ -857,6 +857,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "data-security", label: "Data Security Plan" },
   ];
   
+
+  
   const processOptions = [
     { id: "info-security-policy", label: "Define Information Security Policy" },
     { id: "risk-assessments", label: "Conduct Risk Assessments" },
@@ -3243,6 +3245,34 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <div className="mb-4 p-2 bg-green-200 border border-green-500 rounded">
                     <strong>DEBUG:</strong> ISMS Tab is now visible. All sections should appear in order.
                   </div>
+                  
+                  {/* CRITICAL TEST - ALTERNATE LOCATION FOR PROCESSES SECTION */}
+                  <div style={{
+                    border: "10px solid purple", 
+                    padding: "15px", 
+                    margin: "20px 0",
+                    backgroundColor: "lightgreen"
+                  }}>
+                    <h2 style={{
+                      fontSize: "24px", 
+                      fontWeight: "bold", 
+                      color: "purple",
+                      marginBottom: "15px"
+                    }}>
+                      ISMS PROCESSES - ALTERNATE LOCATION
+                    </h2>
+                    <div style={{backgroundColor: "white", padding: "15px", border: "1px solid black"}}>
+                      <p>This test checks if the Processes section renders in a different position.</p>
+                      <ul style={{listStyleType: "disc", paddingLeft: "20px", marginTop: "10px"}}>
+                        {processOptions.slice(0, 4).map((option, idx) => (
+                          <li key={idx} style={{marginBottom: "5px"}}>
+                            {option.label}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                  
                   <p className="text-sm text-muted-foreground mb-4">
                     Select ISMS implementation options and related documents.
                   </p>
@@ -3390,42 +3420,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div className="mt-6" id="ismsProcessesSection" style={{border: "2px solid #d53f8c", padding: "15px", margin: "20px 0", backgroundColor: "#fff5f7"}}>
-                      <h4 className="font-medium text-lg border-b border-pink-500 pb-2 mb-4">ISMS Processes</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {processOptions.map((option) => (
-                          <FormField
-                            key={option.id}
-                            control={form.control}
-                            name="ismsProcesses"
-                            render={({ field }) => (
-                              <FormItem
-                                key={option.id}
-                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border border-pink-300 rounded-md bg-white"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(option.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...(field.value || []), option.id])
-                                        : field.onChange(
-                                            (field.value || [])?.filter(
-                                              (value) => value !== option.id
-                                            )
-                                          );
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  {option.label}
-                                </FormLabel>
-                              </FormItem>
-                            )}
-                          />
-                        ))}
-                      </div>
-                    </div>
+
                     
                     <div className="mt-6">
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Leadership</h4>
