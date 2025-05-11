@@ -3223,6 +3223,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">11. Information Security Management System (ISMS)</h3>
+                  <div className="mb-4 p-3 bg-red-100 rounded-md">
+                    <p className="font-medium">DEBUG: ISMS Tab Content</p>
+                    <p className="text-sm">If you can see this, the ISMS tab is rendering properly</p>
+                  </div>
                   <p className="text-sm text-muted-foreground mb-4">
                     Select ISMS implementation options and related documents.
                   </p>
@@ -3372,6 +3376,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     
                     <div>
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
+                      {/* Debug messages */}
+                      <div className="mb-4 p-3 bg-yellow-100 rounded-md">
+                        <p className="text-sm font-semibold">Debug Info:</p>
+                        <p className="text-xs">Process options count: {processOptions.length}</p>
+                        <p className="text-xs">First few processes: {processOptions.slice(0, 3).map(p => p.label).join(", ")}...</p>
+                      </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {processOptions.map((option) => (
                           <FormField
@@ -5734,8 +5744,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 "None selected"}</div>
                                 
                           <div className="font-medium">ISMS Processes:</div>
+                          <div className="bg-blue-50 p-2 rounded mb-1 text-xs">
+                            Debug: Raw IDs: {form.getValues("ismsProcesses")?.join(", ") || "None"}
+                          </div>
                           <div>{form.getValues("ismsProcesses")?.length > 0 ? 
-                                form.getValues("ismsProcesses").join(", ") : 
+                                form.getValues("ismsProcesses").map(id => {
+                                  const option = processOptions.find(o => o.id === id);
+                                  return option ? option.label : id;
+                                }).join(", ") : 
                                 "None selected"}</div>
                                 
                           <div className="font-medium">Executive Support:</div>
