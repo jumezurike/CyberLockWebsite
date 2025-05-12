@@ -630,55 +630,7 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
                 <p className="text-sm text-gray-600 mb-4">Indicate the current implementation state of your Information Security Management System</p>
                 
                 <div className="space-y-6">
-                  {/* ISMS Policies Section */}
-                  <div>
-                    <h4 className="font-medium mb-3 border-b pb-2">ISMS Policies</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="flex items-center space-x-3">
-                        <Checkbox 
-                          id="isms-policy-acceptable-use" 
-                          checked={currentItem.isms?.policies?.includes("Acceptable Use Policy") || false}
-                          onCheckedChange={(checked) => {
-                            const updatedPolicies = checked 
-                              ? [...(currentItem.isms?.policies || []), "Acceptable Use Policy"]
-                              : (currentItem.isms?.policies || []).filter(p => p !== "Acceptable Use Policy");
-                            
-                            const updatedItem = { 
-                              ...currentItem, 
-                              isms: {
-                                ...currentItem.isms || {},
-                                policies: updatedPolicies
-                              }
-                            };
-                            updateMatrixItem(currentInfraIndex, updatedItem);
-                          }}
-                        />
-                        <Label htmlFor="isms-policy-acceptable-use">Acceptable Use Policy</Label>
-                      </div>
-                      
-                      <div className="flex items-center space-x-3">
-                        <Checkbox 
-                          id="isms-policy-info-security" 
-                          checked={currentItem.isms?.policies?.includes("Information Security Policy") || false}
-                          onCheckedChange={(checked) => {
-                            const updatedPolicies = checked 
-                              ? [...(currentItem.isms?.policies || []), "Information Security Policy"]
-                              : (currentItem.isms?.policies || []).filter(p => p !== "Information Security Policy");
-                            
-                            const updatedItem = { 
-                              ...currentItem, 
-                              isms: {
-                                ...currentItem.isms || {},
-                                policies: updatedPolicies
-                              }
-                            };
-                            updateMatrixItem(currentInfraIndex, updatedItem);
-                          }}
-                        />
-                        <Label htmlFor="isms-policy-info-security">Information Security Policy</Label>
-                      </div>
-                    </div>
-                  </div>
+                  {/* ISMS Policies Section temporarily removed for testing */}
                   
                   {/* ISMS Procedures Section */}
                   <div>
