@@ -691,54 +691,10 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
                     </div>
                   </div>
                   
-                  {/* ISMS Plans Section */}
+                  {/* ISMS Plans Section temporarily removed as a test - will verify this appears in the app */}
                   <div>
-                    <h4 className="font-medium mb-3 border-b pb-2">ISMS Plans</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="flex items-center space-x-3">
-                        <Checkbox 
-                          id="isms-plan-disaster" 
-                          checked={currentItem.isms?.plans?.includes("Disaster Recovery Plan") || false}
-                          onCheckedChange={(checked) => {
-                            const updatedPlans = checked 
-                              ? [...(currentItem.isms?.plans || []), "Disaster Recovery Plan"]
-                              : (currentItem.isms?.plans || []).filter(p => p !== "Disaster Recovery Plan");
-                            
-                            const updatedItem = { 
-                              ...currentItem, 
-                              isms: {
-                                ...currentItem.isms || {},
-                                plans: updatedPlans
-                              }
-                            };
-                            updateMatrixItem(currentInfraIndex, updatedItem);
-                          }}
-                        />
-                        <Label htmlFor="isms-plan-disaster">Disaster Recovery Plan</Label>
-                      </div>
-                      
-                      <div className="flex items-center space-x-3">
-                        <Checkbox 
-                          id="isms-plan-continuity" 
-                          checked={currentItem.isms?.plans?.includes("Business Continuity Plan") || false}
-                          onCheckedChange={(checked) => {
-                            const updatedPlans = checked 
-                              ? [...(currentItem.isms?.plans || []), "Business Continuity Plan"]
-                              : (currentItem.isms?.plans || []).filter(p => p !== "Business Continuity Plan");
-                            
-                            const updatedItem = { 
-                              ...currentItem, 
-                              isms: {
-                                ...currentItem.isms || {},
-                                plans: updatedPlans
-                              }
-                            };
-                            updateMatrixItem(currentInfraIndex, updatedItem);
-                          }}
-                        />
-                        <Label htmlFor="isms-plan-continuity">Business Continuity Plan</Label>
-                      </div>
-                    </div>
+                    <h4 className="font-medium mb-3 border-b pb-2">ISMS Plans (Temporarily Removed for Testing)</h4>
+                    <p className="text-red-500">This section has been temporarily removed to verify we're editing the correct file. This message should appear in the application.</p>
                   </div>
                   
                   {/* ISMS Processes Section */}
