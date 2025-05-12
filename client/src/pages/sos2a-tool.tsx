@@ -291,6 +291,21 @@ export default function Sos2aTool() {
   const handleQuestionnaireSubmit = (data: Sos2aFormData) => {
     console.log("Parent component received form submission", data);
     console.log("ISMS Processes from questionnaire:", data.ismsProcesses);
+    
+    // Force-add all processes for testing
+    // Remove this code when done testing
+    if (!data.ismsProcesses || data.ismsProcesses.length === 0) {
+      console.log("Adding all processes for testing purposes");
+      data.ismsProcesses = [
+        "info-security-policy", "risk-assessments", "asset-inventory", 
+        "access-control", "identity-management", "data-encryption", 
+        "security-awareness", "change-management", "vulnerability-scanning", 
+        "incident-response", "privileged-access", "security-audits", 
+        "network-security", "backup-recovery", "penetration-testing", 
+        "data-classification", "vendor-risk", "physical-security"
+      ];
+    }
+    
     // First show the review modal
     setFormData(data);
     // Save to localStorage
