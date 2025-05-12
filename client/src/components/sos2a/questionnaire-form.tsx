@@ -3445,57 +3445,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    <div className="mt-6 p-6 border-4 border-red-600 rounded-md bg-red-100 shadow-lg" id="ismsProcessesSection" style={{
-                      position: 'relative',
-                      zIndex: 50,
-                      display: 'block',
-                      visibility: 'visible',
-                      opacity: 1,
-                      transform: 'scale(1.05)',
-                      boxShadow: '0 0 30px rgba(255, 0, 0, 0.5)'
-                    }}>
-                      <h4 className="font-bold text-xl text-red-800 border-b-2 border-red-400 pb-3 mb-6">⚠️ ISMS Processes (IMPORTANT SECTION)</h4>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {processOptions.map((option) => (
-                          <FormField
-                            key={option.id}
-                            control={form.control}
-                            name="ismsProcesses"
-                            render={({ field }) => (
-                              <FormItem
-                                key={option.id}
-                                className="flex flex-row items-start space-x-3 space-y-0 p-5 border-2 border-red-400 bg-white rounded-md shadow-md"
-                                style={{ position: 'relative', zIndex: 50 }}
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    id={`ismsProcess-${option.id}`}
-                                    className="h-6 w-6" 
-                                    checked={field.value?.includes(option.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...(field.value || []), option.id])
-                                        : field.onChange(
-                                            (field.value || [])?.filter(
-                                              (value) => value !== option.id
-                                            )
-                                          );
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel 
-                                  htmlFor={`ismsProcess-${option.id}`} 
-                                  className="font-medium text-lg cursor-pointer text-red-900"
-                                >
-                                  {option.label}
-                                </FormLabel>
-                              </FormItem>
-                            )}
-                          />
-                        ))}
-                      </div>
-                    </div>
+                    {/* Import IsmsProcessesSection component */}
+                    {(() => {
+                      // Dynamically import the component to ensure it's available
+                      const IsmsProcessesSection = require("./isms-processes-section").default;
+                      // Render it directly
+                      return <IsmsProcessesSection form={form} processOptions={processOptions} />;
+                    })()}
                     
                     <div className="mt-6">
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Leadership</h4>
