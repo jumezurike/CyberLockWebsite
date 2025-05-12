@@ -1030,21 +1030,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       <CardContent className="p-6">
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
-            <div className="mb-6 p-4 border-4 border-purple-500 rounded-md bg-purple-100 text-center">
-              <h3 className="text-xl font-bold mb-2">TESTING COMPONENT VISIBILITY</h3>
-              <p className="mb-2">This is a test area to check if components can be rendered at the form level</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
-                <div className="p-3 border-2 border-blue-400 rounded bg-blue-50">
-                  <span className="text-blue-800 font-medium">Test Box 1</span>
-                </div>
-                <div className="p-3 border-2 border-green-400 rounded bg-green-50">
-                  <span className="text-green-800 font-medium">Test Box 2</span>
-                </div>
-                <div className="p-3 border-2 border-red-400 rounded bg-red-50">
-                  <span className="text-red-800 font-medium">Test Box 3</span>
-                </div>
-              </div>
-            </div>
             <Tabs defaultValue="business" className="w-full">
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
@@ -3264,32 +3249,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 11. ISMS Tab */}
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <div className="p-4 mb-6 bg-red-100 border-2 border-red-500 rounded-md">
-                    <h2 className="text-red-700 font-bold text-xl">DEBUG INFO - PLEASE HELP US</h2>
-                    <p className="text-red-800 font-medium">
-                      We're troubleshooting the ISMS Processes section. Please scroll down and look for a section with bright red borders below.
-                    </p>
-                    <p className="mt-2">There should be 5 sections in order: 
-                      <span className="font-bold">1. Implementation Status, 2. Policies, 3. Procedures, 4. Plans, 5. Processes (RED SECTION), 6. Leadership</span>
-                    </p>
-                    
-                    {/* Duplicate ISMS Processes Section at the top for testing visibility */}
-                    <div className="mt-6 p-4 border-4 border-red-600 rounded-md bg-red-100 shadow-lg" style={{
-                      position: 'relative',
-                      zIndex: 50
-                    }}>
-                      <h4 className="font-bold text-xl text-red-800 border-b-2 border-red-400 pb-3 mb-6">⚠️ TEST COPY: ISMS Processes</h4>
-                      
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {processOptions.slice(0, 2).map((option) => (
-                          <div key={option.id} className="p-3 border-2 border-red-400 bg-white rounded-md shadow-md">
-                            <span className="font-medium text-lg text-red-900">{option.label}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  
                   <h3 className="font-medium mb-4">11. Information Security Management System (ISMS)</h3>
                   
                   <div className="mb-4 p-2 bg-blue-50 border border-blue-300 rounded">
@@ -3408,21 +3367,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    {/* Test Section - This is a completely new section */}
-                    <div className="mt-6 p-4 border-4 border-purple-400 rounded-md bg-purple-50">
-                      <h4 className="font-bold text-lg text-purple-800 border-b-2 pb-2 mb-4">TEST SECTION - Between Procedures and Plans</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="p-4 border-2 border-purple-300 rounded-md">
-                          <p className="font-medium">Test Item 1</p>
-                          <p className="text-sm">If you can see this section, but not the red ISMS Processes section below, there might be a conditional rendering issue.</p>
-                        </div>
-                        <div className="p-4 border-2 border-purple-300 rounded-md">
-                          <p className="font-medium">Test Item 2</p>
-                          <p className="text-sm">This is just a static test section to see if we can add new content in this area.</p>
-                        </div>
-                      </div>
-                    </div>
-                    
+
                     <div>
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Plans</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3460,13 +3405,42 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
-                    {/* Import IsmsProcessesSection component */}
-                    {(() => {
-                      // Dynamically import the component to ensure it's available
-                      const IsmsProcessesSection = require("./isms-processes-section").default;
-                      // Render it directly
-                      return <IsmsProcessesSection form={form} processOptions={processOptions} />;
-                    })()}
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {processOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="ismsProcesses"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...(field.value || []), option.id])
+                                        : field.onChange(
+                                            (field.value || [])?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
                     
                     <div className="mt-6">
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Leadership</h4>
