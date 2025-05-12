@@ -1,0 +1,69 @@
+chunk-RPCDYKBN.js?v=3436490f:21551 Download the React DevTools for a better development experience: https://reactjs.org/link/react-devtools
+App.tsx:40 Current route: /sos2a-tool
+App.tsx:40 Current route: /sos2a-tool
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.
+
+                
+          
+          
+          
+         Chrome is moving towards a new experience that allows users to choose to browse without third-party cookies.
+chunk-RPCDYKBN.js?v=3436490f:521 Warning: validateDOMNesting(...): <div> cannot appear as a descendant of <p>.
+    at div
+    at p
+    at https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/components/ui/form.tsx:165:6
+    at div
+    at div
+    at https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/components/ui/form.tsx:72:6
+    at Controller (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-4BFJKWC4.js?v=3436490f:298:35)
+    at FormField (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/components/ui/form.tsx:33:6)
+    at div
+    at div
+    at div
+    at RegulatoryContent (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/components/sos2a/regulatory-content.tsx:25:37)
+    at div
+    at div
+    at https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-AXMZZQ2X.js?v=3436490f:42:13
+    at Presence (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-LUE5KDWX.js?v=3436490f:24:11)
+    at https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=3436490f:176:13
+    at _c5 (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/components/ui/tabs.tsx:72:12)
+    at div
+    at https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-AXMZZQ2X.js?v=3436490f:42:13
+    at Provider (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=3436490f:38:15)
+    at https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tabs.js?v=3436490f:54:7
+    at form
+    at FormProvider (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-4BFJKWC4.js?v=3436490f:102:11)
+    at div
+    at _c9 (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/components/ui/card.tsx:114:12)
+    at div
+    at _c (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/components/ui/card.tsx:20:11)
+    at QuestionnaireForm (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/components/sos2a/questionnaire-form-fixed.tsx:200:45)
+    at div
+    at div
+    at Sos2aTool (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/pages/sos2a-tool.tsx:152:27)
+    at Route (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3436490f:323:16)
+    at Switch (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/wouter.js?v=3436490f:379:17)
+    at main
+    at div
+    at Router (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/src/App.tsx?v=MjWylEoUl3jqOfeF5mf1h:52:22)
+    at Provider (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/chunk-OXZDJRWN.js?v=3436490f:38:15)
+    at TooltipProvider (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@radix-ui_react-tooltip.js?v=3436490f:64:5)
+    at QueryClientProvider (https://a33b99fc-0b61-4a69-8be6-35954a1b1309-00-37btslw2ml3qr.picard.replit.dev/@fs/home/runner/workspace/node_modules/.vite/deps/@tanstack_react-query.js?v=3436490f:2805:3)
+    at App
+printWarning @ chunk-RPCDYKBN.js?v=3436490f:521
+error @ chunk-RPCDYKBN.js?v=3436490f:505
+validateDOMNesting @ chunk-RPCDYKBN.js?v=3436490f:8256
+createInstance @ chunk-RPCDYKBN.js?v=3436490f:8328
+completeWork @ chunk-RPCDYKBN.js?v=3436490f:16290
+completeUnitOfWork @ chunk-RPCDYKBN.js?v=3436490f:19224
+performUnitOfWork @ chunk-RPCDYKBN.js?v=3436490f:19206
+workLoopSync @ chunk-RPCDYKBN.js?v=3436490f:19137
+renderRootSync @ chunk-RPCDYKBN.js?v=3436490f:19116
+performSyncWorkOnRoot @ chunk-RPCDYKBN.js?v=3436490f:18874
+flushSyncCallbacks @ chunk-RPCDYKBN.js?v=3436490f:9119
+(anonymous) @ chunk-RPCDYKBN.js?v=3436490f:18627

@@ -3249,8 +3249,34 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* 11. ISMS Tab */}
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
+                  <div className="p-4 mb-6 bg-red-100 border-2 border-red-500 rounded-md">
+                    <h2 className="text-red-700 font-bold text-xl">DEBUG INFO - PLEASE HELP US</h2>
+                    <p className="text-red-800 font-medium">
+                      We're troubleshooting the ISMS Processes section. Please scroll down and look for a section with bright red borders below.
+                    </p>
+                    <p className="mt-2">There should be 5 sections in order: 
+                      <span className="font-bold">1. Implementation Status, 2. Policies, 3. Procedures, 4. Plans, 5. Processes (RED SECTION), 6. Leadership</span>
+                    </p>
+                    
+                    {/* Duplicate ISMS Processes Section at the top for testing visibility */}
+                    <div className="mt-6 p-4 border-4 border-red-600 rounded-md bg-red-100 shadow-lg" style={{
+                      position: 'relative',
+                      zIndex: 50
+                    }}>
+                      <h4 className="font-bold text-xl text-red-800 border-b-2 border-red-400 pb-3 mb-6">⚠️ TEST COPY: ISMS Processes</h4>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        {processOptions.slice(0, 2).map((option) => (
+                          <div key={option.id} className="p-3 border-2 border-red-400 bg-white rounded-md shadow-md">
+                            <span className="font-medium text-lg text-red-900">{option.label}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  
                   <h3 className="font-medium mb-4">11. Information Security Management System (ISMS)</h3>
-                  {/* Regular instructions - no debug info */}
+                  
                   <div className="mb-4 p-2 bg-blue-50 border border-blue-300 rounded">
                     <p className="text-sm text-blue-700">
                       <strong>Information:</strong> Complete the Information Security Management System (ISMS) implementation details below.
@@ -3364,6 +3390,21 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             )}
                           />
                         ))}
+                      </div>
+                    </div>
+                    
+                    {/* Test Section - This is a completely new section */}
+                    <div className="mt-6 p-4 border-4 border-purple-400 rounded-md bg-purple-50">
+                      <h4 className="font-bold text-lg text-purple-800 border-b-2 pb-2 mb-4">TEST SECTION - Between Procedures and Plans</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="p-4 border-2 border-purple-300 rounded-md">
+                          <p className="font-medium">Test Item 1</p>
+                          <p className="text-sm">If you can see this section, but not the red ISMS Processes section below, there might be a conditional rendering issue.</p>
+                        </div>
+                        <div className="p-4 border-2 border-purple-300 rounded-md">
+                          <p className="font-medium">Test Item 2</p>
+                          <p className="text-sm">This is just a static test section to see if we can add new content in this area.</p>
+                        </div>
                       </div>
                     </div>
                     
