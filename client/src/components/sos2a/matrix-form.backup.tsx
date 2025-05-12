@@ -45,8 +45,6 @@ const processIdToLabelMap: Record<string, string> = {
 };
 
 export default function MatrixForm({ operationModes, internetPresence, ismsProcesses = [], onSubmit, onBack }: MatrixFormProps) {
-  // Debug line to verify this file is being loaded
-  console.log("MatrixForm loaded with ISMS Policies section removed - timestamp:", new Date().toISOString());
   // Generate initial matrix data based on selected operation modes and internet presence
   const initialMatrixData = generateInitialMatrixData(operationModes, internetPresence);
   
