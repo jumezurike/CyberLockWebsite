@@ -58,10 +58,10 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
   const allProcessIds = Object.keys(processIdToLabelMap);
   console.log("Available process IDs:", allProcessIds);
   
-  // For debugging, let's add all processes
-  // const processLabels = allProcessIds.map(id => processIdToLabelMap[id]);
+  // Use process labels based on the IDs received from questionnaire form
   const processLabels = safeIsmsProcesses.map(id => processIdToLabelMap[id] || id);
   
+  // For debugging
   console.log("Matrix Form received ISMS processes (IDs):", ismsProcesses);
   console.log("Using safe array:", safeIsmsProcesses);
   console.log("Mapped to process labels:", processLabels);
