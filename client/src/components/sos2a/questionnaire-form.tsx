@@ -1030,6 +1030,21 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       <CardContent className="p-6">
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="mb-6 p-4 border-4 border-purple-500 rounded-md bg-purple-100 text-center">
+              <h3 className="text-xl font-bold mb-2">TESTING COMPONENT VISIBILITY</h3>
+              <p className="mb-2">This is a test area to check if components can be rendered at the form level</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-4">
+                <div className="p-3 border-2 border-blue-400 rounded bg-blue-50">
+                  <span className="text-blue-800 font-medium">Test Box 1</span>
+                </div>
+                <div className="p-3 border-2 border-green-400 rounded bg-green-50">
+                  <span className="text-green-800 font-medium">Test Box 2</span>
+                </div>
+                <div className="p-3 border-2 border-red-400 rounded bg-red-50">
+                  <span className="text-red-800 font-medium">Test Box 3</span>
+                </div>
+              </div>
+            </div>
             <Tabs defaultValue="business" className="w-full">
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
