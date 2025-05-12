@@ -3407,6 +3407,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     
                     <div>
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
+                      
+                      {/* TEST COMPONENT - For verification only */}
+                      <div className="p-3 mb-4 bg-green-100 border-2 border-green-500 rounded-md">
+                        <h5 className="font-bold text-green-800">TEST SECTION</h5>
+                        <p className="text-sm text-green-700">This test section confirms ISMS Processes is rendering correctly.</p>
+                        <p className="text-xs mt-1 font-medium">Current selection: {form.getValues("ismsProcesses")?.length || 0} items selected</p>
+                      </div>
+                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {processOptions.map((option) => (
                           <FormField
