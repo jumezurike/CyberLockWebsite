@@ -3293,42 +3293,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       )}
                     />
                     
-                    <div>
-                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Policies</h4>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {policyOptions.map((option) => (
-                          <FormField
-                            key={option.id}
-                            control={form.control}
-                            name="ismsPolicies"
-                            render={({ field }) => (
-                              <FormItem
-                                key={option.id}
-                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
-                              >
-                                <FormControl>
-                                  <Checkbox
-                                    checked={field.value?.includes(option.id)}
-                                    onCheckedChange={(checked) => {
-                                      return checked
-                                        ? field.onChange([...field.value, option.id])
-                                        : field.onChange(
-                                            field.value?.filter(
-                                              (value) => value !== option.id
-                                            )
-                                          );
-                                    }}
-                                  />
-                                </FormControl>
-                                <FormLabel className="font-normal">
-                                  {option.label}
-                                </FormLabel>
-                              </FormItem>
-                            )}
-                          />
-                        ))}
-                      </div>
-                    </div>
+                    {/* ISMS Policies section temporarily removed for testing */}
                     
                     <div>
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Procedures</h4>
@@ -3407,14 +3372,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     
                     <div>
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
-                      
-                      {/* TEST COMPONENT - For verification only */}
-                      <div className="p-3 mb-4 bg-green-100 border-2 border-green-500 rounded-md">
-                        <h5 className="font-bold text-green-800">TEST SECTION</h5>
-                        <p className="text-sm text-green-700">This test section confirms ISMS Processes is rendering correctly.</p>
-                        <p className="text-xs mt-1 font-medium">Current selection: {form.getValues("ismsProcesses")?.length || 0} items selected</p>
-                      </div>
-                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {processOptions.map((option) => (
                           <FormField
@@ -5762,9 +5719,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <div>{form.getValues("ismsImplementation") || "Not specified"}</div>
                           
                           <div className="font-medium">ISMS Policies:</div>
-                          <div>{form.getValues("ismsPolicies")?.length > 0 ? 
-                                form.getValues("ismsPolicies").join(", ") : 
-                                "None selected"}</div>
+                          <div className="line-through text-gray-500">Section temporarily removed for testing</div>
                                 
                           <div className="font-medium">ISMS Plans:</div>
                           <div>{form.getValues("ismsPlans")?.length > 0 ? 
