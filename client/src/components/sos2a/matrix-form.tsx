@@ -54,9 +54,10 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
   // Make sure ismsProcesses is always an array
   const safeIsmsProcesses = Array.isArray(ismsProcesses) ? ismsProcesses : [];
   
-  // Force-include all process IDs for testing
-  const allProcessIds = Object.keys(processIdToLabelMap);
-  console.log("Available process IDs:", allProcessIds);
+  // Force-include all process IDs for testing - uncomment to test with all processes
+  // const safeIsmsProcesses = Object.keys(processIdToLabelMap);
+  
+  console.log("Available process IDs:", Object.keys(processIdToLabelMap));
   
   // Use process labels based on the IDs received from questionnaire form
   const processLabels = safeIsmsProcesses.map(id => processIdToLabelMap[id] || id);
@@ -748,13 +749,25 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
                       <div className="flex items-center space-x-3">
                         <Checkbox 
                           id="isms-process-1" 
-                          checked={(currentItem.isms?.processes?.includes("Define Information Security Policy") || false)}
+                          checked={(currentItem.isms?.processes?.includes("Define Information Security Policy") || 
+                                   currentItem.isms?.processes?.includes("info-security-policy") || 
+                                   false)}
                           onCheckedChange={(checked) => {
                             console.log("Process checkbox changed:", "Define Information Security Policy", checked);
                             console.log("Current processes:", currentItem.isms?.processes);
+                            
+                            // Use the ID value "info-security-policy" consistently for storage
+                            const processId = "info-security-policy";
+                            const processLabel = "Define Information Security Policy";
+                            
+                            // Remove both ID and label versions to avoid duplicates
+                            const filteredProcesses = (currentItem.isms?.processes || [])
+                              .filter(p => p !== processId && p !== processLabel);
+                            
+                            // Add only the ID version if checked
                             const updatedProcesses = checked 
-                              ? [...(currentItem.isms?.processes || []), "Define Information Security Policy"]
-                              : (currentItem.isms?.processes || []).filter(p => p !== "Define Information Security Policy");
+                              ? [...filteredProcesses, processId]
+                              : filteredProcesses;
                             
                             const updatedItem = { 
                               ...currentItem, 
@@ -772,11 +785,24 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
                       <div className="flex items-center space-x-3">
                         <Checkbox 
                           id="isms-process-2" 
-                          checked={currentItem.isms?.processes?.includes("Conduct Risk Assessments") || false}
+                          checked={(currentItem.isms?.processes?.includes("Conduct Risk Assessments") || 
+                                   currentItem.isms?.processes?.includes("risk-assessments") || 
+                                   false)}
                           onCheckedChange={(checked) => {
+                            console.log("Process checkbox changed:", "Conduct Risk Assessments", checked);
+                            
+                            // Use the ID value consistently for storage
+                            const processId = "risk-assessments";
+                            const processLabel = "Conduct Risk Assessments";
+                            
+                            // Remove both ID and label versions to avoid duplicates
+                            const filteredProcesses = (currentItem.isms?.processes || [])
+                              .filter(p => p !== processId && p !== processLabel);
+                            
+                            // Add only the ID version if checked
                             const updatedProcesses = checked 
-                              ? [...(currentItem.isms?.processes || []), "Conduct Risk Assessments"]
-                              : (currentItem.isms?.processes || []).filter(p => p !== "Conduct Risk Assessments");
+                              ? [...filteredProcesses, processId]
+                              : filteredProcesses;
                             
                             const updatedItem = { 
                               ...currentItem, 
