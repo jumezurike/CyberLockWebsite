@@ -820,11 +820,24 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
                       <div className="flex items-center space-x-3">
                         <Checkbox 
                           id="isms-process-3" 
-                          checked={currentItem.isms?.processes?.includes("Asset Inventory") || false}
+                          checked={(currentItem.isms?.processes?.includes("Perform Asset Inventory") || 
+                                   currentItem.isms?.processes?.includes("asset-inventory") || 
+                                   false)}
                           onCheckedChange={(checked) => {
+                            console.log("Process checkbox changed:", "Perform Asset Inventory", checked);
+                            
+                            // Use the ID value consistently for storage
+                            const processId = "asset-inventory";
+                            const processLabel = "Perform Asset Inventory";
+                            
+                            // Remove both ID and label versions to avoid duplicates
+                            const filteredProcesses = (currentItem.isms?.processes || [])
+                              .filter(p => p !== processId && p !== processLabel);
+                            
+                            // Add only the ID version if checked
                             const updatedProcesses = checked 
-                              ? [...(currentItem.isms?.processes || []), "Asset Inventory"]
-                              : (currentItem.isms?.processes || []).filter(p => p !== "Asset Inventory");
+                              ? [...filteredProcesses, processId]
+                              : filteredProcesses;
                             
                             const updatedItem = { 
                               ...currentItem, 
