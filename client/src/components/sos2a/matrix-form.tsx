@@ -46,13 +46,20 @@ const processIdToLabelMap: Record<string, string> = {
 
 export default function MatrixForm({ operationModes, internetPresence, ismsProcesses = [], onSubmit, onBack }: MatrixFormProps) {
   // Debug line to verify this file is being loaded
-  console.log("MatrixForm loaded with ISMS Policies section removed - timestamp:", new Date().toISOString());
+  console.log("MatrixForm loaded with debug logging for ISMS Processes - timestamp:", new Date().toISOString());
   // Generate initial matrix data based on selected operation modes and internet presence
   const initialMatrixData = generateInitialMatrixData(operationModes, internetPresence);
   
   // Convert process IDs to their display labels
   // Make sure ismsProcesses is always an array
   const safeIsmsProcesses = Array.isArray(ismsProcesses) ? ismsProcesses : [];
+  
+  // Force-include all process IDs for testing
+  const allProcessIds = Object.keys(processIdToLabelMap);
+  console.log("Available process IDs:", allProcessIds);
+  
+  // For debugging, let's add all processes
+  // const processLabels = allProcessIds.map(id => processIdToLabelMap[id]);
   const processLabels = safeIsmsProcesses.map(id => processIdToLabelMap[id] || id);
   
   console.log("Matrix Form received ISMS processes (IDs):", ismsProcesses);
@@ -75,7 +82,7 @@ export default function MatrixForm({ operationModes, internetPresence, ismsProce
     }
     
     // Add debug log for each item
-    console.log(`Matrix item ${item.id || 'unknown'} has ISMS processes:`, item.isms.processes);
+    console.log(`Matrix item ${item.infraType || 'unknown'} has ISMS processes:`, item.isms.processes);
   });
   
   const [matrixData, setMatrixData] = useState<MatrixItem[]>(initialMatrixData);
