@@ -145,7 +145,61 @@ const formSchema = z.object({
     securityCommittee: z.boolean().optional(),
   }).optional(),
   
-  // 11. Contact and Confirmation
+  // 12. Device Inventory Tracking
+  deviceInventoryTracking: z.object({
+    deviceId: z.string().optional(),
+    makeModel: z.string().optional(),
+    colorDescription: z.string().optional(),
+    serialNumber: z.string().optional(),
+    owner: z.string().optional(),
+    deviceType: z.string().optional(),
+    dataSensitivityLevel: z.string().optional(),
+    ipAddress: z.string().optional(),
+    macAddress: z.string().optional(),
+    networkLocation: z.string().optional(),
+    physicalLocation: z.string().optional(),
+    osVersion: z.string().optional(),
+    securitySoftware: z.array(z.string()).optional(),
+    patchStatus: z.string().optional(),
+    lastUpdated: z.string().optional(),
+    primaryFunction: z.string().optional(),
+    authorizedUsers: z.string().optional(),
+    monitoringTools: z.string().optional(),
+    backupStatus: z.string().optional(),
+    backupFrequency: z.string().optional(),
+    backupType: z.string().optional(),
+    backupLocation: z.string().optional().nullable(),
+    backupPath: z.string().optional(),
+    backupRetentionPeriod: z.string().optional().nullable(),
+    lastBackupTest: z.string().optional(),
+    backupNotes: z.string().optional(),
+    acquisitionDate: z.string().optional(),
+    expectedLifespan: z.string().optional(),
+    maintenanceSchedule: z.string().optional(),
+    maintenanceContact: z.string().optional(),
+    ownershipType: z.string().optional(),
+    disposalPlan: z.string().optional(),
+  }).optional(),
+  
+  // Device Inventory List
+  deviceInventoryList: z.array(z.any()).optional(),
+  deviceTypeFilter: z.string().optional(),
+  
+  // 13. Identity Behavior & Hygiene
+  identityBehaviorHygiene: z.object({
+    passwordPolicyCompliance: z.boolean().optional(),
+    passwordPolicyDetails: z.string().optional(),
+    mfaStatus: z.boolean().optional(),
+    mfaTypes: z.array(z.string()).optional(),
+    federatedIdentitySource: z.string().optional(),
+    otherIdentitySource: z.string().optional(),
+    accessControlModel: z.string().optional(),
+    sessionTimeoutPeriod: z.string().optional(),
+    privilegedAccessReview: z.boolean().optional(),
+    privilegedAccessFrequency: z.string().optional(),
+  }).optional(),
+  
+  // 14. Contact and Confirmation
   contactInfo: z.object({
     name: z.string().min(2, "Name is required"),
     pointOfContact: z.string().min(2, "Point of contact is required"),
@@ -320,7 +374,59 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
         securityCommittee: false,
       },
       
-      // 11. Contact and Confirmation
+      // 12. Device Inventory Tracking
+      deviceInventoryTracking: {
+        deviceId: "",
+        makeModel: "",
+        colorDescription: "",
+        serialNumber: "",
+        owner: "",
+        deviceType: "",
+        dataSensitivityLevel: "",
+        ipAddress: "",
+        macAddress: "",
+        networkLocation: "",
+        physicalLocation: "",
+        osVersion: "",
+        securitySoftware: [],
+        patchStatus: "",
+        lastUpdated: "",
+        primaryFunction: "",
+        authorizedUsers: "",
+        monitoringTools: "",
+        backupStatus: "",
+        backupFrequency: "",
+        backupType: "",
+        backupLocation: null,
+        backupPath: "",
+        backupRetentionPeriod: null,
+        lastBackupTest: "",
+        backupNotes: "",
+        acquisitionDate: "",
+        expectedLifespan: "",
+        maintenanceSchedule: "",
+        maintenanceContact: "",
+        ownershipType: "",
+        disposalPlan: "",
+      },
+      deviceInventoryList: [],
+      deviceTypeFilter: "all",
+      
+      // 13. Identity Behavior & Hygiene
+      identityBehaviorHygiene: {
+        passwordPolicyCompliance: false,
+        passwordPolicyDetails: "",
+        mfaStatus: false,
+        mfaTypes: [],
+        federatedIdentitySource: "",
+        otherIdentitySource: "",
+        accessControlModel: "",
+        sessionTimeoutPeriod: "",
+        privilegedAccessReview: false,
+        privilegedAccessFrequency: "",
+      },
+      
+      // 14. Contact and Confirmation
       contactInfo: {
         name: "",
         pointOfContact: "",
@@ -3443,7 +3549,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Contact and Confirmation Tab */}
               <TabsContent value="contact" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">14. Contact Confirmation</h3>
+                  <h3 className="font-medium mb-4">12. Contact Confirmation</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Provide contact details for follow-up and select your assessment type.
                   </p>
@@ -3639,7 +3745,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Review Tab */}
               <TabsContent value="review" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">15. Review & Submit Your Questionnaire</h3>
+                  <h3 className="font-medium mb-4">13. Review & Submit Your Questionnaire</h3>
                   <p className="text-sm mb-4">
                     <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
                   </p>
