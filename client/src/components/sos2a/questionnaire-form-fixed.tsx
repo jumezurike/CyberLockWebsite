@@ -4921,6 +4921,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
+                                <SelectItem value="none">None</SelectItem>
                                 <SelectItem value="azure-ad">Azure AD</SelectItem>
                                 <SelectItem value="okta">Okta</SelectItem>
                                 <SelectItem value="on-prem-ad">On-Prem AD</SelectItem>
@@ -4928,6 +4929,24 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               </SelectContent>
                             </Select>
                             <FormMessage />
+                            {field.value === "other" && (
+                              <div className="mt-2">
+                                <FormField
+                                  control={form.control}
+                                  name="identityBehaviorHygiene.otherFederatedIdentitySource"
+                                  render={({ field }) => (
+                                    <FormItem>
+                                      <FormControl>
+                                        <Input 
+                                          placeholder="Please specify other identity source" 
+                                          {...field} 
+                                        />
+                                      </FormControl>
+                                    </FormItem>
+                                  )}
+                                />
+                              </div>
+                            )}
                           </FormItem>
                         )}
                       />
