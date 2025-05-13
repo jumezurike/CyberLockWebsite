@@ -94,6 +94,16 @@ export interface IdentityBehaviorHygiene {
   biometricAuthentication?: boolean;
   biometricTypes?: string[];
   
+  // Password Management
+  passwordLastChanged?: string;
+  passwordComplexity?: string;
+  passwordLength?: string;
+  passwordExpirationDays?: string;
+  
+  // Federated Identity
+  federatedIdentitySource?: string;
+  otherFederatedIdentitySource?: string;
+  
   // 2. Access Behavior
   loginPatterns?: string;
   remoteAccessFrequency?: string;
@@ -114,6 +124,10 @@ export interface IdentityBehaviorHygiene {
   privilegeEscalationControls?: boolean;
   adminAccountReview?: string;
   separationOfDuties?: boolean;
+  
+  // Access Control Models
+  accessControlModel?: string; // ABAC, RBAC, ROBAC, None
+  accessDuration?: string; // 1-30 days, 1-3 months, 1-6 months, permanent
   
   // 5. Identity Lifecycle Management
   onboardingStatus?: string;
@@ -141,6 +155,10 @@ export interface DeviceInventoryItem {
   expectedLifespan?: string;
   ownershipType?: string;
   disposalPlan?: string;
+  
+  // Network details
+  macAddress?: string;
+  ipAddress?: string;
   
   // Enhanced backup details
   backupStatus?: boolean;

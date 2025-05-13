@@ -4959,6 +4959,36 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
+                        name="identityBehaviorHygiene.accessControlModel"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Access Control Model</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select access control model" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="none">None</SelectItem>
+                                <SelectItem value="rbac">Role-Based Access Control (RBAC)</SelectItem>
+                                <SelectItem value="abac">Attribute-Based Access Control (ABAC)</SelectItem>
+                                <SelectItem value="robac">Rule-Based Access Control (ROBAC)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormDescription>
+                              The primary access control model used in your organization
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    
+                      <FormField
+                        control={form.control}
                         name="identityBehaviorHygiene.assignedRoles"
                         render={({ field }) => (
                           <FormItem>
@@ -5011,7 +5041,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="temporary">Temporary</SelectItem>
+                                <SelectItem value="1-30-days">1-30 days</SelectItem>
+                                <SelectItem value="1-3-months">1-3 months</SelectItem>
+                                <SelectItem value="3-6-months">3-6 months</SelectItem>
                                 <SelectItem value="permanent">Permanent</SelectItem>
                               </SelectContent>
                             </Select>
@@ -5019,6 +5051,113 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           </FormItem>
                         )}
                       />
+                      
+                      {/* Password Management Section */}
+                      <div className="border rounded-md p-4 mb-4">
+                        <h5 className="font-medium mb-3">Password Management</h5>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.passwordLastChanged"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Password Last Changed</FormLabel>
+                                <FormControl>
+                                  <Input
+                                    type="date"
+                                    placeholder="Select date"
+                                    {...field}
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.passwordComplexity"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Password Complexity</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select complexity" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="low">Low (letters only)</SelectItem>
+                                    <SelectItem value="medium">Medium (letters + numbers)</SelectItem>
+                                    <SelectItem value="high">High (letters, numbers, special characters)</SelectItem>
+                                    <SelectItem value="very-high">Very High (letters, numbers, special characters, case sensitive)</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.passwordLength"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Password Length</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select minimum length" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="8">8 characters</SelectItem>
+                                    <SelectItem value="12">12 characters</SelectItem>
+                                    <SelectItem value="16">16 characters</SelectItem>
+                                    <SelectItem value="20">20+ characters</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.passwordExpirationDays"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel>Password Expiration</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select expiration period" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="30">30 days</SelectItem>
+                                    <SelectItem value="60">60 days</SelectItem>
+                                    <SelectItem value="90">90 days</SelectItem>
+                                    <SelectItem value="180">180 days</SelectItem>
+                                    <SelectItem value="365">365 days</SelectItem>
+                                    <SelectItem value="never">Never</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
                       
                       <FormField
                         control={form.control}
