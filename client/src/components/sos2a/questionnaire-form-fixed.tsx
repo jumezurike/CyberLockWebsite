@@ -4388,11 +4388,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                       <SelectValue placeholder="Select backup location" />
                                     </SelectTrigger>
                                   </FormControl>
+                                  <FormDescription className="text-xs mt-1">
+                                    Select "N/A" for devices that don't require backups or for cloud services managed by third parties.
+                                  </FormDescription>
                                   <SelectContent>
                                     <SelectItem value="local">Local (Same Device)</SelectItem>
                                     <SelectItem value="external">External Drive</SelectItem>
                                     <SelectItem value="network">Network Storage/NAS</SelectItem>
                                     <SelectItem value="cloud">Cloud Storage</SelectItem>
+                                    <SelectItem value="N/A">N/A</SelectItem>
                                     <SelectItem value="tape">Tape Backup</SelectItem>
                                     <SelectItem value="offsite">Offsite Physical Location</SelectItem>
                                     <SelectItem value="hybrid">Hybrid (Multiple Locations)</SelectItem>
@@ -4438,10 +4442,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                       <SelectValue placeholder="Select retention period" />
                                     </SelectTrigger>
                                   </FormControl>
+                                  <FormDescription className="text-xs mt-1">
+                                    Select "N/A" for devices without backup requirements or for third-party managed services.
+                                  </FormDescription>
                                   <SelectContent>
                                     <SelectItem value="7days">7 Days</SelectItem>
                                     <SelectItem value="30days">30 Days</SelectItem>
                                     <SelectItem value="90days">90 Days</SelectItem>
+                                    <SelectItem value="N/A">N/A</SelectItem>
                                     <SelectItem value="6months">6 Months</SelectItem>
                                     <SelectItem value="1year">1 Year</SelectItem>
                                     <SelectItem value="7years">7 Years</SelectItem>
