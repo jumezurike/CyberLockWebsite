@@ -1143,30 +1143,30 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Industry</FormLabel>
-                          <Select 
-                            onValueChange={handleIndustryChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
+                          <FormControl>
+                            <Select 
+                              onValueChange={handleIndustryChange}
+                              defaultValue={field.value}
+                            >
                               <SelectTrigger>
                                 <SelectValue placeholder="Select your industry" />
                               </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="healthcare">Healthcare</SelectItem>
-                              <SelectItem value="financial">Financial Services</SelectItem>
-                              <SelectItem value="education">Education</SelectItem>
-                              <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                              <SelectItem value="retail">Retail</SelectItem>
-                              <SelectItem value="professional-services">Professional Services</SelectItem>
-                              <SelectItem value="technology">Technology</SelectItem>
-                              <SelectItem value="government">Government</SelectItem>
-                              <SelectItem value="energy">Energy & Utilities</SelectItem>
-                              <SelectItem value="transportation">Transportation & Logistics</SelectItem>
-                              <SelectItem value="nonprofit">Nonprofit</SelectItem>
-                              <SelectItem value="other">Other</SelectItem>
-                            </SelectContent>
-                          </Select>
+                              <SelectContent>
+                                <SelectItem value="healthcare">Healthcare</SelectItem>
+                                <SelectItem value="financial">Financial Services</SelectItem>
+                                <SelectItem value="education">Education</SelectItem>
+                                <SelectItem value="manufacturing">Manufacturing</SelectItem>
+                                <SelectItem value="retail">Retail</SelectItem>
+                                <SelectItem value="professional-services">Professional Services</SelectItem>
+                                <SelectItem value="technology">Technology</SelectItem>
+                                <SelectItem value="government">Government</SelectItem>
+                                <SelectItem value="energy">Energy & Utilities</SelectItem>
+                                <SelectItem value="transportation">Transportation & Logistics</SelectItem>
+                                <SelectItem value="nonprofit">Nonprofit</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -1194,25 +1194,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Number of Employees</FormLabel>
-                          <Select 
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
-                          >
-                            <FormControl>
+                          <FormControl>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
                               <SelectTrigger>
                                 <SelectValue placeholder="Select employee count" />
                               </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="1-10">1-10</SelectItem>
-                              <SelectItem value="11-50">11-50</SelectItem>
-                              <SelectItem value="51-200">51-200</SelectItem>
-                              <SelectItem value="201-500">201-500</SelectItem>
-                              <SelectItem value="501-1000">501-1000</SelectItem>
-                              <SelectItem value="1001-5000">1001-5000</SelectItem>
-                              <SelectItem value="5001+">5001+</SelectItem>
-                            </SelectContent>
-                          </Select>
+                              <SelectContent>
+                                <SelectItem value="1-10">1-10</SelectItem>
+                                <SelectItem value="11-50">11-50</SelectItem>
+                                <SelectItem value="51-200">51-200</SelectItem>
+                                <SelectItem value="201-500">201-500</SelectItem>
+                                <SelectItem value="501-1000">501-1000</SelectItem>
+                                <SelectItem value="1001-5000">1001-5000</SelectItem>
+                                <SelectItem value="5001+">5001+</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -3647,7 +3647,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             if (allDevices.length === 0) {
                               return;
                             }
-                            
+                          
                             // Set the filtered devices (used for display only)
                             if (value === "all") {
                               // Reset to show all devices
