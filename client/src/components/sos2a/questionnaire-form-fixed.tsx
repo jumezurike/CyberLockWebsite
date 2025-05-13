@@ -3599,15 +3599,29 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </Button>
                     </div>
                     
-                    <div className="border rounded-md p-4">
+                    <div className="border-2 border-purple-300 rounded-md p-4 bg-purple-50">
                       <div className="flex justify-between items-center mb-4">
                         <div className="flex items-center gap-2">
                           <h5 className="font-medium">Filter Device List</h5>
-                          <Filter className="h-4 w-4 text-muted-foreground" />
+                          <Filter className="h-4 w-4 text-purple-600" />
                           {form.watch("deviceTypeFilter") && form.watch("deviceTypeFilter") !== "all" && (
-                            <Badge variant="outline" className="ml-2">
-                              Filtering: {form.watch("deviceTypeFilter")}
-                            </Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="secondary" className="ml-2 bg-purple-200 text-purple-800 hover:bg-purple-300">
+                                Filtering: {form.watch("deviceTypeFilter")}
+                              </Badge>
+                              <Button 
+                                variant="ghost" 
+                                size="sm" 
+                                className="h-6 px-2 text-xs text-purple-800 hover:bg-purple-200 hover:text-purple-900"
+                                onClick={() => {
+                                  form.setValue("deviceTypeFilter", "all");
+                                  form.setValue("filteredDeviceInventory", undefined);
+                                }}
+                              >
+                                <X className="h-3 w-3 mr-1" />
+                                Clear
+                              </Button>
+                            </div>
                           )}
                         </div>
                         
