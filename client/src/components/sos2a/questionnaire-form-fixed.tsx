@@ -145,54 +145,7 @@ const formSchema = z.object({
     securityCommittee: z.boolean().optional(),
   }).optional(),
   
-  // 11. Device Inventory Tracking
-  deviceInventoryTracking: z.object({
-    deviceId: z.string().optional(),
-    deviceName: z.string().optional(),
-    deviceType: z.string().optional(),
-    ownership: z.string().optional(),
-    operatingSystem: z.string().optional(),
-    osVersion: z.string().optional(),
-    macAddress: z.string().optional(),
-    macAddressNA: z.boolean().optional(),
-    ipAddress: z.string().optional(),
-    encryptionStatus: z.string().optional(),
-    antivirusStatus: z.string().optional(),
-    firewallStatus: z.string().optional(),
-    lastPatchDate: z.string().optional(),
-    backupStatus: z.string().optional(),
-    lastBackupDate: z.string().optional(),
-    backupLocation: z.string().optional(),
-    backupLocationNA: z.boolean().optional(),
-    retentionPeriod: z.string().optional(),
-    retentionPeriodNA: z.boolean().optional(),
-    purchaseDate: z.string().optional(),
-    warrantyExpiration: z.string().optional(),
-    endOfLifeDate: z.string().optional(),
-    lastReviewDate: z.string().optional(),
-  }).optional(),
-  
-  // 12. Identity Behavior & Hygiene
-  identityBehavior: z.object({
-    primaryDirectoryService: z.string().optional(),
-    federatedIdentitySources: z.string().optional(),
-    additionalDirectories: z.array(z.string()).optional(),
-    accessControlModel: z.string().optional(),
-    mfaImplementation: z.string().optional(),
-    mfaMethods: z.array(z.string()).optional(),
-    ssoImplementation: z.string().optional(),
-    passwordComplexity: z.string().optional(),
-    passwordExpiration: z.string().optional(),
-    passwordManager: z.string().optional(),
-    privilegedAccountManagement: z.string().optional(),
-    adminAccountsUsage: z.string().optional(),
-    privilegedAccountInventory: z.string().optional(),
-    userAccessReviews: z.string().optional(),
-    userOffboarding: z.string().optional(),
-    dormantAccounts: z.string().optional(),
-  }).optional(),
-  
-  // 13. Contact and Confirmation
+  // 11. Contact and Confirmation
   contactInfo: z.object({
     name: z.string().min(2, "Name is required"),
     pointOfContact: z.string().min(2, "Point of contact is required"),
@@ -384,53 +337,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       
       // Legal agreements
       eulaAccepted: false,
-      
-      // Device inventory tracking
-      deviceInventoryTracking: {
-        deviceId: "",
-        deviceName: "",
-        deviceType: "",
-        ownership: "",
-        operatingSystem: "",
-        osVersion: "",
-        macAddress: "",
-        macAddressNA: false,
-        ipAddress: "",
-        encryptionStatus: "",
-        antivirusStatus: "",
-        firewallStatus: "",
-        lastPatchDate: "",
-        backupStatus: "",
-        lastBackupDate: "",
-        backupLocation: "",
-        backupLocationNA: false,
-        retentionPeriod: "",
-        retentionPeriodNA: false,
-        purchaseDate: "",
-        warrantyExpiration: "",
-        endOfLifeDate: "",
-        lastReviewDate: "",
-      },
-      
-      // Identity behavior
-      identityBehavior: {
-        primaryDirectoryService: "",
-        federatedIdentitySources: "",
-        additionalDirectories: [],
-        accessControlModel: "",
-        mfaImplementation: "",
-        mfaMethods: [],
-        ssoImplementation: "",
-        passwordComplexity: "",
-        passwordExpiration: "",
-        passwordManager: "",
-        privilegedAccountManagement: "",
-        adminAccountsUsage: "",
-        privilegedAccountInventory: "",
-        userAccessReviews: "",
-        userOffboarding: "",
-        dormantAccounts: "",
-      },
     },
   });
   
@@ -438,6 +344,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     // Debug logs to check form submission
     console.log("Form submitted", data);
     console.log("EULA status:", eulaAccepted);
+    // ISMS Processes are now properly handled
     
     // Update the EULA acceptance state in the form data
     const updatedData = {
@@ -950,6 +857,29 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "data-security", label: "Data Security Plan" },
   ];
   
+
+  
+  const processOptions = [
+    { id: "info-security-policy", label: "Define Information Security Policy" },
+    { id: "risk-assessments", label: "Conduct Risk Assessments" },
+    { id: "asset-inventory", label: "Perform Asset Inventory" },
+    { id: "access-control", label: "Establish Access Control Rules" },
+    { id: "identity-management", label: "Configure Identity Management" },
+    { id: "data-encryption", label: "Apply Data Encryption" },
+    { id: "security-awareness", label: "Conduct Security Awareness Training" },
+    { id: "change-management", label: "Implement Change Management" },
+    { id: "vulnerability-scanning", label: "Conduct Vulnerability Scanning" },
+    { id: "incident-response", label: "Perform Security Incident Response" },
+    { id: "privileged-access", label: "Implement Privileged Access Management" },
+    { id: "security-audits", label: "Conduct Regular Security Audits" },
+    { id: "network-security", label: "Implement Network Security Controls" },
+    { id: "backup-recovery", label: "Implement Backup and Recovery Procedures" },
+    { id: "penetration-testing", label: "Conduct Penetration Testing" },
+    { id: "data-classification", label: "Implement Data Classification" },
+    { id: "vendor-risk", label: "Establish Vendor Risk Management" },
+    { id: "physical-security", label: "Implement Physical Security Controls" },
+  ];
+  
   const guideOptions = [
     { id: "security-awareness", label: "Security Awareness Guidelines" },
     { id: "secure-coding", label: "Secure Coding Guidelines" },
@@ -1116,7 +1046,32 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="acq-tools">9. Relevant ACQ Tools</TabsTrigger>
                 <TabsTrigger value="adversarial">10. Adversarial Insight (MITRE ATT&CK)</TabsTrigger>
-                <TabsTrigger value="isms">11. Information Security Management System (ISMS)</TabsTrigger>
+                <TabsTrigger 
+                value="isms" 
+                onClick={() => {
+                  setTimeout(() => {
+                    // Add debug info to browser console
+                    console.log("ISMS Tab clicked - looking for Processes section");
+                    const processesSection = document.getElementById("ismsProcessesSection");
+                    console.log("Processes section found:", !!processesSection);
+                    console.log("Process options:", processOptions);
+                    console.log("ismsProcesses value:", form.getValues("ismsProcesses"));
+                    
+                    // Make the section extra visible
+                    if (processesSection) {
+                      processesSection.style.boxShadow = "0 0 20px rgba(213, 63, 140, 0.8)";
+                      processesSection.style.border = "4px solid red";
+                      processesSection.style.padding = "20px";
+                      processesSection.style.background = "#ffeeee";
+                      processesSection.scrollIntoView({ behavior: "smooth" });
+                    } else {
+                      console.error("ISMS Processes section not found in the DOM!");
+                    }
+                  }, 500);
+                }}
+              >
+                11. Information Security Management System (ISMS)
+              </TabsTrigger>
                 <TabsTrigger value="device-inventory">12. Device Inventory Tracking</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
@@ -2821,7 +2776,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* 9. Adversarial Insight Tab */}
+              {/* 10. Adversarial Insight Tab */}
               <TabsContent value="adversarial" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">10. Adversarial Insight (MITRE ATT&CK)</h3>
@@ -3291,10 +3246,17 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* 10. ISMS Tab */}
+              {/* 11. ISMS Tab */}
               <TabsContent value="isms" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">11. Information Security Management System (ISMS)</h3>
+                  
+                  <div className="mb-4 p-2 bg-blue-50 border border-blue-300 rounded">
+                    <p className="text-sm text-blue-700">
+                      <strong>Information:</strong> Complete the Information Security Management System (ISMS) implementation details below.
+                    </p>
+                  </div>
+                  
                   <p className="text-sm text-muted-foreground mb-4">
                     Select ISMS implementation options and related documents.
                   </p>
@@ -3405,6 +3367,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
+
                     <div>
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Plans</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -3443,6 +3406,43 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                     
                     <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {processOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="ismsProcesses"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...(field.value || []), option.id])
+                                        : field.onChange(
+                                            (field.value || [])?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div className="mt-6">
                       <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Leadership</h4>
                       <div className="space-y-4">
                         <FormField
@@ -3534,7 +3534,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Device Inventory Tracking Tab */}
+              {/* 12. Device Inventory Tracking Tab */}
               <TabsContent value="device-inventory" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">12. Device Inventory Tracking</h3>
@@ -3559,14 +3559,71 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           </FormItem>
                         )}
                       />
+                      
                       <FormField
                         control={form.control}
-                        name="deviceInventoryTracking.deviceName"
+                        name="deviceInventoryTracking.makeModel"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Device Name</FormLabel>
+                            <FormLabel>Make / Model</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter device name" {...field} />
+                              <Input placeholder="Enter device make and model" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.colorDescription"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Color / Physical Description</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter device color or description" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.serialNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Serial Number</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter device serial number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.owner"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Owner / Assigned User</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter device owner or assigned user" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.deviceNickname"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Device Nickname or Label (if used)</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter device nickname or label" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3578,144 +3635,174 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 2. Classification Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">2. Classification</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-6">
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.deviceType"
-                        render={({ field }) => (
+                        render={() => (
                           <FormItem>
-                            <FormLabel>Device Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select device type" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="desktop">Desktop Computer</SelectItem>
-                                <SelectItem value="laptop">Laptop</SelectItem>
-                                <SelectItem value="tablet">Tablet</SelectItem>
-                                <SelectItem value="smartphone">Smartphone</SelectItem>
-                                <SelectItem value="server">Server</SelectItem>
-                                <SelectItem value="iot">IoT Device</SelectItem>
-                                <SelectItem value="medical">Medical Device</SelectItem>
-                                <SelectItem value="network">Network Equipment</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <div className="mb-4">
+                              <FormLabel>Device Type</FormLabel>
+                              <FormDescription>
+                                Select all that apply
+                              </FormDescription>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {["Laptop", "Desktop", "Server", "Mobile", "Tablet", "Router", "Switch", "Firewall", "IoT Device", "Smartwatch", "Printer", "Other"].map((type) => (
+                                <FormField
+                                  key={type}
+                                  control={form.control}
+                                  name="deviceInventoryTracking.deviceType"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={type}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(type)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), type]
+                                                : field.value?.filter(
+                                                    (value) => value !== type
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {type}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+                      
                       <FormField
                         control={form.control}
-                        name="deviceInventoryTracking.ownership"
-                        render={({ field }) => (
+                        name="deviceInventoryTracking.endpointCategory"
+                        render={() => (
                           <FormItem>
-                            <FormLabel>Ownership</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select ownership type" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="corporate">Corporate-owned</SelectItem>
-                                <SelectItem value="personal">Personal (BYOD)</SelectItem>
-                                <SelectItem value="leased">Leased</SelectItem>
-                                <SelectItem value="vendor">Vendor-managed</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <div className="mb-4">
+                              <FormLabel>Endpoint Category</FormLabel>
+                              <FormDescription>
+                                Select all that apply
+                              </FormDescription>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                              {["User Device", "Shared Asset", "Infrastructure Device", "Monitoring System", "Security Device"].map((type) => (
+                                <FormField
+                                  key={type}
+                                  control={form.control}
+                                  name="deviceInventoryTracking.endpointCategory"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={type}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(type)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), type]
+                                                : field.value?.filter(
+                                                    (value) => value !== type
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {type}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                    </div>
-                  </div>
-                  
-                  {/* 3. Technical Information Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Technical Information</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.operatingSystem"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Operating System</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select operating system" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="windows10">Windows 10</SelectItem>
-                                <SelectItem value="windows11">Windows 11</SelectItem>
-                                <SelectItem value="macos">macOS</SelectItem>
-                                <SelectItem value="ios">iOS</SelectItem>
-                                <SelectItem value="android">Android</SelectItem>
-                                <SelectItem value="linux">Linux</SelectItem>
-                                <SelectItem value="chrome">Chrome OS</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.osVersion"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>OS Version</FormLabel>
+                            <FormLabel>Operating System & Version</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter OS version" {...field} />
+                              <Input placeholder="Enter OS and version (e.g., Windows 11, macOS 14.1)" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+                      
                       <FormField
                         control={form.control}
-                        name="deviceInventoryTracking.macAddress"
-                        render={({ field }) => (
+                        name="deviceInventoryTracking.browsersInstalled"
+                        render={() => (
                           <FormItem>
-                            <FormLabel>MAC Address</FormLabel>
-                            <div className="flex space-x-4">
-                              <FormControl className="flex-grow">
-                                <Input placeholder="Enter MAC address" {...field} />
-                              </FormControl>
-                              <FormField
-                                control={form.control}
-                                name="deviceInventoryTracking.macAddressNA"
-                                render={({ field }) => (
-                                  <FormItem className="flex items-center space-x-3 space-y-0">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm">N/A</FormLabel>
-                                  </FormItem>
-                                )}
-                              />
+                            <div className="mb-4">
+                              <FormLabel>Browser(s) Installed + Engine</FormLabel>
+                              <FormDescription>
+                                Select all that apply
+                              </FormDescription>
                             </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.ipAddress"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>IP Address</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter IP address" {...field} />
-                            </FormControl>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {[
+                                "Chrome (Chromium)", 
+                                "Firefox (Gecko)",
+                                "Safari (WebKit)",
+                                "Edge (Chromium)",
+                                "Opera (Chromium)",
+                                "Brave (Chromium)",
+                                "Internet Explorer (Trident)"
+                              ].map((browser) => (
+                                <FormField
+                                  key={browser}
+                                  control={form.control}
+                                  name="deviceInventoryTracking.browsersInstalled"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={browser}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(browser)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), browser]
+                                                : field.value?.filter(
+                                                    (value) => value !== browser
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {browser}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -3723,87 +3810,359 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 4. Security Section */}
+                  {/* 3. Network & Location Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">4. Security</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <h4 className="font-medium mb-4">3. Network & Location</h4>
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.ipAddress"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>IP Address(es)</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter IP address(es)" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.macAddress"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>MAC Address</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter MAC address" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.lastKnownLocation"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Last Known Location</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter location (Office/Room/Geotag)" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.assignedDepartment"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Assigned Department / Business Unit</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter department or business unit" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.networkZone"
+                        render={() => (
+                          <FormItem>
+                            <div className="mb-4">
+                              <FormLabel>Network Zone</FormLabel>
+                              <FormDescription>
+                                Select all that apply
+                              </FormDescription>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {[
+                                "DMZ", 
+                                "Internal", 
+                                "Guest",
+                                "Management",
+                                "Secured/Isolated",
+                                "IoT Network",
+                                "VPN"
+                              ].map((zone) => (
+                                <FormField
+                                  key={zone}
+                                  control={form.control}
+                                  name="deviceInventoryTracking.networkZone"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={zone}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(zone)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), zone]
+                                                : field.value?.filter(
+                                                    (value) => value !== zone
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {zone}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
+                            </div>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* 4. Security Posture Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">4. Security Posture</h4>
+                    <div className="space-y-6">
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.encryptionStatus"
-                        render={({ field }) => (
+                        render={() => (
                           <FormItem>
-                            <FormLabel>Encryption Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select encryption status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="full">Full Disk Encryption</SelectItem>
-                                <SelectItem value="partial">Partial Encryption</SelectItem>
-                                <SelectItem value="none">No Encryption</SelectItem>
-                                <SelectItem value="unknown">Unknown</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <div className="mb-4">
+                              <FormLabel>Encryption Status</FormLabel>
+                              <FormDescription>
+                                Select all that apply
+                              </FormDescription>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {[
+                                "Full Disk Encryption", 
+                                "File-Level Encryption",
+                                "Removable Media Encryption",
+                                "No Encryption",
+                                "Partial Encryption",
+                                "Unknown"
+                              ].map((status) => (
+                                <FormField
+                                  key={status}
+                                  control={form.control}
+                                  name="deviceInventoryTracking.encryptionStatus"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={status}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(status)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), status]
+                                                : field.value?.filter(
+                                                    (value) => value !== status
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {status}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.antivirusStatus"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Antivirus Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.antivirusInstalled"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                               <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select antivirus status" />
-                                </SelectTrigger>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
                               </FormControl>
-                              <SelectContent>
-                                <SelectItem value="installed-current">Installed & Updated</SelectItem>
-                                <SelectItem value="installed-outdated">Installed but Outdated</SelectItem>
-                                <SelectItem value="none">Not Installed</SelectItem>
-                                <SelectItem value="unknown">Unknown</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.firewallStatus"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Firewall Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Antivirus / EDR Installed?</FormLabel>
+                                <FormDescription>
+                                  Check if antivirus or endpoint detection and response is installed
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.firewallActive"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                               <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select firewall status" />
-                                </SelectTrigger>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
                               </FormControl>
-                              <SelectContent>
-                                <SelectItem value="enabled">Enabled</SelectItem>
-                                <SelectItem value="disabled">Disabled</SelectItem>
-                                <SelectItem value="unknown">Unknown</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Firewall Active?</FormLabel>
+                                <FormDescription>
+                                  Check if device firewall is active
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.tpmPresent"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>TPM Present?</FormLabel>
+                                <FormDescription>
+                                  Check if Trusted Platform Module is present
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.patchStatus"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Patch Status (OS, App, Firmware)</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select patch status" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="fully-patched">Fully Patched</SelectItem>
+                                  <SelectItem value="patched-critical">Critical Patches Only</SelectItem>
+                                  <SelectItem value="out-of-date">Out of Date</SelectItem>
+                                  <SelectItem value="unknown">Unknown</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.vpnMdmEnrollment"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>VPN Usage / MDM Enrollment?</FormLabel>
+                                <FormDescription>
+                                  Check if device uses VPN or is enrolled in Mobile Device Management
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
                       <FormField
                         control={form.control}
-                        name="deviceInventoryTracking.lastPatchDate"
-                        render={({ field }) => (
+                        name="deviceInventoryTracking.securityComplianceLevel"
+                        render={() => (
                           <FormItem>
-                            <FormLabel>Last Patched Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
+                            <div className="mb-4">
+                              <FormLabel>Security Compliance Level</FormLabel>
+                              <FormDescription>
+                                Select all that apply
+                              </FormDescription>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {[
+                                "HIPAA", 
+                                "CMMC",
+                                "ISO 27001",
+                                "NIST 800-171",
+                                "SOC 2",
+                                "PCI DSS",
+                                "GDPR",
+                                "FISMA",
+                                "None"
+                              ].map((compliance) => (
+                                <FormField
+                                  key={compliance}
+                                  control={form.control}
+                                  name="deviceInventoryTracking.securityComplianceLevel"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={compliance}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(compliance)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), compliance]
+                                                : field.value?.filter(
+                                                    (value) => value !== compliance
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {compliance}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -3811,161 +4170,214 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 5. Backup & Recovery Section */}
+                  {/* 5. Usage & Monitoring Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Backup & Recovery</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.backupStatus"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Backup Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <h4 className="font-medium mb-4">5. Usage & Monitoring</h4>
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.lastLoginDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Last Login Date</FormLabel>
                               <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select backup status" />
-                                </SelectTrigger>
+                                <Input type="date" {...field} />
                               </FormControl>
-                              <SelectContent>
-                                <SelectItem value="regular">Regular Backups</SelectItem>
-                                <SelectItem value="irregular">Irregular Backups</SelectItem>
-                                <SelectItem value="none">No Backups</SelectItem>
-                                <SelectItem value="unknown">Unknown</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.lastBackupDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Last Backup Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.backupLocation"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Backup Location</FormLabel>
-                            <div className="flex space-x-4">
-                              <FormControl className="flex-grow">
-                                <Input placeholder="Enter backup location path" {...field} />
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.lastNetworkCheckin"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Last Network Check-in</FormLabel>
+                              <FormControl>
+                                <Input type="date" {...field} />
                               </FormControl>
-                              <FormField
-                                control={form.control}
-                                name="deviceInventoryTracking.backupLocationNA"
-                                render={({ field }) => (
-                                  <FormItem className="flex items-center space-x-3 space-y-0">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm">N/A</FormLabel>
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.retentionPeriod"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Retention Period (days)</FormLabel>
-                            <div className="flex space-x-4">
-                              <FormControl className="flex-grow">
-                                <Input type="number" placeholder="Enter retention period" {...field} />
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.deviceStatus"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Device Activity / Status</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select device status" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="active">Active</SelectItem>
+                                  <SelectItem value="inactive">Inactive</SelectItem>
+                                  <SelectItem value="in-repair">In Repair</SelectItem>
+                                  <SelectItem value="retired">Retired</SelectItem>
+                                  <SelectItem value="lost-stolen">Lost/Stolen</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.deviceRiskScore"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Device Risk Score (Optional)</FormLabel>
+                              <FormDescription>
+                                If available from your SIEM/EDR, enter a risk score from 0-100
+                              </FormDescription>
+                              <FormControl>
+                                <Input 
+                                  type="number" 
+                                  min="0" 
+                                  max="100" 
+                                  placeholder="Enter risk score (0-100)"
+                                  {...field}
+                                  onChange={e => {
+                                    const value = e.target.value === '' ? undefined : Number(e.target.value);
+                                    field.onChange(value);
+                                  }}
+                                />
                               </FormControl>
-                              <FormField
-                                control={form.control}
-                                name="deviceInventoryTracking.retentionPeriodNA"
-                                render={({ field }) => (
-                                  <FormItem className="flex items-center space-x-3 space-y-0">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm">N/A</FormLabel>
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                     </div>
                   </div>
                   
-                  {/* 6. Lifecycle Management Section */}
-                  <div className="border rounded-md p-4">
-                    <h4 className="font-medium mb-4">6. Lifecycle Management</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* 6. Lifecycle & Ownership Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">6. Lifecycle & Ownership</h4>
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.procurementDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Procurement Date / Vendor</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter procurement date and vendor" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.warrantyExpiration"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Warranty Expiration</FormLabel>
+                              <FormControl>
+                                <Input type="date" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.deviceLifecycleStatus"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Device Lifecycle Status</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select lifecycle status" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="in-use">In Use</SelectItem>
+                                  <SelectItem value="in-storage">In Storage</SelectItem>
+                                  <SelectItem value="decommissioned">Decommissioned</SelectItem>
+                                  <SelectItem value="pending-disposal">Pending Disposal</SelectItem>
+                                  <SelectItem value="disposed">Disposed</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
                       <FormField
                         control={form.control}
-                        name="deviceInventoryTracking.purchaseDate"
-                        render={({ field }) => (
+                        name="deviceInventoryTracking.assignedPolicies"
+                        render={() => (
                           <FormItem>
-                            <FormLabel>Purchase Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.warrantyExpiration"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Warranty Expiration</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.endOfLifeDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>End of Life Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.lastReviewDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Last Inventory Review Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
+                            <div className="mb-4">
+                              <FormLabel>Assigned Policies or Group Tags</FormLabel>
+                              <FormDescription>
+                                Select all that apply
+                              </FormDescription>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {[
+                                "Finance Only", 
+                                "Executive", 
+                                "IT Admin",
+                                "Developer",
+                                "Guest Access",
+                                "Restricted Access",
+                                "BYOD",
+                                "Remote Worker",
+                                "Standard User"
+                              ].map((policy) => (
+                                <FormField
+                                  key={policy}
+                                  control={form.control}
+                                  name="deviceInventoryTracking.assignedPolicies"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={policy}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(policy)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), policy]
+                                                : field.value?.filter(
+                                                    (value) => value !== policy
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {policy}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -3973,9 +4385,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                 </div>
+                
+                <div className="flex justify-end space-x-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => document.querySelector('[value="isms"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                  >
+                    Previous Step
+                  </Button>
+                  <Button 
+                    type="button"
+                    onClick={() => document.querySelector('[value="identity-behavior"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                  >
+                    Next Step
+                  </Button>
+                </div>
               </TabsContent>
               
-              {/* Identity Behavior & Hygiene Tab */}
+              {/* 13. Identity Behavior & Hygiene Tab */}
               <TabsContent value="identity-behavior" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">13. Identity Behavior & Hygiene</h3>
@@ -3983,120 +4411,200 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
                   
-                  {/* 1. Identity Sources Section */}
+                  {/* 1. Authentication Practices Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">1. Identity Sources</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <h4 className="font-medium mb-4">1. Authentication Practices</h4>
+                    <div className="space-y-6">
                       <FormField
                         control={form.control}
-                        name="identityBehavior.primaryDirectoryService"
+                        name="identityBehaviorHygiene.passwordPolicyCompliance"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Password Policy Compliance</FormLabel>
+                              <FormDescription>
+                                Do you have a formal password policy that meets industry standards?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.passwordPolicyDetails"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Primary Directory Service</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select primary directory" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="active-directory">Active Directory</SelectItem>
-                                <SelectItem value="azure-ad">Azure AD / Entra ID</SelectItem>
-                                <SelectItem value="google-workspace">Google Workspace</SelectItem>
-                                <SelectItem value="okta">Okta</SelectItem>
-                                <SelectItem value="onelogin">OneLogin</SelectItem>
-                                <SelectItem value="ping">Ping Identity</SelectItem>
-                                <SelectItem value="aws">AWS IAM</SelectItem>
-                                <SelectItem value="ldap">LDAP</SelectItem>
-                                <SelectItem value="none">None</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <FormLabel>Password Policy Details</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                placeholder="Describe your password policy requirements (length, complexity, rotation, etc.)" 
+                                className="h-24"
+                                {...field} 
+                              />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+                      
                       <FormField
                         control={form.control}
-                        name="identityBehavior.federatedIdentitySources"
+                        name="identityBehaviorHygiene.mfaStatus"
                         render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Multi-Factor Authentication (MFA)</FormLabel>
+                              <FormDescription>
+                                Do you implement multi-factor authentication?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.mfaTypes"
+                        render={() => (
                           <FormItem>
-                            <FormLabel>Federated Identity Sources</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select federated sources" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="saml">SAML</SelectItem>
-                                <SelectItem value="oauth">OAuth/OIDC</SelectItem>
-                                <SelectItem value="both">Both SAML and OAuth/OIDC</SelectItem>
-                                <SelectItem value="other">Other Federation Protocol</SelectItem>
-                                <SelectItem value="none">None</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <div className="mb-4">
+                              <FormLabel>MFA Types</FormLabel>
+                              <FormDescription>
+                                Select all MFA types that are implemented
+                              </FormDescription>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {[
+                                "SMS/Text Messages", 
+                                "Email Codes",
+                                "Mobile App Authenticator",
+                                "Hardware Tokens/Keys",
+                                "Biometrics",
+                                "Push Notifications",
+                                "Phone Calls"
+                              ].map((type) => (
+                                <FormField
+                                  key={type}
+                                  control={form.control}
+                                  name="identityBehaviorHygiene.mfaTypes"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={type}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(type)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), type]
+                                                : field.value?.filter(
+                                                    (value) => value !== type
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {type}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+                      
                       <FormField
                         control={form.control}
-                        name="identityBehavior.additionalDirectories"
+                        name="identityBehaviorHygiene.biometricAuthentication"
                         render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Biometric Authentication</FormLabel>
+                              <FormDescription>
+                                Do you use biometric authentication?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.biometricTypes"
+                        render={() => (
                           <FormItem>
-                            <FormLabel>Additional Directory Services</FormLabel>
-                            <div className="space-y-2">
-                              <div className="flex flex-wrap gap-2">
-                                {field.value?.map((dir) => (
-                                  <div key={dir} className="flex items-center bg-secondary text-secondary-foreground rounded-md px-2 py-1">
-                                    <span>{dir}</span>
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      className="h-auto p-0 px-1.5"
-                                      onClick={() => {
-                                        const newValue = field.value?.filter((v) => v !== dir) || [];
-                                        field.onChange(newValue);
-                                      }}
-                                    >
-                                      ×
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                              <Select
-                                onValueChange={(value) => {
-                                  if (value === "other") {
-                                    // Handle custom input
-                                    const customDir = prompt("Enter custom directory service");
-                                    if (customDir) {
-                                      const newValue = [...(field.value || []), customDir];
-                                      field.onChange(newValue);
-                                    }
-                                  } else if (value && !field.value?.includes(value)) {
-                                    const newValue = [...(field.value || []), value];
-                                    field.onChange(newValue);
-                                  }
-                                }}
-                              >
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Add additional directories" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="active-directory">Active Directory</SelectItem>
-                                  <SelectItem value="azure-ad">Azure AD / Entra ID</SelectItem>
-                                  <SelectItem value="google-workspace">Google Workspace</SelectItem>
-                                  <SelectItem value="okta">Okta</SelectItem>
-                                  <SelectItem value="onelogin">OneLogin</SelectItem>
-                                  <SelectItem value="ping">Ping Identity</SelectItem>
-                                  <SelectItem value="aws">AWS IAM</SelectItem>
-                                  <SelectItem value="ldap">LDAP</SelectItem>
-                                  <SelectItem value="other">Other (Custom)</SelectItem>
-                                </SelectContent>
-                              </Select>
+                            <div className="mb-4">
+                              <FormLabel>Biometric Types</FormLabel>
+                              <FormDescription>
+                                Select all biometric types that are used
+                              </FormDescription>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {[
+                                "Fingerprint", 
+                                "Facial Recognition",
+                                "Voice Recognition",
+                                "Iris Scanning",
+                                "Palm Vein/Hand Geometry",
+                                "Behavioral Biometrics"
+                              ].map((type) => (
+                                <FormField
+                                  key={type}
+                                  control={form.control}
+                                  name="identityBehaviorHygiene.biometricTypes"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={type}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(type)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), type]
+                                                : field.value?.filter(
+                                                    (value) => value !== type
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {type}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
                             </div>
                             <FormMessage />
                           </FormItem>
@@ -4105,63 +4613,242 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 2. Access Control Model Section */}
+                  {/* 2. Access Behavior Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">2. Access Control Model</h4>
-                    <div className="grid grid-cols-1 gap-6">
+                    <h4 className="font-medium mb-4">2. Access Behavior</h4>
+                    <div className="space-y-6">
                       <FormField
                         control={form.control}
-                        name="identityBehavior.accessControlModel"
+                        name="identityBehaviorHygiene.loginPatterns"
                         render={({ field }) => (
-                          <FormItem className="space-y-3">
-                            <FormLabel>Access Control Model Used</FormLabel>
+                          <FormItem>
+                            <FormLabel>Login Patterns</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select typical login patterns" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="regular-business-hours">Regular Business Hours Only</SelectItem>
+                                <SelectItem value="extended-hours">Extended Hours (Early/Late)</SelectItem>
+                                <SelectItem value="24-7-operations">24/7 Operations</SelectItem>
+                                <SelectItem value="mostly-remote">Primarily Remote Access</SelectItem>
+                                <SelectItem value="irregular-varied">Irregular/Varied Patterns</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.remoteAccessFrequency"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Remote Access Frequency</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select remote access frequency" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="rare">Rare (Almost Never)</SelectItem>
+                                <SelectItem value="occasional">Occasional (Monthly)</SelectItem>
+                                <SelectItem value="regular">Regular (Weekly)</SelectItem>
+                                <SelectItem value="frequent">Frequent (Daily)</SelectItem>
+                                <SelectItem value="primary-access">Primary Access Method</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.sessionDuration"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Typical Session Duration</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select typical session duration" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="short">Short (<1 hour)</SelectItem>
+                                <SelectItem value="medium">Medium (1-4 hours)</SelectItem>
+                                <SelectItem value="long">Long (4-8 hours)</SelectItem>
+                                <SelectItem value="extended">Extended (>8 hours)</SelectItem>
+                                <SelectItem value="all-day">All Day Sessions</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.abnormalAccessDetection"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Abnormal Access Detection</FormLabel>
+                                <FormDescription>
+                                  Do you have systems to detect abnormal access patterns?
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.locationBasedAccess"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Location-Based Access Controls</FormLabel>
+                                <FormDescription>
+                                  Do you restrict access based on geographic location?
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* 3. Identity Protection Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">3. Identity Protection</h4>
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.identityProtectionTraining"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Identity Protection Training</FormLabel>
+                                <FormDescription>
+                                  Do you provide identity protection training to users?
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.trainingCompletionDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Last Training Completion Date</FormLabel>
+                              <FormControl>
+                                <Input type="date" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.phishingAwarenessLevel"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phishing Awareness Level</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select phishing awareness level" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="basic">Basic Awareness</SelectItem>
+                                <SelectItem value="intermediate">Intermediate Understanding</SelectItem>
+                                <SelectItem value="advanced">Advanced Knowledge</SelectItem>
+                                <SelectItem value="expert">Expert Level</SelectItem>
+                                <SelectItem value="unknown">Unknown/Not Measured</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.securityIncidentHistory"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                             <FormControl>
-                              <RadioGroup
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                                className="flex flex-col space-y-1"
-                              >
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="rbac" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    Role-Based Access Control (RBAC)
-                                  </FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="abac" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    Attribute-Based Access Control (ABAC)
-                                  </FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="robac" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    Rule-Based Access Control (RoBAC)
-                                  </FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="hybrid" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    Hybrid Access Control Model
-                                  </FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="none" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    No formal access control model
-                                  </FormLabel>
-                                </FormItem>
-                              </RadioGroup>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Security Incident History</FormLabel>
+                              <FormDescription>
+                                Have you experienced identity-related security incidents in the past 12 months?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.incidentDetails"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Incident Details</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                placeholder="If you had incidents, please provide brief details about the nature and impact" 
+                                className="h-24"
+                                {...field} 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -4170,1384 +4857,264 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 3. Authentication Practices Section */}
+                  {/* 4. Privileged Access Management Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Authentication Practices</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.mfaImplementation"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Multi-Factor Authentication</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <h4 className="font-medium mb-4">4. Privileged Access Management</h4>
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.privilegedAccountInventory"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                               <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select MFA implementation" />
-                                </SelectTrigger>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
                               </FormControl>
-                              <SelectContent>
-                                <SelectItem value="all-users">Enforced for all users</SelectItem>
-                                <SelectItem value="privileged-only">Only for privileged accounts</SelectItem>
-                                <SelectItem value="selective">Selective implementation</SelectItem>
-                                <SelectItem value="not-implemented">Not implemented</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.mfaMethods"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>MFA Methods</FormLabel>
-                            <div className="space-y-2">
-                              <div className="flex flex-wrap gap-2">
-                                {field.value?.map((method) => (
-                                  <div key={method} className="flex items-center bg-secondary text-secondary-foreground rounded-md px-2 py-1">
-                                    <span>{method}</span>
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      className="h-auto p-0 px-1.5"
-                                      onClick={() => {
-                                        const newValue = field.value?.filter((v) => v !== method) || [];
-                                        field.onChange(newValue);
-                                      }}
-                                    >
-                                      ×
-                                    </Button>
-                                  </div>
-                                ))}
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Privileged Account Inventory</FormLabel>
+                                <FormDescription>
+                                  Do you maintain an inventory of privileged accounts?
+                                </FormDescription>
                               </div>
-                              <Select
-                                onValueChange={(value) => {
-                                  if (value === "other") {
-                                    // Handle custom input
-                                    const customMethod = prompt("Enter custom MFA method");
-                                    if (customMethod) {
-                                      const newValue = [...(field.value || []), customMethod];
-                                      field.onChange(newValue);
-                                    }
-                                  } else if (value && !field.value?.includes(value)) {
-                                    const newValue = [...(field.value || []), value];
-                                    field.onChange(newValue);
-                                  }
-                                }}
-                              >
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Add MFA methods" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="app-authenticator">Authenticator Apps</SelectItem>
-                                  <SelectItem value="sms">SMS</SelectItem>
-                                  <SelectItem value="email">Email</SelectItem>
-                                  <SelectItem value="hardware-token">Hardware Token</SelectItem>
-                                  <SelectItem value="biometric">Biometric</SelectItem>
-                                  <SelectItem value="push-notification">Push Notification</SelectItem>
-                                  <SelectItem value="other">Other (Custom)</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.ssoImplementation"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Single Sign-On (SSO)</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.justInTimeAccess"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                               <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select SSO implementation" />
-                                </SelectTrigger>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
                               </FormControl>
-                              <SelectContent>
-                                <SelectItem value="enterprise-wide">Enterprise-wide implementation</SelectItem>
-                                <SelectItem value="partial">Partial implementation</SelectItem>
-                                <SelectItem value="planning">Planning implementation</SelectItem>
-                                <SelectItem value="not-implemented">Not implemented</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 4. Password Management Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">4. Password Management</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.passwordComplexity"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password Complexity Requirements</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Just-In-Time Access</FormLabel>
+                                <FormDescription>
+                                  Do you implement just-in-time access for privileged accounts?
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.privilegeEscalationControls"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                               <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select complexity level" />
-                                </SelectTrigger>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
                               </FormControl>
-                              <SelectContent>
-                                <SelectItem value="high">High (14+ chars, multiple character types)</SelectItem>
-                                <SelectItem value="medium">Medium (10-12 chars, mixed requirements)</SelectItem>
-                                <SelectItem value="basic">Basic (8 chars, minimal requirements)</SelectItem>
-                                <SelectItem value="low">Low (Less than 8 chars)</SelectItem>
-                                <SelectItem value="none">No password policy</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Privilege Escalation Controls</FormLabel>
+                                <FormDescription>
+                                  Do you have controls to prevent unauthorized privilege escalation?
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
                       <FormField
                         control={form.control}
-                        name="identityBehavior.passwordExpiration"
+                        name="identityBehaviorHygiene.adminAccountReview"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Password Expiration Policy</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select expiration policy" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="30-days">30 days</SelectItem>
-                                <SelectItem value="60-days">60 days</SelectItem>
-                                <SelectItem value="90-days">90 days</SelectItem>
-                                <SelectItem value="180-days">180 days</SelectItem>
-                                <SelectItem value="365-days">365 days</SelectItem>
-                                <SelectItem value="never">Never (no expiration)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.passwordManager"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password Manager Use</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select password manager status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="enterprise">Enterprise solution deployed</SelectItem>
-                                <SelectItem value="department">Department-level solutions</SelectItem>
-                                <SelectItem value="recommended">Recommended but not enforced</SelectItem>
-                                <SelectItem value="not-used">Not used</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 5. Privileged Access Management Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Privileged Access Management</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.privilegedAccountManagement"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Privileged Account Management</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select PAM approach" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="dedicated-pam">Dedicated PAM solution</SelectItem>
-                                <SelectItem value="just-in-time">Just-in-time privileged access</SelectItem>
-                                <SelectItem value="manual-tracking">Manual tracking of privileged accounts</SelectItem>
-                                <SelectItem value="none">No privileged account controls</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.adminAccountsUsage"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Administrator Accounts Usage</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select admin accounts usage" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="separate-accounts">Separate accounts for admin tasks</SelectItem>
-                                <SelectItem value="elevation">Elevation of privileges when needed</SelectItem>
-                                <SelectItem value="shared-accounts">Shared admin accounts with tracking</SelectItem>
-                                <SelectItem value="daily-use">Admin accounts used for daily tasks</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.privilegedAccountInventory"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Privileged Account Inventory</FormLabel>
-                            <RadioGroup
+                            <FormLabel>Admin Account Review Frequency</FormLabel>
+                            <Select 
                               onValueChange={field.onChange}
                               defaultValue={field.value}
-                              className="flex flex-col space-y-1"
                             >
                               <FormControl>
-                                <div className="flex space-x-3">
-                                  <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="yes" id="privileged-inventory-yes" />
-                                    <FormLabel htmlFor="privileged-inventory-yes" className="font-normal">Yes</FormLabel>
-                                  </div>
-                                  <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="no" id="privileged-inventory-no" />
-                                    <FormLabel htmlFor="privileged-inventory-no" className="font-normal">No</FormLabel>
-                                  </div>
-                                  <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="partial" id="privileged-inventory-partial" />
-                                    <FormLabel htmlFor="privileged-inventory-partial" className="font-normal">Partial</FormLabel>
-                                  </div>
-                                </div>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select review frequency" />
+                                </SelectTrigger>
                               </FormControl>
-                            </RadioGroup>
-                            <FormDescription>
-                              Do you maintain an inventory of privileged accounts?
-                            </FormDescription>
+                              <SelectContent>
+                                <SelectItem value="weekly">Weekly</SelectItem>
+                                <SelectItem value="monthly">Monthly</SelectItem>
+                                <SelectItem value="quarterly">Quarterly</SelectItem>
+                                <SelectItem value="semi-annually">Semi-Annually</SelectItem>
+                                <SelectItem value="annually">Annually</SelectItem>
+                                <SelectItem value="never">Never/Ad-hoc</SelectItem>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.separationOfDuties"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Separation of Duties</FormLabel>
+                              <FormDescription>
+                                Do you implement separation of duties for privileged operations?
+                              </FormDescription>
+                            </div>
                           </FormItem>
                         )}
                       />
                     </div>
                   </div>
                   
-                  {/* 6. Identity Governance Section */}
-                  <div className="border rounded-md p-4">
-                    <h4 className="font-medium mb-4">6. Identity Governance</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* 5. Identity Lifecycle Management Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">5. Identity Lifecycle Management</h4>
+                    <div className="space-y-6">
                       <FormField
                         control={form.control}
-                        name="identityBehavior.userAccessReviews"
+                        name="identityBehaviorHygiene.onboardingStatus"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>User Access Reviews</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormLabel>Onboarding Process Status</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select onboarding process status" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="manual">Manual Process</SelectItem>
+                                <SelectItem value="partially-automated">Partially Automated</SelectItem>
+                                <SelectItem value="fully-automated">Fully Automated</SelectItem>
+                                <SelectItem value="identity-governance">Identity Governance Solution</SelectItem>
+                                <SelectItem value="no-process">No Formal Process</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.offboardingProcess"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Formal Offboarding Process</FormLabel>
+                                <FormDescription>
+                                  Do you have a formal offboarding process to revoke access?
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.accountDormancyMonitoring"
+                          render={({ field }) => (
+                            <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Account Dormancy Monitoring</FormLabel>
+                                <FormDescription>
+                                  Do you monitor and manage dormant/inactive accounts?
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.accessReviewFrequency"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Access Review Frequency</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
                               <FormControl>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Select access review frequency" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="quarterly">Quarterly reviews</SelectItem>
-                                <SelectItem value="bi-annual">Bi-annual reviews</SelectItem>
-                                <SelectItem value="annual">Annual reviews</SelectItem>
-                                <SelectItem value="ad-hoc">Ad-hoc reviews</SelectItem>
-                                <SelectItem value="none">No regular reviews</SelectItem>
+                                <SelectItem value="monthly">Monthly</SelectItem>
+                                <SelectItem value="quarterly">Quarterly</SelectItem>
+                                <SelectItem value="semi-annually">Semi-Annually</SelectItem>
+                                <SelectItem value="annually">Annually</SelectItem>
+                                <SelectItem value="ad-hoc">Ad-hoc/No Regular Schedule</SelectItem>
+                                <SelectItem value="never">Never Performed</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
+                      
                       <FormField
                         control={form.control}
-                        name="identityBehavior.userOffboarding"
+                        name="identityBehaviorHygiene.roleChanges"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>User Offboarding Process</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select offboarding process" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="automated">Fully automated process</SelectItem>
-                                <SelectItem value="semi-automated">Semi-automated process</SelectItem>
-                                <SelectItem value="manual-checklist">Manual with checklist</SelectItem>
-                                <SelectItem value="ad-hoc">Ad-hoc process</SelectItem>
-                                <SelectItem value="none">No formal process</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.dormantAccounts"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Dormant Account Management</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select dormant account handling" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="automated-disable">Automated disabling (30-60 days)</SelectItem>
-                                <SelectItem value="automated-long">Automated disabling (90+ days)</SelectItem>
-                                <SelectItem value="manual-review">Manual review process</SelectItem>
-                                <SelectItem value="none">No dormant account process</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </TabsContent>
-              
-              {/* Device Inventory Tracking Tab */}
-              <TabsContent value="device-inventory" className="space-y-6">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">12. Device Inventory Tracking</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Track and manage your organization's devices to improve security visibility and control.
-                  </p>
-                  
-                  {/* 1. Identification Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">1. Identification</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.deviceId"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Device ID / Asset Tag</FormLabel>
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                             <FormControl>
-                              <Input placeholder="Enter device ID or asset tag" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.deviceName"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Device Name</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter device name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 2. Classification Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">2. Classification</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.deviceType"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Device Type</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select device type" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="desktop">Desktop Computer</SelectItem>
-                                <SelectItem value="laptop">Laptop</SelectItem>
-                                <SelectItem value="tablet">Tablet</SelectItem>
-                                <SelectItem value="smartphone">Smartphone</SelectItem>
-                                <SelectItem value="server">Server</SelectItem>
-                                <SelectItem value="iot">IoT Device</SelectItem>
-                                <SelectItem value="medical">Medical Device</SelectItem>
-                                <SelectItem value="network">Network Equipment</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.ownership"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Ownership</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select ownership type" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="corporate">Corporate-owned</SelectItem>
-                                <SelectItem value="personal">Personal (BYOD)</SelectItem>
-                                <SelectItem value="leased">Leased</SelectItem>
-                                <SelectItem value="vendor">Vendor-managed</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 3. Technical Information Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Technical Information</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.operatingSystem"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Operating System</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select operating system" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="windows10">Windows 10</SelectItem>
-                                <SelectItem value="windows11">Windows 11</SelectItem>
-                                <SelectItem value="macos">macOS</SelectItem>
-                                <SelectItem value="ios">iOS</SelectItem>
-                                <SelectItem value="android">Android</SelectItem>
-                                <SelectItem value="linux">Linux</SelectItem>
-                                <SelectItem value="chrome">Chrome OS</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                                <SelectItem value="unknown">Unknown</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.osVersion"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>OS Version</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter OS version" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.macAddress"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>MAC Address</FormLabel>
-                            <div className="flex space-x-4">
-                              <FormControl className="flex-grow">
-                                <Input placeholder="Enter MAC address" {...field} />
-                              </FormControl>
-                              <FormField
-                                control={form.control}
-                                name="deviceInventoryTracking.macAddressNA"
-                                render={({ field }) => (
-                                  <FormItem className="flex items-center space-x-3 space-y-0">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm">N/A</FormLabel>
-                                  </FormItem>
-                                )}
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
                               />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Role Change Management Process</FormLabel>
+                              <FormDescription>
+                                Do you have a process to manage access rights when users change roles?
+                              </FormDescription>
                             </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.ipAddress"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>IP Address</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter IP address" {...field} />
-                            </FormControl>
-                            <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
                   </div>
                   
-                  {/* 4. Security Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">4. Security</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.encryptionStatus"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Encryption Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select encryption status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="full">Full Disk Encryption</SelectItem>
-                                <SelectItem value="partial">Partial Encryption</SelectItem>
-                                <SelectItem value="none">No Encryption</SelectItem>
-                                <SelectItem value="unknown">Unknown</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.antivirusStatus"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Antivirus Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select antivirus status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="installed-current">Installed & Updated</SelectItem>
-                                <SelectItem value="installed-outdated">Installed but Outdated</SelectItem>
-                                <SelectItem value="none">Not Installed</SelectItem>
-                                <SelectItem value="unknown">Unknown</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.firewallStatus"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Firewall Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select firewall status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="enabled">Enabled</SelectItem>
-                                <SelectItem value="disabled">Disabled</SelectItem>
-                                <SelectItem value="unknown">Unknown</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.lastPatchDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Last Patched Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 5. Backup & Recovery Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Backup & Recovery</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.backupStatus"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Backup Status</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select backup status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="regular">Regular Backups</SelectItem>
-                                <SelectItem value="irregular">Irregular Backups</SelectItem>
-                                <SelectItem value="none">No Backups</SelectItem>
-                                <SelectItem value="unknown">Unknown</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.lastBackupDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Last Backup Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.backupLocation"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Backup Location</FormLabel>
-                            <div className="flex space-x-4">
-                              <FormControl className="flex-grow">
-                                <Input placeholder="Enter backup location path" {...field} />
-                              </FormControl>
-                              <FormField
-                                control={form.control}
-                                name="deviceInventoryTracking.backupLocationNA"
-                                render={({ field }) => (
-                                  <FormItem className="flex items-center space-x-3 space-y-0">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm">N/A</FormLabel>
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.retentionPeriod"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Retention Period (days)</FormLabel>
-                            <div className="flex space-x-4">
-                              <FormControl className="flex-grow">
-                                <Input type="number" placeholder="Enter retention period" {...field} />
-                              </FormControl>
-                              <FormField
-                                control={form.control}
-                                name="deviceInventoryTracking.retentionPeriodNA"
-                                render={({ field }) => (
-                                  <FormItem className="flex items-center space-x-3 space-y-0">
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm">N/A</FormLabel>
-                                  </FormItem>
-                                )}
-                              />
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 6. Lifecycle Management Section */}
-                  <div className="border rounded-md p-4">
-                    <h4 className="font-medium mb-4">6. Lifecycle Management</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.purchaseDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Purchase Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.warrantyExpiration"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Warranty Expiration</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.endOfLifeDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>End of Life Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.lastReviewDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Last Inventory Review Date</FormLabel>
-                            <FormControl>
-                              <Input type="date" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6 flex justify-between">
+                  <div className="flex justify-end space-x-4">
                     <Button
                       type="button"
-                      onClick={() => document.querySelector('[value="isms"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
-                    >
-                      Previous Step
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={() => document.querySelector('[value="identity-behavior"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
-                    >
-                      Next Step
-                    </Button>
-                  </div>
-                </div>
-              </TabsContent>
-              
-              {/* Identity Behavior & Hygiene Tab */}
-              <TabsContent value="identity-behavior" className="space-y-6">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">13. Identity Behavior & Hygiene</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Track and manage identity behaviors, authentication practices, and security hygiene measures.
-                  </p>
-                  
-                  {/* 1. Identity Sources Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">1. Identity Sources</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.primaryDirectoryService"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Primary Directory Service</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select primary directory" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="active-directory">Active Directory</SelectItem>
-                                <SelectItem value="azure-ad">Azure AD / Entra ID</SelectItem>
-                                <SelectItem value="google-workspace">Google Workspace</SelectItem>
-                                <SelectItem value="okta">Okta</SelectItem>
-                                <SelectItem value="onelogin">OneLogin</SelectItem>
-                                <SelectItem value="ping">Ping Identity</SelectItem>
-                                <SelectItem value="aws">AWS IAM</SelectItem>
-                                <SelectItem value="ldap">LDAP</SelectItem>
-                                <SelectItem value="none">None</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.federatedIdentitySources"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Federated Identity Sources</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select federated sources" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="saml">SAML</SelectItem>
-                                <SelectItem value="oauth">OAuth/OIDC</SelectItem>
-                                <SelectItem value="both">Both SAML and OAuth/OIDC</SelectItem>
-                                <SelectItem value="other">Other Federation Protocol</SelectItem>
-                                <SelectItem value="none">None</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.additionalDirectories"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Additional Directory Services</FormLabel>
-                            <div className="space-y-2">
-                              <div className="flex flex-wrap gap-2">
-                                {field.value?.map((dir) => (
-                                  <div key={dir} className="flex items-center bg-secondary text-secondary-foreground rounded-md px-2 py-1">
-                                    <span>{dir}</span>
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      className="h-auto p-0 px-1.5"
-                                      onClick={() => {
-                                        const newValue = field.value?.filter((v) => v !== dir) || [];
-                                        field.onChange(newValue);
-                                      }}
-                                    >
-                                      ×
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                              <Select
-                                onValueChange={(value) => {
-                                  if (value === "other") {
-                                    // Handle custom input
-                                    const customDir = prompt("Enter custom directory service");
-                                    if (customDir) {
-                                      const newValue = [...(field.value || []), customDir];
-                                      field.onChange(newValue);
-                                    }
-                                  } else if (value && !field.value?.includes(value)) {
-                                    const newValue = [...(field.value || []), value];
-                                    field.onChange(newValue);
-                                  }
-                                }}
-                              >
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Add additional directories" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="active-directory">Active Directory</SelectItem>
-                                  <SelectItem value="azure-ad">Azure AD / Entra ID</SelectItem>
-                                  <SelectItem value="google-workspace">Google Workspace</SelectItem>
-                                  <SelectItem value="okta">Okta</SelectItem>
-                                  <SelectItem value="onelogin">OneLogin</SelectItem>
-                                  <SelectItem value="ping">Ping Identity</SelectItem>
-                                  <SelectItem value="aws">AWS IAM</SelectItem>
-                                  <SelectItem value="ldap">LDAP</SelectItem>
-                                  <SelectItem value="other">Other (Custom)</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 2. Access Control Model Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">2. Access Control Model</h4>
-                    <div className="grid grid-cols-1 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.accessControlModel"
-                        render={({ field }) => (
-                          <FormItem className="space-y-3">
-                            <FormLabel>Access Control Model Used</FormLabel>
-                            <FormControl>
-                              <RadioGroup
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                                className="flex flex-col space-y-1"
-                              >
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="rbac" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    Role-Based Access Control (RBAC)
-                                  </FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="abac" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    Attribute-Based Access Control (ABAC)
-                                  </FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="robac" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    Rule-Based Access Control (RoBAC)
-                                  </FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="hybrid" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    Hybrid Access Control Model
-                                  </FormLabel>
-                                </FormItem>
-                                <FormItem className="flex items-center space-x-3 space-y-0">
-                                  <FormControl>
-                                    <RadioGroupItem value="none" />
-                                  </FormControl>
-                                  <FormLabel className="font-normal">
-                                    No formal access control model
-                                  </FormLabel>
-                                </FormItem>
-                              </RadioGroup>
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 3. Authentication Practices Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Authentication Practices</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.mfaImplementation"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Multi-Factor Authentication</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select MFA implementation" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="all-users">Enforced for all users</SelectItem>
-                                <SelectItem value="privileged-only">Only for privileged accounts</SelectItem>
-                                <SelectItem value="selective">Selective implementation</SelectItem>
-                                <SelectItem value="not-implemented">Not implemented</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.mfaMethods"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>MFA Methods</FormLabel>
-                            <div className="space-y-2">
-                              <div className="flex flex-wrap gap-2">
-                                {field.value?.map((method) => (
-                                  <div key={method} className="flex items-center bg-secondary text-secondary-foreground rounded-md px-2 py-1">
-                                    <span>{method}</span>
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      className="h-auto p-0 px-1.5"
-                                      onClick={() => {
-                                        const newValue = field.value?.filter((v) => v !== method) || [];
-                                        field.onChange(newValue);
-                                      }}
-                                    >
-                                      ×
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                              <Select
-                                onValueChange={(value) => {
-                                  if (value === "other") {
-                                    // Handle custom input
-                                    const customMethod = prompt("Enter custom MFA method");
-                                    if (customMethod) {
-                                      const newValue = [...(field.value || []), customMethod];
-                                      field.onChange(newValue);
-                                    }
-                                  } else if (value && !field.value?.includes(value)) {
-                                    const newValue = [...(field.value || []), value];
-                                    field.onChange(newValue);
-                                  }
-                                }}
-                              >
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Add MFA methods" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="app-authenticator">Authenticator Apps</SelectItem>
-                                  <SelectItem value="sms">SMS</SelectItem>
-                                  <SelectItem value="email">Email</SelectItem>
-                                  <SelectItem value="hardware-token">Hardware Token</SelectItem>
-                                  <SelectItem value="biometric">Biometric</SelectItem>
-                                  <SelectItem value="push-notification">Push Notification</SelectItem>
-                                  <SelectItem value="other">Other (Custom)</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.ssoImplementation"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Single Sign-On (SSO)</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select SSO implementation" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="enterprise-wide">Enterprise-wide implementation</SelectItem>
-                                <SelectItem value="partial">Partial implementation</SelectItem>
-                                <SelectItem value="planning">Planning implementation</SelectItem>
-                                <SelectItem value="not-implemented">Not implemented</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 4. Password Management Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">4. Password Management</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.passwordComplexity"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password Complexity Requirements</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select complexity level" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="high">High (14+ chars, multiple character types)</SelectItem>
-                                <SelectItem value="medium">Medium (10-12 chars, mixed requirements)</SelectItem>
-                                <SelectItem value="basic">Basic (8 chars, minimal requirements)</SelectItem>
-                                <SelectItem value="low">Low (Less than 8 chars)</SelectItem>
-                                <SelectItem value="none">No password policy</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.passwordExpiration"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password Expiration Policy</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select expiration policy" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="30-days">30 days</SelectItem>
-                                <SelectItem value="60-days">60 days</SelectItem>
-                                <SelectItem value="90-days">90 days</SelectItem>
-                                <SelectItem value="180-days">180 days</SelectItem>
-                                <SelectItem value="365-days">365 days</SelectItem>
-                                <SelectItem value="never">Never (no expiration)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.passwordManager"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Password Manager Use</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select password manager status" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="enterprise">Enterprise solution deployed</SelectItem>
-                                <SelectItem value="department">Department-level solutions</SelectItem>
-                                <SelectItem value="recommended">Recommended but not enforced</SelectItem>
-                                <SelectItem value="not-used">Not used</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 5. Privileged Access Management Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Privileged Access Management</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.privilegedAccountManagement"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Privileged Account Management</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select PAM approach" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="dedicated-pam">Dedicated PAM solution</SelectItem>
-                                <SelectItem value="just-in-time">Just-in-time privileged access</SelectItem>
-                                <SelectItem value="manual-tracking">Manual tracking of privileged accounts</SelectItem>
-                                <SelectItem value="none">No privileged account controls</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.adminAccountsUsage"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Administrator Accounts Usage</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select admin accounts usage" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="separate-accounts">Separate accounts for admin tasks</SelectItem>
-                                <SelectItem value="elevation">Elevation of privileges when needed</SelectItem>
-                                <SelectItem value="shared-accounts">Shared admin accounts with tracking</SelectItem>
-                                <SelectItem value="daily-use">Admin accounts used for daily tasks</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.privilegedAccountInventory"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Privileged Account Inventory</FormLabel>
-                            <RadioGroup
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                              className="flex flex-col space-y-1"
-                            >
-                              <FormControl>
-                                <div className="flex space-x-3">
-                                  <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="yes" id="privileged-inventory-yes" />
-                                    <FormLabel htmlFor="privileged-inventory-yes" className="font-normal">Yes</FormLabel>
-                                  </div>
-                                  <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="no" id="privileged-inventory-no" />
-                                    <FormLabel htmlFor="privileged-inventory-no" className="font-normal">No</FormLabel>
-                                  </div>
-                                  <div className="flex items-center space-x-2">
-                                    <RadioGroupItem value="partial" id="privileged-inventory-partial" />
-                                    <FormLabel htmlFor="privileged-inventory-partial" className="font-normal">Partial</FormLabel>
-                                  </div>
-                                </div>
-                              </FormControl>
-                            </RadioGroup>
-                            <FormDescription>
-                              Do you maintain an inventory of privileged accounts?
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 6. Identity Governance Section */}
-                  <div className="border rounded-md p-4">
-                    <h4 className="font-medium mb-4">6. Identity Governance</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.userAccessReviews"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>User Access Reviews</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select access review frequency" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="quarterly">Quarterly reviews</SelectItem>
-                                <SelectItem value="bi-annual">Bi-annual reviews</SelectItem>
-                                <SelectItem value="annual">Annual reviews</SelectItem>
-                                <SelectItem value="ad-hoc">Ad-hoc reviews</SelectItem>
-                                <SelectItem value="none">No regular reviews</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.userOffboarding"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>User Offboarding Process</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select offboarding process" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="automated">Fully automated process</SelectItem>
-                                <SelectItem value="semi-automated">Semi-automated process</SelectItem>
-                                <SelectItem value="manual-checklist">Manual with checklist</SelectItem>
-                                <SelectItem value="ad-hoc">Ad-hoc process</SelectItem>
-                                <SelectItem value="none">No formal process</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="identityBehavior.dormantAccounts"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Dormant Account Management</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select dormant account handling" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="automated-disable">Automated disabling (30-60 days)</SelectItem>
-                                <SelectItem value="automated-long">Automated disabling (90+ days)</SelectItem>
-                                <SelectItem value="manual-review">Manual review process</SelectItem>
-                                <SelectItem value="none">No dormant account process</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="mt-6 flex justify-between">
-                    <Button
-                      type="button"
+                      variant="outline"
                       onClick={() => document.querySelector('[value="device-inventory"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
                     >
                       Previous Step
                     </Button>
-                    <Button
+                    <Button 
                       type="button"
                       onClick={() => document.querySelector('[value="contact"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
                     >
@@ -5557,10 +5124,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 </div>
               </TabsContent>
               
-              {/* Contact and Confirmation Tab */}
+              {/* 14. Contact and Confirmation Tab */}
               <TabsContent value="contact" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">12. Contact Confirmation</h3>
+                  <h3 className="font-medium mb-4">14. Contact Confirmation</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Provide contact details for follow-up and select your assessment type.
                   </p>
@@ -5756,7 +5323,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               {/* Review Tab */}
               <TabsContent value="review" className="space-y-6">
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">13. Review & Submit Your Questionnaire</h3>
+                  <h3 className="font-medium mb-4">15. Review & Submit Your Questionnaire</h3>
                   <p className="text-sm mb-4">
                     <span className="font-medium text-primary">This is the final step!</span> Please review your responses before submitting. After submission, our experts will review your information and schedule the interview phase for your security assessment.
                   </p>
@@ -6201,10 +5768,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 form.getValues("ismsProcedures").join(", ") : 
                                 "None selected"}</div>
                                 
-                          <div className="font-medium">ISMS Processes:</div>
-                          <div>{form.getValues("ismsProcesses")?.length > 0 ? 
-                                form.getValues("ismsProcesses").join(", ") : 
-                                "None selected"}</div>
+                          <div className="font-medium border-b border-blue-300 pb-1 mt-4">ISMS Processes:</div>
+                          <div className="p-2 bg-blue-50 border border-blue-200 rounded-md mt-1">
+                            {form.getValues("ismsProcesses")?.length > 0 ? 
+                                form.getValues("ismsProcesses").map(id => {
+                                  const option = processOptions.find(o => o.id === id);
+                                  return option ? option.label : id;
+                                }).join(", ") : 
+                                "None selected"}
+                          </div>
                                 
                           <div className="font-medium">Executive Support:</div>
                           <div>{form.getValues("ismsLeadership.executiveSupport") ? "Yes" : "No"}</div>
