@@ -902,6 +902,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "data-breach", label: "Data Breach Notification Procedures" },
   ];
   
+  const processOptions = [
+    { id: "info-security-policy", label: "Define Information Security Policy" },
+    { id: "risk-assessments", label: "Conduct Risk Assessments" },
+    { id: "asset-inventory", label: "Perform Asset Inventory" },
+    { id: "access-control", label: "Establish Access Control Rules" },
+    { id: "identity-management", label: "Configure Identity Management" },
+    { id: "data-encryption", label: "Apply Data Encryption" },
+    { id: "security-awareness", label: "Conduct Security Awareness Training" },
+    { id: "change-management", label: "Implement Change Management" },
+    { id: "vulnerability-scanning", label: "Conduct Vulnerability Scanning" },
+    { id: "incident-response", label: "Perform Security Incident Response" },
+    { id: "privileged-access", label: "Implement Privileged Access Management" },
+    { id: "security-audits", label: "Conduct Regular Security Audits" },
+    { id: "network-security", label: "Implement Network Security Controls" },
+    { id: "backup-recovery", label: "Implement Backup and Recovery Procedures" },
+    { id: "penetration-testing", label: "Conduct Penetration Testing" },
+    { id: "data-classification", label: "Implement Data Classification" },
+    { id: "vendor-risk", label: "Establish Vendor Risk Management" },
+    { id: "physical-security", label: "Implement Physical Security Controls" },
+  ];
+  
   const planOptions = [
     { id: "disaster-recovery", label: "Disaster Recovery Plan" },
     { id: "business-continuity", label: "Business Continuity Plan" },
@@ -3387,6 +3408,43 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         ? field.onChange([...field.value, option.id])
                                         : field.onChange(
                                             field.value?.filter(
+                                              (value) => value !== option.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {option.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">ISMS Processes</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {processOptions.map((option) => (
+                          <FormField
+                            key={option.id}
+                            control={form.control}
+                            name="ismsProcesses"
+                            render={({ field }) => (
+                              <FormItem
+                                key={option.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(option.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...(field.value || []), option.id])
+                                        : field.onChange(
+                                            (field.value || [])?.filter(
                                               (value) => value !== option.id
                                             )
                                           );
