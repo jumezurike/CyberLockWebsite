@@ -3,6 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Link } from "wouter";
 import * as z from "zod";
+import { Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar } from "@/components/ui/calendar";
@@ -3588,6 +3589,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               // Add other default values as needed
                             }
                           ]);
+                          
+                          // Clear any active filter when adding a new device
+                          form.setValue("deviceTypeFilter", "all");
+                          form.setValue("filteredDeviceInventory", undefined);
                         }}
                       >
                         Add Device
@@ -3599,41 +3604,53 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <div className="flex items-center gap-2">
                           <h5 className="font-medium">Filter Device List</h5>
                           <Filter className="h-4 w-4 text-muted-foreground" />
+                          {form.watch("deviceTypeFilter") && form.watch("deviceTypeFilter") !== "all" && (
+                            <Badge variant="outline" className="ml-2">
+                              Filtering: {form.watch("deviceTypeFilter")}
+                            </Badge>
+                          )}
                         </div>
                         
                         <Select
-                          value="all"
+                          value={form.watch("deviceTypeFilter") || "all"}
                           onValueChange={(value) => {
-                            // Get current devices
-                            const currentDevices = form.getValues("deviceInventory") || [];
-                            // If no devices or "all" is selected, no filtering needed
-                            if (currentDevices.length === 0 || value === "all") {
+                            // Store the selected filter value
+                            form.setValue("deviceTypeFilter", value);
+                            
+                            // Get all devices
+                            const allDevices = form.getValues("deviceInventory") || [];
+                            
+                            // If no devices, nothing to filter
+                            if (allDevices.length === 0) {
                               return;
                             }
                             
-                            // Show all devices if "all" selected, otherwise filter by type
-                            const filteredDevices = currentDevices.filter((device: any) => {
-                              if (value === "all") return true;
-                              
-                              // Map dropdown values to device type strings
+                            // Set the filtered devices (used for display only)
+                            if (value === "all") {
+                              // Reset to show all devices
+                              form.setValue("filteredDeviceInventory", undefined);
+                            } else {
+                              // Filter devices by the selected type
                               const typeMap: Record<string, string[]> = {
                                 "server": ["Server"],
                                 "workstation": ["Workstation"],
                                 "laptop": ["Laptop"],
                                 "mobile": ["Mobile Phone", "Mobile Device"],
-                                "network": ["Network Device"],
+                                "network": ["Network Device", "Router", "Switch", "Firewall"],
                                 "iot": ["IoT Device"],
                                 "medical": ["Medical Device"],
                                 "other": ["Other"]
                               };
                               
-                              // Check if device type matches the selected filter
-                              return typeMap[value]?.includes(device.deviceType);
-                            });
-                            
-                            // Update the displayed devices (temporary filter, doesn't change saved data)
-                            // This would need to be enhanced with state management for a real implementation
-                            console.log(`Filtered to ${filteredDevices.length} ${value} devices`);
+                              const filteredDevices = allDevices.filter((device: any) => 
+                                typeMap[value]?.some(type => 
+                                  device.deviceType?.includes(type)
+                                )
+                              );
+                              
+                              // Store filtered devices for display
+                              form.setValue("filteredDeviceInventory", filteredDevices);
+                            }
                           }}
                         >
                           <SelectTrigger className="w-[180px]">
@@ -3667,13 +3684,24 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           </thead>
                           <tbody>
                             {(form.watch("deviceInventory") || []).length === 0 ? (
-                              <tr>
-                                <td colSpan={6} className="p-4 text-center text-muted-foreground">
-                                  No devices added yet. Click "Add Device" to begin tracking devices.
-                                </td>
-                              </tr>
+                              <>
+                                <tr>
+                                  <td colSpan={6} className="p-4 text-center text-muted-foreground">
+                                    No devices added yet. Click "Add Device" to begin tracking devices.
+                                  </td>
+                                </tr>
+                                <tr>
+                                  <td colSpan={6} className="px-4 pb-2 text-center text-xs text-muted-foreground italic">
+                                    <div className="flex items-center justify-center gap-1">
+                                      <Filter className="h-3 w-3" />
+                                      <span>The filter above will become active once you add devices to the inventory</span>
+                                    </div>
+                                  </td>
+                                </tr>
+                              </>
                             ) : (
-                              form.watch("deviceInventory")?.map((device: any, index: number) => (
+                              // Show filtered devices if filter is active, otherwise show all devices
+                              (form.watch("filteredDeviceInventory") || form.watch("deviceInventory"))?.map((device: any, index: number) => (
                                 <tr key={device.id} className="border-b">
                                   <td className="p-2">{device.deviceType || "—"}</td>
                                   <td className="p-2">{device.makeModel || "—"}</td>
