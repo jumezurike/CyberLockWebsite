@@ -4963,22 +4963,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Access Control Model</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
+                            <FormControl>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
                                 <SelectTrigger>
                                   <SelectValue placeholder="Select access control model" />
                                 </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="none">None</SelectItem>
-                                <SelectItem value="rbac">Role-Based Access Control (RBAC)</SelectItem>
-                                <SelectItem value="abac">Attribute-Based Access Control (ABAC)</SelectItem>
-                                <SelectItem value="robac">Rule-Based Access Control (ROBAC)</SelectItem>
-                              </SelectContent>
-                            </Select>
+                                <SelectContent>
+                                  <SelectItem value="none">None</SelectItem>
+                                  <SelectItem value="rbac">Role-Based Access Control (RBAC)</SelectItem>
+                                  <SelectItem value="abac">Attribute-Based Access Control (ABAC)</SelectItem>
+                                  <SelectItem value="robac">Rule-Based Access Control (ROBAC)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormControl>
                             <FormDescription>
                               The primary access control model used in your organization
                             </FormDescription>
@@ -5080,22 +5080,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Password Complexity</FormLabel>
-                                <Select 
-                                  onValueChange={field.onChange}
-                                  defaultValue={field.value}
-                                >
-                                  <FormControl>
+                                <FormControl>
+                                  <Select 
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                  >
                                     <SelectTrigger>
                                       <SelectValue placeholder="Select complexity" />
                                     </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    <SelectItem value="low">Low (letters only)</SelectItem>
-                                    <SelectItem value="medium">Medium (letters + numbers)</SelectItem>
-                                    <SelectItem value="high">High (letters, numbers, special characters)</SelectItem>
-                                    <SelectItem value="very-high">Very High (letters, numbers, special characters, case sensitive)</SelectItem>
-                                  </SelectContent>
-                                </Select>
+                                    <SelectContent>
+                                      <SelectItem value="low">Low (letters only)</SelectItem>
+                                      <SelectItem value="medium">Medium (letters + numbers)</SelectItem>
+                                      <SelectItem value="high">High (letters, numbers, special characters)</SelectItem>
+                                      <SelectItem value="very-high">Very High (letters, numbers, special characters, case sensitive)</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
                                 <FormMessage />
                               </FormItem>
                             )}
@@ -5107,22 +5107,22 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Password Length</FormLabel>
-                                <Select 
-                                  onValueChange={field.onChange}
-                                  defaultValue={field.value}
-                                >
-                                  <FormControl>
+                                <FormControl>
+                                  <Select 
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                  >
                                     <SelectTrigger>
                                       <SelectValue placeholder="Select minimum length" />
                                     </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    <SelectItem value="8">8 characters</SelectItem>
-                                    <SelectItem value="12">12 characters</SelectItem>
-                                    <SelectItem value="16">16 characters</SelectItem>
-                                    <SelectItem value="20">20+ characters</SelectItem>
-                                  </SelectContent>
-                                </Select>
+                                    <SelectContent>
+                                      <SelectItem value="8">8 characters</SelectItem>
+                                      <SelectItem value="12">12 characters</SelectItem>
+                                      <SelectItem value="16">16 characters</SelectItem>
+                                      <SelectItem value="20">20+ characters</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
                                 <FormMessage />
                               </FormItem>
                             )}
@@ -5134,24 +5134,24 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Password Expiration</FormLabel>
-                                <Select 
-                                  onValueChange={field.onChange}
-                                  defaultValue={field.value}
-                                >
-                                  <FormControl>
+                                <FormControl>
+                                  <Select 
+                                    onValueChange={field.onChange}
+                                    defaultValue={field.value}
+                                  >
                                     <SelectTrigger>
                                       <SelectValue placeholder="Select expiration period" />
                                     </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    <SelectItem value="30">30 days</SelectItem>
-                                    <SelectItem value="60">60 days</SelectItem>
-                                    <SelectItem value="90">90 days</SelectItem>
-                                    <SelectItem value="180">180 days</SelectItem>
-                                    <SelectItem value="365">365 days</SelectItem>
-                                    <SelectItem value="never">Never</SelectItem>
-                                  </SelectContent>
-                                </Select>
+                                    <SelectContent>
+                                      <SelectItem value="30">30 days</SelectItem>
+                                      <SelectItem value="60">60 days</SelectItem>
+                                      <SelectItem value="90">90 days</SelectItem>
+                                      <SelectItem value="180">180 days</SelectItem>
+                                      <SelectItem value="365">365 days</SelectItem>
+                                      <SelectItem value="never">Never</SelectItem>
+                                    </SelectContent>
+                                  </Select>
+                                </FormControl>
                                 <FormMessage />
                               </FormItem>
                             )}
