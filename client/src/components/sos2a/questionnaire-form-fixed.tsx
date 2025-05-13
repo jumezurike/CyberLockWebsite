@@ -34,7 +34,7 @@ import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
 import { format } from "date-fns";
-import { CalendarIcon, Download, UserPlus } from "lucide-react";
+import { CalendarIcon, Download, UserPlus, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Helper function to safely handle potentially undefined arrays

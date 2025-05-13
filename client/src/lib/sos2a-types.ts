@@ -298,6 +298,10 @@ export interface Sos2aFormData {
   // Device inventory list
   deviceInventory?: DeviceInventoryItem[];
   currentEditedDeviceIndex?: number;
+  
+  // Device filtering options
+  deviceTypeFilter?: string;
+  filteredDeviceInventory?: DeviceInventoryItem[];
 }
 
 export interface SecurityRisk {
