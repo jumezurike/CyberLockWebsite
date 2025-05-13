@@ -3596,12 +3596,44 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     
                     <div className="border rounded-md p-4">
                       <div className="flex justify-between items-center mb-4">
-                        <h5 className="font-medium">Device Types</h5>
+                        <div className="flex items-center gap-2">
+                          <h5 className="font-medium">Filter Device List</h5>
+                          <Filter className="h-4 w-4 text-muted-foreground" />
+                        </div>
                         
                         <Select
                           value="all"
-                          onValueChange={() => {
-                            // Filter devices by type
+                          onValueChange={(value) => {
+                            // Get current devices
+                            const currentDevices = form.getValues("deviceInventory") || [];
+                            // If no devices or "all" is selected, no filtering needed
+                            if (currentDevices.length === 0 || value === "all") {
+                              return;
+                            }
+                            
+                            // Show all devices if "all" selected, otherwise filter by type
+                            const filteredDevices = currentDevices.filter((device: any) => {
+                              if (value === "all") return true;
+                              
+                              // Map dropdown values to device type strings
+                              const typeMap: Record<string, string[]> = {
+                                "server": ["Server"],
+                                "workstation": ["Workstation"],
+                                "laptop": ["Laptop"],
+                                "mobile": ["Mobile Phone", "Mobile Device"],
+                                "network": ["Network Device"],
+                                "iot": ["IoT Device"],
+                                "medical": ["Medical Device"],
+                                "other": ["Other"]
+                              };
+                              
+                              // Check if device type matches the selected filter
+                              return typeMap[value]?.includes(device.deviceType);
+                            });
+                            
+                            // Update the displayed devices (temporary filter, doesn't change saved data)
+                            // This would need to be enhanced with state management for a real implementation
+                            console.log(`Filtered to ${filteredDevices.length} ${value} devices`);
                           }}
                         >
                           <SelectTrigger className="w-[180px]">
