@@ -3586,6 +3586,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               owner: "",
                               patchStatus: "up-to-date",
                               lastLoginDate: new Date().toISOString(),
+                              macAddress: "",
+                              ipAddress: "",
+                              osVersion: "",
+                              backupLocation: "",
+                              backupRetentionPeriod: ""
                               // Add other default values as needed
                             }
                           ]);
@@ -4016,7 +4021,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <FormItem>
                             <FormLabel>MAC Address</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter MAC address" {...field} />
+                              <div className="flex gap-2">
+                                <Input placeholder="Enter MAC address" {...field} className="flex-1" />
+                                <Button 
+                                  type="button" 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => field.onChange("N/A")}
+                                >
+                                  Set N/A
+                                </Button>
+                              </div>
+                              <FormDescription className="text-xs">
+                                Use "N/A" for hosted services where MAC address is not applicable.
+                              </FormDescription>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -4077,7 +4095,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <FormItem>
                             <FormLabel>Operating System & Version</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter OS and version" {...field} />
+                              <div className="flex gap-2">
+                                <Input placeholder="Enter OS and version" {...field} className="flex-1" />
+                                <Button 
+                                  type="button" 
+                                  variant="outline" 
+                                  size="sm"
+                                  onClick={() => field.onChange("Unknown")}
+                                >
+                                  Set Unknown
+                                </Button>
+                              </div>
+                              <FormDescription className="text-xs">
+                                Use "Unknown" if OS version information is not immediately available. Analysis can reveal it later.
+                              </FormDescription>
                             </FormControl>
                             <FormMessage />
                           </FormItem>
