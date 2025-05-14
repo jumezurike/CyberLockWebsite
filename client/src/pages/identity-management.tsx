@@ -394,21 +394,20 @@ export default function IdentityManagement() {
                   <div className="flex flex-col items-center justify-center mb-12">
                     <div className="relative">
                       {/* Animated circles around the fingerprint */}
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border-2 border-blue-400 opacity-50 animate-ping"></div>
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border-2 border-blue-300 animate-pulse"></div>
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-32 h-32 rounded-full border-2 border-blue-400 opacity-30 animate-ping"></div>
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border border-blue-300 opacity-50 animate-pulse"></div>
                       
                       {/* Main fingerprint circle */}
-                      <div className="w-24 h-24 rounded-full bg-blue-100 border-4 border-blue-500 flex items-center justify-center mb-3 relative z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M8 11a4 4 0 0 1 8 0v1a3 3 0 0 1-2.12 2.88"></path>
-                          <path d="M10 9.37a4 4 0 0 1 4 0"></path>
-                          <path d="M11 14.5a2 2 0 0 1-2-2"></path>
-                          <path d="m13.6 21 1.4-3m-2.5-4.5a4 4 0 0 0-3.57 2.26"></path>
-                          <path d="M4 17.5A9 9 0 0 1 21.7 8"></path>
-                          <path d="M20.96 11.22a9 9 0 0 1-1.3 6.41"></path>
-                          <path d="M8.5 19.5a9 9 0 0 1-2.19-3.26"></path>
-                          <path d="M7.23 10.26A9 9 0 0 1 16.07 5"></path>
-                          <path d="M17.5 15.5a9 9 0 0 1-6.1 3.28"></path>
+                      <div className="w-24 h-24 rounded-full bg-blue-600 flex items-center justify-center mb-3 relative z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M19.07 4.93A10 10 0 0 0 6.99 3.34"></path>
+                          <path d="M4 6.99a10 10 0 0 0 1.93 12.08"></path>
+                          <path d="M6.29 18.96A10 10 0 0 0 17.94 21"></path>
+                          <path d="M21 17.94c.83-1.87 1-4.202.5-6.5"></path>
+                          <path d="M12 10a2 2 0 0 0-2 2"></path>
+                          <path d="M12 10a2 2 0 0 1 2 2"></path>
+                          <path d="M12 10a6 6 0 0 0-6 6"></path>
+                          <path d="M12 10a6 6 0 0 1 6 6"></path>
                         </svg>
                       </div>
                     </div>
@@ -419,7 +418,7 @@ export default function IdentityManagement() {
                   </div>
                   
                   {/* Dotted circular border around the central identity */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-dashed border-2 border-gray-300 -z-10 animate-[spin_20s_linear_infinite]"></div>
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-dashed border-2 border-gray-300 -z-10 animate-[spin_30s_linear_infinite]"></div>
                   
                   {/* Three connected elements - Top Row */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
