@@ -149,12 +149,16 @@ export interface DeviceInventoryItem {
   patchStatus?: string;
   lastLoginDate?: string;
   osVersion?: string;
+  operatingSystem?: string; // Added for device inventory bulk view
   securitySoftware?: string[];
   authorizedUsers?: string[];
   acquisitionDate?: string;
   expectedLifespan?: string;
   ownershipType?: string;
   disposalPlan?: string;
+  notes?: string; // Added for device inventory bulk view
+  encryptionStatus?: string; // Added for device inventory bulk view
+  lastPatchDate?: string; // Added for device inventory bulk view
   
   // Network details
   macAddress?: string;
