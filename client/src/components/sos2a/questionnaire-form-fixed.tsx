@@ -5228,6 +5228,24 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         )}
                       />
                       
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.onboardingOffboardingDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Onboarding/Offboarding Date</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="date" 
+                                placeholder="mm/dd/yyyy" 
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
                           control={form.control}
@@ -5318,6 +5336,77 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 Do you have a process to manage access rights when users change roles?
                               </FormDescription>
                             </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.accessReviewSchedule"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Access Review Schedule</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select review schedule" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="monthly">Monthly</SelectItem>
+                                <SelectItem value="quarterly">Quarterly</SelectItem>
+                                <SelectItem value="semi-annual">Semi-Annually</SelectItem>
+                                <SelectItem value="annual">Annually</SelectItem>
+                                <SelectItem value="biennial">Every 2 Years</SelectItem>
+                                <SelectItem value="none">No Regular Review</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.certificationStatus"
+                        render={({ field }) => (
+                          <FormItem className="border p-4 rounded-md h-full flex flex-col justify-center">
+                            <div className="flex flex-row items-start space-x-3">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Certification Status</FormLabel>
+                                <FormDescription>
+                                  Is this identity compliant with NIST/ISO audits?
+                                </FormDescription>
+                              </div>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.incidentHistory"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Incident History</FormLabel>
+                            <FormDescription>Past violations, e.g., policy breaches</FormDescription>
+                            <FormControl>
+                              <Textarea 
+                                placeholder="Describe any past security incidents" 
+                                className="min-h-[80px]"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
                           </FormItem>
                         )}
                       />
@@ -5883,101 +5972,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 6. Lifecycle & Governance Section - MERGED */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">6. Lifecycle & Governance</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.onboardingOffboardingDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Onboarding/Offboarding Date</FormLabel>
-                            <FormControl>
-                              <Input 
-                                type="date" 
-                                placeholder="mm/dd/yyyy" 
-                                {...field} 
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.accessReviewSchedule"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Access Review Schedule</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select review schedule" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="monthly">Monthly</SelectItem>
-                                <SelectItem value="quarterly">Quarterly</SelectItem>
-                                <SelectItem value="semi-annual">Semi-Annually</SelectItem>
-                                <SelectItem value="annual">Annually</SelectItem>
-                                <SelectItem value="biennial">Every 2 Years</SelectItem>
-                                <SelectItem value="none">No Regular Review</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.certificationStatus"
-                        render={({ field }) => (
-                          <FormItem className="border p-4 rounded-md h-full flex flex-col justify-center">
-                            <div className="flex flex-row items-start space-x-3">
-                              <FormControl>
-                                <Checkbox
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                              <div className="space-y-1 leading-none">
-                                <FormLabel>Certification Status</FormLabel>
-                                <FormDescription>
-                                  Is this identity compliant with NIST/ISO audits?
-                                </FormDescription>
-                              </div>
-                            </div>
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.incidentHistory"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Incident History</FormLabel>
-                            <FormDescription>Past violations, e.g., policy breaches</FormDescription>
-                            <FormControl>
-                              <Textarea 
-                                placeholder="Describe any past security incidents" 
-                                className="min-h-[80px]"
-                                {...field} 
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
+
                   <div className="flex justify-end space-x-4">
                     <Button
                       type="button"
