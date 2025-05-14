@@ -6821,6 +6821,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
           </form>
         </Form>
       </CardContent>
+      {showIdentityManager && (
+        <UserIdentityManager 
+          open={showIdentityManager} 
+          onOpenChange={setShowIdentityManager} 
+        />
+      )}
     </Card>
   );
 }
