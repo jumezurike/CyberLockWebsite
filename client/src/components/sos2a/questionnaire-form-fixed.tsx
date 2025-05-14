@@ -175,6 +175,60 @@ interface QuestionnaireFormProps {
 
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
+  const [deviceTypeFilter, setDeviceTypeFilter] = useState<string>("all");
+  const [filteredDevices, setFilteredDevices] = useState<any[]>([]);
+  
+  // Device management functions
+  const addDevice = () => {
+    const devices = form.getValues('deviceInventory') || [];
+    form.setValue('deviceInventory', [
+      ...devices,
+      {
+        id: `device-${Date.now()}`,
+        deviceType: '',
+        makeModel: '',
+        serialNumber: '',
+        sensitivityLevel: '',
+        networkZone: '',
+        operatingSystem: '',
+        lastPatchDate: '',
+        patchStatus: '',
+        encryptionStatus: '',
+        authorizedUsers: [],
+        notes: ''
+      }
+    ]);
+  };
+  
+  const removeDevice = (index: number) => {
+    const devices = form.getValues('deviceInventory') || [];
+    devices.splice(index, 1);
+    form.setValue('deviceInventory', [...devices]);
+  };
+  
+  const handleFilterChange = (type: string) => {
+    setDeviceTypeFilter(type);
+    
+    const devices = form.getValues('deviceInventory') || [];
+    if (type === 'all') {
+      setFilteredDevices(devices);
+    } else {
+      setFilteredDevices(devices.filter(device => device?.deviceType === type));
+    }
+  };
+  
+  // CSV template handling
+  const generateCsvTemplate = () => {
+    const header = 'Device Type,Make/Model,Serial Number,Sensitivity Level,Network Zone,Operating System,Last Patch Date,Patch Status,Encryption Status,Authorized Users,Notes';
+    const csvContent = `data:text/csv;charset=utf-8,${header}\n`;
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement('a');
+    link.setAttribute('href', encodedUri);
+    link.setAttribute('download', 'device_inventory_template.csv');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
   
   // Helper function to handle OS checkbox changes
   const handleOsCheckboxChange = (currentValues: string[] = [], os: any, isChecked: boolean): string[] => {
