@@ -393,17 +393,17 @@ export default function IdentityManagement() {
                   {/* Central DNA identity concept */}
                   <div className="flex flex-col items-center justify-center mb-12">
                     <div className="relative">
-                      {/* Animated outer circle */}
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-28 h-28 rounded-full border border-[#4558f1] opacity-40 animate-pulse"></div>
+                      {/* Thin moving circle that passes through the blue circle */}
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-[#4558f1] opacity-40 animate-[spin_15s_linear_infinite]"></div>
                       
                       {/* Main fingerprint circle */}
                       <div className="w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center mb-3 relative z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M5 12a7 7 0 0 1 14 0 1 1 0 0 1-1 1H6a1 1 0 0 1-1-1" />
-                          <path d="M9 9c-.295.707-.667 1.372-1.111 2" />
-                          <path d="M15 9c.295.707.667 1.372 1.111 2" />
-                          <path d="M8 15.345v.655l4 4 4-4v-2" />
-                          <path d="M12 16v4" />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 11c0 1.657-1.343 2.5-3 2.5s-3-.843-3-2.5S7.343 8 9 8s3 1.343 3 3z"></path>
+                          <path d="M13 13c-.366 2.235-1.813 4-4 4-2.343 0-4-2.739-4-5 0-2.761 1.657-5 4-5 2.343 0 4.344 2.25 4 5"></path>
+                          <path d="M16 13c-.366 3.25-1.813 6-4 6-2.343 0-4-2.739-4-5 0-2.761 2.657-6 5-6 2.343 0 3.344 2.25 3 5"></path>
+                          <path d="M19 13c-.366 3.25-1.813 6-4 6-2.343 0-4-2.739-4-5 0-2.761 1.657-5 4-5 2.343 0 4.344 2.25 4 4"></path>
+                          <path d="M9 16c0 1.657-1.343 3-3 3"></path>
                         </svg>
                       </div>
                     </div>
