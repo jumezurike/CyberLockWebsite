@@ -190,45 +190,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const [deviceTypeFilter, setDeviceTypeFilter] = useState<string>("all");
   const [filteredDevices, setFilteredDevices] = useState<any[]>([]);
   
-  // Device management functions
-  const addDevice = () => {
-    const devices = form.getValues('deviceInventory') || [];
-    form.setValue('deviceInventory', [
-      ...devices,
-      {
-        id: `device-${Date.now()}`,
-        deviceType: '',
-        makeModel: '',
-        serialNumber: '',
-        sensitivityLevel: '',
-        networkZone: '',
-        operatingSystem: '',
-        lastPatchDate: '',
-        patchStatus: '',
-        encryptionStatus: '',
-        authorizedUsers: [],
-        notes: ''
-      }
-    ]);
-  };
-  
-  const removeDevice = (index: number) => {
-    const devices = form.getValues('deviceInventory') || [];
-    devices.splice(index, 1);
-    form.setValue('deviceInventory', [...devices]);
-  };
-  
-  const handleFilterChange = (type: string) => {
-    setDeviceTypeFilter(type);
-    
-    const devices = form.getValues('deviceInventory') || [];
-    if (type === 'all') {
-      setFilteredDevices(devices);
-    } else {
-      setFilteredDevices(devices.filter(device => device?.deviceType === type));
-    }
-  };
-  
   // CSV template handling
   const generateCsvTemplate = () => {
     const header = 'Device Type,Make/Model,Serial Number,Sensitivity Level,Network Zone,Operating System,Last Patch Date,Patch Status,Encryption Status,Authorized Users,Notes';
@@ -425,6 +386,48 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       console.error("Error in form submission:", error);
     }
   });
+  
+  // Add device management functions after form is defined
+  const addDevice = () => {
+    const devices = form.getValues('deviceInventory') || [];
+    form.setValue('deviceInventory', [
+      ...devices,
+      {
+        id: `device-${Date.now()}`,
+        deviceType: '',
+        makeModel: '',
+        serialNumber: '',
+        sensitivityLevel: '',
+        networkZone: '',
+        operatingSystem: '',
+        lastPatchDate: '',
+        patchStatus: '',
+        encryptionStatus: '',
+        authorizedUsers: [],
+        notes: ''
+      }
+    ]);
+  };
+  
+  const removeDevice = (index: number) => {
+    const devices = form.getValues('deviceInventory') || [];
+    devices.splice(index, 1);
+    form.setValue('deviceInventory', [...devices]);
+  };
+  
+  const handleFilterChange = (type: string) => {
+    setDeviceTypeFilter(type);
+  };
+  
+  // Update filtered devices when inventory changes or filter changes
+  useEffect(() => {
+    const devices = form.getValues('deviceInventory') || [];
+    if (deviceTypeFilter === 'all') {
+      setFilteredDevices(devices);
+    } else {
+      setFilteredDevices(devices.filter(device => device?.deviceType === deviceTypeFilter));
+    }
+  }, [form.watch('deviceInventory'), deviceTypeFilter]);
   
   const operationModes = [
     { id: "isp-modem", label: "ISP Modem" },
@@ -3654,11 +3657,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                       
                       {form.getValues('deviceInventory')?.length ? (
-                        form.getValues('deviceInventory')
-                          .filter(device => 
-                            deviceTypeFilter === 'all' || 
-                            device.deviceType === deviceTypeFilter
-                          )
+                        (deviceTypeFilter === 'all' 
+                          ? form.getValues('deviceInventory') 
+                          : form.getValues('deviceInventory')?.filter(d => d.deviceType === deviceTypeFilter))
                           .map((device, index) => (
                             <div key={device.id} className="grid grid-cols-5 p-2 border-t text-sm">
                               <div>{device.deviceType || '—'}</div>
