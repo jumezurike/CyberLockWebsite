@@ -396,8 +396,8 @@ export default function IdentityManagement() {
                     <div className="relative w-full max-w-[1100px] flex flex-col items-center">
                       {/* Diagram container with exact positioning */}
                       <div className="relative w-full">
-                        {/* Large dashed circle with exact positioning */}
-                        <div className="w-[700px] h-[700px] absolute left-1/2 transform -translate-x-1/2 -translate-y-[350px] top-1/2 border border-dashed border-gray-300 rounded-full"></div>
+                        {/* Large dashed circle with animation */}
+                        <div className="w-[700px] h-[700px] absolute left-1/2 transform -translate-x-1/2 -translate-y-[350px] top-1/2 border border-dashed border-gray-300 rounded-full animate-spin-medium"></div>
                         
                         {/* Blue fingerprint icon positioned exactly as in reference */}
                         <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-[220px] w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center z-10">
