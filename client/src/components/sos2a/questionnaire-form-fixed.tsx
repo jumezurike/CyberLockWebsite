@@ -35,7 +35,7 @@ import { EulaAgreement } from "./eula-agreement";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { DownloadCloud, UploadCloud, Pencil, Trash2 } from "lucide-react";
+import { DownloadCloud, UploadCloud, Pencil, Trash2, Info, Plus } from "lucide-react";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -4580,6 +4580,30 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
+                  
+                  {/* Universal Identity Verification System (UIVS) Section */}
+                  <div className="border rounded-md p-4 mb-6 bg-blue-50">
+                    <h4 className="font-medium text-blue-700 mb-2">Universal Identity Verification System (UIVS)</h4>
+                    <p className="text-sm mb-4">
+                      For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                      >
+                        Manage User Identities
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        size="sm"
+                      >
+                        Download Template
+                      </Button>
+                    </div>
+                  </div>
                   
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
