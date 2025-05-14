@@ -3700,19 +3700,47 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                     
                     {/* Import options */}
-                    <div className="mt-4">
-                      <h5 className="text-sm font-medium mb-2">Import Device Inventory</h5>
+                    <div className="mt-4 border rounded-md p-4 bg-muted/30">
+                      <h5 className="text-sm font-medium mb-2">Bulk Device Import</h5>
                       <p className="text-xs text-muted-foreground mb-3">
-                        Use these options to import existing device inventory data.
+                        Save time by importing multiple devices at once using our template.
                       </p>
-                      <div className="flex space-x-2">
-                        <Button type="button" variant="outline" size="sm" disabled>
-                          Import CSV
-                        </Button>
-                        <Button type="button" variant="outline" size="sm" disabled>
+                      
+                      <div className="flex flex-col md:flex-row gap-4">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={generateDeviceTemplateCSV}
+                          className="flex items-center"
+                        >
+                          <Download className="h-4 w-4 mr-2" />
                           Download Template
                         </Button>
+                        
+                        <div className="flex-1">
+                          <Label htmlFor="device-csv-upload" className="mb-2 block text-sm">
+                            Import devices from CSV
+                          </Label>
+                          <Input
+                            id="device-csv-upload"
+                            type="file"
+                            accept=".csv"
+                            onChange={handleDeviceCSVUpload}
+                            className="w-full text-sm"
+                          />
+                        </div>
                       </div>
+                      
+                      {deviceImportStatus && (
+                        <div className={`mt-4 p-3 rounded text-sm ${
+                          deviceImportStatus.includes("Error") 
+                            ? "bg-destructive/10 text-destructive" 
+                            : "bg-success/10 text-success"
+                        }`}>
+                          {deviceImportStatus}
+                        </div>
+                      )}
                     </div>
                   </div>
                   
