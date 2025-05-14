@@ -5549,9 +5549,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 3. Access & Permissions Section */}
+                  {/* 7. Access 3. Access & Permissions Permissions Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Access & Permissions</h4>
+                    <h4 className="font-medium mb-4">7. Access 3. Access & Permissions Permissions</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
@@ -5675,9 +5675,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 4. Security Posture Section */}
+                  {/* 8. Security Posture Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">4. Security Posture</h4>
+                    <h4 className="font-medium mb-4">8. Security Posture</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
@@ -5799,7 +5799,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 5. Behavior Monitoring Section */}
+                  {/* 9. Behavior Monitoring Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">5. Behavior Monitoring</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
