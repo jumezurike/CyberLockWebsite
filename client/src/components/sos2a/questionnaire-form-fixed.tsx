@@ -5196,9 +5196,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 6. Identity Lifecycle Management Section - FIXED NUMBERING */}
+                  {/* 6. Lifecycle & Governance Section - MERGED */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">6. Identity Lifecycle Management</h4>
+                    <h4 className="font-medium mb-4">6. Lifecycle & Governance</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
