@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -18,6 +18,15 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Label } from "@/components/ui/label";
+import { 
+  Trash2, 
+  Plus, 
+  Download, 
+  Upload, 
+  Search, 
+  Computer,
+} from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
@@ -185,6 +194,23 @@ const formSchema = z.object({
   deviceInventoryList: z.array(z.any()).optional(),
   deviceTypeFilter: z.string().optional(),
   
+  // New Device Inventory with N/A fields
+  deviceInventory: z.object({
+    devices: z.array(z.object({
+      makeModel: z.string().optional(),
+      serialNumber: z.string().optional(),
+      type: z.string().optional(),
+      operatingSystem: z.string().optional(),
+      owner: z.string().optional(),
+      macAddress: z.string().optional(),
+      macAddressNA: z.boolean().optional(),
+      backupLocation: z.string().optional(),
+      backupLocationNA: z.boolean().optional(),
+      retentionPeriod: z.string().optional(),
+      retentionPeriodNA: z.boolean().optional(),
+    })).optional()
+  }).optional(),
+  
   // 13. Identity Behavior & Hygiene
   identityBehaviorHygiene: z.object({
     passwordPolicyCompliance: z.boolean().optional(),
@@ -229,6 +255,274 @@ interface QuestionnaireFormProps {
 
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
+  
+  // Device inventory management states
+  const [deviceFields, setDeviceFields] = useState<{ id: string }[]>([]);
+  const [deviceSearchQuery, setDeviceSearchQuery] = useState("");
+  const [deviceFilterType, setDeviceFilterType] = useState("all");
+  const [deviceImportStatus, setDeviceImportStatus] = useState<string | null>(null);
+  
+  // The form will need to be defined before this is actually used
+  // Use device fields to create filtered devices array
+  const getFilteredDevices = () => {
+    if (!form || !deviceFields) return [];
+    
+    return deviceFields.filter((field, index) => {
+      try {
+        // Get the values from the form safely
+        const values = form.getValues();
+        const devices = values?.deviceInventory?.devices || [];
+        const device = devices[index] || {};
+        
+        const makeModel = device.makeModel || '';
+        const serialNumber = device.serialNumber || '';
+        const owner = device.owner || '';
+        const deviceType = device.type || '';
+        
+        // Apply type filter
+        if (deviceFilterType !== "all" && deviceType !== deviceFilterType) {
+          return false;
+        }
+        
+        // Apply search filter (case insensitive)
+        if (!deviceSearchQuery) return true;
+        
+        const searchTerms = deviceSearchQuery.toLowerCase().split(" ");
+        const deviceString = `${makeModel} ${serialNumber} ${owner} ${deviceType}`.toLowerCase();
+        
+        // All search terms must match
+        return searchTerms.every(term => deviceString.includes(term));
+      } catch (e) {
+        console.error("Error filtering device:", e);
+        return false;
+      }
+    });
+  };
+  
+  // Basic device management functions
+  const addDevice = () => {
+    setDeviceFields([...deviceFields, { id: `device-${Date.now()}` }]);
+  };
+  
+  const removeDevice = (index: number) => {
+    setDeviceFields((fields) => fields.filter((_, i) => i !== index));
+  };
+  
+  // Generate CSV template for device import
+  const generateDeviceTemplateCSV = () => {
+    try {
+      // CSV header row
+      const headers = [
+        'Make/Model',
+        'Serial/Asset #',
+        'Device Type',
+        'Operating System',
+        'Owner/Custodian',
+        'MAC Address',
+        'Backup Location',
+        'Data Retention Period'
+      ];
+      
+      // CSV device type options as a comment line
+      const deviceTypes = [
+        'laptop',
+        'desktop',
+        'server',
+        'tablet',
+        'smartphone',
+        'iot',
+        'networking',
+        'medical',
+        'other'
+      ];
+      
+      // CSV OS options as a comment line
+      const osSystems = [
+        'windows10',
+        'windows11',
+        'windowsServer',
+        'macOS',
+        'linux',
+        'ios',
+        'android',
+        'chrome',
+        'proprietary',
+        'other'
+      ];
+      
+      // Create example data row
+      const exampleRow = [
+        'Dell XPS 15',
+        'SN12345678',
+        'laptop',
+        'windows11',
+        'IT Department', 
+        '00:1A:2B:3C:4D:5E',
+        'Cloud Storage',
+        '365 days'
+      ];
+      
+      // Create CSV content with headers and example row
+      let csvContent = headers.join(',') + '\r\n';
+      csvContent += '# Device Type Options: ' + deviceTypes.join(', ') + '\r\n';
+      csvContent += '# OS Options: ' + osSystems.join(', ') + '\r\n';
+      csvContent += '# Example Row (delete before importing):\r\n';
+      csvContent += exampleRow.join(',') + '\r\n';
+      
+      // Create a blob and download link
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'device_inventory_template.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      setDeviceImportStatus("Template downloaded successfully. Fill it out and import when ready.");
+      
+      // Clear status message after 5 seconds
+      setTimeout(() => {
+        setDeviceImportStatus(null);
+      }, 5000);
+    } catch (error) {
+      console.error("Error generating template:", error);
+      setDeviceImportStatus("Error generating template. Please try again.");
+    }
+  };
+  
+  // Handle CSV upload for device import
+  const handleDeviceCSVUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    
+    setDeviceImportStatus("Processing file...");
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const csvText = e.target?.result as string;
+        // Split by line and filter out empty lines and comment lines
+        const rows = csvText.split(/\r?\n/)
+          .filter(line => line.trim() !== '' && !line.startsWith('#'));
+        
+        if (rows.length < 2) {
+          setDeviceImportStatus("Error: CSV file must contain a header row and at least one data row.");
+          return;
+        }
+        
+        const headers = rows[0].split(',').map(header => header.trim());
+        const expectedHeaders = [
+          'Make/Model',
+          'Serial/Asset #',
+          'Device Type',
+          'Operating System',
+          'Owner/Custodian',
+          'MAC Address',
+          'Backup Location',
+          'Data Retention Period'
+        ];
+        
+        // Check if headers match expected format
+        const missingHeaders = expectedHeaders.filter(header => !headers.includes(header));
+        if (missingHeaders.length > 0) {
+          setDeviceImportStatus(`Error: Missing required CSV headers: ${missingHeaders.join(', ')}`);
+          return;
+        }
+        
+        // Process data rows
+        const deviceData = rows.slice(1).map(row => {
+          const values = row.split(',').map(value => value.trim());
+          const device: any = {};
+          
+          headers.forEach((header, index) => {
+            const value = values[index] || '';
+            
+            switch(header) {
+              case 'Make/Model':
+                device.makeModel = value;
+                break;
+              case 'Serial/Asset #':
+                device.serialNumber = value;
+                break;
+              case 'Device Type':
+                device.type = value;
+                break;
+              case 'Operating System':
+                device.operatingSystem = value;
+                break;
+              case 'Owner/Custodian':
+                device.owner = value;
+                break;
+              case 'MAC Address':
+                if (value === 'N/A') {
+                  device.macAddress = 'N/A';
+                  device.macAddressNA = true;
+                } else {
+                  device.macAddress = value;
+                  device.macAddressNA = false;
+                }
+                break;
+              case 'Backup Location':
+                if (value === 'N/A') {
+                  device.backupLocation = 'N/A';
+                  device.backupLocationNA = true;
+                } else {
+                  device.backupLocation = value;
+                  device.backupLocationNA = false;
+                }
+                break;
+              case 'Data Retention Period':
+                if (value === 'N/A') {
+                  device.retentionPeriod = 'N/A';
+                  device.retentionPeriodNA = true;
+                } else {
+                  device.retentionPeriod = value;
+                  device.retentionPeriodNA = false;
+                }
+                break;
+            }
+          });
+          
+          return device;
+        });
+        
+        // Add devices to the form
+        const newDeviceFields = deviceData.map(() => ({ id: `device-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` }));
+        
+        // Update the device fields state
+        setDeviceFields(prev => [...prev, ...newDeviceFields]);
+        
+        // Set form values for each device
+        deviceData.forEach((device, index) => {
+          const fieldIndex = deviceFields.length + index;
+          Object.entries(device).forEach(([key, value]) => {
+            form.setValue(`deviceInventory.devices.${fieldIndex}.${key}`, value);
+          });
+        });
+        
+        setDeviceImportStatus(`Successfully imported ${deviceData.length} devices.`);
+        
+        // Clear the file input
+        event.target.value = '';
+        
+        // Clear status after 5 seconds
+        setTimeout(() => {
+          setDeviceImportStatus(null);
+        }, 5000);
+      } catch (error) {
+        console.error("Error parsing CSV:", error);
+        setDeviceImportStatus("Error parsing CSV file. Please check the format and try again.");
+      }
+    };
+    
+    reader.onerror = () => {
+      setDeviceImportStatus("Error reading the file. Please try again.");
+    };
+    
+    reader.readAsText(file);
+  };
   
   // Helper function to handle OS checkbox changes
   const handleOsCheckboxChange = (currentValues: string[] = [], os: any, isChecked: boolean): string[] => {
