@@ -277,53 +277,91 @@ export default function IdentityManagement() {
           <TabsContent value="import-export">
             <Card>
               <CardContent className="pt-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="border rounded-md p-6 flex flex-col items-center text-center">
-                    <Download className="h-12 w-12 text-blue-500 mb-4" />
-                    <h3 className="text-lg font-medium mb-2">Export Identities</h3>
+                <div className="space-y-8">
+                  {/* Import Identities Section */}
+                  <div>
+                    <h3 className="text-xl font-medium mb-2">Import Identities</h3>
                     <p className="text-sm text-gray-500 mb-4">
-                      Download all identity data in CSV format for backup or analysis
+                      Import user identities from a CSV file. Use our template for the correct format.
                     </p>
-                    <Button className="mt-2">
-                      Export CSV
-                    </Button>
+                    
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <p className="text-sm font-medium">Upload CSV File</p>
+                        <div className="flex items-center gap-3">
+                          <Button variant="outline" size="sm">Choose File</Button>
+                          <span className="text-sm text-gray-500">No file chosen</span>
+                          <Button 
+                            variant="ghost" 
+                            size="sm"
+                            className="ml-auto"
+                            onClick={() => {
+                              // Download template functionality
+                              const csvHeader = "user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source";
+                              
+                              const sampleData = [
+                                "EMP001,John,Smith,john.smith@example.com,IT Manager,Information Technology,human,privileged,drivers_license,NY-DMV,yes,app+sms,Headquarters,jane.doe@example.com,Full Time,2025-04-15,2025-03-01,\"ERP, CRM, IT Admin Portal\",9:00-17:00,medium,30,yes,60,yes,Active Directory",
+                                "EMP002,Sarah,Johnson,sarah.johnson@example.com,Finance Director,Finance,human,admin,state_id,CA-DMV,yes,hardware,Headquarters,executive@example.com,Full Time,2025-04-20,2025-03-01,\"ERP, Finance Portal, Expense System\",8:00-18:00,high,30,yes,30,yes,Okta SSO",
+                                "SVC001,Backup,Service,backup-service@system.internal,Automated Process,Operations,machine,standard,not_applicable,not_applicable,no,,Data Center,john.smith@example.com,System,2025-01-15,N/A,\"Backup System, Storage Access\",,low,365,no,0,yes,Local",
+                                "API001,Payment,Gateway,api-monitor@example.com,External Service,Finance,api,limited,not_applicable,not_applicable,yes,api-key,Cloud,sarah.johnson@example.com,Service,2025-03-30,N/A,\"Payment Processing System\",,high,90,yes,15,yes,AWS IAM",
+                                "VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,passport,US-State-Dept,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,\"Ticketing System, Knowledge Base\",9:00-20:00,medium,45,yes,20,yes,External IDP"
+                              ];
+                              
+                              const csvContent = [csvHeader, ...sampleData].join('\n');
+                              
+                              const blob = new Blob([csvContent], { type: 'text/csv' });
+                              const url = URL.createObjectURL(blob);
+                              const link = document.createElement('a');
+                              link.href = url;
+                              link.download = 'user-identity-template.csv';
+                              document.body.appendChild(link);
+                              link.click();
+                              document.body.removeChild(link);
+                            }}
+                          >
+                            Get Template
+                          </Button>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-medium">Import Rules</h4>
+                        <ul className="text-sm text-gray-600 space-y-1 list-disc pl-5">
+                          <li>The CSV file must follow the template format</li>
+                          <li>First row must contain column headers</li>
+                          <li>User IDs must be unique</li>
+                          <li>Required fields: User ID, First Name, Last Name, Email, Identity Type</li>
+                          <li>For machine identities, provide: contact owner, IMEI, serial number, and unique identifier (UID)</li>
+                          <li>For API identities, include: contact owner, token ID, and source system information</li>
+                          <li>For human identities, government ID fields are required for DNA integration</li>
+                          <li>Government ID information will be validated during import</li>
+                        </ul>
+                      </div>
+                      
+                      <Button className="w-full sm:w-auto" size="sm">
+                        <Upload className="h-4 w-4 mr-2" />
+                        Upload and Import
+                      </Button>
+                    </div>
                   </div>
                   
-                  <div className="border rounded-md p-6 flex flex-col items-center text-center">
-                    <Upload className="h-12 w-12 text-blue-500 mb-4" />
-                    <h3 className="text-lg font-medium mb-2">Import Identities</h3>
+                  {/* Export Identities Section */}
+                  <div className="border-t pt-8">
+                    <h3 className="text-xl font-medium mb-2">Export Identities</h3>
                     <p className="text-sm text-gray-500 mb-4">
-                      Bulk import identities using our standardized CSV template
+                      Export your DDNA repository data to a CSV file for backup or analysis.
                     </p>
-                    <div className="flex gap-2">
-                      <Button variant="outline" onClick={() => {
-                        // Download template functionality
-                        const csvHeader = "user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source";
-                        
-                        const sampleData = [
-                          "EMP001,John,Smith,john.smith@example.com,IT Manager,Information Technology,human,privileged,drivers_license,NY-DMV,yes,app+sms,Headquarters,jane.doe@example.com,Full Time,2025-04-15,2025-03-01,\"ERP, CRM, IT Admin Portal\",9:00-17:00,medium,30,yes,60,yes,Active Directory",
-                          "EMP002,Sarah,Johnson,sarah.johnson@example.com,Finance Director,Finance,human,admin,state_id,CA-DMV,yes,hardware,Headquarters,executive@example.com,Full Time,2025-04-20,2025-03-01,\"ERP, Finance Portal, Expense System\",8:00-18:00,high,30,yes,30,yes,Okta SSO",
-                          "SVC001,Backup,Service,backup-service@system.internal,Automated Process,Operations,machine,standard,not_applicable,not_applicable,no,,Data Center,john.smith@example.com,System,2025-01-15,N/A,\"Backup System, Storage Access\",,low,365,no,0,yes,Local",
-                          "API001,Payment,Gateway,api-monitor@example.com,External Service,Finance,api,limited,not_applicable,not_applicable,yes,api-key,Cloud,sarah.johnson@example.com,Service,2025-03-30,N/A,\"Payment Processing System\",,high,90,yes,15,yes,AWS IAM",
-                          "VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,passport,US-State-Dept,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,\"Ticketing System, Knowledge Base\",9:00-20:00,medium,45,yes,20,yes,External IDP"
-                        ];
-                        
-                        const csvContent = [csvHeader, ...sampleData].join('\n');
-                        
-                        const blob = new Blob([csvContent], { type: 'text/csv' });
-                        const url = URL.createObjectURL(blob);
-                        const link = document.createElement('a');
-                        link.href = url;
-                        link.download = 'user-identity-template.csv';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      }}>
-                        Download Template
-                      </Button>
-                      <Button>
-                        Upload CSV
-                      </Button>
+                    
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <h4 className="text-sm font-medium">Export Options</h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          <Button variant="outline" size="sm">Export All Identities</Button>
+                          <Button variant="outline" size="sm">Export Human Users</Button>
+                          <Button variant="outline" size="sm">Export Machine Identities</Button>
+                          <Button variant="outline" size="sm">Export Third-Party Access</Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
