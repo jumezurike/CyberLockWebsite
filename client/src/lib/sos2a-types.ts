@@ -135,6 +135,45 @@ export interface IdentityBehaviorHygiene {
   accessReviewFrequency?: string;
   roleChanges?: boolean;
   accountDormancyMonitoring?: boolean;
+  
+  // New fields based on user request
+  // 1. Identification
+  userId?: string;
+  fullNameRole?: string;
+  contactInfo?: string;
+  identityType?: string;
+  
+  // 2. Classification
+  accessTier?: string;
+  departmentTeam?: string;
+  assignedRiskLevel?: string;
+  federatedIdentitySource2?: string; // Adding a second field since we already have one
+  
+  // 3. Access & Permissions
+  assignedRoles?: string;
+  entitlements?: string;
+  accessDuration2?: string; // Adding a second field since we already have one
+  mfaStatus2?: string; // Adding a second field since we already have one
+  mfaMethod?: string;
+  
+  // 4. Security Posture
+  passwordHygiene?: string;
+  breachedCredentialChecks?: boolean;
+  sessionTimeoutSettings?: string;
+  unusedAccountDetection?: boolean;
+  privilegeEscalationAlerts?: boolean;
+  
+  // 5. Behavior Monitoring
+  typicalLoginPatterns?: string;
+  anomalyDetectionFlags?: boolean;
+  dataAccessTrends?: string;
+  toolCommandUsage?: string;
+  
+  // 6. Lifecycle & Governance
+  onboardingOffboardingDate?: string;
+  accessReviewSchedule?: string;
+  certificationStatus?: boolean;
+  incidentHistory?: string;
 }
 
 export interface DeviceInventoryItem {
