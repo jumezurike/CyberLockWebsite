@@ -395,10 +395,12 @@ export default function IdentityManagement() {
                     <div className="flex flex-col items-center">
                       {/* Container for entire identity visualization with dashed encircling line */}
                       <div className="relative w-full max-w-3xl">
-                        {/* Center blue fingerprint element */}
+                        {/* Center blue fingerprint element with white edge */}
                         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
-                          <div className="w-24 h-24 rounded-full bg-[#4558f1] flex items-center justify-center shadow-lg">
-                            <Fingerprint className="h-10 w-10 text-white" />
+                          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center shadow-lg">
+                            <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
+                              <Fingerprint className="h-10 w-10 text-indigo-600" />
+                            </div>
                           </div>
                         </div>
                         
@@ -409,7 +411,7 @@ export default function IdentityManagement() {
                       </div>
                       
                       {/* Text content matching reference image exactly */}
-                      <div className="text-center mt-8 mb-16">
+                      <div className="text-center mt-32 mb-16">
                         <h3 className="text-xl font-medium mb-1">Universal Digital Identity</h3>
                         <p className="text-sm text-gray-600 max-w-md mx-auto">
                           The DNA forms an immutable, verifiable identity core that combines government-verified credentials with behavioral intelligence.
