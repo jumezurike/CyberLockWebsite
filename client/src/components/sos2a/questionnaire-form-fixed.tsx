@@ -5883,9 +5883,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 10. Lifecycle 6. Lifecycle & Governance Governance Section */}
+                  {/* 6. Lifecycle & Governance Section - MERGED */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">10. Lifecycle 6. Lifecycle & Governance Governance</h4>
+                    <h4 className="font-medium mb-4">6. Lifecycle & Governance</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
