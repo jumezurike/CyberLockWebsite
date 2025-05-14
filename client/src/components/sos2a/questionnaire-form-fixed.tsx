@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -3607,6 +3607,109 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and manage your organization's devices to improve security visibility and control.
                   </p>
+                  
+                  {/* Device Inventory Table Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="font-medium">Device Inventory</h4>
+                      <Button 
+                        onClick={addDevice}
+                        size="sm"
+                        className="bg-purple-600 hover:bg-purple-700"
+                      >
+                        Add Device
+                      </Button>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h5 className="text-sm font-medium mb-2">Device Types</h5>
+                      <Select
+                        value={deviceTypeFilter}
+                        onValueChange={handleFilterChange}
+                      >
+                        <SelectTrigger className="w-[180px] bg-gray-100 border-gray-300">
+                          <SelectValue placeholder="Filter by device type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Types</SelectItem>
+                          <SelectItem value="Workstation">Workstations</SelectItem>
+                          <SelectItem value="Laptop">Laptops</SelectItem>
+                          <SelectItem value="Mobile Phone">Mobile Devices</SelectItem>
+                          <SelectItem value="Server">Servers</SelectItem>
+                          <SelectItem value="Network Device">Network Equipment</SelectItem>
+                          <SelectItem value="IoT Device">IoT Devices</SelectItem>
+                          <SelectItem value="Medical Device">Medical Devices</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="rounded-md border overflow-hidden">
+                      <div className="grid grid-cols-5 bg-gray-100 p-2 font-medium text-sm">
+                        <div>Device Type</div>
+                        <div>Make/Model</div>
+                        <div>Serial/Asset #</div>
+                        <div>Risk Level</div>
+                        <div>Owner</div>
+                      </div>
+                      
+                      {form.getValues('deviceInventory')?.length ? (
+                        form.getValues('deviceInventory')
+                          .filter(device => 
+                            deviceTypeFilter === 'all' || 
+                            device.deviceType === deviceTypeFilter
+                          )
+                          .map((device, index) => (
+                            <div key={device.id} className="grid grid-cols-5 p-2 border-t text-sm">
+                              <div>{device.deviceType || '—'}</div>
+                              <div>{device.makeModel || '—'}</div>
+                              <div>{device.serialNumber || '—'}</div>
+                              <div>{device.sensitivityLevel || '—'}</div>
+                              <div className="flex items-center justify-between">
+                                <span>{device.owner || '—'}</span>
+                                <Button 
+                                  variant="ghost" 
+                                  size="sm"
+                                  onClick={() => removeDevice(index)}
+                                >
+                                  <span>Delete</span>
+                                </Button>
+                              </div>
+                            </div>
+                          ))
+                      ) : (
+                        <div className="p-4 text-center text-gray-500 text-sm">
+                          No devices added yet. Click "Add Device" to begin tracking devices.
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="mt-4">
+                      <h5 className="text-sm font-medium mb-2">Import Device Inventory</h5>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Use these options to import existing device inventory data.
+                      </p>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            // File input for CSV upload would go here
+                            alert('CSV import functionality would be implemented here');
+                          }}
+                        >
+                          Import CSV
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={generateCsvTemplate}
+                        >
+                          Download Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                   
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
