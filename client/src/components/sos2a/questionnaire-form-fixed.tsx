@@ -4581,9 +4581,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
                   
-                  {/* 1. Authentication Practices Section */}
+                  {/* 2. Authentication Practices Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">1. Authentication Practices</h4>
+                    <h4 className="font-medium mb-4">2. Authentication Practices</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
@@ -4783,9 +4783,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 2. Access Behavior Section */}
+                  {/* 3. Access Behavior Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">2. Access Behavior</h4>
+                    <h4 className="font-medium mb-4">3. Access Behavior</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
@@ -4917,9 +4917,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 3. Identity Protection Section */}
+                  {/* 4. Identity Protection Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Identity Protection</h4>
+                    <h4 className="font-medium mb-4">4. Identity Protection</h4>
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
@@ -5027,9 +5027,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 4. Privileged Access Management Section */}
+                  {/* 5. Privileged Access Management Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">4. Privileged Access Management</h4>
+                    <h4 className="font-medium mb-4">5. Privileged Access Management</h4>
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <FormField
@@ -5148,9 +5148,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 5. Identity Lifecycle Management Section */}
+                  {/* 6. Identity Lifecycle Management Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Identity Lifecycle Management</h4>
+                    <h4 className="font-medium mb-4">6. Identity Lifecycle Management</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
