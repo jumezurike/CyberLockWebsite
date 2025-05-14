@@ -4411,9 +4411,72 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
                   
-                  {/* 1. Authentication Practices Section */}
+                  {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">1. Authentication Practices</h4>
+                    <h4 className="font-medium mb-4">1. Identification</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.identificationMethod"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Identification Method</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identification method" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="username">Username</SelectItem>
+                                <SelectItem value="email">Email Address</SelectItem>
+                                <SelectItem value="employee-id">Employee ID</SelectItem>
+                                <SelectItem value="badge">Badge Number</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.identityType"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Identity Type</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identity type" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="employee">Employee</SelectItem>
+                                <SelectItem value="contractor">Contractor</SelectItem>
+                                <SelectItem value="vendor">Vendor</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="system-account">System Account</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* 7. Authentication Practices Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">7. Authentication Practices</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
