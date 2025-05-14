@@ -1,0 +1,142 @@
+Universal Digital Identity
+The DNA forms an immutable, verifiable identity core that combines government-verified credentials with behavioral intelligence
+
+Government Identity Verification
+Government ID TypeCritical
+Driver's license, state ID, passport, or other official identification
+
+Issuing AuthorityCritical
+Government entity that issued the identification document
+
+ID Verification Status
+Whether the ID has been validated and confirmed
+
+Core Identity
+Full NameCritical
+Legal name as appears on official documents
+
+Identity Type
+Human, machine, service account, or API classification
+
+Unique IdentifierCritical
+Universal ID that persists across all systems
+
+Organizational Context
+Department/Team
+Organizational unit or functional group
+
+Role/Position
+Job function or service purpose
+
+Reporting Hierarchy
+Management chain and responsibility structure
+
+Access & Entitlements
+Access Level
+Privilege tier and permission scope
+
+System Entitlements
+Specific rights and access grants across systems
+
+Authentication Methods
+MFA status and credential mechanisms
+
+Behavioral Patterns
+Access Patterns
+Typical login hours and behavioral baselines
+
+Location Data
+Normal physical or network access points
+
+Security Posture
+Compliance with security policies and training
+
+Risk Indicators
+Risk Classification
+Assessment of identity risk level
+
+Anomaly Detection
+Tracking of unusual behaviors or access patterns
+
+Credential Exposure
+Records of potential credential compromise events
+
+Lifecycle Management
+Creation & Onboarding
+Initial provisioning and account creation
+
+Credential Rotation
+Password changes and certificate renewals
+
+Deprovisioning Process
+Account deactivation and offboarding workflows
+
+Visual Identity Verification
+Color-Coded Profile ImageCritical
+Non-fungible cryptographically signed profile picture with embedded steganographic data
+
+Image Modification History
+Immutable record of all changes to visual identity elements
+
+Visual Hash Verification
+Cryptographic validation of image integrity and authenticity
+
+Continuous Identity Verification
+The DNA continuously verifies all aspects of identity through a multi-layered approach. Government-issued ID creates the strong foundation that anchors the digital identity to a real-world, verifiable entity, enabling powerful accountability throughout the system.
+
+Color-Coded Non-Fungible Image Verification
+🔒 Advanced Security Feature: All identity profiles must include a color-coded non-fungible profile image that contains hidden encrypted data using steganography. This creates a cryptographically unique visual identifier that cannot be duplicated or transferred between identities. The embedded data can only be detected and verified through a specialized decryption process.
+
+ All image changes are permanently recorded in an immutable ledger, creating a complete audit trail of visual identity modifications.
+
+User Identity Template
+Universal Identity Template
+Standard CSV format for importing all identity types into the UIVS platform
+Download Template
+Template Structure
+Best Practices
+Example Identities
+Field	Description	Example	Required	Category
+user_id	Unique identifier for the user or identity	EMP001, SVC001	Required	Basic Info
+first_name	First name for human users or service name for non-human identities	John, Backup	Required	Basic Info
+last_name	Last name for human users or service identifier for non-human identities	Smith, Service	Required	Basic Info
+email	Email address or notification endpoint	john.smith@example.com	Required	Basic Info
+role	Job role or service function	IT Manager, Automated Process	Required	Basic Info
+department	Department or functional area	Information Technology, Finance	Required	Basic Info
+identity_type	Type of identity (human, machine, api, third-party)	human, machine, api, third-party	Required	Identity
+access_level	Level of access granted (standard, limited, admin, privileged)	standard, limited, admin, privileged	Required	Access
+government_id_type	Type of government-issued ID for human user accountability	drivers_license, state_id, passport, not_applicable	Required	Identity
+government_id_issuing_authority	Authority that issued the government ID	CA-DMV, NY-DMV, US-State-Dept	Required	Identity
+mfa_enabled	Whether multi-factor authentication is enabled	yes, no	Required	Access
+mfa_type	Type of MFA used (app, sms, hardware token, etc.)	app, sms, hardware, api-key	Optional	Access
+location	Primary physical or logical location	Headquarters, Data Center, Cloud	Optional	Basic Info
+manager	Manager email or responsible party for the identity	jane.doe@example.com	Optional	Basic Info
+employment_status	Status for humans or service status for non-humans	Full Time, Contractor, System, Service	Optional	Basic Info
+last_password_change	Date of last credential rotation	2025-04-15	Optional	Security
+last_security_training	Date of last security awareness training (N/A for non-human)	2025-03-01, N/A	Optional	Security
+system_access	List of systems this identity can access	ERP, CRM, Finance Portal	Optional	Access
+typical_login_hours	Normal hours of activity	9:00-17:00	Optional	Behavior
+login_anomaly_threshold	Sensitivity for login anomaly detection	low, medium, high	Optional	Behavior
+inactive_account_days	Days before account is flagged as inactive	30, 90, 365	Optional	Security
+credential_exposure_check	Whether credential breach monitoring is enabled	yes, no	Optional	Security
+session_timeout_minutes	Minutes before automatic session termination	15, 30, 60	Optional	Security
+privilege_escalation_alerts	Whether to alert on privilege escalation	yes, no	Optional	Security
+federation_source	Identity federation or SSO source	Active Directory, Okta SSO, AWS IAM	Optional	Identity
+Additional Templates
+Download specialized templates for different identity management needs
+Machine Identity Template
+Specialized template for tracking machine identities with IMEI, serial numbers, UIDs and hardware details.
+
+Download Template
+Third-Party Vendor Template
+Template for managing external vendor access and third-party relationships.
+
+Download Template
+API Identity Template
+Template for tracking API keys, service tokens, UUIDs, and source system identifiers.
+
+Download Template
+Identity-Device Mapping Template
+Map users to authorized devices for comprehensive access control.
+
+Download Template

@@ -404,8 +404,8 @@ export default function IdentityManagement() {
                   {/* Dotted circular border around the central identity */}
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-dashed border-2 border-gray-300 -z-10"></div>
                   
-                  {/* Three connected elements */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {/* Three connected elements - Top Row */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     {/* Government Identity Verification */}
                     <div className="border rounded-lg p-4 bg-red-50">
                       <div className="flex items-center gap-2 mb-2">
@@ -418,19 +418,20 @@ export default function IdentityManagement() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-600">Government ID Type</span>
-                          <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">Required</Badge>
+                          <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Critical</Badge>
                         </div>
-                        <p className="text-xs text-gray-500">Driver's license, passport, or other official identification</p>
+                        <p className="text-xs text-gray-500">Driver's license, state ID, passport, or other official identification</p>
                         
                         <div className="flex justify-between">
                           <span className="text-gray-600">Issuing Authority</span>
-                          <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">Required</Badge>
+                          <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Critical</Badge>
                         </div>
                         <p className="text-xs text-gray-500">Government entity that issued the identification document</p>
                         
                         <div className="flex justify-between">
                           <span className="text-gray-600">ID Verification Status</span>
                         </div>
+                        <p className="text-xs text-gray-500">Whether the ID has been validated and confirmed</p>
                       </div>
                     </div>
                     
@@ -446,7 +447,7 @@ export default function IdentityManagement() {
                       <div className="space-y-2 text-sm">
                         <div className="flex justify-between">
                           <span className="text-gray-600">Full Name</span>
-                          <Badge variant="outline" className="bg-purple-100 text-purple-800 border-purple-300">Required</Badge>
+                          <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Critical</Badge>
                         </div>
                         <p className="text-xs text-gray-500">Legal name as appears on official documents</p>
                         
@@ -457,8 +458,9 @@ export default function IdentityManagement() {
                         
                         <div className="flex justify-between">
                           <span className="text-gray-600">Unique Identifier</span>
-                          <Badge variant="outline" className="bg-purple-100 text-purple-800 border-purple-300">Required</Badge>
+                          <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Critical</Badge>
                         </div>
+                        <p className="text-xs text-gray-500">Universal ID that persists across all systems</p>
                       </div>
                     </div>
                     
@@ -485,8 +487,334 @@ export default function IdentityManagement() {
                         <div className="flex justify-between">
                           <span className="text-gray-600">Reporting Hierarchy</span>
                         </div>
+                        <p className="text-xs text-gray-500">Management chain and responsibility structure</p>
                       </div>
                     </div>
+                  </div>
+                  
+                  {/* Three connected elements - Middle Row */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                    {/* Access & Entitlements */}
+                    <div className="border rounded-lg p-4 bg-indigo-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-indigo-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
+                        </span>
+                        <h5 className="font-semibold">Access & Entitlements</h5>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Access Level</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Privilege tier and permission scope</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">System Entitlements</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Specific rights and access grants across systems</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Authentication Methods</span>
+                        </div>
+                        <p className="text-xs text-gray-500">MFA status and credential mechanisms</p>
+                      </div>
+                    </div>
+                    
+                    {/* Behavioral Patterns */}
+                    <div className="border rounded-lg p-4 bg-green-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-green-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><circle cx="10" cy="13" r="2"/><path d="m20 17-2-2-2 2-2-2"/></svg>
+                        </span>
+                        <h5 className="font-semibold">Behavioral Patterns</h5>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Access Patterns</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Typical login hours and behavioral baselines</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Location Data</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Normal physical or network access points</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Security Posture</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Compliance with security policies and training</p>
+                      </div>
+                    </div>
+                    
+                    {/* Risk Indicators */}
+                    <div className="border rounded-lg p-4 bg-amber-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-amber-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m8.5 14.5-5-5 5-5"/><path d="m15.5 4.5 5 5-5 5"/><path d="M13 8 8 12"/></svg>
+                        </span>
+                        <h5 className="font-semibold">Risk Indicators</h5>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Risk Classification</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Assessment of identity risk level</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Anomaly Detection</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Tracking of unusual behaviors or access patterns</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Credential Exposure</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Records of potential credential compromise events</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* Three connected elements - Bottom Row */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Lifecycle Management */}
+                    <div className="border rounded-lg p-4 bg-cyan-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-cyan-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                        </span>
+                        <h5 className="font-semibold">Lifecycle Management</h5>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Creation & Onboarding</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Initial provisioning and account creation</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Credential Rotation</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Password changes and certificate renewals</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Deprovisioning Process</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Account deactivation and offboarding workflows</p>
+                      </div>
+                    </div>
+                    
+                    {/* Visual Identity Verification */}
+                    <div className="border rounded-lg p-4 bg-violet-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-violet-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+                        </span>
+                        <h5 className="font-semibold">Visual Identity Verification</h5>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Color-Coded Profile Image</span>
+                          <Badge className="bg-red-100 text-red-800 hover:bg-red-100">Critical</Badge>
+                        </div>
+                        <p className="text-xs text-gray-500">Non-fungible cryptographically signed profile picture with embedded steganographic data</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Image Modification History</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Immutable record of all changes to visual identity elements</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Visual Hash Verification</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Cryptographic validation of image integrity and authenticity</p>
+                      </div>
+                    </div>
+                    
+                    {/* Empty cell to maintain grid balance */}
+                    <div className="relative">
+                      <div className="absolute top-1/2 right-4 transform -translate-y-1/2">
+                        <div className="w-10 h-10 rounded-full bg-amber-400 flex items-center justify-center text-white">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 16v.01"/><path d="M12 8v5"/><path d="M21.71 7.29c.18.1.29.29.29.49v8.44c0 .2-.11.39-.29.49l-8 4.5a.5.5 0 0 1-.48 0l-8-4.5A.51.51 0 0 1 5 16.22V7.78c0-.2.11-.39.29-.49l8-4.5a.5.5 0 0 1 .48 0l8 4.5Z"/></svg>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Continuous Identity Verification Section */}
+              <div className="bg-white rounded-lg border p-6">
+                <h3 className="font-semibold text-lg mb-4">Continuous Identity Verification</h3>
+                <p className="text-sm text-gray-600 mb-6">
+                  The DNA continuously verifies all aspects of identity through a multi-layered approach. Government-issued ID creates the strong foundation that anchors the digital identity to a real-world, verifiable entity, enabling powerful accountability throughout the system.
+                </p>
+                
+                <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-6">
+                  <div className="flex items-start gap-3">
+                    <span className="text-purple-600 mt-1">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 7v5l2 2"/><path d="M9 17H7"/><path d="M17 17h-2"/></svg>
+                    </span>
+                    <div>
+                      <h4 className="font-semibold mb-2">Color-Coded Non-Fungible Image Verification</h4>
+                      <p className="text-sm text-gray-600">
+                        <span className="inline-block bg-blue-100 text-blue-800 px-2 py-0.5 rounded text-xs mr-2">Advanced Security Feature:</span>  
+                        All identity profiles must include a color-coded non-fungible profile image that contains hidden encrypted data using steganography. This creates a cryptographically unique visual identifier that cannot be duplicated or transferred between identities. The embedded data can only be detected and verified through a specialized decryption process.
+                      </p>
+                      <p className="text-sm text-gray-600 mt-2">
+                        All image changes are permanently recorded in an immutable ledger, creating a complete audit trail of visual identity modifications.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* User Identity Template Section */}
+              <div className="bg-white rounded-lg border p-6">
+                <h3 className="font-semibold text-lg mb-4">User Identity Template</h3>
+                <div className="flex justify-between items-center mb-4">
+                  <h4 className="font-semibold">Universal Identity Template</h4>
+                  <Button variant="outline" size="sm" className="bg-blue-50 border-blue-200 text-blue-700">
+                    Download Template
+                  </Button>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">
+                  Standard CSV format for importing all identity types into the UIVS platform
+                </p>
+                
+                <div className="border rounded-lg overflow-hidden mb-6">
+                  <div className="bg-gray-50 px-4 py-2 border-b">
+                    <div className="flex gap-4">
+                      <div className="border-b-2 border-blue-500 px-3 py-2 text-blue-600 font-medium text-sm">
+                        Template Structure
+                      </div>
+                      <div className="px-3 py-2 text-gray-500 font-medium text-sm">
+                        Best Practices
+                      </div>
+                      <div className="px-3 py-2 text-gray-500 font-medium text-sm">
+                        Example Identities
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Field</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Example</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Required</th>
+                          <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200 text-sm">
+                        <tr>
+                          <td className="px-6 py-2 font-medium">user_id</td>
+                          <td className="px-6 py-2 text-gray-500">Unique identifier for the user or identity</td>
+                          <td className="px-6 py-2 text-gray-500">EMP001, SVC001</td>
+                          <td className="px-6 py-2 text-blue-600">Required</td>
+                          <td className="px-6 py-2">Basic Info</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-2 font-medium">first_name</td>
+                          <td className="px-6 py-2 text-gray-500">First name for human users or service name for non-human identities</td>
+                          <td className="px-6 py-2 text-gray-500">John, Backup</td>
+                          <td className="px-6 py-2 text-blue-600">Required</td>
+                          <td className="px-6 py-2">Basic Info</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-2 font-medium">last_name</td>
+                          <td className="px-6 py-2 text-gray-500">Last name for human users or service identifier for non-human identities</td>
+                          <td className="px-6 py-2 text-gray-500">Smith, Service</td>
+                          <td className="px-6 py-2 text-blue-600">Required</td>
+                          <td className="px-6 py-2">Basic Info</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-2 font-medium">email</td>
+                          <td className="px-6 py-2 text-gray-500">Email address or notification endpoint</td>
+                          <td className="px-6 py-2 text-gray-500">john.smith@example.com</td>
+                          <td className="px-6 py-2 text-blue-600">Required</td>
+                          <td className="px-6 py-2">Basic Info</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-2 font-medium">role</td>
+                          <td className="px-6 py-2 text-gray-500">Job role or service function</td>
+                          <td className="px-6 py-2 text-gray-500">IT Manager, Automated Process</td>
+                          <td className="px-6 py-2 text-blue-600">Required</td>
+                          <td className="px-6 py-2">Basic Info</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-2 font-medium">department</td>
+                          <td className="px-6 py-2 text-gray-500">Department or functional area</td>
+                          <td className="px-6 py-2 text-gray-500">Information Technology, Finance</td>
+                          <td className="px-6 py-2 text-blue-600">Required</td>
+                          <td className="px-6 py-2">Basic Info</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+                
+                {/* Additional Templates */}
+                <h4 className="font-semibold mb-3">Additional Templates</h4>
+                <p className="text-sm text-gray-600 mb-4">
+                  Download specialized templates for different identity management needs
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="border rounded-lg p-4">
+                    <div className="flex justify-between mb-1">
+                      <h5 className="font-medium">Machine Identity Template</h5>
+                      <Button variant="ghost" size="sm" className="h-8 px-2 text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        Download
+                      </Button>
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Specialized template for tracking machine identities with IMEI, serial numbers, UIDs and hardware details.
+                    </p>
+                  </div>
+                  
+                  <div className="border rounded-lg p-4">
+                    <div className="flex justify-between mb-1">
+                      <h5 className="font-medium">Third-Party Vendor Template</h5>
+                      <Button variant="ghost" size="sm" className="h-8 px-2 text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        Download
+                      </Button>
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Template for managing external vendor access and third-party relationships.
+                    </p>
+                  </div>
+                  
+                  <div className="border rounded-lg p-4">
+                    <div className="flex justify-between mb-1">
+                      <h5 className="font-medium">API Identity Template</h5>
+                      <Button variant="ghost" size="sm" className="h-8 px-2 text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        Download
+                      </Button>
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Template for tracking API keys, service tokens, UUIDs, and source system identifiers.
+                    </p>
+                  </div>
+                  
+                  <div className="border rounded-lg p-4">
+                    <div className="flex justify-between mb-1">
+                      <h5 className="font-medium">Identity-Device Mapping Template</h5>
+                      <Button variant="ghost" size="sm" className="h-8 px-2 text-blue-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-1"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        Download
+                      </Button>
+                    </div>
+                    <p className="text-xs text-gray-500">
+                      Map users to authorized devices for comprehensive access control.
+                    </p>
                   </div>
                 </div>
               </div>
