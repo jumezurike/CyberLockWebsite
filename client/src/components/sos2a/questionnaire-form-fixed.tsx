@@ -3802,7 +3802,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 2. Classification Section */}
+                  {/* Classification - REMOVED DUPLICATE NUMBER Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">Classification</h4>
                     <div className="space-y-6">
