@@ -28,6 +28,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Sos2aFormData } from "@/lib/sos2a-types";
+import { UserIdentityManager } from "@/components/identity-behavior/user-identity-manager";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
