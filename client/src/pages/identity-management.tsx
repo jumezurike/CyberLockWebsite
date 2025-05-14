@@ -1,14 +1,14 @@
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import React, { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Users, Shield, Download, Upload, UserPlus, FileText, AlertTriangle } from 'lucide-react';
-import UserIdentityTemplate from '@/components/identity-behavior/user-identity-template';
+import { Users, AlertTriangle, Download, Upload, ChevronLeft } from 'lucide-react';
+import { Link } from 'wouter';
 
-// Sample identity data for display purposes
-const sampleIdentities = [
+// Sample data for demonstration purposes
+const identitiesData = [
   {
     id: 'EMP001',
     name: 'John Smith',
@@ -17,9 +17,8 @@ const sampleIdentities = [
     department: 'Information Technology',
     type: 'human',
     accessLevel: 'privileged',
-    mfaEnabled: true,
     lastActive: '2025-05-01',
-    riskScore: 'low'
+    riskLevel: 'low'
   },
   {
     id: 'EMP002',
@@ -29,9 +28,8 @@ const sampleIdentities = [
     department: 'Finance',
     type: 'human',
     accessLevel: 'admin',
-    mfaEnabled: true,
     lastActive: '2025-05-11',
-    riskScore: 'low'
+    riskLevel: 'high'
   },
   {
     id: 'SVC001',
@@ -41,9 +39,8 @@ const sampleIdentities = [
     department: 'Operations',
     type: 'machine',
     accessLevel: 'standard',
-    mfaEnabled: false,
     lastActive: '2025-05-12',
-    riskScore: 'medium'
+    riskLevel: 'medium'
   },
   {
     id: 'API001',
@@ -53,9 +50,8 @@ const sampleIdentities = [
     department: 'Finance',
     type: 'api',
     accessLevel: 'limited',
-    mfaEnabled: true,
     lastActive: '2025-05-10',
-    riskScore: 'medium'
+    riskLevel: 'high'
   },
   {
     id: 'VEN001',
@@ -65,268 +61,204 @@ const sampleIdentities = [
     department: 'External',
     type: 'third-party',
     accessLevel: 'limited',
-    mfaEnabled: true,
     lastActive: '2025-04-30',
-    riskScore: 'high'
+    riskLevel: 'medium'
+  }
+];
+
+// Recent activities data
+const recentActivities = [
+  {
+    id: 1,
+    type: 'Unusual Login Location',
+    details: 'Sarah Johnson (EMP002) logged in from an unusual location - New York, NY',
+    timestamp: '2025-05-12 08:42:13',
+    severity: 'warning'
+  },
+  {
+    id: 2,
+    type: 'Privileged Access',
+    details: 'John Smith (EMP001) escalated privileges on Finance Database',
+    timestamp: '2025-05-11 14:37:22',
+    severity: 'info'
+  },
+  {
+    id: 3,
+    type: 'Failed Authentication',
+    details: 'Multiple failed login attempts for API001 from unauthorized IP',
+    timestamp: '2025-05-10 23:15:51',
+    severity: 'high'
   }
 ];
 
 export default function IdentityManagement() {
-  // Function to download the CSV template
-  const downloadTemplate = () => {
-    // The content includes the header and sample data
-    const csvHeader = "user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source";
-    
-    // Sample data rows provided in the template
-    const sampleData = [
-      "EMP001,John,Smith,john.smith@example.com,IT Manager,Information Technology,human,privileged,drivers_license,NY-DMV,yes,app+sms,Headquarters,jane.doe@example.com,Full Time,2025-04-15,2025-03-01,\"ERP, CRM, IT Admin Portal\",9:00-17:00,medium,30,yes,60,yes,Active Directory",
-      "EMP002,Sarah,Johnson,sarah.johnson@example.com,Finance Director,Finance,human,admin,state_id,CA-DMV,yes,hardware,Headquarters,executive@example.com,Full Time,2025-04-20,2025-03-01,\"ERP, Finance Portal, Expense System\",8:00-18:00,high,30,yes,30,yes,Okta SSO",
-      "SVC001,Backup,Service,backup-service@system.internal,Automated Process,Operations,machine,standard,not_applicable,not_applicable,no,,Data Center,john.smith@example.com,System,2025-01-15,N/A,\"Backup System, Storage Access\",,low,365,no,0,yes,Local",
-      "API001,Payment,Gateway,api-monitor@example.com,External Service,Finance,api,limited,not_applicable,not_applicable,yes,api-key,Cloud,sarah.johnson@example.com,Service,2025-03-30,N/A,\"Payment Processing System\",,high,90,yes,15,yes,AWS IAM",
-      "VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,passport,US-State-Dept,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,\"Ticketing System, Knowledge Base\",9:00-20:00,medium,45,yes,20,yes,External IDP"
-    ];
-    
-    const csvContent = [csvHeader, ...sampleData].join('\n');
-    
-    // Create and trigger download
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'user-identity-template.csv';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
-
-  // Function to handle file upload
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    // In a real implementation, this would process the CSV file
-    console.log('File upload triggered', event.target.files?.[0]?.name);
-    alert('File upload functionality would be implemented here');
-  };
-
+  const [activeTab, setActiveTab] = useState('dashboard');
+  
+  // Count high risk identities
+  const highRiskCount = identitiesData.filter(id => id.riskLevel === 'high').length;
+  
+  // Count by identity type
+  const humanCount = identitiesData.filter(id => id.type === 'human').length;
+  const machineCount = identitiesData.filter(id => id.type === 'machine').length;
+  const apiCount = identitiesData.filter(id => id.type === 'api').length;
+  const thirdPartyCount = identitiesData.filter(id => id.type === 'third-party').length;
+  
   return (
-    <div className="container py-10">
-      <div className="flex flex-col gap-6">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div>
-            <h1 className="text-3xl font-bold flex items-center">
-              <Users className="mr-2 h-8 w-8 text-blue-600" />
-              Universal Identity Verification System
-            </h1>
-            <p className="text-gray-500 mt-1">
-              Centralized management for human, machine, API, and third-party identities
-            </p>
-          </div>
+    <div className="flex flex-col min-h-screen bg-slate-50">
+      <div className="p-6">
+        <div className="mb-6">
+          <Link href="/sos2a-tool" className="inline-flex items-center text-blue-600 hover:text-blue-800">
+            <ChevronLeft className="mr-1 h-4 w-4" />
+            Back to Assessment
+          </Link>
           
-          <div className="flex flex-wrap gap-3">
-            <Button onClick={downloadTemplate} variant="outline" className="flex items-center">
-              <Download className="mr-2 h-4 w-4" />
-              Download Template
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center"
-              onClick={() => document.getElementById('file-upload')?.click()}
-            >
-              <Upload className="mr-2 h-4 w-4" />
-              Import Identities
-              <input
-                id="file-upload"
-                type="file"
-                accept=".csv"
-                onChange={handleFileUpload}
-                className="hidden"
-              />
-            </Button>
-            <Button className="flex items-center">
-              <UserPlus className="mr-2 h-4 w-4" />
-              Add Identity
-            </Button>
-          </div>
+          <h1 className="text-3xl font-bold mt-2">Identity Management</h1>
+          <p className="text-gray-600 mt-1">
+            Manage and monitor all identity types across your organization using our patented Universal Identity Verification System (UIVS).
+          </p>
         </div>
         
-        {/* Dashboard Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl">Identity Types</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span>Human Users</span>
-                  <Badge>2</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Machine Identities</span>
-                  <Badge variant="outline">1</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>API Identities</span>
-                  <Badge variant="secondary">1</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Third-Party</span>
-                  <Badge variant="destructive">1</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <Tabs defaultValue="dashboard" className="w-full" onValueChange={setActiveTab}>
+          <TabsList className="grid grid-cols-4 bg-gray-100">
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
+            <TabsTrigger value="identities">Identities</TabsTrigger>
+            <TabsTrigger value="import-export">Import / Export</TabsTrigger>
+            <TabsTrigger value="templates">Templates</TabsTrigger>
+          </TabsList>
           
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl">Access Levels</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span>Standard</span>
-                  <Badge>1</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Limited</span>
-                  <Badge variant="outline">2</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Admin</span>
-                  <Badge variant="secondary">1</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Privileged</span>
-                  <Badge variant="destructive">1</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl">Security Status</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span>MFA Enabled</span>
-                  <Badge className="bg-green-500">4</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>MFA Disabled</span>
-                  <Badge variant="destructive">1</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Password Expired</span>
-                  <Badge variant="outline">0</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Security Training Due</span>
-                  <Badge variant="secondary">2</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-          
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-xl">Risk Analysis</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between items-center">
-                  <span>Low Risk</span>
-                  <Badge className="bg-green-500">2</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Medium Risk</span>
-                  <Badge className="bg-yellow-500">2</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>High Risk</span>
-                  <Badge className="bg-red-500">1</Badge>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span>Critical Risk</span>
-                  <Badge variant="destructive">0</Badge>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-        
-        {/* Identity Management Interface */}
-        <Card className="mt-6">
-          <CardHeader>
-            <CardTitle>Identity Management</CardTitle>
-            <CardDescription>
-              View and manage all identities across your organization
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Tabs defaultValue="all" className="w-full">
-              <TabsList className="mb-4">
-                <TabsTrigger value="all">All Identities</TabsTrigger>
-                <TabsTrigger value="human">Human</TabsTrigger>
-                <TabsTrigger value="machine">Machine</TabsTrigger>
-                <TabsTrigger value="api">API</TabsTrigger>
-                <TabsTrigger value="third-party">Third-Party</TabsTrigger>
-              </TabsList>
+          {/* Dashboard Tab */}
+          <TabsContent value="dashboard" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {/* Total Identities Card */}
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex flex-col space-y-3">
+                    <h3 className="font-medium text-gray-500">Total Identities</h3>
+                    <p className="text-sm text-gray-500">All managed identities</p>
+                    <div className="flex items-center">
+                      <Users className="h-8 w-8 text-blue-500 mr-3" />
+                      <span className="text-3xl font-bold">{identitiesData.length}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
               
-              <TabsContent value="all">
-                <div className="overflow-x-auto">
+              {/* High Risk Identities Card */}
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex flex-col space-y-3">
+                    <h3 className="font-medium text-gray-500">High Risk Identities</h3>
+                    <p className="text-sm text-gray-500">Require attention</p>
+                    <div className="flex items-center">
+                      <AlertTriangle className="h-8 w-8 text-red-500 mr-3" />
+                      <span className="text-3xl font-bold">{highRiskCount}</span>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+              
+              {/* Identity Types Card */}
+              <Card>
+                <CardContent className="pt-6">
+                  <div className="flex flex-col space-y-3">
+                    <h3 className="font-medium text-gray-500">Identity Types</h3>
+                    <p className="text-sm text-gray-500">Distribution by category</p>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge className="bg-blue-500">{humanCount} Human</Badge>
+                      <Badge className="bg-gray-500">{machineCount} Machine</Badge>
+                      <Badge className="bg-purple-500">{apiCount} API</Badge>
+                      <Badge className="bg-orange-500">{thirdPartyCount} Third-Party</Badge>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+            
+            {/* Recent Activities Section */}
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex flex-col space-y-4">
+                  <h3 className="font-medium text-gray-500">Recent Activities</h3>
+                  <p className="text-sm text-gray-500">Latest identity-related security events</p>
+                  
+                  <div className="space-y-4">
+                    {recentActivities.map(activity => (
+                      <div key={activity.id} className="border-l-4 pl-4 py-2" 
+                        style={{ 
+                          borderColor: activity.severity === 'high' ? 'rgb(239, 68, 68)' : 
+                                      activity.severity === 'warning' ? 'rgb(245, 158, 11)' : 
+                                      'rgb(59, 130, 246)'
+                        }}>
+                        <div className="flex justify-between">
+                          <h4 className="font-medium">{activity.type}</h4>
+                          <Badge 
+                            className={
+                              activity.severity === 'high' ? 'bg-red-500' :
+                              activity.severity === 'warning' ? 'bg-yellow-500' :
+                              'bg-blue-500'
+                            }
+                          >
+                            {activity.severity.charAt(0).toUpperCase() + activity.severity.slice(1)}
+                          </Badge>
+                        </div>
+                        <p className="text-sm mt-1">{activity.details}</p>
+                        <p className="text-xs text-gray-500 mt-1">{activity.timestamp}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          {/* Identities Tab */}
+          <TabsContent value="identities">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex justify-between mb-4">
+                  <h3 className="font-medium text-gray-500">Managed Identities</h3>
+                  <Button size="sm">Add New Identity</Button>
+                </div>
+                
+                <div className="rounded-md border overflow-hidden">
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-[100px]">ID</TableHead>
+                        <TableHead>ID</TableHead>
                         <TableHead>Name</TableHead>
-                        <TableHead>Email / Contact</TableHead>
-                        <TableHead>Role / Department</TableHead>
                         <TableHead>Type</TableHead>
+                        <TableHead>Department</TableHead>
                         <TableHead>Access Level</TableHead>
-                        <TableHead>MFA</TableHead>
-                        <TableHead>Risk Score</TableHead>
+                        <TableHead>Last Active</TableHead>
+                        <TableHead>Risk Level</TableHead>
                         <TableHead>Actions</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {sampleIdentities.map((identity) => (
+                      {identitiesData.map(identity => (
                         <TableRow key={identity.id}>
                           <TableCell className="font-medium">{identity.id}</TableCell>
                           <TableCell>{identity.name}</TableCell>
-                          <TableCell>{identity.email}</TableCell>
-                          <TableCell>{identity.role} / {identity.department}</TableCell>
                           <TableCell>
-                            <Badge variant={
-                              identity.type === 'human' ? 'default' :
-                              identity.type === 'machine' ? 'outline' :
-                              identity.type === 'api' ? 'secondary' : 'destructive'
+                            <Badge className={
+                              identity.type === 'human' ? 'bg-blue-500' :
+                              identity.type === 'machine' ? 'bg-gray-500' :
+                              identity.type === 'api' ? 'bg-purple-500' :
+                              'bg-orange-500'
                             }>
                               {identity.type}
                             </Badge>
                           </TableCell>
-                          <TableCell>
-                            <Badge variant={
-                              identity.accessLevel === 'standard' ? 'default' :
-                              identity.accessLevel === 'limited' ? 'outline' :
-                              identity.accessLevel === 'admin' ? 'secondary' : 'destructive'
-                            }>
-                              {identity.accessLevel}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            {identity.mfaEnabled ? (
-                              <Badge className="bg-green-500">Enabled</Badge>
-                            ) : (
-                              <Badge variant="outline" className="text-red-500 border-red-500">Disabled</Badge>
-                            )}
-                          </TableCell>
+                          <TableCell>{identity.department}</TableCell>
+                          <TableCell>{identity.accessLevel}</TableCell>
+                          <TableCell>{identity.lastActive}</TableCell>
                           <TableCell>
                             <Badge className={
-                              identity.riskScore === 'low' ? 'bg-green-500' :
-                              identity.riskScore === 'medium' ? 'bg-yellow-500' : 'bg-red-500'
+                              identity.riskLevel === 'low' ? 'bg-green-500' :
+                              identity.riskLevel === 'medium' ? 'bg-yellow-500' :
+                              'bg-red-500'
                             }>
-                              {identity.riskScore}
+                              {identity.riskLevel}
                             </Badge>
                           </TableCell>
                           <TableCell>
@@ -337,106 +269,149 @@ export default function IdentityManagement() {
                     </TableBody>
                   </Table>
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="human">
-                <div className="overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[100px]">ID</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Email / Contact</TableHead>
-                        <TableHead>Role / Department</TableHead>
-                        <TableHead>Access Level</TableHead>
-                        <TableHead>MFA</TableHead>
-                        <TableHead>Risk Score</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {sampleIdentities.filter(i => i.type === 'human').map((identity) => (
-                        <TableRow key={identity.id}>
-                          <TableCell className="font-medium">{identity.id}</TableCell>
-                          <TableCell>{identity.name}</TableCell>
-                          <TableCell>{identity.email}</TableCell>
-                          <TableCell>{identity.role} / {identity.department}</TableCell>
-                          <TableCell>
-                            <Badge variant={
-                              identity.accessLevel === 'standard' ? 'default' :
-                              identity.accessLevel === 'limited' ? 'outline' :
-                              identity.accessLevel === 'admin' ? 'secondary' : 'destructive'
-                            }>
-                              {identity.accessLevel}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            {identity.mfaEnabled ? (
-                              <Badge className="bg-green-500">Enabled</Badge>
-                            ) : (
-                              <Badge variant="outline" className="text-red-500 border-red-500">Disabled</Badge>
-                            )}
-                          </TableCell>
-                          <TableCell>
-                            <Badge className={
-                              identity.riskScore === 'low' ? 'bg-green-500' :
-                              identity.riskScore === 'medium' ? 'bg-yellow-500' : 'bg-red-500'
-                            }>
-                              {identity.riskScore}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Button variant="ghost" size="sm">View</Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </TabsContent>
-              
-              {/* Similar tables for other tabs (machine, api, third-party) would go here */}
-              <TabsContent value="machine">
-                <div className="flex justify-center py-10">
-                  <div className="text-center">
-                    <Shield className="h-20 w-20 text-blue-200 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium mb-2">View Filtered Machine Identities</h3>
-                    <p className="text-gray-500 max-w-md mx-auto">
-                      In a complete implementation, this tab would show machine identities filtered from the main list.
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          {/* Import / Export Tab */}
+          <TabsContent value="import-export">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="border rounded-md p-6 flex flex-col items-center text-center">
+                    <Download className="h-12 w-12 text-blue-500 mb-4" />
+                    <h3 className="text-lg font-medium mb-2">Export Identities</h3>
+                    <p className="text-sm text-gray-500 mb-4">
+                      Download all identity data in CSV format for backup or analysis
                     </p>
+                    <Button className="mt-2">
+                      Export CSV
+                    </Button>
+                  </div>
+                  
+                  <div className="border rounded-md p-6 flex flex-col items-center text-center">
+                    <Upload className="h-12 w-12 text-blue-500 mb-4" />
+                    <h3 className="text-lg font-medium mb-2">Import Identities</h3>
+                    <p className="text-sm text-gray-500 mb-4">
+                      Bulk import identities using our standardized CSV template
+                    </p>
+                    <div className="flex gap-2">
+                      <Button variant="outline" onClick={() => {
+                        // Download template functionality
+                        const csvHeader = "user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source";
+                        
+                        const sampleData = [
+                          "EMP001,John,Smith,john.smith@example.com,IT Manager,Information Technology,human,privileged,drivers_license,NY-DMV,yes,app+sms,Headquarters,jane.doe@example.com,Full Time,2025-04-15,2025-03-01,\"ERP, CRM, IT Admin Portal\",9:00-17:00,medium,30,yes,60,yes,Active Directory",
+                          "EMP002,Sarah,Johnson,sarah.johnson@example.com,Finance Director,Finance,human,admin,state_id,CA-DMV,yes,hardware,Headquarters,executive@example.com,Full Time,2025-04-20,2025-03-01,\"ERP, Finance Portal, Expense System\",8:00-18:00,high,30,yes,30,yes,Okta SSO",
+                          "SVC001,Backup,Service,backup-service@system.internal,Automated Process,Operations,machine,standard,not_applicable,not_applicable,no,,Data Center,john.smith@example.com,System,2025-01-15,N/A,\"Backup System, Storage Access\",,low,365,no,0,yes,Local",
+                          "API001,Payment,Gateway,api-monitor@example.com,External Service,Finance,api,limited,not_applicable,not_applicable,yes,api-key,Cloud,sarah.johnson@example.com,Service,2025-03-30,N/A,\"Payment Processing System\",,high,90,yes,15,yes,AWS IAM",
+                          "VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,passport,US-State-Dept,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,\"Ticketing System, Knowledge Base\",9:00-20:00,medium,45,yes,20,yes,External IDP"
+                        ];
+                        
+                        const csvContent = [csvHeader, ...sampleData].join('\n');
+                        
+                        const blob = new Blob([csvContent], { type: 'text/csv' });
+                        const url = URL.createObjectURL(blob);
+                        const link = document.createElement('a');
+                        link.href = url;
+                        link.download = 'user-identity-template.csv';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}>
+                        Download Template
+                      </Button>
+                      <Button>
+                        Upload CSV
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="api">
-                <div className="flex justify-center py-10">
-                  <div className="text-center">
-                    <Shield className="h-20 w-20 text-blue-200 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium mb-2">View Filtered API Identities</h3>
-                    <p className="text-gray-500 max-w-md mx-auto">
-                      In a complete implementation, this tab would show API identities filtered from the main list.
+              </CardContent>
+            </Card>
+          </TabsContent>
+          
+          {/* Templates Tab */}
+          <TabsContent value="templates">
+            <Card>
+              <CardContent className="pt-6">
+                <h3 className="font-medium text-gray-500 mb-4">Identity Templates</h3>
+                
+                <div className="space-y-4">
+                  <div className="border rounded-md p-4">
+                    <h4 className="font-medium mb-2">Standard User Template</h4>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Basic template for standard employee accounts with normal access privileges
                     </p>
+                    <div className="flex gap-2">
+                      <Badge>Human</Badge>
+                      <Badge variant="outline">Standard Access</Badge>
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <Button variant="outline" size="sm">Use Template</Button>
+                    </div>
+                  </div>
+                  
+                  <div className="border rounded-md p-4">
+                    <h4 className="font-medium mb-2">Privileged Admin Template</h4>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Template for IT administrators with elevated system privileges
+                    </p>
+                    <div className="flex gap-2">
+                      <Badge>Human</Badge>
+                      <Badge variant="destructive">Privileged Access</Badge>
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <Button variant="outline" size="sm">Use Template</Button>
+                    </div>
+                  </div>
+                  
+                  <div className="border rounded-md p-4">
+                    <h4 className="font-medium mb-2">Service Account Template</h4>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Template for automated service accounts with specific access scopes
+                    </p>
+                    <div className="flex gap-2">
+                      <Badge variant="secondary">Machine</Badge>
+                      <Badge variant="outline">Limited Access</Badge>
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <Button variant="outline" size="sm">Use Template</Button>
+                    </div>
+                  </div>
+                  
+                  <div className="border rounded-md p-4">
+                    <h4 className="font-medium mb-2">API Integration Template</h4>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Template for API connections with proper authentication settings
+                    </p>
+                    <div className="flex gap-2">
+                      <Badge className="bg-purple-500">API</Badge>
+                      <Badge variant="outline">Limited Access</Badge>
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <Button variant="outline" size="sm">Use Template</Button>
+                    </div>
+                  </div>
+                  
+                  <div className="border rounded-md p-4">
+                    <h4 className="font-medium mb-2">Vendor Access Template</h4>
+                    <p className="text-sm text-gray-500 mb-3">
+                      Template for third-party vendor accounts with restricted permissions
+                    </p>
+                    <div className="flex gap-2">
+                      <Badge className="bg-orange-500">Third-Party</Badge>
+                      <Badge variant="outline">Limited Access</Badge>
+                    </div>
+                    <div className="flex justify-end mt-4">
+                      <Button variant="outline" size="sm">Use Template</Button>
+                    </div>
                   </div>
                 </div>
-              </TabsContent>
-              
-              <TabsContent value="third-party">
-                <div className="flex justify-center py-10">
-                  <div className="text-center">
-                    <Shield className="h-20 w-20 text-blue-200 mx-auto mb-4" />
-                    <h3 className="text-xl font-medium mb-2">View Filtered Third-Party Identities</h3>
-                    <p className="text-gray-500 max-w-md mx-auto">
-                      In a complete implementation, this tab would show third-party identities filtered from the main list.
-                    </p>
-                  </div>
-                </div>
-              </TabsContent>
-            </Tabs>
-          </CardContent>
-        </Card>
-        
-        {/* Template Information */}
-        <UserIdentityTemplate />
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );
