@@ -393,19 +393,17 @@ export default function IdentityManagement() {
                   {/* Central DNA identity concept */}
                   <div className="flex flex-col items-center justify-center mb-12">
                     <div className="relative">
-                      {/* Center nucleus with fingerprint - exactly matching the deployed version */}
-                      <div className="w-24 h-24 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center mb-3 relative z-10 shadow-lg">
-                        <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-indigo-600">
-                            <path d="M12 12c0-1.657-1.343-3-3-3s-3 1.343-3 3 1.343 3 3 3 3-1.343 3-3z"></path>
-                            <path d="M12 12c0 2.761-2.239 5-5 5s-5-2.239-5-5 2.239-5 5-5 5 2.239 5 5z"></path>
-                            <path d="M12 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z"></path>
-                            <path d="M17 12c0-2.761-2.239-5-5-5"></path>
-                            <path d="M17 12c0 2.761-2.239 5-5 5s-5-2.239-5-5"></path>
-                            <path d="M17 7c0-2.761-2.239-5-5-5s-5 2.239-5 5"></path>
-                            <path d="M17 12c0 4.418-3.582 8-8 8"></path>
-                          </svg>
-                        </div>
+                      {/* Center nucleus with fingerprint - exactly matching the reference image */}
+                      <div className="w-16 h-16 rounded-full bg-[#4558f1] flex items-center justify-center mb-3 relative z-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 12c0-1.657-1.343-3-3-3s-3 1.343-3 3 1.343 3 3 3 3-1.343 3-3z"></path>
+                          <path d="M12 12c0 2.761-2.239 5-5 5s-5-2.239-5-5 2.239-5 5-5 5 2.239 5 5z"></path>
+                          <path d="M12 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z"></path>
+                          <path d="M17 12c0-2.761-2.239-5-5-5"></path>
+                          <path d="M17 12c0 2.761-2.239 5-5 5s-5-2.239-5-5"></path>
+                          <path d="M17 7c0-2.761-2.239-5-5-5s-5 2.239-5 5"></path>
+                          <path d="M17 12c0 4.418-3.582 8-8 8"></path>
+                        </svg>
                       </div>
                     </div>
                     <h4 className="font-semibold text-center">Universal Digital Identity</h4>
@@ -414,8 +412,7 @@ export default function IdentityManagement() {
                     </p>
                   </div>
                   
-                  {/* Dotted circular border around the central identity - animated as in the deployed version */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-dashed border-[1px] border-gray-300 -z-10 animate-spin-slow"></div>
+                  {/* No dotted circular border in the reference image */}
                   
                   {/* Three connected elements - Top Row */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
