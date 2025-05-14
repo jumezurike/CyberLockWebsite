@@ -86,7 +86,10 @@ export interface DeviceInventoryTracking {
 }
 
 export interface IdentityBehaviorHygiene {
-  // 1. Authentication Practices
+  // 1. Identification
+  identificationMethod?: string;
+  
+  // Authentication Practices
   passwordPolicyCompliance?: boolean;
   passwordPolicyDetails?: string;
   mfaStatus?: boolean;
