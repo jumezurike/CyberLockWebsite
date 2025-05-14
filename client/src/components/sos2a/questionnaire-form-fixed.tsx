@@ -28,7 +28,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Sos2aFormData } from "@/lib/sos2a-types";
-import { UserIdentityManager } from "@/components/identity-behavior/user-identity-manager";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
@@ -190,7 +189,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const [eulaAccepted, setEulaAccepted] = useState(false);
   const [deviceTypeFilter, setDeviceTypeFilter] = useState<string>("all");
   const [filteredDevices, setFilteredDevices] = useState<any[]>([]);
-  const [showIdentityManager, setShowIdentityManager] = useState(false);
   
   // CSV template handling
   const generateCsvTemplate = () => {
@@ -4594,7 +4592,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         type="button" 
                         variant="outline" 
                         size="sm"
-                        onClick={() => setShowIdentityManager(true)}
+                        onClick={() => window.location.href = "/identity-management"}
                       >
                         Manage User Identities
                       </Button>
@@ -6821,12 +6819,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
           </form>
         </Form>
       </CardContent>
-      {showIdentityManager && (
-        <UserIdentityManager 
-          open={showIdentityManager} 
-          onOpenChange={setShowIdentityManager} 
-        />
-      )}
     </Card>
   );
 }
