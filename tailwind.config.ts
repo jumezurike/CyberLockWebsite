@@ -84,6 +84,11 @@ export default {
             transform: 'rotate(-360deg)',
           },
         },
+        "dash-offset": {
+          to: {
+            strokeDashoffset: '-50',
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -91,6 +96,7 @@ export default {
         "spin-slow": "spin 40s linear infinite",
         "spin-medium": "spin 20s linear infinite",
         "spin-reverse": "spin-reverse 20s linear infinite",
+        "dash-around": "dash-offset 20s linear infinite",
       },
     },
   },

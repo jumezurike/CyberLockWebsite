@@ -390,18 +390,27 @@ export default function IdentityManagement() {
                 <p className="text-sm text-gray-500 mb-8">The comprehensive aggregation of identity data forming a complete digital profile</p>
                 
                 <div className="relative">
-                  {/* Exact match to the layout in the image (universal-digital-identity-screenshot.png) */}
+                  {/* Encircling layout with dashed line going around all identity elements */}
                   <div className="relative py-10">
                     <div className="flex flex-col items-center">
-                      {/* Centered container for fingerprint and circle */}
-                      <div className="relative mb-6">
-                        {/* Visible part of the dashed circle */}
-                        <div className="absolute w-[750px] h-[750px] border border-dashed border-gray-300 rounded-full left-1/2 transform -translate-x-1/2 top-[50px] animate-spin-medium">
-                          {/* The circle is positioned so it passes through the center of the icon */}
+                      {/* Container for entire identity visualization with dashed encircling line */}
+                      <div className="relative">
+                        {/* We'll use a pseudo SVG path for the encircling dashed line that will contain ALL elements */}
+                        <div className="absolute inset-0 w-full h-[800px]">
+                          <svg className="w-full h-full absolute top-0 left-0" xmlns="http://www.w3.org/2000/svg">
+                            <path 
+                              d="M400,70 C600,70 700,200 700,350 C700,650 100,650 100,350 C100,200 200,70 400,70" 
+                              fill="none" 
+                              stroke="#d1d5db" 
+                              strokeWidth="1" 
+                              strokeDasharray="5,5"
+                              className="animate-dash-around"
+                            />
+                          </svg>
                         </div>
                         
-                        {/* Blue fingerprint icon - positioned exactly as in reference */}
-                        <div className="relative z-10 w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center">
+                        {/* Blue fingerprint icon positioned at the top of the path */}
+                        <div className="relative z-10 w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center mx-auto">
                           <Fingerprint className="h-10 w-10 text-white" />
                         </div>
                       </div>
