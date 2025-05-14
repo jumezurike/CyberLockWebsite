@@ -5548,9 +5548,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 3. Access 8. Access & Permissions Permissions Section */}
+                  {/* 3. Access & Permissions Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Access 3. Access 3. Access 8. Access & Permissions Permissions Permissions Permissions</h4>
+                    <h4 className="font-medium mb-4">3. Access & Permissions</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
@@ -5882,9 +5882,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 6. Lifecycle 11. Lifecycle & Governance Governance Section */}
+                  {/* 6. Lifecycle & Governance Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">6. Lifecycle 6. Lifecycle 6. Lifecycle 11. Lifecycle & Governance Governance Governance Governance</h4>
+                    <h4 className="font-medium mb-4">6. Lifecycle & Governance</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
