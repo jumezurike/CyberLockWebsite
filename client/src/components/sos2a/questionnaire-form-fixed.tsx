@@ -5667,18 +5667,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         control={form.control}
                         name="identityBehaviorHygiene.unusedAccountDetection"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>Unused Account Detection</FormLabel>
-                              <FormDescription>
-                                Do you detect and manage accounts inactive for 90+ days?
-                              </FormDescription>
+                          <FormItem className="border p-4 rounded-md h-full flex flex-col justify-center">
+                            <div className="flex flex-row items-start space-x-3">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Unused Account Detection</FormLabel>
+                                <FormDescription>
+                                  Do you detect and manage accounts inactive for 90+ days?
+                                </FormDescription>
+                              </div>
                             </div>
                           </FormItem>
                         )}
@@ -5688,18 +5690,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         control={form.control}
                         name="identityBehaviorHygiene.privilegeEscalationAlerts"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>Privilege Escalation Alerts</FormLabel>
-                              <FormDescription>
-                                Do you monitor and alert on sudo/root usage logs?
-                              </FormDescription>
+                          <FormItem className="border p-4 rounded-md h-full flex flex-col justify-center">
+                            <div className="flex flex-row items-start space-x-3">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Privilege Escalation Alerts</FormLabel>
+                                <FormDescription>
+                                  Do you monitor and alert on sudo/root usage logs?
+                                </FormDescription>
+                              </div>
                             </div>
                           </FormItem>
                         )}
@@ -5707,10 +5711,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 10. Behavior Monitoring Section */}
+                  {/* 5. Behavior Monitoring Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">10. Behavior Monitoring</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">5. Behavior Monitoring</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.typicalLoginPatterns"
