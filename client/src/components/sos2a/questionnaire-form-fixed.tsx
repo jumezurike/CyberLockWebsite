@@ -4830,9 +4830,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 3. Access Behavior Section */}
+                  {/* Access Behavior Section - REMOVED DUPLICATE NUMBER */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Access Behavior</h4>
+                    <h4 className="font-medium mb-4">Access Behavior</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
@@ -5195,7 +5195,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 6. Identity Lifecycle Management Section */}
+                  {/* 6. Identity Lifecycle Management Section - FIXED NUMBERING */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">6. Identity Lifecycle Management</h4>
                     <div className="space-y-6">
@@ -5323,9 +5323,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 2. Authentication Practices Section */}
+                  {/* Authentication Practices Section - REMOVED DUPLICATE NUMBER */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">2. Authentication Practices</h4>
+                    <h4 className="font-medium mb-4">Authentication Practices</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
