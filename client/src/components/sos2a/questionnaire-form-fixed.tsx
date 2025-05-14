@@ -1075,10 +1075,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="device-inventory">12. Device Inventory Tracking</TabsTrigger>
               </TabsList>
               <TabsList className="grid grid-cols-4 mb-6">
+                <TabsTrigger value="device-inventory-bulk">12b. Device Inventory Bulk</TabsTrigger>
                 <TabsTrigger value="identity-behavior">13. Identity Behavior & Hygiene</TabsTrigger>
                 <TabsTrigger value="contact">14. Contact Confirmation</TabsTrigger>
                 <TabsTrigger value="review" className="bg-[#7936b0] text-white hover:bg-[#6b2aa2]">15. Review & Submit Your Questionnaire</TabsTrigger>
-                <TabsTrigger value="" disabled></TabsTrigger>
               </TabsList>
               
               {/* Business Information Tab */}
