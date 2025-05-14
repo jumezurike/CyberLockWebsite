@@ -390,33 +390,34 @@ export default function IdentityManagement() {
                 <p className="text-sm text-gray-500 mb-8">The comprehensive aggregation of identity data forming a complete digital profile</p>
                 
                 <div className="relative">
-                  {/* DNA Circle with Fingerprint - Exact match to new reference image */}
-                  <div className="flex flex-col items-center relative">
-                    {/* A centered container for the entire diagram */}
-                    <div className="relative w-full max-w-[1100px] flex flex-col items-center">
-                      {/* Diagram container with exact positioning */}
-                      <div className="relative w-full">
-                        {/* Large dashed circle with animation */}
-                        <div className="w-[700px] h-[700px] absolute left-1/2 transform -translate-x-1/2 -translate-y-[350px] top-1/2 border border-dashed border-gray-300 rounded-full animate-spin-medium"></div>
+                  {/* Exact match to the layout in the image (universal-digital-identity-screenshot.png) */}
+                  <div className="relative py-10">
+                    <div className="flex flex-col items-center">
+                      {/* Centered container for fingerprint and circle */}
+                      <div className="relative mb-6">
+                        {/* Visible part of the dashed circle */}
+                        <div className="absolute w-[750px] h-[750px] border border-dashed border-gray-300 rounded-full left-1/2 transform -translate-x-1/2 top-[50px] animate-spin-medium">
+                          {/* The circle is positioned so it passes through the center of the icon */}
+                        </div>
                         
-                        {/* Blue fingerprint icon positioned exactly as in reference */}
-                        <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-[220px] w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center z-10">
+                        {/* Blue fingerprint icon - positioned exactly as in reference */}
+                        <div className="relative z-10 w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center">
                           <Fingerprint className="h-10 w-10 text-white" />
                         </div>
-                        
-                        {/* Text content positioned below the fingerprint */}
-                        <div className="absolute left-1/2 transform -translate-x-1/2 -translate-y-[120px] text-center w-full">
-                          <h3 className="font-semibold text-lg">Universal Digital Identity</h3>
-                          <p className="text-sm text-gray-600 max-w-md mx-auto">
-                            The DNA forms an immutable, verifiable identity core that combines government-verified credentials with behavioral intelligence.
-                          </p>
-                        </div>
+                      </div>
+                      
+                      {/* Text content matching reference image exactly */}
+                      <div className="text-center mt-8 mb-16">
+                        <h3 className="text-xl font-medium mb-1">Universal Digital Identity</h3>
+                        <p className="text-sm text-gray-600 max-w-md mx-auto">
+                          The DNA forms an immutable, verifiable identity core that combines government-verified credentials with behavioral intelligence.
+                        </p>
                       </div>
                     </div>
                   </div>
                   
-                  {/* First row of connected boxes */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 relative mt-40">
+                  {/* First row of boxes - matching reference image exactly */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     {/* We removed connection lines to match the reference image */}
                     {/* Government Identity Verification */}
                     <div className="border rounded-lg p-4 bg-red-50">
@@ -506,8 +507,8 @@ export default function IdentityManagement() {
                   
                   {/* No vertical connector to match reference */}
                   
-                  {/* Second row of connected boxes */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 relative">
+                  {/* Second row of boxes - matching reference image */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     {/* No connections to match reference image */}
                     
                     {/* Access & Entitlements */}
