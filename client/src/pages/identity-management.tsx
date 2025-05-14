@@ -393,8 +393,11 @@ export default function IdentityManagement() {
                   {/* Central DNA identity concept */}
                   <div className="flex flex-col items-center justify-center mb-12">
                     <div className="relative">
-                      {/* Thin moving circle that passes through the blue circle */}
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-[#4558f1] opacity-40 animate-[spin_15s_linear_infinite]"></div>
+                      {/* Large moving circle that passes through the blue circle */}
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border border-[#4558f1] opacity-40 animate-[spin_15s_linear_infinite]"></div>
+                      
+                      {/* Second moving circle in opposite direction */}
+                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-[#4558f1] opacity-20 animate-spin-reverse"></div>
                       
                       {/* Main fingerprint circle */}
                       <div className="w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center mb-3 relative z-10">
