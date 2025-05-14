@@ -404,7 +404,8 @@ export default function IdentityManagement() {
                     </p>
                   </div>
                   
-                  {/* No dotted circular border in the reference image */}
+                  {/* Animated dotted circular border around the fingerprint icon */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-4 border-dashed border-gray-300 -z-10 animate-spin-slow"></div>
                   
                   {/* Three connected elements - Top Row */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
