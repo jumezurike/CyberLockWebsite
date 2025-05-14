@@ -190,6 +190,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const [eulaAccepted, setEulaAccepted] = useState(false);
   const [deviceTypeFilter, setDeviceTypeFilter] = useState<string>("all");
   const [filteredDevices, setFilteredDevices] = useState<any[]>([]);
+  const [showIdentityManager, setShowIdentityManager] = useState(false);
   
   // CSV template handling
   const generateCsvTemplate = () => {
