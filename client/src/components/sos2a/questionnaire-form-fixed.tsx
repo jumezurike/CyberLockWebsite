@@ -5278,8 +5278,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   
                   {/* 6. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">6. Identification</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">1. Identification</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.userId"
@@ -5355,10 +5355,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 7. Classification Section */}
+                  {/* 2. Classification Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">7. Classification</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">2. Classification</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.accessTier"
@@ -5461,10 +5461,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 8. Access & Permissions Section */}
+                  {/* 3. Access & Permissions Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">8. Access & Permissions</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">3. Access & Permissions</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.assignedRoles"
@@ -5525,7 +5525,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         )}
                       />
                       
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div className="flex flex-col gap-4">
                         <FormField
                           control={form.control}
                           name="identityBehaviorHygiene.mfaStatus2"
