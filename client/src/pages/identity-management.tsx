@@ -390,12 +390,15 @@ export default function IdentityManagement() {
                 <p className="text-sm text-gray-500 mb-8">The comprehensive aggregation of identity data forming a complete digital profile</p>
                 
                 <div className="relative">
-                  {/* DNA Circle with Fingerprint - Exactly matching reference image */}
-                  <div className="flex flex-col items-center mb-16 relative">
-                    {/* This is the container that holds both circle and icon */}
+                  {/* DNA Circle with Fingerprint and connecting lines */}
+                  <div className="flex flex-col items-center relative">
+                    {/* This is the container that holds the circle and icon */}
                     <div className="relative w-[700px] h-[700px]">
-                      {/* The spinning dashed border - positioned to match reference */}
+                      {/* The spinning dashed border */}
                       <div className="absolute inset-0 rounded-full border border-dashed border-gray-300 animate-spin-medium"></div>
+                      
+                      {/* Vertical dashed connection line running down from the center */}
+                      <div className="absolute left-1/2 top-1/2 w-0 h-[350px] border-l border-dashed border-gray-300 transform -translate-x-1/2"></div>
                       
                       {/* Center blue fingerprint positioned in exact center */}
                       <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center">
@@ -403,7 +406,7 @@ export default function IdentityManagement() {
                       </div>
                     </div>
                     
-                    <div className="mt-4 text-center">
+                    <div className="text-center -mt-12">
                       <h3 className="font-semibold text-lg">Universal Digital Identity</h3>
                       <p className="text-sm text-gray-600 max-w-md mx-auto">
                         The DNA forms an immutable, verifiable identity core that combines government-verified credentials with behavioral intelligence.
@@ -411,8 +414,17 @@ export default function IdentityManagement() {
                     </div>
                   </div>
                   
-                  {/* Three connected elements - Top Row */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  {/* Vertical connector between sections */}
+                  <div className="relative h-6 mb-2">
+                    <div className="absolute left-1/2 top-0 h-full border-l border-dashed border-gray-300 transform -translate-x-1/2"></div>
+                  </div>
+                  
+                  {/* Three connected elements - Top Row - with dashed connection lines from center */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 relative">
+                    {/* Dashed connections to grid items */}
+                    <div className="absolute left-1/2 -top-10 w-full h-10 border-b border-dashed border-gray-300"></div>
+                    <div className="absolute left-1/4 -top-10 h-10 border-l border-dashed border-gray-300"></div>
+                    <div className="absolute left-3/4 -top-10 h-10 border-l border-dashed border-gray-300"></div>
                     {/* Government Identity Verification */}
                     <div className="border rounded-lg p-4 bg-red-50">
                       <div className="flex items-center gap-2 mb-2">
@@ -499,8 +511,18 @@ export default function IdentityManagement() {
                     </div>
                   </div>
                   
+                  {/* Vertical connector between rows */}
+                  <div className="relative h-6 mb-2">
+                    <div className="absolute left-1/2 top-0 h-full border-l border-dashed border-gray-300 transform -translate-x-1/2"></div>
+                  </div>
+                  
                   {/* Three connected elements - Middle Row */}
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 relative">
+                    {/* Dashed connections to bottom grid items */}
+                    <div className="absolute left-1/2 -top-10 w-full h-10 border-b border-dashed border-gray-300"></div>
+                    <div className="absolute left-1/4 -top-10 h-10 border-l border-dashed border-gray-300"></div>
+                    <div className="absolute left-3/4 -top-10 h-10 border-l border-dashed border-gray-300"></div>
+                    
                     {/* Access & Entitlements */}
                     <div className="border rounded-lg p-4 bg-indigo-50">
                       <div className="flex items-center gap-2 mb-2">
