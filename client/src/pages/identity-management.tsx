@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Users, AlertTriangle, Download, Upload, ChevronLeft } from 'lucide-react';
 import { Link } from 'wouter';
+import fingerprintCircle from '@assets/fingerprint-circle.svg';
 
 // Sample data for demonstration purposes
 const identitiesData = [
@@ -394,16 +395,8 @@ export default function IdentityManagement() {
                   <div className="flex flex-col items-center justify-center mb-12">
                     <div className="relative">
                       {/* Center nucleus with fingerprint - exactly matching the reference image */}
-                      <div className="w-16 h-16 rounded-full bg-[#4558f1] flex items-center justify-center mb-3 relative z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M12 12c0-1.657-1.343-3-3-3s-3 1.343-3 3 1.343 3 3 3 3-1.343 3-3z"></path>
-                          <path d="M12 12c0 2.761-2.239 5-5 5s-5-2.239-5-5 2.239-5 5-5 5 2.239 5 5z"></path>
-                          <path d="M12 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z"></path>
-                          <path d="M17 12c0-2.761-2.239-5-5-5"></path>
-                          <path d="M17 12c0 2.761-2.239 5-5 5s-5-2.239-5-5"></path>
-                          <path d="M17 7c0-2.761-2.239-5-5-5s-5 2.239-5 5"></path>
-                          <path d="M17 12c0 4.418-3.582 8-8 8"></path>
-                        </svg>
+                      <div className="w-16 h-16 mb-3 relative z-10">
+                        <img src={fingerprintCircle} alt="Fingerprint" className="w-full h-full" />
                       </div>
                     </div>
                     <h4 className="font-semibold text-center">Universal Digital Identity</h4>
