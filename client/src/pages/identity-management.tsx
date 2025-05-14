@@ -390,15 +390,15 @@ export default function IdentityManagement() {
                 <p className="text-sm text-gray-500 mb-8">The comprehensive aggregation of identity data forming a complete digital profile</p>
                 
                 <div className="relative">
-                  {/* DNA Circle with Fingerprint - Fixed position with moving dashed line */}
+                  {/* DNA Circle with Fingerprint - With dashed line passing through the icon */}
                   <div className="flex flex-col items-center mb-16 relative">
-                    {/* Fixed circle position with a separate moving dashed stroke */}
-                    <div className="relative w-[500px] h-[500px] flex items-center justify-center">
-                      {/* The spinning dashed border */}
+                    {/* This is the container that holds both circle and icon */}
+                    <div className="relative w-[500px] h-[500px]">
+                      {/* The spinning dashed border - positioned behind with no z-index */}
                       <div className="absolute inset-0 rounded-full border-2 border-dashed border-gray-400 animate-spin-medium"></div>
                       
-                      {/* Center blue fingerprint in the exact center */}
-                      <div className="w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center z-20">
+                      {/* Center blue fingerprint positioned in exact center, no z-index so circle passes through */}
+                      <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center">
                         <Fingerprint className="h-10 w-10 text-white" />
                       </div>
                     </div>
