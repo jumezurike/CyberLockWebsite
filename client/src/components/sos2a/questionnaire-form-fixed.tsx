@@ -4462,15 +4462,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </Button>
                   <Button 
                     type="button"
-                    onClick={() => document.querySelector('[value="device-inventory-bulk"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                    onClick={() => document.querySelector('[value="identity-behavior"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
                   >
                     Next Step
                   </Button>
                 </div>
               </TabsContent>
-              
-              {/* 12b. Device Inventory Bulk Tab */}
-
               
               {/* 13. Identity Behavior & Hygiene Tab */}
               <TabsContent value="identity-behavior" className="space-y-6">
