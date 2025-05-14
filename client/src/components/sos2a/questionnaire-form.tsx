@@ -4474,9 +4474,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 7. Authentication Practices Section */}
+                  {/* 6. Authentication Practices Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">7. Authentication Practices</h4>
+                    <h4 className="font-medium mb-4">6. Authentication Practices</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
@@ -4752,10 +4752,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="short">Short (<1 hour)</SelectItem>
+                                <SelectItem value="short">Short (&lt;1 hour)</SelectItem>
                                 <SelectItem value="medium">Medium (1-4 hours)</SelectItem>
                                 <SelectItem value="long">Long (4-8 hours)</SelectItem>
-                                <SelectItem value="extended">Extended (>8 hours)</SelectItem>
+                                <SelectItem value="extended">Extended (&gt;8 hours)</SelectItem>
                                 <SelectItem value="all-day">All Day Sessions</SelectItem>
                               </SelectContent>
                             </Select>

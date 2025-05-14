@@ -142,6 +142,7 @@ export interface IdentityBehaviorHygiene {
   fullNameRole?: string;
   contactInfo?: string;
   identityType?: string;
+  identificationMethod?: string;
   
   // 2. Classification
   accessTier?: string;
