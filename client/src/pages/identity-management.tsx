@@ -393,14 +393,16 @@ export default function IdentityManagement() {
                   {/* Central DNA identity concept */}
                   <div className="flex flex-col items-center justify-center mb-12">
                     <div className="relative">
-                      {/* Main fingerprint circle */}
+                      {/* Main fingerprint circle - exactly as in the reference image */}
                       <div className="w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center mb-3 relative z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M12 11c0 1.657-1.343 2.5-3 2.5s-3-.843-3-2.5S7.343 8 9 8s3 1.343 3 3z"></path>
-                          <path d="M13 13c-.366 2.235-1.813 4-4 4-2.343 0-4-2.739-4-5 0-2.761 1.657-5 4-5 2.343 0 4.344 2.25 4 5"></path>
-                          <path d="M16 13c-.366 3.25-1.813 6-4 6-2.343 0-4-2.739-4-5 0-2.761 2.657-6 5-6 2.343 0 3.344 2.25 3 5"></path>
-                          <path d="M19 13c-.366 3.25-1.813 6-4 6-2.343 0-4-2.739-4-5 0-2.761 1.657-5 4-5 2.343 0 4.344 2.25 4 4"></path>
-                          <path d="M9 16c0 1.657-1.343 3-3 3"></path>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M12 12c0-1.657-1.343-3-3-3s-3 1.343-3 3 1.343 3 3 3 3-1.343 3-3z"></path>
+                          <path d="M12 12c0 2.761-2.239 5-5 5s-5-2.239-5-5 2.239-5 5-5 5 2.239 5 5z"></path>
+                          <path d="M12 12c0 4.418-3.582 8-8 8s-8-3.582-8-8 3.582-8 8-8 8 3.582 8 8z"></path>
+                          <path d="M17 12c0-2.761-2.239-5-5-5"></path>
+                          <path d="M17 12c0 2.761-2.239 5-5 5s-5-2.239-5-5"></path>
+                          <path d="M17 7c0-2.761-2.239-5-5-5s-5 2.239-5 5"></path>
+                          <path d="M17 12c0 4.418-3.582 8-8 8"></path>
                         </svg>
                       </div>
                     </div>
