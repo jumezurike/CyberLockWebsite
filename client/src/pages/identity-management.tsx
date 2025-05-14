@@ -6,7 +6,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Users, AlertTriangle, Download, Upload, ChevronLeft } from 'lucide-react';
 import { Link } from 'wouter';
-import fingerprintCircle from '@assets/fingerprint-circle.svg';
 
 // Sample data for demonstration purposes
 const identitiesData = [
