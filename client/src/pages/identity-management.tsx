@@ -390,18 +390,21 @@ export default function IdentityManagement() {
                 <p className="text-sm text-gray-500 mb-8">The comprehensive aggregation of identity data forming a complete digital profile</p>
                 
                 <div className="relative">
-                  {/* Container for everything with a tracing border line */}
+                  {/* Encircling layout with dashed line going around all identity elements */}
                   <div className="relative py-10">
-                    {/* Outer container with dashed animated border */}
-                    <div className="w-full max-w-[1100px] mx-auto relative border border-dashed border-gray-300 rounded-lg p-10 overflow-hidden">
-                      {/* Animated tracing element - moves around the border */}
-                      <div className="absolute w-10 h-10 border-2 border-gray-300 rounded-full animate-border-trace"></div>
-                      
-                      {/* Content container */}
-                      <div className="flex flex-col items-center">
-                        {/* Blue fingerprint icon at top center - always in foreground */}
-                        <div className="relative z-10 w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center mx-auto">
-                          <Fingerprint className="h-10 w-10 text-white" />
+                    <div className="flex flex-col items-center">
+                      {/* Container for entire identity visualization with dashed encircling line */}
+                      <div className="relative w-full max-w-3xl">
+                        {/* Center blue fingerprint element */}
+                        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                          <div className="w-24 h-24 rounded-full bg-[#4558f1] flex items-center justify-center shadow-lg">
+                            <Fingerprint className="h-10 w-10 text-white" />
+                          </div>
+                        </div>
+                        
+                        {/* Dashed spinning circle that surrounds everything */}
+                        <div className="w-full aspect-square opacity-30 absolute left-0 top-0">
+                          <div className="w-full h-full rounded-full border-4 border-dashed border-gray-400 animate-spin-slow"></div>
                         </div>
                       </div>
                       
