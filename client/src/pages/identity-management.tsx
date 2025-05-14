@@ -392,8 +392,8 @@ export default function IdentityManagement() {
                 <div className="relative">
                   {/* DNA Circle with Fingerprint - Centralizing the relative layout */}
                   <div className="flex flex-col items-center mb-16 relative">
-                    {/* Dashed circular border with rotation animation */}
-                    <div className="w-[500px] h-[500px] absolute left-1/2 top-10 transform -translate-x-1/2 border border-dashed border-gray-300 rounded-full animate-spin-slow"></div>
+                    {/* Dashed circular border with faster rotation animation and bolder dashes */}
+                    <div className="w-[500px] h-[500px] absolute left-1/2 top-10 transform -translate-x-1/2 border-2 border-dashed border-gray-400 rounded-full animate-spin-medium"></div>
                     
                     {/* Center blue fingerprint */}
                     <div className="w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center z-10 relative">
