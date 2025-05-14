@@ -390,23 +390,22 @@ export default function IdentityManagement() {
                 <p className="text-sm text-gray-500 mb-8">The comprehensive aggregation of identity data forming a complete digital profile</p>
                 
                 <div className="relative">
-                  {/* DNA Circle with Fingerprint and connecting lines */}
+                  {/* DNA Circle with Fingerprint - Exact match to reference */}
                   <div className="flex flex-col items-center relative">
-                    {/* This is the container that holds the circle and icon */}
-                    <div className="relative w-[700px] h-[700px]">
-                      {/* The spinning dashed border */}
-                      <div className="absolute inset-0 rounded-full border border-dashed border-gray-300 animate-spin-medium"></div>
-                      
-                      {/* Vertical dashed connection line running down from the center */}
-                      <div className="absolute left-1/2 top-1/2 w-0 h-[350px] border-l border-dashed border-gray-300 transform -translate-x-1/2"></div>
-                      
-                      {/* Center blue fingerprint positioned in exact center */}
-                      <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center">
-                        <Fingerprint className="h-10 w-10 text-white" />
+                    <div className="mb-4 relative">
+                      {/* Container with fingerprint and dashed circle */}
+                      <div className="relative flex justify-center">
+                        {/* Large dashed circle - positioned to match reference exactly */}
+                        <div className="w-[700px] h-[700px] absolute top-[-330px] left-1/2 transform -translate-x-1/2 border border-dashed border-gray-300 rounded-full"></div>
+                        
+                        {/* Blue fingerprint icon */}
+                        <div className="w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center z-10">
+                          <Fingerprint className="h-10 w-10 text-white" />
+                        </div>
                       </div>
                     </div>
                     
-                    <div className="text-center -mt-12">
+                    <div className="text-center mt-4">
                       <h3 className="font-semibold text-lg">Universal Digital Identity</h3>
                       <p className="text-sm text-gray-600 max-w-md mx-auto">
                         The DNA forms an immutable, verifiable identity core that combines government-verified credentials with behavioral intelligence.
