@@ -4657,6 +4657,37 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           </FormItem>
                         )}
                       />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.identificationMethod"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Identification Method</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identification method" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="username-password">Username/Password</SelectItem>
+                                <SelectItem value="employee-id">Employee ID</SelectItem>
+                                <SelectItem value="certificate">Certificate</SelectItem>
+                                <SelectItem value="biometric">Biometric</SelectItem>
+                                <SelectItem value="smart-card">Smart Card</SelectItem>
+                                <SelectItem value="sso">Single Sign-On</SelectItem>
+                                <SelectItem value="token">Token-based</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   </div>
                   
