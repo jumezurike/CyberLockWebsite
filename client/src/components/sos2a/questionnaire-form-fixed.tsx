@@ -5587,10 +5587,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 9. Security Posture Section */}
+                  {/* 4. Security Posture Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">9. Security Posture</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">4. Security Posture</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.passwordHygiene"
@@ -5614,18 +5614,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         control={form.control}
                         name="identityBehaviorHygiene.breachedCredentialChecks"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>Breached Credential Checks</FormLabel>
-                              <FormDescription>
-                                Do you check for breached credentials via services like HaveIBeenPwned?
-                              </FormDescription>
+                          <FormItem className="border p-4 rounded-md h-full flex flex-col justify-center">
+                            <div className="flex flex-row items-start space-x-3">
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value}
+                                  onCheckedChange={field.onChange}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel>Breached Credential Checks</FormLabel>
+                                <FormDescription>
+                                  Do you check for breached credentials via services like HaveIBeenPwned?
+                                </FormDescription>
+                              </div>
                             </div>
                           </FormItem>
                         )}
