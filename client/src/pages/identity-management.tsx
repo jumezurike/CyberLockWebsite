@@ -390,26 +390,16 @@ export default function IdentityManagement() {
                 <p className="text-sm text-gray-500 mb-8">The comprehensive aggregation of identity data forming a complete digital profile</p>
                 
                 <div className="relative">
-                  {/* Encircling layout with dashed line going around all identity elements */}
+                  {/* Container for everything with a tracing border line */}
                   <div className="relative py-10">
-                    <div className="flex flex-col items-center">
-                      {/* Container for entire identity visualization with dashed encircling line */}
-                      <div className="relative">
-                        {/* We'll use a pseudo SVG path for the encircling dashed line that will contain ALL elements */}
-                        <div className="absolute inset-0 w-full h-[800px]">
-                          <svg className="w-full h-full absolute top-0 left-0" xmlns="http://www.w3.org/2000/svg">
-                            <path 
-                              d="M400,70 C600,70 700,200 700,350 C700,650 100,650 100,350 C100,200 200,70 400,70" 
-                              fill="none" 
-                              stroke="#d1d5db" 
-                              strokeWidth="1" 
-                              strokeDasharray="5,5"
-                              className="animate-dash-around"
-                            />
-                          </svg>
-                        </div>
-                        
-                        {/* Blue fingerprint icon positioned at the top of the path */}
+                    {/* Outer container with dashed animated border */}
+                    <div className="w-full max-w-[1100px] mx-auto relative border border-dashed border-gray-300 rounded-lg p-10 overflow-hidden">
+                      {/* Animated tracing element - moves around the border */}
+                      <div className="absolute w-10 h-10 border-2 border-gray-300 rounded-full animate-border-trace"></div>
+                      
+                      {/* Content container */}
+                      <div className="flex flex-col items-center">
+                        {/* Blue fingerprint icon at top center - always in foreground */}
                         <div className="relative z-10 w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center mx-auto">
                           <Fingerprint className="h-10 w-10 text-white" />
                         </div>

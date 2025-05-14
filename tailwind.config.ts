@@ -89,6 +89,33 @@ export default {
             strokeDashoffset: '-50',
           },
         },
+        "border-trace": {
+          "0%": {
+            top: '-5px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+          },
+          "25%": {
+            top: '50%',
+            left: 'calc(100% + 5px)',
+            transform: 'translateY(-50%)',
+          },
+          "50%": {
+            top: 'calc(100% + 5px)',
+            left: '50%',
+            transform: 'translateX(-50%)',
+          },
+          "75%": {
+            top: '50%',
+            left: '-5px',
+            transform: 'translateY(-50%)',
+          },
+          "100%": {
+            top: '-5px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+          }
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -97,6 +124,7 @@ export default {
         "spin-medium": "spin 20s linear infinite",
         "spin-reverse": "spin-reverse 20s linear infinite",
         "dash-around": "dash-offset 20s linear infinite",
+        "border-trace": "border-trace 10s linear infinite",
       },
     },
   },
