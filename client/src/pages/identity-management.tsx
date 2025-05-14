@@ -371,83 +371,126 @@ export default function IdentityManagement() {
           
           {/* Templates Tab */}
           <TabsContent value="templates">
-            <Card>
-              <CardContent className="pt-6">
-                <h3 className="font-medium text-gray-500 mb-4">Identity Templates</h3>
+            <div className="space-y-8">
+              <h2 className="text-2xl font-bold">Data Nuclear Aggregate (DNA) Model</h2>
+              <p className="text-gray-600">
+                The DNA approach forms the foundation of our identity verification system by aggregating all identity data into a comprehensive profile. Government-verified ID creates strong accountability and anchors digital identities to real-world entities.
+              </p>
+              
+              <div className="bg-white rounded-lg border p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-blue-600">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" /><path d="M3 9h18" /><path d="M9 21V9" /></svg>
+                    </span>
+                    <h3 className="font-semibold text-lg">Data Nuclear Aggregate (DNA)</h3>
+                  </div>
+                  <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-100">DNA PROTECTED</Badge>
+                </div>
+                <p className="text-sm text-gray-500 mb-8">The comprehensive aggregation of identity data forming a complete digital profile</p>
                 
-                <div className="space-y-4">
-                  <div className="border rounded-md p-4">
-                    <h4 className="font-medium mb-2">Standard User Template</h4>
-                    <p className="text-sm text-gray-500 mb-3">
-                      Basic template for standard employee accounts with normal access privileges
+                <div className="relative">
+                  {/* Central DNA identity concept */}
+                  <div className="flex flex-col items-center justify-center mb-12">
+                    <div className="w-24 h-24 rounded-full bg-blue-100 border-4 border-blue-500 flex items-center justify-center mb-3">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M13 7a3 3 0 0 0-3-3H6a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h4a3 3 0 0 0 3-3V7Z"/><path d="M13 7h2a3 3 0 0 1 3 3v6a3 3 0 0 1-3 3h-4a3 3 0 0 1-3-3v-2"/><circle cx="12" cy="12" r="1"/></svg>
+                    </div>
+                    <h4 className="font-semibold text-center">Universal Digital Identity</h4>
+                    <p className="text-sm text-gray-500 text-center max-w-md">
+                      The DNA forms an immutable, verifiable identity core that combines government-verified credentials with behavioral intelligence.
                     </p>
-                    <div className="flex gap-2">
-                      <Badge>Human</Badge>
-                      <Badge variant="outline">Standard Access</Badge>
-                    </div>
-                    <div className="flex justify-end mt-4">
-                      <Button variant="outline" size="sm">Use Template</Button>
-                    </div>
                   </div>
                   
-                  <div className="border rounded-md p-4">
-                    <h4 className="font-medium mb-2">Privileged Admin Template</h4>
-                    <p className="text-sm text-gray-500 mb-3">
-                      Template for IT administrators with elevated system privileges
-                    </p>
-                    <div className="flex gap-2">
-                      <Badge>Human</Badge>
-                      <Badge variant="destructive">Privileged Access</Badge>
-                    </div>
-                    <div className="flex justify-end mt-4">
-                      <Button variant="outline" size="sm">Use Template</Button>
-                    </div>
-                  </div>
+                  {/* Dotted circular border around the central identity */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-dashed border-2 border-gray-300 -z-10"></div>
                   
-                  <div className="border rounded-md p-4">
-                    <h4 className="font-medium mb-2">Service Account Template</h4>
-                    <p className="text-sm text-gray-500 mb-3">
-                      Template for automated service accounts with specific access scopes
-                    </p>
-                    <div className="flex gap-2">
-                      <Badge variant="secondary">Machine</Badge>
-                      <Badge variant="outline">Limited Access</Badge>
+                  {/* Three connected elements */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    {/* Government Identity Verification */}
+                    <div className="border rounded-lg p-4 bg-red-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-red-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/></svg>
+                        </span>
+                        <h5 className="font-semibold">Government Identity Verification</h5>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Government ID Type</span>
+                          <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">Required</Badge>
+                        </div>
+                        <p className="text-xs text-gray-500">Driver's license, passport, or other official identification</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Issuing Authority</span>
+                          <Badge variant="outline" className="bg-red-100 text-red-800 border-red-300">Required</Badge>
+                        </div>
+                        <p className="text-xs text-gray-500">Government entity that issued the identification document</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">ID Verification Status</span>
+                        </div>
+                      </div>
                     </div>
-                    <div className="flex justify-end mt-4">
-                      <Button variant="outline" size="sm">Use Template</Button>
+                    
+                    {/* Core Identity */}
+                    <div className="border rounded-lg p-4 bg-purple-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-purple-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="10" r="3"/><path d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/></svg>
+                        </span>
+                        <h5 className="font-semibold">Core Identity</h5>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Full Name</span>
+                          <Badge variant="outline" className="bg-purple-100 text-purple-800 border-purple-300">Required</Badge>
+                        </div>
+                        <p className="text-xs text-gray-500">Legal name as appears on official documents</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Identity Type</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Human, machine, service account, or API classification</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Unique Identifier</span>
+                          <Badge variant="outline" className="bg-purple-100 text-purple-800 border-purple-300">Required</Badge>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  
-                  <div className="border rounded-md p-4">
-                    <h4 className="font-medium mb-2">API Integration Template</h4>
-                    <p className="text-sm text-gray-500 mb-3">
-                      Template for API connections with proper authentication settings
-                    </p>
-                    <div className="flex gap-2">
-                      <Badge className="bg-purple-500">API</Badge>
-                      <Badge variant="outline">Limited Access</Badge>
-                    </div>
-                    <div className="flex justify-end mt-4">
-                      <Button variant="outline" size="sm">Use Template</Button>
-                    </div>
-                  </div>
-                  
-                  <div className="border rounded-md p-4">
-                    <h4 className="font-medium mb-2">Vendor Access Template</h4>
-                    <p className="text-sm text-gray-500 mb-3">
-                      Template for third-party vendor accounts with restricted permissions
-                    </p>
-                    <div className="flex gap-2">
-                      <Badge className="bg-orange-500">Third-Party</Badge>
-                      <Badge variant="outline">Limited Access</Badge>
-                    </div>
-                    <div className="flex justify-end mt-4">
-                      <Button variant="outline" size="sm">Use Template</Button>
+                    
+                    {/* Organizational Context */}
+                    <div className="border rounded-lg p-4 bg-blue-50">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-blue-500">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                        </span>
+                        <h5 className="font-semibold">Organizational Context</h5>
+                      </div>
+                      
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Department/Team</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Organizational unit or functional group</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Role/Position</span>
+                        </div>
+                        <p className="text-xs text-gray-500">Job function or service purpose</p>
+                        
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Reporting Hierarchy</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
