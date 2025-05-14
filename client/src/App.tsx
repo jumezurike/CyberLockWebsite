@@ -25,7 +25,7 @@ import ParameterMappingPage from "@/pages/parameter-mapping";
 import BrowserBaselinePage from "@/pages/browser-baseline";
 import LightbulbCapture from "@/components/knowledge-share/lightbulb-capture";
 import Checkout from "@/pages/checkout";
-import IdentityManagementPage from "@/pages/identity-management";
+import IdentityManagement from "@/pages/identity-management";
 import PaymentSuccess from "@/pages/payment-success";
 import PaymentError from "@/pages/payment-error";
 import DirectNavigation from "@/components/direct-navigation";
@@ -68,7 +68,7 @@ function Router() {
               return <DeviceInventoryPage />;
             });
           }} />
-          <Route path="/identity-management" component={IdentityManagementPage} />
+          <Route path="/identity-management" component={IdentityManagement} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/payment-error" component={PaymentError} />
