@@ -393,15 +393,9 @@ export default function IdentityManagement() {
                   {/* Central DNA identity concept */}
                   <div className="flex flex-col items-center justify-center mb-12">
                     <div className="relative">
-                      {/* Large moving circle that passes through the blue circle */}
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full border border-[#4558f1] opacity-40 animate-[spin_15s_linear_infinite]"></div>
-                      
-                      {/* Second moving circle in opposite direction */}
-                      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full border border-[#4558f1] opacity-20 animate-spin-reverse"></div>
-                      
                       {/* Main fingerprint circle */}
                       <div className="w-20 h-20 rounded-full bg-[#4558f1] flex items-center justify-center mb-3 relative z-10">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
                           <path d="M12 11c0 1.657-1.343 2.5-3 2.5s-3-.843-3-2.5S7.343 8 9 8s3 1.343 3 3z"></path>
                           <path d="M13 13c-.366 2.235-1.813 4-4 4-2.343 0-4-2.739-4-5 0-2.761 1.657-5 4-5 2.343 0 4.344 2.25 4 5"></path>
                           <path d="M16 13c-.366 3.25-1.813 6-4 6-2.343 0-4-2.739-4-5 0-2.761 2.657-6 5-6 2.343 0 3.344 2.25 3 5"></path>
@@ -416,8 +410,8 @@ export default function IdentityManagement() {
                     </p>
                   </div>
                   
-                  {/* Dotted circular border around the central identity */}
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-dashed border-[1px] border-gray-300 -z-10 animate-[spin_40s_linear_infinite]"></div>
+                  {/* Dotted circular border around the central identity - exactly as in the reference image */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 rounded-full border-dashed border-[1px] border-gray-300 -z-10"></div>
                   
                   {/* Three connected elements - Top Row */}
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
