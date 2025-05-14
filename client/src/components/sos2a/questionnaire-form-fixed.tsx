@@ -4581,43 +4581,19 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
                   
-                  {/* 2. Authentication Practices Section */}
+                  {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">7. Authentication Practices</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">1. Identification</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.passwordPolicyCompliance"
-                        render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
-                            <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
-                            </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>Password Policy Compliance</FormLabel>
-                              <FormDescription>
-                                Do you have a formal password policy that meets industry standards?
-                              </FormDescription>
-                            </div>
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.passwordPolicyDetails"
+                        name="identityBehaviorHygiene.userId"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Password Policy Details</FormLabel>
+                            <FormLabel>User ID</FormLabel>
+                            <FormDescription>Employee ID, service account name</FormDescription>
                             <FormControl>
-                              <Textarea 
-                                placeholder="Describe your password policy requirements (length, complexity, rotation, etc.)" 
-                                className="h-24"
-                                {...field} 
-                              />
+                              <Input placeholder="Enter user ID" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -4626,25 +4602,67 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.mfaStatus"
+                        name="identityBehaviorHygiene.fullNameRole"
                         render={({ field }) => (
-                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                          <FormItem>
+                            <FormLabel>Full Name / Role</FormLabel>
                             <FormControl>
-                              <Checkbox
-                                checked={field.value}
-                                onCheckedChange={field.onChange}
-                              />
+                              <Input placeholder="Enter full name and role" {...field} />
                             </FormControl>
-                            <div className="space-y-1 leading-none">
-                              <FormLabel>Multi-Factor Authentication (MFA)</FormLabel>
-                              <FormDescription>
-                                Do you implement multi-factor authentication?
-                              </FormDescription>
-                            </div>
+                            <FormMessage />
                           </FormItem>
                         )}
                       />
                       
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.contactInfo"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact Info</FormLabel>
+                            <FormDescription>Email, phone for emergency access</FormDescription>
+                            <FormControl>
+                              <Input placeholder="Enter contact information" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.identityType"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Identity Type</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identity type" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="employee">Employee</SelectItem>
+                                <SelectItem value="contractor">Contractor</SelectItem>
+                                <SelectItem value="vendor">Vendor</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="system-account">System Account</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">7. Authentication Practices</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.mfaTypes"
@@ -4658,8 +4676,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                               {[
-                                "SMS/Text Messages", 
-                                "Email Codes",
                                 "Mobile App Authenticator",
                                 "Hardware Tokens/Keys",
                                 "Biometrics",
@@ -5276,19 +5292,43 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 1. Identification Section */}
+                  {/* 2. Authentication Practices Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">1. Identification</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <h4 className="font-medium mb-4">7. Authentication Practices</h4>
+                    <div className="space-y-6">
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.userId"
+                        name="identityBehaviorHygiene.passwordPolicyCompliance"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Password Policy Compliance</FormLabel>
+                              <FormDescription>
+                                Do you have a formal password policy that meets industry standards?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.passwordPolicyDetails"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>User ID</FormLabel>
-                            <FormDescription>Employee ID, service account name</FormDescription>
+                            <FormLabel>Password Policy Details</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter user ID" {...field} />
+                              <Textarea 
+                                placeholder="Describe your password policy requirements (length, complexity, rotation, etc.)" 
+                                className="h-24"
+                                {...field} 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -5297,57 +5337,73 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.fullNameRole"
+                        name="identityBehaviorHygiene.mfaStatus"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Full Name / Role</FormLabel>
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                             <FormControl>
-                              <Input placeholder="Enter full name and role" {...field} />
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
                             </FormControl>
-                            <FormMessage />
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Multi-Factor Authentication (MFA)</FormLabel>
+                              <FormDescription>
+                                Do you implement multi-factor authentication?
+                              </FormDescription>
+                            </div>
                           </FormItem>
                         )}
                       />
                       
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.contactInfo"
-                        render={({ field }) => (
+                        name="identityBehaviorHygiene.mfaTypes"
+                        render={() => (
                           <FormItem>
-                            <FormLabel>Contact Info</FormLabel>
-                            <FormDescription>Email, phone for emergency access</FormDescription>
-                            <FormControl>
-                              <Input placeholder="Enter contact information" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.identityType"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Identity Type</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select identity type" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="employee">Employee</SelectItem>
-                                <SelectItem value="contractor">Contractor</SelectItem>
-                                <SelectItem value="vendor">Vendor</SelectItem>
-                                <SelectItem value="service-account">Service Account</SelectItem>
-                                <SelectItem value="system-account">System Account</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <div className="mb-4">
+                              <FormLabel>MFA Types</FormLabel>
+                              <FormDescription>
+                                Select all MFA types that are implemented
+                              </FormDescription>
+                            </div>
+                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                              {[
+                                "SMS/Text Messages", 
+                                "Email Codes"
+                              ].map((type) => (
+                                <FormField
+                                  key={type}
+                                  control={form.control}
+                                  name="identityBehaviorHygiene.mfaTypes"
+                                  render={({ field }) => {
+                                    return (
+                                      <FormItem
+                                        key={type}
+                                        className="flex flex-row items-start space-x-3 space-y-0"
+                                      >
+                                        <FormControl>
+                                          <Checkbox
+                                            checked={field.value?.includes(type)}
+                                            onCheckedChange={(checked) => {
+                                              const updatedValue = checked
+                                                ? [...(field.value || []), type]
+                                                : field.value?.filter(
+                                                    (value) => value !== type
+                                                  ) || [];
+                                              field.onChange(updatedValue);
+                                            }}
+                                          />
+                                        </FormControl>
+                                        <FormLabel className="font-normal cursor-pointer">
+                                          {type}
+                                        </FormLabel>
+                                      </FormItem>
+                                    );
+                                  }}
+                                />
+                              ))}
+                            </div>
                             <FormMessage />
                           </FormItem>
                         )}
