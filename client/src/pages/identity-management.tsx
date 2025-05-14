@@ -394,8 +394,16 @@ export default function IdentityManagement() {
                   <div className="flex flex-col items-center justify-center mb-12">
                     <div className="relative">
                       {/* Center nucleus with fingerprint - exactly matching the reference image */}
-                      <div className="w-16 h-16 mb-3 relative z-10">
-                        <img src={fingerprintCircle} alt="Fingerprint" className="w-full h-full" />
+                      <div className="w-16 h-16 rounded-full bg-[#4558f1] flex items-center justify-center mb-3 relative z-10">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M12 11C12 9.89543 11.1046 9 10 9C8.89543 9 8 9.89543 8 11C8 12.1046 8.89543 13 10 13C11.1046 13 12 12.1046 12 11Z" stroke="white" strokeWidth="1.5" />
+                          <path d="M12 11C12 13.2091 10.2091 15 8 15C5.79086 15 4 13.2091 4 11C4 8.79086 5.79086 7 8 7C10.2091 7 12 8.79086 12 11Z" stroke="white" strokeWidth="1.5" />
+                          <path d="M12 11C12 15.4183 8.41828 19 4 19C-0.418278 19 -4 15.4183 -4 11C-4 6.58172 -0.418278 3 4 3C8.41828 3 12 6.58172 12 11Z" stroke="white" strokeWidth="1.5" />
+                          <path d="M17 11C17 8.79086 15.2091 7 13 7" stroke="white" strokeWidth="1.5" />
+                          <path d="M17 11C17 13.2091 15.2091 15 13 15C10.7909 15 9 13.2091 9 11" stroke="white" strokeWidth="1.5" />
+                          <path d="M17 6C17 3.79086 15.2091 2 13 2C10.7909 2 9 3.79086 9 6" stroke="white" strokeWidth="1.5" />
+                          <path d="M17 11C17 15.4183 13.4183 19 9 19" stroke="white" strokeWidth="1.5" />
+                        </svg>
                       </div>
                     </div>
                     <h4 className="font-semibold text-center">Universal Digital Identity</h4>
