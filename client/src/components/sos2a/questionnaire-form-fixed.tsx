@@ -4592,7 +4592,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         type="button" 
                         variant="outline" 
                         size="sm"
-                        onClick={() => window.open('/identity-management', '_blank')}
+                        onClick={() => setShowIdentityManager(true)}
                       >
                         Manage User Identities
                       </Button>
