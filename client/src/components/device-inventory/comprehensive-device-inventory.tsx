@@ -470,6 +470,50 @@ export default function ComprehensiveDeviceInventory() {
             </CardHeader>
             
             <CardContent>
+              {/* Filters Section */}
+              <div className="mb-6 border border-gray-200 rounded-lg">
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-base font-semibold">Device Types</h3>
+                    <Button onClick={() => setFormOpen(true)} className="bg-purple-600 hover:bg-purple-700">Add Device</Button>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <div className="w-[180px]">
+                      <Select value={filterDeviceType} onValueChange={setFilterDeviceType}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="All Types" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all">All Types</SelectItem>
+                          <SelectItem value="Workstation">Workstation</SelectItem>
+                          <SelectItem value="Server">Server</SelectItem>
+                          <SelectItem value="Mobile Device">Mobile Device</SelectItem>
+                          <SelectItem value="Network Device">Network Device</SelectItem>
+                          <SelectItem value="IoT Device">IoT Device</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="flex items-center relative flex-1">
+                      <Search className="absolute left-3 h-4 w-4 text-gray-400" />
+                      <Input 
+                        className="pl-9"
+                        placeholder="Search by make, model, serial number, or owner..." 
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                      {searchTerm && (
+                        <X 
+                          className="absolute right-3 h-4 w-4 text-gray-400 cursor-pointer" 
+                          onClick={() => setSearchTerm("")}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
               {/* Stats Overview */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div className="bg-gray-50 p-4 rounded-lg">
