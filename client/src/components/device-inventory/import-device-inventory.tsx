@@ -55,7 +55,7 @@ export default function ImportDeviceInventory() {
           <Button 
             onClick={handleImportCSV}
             variant="default"
-            className="justify-center py-2 h-auto text-sm"
+            className="justify-center py-2 h-auto text-sm bg-purple-600 hover:bg-purple-700"
             disabled={isImporting}
           >
             Import CSV
