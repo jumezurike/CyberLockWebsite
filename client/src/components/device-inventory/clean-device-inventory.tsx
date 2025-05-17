@@ -153,6 +153,9 @@ export default function CleanDeviceInventory() {
         
         <div>
           <h2 className="text-lg font-medium mb-2">2. Classification</h2>
+          <p className="text-gray-600 text-sm mb-4">
+            Classify your device by type and sensitivity level to determine appropriate security controls and policies.
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="device-type-select">Device Type</Label>
