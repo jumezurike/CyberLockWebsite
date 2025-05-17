@@ -87,8 +87,10 @@ export default function ComprehensiveDeviceInventory() {
   const [formOpen, setFormOpen] = useState(false);
   const [selectedDevice, setSelectedDevice] = useState<ExtendedDeviceInventoryItem | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [filterDeviceType, setFilterDeviceType] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState("");
+  const [editedDevice, setEditedDevice] = useState<ExtendedDeviceInventoryItem | null>(null);
 
   // Sample data - in a real implementation, this would come from an API
   useEffect(() => {
@@ -390,6 +392,46 @@ export default function ComprehensiveDeviceInventory() {
     setSelectedDevice(device);
     setHistoryOpen(true);
   };
+  
+  const handleOpenEditDialog = (device: ExtendedDeviceInventoryItem) => {
+    setSelectedDevice(device);
+    setEditedDevice({...device});
+    setEditDialogOpen(true);
+  };
+  
+  const handleSaveDevice = () => {
+    if (!editedDevice || !selectedDevice) return;
+    
+    // Create an entry for the history to track the change
+    const newHistoryEntry = {
+      date: new Date().toISOString(),
+      action: "Device Updated",
+      description: "Device information manually updated",
+      user: "System Admin"
+    };
+    
+    // Update the device in the list
+    const updatedDevices = devices.map(d => {
+      if (d.id === selectedDevice.id) {
+        return {
+          ...editedDevice,
+          lastUpdated: new Date().toISOString(),
+          historyEntries: [newHistoryEntry, ...editedDevice.historyEntries]
+        };
+      }
+      return d;
+    });
+    
+    setDevices(updatedDevices);
+    setEditDialogOpen(false);
+    setSelectedDevice(null);
+    setEditedDevice(null);
+    
+    toast({
+      title: "Device updated",
+      description: `Updated information for ${editedDevice.makeModel || 'device'}`,
+    });
+  };
 
   const deviceCounts = getTotalDevicesByType();
   const monitoringCoverage = getMonitoringCoverage();
@@ -530,22 +572,22 @@ export default function ComprehensiveDeviceInventory() {
                           <TableCell>
                             <div className="flex items-center gap-2">
                               {getDeviceIcon(device.deviceType)}
-                              <span>{device.deviceType}</span>
+                              <span>{device.deviceType || "—"}</span>
                             </div>
                           </TableCell>
                           <TableCell>
                             <div>
-                              <div className="font-medium">{device.makeModel}</div>
-                              <div className="text-xs text-gray-500">S/N: {device.serialNumber}</div>
+                              <div className="font-medium">{device.makeModel || "—"}</div>
+                              <div className="text-xs text-gray-500">S/N: {device.serialNumber || "—"}</div>
                             </div>
                           </TableCell>
                           <TableCell>
-                            {device.owner}
-                            <div className="text-xs text-gray-500">{device.lastKnownLocation}</div>
+                            {device.owner || "—"}
+                            <div className="text-xs text-gray-500">{device.lastKnownLocation || "Unknown location"}</div>
                           </TableCell>
                           <TableCell>
-                            {device.operatingSystem}
-                            <div className="text-xs text-gray-500">{device.osVersion}</div>
+                            {device.operatingSystem || "—"}
+                            <div className="text-xs text-gray-500">{device.osVersion || "—"}</div>
                           </TableCell>
                           <TableCell>
                             <Badge 
@@ -558,7 +600,7 @@ export default function ComprehensiveDeviceInventory() {
                                     : "border-orange-500 text-orange-700 bg-orange-50"
                               }
                             >
-                              {device.patchStatus}
+                              {device.patchStatus || "Unknown"}
                             </Badge>
                           </TableCell>
                           <TableCell>
@@ -581,14 +623,25 @@ export default function ComprehensiveDeviceInventory() {
                             </div>
                           </TableCell>
                           <TableCell className="text-right">
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              onClick={() => handleOpenHistory(device)}
-                            >
-                              <Clock className="h-4 w-4 mr-1" />
-                              History
-                            </Button>
+                            <div className="flex items-center justify-end gap-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleOpenEditDialog(device)}
+                                className="h-8 px-2 text-blue-600"
+                              >
+                                Edit
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => handleOpenHistory(device)}
+                                className="h-8"
+                              >
+                                <Clock className="h-4 w-4 mr-1" />
+                                History
+                              </Button>
+                            </div>
                           </TableCell>
                         </TableRow>
                       ))
@@ -1007,7 +1060,7 @@ export default function ComprehensiveDeviceInventory() {
             <DialogTitle>Device History</DialogTitle>
             <DialogDescription>
               {selectedDevice && (
-                <span>Tracking security changes for {selectedDevice.makeModel} ({selectedDevice.serialNumber})</span>
+                <span>Tracking security changes for {selectedDevice.makeModel || "Device"} ({selectedDevice.serialNumber || "No S/N"})</span>
               )}
             </DialogDescription>
           </DialogHeader>
@@ -1016,9 +1069,9 @@ export default function ComprehensiveDeviceInventory() {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-medium">{selectedDevice.makeModel}</div>
+                  <div className="font-medium">{selectedDevice.makeModel || "—"}</div>
                   <div className="text-sm text-gray-500">
-                    {selectedDevice.deviceType} • {selectedDevice.operatingSystem} {selectedDevice.osVersion}
+                    {selectedDevice.deviceType || "Unknown"} • {selectedDevice.operatingSystem || "—"} {selectedDevice.osVersion || "—"}
                   </div>
                 </div>
                 
@@ -1032,7 +1085,7 @@ export default function ComprehensiveDeviceInventory() {
                         : "border-blue-500 text-blue-700 bg-blue-50"
                   }
                 >
-                  {selectedDevice.sensitivityLevel} Risk
+                  {selectedDevice.sensitivityLevel || "Unknown"} Risk
                 </Badge>
               </div>
               
@@ -1079,6 +1132,299 @@ export default function ComprehensiveDeviceInventory() {
             <Button variant="outline" onClick={() => setHistoryOpen(false)}>
               Close
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Device Edit Dialog */}
+      <Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
+        <DialogContent className="sm:max-w-[600px]">
+          <DialogHeader>
+            <DialogTitle>Edit Device</DialogTitle>
+            <DialogDescription>
+              Update device information and monitoring settings
+            </DialogDescription>
+          </DialogHeader>
+          
+          {editedDevice && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="deviceType">Device Type</Label>
+                  <Select
+                    value={editedDevice.deviceType || ""}
+                    onValueChange={(value) => setEditedDevice({...editedDevice, deviceType: value})}
+                  >
+                    <SelectTrigger id="deviceType">
+                      <SelectValue placeholder="Select device type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Workstation">Workstation</SelectItem>
+                      <SelectItem value="Server">Server</SelectItem>
+                      <SelectItem value="Mobile Device">Mobile Device</SelectItem>
+                      <SelectItem value="Network Device">Network Device</SelectItem>
+                      <SelectItem value="IoT Device">IoT Device</SelectItem>
+                      <SelectItem value="Medical Device">Medical Device</SelectItem>
+                      <SelectItem value="Other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="sensitivityLevel">Risk Level</Label>
+                  <Select
+                    value={editedDevice.sensitivityLevel || ""}
+                    onValueChange={(value) => setEditedDevice({...editedDevice, sensitivityLevel: value})}
+                  >
+                    <SelectTrigger id="sensitivityLevel">
+                      <SelectValue placeholder="Select risk level" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Critical">Critical</SelectItem>
+                      <SelectItem value="High">High</SelectItem>
+                      <SelectItem value="Medium">Medium</SelectItem>
+                      <SelectItem value="Low">Low</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="makeModel">Make/Model</Label>
+                  <Input 
+                    id="makeModel" 
+                    value={editedDevice.makeModel || ""} 
+                    onChange={(e) => setEditedDevice({...editedDevice, makeModel: e.target.value})}
+                    placeholder="Device make and model"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="serialNumber">Serial Number</Label>
+                  <Input 
+                    id="serialNumber" 
+                    value={editedDevice.serialNumber || ""} 
+                    onChange={(e) => setEditedDevice({...editedDevice, serialNumber: e.target.value})}
+                    placeholder="Enter N/A if not applicable"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="operatingSystem">Operating System</Label>
+                  <Input 
+                    id="operatingSystem" 
+                    value={editedDevice.operatingSystem || ""} 
+                    onChange={(e) => setEditedDevice({...editedDevice, operatingSystem: e.target.value})}
+                    placeholder="e.g. Windows, Linux, iOS"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="osVersion">OS Version</Label>
+                  <Input 
+                    id="osVersion" 
+                    value={editedDevice.osVersion || ""} 
+                    onChange={(e) => setEditedDevice({...editedDevice, osVersion: e.target.value})}
+                    placeholder="e.g. 11, 22.04, 16"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="owner">Owner/Responsible</Label>
+                  <Input 
+                    id="owner" 
+                    value={editedDevice.owner || ""} 
+                    onChange={(e) => setEditedDevice({...editedDevice, owner: e.target.value})}
+                    placeholder="Person or department responsible"
+                  />
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="location">Location</Label>
+                  <Input 
+                    id="location" 
+                    value={editedDevice.lastKnownLocation || ""} 
+                    onChange={(e) => setEditedDevice({...editedDevice, lastKnownLocation: e.target.value})}
+                    placeholder="Physical location of device"
+                  />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="patchStatus">Patch Status</Label>
+                  <Select
+                    value={editedDevice.patchStatus || ""}
+                    onValueChange={(value) => setEditedDevice({...editedDevice, patchStatus: value})}
+                  >
+                    <SelectTrigger id="patchStatus">
+                      <SelectValue placeholder="Select patch status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Up to date">Up to date</SelectItem>
+                      <SelectItem value="Update required">Update required</SelectItem>
+                      <SelectItem value="Update in progress">Update in progress</SelectItem>
+                      <SelectItem value="Out of date">Out of date</SelectItem>
+                      <SelectItem value="N/A">Not applicable</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="space-y-2">
+                  <Label htmlFor="networkZone">Network Zone</Label>
+                  <Input 
+                    id="networkZone" 
+                    value={editedDevice.networkZone || ""} 
+                    onChange={(e) => setEditedDevice({...editedDevice, networkZone: e.target.value})}
+                    placeholder="e.g. Corporate, Clinical, DMZ"
+                  />
+                </div>
+              </div>
+              
+              <div className="border-t pt-4">
+                <h3 className="text-sm font-medium mb-2">SOC Monitoring</h3>
+                <div className="grid grid-cols-3 gap-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="monitoringSplunk" 
+                      checked={editedDevice.socMonitoring.splunk} 
+                      onCheckedChange={(checked) => 
+                        setEditedDevice({
+                          ...editedDevice, 
+                          socMonitoring: {
+                            ...editedDevice.socMonitoring,
+                            splunk: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="monitoringSplunk" className="text-sm">Splunk</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="monitoringWazuh" 
+                      checked={editedDevice.socMonitoring.wazuh} 
+                      onCheckedChange={(checked) => 
+                        setEditedDevice({
+                          ...editedDevice, 
+                          socMonitoring: {
+                            ...editedDevice.socMonitoring,
+                            wazuh: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="monitoringWazuh" className="text-sm">Wazuh</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="monitoringSuricata" 
+                      checked={editedDevice.socMonitoring.suricata} 
+                      onCheckedChange={(checked) => 
+                        setEditedDevice({
+                          ...editedDevice, 
+                          socMonitoring: {
+                            ...editedDevice.socMonitoring,
+                            suricata: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="monitoringSuricata" className="text-sm">Suricata</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="monitoringNtopng" 
+                      checked={editedDevice.socMonitoring.ntopng} 
+                      onCheckedChange={(checked) => 
+                        setEditedDevice({
+                          ...editedDevice, 
+                          socMonitoring: {
+                            ...editedDevice.socMonitoring,
+                            ntopng: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="monitoringNtopng" className="text-sm">ntopng</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="monitoringMisp" 
+                      checked={editedDevice.socMonitoring.misp} 
+                      onCheckedChange={(checked) => 
+                        setEditedDevice({
+                          ...editedDevice, 
+                          socMonitoring: {
+                            ...editedDevice.socMonitoring,
+                            misp: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="monitoringMisp" className="text-sm">MISP</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="monitoringOpenvas" 
+                      checked={editedDevice.socMonitoring.openvas} 
+                      onCheckedChange={(checked) => 
+                        setEditedDevice({
+                          ...editedDevice, 
+                          socMonitoring: {
+                            ...editedDevice.socMonitoring,
+                            openvas: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="monitoringOpenvas" className="text-sm">OpenVAS</Label>
+                  </div>
+                  
+                  <div className="flex items-center space-x-2">
+                    <Checkbox 
+                      id="monitoringJira" 
+                      checked={editedDevice.socMonitoring.jira} 
+                      onCheckedChange={(checked) => 
+                        setEditedDevice({
+                          ...editedDevice, 
+                          socMonitoring: {
+                            ...editedDevice.socMonitoring,
+                            jira: checked === true
+                          }
+                        })
+                      }
+                    />
+                    <Label htmlFor="monitoringJira" className="text-sm">Jira</Label>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="notes" className="text-sm font-medium">Additional Notes</Label>
+                <Input
+                  id="notes"
+                  value={editedDevice.additionalNotes || ""}
+                  onChange={(e) => setEditedDevice({...editedDevice, additionalNotes: e.target.value})}
+                  placeholder="Enter any additional information, write N/A if not applicable"
+                />
+              </div>
+            </div>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setEditDialogOpen(false)}>Cancel</Button>
+            <Button onClick={handleSaveDevice}>Save Changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
