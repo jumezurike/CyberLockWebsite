@@ -118,7 +118,11 @@ export default function ExactMatchInventory() {
       {/* Form Categories - Exactly as in reference */}
       <div className="space-y-6">
         <div className="border rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">1. Identification</h3>
+          <h3 className="text-lg font-semibold mb-2">1. Identification</h3>
+          <p className="text-gray-600 text-sm mb-4">
+            This section captures basic identifying information about the device that distinguishes it from others.
+            Use this to document the unique attributes that identify each device in your inventory.
+          </p>
           <div className="grid grid-cols-1 gap-4">
             <div>
               <Label htmlFor="device-id">Device ID / Asset Tag</Label>
@@ -148,7 +152,11 @@ export default function ExactMatchInventory() {
         </div>
         
         <div className="border rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">2. Classification</h3>
+          <h3 className="text-lg font-semibold mb-2">2. Classification</h3>
+          <p className="text-gray-600 text-sm mb-4">
+            Properly classifying devices helps determine security requirements. This section captures how the device 
+            should be categorized and what level of protection it requires based on the sensitivity of data it processes.
+          </p>
           <div className="space-y-4">
             <div>
               <Label htmlFor="device-type">Device Type</Label>
@@ -181,7 +189,11 @@ export default function ExactMatchInventory() {
         </div>
         
         <div className="border rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">3. Network & Location</h3>
+          <h3 className="text-lg font-semibold mb-2">3. Network & Location</h3>
+          <p className="text-gray-600 text-sm mb-4">
+            Network positioning and physical location information is critical for security management. 
+            This section helps track where devices exist on your network and physically within your organization.
+          </p>
           <div className="grid grid-cols-1 gap-4">
             <div>
               <Label htmlFor="ip-address">IP Address</Label>
@@ -213,7 +225,11 @@ export default function ExactMatchInventory() {
         </div>
         
         <div className="border rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">4. Security Posture</h3>
+          <h3 className="text-lg font-semibold mb-2">4. Security Posture</h3>
+          <p className="text-gray-600 text-sm mb-4">
+            This section documents the current security status of the device, including installed security software, 
+            patch status, and operating system information. Keeping these details current is essential for vulnerability management.
+          </p>
           <div className="space-y-4">
             <div>
               <Label htmlFor="os-version">Operating System & Version</Label>
@@ -256,7 +272,11 @@ export default function ExactMatchInventory() {
         </div>
         
         <div className="border rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">5. Usage & Monitoring</h3>
+          <h3 className="text-lg font-semibold mb-2">5. Usage & Monitoring</h3>
+          <p className="text-gray-600 text-sm mb-4">
+            How a device is used and monitored affects its security risk profile. This section captures information about 
+            primary functions, authorized users, and backup processes to ensure proper operational security management.
+          </p>
           <div className="space-y-4">
             <div>
               <Label htmlFor="primary-function">Primary Function</Label>
@@ -372,7 +392,12 @@ export default function ExactMatchInventory() {
         </div>
         
         <div className="border rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-4">6. Lifecycle & Ownership</h3>
+          <h3 className="text-lg font-semibold mb-2">6. Lifecycle & Ownership</h3>
+          <p className="text-gray-600 text-sm mb-4">
+            Every device has a lifecycle from acquisition to retirement. This section documents ownership information, 
+            warranty details, and lifecycle status to help manage device transitions and ensure proper 
+            decommissioning procedures are followed when devices reach end-of-life.
+          </p>
           <div className="grid grid-cols-1 gap-4">
             <div>
               <Label htmlFor="acquisition-date">Acquisition Date</Label>
