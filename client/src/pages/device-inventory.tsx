@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ComprehensiveDeviceInventory from '../components/device-inventory/comprehensive-device-inventory';
 import BrowserInventoryFormNew from '../components/sos2a/browser-inventory-form-new';
 import DeviceInventoryTemplate from '../components/device-inventory/device-inventory-template';
+import ExactMatchInventory from '../components/device-inventory/exact-match-inventory';
 
 export default function DeviceInventoryPage() {
   return (
@@ -68,11 +69,35 @@ export default function DeviceInventoryPage() {
         </div>
       </div>
       
-      <Tabs defaultValue="comprehensive" className="w-full">
+      <Tabs defaultValue="sections" className="w-full">
         <TabsList className="mb-6">
-          <TabsTrigger value="comprehensive">Comprehensive Device Inventory</TabsTrigger>
+          <TabsTrigger value="sections">Detailed Device Inventory</TabsTrigger>
+          <TabsTrigger value="comprehensive">Dashboard View</TabsTrigger>
           <TabsTrigger value="browser">Browser Inventory</TabsTrigger>
         </TabsList>
+        
+        <TabsContent value="sections" className="space-y-6">
+          {/* Add template download component */}
+          <DeviceInventoryTemplate />
+          
+          <div className="bg-white rounded-lg">
+            <ExactMatchInventory />
+          </div>
+          
+          <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
+            <div className="flex items-start">
+              <span className="bg-blue-100 text-blue-800 font-medium mr-3 px-2.5 py-0.5 rounded-full">Info</span>
+              <div>
+                <h3 className="font-semibold text-lg">Why Device Categories Matter</h3>
+                <p className="text-gray-700 mt-1">
+                  Our device inventory form follows the key categories identified in the NIST Cybersecurity Framework 
+                  for complete device tracking. Each section serves a specific purpose in managing the security 
+                  lifecycle of devices in your organization.
+                </p>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
         
         <TabsContent value="comprehensive" className="space-y-6">
           {/* Add template download component */}
