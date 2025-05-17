@@ -1,0 +1,131 @@
+Device Inventory
+Add Device
+Device Types
+
+All Types
+
+Device Type	Make/Model	Serial/Asset #	Risk Level	Owner	Actions
+No devices added yet. Click "Add Device" to begin tracking devices.
+Import Device Inventory
+Use these options to import existing device inventory data.
+
+Import CSV
+Download Template
+2. Classification
+Device Type
+Select the type of device
+
+
+Workstation
+
+Laptop
+
+Mobile Phone
+
+Tablet
+
+Server
+
+Network Device
+
+IoT Device
+
+Medical Device
+
+Other
+Data Sensitivity Level
+Select data sensitivity level
+
+3. Network & Location
+IP Address
+Enter IP address
+MAC Address
+Enter MAC address
+Network Location
+Select network location
+
+Physical Location
+Enter physical location
+4. Security Posture
+Operating System & Version
+Enter OS and version
+Security Software Installed
+Select all security software installed on the device
+
+
+Antivirus
+
+EDR/XDR
+
+Firewall
+
+DLP
+
+Encryption
+
+VPN
+
+MFA
+
+HIDS/HIPS
+
+Other
+Patch Status
+Select patch status
+
+Last Updated Date
+
+Pick a date
+5. Usage & Monitoring
+Primary Function
+Enter device's primary function
+Authorized Users
+Enter authorized users
+List individuals or groups authorized to use this device
+
+Monitoring Tools
+Enter monitoring tools
+List monitoring tools or solutions used for this device
+
+
+Backup Status
+Is this device backed up according to policy?
+
+Enhanced Backup Details
+Backup Frequency
+Select backup frequency
+
+Backup Type
+Select backup type
+
+Backup Location
+Select backup location
+
+Backup Folder/Path
+Enter specific backup folder or path
+Specific files, folders, or paths that are backed up
+
+Backup Retention Period
+Select retention period
+
+Last Backup Restoration Test
+mm/dd/yyyy
+Date when backup restoration was last verified
+
+Additional Backup Notes
+Enter any additional backup details or notes
+6. Lifecycle & Ownership
+Acquisition Date
+
+Pick a date
+Expected Lifespan
+Select expected lifespan
+
+Maintenance Schedule
+Enter maintenance schedule
+Maintenance Contact
+Enter maintenance contact
+Ownership Type
+Select ownership type
+
+Disposal Plan
