@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { Switch, Route, useLocation } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
@@ -29,8 +30,7 @@ import IdentityManagement from "@/pages/identity-management";
 import PaymentSuccess from "@/pages/payment-success";
 import PaymentError from "@/pages/payment-error";
 import DirectNavigation from "@/components/direct-navigation";
-
-import { useEffect } from "react";
+import DeviceInventoryPage from "@/pages/device-inventory";
 
 function Router() {
   const [location] = useLocation();
@@ -62,12 +62,7 @@ function Router() {
           <Route path="/lightbulb-moments" component={LightbulbMomentsPage} />
           <Route path="/parameter-mapping" component={ParameterMappingPage} />
           <Route path="/browser-baseline" component={BrowserBaselinePage} />
-          <Route path="/device-inventory" component={() => {
-            return import("./pages/device-inventory").then(module => {
-              const DeviceInventoryPage = module.default;
-              return <DeviceInventoryPage />;
-            });
-          }} />
+          <Route path="/device-inventory" component={DeviceInventoryPage} />
           <Route path="/identity-management" component={IdentityManagement} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/payment-success" component={PaymentSuccess} />
