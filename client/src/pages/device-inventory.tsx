@@ -3,6 +3,7 @@ import { Link } from 'wouter';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ComprehensiveDeviceInventory from '../components/device-inventory/comprehensive-device-inventory';
 import BrowserInventoryFormNew from '../components/sos2a/browser-inventory-form-new';
+import DeviceInventoryTemplate from '../components/device-inventory/device-inventory-template';
 
 export default function DeviceInventoryPage() {
   return (
