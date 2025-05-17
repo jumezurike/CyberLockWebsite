@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'wouter';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ProductionDeviceInventory from '../components/device-inventory/production-device-inventory';
+import ExactMatchInventory from '../components/device-inventory/exact-match-inventory';
 import BrowserInventoryFormNew from '../components/sos2a/browser-inventory-form-new';
 
 export default function DeviceInventoryPage() {
@@ -75,7 +75,7 @@ export default function DeviceInventoryPage() {
         
         <TabsContent value="comprehensive" className="space-y-6">
           <div className="bg-white rounded-lg">
-            <ProductionDeviceInventory />
+            <ExactMatchInventory />
           </div>
           
           <div className="bg-gray-50 border border-gray-200 rounded-lg p-6">
