@@ -499,89 +499,138 @@ export default function ComprehensiveDeviceInventory() {
                 </div>
               </div>
               
-              {/* Filter Controls Section */}
-              <div className="mb-6 border border-blue-200 rounded-md bg-blue-50 p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="bg-blue-600 p-1 rounded text-white">
-                    <Search className="h-4 w-4" />
+              <div className="mb-6 flex flex-col sm:flex-row justify-between gap-4 border p-4 rounded-md bg-gray-50">
+                <div>
+                  <h3 className="font-semibold mb-2">Import Devices</h3>
+                  <div className="flex gap-2">
+                    {/* Import CSV button with distinct color */}
+                    <Button 
+                      className="bg-green-600 hover:bg-green-700 text-white" 
+                      onClick={() => {
+                        // File input for CSV upload
+                        const input = document.createElement('input');
+                        input.type = 'file';
+                        input.accept = '.csv';
+                        input.onchange = (e) => {
+                          const file = (e.target as HTMLInputElement).files?.[0];
+                          if (file) {
+                            // File handling would go here
+                            toast({
+                              title: "CSV Import",
+                              description: `${file.name} selected for import. This feature will be fully implemented soon.`,
+                            });
+                          }
+                        };
+                        input.click();
+                      }}
+                    >
+                      Import CSV
+                    </Button>
+                    
+                    {/* Download Template with different color */}
+                    <Button 
+                      variant="outline" 
+                      className="border-blue-500 text-blue-700 bg-blue-50 hover:bg-blue-100"
+                      onClick={() => {
+                        // Download the CSV template
+                        const link = document.createElement('a');
+                        link.href = '/templates/device-inventory-template.csv';
+                        link.setAttribute('download', 'device-inventory-template.csv');
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                        
+                        toast({
+                          title: "Template Downloaded",
+                          description: "Fill this template with your device information and import it back.",
+                        });
+                      }}
+                    >
+                      Download Template
+                    </Button>
                   </div>
-                  <h3 className="text-lg font-medium text-blue-800">Filter Devices</h3>
                 </div>
                 
-                <div className="grid gap-4 md:grid-cols-2">
-                  {/* Device Type Filter */}
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium text-blue-700">Filter by Device Type</div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                      {Object.entries(deviceCounts).map(([type, count]) => (
-                        <div 
-                          key={type}
-                          className={`p-2 rounded-md cursor-pointer transition-colors ${
-                            filterDeviceType === type ? 'bg-blue-200 border-blue-400 border' : 'bg-white border border-gray-200 hover:bg-blue-50'
-                          }`}
-                          onClick={() => setFilterDeviceType(filterDeviceType === type ? "all" : type)}
-                        >
-                          <div className="flex items-center justify-between mb-1">
-                            <div className="flex items-center">
-                              {getDeviceIcon(type)}
-                              <span className="ml-1 font-medium text-sm">{type}</span>
-                            </div>
-                            <span className={`${filterDeviceType === type ? 'bg-blue-600 text-white' : 'bg-gray-100'} text-xs py-0.5 px-2 rounded-full`}>{count}</span>
-                          </div>
-                        </div>
-                      ))}
-                      
-                      {filterDeviceType !== "all" && (
-                        <div 
-                          className="p-2 rounded-md border border-red-300 bg-red-50 cursor-pointer hover:bg-red-100 flex items-center justify-center"
-                          onClick={() => setFilterDeviceType("all")}
-                        >
-                          <span className="text-red-600 text-sm font-medium">Clear Filters</span>
-                        </div>
-                      )}
-                    </div>
+                <div className="flex items-center justify-between mt-4 sm:mt-0">
+                  <div className="mr-4">
+                    <Select
+                      value={filterDeviceType}
+                      onValueChange={setFilterDeviceType}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="All Types" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All Types</SelectItem>
+                        {Object.entries(deviceCounts).map(([type, count]) => (
+                          <SelectItem key={type} value={type}>
+                            {type} ({count})
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
                   
-                  {/* Text Search */}
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium text-blue-700">Search by Name, Serial Number, or Owner</div>
-                    <div className="relative">
-                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                      <Input
-                        placeholder="Enter search term..."
-                        className="pl-9 w-full border-gray-300 focus:border-blue-500"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                      />
-                      {searchTerm && (
-                        <button 
-                          className="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
-                          onClick={() => setSearchTerm("")}
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      )}
-                    </div>
-                    
-                    <div className="flex justify-between items-center">
-                      <div className="text-xs text-gray-500">
-                        {filteredDevices.length} device{filteredDevices.length !== 1 ? 's' : ''} found
-                      </div>
-                      
-                      <Button className="h-8" onClick={() => {setFilterDeviceType("all"); setSearchTerm("")}}>
-                        Reset All Filters
-                      </Button>
-                    </div>
-                  </div>
+                  <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                    Add Device
+                  </Button>
                 </div>
               </div>
               
-              {/* Add Device Button */}
-              <div className="flex justify-end mb-4">
-                <Button>
-                  <PlusCircle className="h-4 w-4 mr-2" />
-                  Add New Device
-                </Button>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold">Device Types</h2>
+              </div>
+              
+              {/* Device Table */}
+              <div className="mb-8">
+                <div className="rounded-md overflow-hidden">
+                  <div className="grid grid-cols-6 bg-gray-50 p-3 border-b border-gray-200 font-semibold text-gray-700">
+                    <div>Device Type</div>
+                    <div>Make/Model</div>
+                    <div>Serial/Asset #</div>
+                    <div>Risk Level</div>
+                    <div>Owner</div>
+                    <div>Actions</div>
+                  </div>
+                  
+                  {filteredDevices.length === 0 ? (
+                    <div className="p-6 text-center text-gray-500 bg-white border">
+                      No devices added yet. Click "Add Device" to begin tracking devices.
+                    </div>
+                  ) : (
+                    <div>
+                      {filteredDevices.map((device) => (
+                        <div key={device.id} className="grid grid-cols-6 p-4 border-b border-gray-100 items-center bg-white">
+                          <div className="flex items-center">
+                            <div className="mr-2">{getDeviceIcon(device.deviceType)}</div>
+                            <div>{device.deviceType || "—"}</div>
+                          </div>
+                          <div>{device.makeModel || "—"}</div>
+                          <div>{device.serialNumber || "—"}</div>
+                          <div>
+                            <Badge 
+                              variant="outline" 
+                              className={
+                                device.sensitivityLevel === "Critical" 
+                                  ? "border-red-500 text-red-700 bg-red-50" 
+                                  : device.sensitivityLevel === "High"
+                                    ? "border-orange-500 text-orange-700 bg-orange-50"
+                                    : "border-blue-500 text-blue-700 bg-blue-50"
+                              }
+                            >
+                              {device.sensitivityLevel || "—"}
+                            </Badge>
+                          </div>
+                          <div>{device.owner || "—"}</div>
+                          <div className="flex items-center gap-2">
+                            <Button size="sm" variant="outline" className="text-blue-600" onClick={() => handleOpenEditDialog(device)}>Edit</Button>
+                            <Button size="sm" variant="outline" className="text-red-600" onClick={() => {/* Delete function */}}>Remove</Button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
               
               {/* Devices Table */}
