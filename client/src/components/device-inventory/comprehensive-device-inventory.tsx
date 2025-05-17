@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Table,
   TableBody,
@@ -48,7 +49,9 @@ import {
   AlertTriangle,
   CheckCircle2,
   Clock,
-  Search
+  Search,
+  X,
+  PlusCircle
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -79,6 +82,7 @@ interface ExtendedDeviceInventoryItem extends DeviceInventoryItem {
   // Link to identity
   ownerId?: string;
   ownerName?: string;
+  additionalNotes?: string;
 }
 
 export default function ComprehensiveDeviceInventory() {
@@ -495,53 +499,88 @@ export default function ComprehensiveDeviceInventory() {
                 </div>
               </div>
               
-              {/* Device Type Breakdown */}
-              <div className="mb-6 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-                {Object.entries(deviceCounts).map(([type, count]) => (
-                  <div 
-                    key={type}
-                    className={`p-3 rounded-md border cursor-pointer transition-colors ${
-                      filterDeviceType === type ? 'bg-blue-50 border-blue-200' : 'bg-gray-50 border-gray-200 hover:bg-gray-100'
-                    }`}
-                    onClick={() => setFilterDeviceType(filterDeviceType === type ? "all" : type)}
-                  >
-                    <div className="flex items-center justify-between mb-1">
-                      <span className="font-medium text-sm">{type}</span>
-                      <span className="bg-white text-gray-700 text-xs py-0.5 px-2 rounded-full">{count}</span>
-                    </div>
-                    <div className="flex items-center text-gray-500 text-xs">
-                      {getDeviceIcon(type)}
-                      <span className="ml-1">
-                        {filterDeviceType === type ? 'Filtering active' : 'Click to filter'}
-                      </span>
-                    </div>
+              {/* Filter Controls Section */}
+              <div className="mb-6 border border-blue-200 rounded-md bg-blue-50 p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="bg-blue-600 p-1 rounded text-white">
+                    <Search className="h-4 w-4" />
                   </div>
-                ))}
-                
-                {filterDeviceType !== "all" && (
-                  <div 
-                    className="p-3 rounded-md border border-red-200 bg-red-50 cursor-pointer hover:bg-red-100 flex items-center justify-center"
-                    onClick={() => setFilterDeviceType("all")}
-                  >
-                    <span className="text-red-600 text-sm font-medium">Clear Filter</span>
-                  </div>
-                )}
-              </div>
-              
-              {/* Search and Add Device */}
-              <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-6">
-                <div className="relative w-full md:w-auto flex-1">
-                  <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
-                  <Input
-                    placeholder="Search devices by name, serial number, or owner..."
-                    className="pl-9 w-full"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                  />
+                  <h3 className="text-lg font-medium text-blue-800">Filter Devices</h3>
                 </div>
                 
+                <div className="grid gap-4 md:grid-cols-2">
+                  {/* Device Type Filter */}
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium text-blue-700">Filter by Device Type</div>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                      {Object.entries(deviceCounts).map(([type, count]) => (
+                        <div 
+                          key={type}
+                          className={`p-2 rounded-md cursor-pointer transition-colors ${
+                            filterDeviceType === type ? 'bg-blue-200 border-blue-400 border' : 'bg-white border border-gray-200 hover:bg-blue-50'
+                          }`}
+                          onClick={() => setFilterDeviceType(filterDeviceType === type ? "all" : type)}
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center">
+                              {getDeviceIcon(type)}
+                              <span className="ml-1 font-medium text-sm">{type}</span>
+                            </div>
+                            <span className={`${filterDeviceType === type ? 'bg-blue-600 text-white' : 'bg-gray-100'} text-xs py-0.5 px-2 rounded-full`}>{count}</span>
+                          </div>
+                        </div>
+                      ))}
+                      
+                      {filterDeviceType !== "all" && (
+                        <div 
+                          className="p-2 rounded-md border border-red-300 bg-red-50 cursor-pointer hover:bg-red-100 flex items-center justify-center"
+                          onClick={() => setFilterDeviceType("all")}
+                        >
+                          <span className="text-red-600 text-sm font-medium">Clear Filters</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Text Search */}
+                  <div className="space-y-2">
+                    <div className="text-sm font-medium text-blue-700">Search by Name, Serial Number, or Owner</div>
+                    <div className="relative">
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500" />
+                      <Input
+                        placeholder="Enter search term..."
+                        className="pl-9 w-full border-gray-300 focus:border-blue-500"
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                      {searchTerm && (
+                        <button 
+                          className="absolute right-2 top-2 text-gray-400 hover:text-gray-600"
+                          onClick={() => setSearchTerm("")}
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
+                    
+                    <div className="flex justify-between items-center">
+                      <div className="text-xs text-gray-500">
+                        {filteredDevices.length} device{filteredDevices.length !== 1 ? 's' : ''} found
+                      </div>
+                      
+                      <Button className="h-8" onClick={() => {setFilterDeviceType("all"); setSearchTerm("")}}>
+                        Reset All Filters
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Add Device Button */}
+              <div className="flex justify-end mb-4">
                 <Button>
-                  Add Device
+                  <PlusCircle className="h-4 w-4 mr-2" />
+                  Add New Device
                 </Button>
               </div>
               
