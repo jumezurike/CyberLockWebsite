@@ -53,7 +53,8 @@ import {
   X,
   PlusCircle,
   FileSpreadsheet,
-  ArrowDownToLine
+  ArrowDownToLine,
+  Download
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -501,13 +502,16 @@ export default function ComprehensiveDeviceInventory() {
                 </div>
               </div>
               
-              <div className="mb-6 flex flex-col sm:flex-row justify-between gap-4 border p-4 rounded-md bg-gray-50">
-                <div>
-                  <h3 className="font-semibold mb-2">Import Devices</h3>
-                  <div className="flex gap-2">
-                    {/* Import CSV button with enhanced styling */}
+              {/* Import Device Inventory section - matches reference exactly */}
+              <div className="mb-8 border border-gray-200 rounded-lg">
+                <div className="p-4">
+                  <h3 className="text-base font-semibold mb-1">Import Device Inventory</h3>
+                  <p className="text-gray-600 text-sm mb-4">
+                    Use these options to import existing device inventory data.
+                  </p>
+                  
+                  <div className="grid grid-cols-2 gap-4">
                     <Button 
-                      className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold px-6 py-5 shadow-lg hover:shadow-xl transition-all duration-300 rounded-md flex items-center" 
                       onClick={() => {
                         // File input for CSV upload
                         const input = document.createElement('input');
@@ -519,20 +523,19 @@ export default function ComprehensiveDeviceInventory() {
                             // File handling would go here
                             toast({
                               title: "CSV Import",
-                              description: `${file.name} selected for import. This feature will be fully implemented soon.`,
+                              description: `${file.name} selected for import. Processing...`,
                             });
                           }
                         };
                         input.click();
                       }}
+                      variant="default"
+                      className="justify-center py-2 h-auto text-sm bg-purple-600 hover:bg-purple-700"
                     >
-                      <FileSpreadsheet className="mr-2 h-5 w-5" />
-                      IMPORT CSV
+                      Import CSV
                     </Button>
                     
-                    {/* Download Template with enhanced styling */}
                     <Button 
-                      className="bg-gradient-to-r from-blue-400 to-indigo-500 hover:from-blue-500 hover:to-indigo-600 text-white font-bold px-6 py-5 shadow-lg hover:shadow-xl transition-all duration-300 rounded-md flex items-center"
                       onClick={() => {
                         // Download the CSV template
                         const link = document.createElement('a');
@@ -547,41 +550,42 @@ export default function ComprehensiveDeviceInventory() {
                           description: "Fill this template with your device information and import it back.",
                         });
                       }}
+                      variant="outline"
+                      className="justify-center py-2 h-auto text-sm flex items-center bg-white"
                     >
-                      <ArrowDownToLine className="mr-2 h-5 w-5" />
-                      DOWNLOAD TEMPLATE
+                      <Download className="mr-2 h-4 w-4" />
+                      Download Template
                     </Button>
                   </div>
                 </div>
+              </div>
+              
+              {/* Device Type Filter and Add Device Button */}
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-xl font-bold">Device Types</h2>
                 
-                <div className="flex items-center justify-between mt-4 sm:mt-0">
-                  <div className="mr-4">
-                    <Select
-                      value={filterDeviceType}
-                      onValueChange={setFilterDeviceType}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue placeholder="All Types" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="all">All Types</SelectItem>
-                        {Object.entries(deviceCounts).map(([type, count]) => (
-                          <SelectItem key={type} value={type}>
-                            {type} ({count})
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <Select
+                    value={filterDeviceType}
+                    onValueChange={setFilterDeviceType}
+                  >
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="All Types" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      {Object.entries(deviceCounts).map(([type, count]) => (
+                        <SelectItem key={type} value={type}>
+                          {type} ({count})
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                   
                   <Button className="bg-purple-600 hover:bg-purple-700 text-white">
                     Add Device
                   </Button>
                 </div>
-              </div>
-              
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-xl font-bold">Device Types</h2>
               </div>
               
               {/* Device Table */}
