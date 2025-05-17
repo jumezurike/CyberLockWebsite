@@ -75,6 +75,9 @@ export default function DeviceInventoryPage() {
         </TabsList>
         
         <TabsContent value="comprehensive" className="space-y-6">
+          {/* Add template download component */}
+          <DeviceInventoryTemplate />
+          
           <div className="bg-white rounded-lg">
             <ComprehensiveDeviceInventory />
           </div>
