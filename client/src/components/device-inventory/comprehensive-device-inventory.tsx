@@ -532,7 +532,7 @@ export default function ComprehensiveDeviceInventory() {
               
               {/* Device Table */}
               <div className="mb-8">
-                <div className="rounded-md overflow-hidden">
+                <div className="rounded-md overflow-hidden border">
                   <div className="grid grid-cols-6 bg-gray-50 p-3 border-b border-gray-200 font-semibold text-gray-700">
                     <div>Device Type</div>
                     <div>Make/Model</div>
@@ -543,7 +543,7 @@ export default function ComprehensiveDeviceInventory() {
                   </div>
                   
                   {filteredDevices.length === 0 ? (
-                    <div className="p-6 text-center text-gray-500 bg-white border">
+                    <div className="p-6 text-center text-gray-500 bg-white">
                       No devices added yet. Click "Add Device" to begin tracking devices.
                     </div>
                   ) : (
