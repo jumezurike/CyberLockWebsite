@@ -51,7 +51,9 @@ import {
   Clock,
   Search,
   X,
-  PlusCircle
+  PlusCircle,
+  FileSpreadsheet,
+  ArrowDownToLine
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
@@ -503,9 +505,9 @@ export default function ComprehensiveDeviceInventory() {
                 <div>
                   <h3 className="font-semibold mb-2">Import Devices</h3>
                   <div className="flex gap-2">
-                    {/* Import CSV button with distinct color */}
+                    {/* Import CSV button with enhanced styling */}
                     <Button 
-                      className="bg-green-600 hover:bg-green-700 text-white" 
+                      className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-bold px-6 py-5 shadow-lg hover:shadow-xl transition-all duration-300 rounded-md flex items-center" 
                       onClick={() => {
                         // File input for CSV upload
                         const input = document.createElement('input');
@@ -524,13 +526,13 @@ export default function ComprehensiveDeviceInventory() {
                         input.click();
                       }}
                     >
-                      Import CSV
+                      <FileSpreadsheet className="mr-2 h-5 w-5" />
+                      IMPORT CSV
                     </Button>
                     
-                    {/* Download Template with different color */}
+                    {/* Download Template with enhanced styling */}
                     <Button 
-                      variant="outline" 
-                      className="border-blue-500 text-blue-700 bg-blue-50 hover:bg-blue-100"
+                      className="bg-gradient-to-r from-blue-400 to-indigo-500 hover:from-blue-500 hover:to-indigo-600 text-white font-bold px-6 py-5 shadow-lg hover:shadow-xl transition-all duration-300 rounded-md flex items-center"
                       onClick={() => {
                         // Download the CSV template
                         const link = document.createElement('a');
@@ -546,7 +548,8 @@ export default function ComprehensiveDeviceInventory() {
                         });
                       }}
                     >
-                      Download Template
+                      <ArrowDownToLine className="mr-2 h-5 w-5" />
+                      DOWNLOAD TEMPLATE
                     </Button>
                   </div>
                 </div>
