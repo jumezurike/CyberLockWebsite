@@ -388,23 +388,54 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     }
   });
   
-  // Device management functions
+  // Device management functions with validation
   const addDevice = () => {
-    // Get current form values from device inventory tracking section
+    // Validate required fields before adding device
+    const deviceType = form.getValues('deviceInventoryTracking.deviceType');
+    const makeModel = form.getValues('deviceInventoryTracking.makeModel');
+    const serialNumber = form.getValues('deviceInventoryTracking.serialNumber');
+    const owner = form.getValues('deviceInventoryTracking.owner');
+    
+    // Create validation error message
+    let errorMessage = '';
+    
+    if (!deviceType || deviceType.length === 0) {
+      errorMessage += '- Device type must be selected\n';
+    }
+    
+    if (!makeModel || makeModel.trim() === '') {
+      errorMessage += '- Make/Model is required\n';
+    }
+    
+    if (!serialNumber || serialNumber.trim() === '') {
+      errorMessage += '- Serial Number is required\n';
+    }
+    
+    if (!owner || owner.trim() === '') {
+      errorMessage += '- Owner/Assigned User is required\n';
+    }
+    
+    // Display validation errors if any
+    if (errorMessage) {
+      alert(`Please correct the following issues before adding the device:\n${errorMessage}`);
+      return;
+    }
+    
+    // All validation passed, create the device record
     const deviceData = {
       id: `device-${Date.now()}`,
-      deviceType: form.getValues('deviceInventoryTracking.deviceType')?.join(', ') || 'Not specified',
-      makeModel: form.getValues('deviceInventoryTracking.makeModel') || 'Not specified',
-      serialNumber: form.getValues('deviceInventoryTracking.serialNumber') || 'Not specified',
-      sensitivityLevel: 'Medium', // Default value
-      owner: form.getValues('deviceInventoryTracking.owner') || 'Not specified',
-      networkZone: '',
+      deviceType: deviceType?.join(', ') || 'Not specified',
+      makeModel: makeModel || 'Not specified',
+      serialNumber: serialNumber || 'Not specified',
+      sensitivityLevel: form.getValues('deviceInventoryTracking.sensitivityClassification') || 'Medium',
+      owner: owner || 'Not specified',
+      networkZone: form.getValues('deviceInventoryTracking.networkSegment')?.join(', ') || '',
       operatingSystem: form.getValues('deviceInventoryTracking.operatingSystem') || '',
-      lastPatchDate: '',
-      patchStatus: '',
-      encryptionStatus: '',
+      lastPatchDate: form.getValues('deviceInventoryTracking.lastPatchDate') || '',
+      patchStatus: form.getValues('deviceInventoryTracking.patchingStatus') || '',
+      encryptionStatus: form.getValues('deviceInventoryTracking.encryptionStatus')?.join(', ') || '',
       authorizedUsers: [],
-      notes: ''
+      notes: form.getValues('deviceInventoryTracking.notes') || ''
     };
     
     // Add the new device to the inventory
@@ -415,6 +446,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     form.setValue('deviceInventoryTracking.makeModel', '');
     form.setValue('deviceInventoryTracking.serialNumber', '');
     form.setValue('deviceInventoryTracking.owner', '');
+    
+    // Reset other optional fields as well
+    form.setValue('deviceInventoryTracking.deviceType', []);
+    form.setValue('deviceInventoryTracking.operatingSystem', '');
+    form.setValue('deviceInventoryTracking.networkSegment', []);
     
     // Show success message
     alert('Device added successfully to inventory.');
