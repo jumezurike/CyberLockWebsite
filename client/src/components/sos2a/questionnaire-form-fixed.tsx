@@ -3792,13 +3792,36 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <div className="border rounded-md p-4 mb-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium">Device Inventory</h4>
-                      <Button 
-                        onClick={addDevice}
-                        size="sm"
-                        className="bg-purple-600 hover:bg-purple-700"
-                      >
-                        Add Device
-                      </Button>
+                      {editingDeviceIndex !== null ? (
+                        <div className="flex space-x-2">
+                          <Button 
+                            onClick={saveEditedDevice}
+                            size="sm"
+                            className="bg-green-600 hover:bg-green-700 flex items-center"
+                          >
+                            <Save className="w-3.5 h-3.5 mr-1" />
+                            Save Changes
+                          </Button>
+                          <Button 
+                            onClick={cancelEditing}
+                            size="sm"
+                            variant="outline"
+                            className="text-gray-700 border-gray-300"
+                          >
+                            <X className="w-3.5 h-3.5 mr-1" />
+                            Cancel
+                          </Button>
+                        </div>
+                      ) : (
+                        <Button 
+                          onClick={addDevice}
+                          size="sm"
+                          className="bg-purple-600 hover:bg-purple-700"
+                        >
+                          <Plus className="w-3.5 h-3.5 mr-1" />
+                          Add Device
+                        </Button>
+                      )}
                     </div>
                     
                     <div className="mb-4 border-2 border-blue-200 p-4 rounded-md bg-blue-50">
