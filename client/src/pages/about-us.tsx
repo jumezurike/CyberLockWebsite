@@ -316,7 +316,7 @@ const AboutUs = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 <p className="text-gray-700">
-                  Christopher brings his extensive financial expertise and leadership experience to CyberLockX as Co-CEO and CFO. 
+                  Christopher brings his extensive financial expertise and leadership experience to CyberLockX as CFO. 
                   With an MBA and MSE background, he oversees strategic financial planning and business development, 
                   ensuring sustainable growth while helping healthcare organizations protect their critical infrastructure and patient data.
                 </p>
