@@ -3714,20 +3714,33 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           ? form.getValues('deviceInventory') 
                           : form.getValues('deviceInventory')?.filter(d => d.deviceType === deviceTypeFilter))
                           .map((device, index) => (
-                            <div key={device.id} className="grid grid-cols-5 p-2 border-t text-sm">
+                            <div key={device.id} className="grid grid-cols-5 p-2 border-t text-sm hover:bg-gray-50">
                               <div>{device.deviceType || '—'}</div>
                               <div>{device.makeModel || '—'}</div>
                               <div>{device.serialNumber || '—'}</div>
                               <div>{device.sensitivityLevel || '—'}</div>
                               <div className="flex items-center justify-between">
                                 <span>{device.owner || '—'}</span>
-                                <Button 
-                                  variant="ghost" 
-                                  size="sm"
-                                  onClick={() => removeDevice(index)}
-                                >
-                                  <span>Delete</span>
-                                </Button>
+                                <div className="flex space-x-2">
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="text-blue-600 border-blue-200 hover:bg-blue-50 hover:border-blue-300"
+                                    onClick={() => editDevice(index)}
+                                  >
+                                    <Pencil className="w-3.5 h-3.5 mr-1" />
+                                    <span>Edit</span>
+                                  </Button>
+                                  <Button 
+                                    variant="outline" 
+                                    size="sm"
+                                    className="text-red-600 border-red-200 hover:bg-red-50 hover:border-red-300"
+                                    onClick={() => removeDevice(index)}
+                                  >
+                                    <Trash2 className="w-3.5 h-3.5 mr-1" />
+                                    <span>Delete</span>
+                                  </Button>
+                                </div>
                               </div>
                             </div>
                           ))
