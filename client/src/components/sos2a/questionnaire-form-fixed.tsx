@@ -4552,6 +4552,66 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </FormItem>
                           )}
                         />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.disposalLocation"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Disposal/Decommission Location</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Where device was sent if disposed" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="recycling-center">Certified Recycling Center</SelectItem>
+                                  <SelectItem value="asset-recovery">Asset Recovery Service</SelectItem>
+                                  <SelectItem value="manufacturer-return">Returned to Manufacturer</SelectItem>
+                                  <SelectItem value="secure-destruction">Secure Data Destruction Facility</SelectItem>
+                                  <SelectItem value="long-term-storage">Long-term Storage Archive</SelectItem>
+                                  <SelectItem value="donated">Donated to Organization</SelectItem>
+                                  <SelectItem value="other">Other (See Notes)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.dataSanitization"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Data Sanitization Method</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="How data was removed/destroyed" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="none">Not Sanitized Yet</SelectItem>
+                                  <SelectItem value="standard-wipe">Standard Wipe/Factory Reset</SelectItem>
+                                  <SelectItem value="secure-erase">Secure Data Erasure (DoD 5220.22-M)</SelectItem>
+                                  <SelectItem value="degaussing">Magnetic Degaussing</SelectItem>
+                                  <SelectItem value="physical-destruction">Physical Destruction/Shredding</SelectItem>
+                                  <SelectItem value="third-party">Third-Party Certified Destruction</SelectItem>
+                                  <SelectItem value="hybrid">Hybrid Method (See Notes)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </div>
                       
                       <FormField
