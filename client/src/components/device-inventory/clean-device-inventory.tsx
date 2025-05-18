@@ -55,8 +55,12 @@ export default function CleanDeviceInventory() {
         
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center">
-            <div className="mr-4">
-              <span className="block text-sm mb-1">Device Types</span>
+            <div className="mr-4 border p-3 rounded-md bg-gray-50">
+              <div className="flex items-center mb-1">
+                <span className="block text-sm font-medium">Filter by Device Type</span>
+                <div className="ml-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-full">Filter</div>
+              </div>
+              <p className="text-xs text-gray-500 mb-2">Select a device type to filter the inventory list below</p>
               <Select value={selectedDeviceType} onValueChange={setSelectedDeviceType}>
                 <SelectTrigger className="w-[180px]">
                   <SelectValue placeholder="All Types" />
