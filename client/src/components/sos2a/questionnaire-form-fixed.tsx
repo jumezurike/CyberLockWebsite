@@ -4577,37 +4577,59 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">5. Lifecycle Management</h4>
                     <div className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.disposalLocation"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Disposal/Decommission Location</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.disposalLocation"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Disposal/Decommission Location</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select disposal location" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="recycling-center">Recycling Center</SelectItem>
+                                  <SelectItem value="manufacturer-return">Manufacturer Return Program</SelectItem>
+                                  <SelectItem value="certified-disposal">Certified Disposal Facility</SelectItem>
+                                  <SelectItem value="third-party-reseller">Third-Party Reseller</SelectItem>
+                                  <SelectItem value="internal-repurpose">Internal Repurposing</SelectItem>
+                                  <SelectItem value="employee-purchase">Employee Purchase Program</SelectItem>
+                                  <SelectItem value="destruction-service">Destruction Service</SelectItem>
+                                  <SelectItem value="storage-facility">Long-term Storage Facility</SelectItem>
+                                  <SelectItem value="other">Other (Specify in Notes)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.custodyOrganization"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Handling Company/Organization</FormLabel>
                               <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select disposal location" />
-                                </SelectTrigger>
+                                <Input
+                                  placeholder="Enter specific company name (e.g., Each1Teach1 Tech)"
+                                  {...field}
+                                />
                               </FormControl>
-                              <SelectContent>
-                                <SelectItem value="recycling-center">Recycling Center</SelectItem>
-                                <SelectItem value="manufacturer-return">Manufacturer Return Program</SelectItem>
-                                <SelectItem value="certified-disposal">Certified Disposal Facility</SelectItem>
-                                <SelectItem value="third-party-reseller">Third-Party Reseller</SelectItem>
-                                <SelectItem value="internal-repurpose">Internal Repurposing</SelectItem>
-                                <SelectItem value="employee-purchase">Employee Purchase Program</SelectItem>
-                                <SelectItem value="destruction-service">Destruction Service</SelectItem>
-                                <SelectItem value="storage-facility">Long-term Storage Facility</SelectItem>
-                                <SelectItem value="other">Other (Specify in Notes)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                              <FormDescription className="text-xs">
+                                Enter the specific company handling the disposal/recycling
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
                       
                       <FormField
                         control={form.control}
@@ -4636,26 +4658,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 <SelectItem value="other">Other (Specify in Notes)</SelectItem>
                               </SelectContent>
                             </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.custodyOrganization"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Custody Organization</FormLabel>
-                            <FormDescription>
-                              The name of the organization that has custody of decommissioned, disposed, or pending disposal assets
-                            </FormDescription>
-                            <FormControl>
-                              <Input
-                                placeholder="Enter organization name (e.g., Asset Recovery Inc., Internal IT Department)"
-                                {...field}
-                              />
-                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
