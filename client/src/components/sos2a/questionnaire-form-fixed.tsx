@@ -5011,10 +5011,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </Button>
                       <Button 
                         type="button" 
-                        variant="outline" 
+                        variant="secondary" 
                         size="sm"
-                        className="border-blue-300 text-blue-600 hover:bg-blue-50"
-                        onClick={() => {
+                        className="bg-gray-100 hover:bg-gray-200"
+                        onClick={(e) => {
+                          e.preventDefault();
                           // Download the user identity template CSV
                           const csvHeader = "user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source";
                           
@@ -5040,7 +5041,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           document.body.removeChild(link);
                         }}
                       >
-                        Download Template
+                        <Download className="w-4 h-4 mr-2" /> Download Template
                       </Button>
                     </div>
                   </div>
