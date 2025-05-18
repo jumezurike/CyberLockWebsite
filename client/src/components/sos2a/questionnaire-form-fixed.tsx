@@ -3624,13 +3624,17 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </Button>
                     </div>
                     
-                    <div className="mb-4">
-                      <h5 className="text-sm font-medium mb-2">Device Types</h5>
+                    <div className="mb-4 border p-3 rounded-md bg-gray-50">
+                      <div className="flex items-center mb-1">
+                        <h5 className="text-sm font-medium">Filter Devices</h5>
+                        <div className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-full">Filter Tool</div>
+                      </div>
+                      <p className="text-xs text-gray-500 mb-2">Select a device type to filter the inventory list below</p>
                       <Select
                         value={deviceTypeFilter}
                         onValueChange={handleFilterChange}
                       >
-                        <SelectTrigger className="w-[180px] bg-gray-100 border-gray-300">
+                        <SelectTrigger className="w-[180px] bg-white border-gray-300">
                           <SelectValue placeholder="Filter by device type" />
                         </SelectTrigger>
                         <SelectContent>

@@ -42,9 +42,6 @@ export default function DirectNavigation() {
             <Link href="/parameter-mapping">
               <span className="text-blue-600 hover:underline cursor-pointer">Parameter Mapping</span>
             </Link>
-            <Link href="/device-inventory">
-              <span className="text-blue-600 hover:underline cursor-pointer font-bold text-red-600">Device Inventory</span>
-            </Link>
             <Link href="/about-us">
               <span className="text-blue-600 hover:underline cursor-pointer">About Us</span>
             </Link>
