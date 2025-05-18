@@ -36,7 +36,7 @@ import { EulaAgreement } from "./eula-agreement";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { DownloadCloud, UploadCloud, Pencil, Trash2, Info, Plus, Save, X } from "lucide-react";
+import { DownloadCloud, UploadCloud, Pencil, Trash2, Info, Plus, Save, X, UserPlus, Download } from "lucide-react";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -4999,16 +4999,21 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     <div className="flex flex-wrap gap-3">
                       <Button 
                         type="button" 
-                        variant="outline" 
+                        variant="default" 
                         size="sm"
-                        onClick={() => window.location.href = "/identity-management"}
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.location.href = "/identity-management";
+                        }}
                       >
-                        Manage User Identities
+                        <UserPlus className="w-4 h-4 mr-2" /> Manage User Identities
                       </Button>
                       <Button 
                         type="button" 
                         variant="outline" 
                         size="sm"
+                        className="border-blue-300 text-blue-600 hover:bg-blue-50"
                         onClick={() => {
                           // Download the user identity template CSV
                           const csvHeader = "user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source";
