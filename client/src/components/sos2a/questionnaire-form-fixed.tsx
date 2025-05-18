@@ -4853,6 +4853,26 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         
                         <FormField
                           control={form.control}
+                          name="deviceInventoryTracking.custodyOrganization"
+                          render={({ field }) => (
+                            <FormItem className="mt-2">
+                              <FormLabel>Handling Company/Organization</FormLabel>
+                              <FormControl>
+                                <Input
+                                  placeholder="Enter specific company name (e.g., Each1Teach1 Tech)"
+                                  {...field}
+                                />
+                              </FormControl>
+                              <FormDescription className="text-xs">
+                                Enter the specific company handling the disposal/recycling
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
                           name="deviceInventoryTracking.dataSanitization"
                           render={({ field }) => (
                             <FormItem>
