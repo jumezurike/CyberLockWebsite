@@ -27,6 +27,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { FileUp as FileUpload, FileSpreadsheet } from "lucide-react";
 import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
 import { RegulatoryContent } from "./regulatory-content";
@@ -3704,7 +3705,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             alert('CSV import functionality would be implemented here');
                           }}
                         >
-                          <FileUpload className="mr-2 h-4 w-4" />
+                          <FileUp className="mr-2 h-4 w-4" />
                           Import CSV
                         </Button>
                         <Button 
