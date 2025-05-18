@@ -4465,9 +4465,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                   
                   {/* 6. Lifecycle & Ownership Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">6. Lifecycle & Ownership</h4>
-                    <div className="space-y-6">
+                  <div className="border-2 border-yellow-200 rounded-md p-4 mb-6 bg-yellow-50">
+                    <div className="flex items-center mb-2">
+                      <h4 className="font-medium text-yellow-800">6. Lifecycle & Ownership</h4>
+                      <div className="ml-2 px-2 py-0.5 text-xs bg-yellow-600 text-white rounded-full">Maintenance</div>
+                    </div>
+                    <p className="text-xs text-yellow-700 mb-3">Track procurement, warranty, and management details</p>
+                    <div className="space-y-6 bg-white p-3 border border-yellow-200 rounded-md">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
                           control={form.control}
@@ -4586,6 +4590,28 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         )}
                       />
                     </div>
+                  </div>
+                  
+                  {/* Add Device Button Section */}
+                  <div className="border-2 border-blue-200 rounded-md p-6 mb-6 bg-blue-50">
+                    <div className="flex items-center mb-2">
+                      <h4 className="font-medium text-blue-800">Add This Device to Inventory</h4>
+                      <div className="ml-2 px-2 py-0.5 text-xs bg-blue-600 text-white rounded-full">Final Step</div>
+                    </div>
+                    <p className="text-sm text-blue-700 mb-4">
+                      Complete the device information above and click the button below to add this device to your inventory.
+                    </p>
+                    <Button 
+                      type="button" 
+                      className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2 py-6 text-lg" 
+                      onClick={addDevice}
+                    >
+                      <Plus size={24} />
+                      <span>Add Device to Inventory</span>
+                    </Button>
+                    <p className="text-xs text-center text-blue-600 mt-3">
+                      Your device will appear in the inventory list at the top of this page
+                    </p>
                   </div>
                 </div>
                 
