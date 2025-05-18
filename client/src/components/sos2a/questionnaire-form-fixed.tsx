@@ -3625,31 +3625,33 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </Button>
                     </div>
                     
-                    <div className="mb-4 border p-3 rounded-md bg-gray-50">
-                      <div className="flex items-center mb-1">
-                        <h5 className="text-sm font-medium">Filter Devices</h5>
-                        <div className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-full">Filter Tool</div>
+                    <div className="mb-4 border-2 border-blue-200 p-4 rounded-md bg-blue-50">
+                      <div className="flex items-center mb-2">
+                        <h5 className="text-sm font-medium text-blue-800">Filter Devices</h5>
+                        <div className="ml-2 px-2 py-0.5 text-xs bg-blue-600 text-white rounded-full">Filter Tool</div>
                       </div>
-                      <p className="text-xs text-gray-500 mb-2">Select a device type to filter the inventory list below</p>
-                      <Select
-                        value={deviceTypeFilter}
-                        onValueChange={handleFilterChange}
-                      >
-                        <SelectTrigger className="w-[180px] bg-white border-gray-300">
-                          <SelectValue placeholder="Filter by device type" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="all">All Types</SelectItem>
-                          <SelectItem value="Workstation">Workstations</SelectItem>
-                          <SelectItem value="Laptop">Laptops</SelectItem>
-                          <SelectItem value="Mobile Phone">Mobile Devices</SelectItem>
-                          <SelectItem value="Server">Servers</SelectItem>
-                          <SelectItem value="Network Device">Network Equipment</SelectItem>
-                          <SelectItem value="IoT Device">IoT Devices</SelectItem>
-                          <SelectItem value="Medical Device">Medical Devices</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <p className="text-xs text-blue-700 mb-3">Select a device type to filter the inventory list below</p>
+                      <div className="bg-white p-2 rounded border border-blue-200">
+                        <Select
+                          value={deviceTypeFilter}
+                          onValueChange={handleFilterChange}
+                        >
+                          <SelectTrigger className="w-[200px] bg-white border-blue-300 focus:ring-blue-500">
+                            <SelectValue placeholder="Filter by device type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Types</SelectItem>
+                            <SelectItem value="Workstation">Workstations</SelectItem>
+                            <SelectItem value="Laptop">Laptops</SelectItem>
+                            <SelectItem value="Mobile Phone">Mobile Devices</SelectItem>
+                            <SelectItem value="Server">Servers</SelectItem>
+                            <SelectItem value="Network Device">Network Equipment</SelectItem>
+                            <SelectItem value="IoT Device">IoT Devices</SelectItem>
+                            <SelectItem value="Medical Device">Medical Devices</SelectItem>
+                            <SelectItem value="Other">Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                     
                     <div className="rounded-md border overflow-hidden">
