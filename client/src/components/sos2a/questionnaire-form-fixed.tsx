@@ -3724,9 +3724,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                   
                   {/* 1. Identification Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">1. Identification</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="border-2 border-green-200 rounded-md p-4 mb-6 bg-green-50">
+                    <div className="flex items-center mb-2">
+                      <h4 className="font-medium text-green-800">1. Identification</h4>
+                      <div className="ml-2 px-2 py-0.5 text-xs bg-green-600 text-white rounded-full">Required</div>
+                    </div>
+                    <p className="text-xs text-green-700 mb-3">Enter basic device identification information</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-3 border border-green-200 rounded-md">
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.deviceId"
@@ -3734,7 +3738,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <FormItem>
                             <FormLabel>Device ID / Asset Tag</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter device ID or asset tag" {...field} />
+                              <Input placeholder="Enter device ID or asset tag" {...field} className="border-green-300 focus:border-green-500 focus:ring-green-500" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3748,7 +3752,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <FormItem>
                             <FormLabel>Make / Model</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter device make and model" {...field} />
+                              <Input placeholder="Enter device make and model" {...field} className="border-green-300 focus:border-green-500 focus:ring-green-500" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3762,7 +3766,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <FormItem>
                             <FormLabel>Color / Physical Description</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter device color or description" {...field} />
+                              <Input placeholder="Enter device color or description" {...field} className="border-green-300 focus:border-green-500 focus:ring-green-500" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3776,7 +3780,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <FormItem>
                             <FormLabel>Serial Number</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter device serial number" {...field} />
+                              <Input placeholder="Enter device serial number" {...field} className="border-green-300 focus:border-green-500 focus:ring-green-500" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3790,7 +3794,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <FormItem>
                             <FormLabel>Owner / Assigned User</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter device owner or assigned user" {...field} />
+                              <Input placeholder="Enter device owner or assigned user" {...field} className="border-green-300 focus:border-green-500 focus:ring-green-500" />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3813,10 +3817,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* Classification - REMOVED DUPLICATE NUMBER Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">2. Classification</h4>
-                    <div className="space-y-6">
+                  {/* Classification Section */}
+                  <div className="border-2 border-orange-200 rounded-md p-4 mb-6 bg-orange-50">
+                    <div className="flex items-center mb-2">
+                      <h4 className="font-medium text-orange-800">2. Classification</h4>
+                      <div className="ml-2 px-2 py-0.5 text-xs bg-orange-600 text-white rounded-full">Device Type</div>
+                    </div>
+                    <p className="text-xs text-orange-700 mb-3">Classify your device by type and category</p>
+                    <div className="space-y-6 bg-white p-3 border border-orange-200 rounded-md">
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.deviceType"
