@@ -388,26 +388,36 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     }
   });
   
-  // Add device management functions after form is defined
+  // Device management functions
   const addDevice = () => {
+    // Get current form values from device inventory tracking section
+    const deviceData = {
+      id: `device-${Date.now()}`,
+      deviceType: form.getValues('deviceInventoryTracking.deviceType')?.join(', ') || 'Not specified',
+      makeModel: form.getValues('deviceInventoryTracking.makeModel') || 'Not specified',
+      serialNumber: form.getValues('deviceInventoryTracking.serialNumber') || 'Not specified',
+      sensitivityLevel: 'Medium', // Default value
+      owner: form.getValues('deviceInventoryTracking.owner') || 'Not specified',
+      networkZone: '',
+      operatingSystem: form.getValues('deviceInventoryTracking.operatingSystem') || '',
+      lastPatchDate: '',
+      patchStatus: '',
+      encryptionStatus: '',
+      authorizedUsers: [],
+      notes: ''
+    };
+    
+    // Add the new device to the inventory
     const devices = form.getValues('deviceInventory') || [];
-    form.setValue('deviceInventory', [
-      ...devices,
-      {
-        id: `device-${Date.now()}`,
-        deviceType: '',
-        makeModel: '',
-        serialNumber: '',
-        sensitivityLevel: '',
-        networkZone: '',
-        operatingSystem: '',
-        lastPatchDate: '',
-        patchStatus: '',
-        encryptionStatus: '',
-        authorizedUsers: [],
-        notes: ''
-      }
-    ]);
+    form.setValue('deviceInventory', [...devices, deviceData]);
+    
+    // Clear form fields for next device
+    form.setValue('deviceInventoryTracking.makeModel', '');
+    form.setValue('deviceInventoryTracking.serialNumber', '');
+    form.setValue('deviceInventoryTracking.owner', '');
+    
+    // Show success message
+    alert('Device added successfully to inventory.');
   };
   
   const removeDevice = (index: number) => {
@@ -426,7 +436,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     if (deviceTypeFilter === 'all') {
       setFilteredDevices(devices);
     } else {
-      setFilteredDevices(devices.filter(device => device?.deviceType === deviceTypeFilter));
+      setFilteredDevices(devices.filter(device => device?.deviceType.includes(deviceTypeFilter)));
     }
   }, [form.watch('deviceInventory'), deviceTypeFilter]);
   
@@ -4122,9 +4132,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                   
                   {/* 4. Security Posture Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">4. Security Posture</h4>
-                    <div className="space-y-6">
+                  <div className="border-2 border-purple-200 rounded-md p-4 mb-6 bg-purple-50">
+                    <div className="flex items-center mb-2">
+                      <h4 className="font-medium text-purple-800">4. Security Posture</h4>
+                      <div className="ml-2 px-2 py-0.5 text-xs bg-purple-600 text-white rounded-full">Security</div>
+                    </div>
+                    <p className="text-xs text-purple-700 mb-3">Identify security features and compliance status</p>
+                    <div className="space-y-6 bg-white p-3 border border-purple-200 rounded-md">
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.encryptionStatus"
