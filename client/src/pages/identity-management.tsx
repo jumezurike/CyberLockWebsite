@@ -292,9 +292,9 @@ export default function IdentityManagement() {
                           <Button variant="outline" size="sm">Choose File</Button>
                           <span className="text-sm text-gray-500">No file chosen</span>
                           <Button 
-                            variant="ghost" 
+                            variant="default" 
                             size="sm"
-                            className="ml-auto"
+                            className="ml-auto bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
                             onClick={() => {
                               // Download template functionality
                               const csvHeader = "user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source";
@@ -319,6 +319,7 @@ export default function IdentityManagement() {
                               document.body.removeChild(link);
                             }}
                           >
+                            <Download className="h-4 w-4" />
                             Get Template
                           </Button>
                         </div>
@@ -697,7 +698,8 @@ export default function IdentityManagement() {
                 <h3 className="font-semibold text-lg mb-4">User Identity Template</h3>
                 <div className="flex justify-between items-center mb-4">
                   <h4 className="font-semibold">Universal Identity Template</h4>
-                  <Button variant="outline" size="sm" className="bg-blue-50 border-blue-200 text-blue-700">
+                  <Button variant="default" size="sm" className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2">
+                    <Download className="h-4 w-4" />
                     Download Template
                   </Button>
                 </div>
