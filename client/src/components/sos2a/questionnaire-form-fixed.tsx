@@ -3738,64 +3738,41 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       )}
                     </div>
                     
-                    <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div className="border-2 border-blue-200 rounded-md p-4 bg-blue-50 flex flex-col justify-between">
-                        <div>
-                          <h5 className="text-sm font-medium text-blue-800 mb-2">Add New Device</h5>
-                          <p className="text-sm text-blue-700 mb-3">
-                            Fill out the device details below, then click this button to add to inventory
-                          </p>
-                        </div>
+                    <div className="mt-4 border rounded-md p-4 bg-gray-50">
+                      <h5 className="text-sm font-medium mb-2">Import Device Inventory</h5>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Use these options to import existing device inventory data or download a template.
+                      </p>
+                      <div className="grid grid-cols-2 gap-4">
                         <Button 
-                          type="button" 
-                          className="w-full bg-green-600 hover:bg-green-700 text-white flex items-center justify-center gap-2 py-3" 
-                          onClick={addDevice}
+                          variant="default" 
+                          size="default"
+                          className="bg-purple-600 hover:bg-purple-700 w-full flex items-center justify-center py-2"
+                          onClick={() => {
+                            // File input for CSV upload would go here
+                            alert('CSV import functionality would be implemented here');
+                          }}
                         >
-                          <Plus size={18} />
-                          <span>Add Device to Inventory</span>
+                          <Upload className="mr-2 h-4 w-4" />
+                          Import CSV
                         </Button>
-                      </div>
-                      
-                      <div className="border rounded-md p-4 bg-gray-50">
-                        <h5 className="text-sm font-medium mb-2">Import Device Inventory</h5>
-                        <p className="text-sm text-muted-foreground mb-3">
-                          Use these options to import existing device inventory data.
-                        </p>
-                        <div className="grid grid-cols-2 gap-4">
-                          <Button 
-                            variant="default" 
-                            size="default"
-                            className="bg-purple-600 hover:bg-purple-700 w-full flex items-center justify-center py-2"
-                            onClick={() => {
-                              // File input for CSV upload would go here
-                              alert('CSV import functionality would be implemented here');
-                            }}
-                          >
-                            <Upload className="mr-2 h-4 w-4" />
-                            Import CSV
-                          </Button>
-                          <Button 
-                            variant="outline" 
-                            size="default"
-                            className="w-full border-gray-300 bg-white hover:bg-gray-50 flex items-center justify-center py-2"
-                            onClick={generateCsvTemplate}
-                          >
-                            <FileSpreadsheet className="mr-2 h-4 w-4" />
-                            Download Template
-                          </Button>
-                        </div>
+                        <Button 
+                          variant="outline" 
+                          size="default"
+                          className="w-full border-gray-300 bg-white hover:bg-gray-50 flex items-center justify-center py-2"
+                          onClick={generateCsvTemplate}
+                        >
+                          <FileSpreadsheet className="mr-2 h-4 w-4" />
+                          Download Template
+                        </Button>
                       </div>
                     </div>
                   </div>
                   
                   {/* 1. Identification Section */}
-                  <div className="border-2 border-green-200 rounded-md p-4 mb-6 bg-green-50">
-                    <div className="flex items-center mb-2">
-                      <h4 className="font-medium text-green-800">1. Identification</h4>
-                      <div className="ml-2 px-2 py-0.5 text-xs bg-green-600 text-white rounded-full">Required</div>
-                    </div>
-                    <p className="text-xs text-green-700 mb-3">Enter basic device identification information</p>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-3 border border-green-200 rounded-md">
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">1. Identification</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.deviceId"
