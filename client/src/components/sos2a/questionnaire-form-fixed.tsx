@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -36,7 +36,7 @@ import { EulaAgreement } from "./eula-agreement";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { DownloadCloud, UploadCloud, Pencil, Trash2, Info, Plus } from "lucide-react";
+import { DownloadCloud, UploadCloud, Pencil, Trash2, Info, Plus, Save, X } from "lucide-react";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -456,10 +456,140 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     alert('Device added successfully to inventory.');
   };
   
-  const removeDevice = (index: number) => {
+  const editDevice = (index: number) => {
     const devices = form.getValues('deviceInventory') || [];
-    devices.splice(index, 1);
-    form.setValue('deviceInventory', [...devices]);
+    const deviceToEdit = devices[index];
+    
+    if (deviceToEdit) {
+      // Set form fields with the device data to edit
+      form.setValue('deviceInventoryTracking.deviceType', deviceToEdit.deviceType.split(', '));
+      form.setValue('deviceInventoryTracking.makeModel', deviceToEdit.makeModel);
+      form.setValue('deviceInventoryTracking.serialNumber', deviceToEdit.serialNumber);
+      form.setValue('deviceInventoryTracking.owner', deviceToEdit.owner);
+      form.setValue('deviceInventoryTracking.sensitivityClassification', deviceToEdit.sensitivityLevel);
+      
+      if (deviceToEdit.networkZone) {
+        form.setValue('deviceInventoryTracking.networkSegment', deviceToEdit.networkZone.split(', '));
+      }
+      
+      if (deviceToEdit.operatingSystem) {
+        form.setValue('deviceInventoryTracking.operatingSystem', deviceToEdit.operatingSystem);
+      }
+      
+      if (deviceToEdit.lastPatchDate) {
+        form.setValue('deviceInventoryTracking.lastPatchDate', deviceToEdit.lastPatchDate);
+      }
+      
+      if (deviceToEdit.patchStatus) {
+        form.setValue('deviceInventoryTracking.patchingStatus', deviceToEdit.patchStatus);
+      }
+      
+      if (deviceToEdit.encryptionStatus) {
+        form.setValue('deviceInventoryTracking.encryptionStatus', deviceToEdit.encryptionStatus.split(', '));
+      }
+      
+      if (deviceToEdit.notes) {
+        form.setValue('deviceInventoryTracking.notes', deviceToEdit.notes);
+      }
+      
+      // Set the editing index
+      setEditingDeviceIndex(index);
+      
+      // Scroll to the device form
+      document.getElementById('device-inventory-form')?.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
+  const cancelEditing = () => {
+    // Clear the editing state
+    setEditingDeviceIndex(null);
+    
+    // Clear form fields
+    form.setValue('deviceInventoryTracking.deviceType', []);
+    form.setValue('deviceInventoryTracking.makeModel', '');
+    form.setValue('deviceInventoryTracking.serialNumber', '');
+    form.setValue('deviceInventoryTracking.owner', '');
+    form.setValue('deviceInventoryTracking.operatingSystem', '');
+    form.setValue('deviceInventoryTracking.networkSegment', []);
+  };
+  
+  const saveEditedDevice = () => {
+    // Get current values
+    const deviceType = form.getValues('deviceInventoryTracking.deviceType');
+    const makeModel = form.getValues('deviceInventoryTracking.makeModel');
+    const serialNumber = form.getValues('deviceInventoryTracking.serialNumber');
+    const owner = form.getValues('deviceInventoryTracking.owner');
+    
+    // Basic validation
+    let errorMessage = '';
+    
+    if (!deviceType || deviceType.length === 0) {
+      errorMessage += '- Device type must be selected\n';
+    }
+    
+    if (!makeModel || makeModel.trim() === '') {
+      errorMessage += '- Make/Model is required\n';
+    }
+    
+    if (!serialNumber || serialNumber.trim() === '') {
+      errorMessage += '- Serial Number is required\n';
+    }
+    
+    if (!owner || owner.trim() === '') {
+      errorMessage += '- Owner/Assigned User is required\n';
+    }
+    
+    // Display validation errors if any
+    if (errorMessage) {
+      alert(`Please correct the following issues before saving the device:\n${errorMessage}`);
+      return;
+    }
+    
+    // All validation passed, update the device record
+    const deviceData = {
+      id: `device-${Date.now()}`, // Generate a new ID for the updated record
+      deviceType: deviceType?.join(', ') || 'Not specified',
+      makeModel: makeModel || 'Not specified',
+      serialNumber: serialNumber || 'Not specified',
+      sensitivityLevel: form.getValues('deviceInventoryTracking.sensitivityClassification') || 'Medium',
+      owner: owner || 'Not specified',
+      networkZone: form.getValues('deviceInventoryTracking.networkSegment')?.join(', ') || '',
+      operatingSystem: form.getValues('deviceInventoryTracking.operatingSystem') || '',
+      lastPatchDate: form.getValues('deviceInventoryTracking.lastPatchDate') || '',
+      patchStatus: form.getValues('deviceInventoryTracking.patchingStatus') || '',
+      encryptionStatus: form.getValues('deviceInventoryTracking.encryptionStatus')?.join(', ') || '',
+      authorizedUsers: [],
+      notes: form.getValues('deviceInventoryTracking.notes') || ''
+    };
+    
+    // Update the device in the inventory
+    if (editingDeviceIndex !== null) {
+      const devices = form.getValues('deviceInventory') || [];
+      devices[editingDeviceIndex] = deviceData;
+      form.setValue('deviceInventory', [...devices]);
+      
+      // Clear editing state
+      setEditingDeviceIndex(null);
+      
+      // Clear form fields
+      form.setValue('deviceInventoryTracking.deviceType', []);
+      form.setValue('deviceInventoryTracking.makeModel', '');
+      form.setValue('deviceInventoryTracking.serialNumber', '');
+      form.setValue('deviceInventoryTracking.owner', '');
+      form.setValue('deviceInventoryTracking.operatingSystem', '');
+      form.setValue('deviceInventoryTracking.networkSegment', []);
+      
+      // Show success message
+      alert('Device updated successfully.');
+    }
+  };
+
+  const removeDevice = (index: number) => {
+    if (confirm('Are you sure you want to delete this device from inventory?')) {
+      const devices = form.getValues('deviceInventory') || [];
+      devices.splice(index, 1);
+      form.setValue('deviceInventory', [...devices]);
+    }
   };
   
   const handleFilterChange = (type: string) => {
