@@ -5012,9 +5012,9 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                       </Button>
                       <Button 
                         type="button" 
-                        variant="secondary" 
+                        variant="default" 
                         size="sm"
-                        className="bg-gray-100 hover:bg-gray-200"
+                        className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
                         onClick={(e) => {
                           e.preventDefault();
                           // Download the user identity template CSV
@@ -5042,7 +5042,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                           document.body.removeChild(link);
                         }}
                       >
-                        <Download className="w-4 h-4 mr-2" /> Download Template
+                        <Download className="w-4 h-4 mr-2" /> <span className="font-bold">Download Template</span>
                       </Button>
                     </div>
                   </div>
