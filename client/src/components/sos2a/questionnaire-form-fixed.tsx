@@ -3689,27 +3689,31 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       )}
                     </div>
                     
-                    <div className="mt-4">
+                    <div className="mt-4 border rounded-md p-4 bg-gray-50">
                       <h5 className="text-sm font-medium mb-2">Import Device Inventory</h5>
-                      <p className="text-sm text-muted-foreground mb-2">
-                        Use these options to import existing device inventory data.
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Use these options to import existing device inventory data or download a template.
                       </p>
-                      <div className="flex gap-2">
+                      <div className="grid grid-cols-2 gap-4">
                         <Button 
-                          variant="outline" 
-                          size="sm"
+                          variant="default" 
+                          size="default"
+                          className="bg-purple-600 hover:bg-purple-700 w-full flex items-center justify-center py-2"
                           onClick={() => {
                             // File input for CSV upload would go here
                             alert('CSV import functionality would be implemented here');
                           }}
                         >
+                          <FileUpload className="mr-2 h-4 w-4" />
                           Import CSV
                         </Button>
                         <Button 
                           variant="outline" 
-                          size="sm"
+                          size="default"
+                          className="w-full border-gray-300 bg-white hover:bg-gray-50 flex items-center justify-center py-2"
                           onClick={generateCsvTemplate}
                         >
+                          <FileSpreadsheet className="mr-2 h-4 w-4" />
                           Download Template
                         </Button>
                       </div>
