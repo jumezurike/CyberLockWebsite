@@ -547,8 +547,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     }
     
     // All validation passed, update the device record
+    const devices = form.getValues('deviceInventory') || [];
+    const oldDevice = devices[editingDeviceIndex ?? 0];
+    
     const deviceData = {
-      id: `device-${Date.now()}`, // Generate a new ID for the updated record
+      id: oldDevice?.id || `device-${Date.now()}`, // Keep the old ID if editing
       deviceType: deviceType?.join(', ') || 'Not specified',
       makeModel: makeModel || 'Not specified',
       serialNumber: serialNumber || 'Not specified',
@@ -560,7 +563,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       patchStatus: form.getValues('deviceInventoryTracking.patchingStatus') || '',
       encryptionStatus: form.getValues('deviceInventoryTracking.encryptionStatus')?.join(', ') || '',
       authorizedUsers: [],
-      notes: form.getValues('deviceInventoryTracking.notes') || ''
+      notes: form.getValues('deviceInventoryTracking.notes') || '',
+      disposalLocation: form.getValues('deviceInventoryTracking.disposalLocation') || '',
+      dataSanitization: form.getValues('deviceInventoryTracking.dataSanitization') || ''
     };
     
     // Update the device in the inventory
@@ -579,6 +584,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       form.setValue('deviceInventoryTracking.owner', '');
       form.setValue('deviceInventoryTracking.operatingSystem', '');
       form.setValue('deviceInventoryTracking.networkSegment', []);
+      form.setValue('deviceInventoryTracking.disposalLocation', '');
+      form.setValue('deviceInventoryTracking.dataSanitization', '');
       
       // Show success message
       alert('Device updated successfully.');
@@ -4564,9 +4571,79 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 5. Usage & Monitoring Section */}
+                  {/* 5. Lifecycle Management Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Usage & Monitoring</h4>
+                    <h4 className="font-medium mb-4">5. Lifecycle Management</h4>
+                    <div className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.disposalLocation"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Disposal/Decommission Location</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select disposal location" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="recycling-center">Recycling Center</SelectItem>
+                                <SelectItem value="manufacturer-return">Manufacturer Return Program</SelectItem>
+                                <SelectItem value="certified-disposal">Certified Disposal Facility</SelectItem>
+                                <SelectItem value="third-party-reseller">Third-Party Reseller</SelectItem>
+                                <SelectItem value="internal-repurpose">Internal Repurposing</SelectItem>
+                                <SelectItem value="employee-purchase">Employee Purchase Program</SelectItem>
+                                <SelectItem value="destruction-service">Destruction Service</SelectItem>
+                                <SelectItem value="storage-facility">Long-term Storage Facility</SelectItem>
+                                <SelectItem value="other">Other (Specify in Notes)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.dataSanitization"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Data Sanitization Method</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select data sanitization method" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="secure-erasure">Secure Erasure (Software Wipe)</SelectItem>
+                                <SelectItem value="physical-destruction">Physical Destruction</SelectItem>
+                                <SelectItem value="degaussing">Degaussing</SelectItem>
+                                <SelectItem value="cryptographic-erasure">Cryptographic Erasure</SelectItem>
+                                <SelectItem value="factory-reset">Factory Reset</SelectItem>
+                                <SelectItem value="certified-sanitization">Certified Sanitization Service</SelectItem>
+                                <SelectItem value="none">None</SelectItem>
+                                <SelectItem value="unknown">Unknown</SelectItem>
+                                <SelectItem value="other">Other (Specify in Notes)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                      
+                  {/* 6. Usage & Monitoring Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">6. Usage & Monitoring</h4>
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
