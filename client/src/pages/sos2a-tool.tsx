@@ -2100,7 +2100,7 @@ export default function Sos2aTool() {
               </Button>
             </div>
           )}
-          <QuestionnaireForm onSubmit={handleQuestionnaireSubmit} />
+          <QuestionnaireForm onSubmit={handleQuestionnaireSubmit} selectedTab={selectedTab} />
         </div>
       )}
       
