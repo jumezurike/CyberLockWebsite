@@ -565,7 +565,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       authorizedUsers: [],
       notes: form.getValues('deviceInventoryTracking.notes') || '',
       disposalLocation: form.getValues('deviceInventoryTracking.disposalLocation') || '',
-      dataSanitization: form.getValues('deviceInventoryTracking.dataSanitization') || ''
+      dataSanitization: form.getValues('deviceInventoryTracking.dataSanitization') || '',
+      custodyOrganization: form.getValues('deviceInventoryTracking.custodyOrganization') || ''
     };
     
     // Update the device in the inventory
@@ -586,6 +587,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       form.setValue('deviceInventoryTracking.networkSegment', []);
       form.setValue('deviceInventoryTracking.disposalLocation', '');
       form.setValue('deviceInventoryTracking.dataSanitization', '');
+      form.setValue('deviceInventoryTracking.custodyOrganization', '');
       
       // Show success message
       alert('Device updated successfully.');
@@ -4634,6 +4636,26 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 <SelectItem value="other">Other (Specify in Notes)</SelectItem>
                               </SelectContent>
                             </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.custodyOrganization"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Custody Organization</FormLabel>
+                            <FormDescription>
+                              The name of the organization that has custody of decommissioned, disposed, or pending disposal assets
+                            </FormDescription>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter organization name (e.g., Asset Recovery Inc., Internal IT Department)"
+                                {...field}
+                              />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
