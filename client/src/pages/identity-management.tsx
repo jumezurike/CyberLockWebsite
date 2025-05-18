@@ -107,7 +107,7 @@ export default function IdentityManagement() {
     <div className="flex flex-col min-h-screen bg-slate-50">
       <div className="p-6">
         <div className="mb-6">
-          <Link href="/sos2a-tool" className="inline-flex items-center text-blue-600 hover:text-blue-800">
+          <Link href="/sos2a-tool?tab=identity-behavior" className="inline-flex items-center text-blue-600 hover:text-blue-800">
             <ChevronLeft className="mr-1 h-4 w-4" />
             Back to Assessment
           </Link>
