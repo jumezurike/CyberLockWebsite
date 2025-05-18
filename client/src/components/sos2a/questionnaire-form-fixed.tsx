@@ -5143,7 +5143,10 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                 <SelectItem value="username-password">Username/Password</SelectItem>
                                 <SelectItem value="employee-id">Employee ID</SelectItem>
                                 <SelectItem value="certificate">Certificate</SelectItem>
-                                <SelectItem value="biometric">Biometric</SelectItem>
+                                <SelectItem value="biometric-fingerprint">Biometric - Fingerprint</SelectItem>
+                                <SelectItem value="biometric-voice">Biometric - Voice</SelectItem>
+                                <SelectItem value="biometric-facial">Biometric - Facial</SelectItem>
+                                <SelectItem value="biometric-iris">Biometric - Iris</SelectItem>
                                 <SelectItem value="smart-card">Smart Card</SelectItem>
                                 <SelectItem value="sso">Single Sign-On</SelectItem>
                                 <SelectItem value="token">Token-based</SelectItem>
