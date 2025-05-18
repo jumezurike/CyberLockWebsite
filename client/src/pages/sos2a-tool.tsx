@@ -148,6 +148,7 @@ export default function Sos2aTool() {
   const [savedAssessments, setSavedAssessments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedAssessmentId, setSelectedAssessmentId] = useState<string>("");
+  const [selectedTab, setSelectedTab] = useState<string | null>(null);
   
   // Search state
   const [searchCompanyName, setSearchCompanyName] = useState<string>("");
@@ -157,6 +158,18 @@ export default function Sos2aTool() {
   
   // State for form persistence
   const [hasSavedData, setHasSavedData] = useState<boolean>(false);
+  
+  // Parse query parameters on component mount
+  useEffect(() => {
+    // Get the tab parameter from the URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const tabParam = urlParams.get('tab');
+    if (tabParam) {
+      setSelectedTab(tabParam);
+      // Ensure we're on the questionnaire step
+      setStep('questionnaire');
+    }
+  }, []);
   
   const { toast } = useToast();
   

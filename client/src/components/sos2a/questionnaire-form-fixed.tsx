@@ -184,9 +184,10 @@ const formSchema = z.object({
 
 interface QuestionnaireFormProps {
   onSubmit: (data: Sos2aFormData) => void;
+  selectedTab?: string | null;
 }
 
-export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
+export default function QuestionnaireForm({ onSubmit, selectedTab }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
   const [deviceTypeFilter, setDeviceTypeFilter] = useState<string>("all");
   const [filteredDevices, setFilteredDevices] = useState<any[]>([]);
@@ -1286,7 +1287,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       <CardContent className="p-6">
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
-            <Tabs defaultValue="business" className="w-full">
+            <Tabs defaultValue={selectedTab || "business"} className="w-full">
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure">2. Infrastructure Mode</TabsTrigger>
