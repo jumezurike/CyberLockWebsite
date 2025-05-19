@@ -5217,83 +5217,16 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                             <table className="w-full text-sm border">
                               <thead className="bg-muted/50">
                                 <tr>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">UWA</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Identity type</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Identification method</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">ServerID</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">UUID</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">SN:</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">MAKE/MODEL</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">OS</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">OWNER/COMPANY</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">MAC</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">ENVIRONMENT</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">IP address</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">EIN/BIZ #</th>
-                                  <th className="py-2 px-3 text-left font-medium text-xs">ADDRESS</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Field Name</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Human</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Machine</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">API</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs">Third-Party</th>
                                 </tr>
                               </thead>
-                              <tbody>
-                                <tr>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      checked={true} 
-                                      disabled 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      checked={true} 
-                                      disabled 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      checked={true} 
-                                      disabled 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      checked={true} 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      checked={true} 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      checked={true} 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
-                                  <td className="py-2 px-3 border-r">
-                                    <Checkbox 
-                                      className="data-[state=checked]:bg-primary" 
-                                    />
-                                  </td>
+                              <tbody className="divide-y">
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Name</td>
                                   <td className="py-2 px-3 border-r">
                                     <Checkbox 
                                       checked={true} 
@@ -5313,6 +5246,495 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                   <td className="py-2 px-3">
                                     <Checkbox 
                                       checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Address</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Birthplace</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Date of Birth</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">PIN</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">SN/IMEI</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Ph#/EIN/SSN/BVN</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Driver License/Passport</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Primary Auth Device IMEI/IOT S/N</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Make/Model+OS</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Manufacturing Date (DOM)</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">EC2/DO ID/MAC/SN</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">OS</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">UUID</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Server ID</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Environment (PR/ST/TD)</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">IP Address</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Business Certifications</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Business Licenses</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Utility Bills</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
                                       className="data-[state=checked]:bg-primary" 
                                     />
                                   </td>
