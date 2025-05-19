@@ -6034,7 +6034,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         <p className="text-blue-700 font-medium">Virtual UWA Format (Cloud Server):</p>
                                         <p className="text-blue-600">Uses Last26InstanceUUID + First2Env + Last7Address + First7OSname</p>
                                         <div className="mt-1.5 text-blue-700 flex items-center text-[10px]">
-                                          <Info className="h-3 w-3 mr-1" /> The custom UWA generation below will update with cloud server fields
+                                          <Info className="h-3 w-3 mr-1" /> Uses same InstanceUUID component as virtual machines
                                         </div>
                                       </div>
                                     )}
@@ -6042,9 +6042,9 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                     {form.watch('identityBehaviorHygiene.machineType') === 'virtual' && (
                                       <div className="px-2 py-1.5 bg-purple-50 border border-purple-100 rounded text-xs mb-2">
                                         <p className="text-purple-700 font-medium">Virtual UWA Format (VM):</p>
-                                        <p className="text-purple-600">Uses VM-specific InstanceUUID + Environment + Address + OSname</p>
+                                        <p className="text-purple-600">Uses InstanceUUID + Environment + Address + OSname</p>
                                         <div className="mt-1.5 text-purple-700 flex items-center text-[10px]">
-                                          <Info className="h-3 w-3 mr-1" /> The custom UWA generation below will update with virtual machine fields
+                                          <Info className="h-3 w-3 mr-1" /> Uses same InstanceUUID component as cloud servers
                                         </div>
                                       </div>
                                     )}
@@ -6054,7 +6054,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         <p className="text-emerald-800 font-medium">Physical Device UWA Format:</p>
                                         <p className="text-emerald-700">Uses IMEI/MAC/Serial Number and other device identifiers</p>
                                         <div className="mt-1.5 text-emerald-800 flex items-center text-[10px]">
-                                          <Info className="h-3 w-3 mr-1" /> The custom UWA generation below will update with physical device fields
+                                          <Info className="h-3 w-3 mr-1" /> Distinct from virtual UWAs - uses hardware identifiers instead of Instance UUID
                                         </div>
                                       </div>
                                     )}
