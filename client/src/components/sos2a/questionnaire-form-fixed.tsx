@@ -5198,6 +5198,139 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                             <Plus className="h-3 w-3 mr-1" /> Add Identity Component
                           </Button>
                         </div>
+
+                        {/* UWA Matrix Form */}
+                        <div className="p-4 border rounded-md mb-4 bg-muted/10">
+                          <h5 className="text-sm font-medium mb-3">UWA Component Selection Matrix</h5>
+                          <p className="text-xs text-muted-foreground mb-3">
+                            Select the components needed for your UWA intermediate representation. Required fields depend on identity type.
+                          </p>
+                          
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-sm border">
+                              <thead className="bg-muted/50">
+                                <tr>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">UWA</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Identity type</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Identification method</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">ServerID</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">UUID</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">SN:</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">MAKE/MODEL</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">OS</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">OWNER/COMPANY</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">MAC</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">ENVIRONMENT</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">IP address</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">EIN/BIZ #</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs">ADDRESS</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          
+                          <div className="mt-3">
+                            <div className="flex flex-col gap-2">
+                              <h6 className="text-xs font-medium">Selected Identity Matrix Fields</h6>
+                              <p className="text-xs text-muted-foreground">
+                                The UWA (Universal Wallet Address) will be generated using the fields marked above
+                              </p>
+                              <div className="mt-2 flex items-center justify-between">
+                                <p className="text-xs font-medium">
+                                  Fields selected: 8 / 14
+                                </p>
+                                <Button size="sm" variant="outline" className="text-xs">
+                                  <RefreshCw className="h-3 w-3 mr-1" /> Update UWA Matrix
+                                </Button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                         
                         <div className="border rounded overflow-hidden">
                           <table className="w-full text-sm">
