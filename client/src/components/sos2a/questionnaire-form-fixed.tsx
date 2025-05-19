@@ -190,6 +190,7 @@ interface QuestionnaireFormProps {
 }
 
 export default function QuestionnaireForm({ onSubmit, selectedTab }: QuestionnaireFormProps) {
+  const { toast } = useToast();
   const [eulaAccepted, setEulaAccepted] = useState(false);
   const [deviceTypeFilter, setDeviceTypeFilter] = useState<string>("all");
   const [filteredDevices, setFilteredDevices] = useState<any[]>([]);
