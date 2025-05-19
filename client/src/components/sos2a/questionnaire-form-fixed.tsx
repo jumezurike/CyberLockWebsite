@@ -5940,6 +5940,56 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                 <p>Algorithm: Last26InstanceUUID + First2Env + Last7Address + First7OSname</p>
                                                 <p>Formatted in 7-character chunks for readability</p>
                                               </div>
+                                              
+                                              <div className="mt-3 border-t pt-3">
+                                                <h6 className="text-xs font-medium mb-2">Generate Your Own UWA</h6>
+                                                <div className="grid grid-cols-2 gap-2">
+                                                  <div>
+                                                    <label className="text-xs font-medium">Instance UUID</label>
+                                                    <Input 
+                                                      className="mt-1 text-xs h-8" 
+                                                      placeholder="e.g., 1c-49ca-47ae-bebe-4087c52abbf4"
+                                                      value={instanceUUID}
+                                                      onChange={(e) => {
+                                                        // Here we would update the state in a real implementation
+                                                      }}
+                                                    />
+                                                  </div>
+                                                  <div>
+                                                    <label className="text-xs font-medium">Environment</label>
+                                                    <Select defaultValue={environment}>
+                                                      <SelectTrigger className="mt-1 text-xs h-8">
+                                                        <SelectValue placeholder="Select environment" />
+                                                      </SelectTrigger>
+                                                      <SelectContent>
+                                                        <SelectItem value="PR">Production (PR)</SelectItem>
+                                                        <SelectItem value="ST">Staging (ST)</SelectItem>
+                                                        <SelectItem value="DV">Development (DV)</SelectItem>
+                                                        <SelectItem value="TS">Test (TS)</SelectItem>
+                                                      </SelectContent>
+                                                    </Select>
+                                                  </div>
+                                                  <div>
+                                                    <label className="text-xs font-medium">Google Location</label>
+                                                    <Input 
+                                                      className="mt-1 text-xs h-8" 
+                                                      placeholder="e.g., 2X57+XH+"
+                                                      value={address}
+                                                    />
+                                                  </div>
+                                                  <div>
+                                                    <label className="text-xs font-medium">OS Name</label>
+                                                    <Input 
+                                                      className="mt-1 text-xs h-8" 
+                                                      placeholder="e.g., centosl"
+                                                      value={osName}
+                                                    />
+                                                  </div>
+                                                </div>
+                                                <Button size="sm" className="mt-2 text-xs" variant="default">
+                                                  <Save className="h-3 w-3 mr-1" /> Generate Custom UWA
+                                                </Button>
+                                              </div>
                                             </>
                                           );
                                         } else {
