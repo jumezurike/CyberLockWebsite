@@ -222,8 +222,20 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
     const last7Address = address.slice(-7);      // Last 7 chars of Google location
     const first7OS = osName.slice(0, 7);         // First 7 chars of OS name
     
-    // Format with CLX prefix and 7-character chunks
-    return `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
+    // Combine all components into one string
+    const combinedString = `${first2Env}${last26UUID}${last7Address}${first7OS}`;
+    
+    // Format with CLX prefix and consistent 7-character chunks
+    const chunks = [];
+    chunks.push('CLX');
+    
+    // Break the combined string into chunks of 7 characters
+    for (let i = 0; i < combinedString.length; i += 7) {
+      chunks.push(combinedString.substring(i, i + 7));
+    }
+    
+    // Join all chunks with dashes
+    return chunks.join('-');
   };
   
   // CSV template handling
