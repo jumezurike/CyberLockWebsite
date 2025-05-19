@@ -36,7 +36,7 @@ import { EulaAgreement } from "./eula-agreement";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { DownloadCloud, UploadCloud, Pencil, Trash2, Info, Plus, Save, X, UserPlus, Download, FileDown } from "lucide-react";
+import { DownloadCloud, UploadCloud, Pencil, Trash2, Info, Plus, Save, X, UserPlus, Download, FileDown, AlertCircle, RefreshCw, HelpCircle } from "lucide-react";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
