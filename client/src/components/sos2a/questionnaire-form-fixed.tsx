@@ -3858,6 +3858,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                             <SelectItem value="Network Device">Network Equipment</SelectItem>
                             <SelectItem value="IoT Device">IoT Devices</SelectItem>
                             <SelectItem value="Medical Device">Medical Devices</SelectItem>
+                            <SelectItem value="Transportation Device">Transportation Devices</SelectItem>
                             <SelectItem value="Other">Other</SelectItem>
                           </SelectContent>
                         </Select>
