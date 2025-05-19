@@ -4053,7 +4053,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                               </FormDescription>
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {["Laptop", "Desktop", "Server", "Mobile", "Tablet", "Router", "Switch", "Firewall", "IoT Device", "Smartwatch", "Printer", "Other"].map((type) => (
+                              {["Laptop", "Desktop", "Server", "Mobile", "Tablet", "Router", "Switch", "Firewall", "IoT Device", "Smartwatch", "Printer", "Transportation Device", "Other"].map((type) => (
                                 <FormField
                                   key={type}
                                   control={form.control}
