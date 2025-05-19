@@ -192,6 +192,19 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
   const [deviceTypeFilter, setDeviceTypeFilter] = useState<string>("all");
   const [filteredDevices, setFilteredDevices] = useState<any[]>([]);
   const [editingDeviceIndex, setEditingDeviceIndex] = useState<number | null>(null);
+  const [activeUwaTemplate, setActiveUwaTemplate] = useState<string>('machine');
+  const [customUwaInputs, setCustomUwaInputs] = useState({
+    instanceUUID: "1c-49ca-47ae-bebe-4087c52abbf4",
+    environment: "PR",
+    address: "2X57+XH+",
+    osName: "centosl",
+    // For physical machine
+    imei: "990000862471854",
+    macAddress: "00:1B:44:11:3A:B7",
+    serialNumber: "SN-2024-001"
+  });
+  const [generatedUwa, setGeneratedUwa] = useState<string>("");
+  const [showGeneratedUwa, setShowGeneratedUwa] = useState<boolean>(false);
   
   // CSV template handling
   const generateCsvTemplate = () => {
@@ -5949,15 +5962,26 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     <Input 
                                                       className="mt-1 text-xs h-8" 
                                                       placeholder="e.g., 1c-49ca-47ae-bebe-4087c52abbf4"
-                                                      value={instanceUUID}
+                                                      value={customUwaInputs.instanceUUID}
                                                       onChange={(e) => {
-                                                        // Here we would update the state in a real implementation
+                                                        setCustomUwaInputs({
+                                                          ...customUwaInputs,
+                                                          instanceUUID: e.target.value
+                                                        });
                                                       }}
                                                     />
                                                   </div>
                                                   <div>
                                                     <label className="text-xs font-medium">Environment</label>
-                                                    <Select defaultValue={environment}>
+                                                    <Select 
+                                                      defaultValue={customUwaInputs.environment}
+                                                      onValueChange={(value) => {
+                                                        setCustomUwaInputs({
+                                                          ...customUwaInputs,
+                                                          environment: value
+                                                        });
+                                                      }}
+                                                    >
                                                       <SelectTrigger className="mt-1 text-xs h-8">
                                                         <SelectValue placeholder="Select environment" />
                                                       </SelectTrigger>
@@ -5974,7 +5998,13 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     <Input 
                                                       className="mt-1 text-xs h-8" 
                                                       placeholder="e.g., 2X57+XH+"
-                                                      value={address}
+                                                      value={customUwaInputs.address}
+                                                      onChange={(e) => {
+                                                        setCustomUwaInputs({
+                                                          ...customUwaInputs,
+                                                          address: e.target.value
+                                                        });
+                                                      }}
                                                     />
                                                   </div>
                                                   <div>
@@ -5982,13 +6012,55 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     <Input 
                                                       className="mt-1 text-xs h-8" 
                                                       placeholder="e.g., centosl"
-                                                      value={osName}
+                                                      value={customUwaInputs.osName}
+                                                      onChange={(e) => {
+                                                        setCustomUwaInputs({
+                                                          ...customUwaInputs,
+                                                          osName: e.target.value
+                                                        });
+                                                      }}
                                                     />
                                                   </div>
                                                 </div>
-                                                <Button size="sm" className="mt-2 text-xs" variant="default">
+                                                
+                                                <Button 
+                                                  size="sm" 
+                                                  className="mt-2 text-xs" 
+                                                  variant="default"
+                                                  onClick={() => {
+                                                    // Generate UWA from custom inputs
+                                                    const last26UUID = customUwaInputs.instanceUUID.slice(-26);
+                                                    const first2Env = customUwaInputs.environment.slice(0, 2);
+                                                    const last7Address = customUwaInputs.address.slice(-7);
+                                                    const first7OS = customUwaInputs.osName.slice(0, 7);
+                                                    
+                                                    // Format with CLX prefix and 7-character chunks
+                                                    const formattedCustomUwa = `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
+                                                    
+                                                    // Set the generated UWA
+                                                    setGeneratedUwa(formattedCustomUwa);
+                                                    setShowGeneratedUwa(true);
+                                                  }}
+                                                >
                                                   <Save className="h-3 w-3 mr-1" /> Generate Custom UWA
                                                 </Button>
+                                                
+                                                {showGeneratedUwa && (
+                                                  <div className="mt-3 p-2 bg-green-50 rounded border border-green-200 text-xs">
+                                                    <div className="flex items-center justify-between">
+                                                      <p className="font-semibold text-green-700">Your Generated UWA:</p>
+                                                      <Button 
+                                                        size="sm" 
+                                                        variant="ghost" 
+                                                        className="h-6 w-6 p-0" 
+                                                        onClick={() => setShowGeneratedUwa(false)}
+                                                      >
+                                                        <X className="h-3 w-3" />
+                                                      </Button>
+                                                    </div>
+                                                    <p className="font-mono text-green-800 mt-1 break-all">{generatedUwa}</p>
+                                                  </div>
+                                                )}
                                               </div>
                                             </>
                                           );
