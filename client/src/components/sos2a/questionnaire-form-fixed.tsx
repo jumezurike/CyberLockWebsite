@@ -5123,6 +5123,91 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                           <SelectItem value="Third-Party">Third-Party</SelectItem>
                         </SelectContent>
                       </Select>
+                      
+                      {/* Identity Component Inventory */}
+                      <div className="mt-4">
+                        <div className="flex items-center justify-between mb-2">
+                          <h5 className="text-sm font-medium">Identity Component Inventory</h5>
+                          <Button variant="outline" size="sm" className="h-8 text-xs">
+                            <Plus className="h-3 w-3 mr-1" /> Add Identity Component
+                          </Button>
+                        </div>
+                        
+                        <div className="border rounded overflow-hidden">
+                          <table className="w-full text-sm">
+                            <thead className="bg-muted/50">
+                              <tr>
+                                <th className="py-2 px-3 text-left font-medium text-xs">Component Type</th>
+                                <th className="py-2 px-3 text-left font-medium text-xs">Identity Type</th>
+                                <th className="py-2 px-3 text-left font-medium text-xs">Verification Type</th>
+                                <th className="py-2 px-3 text-left font-medium text-xs">Required</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y">
+                              <tr className="hover:bg-muted/20">
+                                <td className="py-2 px-3">Government ID</td>
+                                <td className="py-2 px-3">Human</td>
+                                <td className="py-2 px-3">Driver's License</td>
+                                <td className="py-2 px-3">
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
+                                </td>
+                              </tr>
+                              <tr className="hover:bg-muted/20">
+                                <td className="py-2 px-3">Digital Identity</td>
+                                <td className="py-2 px-3">Human</td>
+                                <td className="py-2 px-3">UUID</td>
+                                <td className="py-2 px-3">
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
+                                </td>
+                              </tr>
+                              <tr className="hover:bg-muted/20">
+                                <td className="py-2 px-3">Biometric</td>
+                                <td className="py-2 px-3">Human</td>
+                                <td className="py-2 px-3">Fingerprint</td>
+                                <td className="py-2 px-3">
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Optional</span>
+                                </td>
+                              </tr>
+                              <tr className="hover:bg-muted/20">
+                                <td className="py-2 px-3">Device Authentication</td>
+                                <td className="py-2 px-3">Machine</td>
+                                <td className="py-2 px-3">IMEI/Serial</td>
+                                <td className="py-2 px-3">
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
+                                </td>
+                              </tr>
+                              <tr className="hover:bg-muted/20">
+                                <td className="py-2 px-3">Digital Signature</td>
+                                <td className="py-2 px-3">API</td>
+                                <td className="py-2 px-3">API Key</td>
+                                <td className="py-2 px-3">
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
+                                </td>
+                              </tr>
+                              <tr className="hover:bg-muted/20">
+                                <td className="py-2 px-3">Business Credential</td>
+                                <td className="py-2 px-3">Third-Party</td>
+                                <td className="py-2 px-3">Business License</td>
+                                <td className="py-2 px-3">
+                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        
+                        <div className="mt-2 text-xs text-muted-foreground flex justify-between items-center">
+                          <div>Showing 6 components</div>
+                          <div className="flex space-x-2">
+                            <Button variant="outline" size="sm" className="h-7 px-2">
+                              <span>Previous</span>
+                            </Button>
+                            <Button variant="outline" size="sm" className="h-7 px-2">
+                              <span>Next</span>
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   
