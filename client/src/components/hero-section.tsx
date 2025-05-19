@@ -13,7 +13,7 @@ export default function HeroSection() {
               Securing every CLICK!!!
             </p>
             <h2 className="text-2xl md:text-3xl font-bold font-heading leading-tight mb-4">
-              Healthcare Security Application Hub
+              Healthcare Apps & Devices Security Hub
             </h2>
             <p className="mb-8 text-neutral-200">
               The only healthcare-focused platform that eliminates threats, automates compliance, and unifies clinical apps/devices—with patented quantum-safe encryption and patient data protection at its core.
