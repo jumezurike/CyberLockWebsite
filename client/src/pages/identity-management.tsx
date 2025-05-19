@@ -214,64 +214,7 @@ export default function IdentityManagement() {
           
           {/* Identities Tab */}
           <TabsContent value="identities">
-            <Card>
-              <CardContent className="pt-6">
-                <div className="flex justify-between mb-4">
-                  <h3 className="font-medium text-gray-500">Managed Identities</h3>
-                  <Button size="sm">Add New Identity</Button>
-                </div>
-                
-                <div className="rounded-md border overflow-hidden">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>ID</TableHead>
-                        <TableHead>Name</TableHead>
-                        <TableHead>Type</TableHead>
-                        <TableHead>Department</TableHead>
-                        <TableHead>Access Level</TableHead>
-                        <TableHead>Last Active</TableHead>
-                        <TableHead>Risk Level</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {identitiesData.map(identity => (
-                        <TableRow key={identity.id}>
-                          <TableCell className="font-medium">{identity.id}</TableCell>
-                          <TableCell>{identity.name}</TableCell>
-                          <TableCell>
-                            <Badge className={
-                              identity.type === 'human' ? 'bg-blue-500' :
-                              identity.type === 'machine' ? 'bg-gray-500' :
-                              identity.type === 'api' ? 'bg-purple-500' :
-                              'bg-orange-500'
-                            }>
-                              {identity.type}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>{identity.department}</TableCell>
-                          <TableCell>{identity.accessLevel}</TableCell>
-                          <TableCell>{identity.lastActive}</TableCell>
-                          <TableCell>
-                            <Badge className={
-                              identity.riskLevel === 'low' ? 'bg-green-500' :
-                              identity.riskLevel === 'medium' ? 'bg-yellow-500' :
-                              'bg-red-500'
-                            }>
-                              {identity.riskLevel}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <Button variant="ghost" size="sm">View</Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              </CardContent>
-            </Card>
+            <CleanIdentityManagement />
           </TabsContent>
           
           {/* Import / Export Tab */}
