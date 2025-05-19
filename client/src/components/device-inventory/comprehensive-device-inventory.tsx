@@ -1143,6 +1143,7 @@ export default function ComprehensiveDeviceInventory() {
                       <SelectItem value="Network Device">Network Device</SelectItem>
                       <SelectItem value="IoT Device">IoT Device</SelectItem>
                       <SelectItem value="Medical Device">Medical Device</SelectItem>
+                      <SelectItem value="Transportation Device">Transportation Device</SelectItem>
                       <SelectItem value="Other">Other</SelectItem>
                     </SelectContent>
                   </Select>
