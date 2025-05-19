@@ -38,7 +38,7 @@ import { EulaAgreement } from "./eula-agreement";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { DownloadCloud, UploadCloud, Pencil, Trash2, Info, Plus, Save, X, UserPlus, Download, FileDown, AlertCircle, RefreshCw, HelpCircle, Server, CloudCog, Cpu } from "lucide-react";
+import { DownloadCloud, UploadCloud, Pencil, Trash2, Info, Plus, Save, X, UserPlus, Download, FileDown, AlertCircle, RefreshCw, HelpCircle, Server, CloudCog, Cpu, Monitor } from "lucide-react";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -5965,7 +5965,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       <Server className="h-4 w-4 mr-1.5" /> 
                                       Machine Type for UWA Generation
                                     </h6>
-                                    <div className="flex gap-2 mb-3">
+                                    <div className="flex flex-wrap gap-2 mb-3">
                                       <Button 
                                         size="sm" 
                                         variant={form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? 'default' : 'outline'} 
@@ -5985,6 +5985,26 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
                                       >
                                         <CloudCog className="h-3 w-3 mr-1" /> Cloud Server
+                                      </Button>
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.machineType') === 'virtual' ? 'default' : 'outline'} 
+                                        className={`text-xs ${form.watch('identityBehaviorHygiene.machineType') === 'virtual' ? 'border-purple-300 bg-purple-50 hover:bg-purple-100' : ''}`}
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.machineType', 'virtual');
+                                          // Update Custom UWA inputs to match virtual machine format
+                                          setCustomUwaInputs({
+                                            ...customUwaInputs,
+                                            // Reset to virtual machine defaults - similar to cloud but with VM-specific values
+                                            instanceUUID: "vm-3fa-41de-b5be-3087c52a55d2",
+                                            environment: "VM",
+                                            address: "3X57+VM+",
+                                            osName: "ubuntu2"
+                                          });
+                                        }}
+                                        disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
+                                      >
+                                        <Monitor className="h-3 w-3 mr-1" /> Virtual Machine
                                       </Button>
                                       <Button 
                                         size="sm" 
@@ -6015,6 +6035,16 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         <p className="text-blue-600">Uses Last26InstanceUUID + First2Env + Last7Address + First7OSname</p>
                                         <div className="mt-1.5 text-blue-700 flex items-center text-[10px]">
                                           <Info className="h-3 w-3 mr-1" /> The custom UWA generation below will update with cloud server fields
+                                        </div>
+                                      </div>
+                                    )}
+                                    
+                                    {form.watch('identityBehaviorHygiene.machineType') === 'virtual' && (
+                                      <div className="px-2 py-1.5 bg-purple-50 border border-purple-100 rounded text-xs mb-2">
+                                        <p className="text-purple-700 font-medium">Virtual Machine UWA Format:</p>
+                                        <p className="text-purple-600">Uses VM-specific InstanceUUID + Environment + Address + OSname</p>
+                                        <div className="mt-1.5 text-purple-700 flex items-center text-[10px]">
+                                          <Info className="h-3 w-3 mr-1" /> The custom UWA generation below will update with virtual machine fields
                                         </div>
                                       </div>
                                     )}
