@@ -31,6 +31,7 @@ import PaymentSuccess from "@/pages/payment-success";
 import PaymentError from "@/pages/payment-error";
 import DirectNavigation from "@/components/direct-navigation";
 import DeviceInventoryPage from "@/pages/device-inventory";
+import AccessibilityDemo from "@/pages/accessibility-demo";
 
 function Router() {
   const [location] = useLocation();
@@ -67,6 +68,7 @@ function Router() {
           <Route path="/checkout" component={Checkout} />
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/payment-error" component={PaymentError} />
+          <Route path="/accessibility-demo" component={AccessibilityDemo} />
           <Route component={NotFound} />
         </Switch>
         {/* Add direct navigation for testing */}
