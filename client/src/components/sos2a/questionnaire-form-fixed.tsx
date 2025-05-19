@@ -5992,30 +5992,6 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       </Button>
                                       <Button 
                                         size="sm" 
-                                        variant={form.watch('identityBehaviorHygiene.machineType') === 'virtual' ? 'default' : 'outline'} 
-                                        className={`text-xs ${form.watch('identityBehaviorHygiene.machineType') === 'virtual' ? 'border-purple-300 bg-purple-50 hover:bg-purple-100' : ''}`}
-                                        onClick={() => {
-                                          form.setValue('identityBehaviorHygiene.machineType', 'virtual');
-                                          // Update Custom UWA inputs to match virtual machine format
-                                          setCustomUwaInputs({
-                                            ...customUwaInputs,
-                                            // Reset to virtual machine defaults - similar to cloud but with VM-specific values
-                                            instanceUUID: "vm-3fa-41de-b5be-3087c52a55d2",
-                                            environment: "VM",
-                                            address: "3X57+VM+",
-                                            osName: "ubuntu2",
-                                            // Clear physical device identifiers that don't apply to virtual machines
-                                            imei: "",
-                                            macAddress: "",
-                                            serialNumber: ""
-                                          });
-                                        }}
-                                        disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
-                                      >
-                                        <Monitor className="h-3 w-3 mr-1" /> Virtual Machine
-                                      </Button>
-                                      <Button 
-                                        size="sm" 
                                         variant={form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'default' : 'outline'} 
                                         className={`text-xs ${form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'border-emerald-400 bg-emerald-50 hover:bg-emerald-100 text-emerald-800' : ''}`}
                                         onClick={() => {
@@ -6039,20 +6015,10 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                     {/* Display machine type-specific help text */}
                                     {form.watch('identityBehaviorHygiene.machineType') === 'cloud' && (
                                       <div className="px-2 py-1.5 bg-blue-50 border border-blue-100 rounded text-xs mb-2">
-                                        <p className="text-blue-700 font-medium">Virtual UWA Format (Cloud Server):</p>
-                                        <p className="text-blue-600">Uses Last26InstanceUUID + First2Env + Last7Address + First7OSname</p>
+                                        <p className="text-blue-700 font-medium">Virtual UWA Format (VM):</p>
+                                        <p className="text-blue-600">Uses InstanceUUID + Environment + Address + OSname</p>
                                         <div className="mt-1.5 text-blue-700 flex items-center text-[10px]">
-                                          <Info className="h-3 w-3 mr-1" /> Uses same InstanceUUID component as virtual machines
-                                        </div>
-                                      </div>
-                                    )}
-                                    
-                                    {form.watch('identityBehaviorHygiene.machineType') === 'virtual' && (
-                                      <div className="px-2 py-1.5 bg-purple-50 border border-purple-100 rounded text-xs mb-2">
-                                        <p className="text-purple-700 font-medium">Virtual UWA Format (VM):</p>
-                                        <p className="text-purple-600">Uses InstanceUUID + Environment + Address + OSname</p>
-                                        <div className="mt-1.5 text-purple-700 flex items-center text-[10px]">
-                                          <Info className="h-3 w-3 mr-1" /> Uses same InstanceUUID component as cloud servers
+                                          <Info className="h-3 w-3 mr-1" /> Uses same InstanceUUID component for all virtual machines
                                         </div>
                                       </div>
                                     )}
