@@ -5089,21 +5089,40 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                             "VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,passport,US-State-Dept,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,\"Ticketing System, Knowledge Base\",9:00-20:00,medium,45,yes,20,yes,External IDP"
                           ];
                           
-                          const csvContent = [csvHeader, ...sampleData].join('\n');
-                          
-                          // Create and trigger download
-                          const blob = new Blob([csvContent], { type: 'text/csv' });
+                          const csvContent = csvHeader + "\n" + sampleData.join("\n");
+                          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
                           const url = URL.createObjectURL(blob);
                           const link = document.createElement('a');
-                          link.href = url;
-                          link.download = 'user-identity-template.csv';
+                          link.setAttribute('href', url);
+                          link.setAttribute('download', 'user-identity-template.csv');
                           document.body.appendChild(link);
                           link.click();
                           document.body.removeChild(link);
                         }}
                       >
-                        <Download className="w-4 h-4 mr-2" /> <span className="font-bold">Download Template</span>
+                        <FileDown className="w-4 h-4 mr-2" /> Download Template
                       </Button>
+                    </div>
+                    
+                    {/* Identity Component Filter Tool */}
+                    <div className="mt-4 border rounded p-3 bg-white">
+                      <div className="flex items-center mb-2">
+                        <span className="block text-sm font-medium">Filter by Identity Type</span>
+                        <div className="ml-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-full">Filter</div>
+                      </div>
+                      <p className="text-xs text-gray-500 mb-2">Select an identity type to filter the identity component inventory list below</p>
+                      <Select defaultValue="All Types">
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="All Types" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="All Types">All Types</SelectItem>
+                          <SelectItem value="Human">Human</SelectItem>
+                          <SelectItem value="Machine">Machine</SelectItem>
+                          <SelectItem value="API">API</SelectItem>
+                          <SelectItem value="Third-Party">Third-Party</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </div>
                   
