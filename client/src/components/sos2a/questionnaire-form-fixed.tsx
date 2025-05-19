@@ -5217,7 +5217,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                             <table className="w-full text-sm border">
                               <thead className="bg-muted/50">
                                 <tr>
-                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Field Name</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Components of Identification</th>
                                   <th className="py-2 px-3 text-left font-medium text-xs border-r">Human</th>
                                   <th className="py-2 px-3 text-left font-medium text-xs border-r">Machine</th>
                                   <th className="py-2 px-3 text-left font-medium text-xs border-r">API</th>
