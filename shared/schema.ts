@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, jsonb, timestamp, varchar, date } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -129,3 +129,34 @@ export const insertRasbitaReportSchema = z.object({
 
 export type InsertRasbitaReport = z.infer<typeof insertRasbitaReportSchema>;
 export type RasbitaReport = typeof rasbitaReports.$inferSelect;
+
+// Universal Wallet Address (UWA) table
+export const uwas = pgTable("uwas", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  assessmentId: integer("assessment_id").references(() => assessments.id),
+  uwaValue: text("uwa_value").notNull(),
+  identityType: text("identity_type").notNull(), // Human, Machine, API, Third-Party
+  machineType: text("machine_type"), // cloud, physical (only for Machine identity type)
+  associatedName: text("associated_name"), // Name of the entity this UWA belongs to
+  componentData: jsonb("component_data"), // JSON of the components used to generate this UWA
+  status: text("status").default("active"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertUwaSchema = z.object({
+  userId: z.number().optional(),
+  assessmentId: z.number().optional(),
+  uwaValue: z.string().min(1, "UWA value is required"),
+  identityType: z.enum(["Human", "Machine", "API", "Third-Party"], {
+    required_error: "Identity type is required"
+  }),
+  machineType: z.enum(["cloud", "physical"]).optional(),
+  associatedName: z.string().optional(),
+  componentData: z.any().optional(),
+  status: z.string().optional(),
+});
+
+export type InsertUwa = z.infer<typeof insertUwaSchema>;
+export type Uwa = typeof uwas.$inferSelect;

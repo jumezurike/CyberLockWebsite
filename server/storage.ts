@@ -10,7 +10,10 @@ import {
   type EarlyAccessSubmission,
   rasbitaReports,
   type InsertRasbitaReport,
-  type RasbitaReport 
+  type RasbitaReport,
+  uwas,
+  type InsertUwa,
+  type Uwa
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc } from "drizzle-orm";
@@ -50,6 +53,15 @@ export interface IStorage {
   updateRasbitaReport(id: number, report: InsertRasbitaReport): Promise<RasbitaReport | undefined>;
   deleteRasbitaReport(id: number): Promise<boolean>;
   getRasbitaReportsByUser(userId: number): Promise<RasbitaReport[]>;
+  
+  // UWA operations
+  getAllUwas(): Promise<Uwa[]>;
+  getUwaById(id: number): Promise<Uwa | undefined>;
+  getUwasByUserId(userId: number): Promise<Uwa[]>;
+  getUwasByIdentityType(identityType: string): Promise<Uwa[]>;
+  createUwa(uwa: InsertUwa): Promise<Uwa>;
+  updateUwa(id: number, uwa: InsertUwa): Promise<Uwa | undefined>;
+  deleteUwa(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -358,6 +370,80 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(rasbitaReports)
       .where(eq(rasbitaReports.userId, userId));
+  }
+
+  // UWA operations
+  async getAllUwas(): Promise<Uwa[]> {
+    return await db.select().from(uwas);
+  }
+
+  async getUwaById(id: number): Promise<Uwa | undefined> {
+    const [uwa] = await db.select().from(uwas).where(eq(uwas.id, id));
+    return uwa;
+  }
+
+  async getUwasByUserId(userId: number): Promise<Uwa[]> {
+    return await db
+      .select()
+      .from(uwas)
+      .where(eq(uwas.userId, userId));
+  }
+
+  async getUwasByIdentityType(identityType: string): Promise<Uwa[]> {
+    return await db
+      .select()
+      .from(uwas)
+      .where(eq(uwas.identityType, identityType));
+  }
+
+  async createUwa(insertUwa: InsertUwa): Promise<Uwa> {
+    const [uwa] = await db
+      .insert(uwas)
+      .values({
+        userId: insertUwa.userId || null,
+        identityType: insertUwa.identityType,
+        identityName: insertUwa.identityName,
+        uwaValue: insertUwa.uwaValue,
+        identificationComponents: insertUwa.identificationComponents || {},
+        expirationDate: insertUwa.expirationDate || null,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .returning();
+    
+    return uwa;
+  }
+
+  async updateUwa(id: number, updatedUwa: InsertUwa): Promise<Uwa | undefined> {
+    const existingUwa = await this.getUwaById(id);
+    if (!existingUwa) {
+      return undefined;
+    }
+    
+    const [uwa] = await db
+      .update(uwas)
+      .set({
+        identityType: updatedUwa.identityType,
+        identityName: updatedUwa.identityName,
+        uwaValue: updatedUwa.uwaValue,
+        identificationComponents: updatedUwa.identificationComponents || existingUwa.identificationComponents,
+        expirationDate: updatedUwa.expirationDate || existingUwa.expirationDate,
+        updatedAt: new Date()
+      })
+      .where(eq(uwas.id, id))
+      .returning();
+    
+    return uwa;
+  }
+
+  async deleteUwa(id: number): Promise<boolean> {
+    await db
+      .delete(uwas)
+      .where(eq(uwas.id, id));
+    
+    // Check if the UWA still exists
+    const uwa = await this.getUwaById(id);
+    return !uwa;
   }
 }
 
