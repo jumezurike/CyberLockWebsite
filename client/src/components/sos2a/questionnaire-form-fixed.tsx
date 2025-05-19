@@ -3887,12 +3887,13 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                     </div>
                     
                     <div className="rounded-md border overflow-hidden">
-                      <div className="grid grid-cols-8 bg-gray-100 p-2 font-medium text-sm">
+                      <div className="grid grid-cols-9 bg-gray-100 p-2 font-medium text-sm">
                         <div>Device Type</div>
                         <div>Make/Model</div>
                         <div>Serial/Asset #</div>
                         <div>Risk Level</div>
                         <div>Owner</div>
+                        <div>Operating System</div>
                         <div>MAC Address</div>
                         <div>IP Address</div>
                         <div>Environment</div>
@@ -3903,12 +3904,13 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                           ? form.getValues('deviceInventory') 
                           : form.getValues('deviceInventory')?.filter(d => d.deviceType === deviceTypeFilter))
                           .map((device, index) => (
-                            <div key={device.id} className="grid grid-cols-8 p-2 border-t text-sm hover:bg-gray-50">
+                            <div key={device.id} className="grid grid-cols-9 p-2 border-t text-sm hover:bg-gray-50">
                               <div>{device.deviceType || '—'}</div>
                               <div>{device.makeModel || '—'}</div>
                               <div>{device.serialNumber || '—'}</div>
                               <div>{device.sensitivityLevel || '—'}</div>
                               <div>{device.owner || '—'}</div>
+                              <div>{device.operatingSystem || '—'}</div>
                               <div>{device.macAddress || '—'}</div>
                               <div>{device.ipAddress || '—'}</div>
                               <div className="flex items-center justify-between">
