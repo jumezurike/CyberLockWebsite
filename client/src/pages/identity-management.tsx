@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Users, AlertTriangle, Download, Upload, ChevronLeft, Fingerprint } from 'lucide-react';
 import { Link } from 'wouter';
+import CleanIdentityManagement from '@/components/identity-behavior/clean-identity-management';
 
 // Sample data for demonstration purposes
 const identitiesData = [
