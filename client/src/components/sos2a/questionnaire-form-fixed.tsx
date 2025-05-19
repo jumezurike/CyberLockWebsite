@@ -5758,48 +5758,132 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       <Button size="sm" variant="outline" className="text-xs w-full justify-start">
                                         <span className="mr-1">🧑</span> Human UWA Template
                                       </Button>
-                                      <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger>
+                                            <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="w-80 text-xs">Human UWA uses driver license, biometrics, and other personal identifiers</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
                                     </div>
                                     <div className="flex items-center justify-between">
-                                      <Button size="sm" variant="outline" className="text-xs w-full justify-start">
+                                      <Button
+                                        size="sm"
+                                        variant="default"
+                                        className="text-xs w-full justify-start"
+                                        onClick={() => {
+                                          // Set state to show we're using Machine UWA
+                                          setActiveUwaTemplate('machine');
+                                        }}
+                                      >
                                         <span className="mr-1">💻</span> Machine UWA Template
                                       </Button>
-                                      <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger>
+                                            <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="w-80 text-xs">For cloud machines: UUID + Environment + Location + OS</p>
+                                            <p className="w-80 text-xs">For physical devices: IMEI/MAC/SN</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
                                     </div>
                                     <div className="flex items-center justify-between">
                                       <Button size="sm" variant="outline" className="text-xs w-full justify-start">
                                         <span className="mr-1">⚙️</span> API UWA Template
                                       </Button>
-                                      <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger>
+                                            <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="w-80 text-xs">API UWA uses digital signatures and certificates</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
                                     </div>
                                     <div className="flex items-center justify-between">
                                       <Button size="sm" variant="outline" className="text-xs w-full justify-start">
                                         <span className="mr-1">🏢</span> Third-Party UWA Template
                                       </Button>
-                                      <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger>
+                                            <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="w-80 text-xs">Third-Party UWA uses business credentials and certifications</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
                                     </div>
                                   </div>
                                 </div>
                                 
                                 <div className="p-3 border rounded-md">
-                                  <h6 className="text-xs font-medium mb-2">UWA Generation Controls</h6>
+                                  <h6 className="text-xs font-medium mb-2">UWA Generation Preview</h6>
                                   <div className="flex flex-col gap-2">
-                                    <div className="flex items-center justify-between">
-                                      <p className="text-xs font-medium">
-                                        Fields selected: <span className="text-primary">8</span> / 14
-                                      </p>
-                                    </div>
-                                    <div className="text-xs text-muted-foreground">
-                                      Minimum required: 5 fields
-                                    </div>
-                                    <div className="flex items-center mt-2">
-                                      <Button size="sm" variant="outline" className="text-xs mr-2">
-                                        <Save className="h-3 w-3 mr-1" /> Save Template
-                                      </Button>
-                                      <Button size="sm" variant="outline" className="text-xs">
-                                        <RefreshCw className="h-3 w-3 mr-1" /> Update Matrix
-                                      </Button>
-                                    </div>
+                                    {(() => {
+                                      // Cloud Machine UWA Generation example
+                                      // Based on: Last26InstanceUUID + First2Env + Last7Address + First7OSname
+                                      // Then rearranged as: CLX-[Env][UUIDchunks]-[Address]-[OS]
+                                      
+                                      // Sample data for demonstration
+                                      const instanceUUID = "1c-49ca-47ae-bebe-4087c52abbf4";
+                                      const environment = "PR"; // Production
+                                      const address = "2X57+XH+"; // Google open location
+                                      const osName = "centosl"; // OS name
+                                      
+                                      // Generate Machine UWA
+                                      const last26UUID = instanceUUID.slice(-26);
+                                      const first2Env = environment.slice(0, 2);
+                                      const last7Address = address.slice(-7);
+                                      const first7OS = osName.slice(0, 7);
+                                      
+                                      // Concatenate components
+                                      const rawUWA = `${last26UUID}${first2Env}${last7Address}${first7OS}`;
+                                      
+                                      // Rearrange as specified
+                                      // UWA: CLX-PR1c49c-a47aebe-be4087c-52abbf4-2X57+XH+-centosl
+                                      const formattedUWA = `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
+                                      
+                                      return (
+                                        <>
+                                          <div className="flex items-center justify-between">
+                                            <p className="text-xs font-medium">
+                                              Selected template: <span className="text-primary">Machine UWA (Cloud)</span>
+                                            </p>
+                                          </div>
+                                          <div className="mt-2 p-2 bg-muted rounded border text-xs font-mono">
+                                            <p><span className="font-semibold">Instance UUID:</span> {instanceUUID}</p>
+                                            <p><span className="font-semibold">Environment:</span> {environment}</p>
+                                            <p><span className="font-semibold">Address:</span> {address}</p>
+                                            <p><span className="font-semibold">OS Name:</span> {osName}</p>
+                                          </div>
+                                          <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
+                                            <p className="font-semibold text-green-700">Generated UWA:</p>
+                                            <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                          </div>
+                                          <div className="flex items-center mt-3 justify-between">
+                                            <div>
+                                              <Button variant="outline" size="sm" className="text-xs mr-2">
+                                                <RefreshCw className="h-3 w-3 mr-1" /> Refresh
+                                              </Button>
+                                              <Button variant="default" size="sm" className="text-xs">
+                                                <Save className="h-3 w-3 mr-1" /> Generate UWA
+                                              </Button>
+                                            </div>
+                                            <p className="text-xs text-muted-foreground">Always starts with CLX</p>
+                                          </div>
+                                        </>
+                                      );
+                                    })()}
                                   </div>
                                 </div>
                               </div>
