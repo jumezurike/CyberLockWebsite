@@ -401,11 +401,13 @@ export class DatabaseStorage implements IStorage {
       .insert(uwas)
       .values({
         userId: insertUwa.userId || null,
+        assessmentId: insertUwa.assessmentId || null,
         identityType: insertUwa.identityType,
-        identityName: insertUwa.identityName,
+        machineType: insertUwa.machineType || null,
+        associatedName: insertUwa.associatedName || null,
         uwaValue: insertUwa.uwaValue,
-        identificationComponents: insertUwa.identificationComponents || {},
-        expirationDate: insertUwa.expirationDate || null,
+        componentData: insertUwa.componentData || {},
+        status: insertUwa.status || "active",
         createdAt: new Date(),
         updatedAt: new Date()
       })
@@ -424,10 +426,11 @@ export class DatabaseStorage implements IStorage {
       .update(uwas)
       .set({
         identityType: updatedUwa.identityType,
-        identityName: updatedUwa.identityName,
+        machineType: updatedUwa.machineType || existingUwa.machineType,
+        associatedName: updatedUwa.associatedName || existingUwa.associatedName,
         uwaValue: updatedUwa.uwaValue,
-        identificationComponents: updatedUwa.identificationComponents || existingUwa.identificationComponents,
-        expirationDate: updatedUwa.expirationDate || existingUwa.expirationDate,
+        componentData: updatedUwa.componentData || existingUwa.componentData,
+        status: updatedUwa.status || existingUwa.status,
         updatedAt: new Date()
       })
       .where(eq(uwas.id, id))

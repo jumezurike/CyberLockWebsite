@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertAssessmentSchema, insertEarlyAccessSubmissionSchema, insertRasbitaReportSchema } from "@shared/schema";
+import { insertAssessmentSchema, insertEarlyAccessSubmissionSchema, insertRasbitaReportSchema, insertUwaSchema } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
 import { initMailgun, sendEarlyAccessNotification } from "./email-service";
@@ -363,6 +363,106 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching user RASBITA reports:", error);
       res.status(500).json({ error: "Failed to fetch user RASBITA reports" });
+    }
+  });
+
+  // UWA API
+  // -------------------------------------------------------------------------
+  
+  // Get all UWAs
+  app.get("/api/uwas", async (req, res) => {
+    try {
+      // Filter by identity type if provided
+      const { identityType, userId } = req.query;
+      
+      if (identityType) {
+        const uwas = await storage.getUwasByIdentityType(identityType as string);
+        res.json(uwas);
+      } else if (userId) {
+        const uwas = await storage.getUwasByUserId(parseInt(userId as string));
+        res.json(uwas);
+      } else {
+        const uwas = await storage.getAllUwas();
+        res.json(uwas);
+      }
+    } catch (error) {
+      console.error("Error fetching UWAs:", error);
+      res.status(500).json({ error: "Failed to fetch UWAs" });
+    }
+  });
+
+  // Get UWA by ID
+  app.get("/api/uwas/:id", async (req, res) => {
+    try {
+      const uwa = await storage.getUwaById(parseInt(req.params.id));
+      if (!uwa) {
+        return res.status(404).json({ error: "UWA not found" });
+      }
+      res.json(uwa);
+    } catch (error) {
+      console.error("Error fetching UWA:", error);
+      res.status(500).json({ error: "Failed to fetch UWA" });
+    }
+  });
+
+  // Create a new UWA
+  app.post("/api/uwas", async (req, res) => {
+    try {
+      console.log("Received UWA data:", JSON.stringify(req.body, null, 2));
+      
+      // Validate the request data
+      const validatedData = insertUwaSchema.parse(req.body);
+      
+      // Create the UWA
+      const newUwa = await storage.createUwa(validatedData);
+      console.log("UWA created successfully:", newUwa.id);
+      res.status(201).json(newUwa);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        res.status(400).json({ error: "Validation error", details: error.errors });
+      } else {
+        console.error("Error creating UWA:", error);
+        res.status(500).json({ 
+          error: "Failed to create UWA", 
+          message: error instanceof Error ? error.message : "Unknown error",
+          stack: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined
+        });
+      }
+    }
+  });
+
+  // Update a UWA
+  app.put("/api/uwas/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const validatedData = insertUwaSchema.parse(req.body);
+      const updatedUwa = await storage.updateUwa(id, validatedData);
+      if (!updatedUwa) {
+        return res.status(404).json({ error: "UWA not found" });
+      }
+      res.json(updatedUwa);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        res.status(400).json({ error: "Validation error", details: error.errors });
+      } else {
+        console.error("Error updating UWA:", error);
+        res.status(500).json({ error: "Failed to update UWA" });
+      }
+    }
+  });
+
+  // Delete a UWA
+  app.delete("/api/uwas/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteUwa(id);
+      if (!success) {
+        return res.status(404).json({ error: "UWA not found" });
+      }
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting UWA:", error);
+      res.status(500).json({ error: "Failed to delete UWA" });
     }
   });
 
