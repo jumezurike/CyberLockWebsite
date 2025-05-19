@@ -72,6 +72,7 @@ export default function CleanDeviceInventory() {
                   <SelectItem value="Mobile Device">Mobile Device</SelectItem>
                   <SelectItem value="Network Device">Network Device</SelectItem>
                   <SelectItem value="IoT Device">IoT Device</SelectItem>
+                  <SelectItem value="Transportation Device">Transportation Device</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -175,6 +176,7 @@ export default function CleanDeviceInventory() {
                   <SelectItem value="tablet">Tablet</SelectItem>
                   <SelectItem value="networkdevice">Network Device</SelectItem>
                   <SelectItem value="iotdevice">IoT Device</SelectItem>
+                  <SelectItem value="transportationdevice">Transportation Device</SelectItem>
                 </SelectContent>
               </Select>
             </div>
