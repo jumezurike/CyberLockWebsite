@@ -5115,7 +5115,14 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                       <div className="flex flex-wrap gap-4">
                         <div>
                           <label className="block text-sm font-medium mb-1">Identity Type</label>
-                          <Select defaultValue="All Types">
+                          <Select 
+                            defaultValue="All Types" 
+                            onValueChange={(value) => {
+                              // Set state for selected identity type filter
+                              const field = form.getFieldState('identityBehaviorHygiene.selectedIdentityType');
+                              form.setValue('identityBehaviorHygiene.selectedIdentityType', value);
+                            }}
+                          >
                             <SelectTrigger className="w-[180px]">
                               <SelectValue placeholder="All Types" />
                             </SelectTrigger>
@@ -5131,7 +5138,13 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                         
                         <div>
                           <label className="block text-sm font-medium mb-1">Identification Method</label>
-                          <Select defaultValue="All Methods">
+                          <Select 
+                            defaultValue="All Methods"
+                            onValueChange={(value) => {
+                              // Set state for selected identification method filter
+                              form.setValue('identityBehaviorHygiene.selectedIdentificationMethod', value);
+                            }}
+                          >
                             <SelectTrigger className="w-[180px]">
                               <SelectValue placeholder="All Methods" />
                             </SelectTrigger>
