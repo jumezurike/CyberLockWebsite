@@ -5145,6 +5145,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                               <SelectItem value="Birth Certificate">Birth Certificate</SelectItem>
                               <SelectItem value="Social Security Card">Social Security Card</SelectItem>
                               <SelectItem value="Certificate of Citizenship">Certificate of Citizenship</SelectItem>
+                              <SelectItem value="UWA">UWA (Universal Web Authentication)</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
