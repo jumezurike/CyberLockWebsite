@@ -5755,7 +5755,14 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                   <h6 className="text-xs font-medium mb-2">UWA Templates by Identity Type</h6>
                                   <div className="flex flex-col gap-2">
                                     <div className="flex items-center justify-between">
-                                      <Button size="sm" variant="outline" className="text-xs w-full justify-start">
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.selectedIdentityType') === 'Human' ? 'default' : 'outline'} 
+                                        className="text-xs w-full justify-start"
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.selectedIdentityType', 'Human');
+                                        }}
+                                      >
                                         <span className="mr-1">🧑</span> Human UWA Template
                                       </Button>
                                       <TooltipProvider>
@@ -5772,11 +5779,10 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                     <div className="flex items-center justify-between">
                                       <Button
                                         size="sm"
-                                        variant="default"
+                                        variant={form.watch('identityBehaviorHygiene.selectedIdentityType') === 'Machine' ? 'default' : 'outline'}
                                         className="text-xs w-full justify-start"
                                         onClick={() => {
-                                          // Set state to show we're using Machine UWA
-                                          setActiveUwaTemplate('machine');
+                                          form.setValue('identityBehaviorHygiene.selectedIdentityType', 'Machine');
                                         }}
                                       >
                                         <span className="mr-1">💻</span> Machine UWA Template
@@ -5794,7 +5800,14 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       </TooltipProvider>
                                     </div>
                                     <div className="flex items-center justify-between">
-                                      <Button size="sm" variant="outline" className="text-xs w-full justify-start">
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.selectedIdentityType') === 'API' ? 'default' : 'outline'} 
+                                        className="text-xs w-full justify-start"
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.selectedIdentityType', 'API');
+                                        }}
+                                      >
                                         <span className="mr-1">⚙️</span> API UWA Template
                                       </Button>
                                       <TooltipProvider>
@@ -5809,7 +5822,14 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       </TooltipProvider>
                                     </div>
                                     <div className="flex items-center justify-between">
-                                      <Button size="sm" variant="outline" className="text-xs w-full justify-start">
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.selectedIdentityType') === 'Third-Party' ? 'default' : 'outline'} 
+                                        className="text-xs w-full justify-start"
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.selectedIdentityType', 'Third-Party');
+                                        }}
+                                      >
                                         <span className="mr-1">🏢</span> Third-Party UWA Template
                                       </Button>
                                       <TooltipProvider>
@@ -5824,66 +5844,212 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       </TooltipProvider>
                                     </div>
                                   </div>
+                                  
+                                  <div className="mt-4">
+                                    <h6 className="text-xs font-medium mb-2">Machine Type</h6>
+                                    <div className="flex gap-2">
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? 'default' : 'outline'} 
+                                        className="text-xs"
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.machineType', 'cloud');
+                                        }}
+                                        disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
+                                      >
+                                        Cloud Server
+                                      </Button>
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'default' : 'outline'} 
+                                        className="text-xs"
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.machineType', 'physical');
+                                        }}
+                                        disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
+                                      >
+                                        Physical Device
+                                      </Button>
+                                    </div>
+                                  </div>
                                 </div>
                                 
                                 <div className="p-3 border rounded-md">
                                   <h6 className="text-xs font-medium mb-2">UWA Generation Preview</h6>
                                   <div className="flex flex-col gap-2">
                                     {(() => {
-                                      // Cloud Machine UWA Generation example
-                                      // Based on: Last26InstanceUUID + First2Env + Last7Address + First7OSname
-                                      // Then rearranged as: CLX-[Env][UUIDchunks]-[Address]-[OS]
+                                      const identityType = form.watch('identityBehaviorHygiene.selectedIdentityType') || 'Machine';
+                                      const machineType = form.watch('identityBehaviorHygiene.machineType') || 'cloud';
                                       
-                                      // Sample data for demonstration
-                                      const instanceUUID = "1c-49ca-47ae-bebe-4087c52abbf4";
-                                      const environment = "PR"; // Production
-                                      const address = "2X57+XH+"; // Google open location
-                                      const osName = "centosl"; // OS name
-                                      
-                                      // Generate Machine UWA
-                                      const last26UUID = instanceUUID.slice(-26);
-                                      const first2Env = environment.slice(0, 2);
-                                      const last7Address = address.slice(-7);
-                                      const first7OS = osName.slice(0, 7);
-                                      
-                                      // Concatenate components
-                                      const rawUWA = `${last26UUID}${first2Env}${last7Address}${first7OS}`;
-                                      
-                                      // Rearrange as specified
-                                      // UWA: CLX-PR1c49c-a47aebe-be4087c-52abbf4-2X57+XH+-centosl
-                                      const formattedUWA = `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
-                                      
-                                      return (
-                                        <>
-                                          <div className="flex items-center justify-between">
-                                            <p className="text-xs font-medium">
-                                              Selected template: <span className="text-primary">Machine UWA (Cloud)</span>
-                                            </p>
-                                          </div>
-                                          <div className="mt-2 p-2 bg-muted rounded border text-xs font-mono">
-                                            <p><span className="font-semibold">Instance UUID:</span> {instanceUUID}</p>
-                                            <p><span className="font-semibold">Environment:</span> {environment}</p>
-                                            <p><span className="font-semibold">Address:</span> {address}</p>
-                                            <p><span className="font-semibold">OS Name:</span> {osName}</p>
-                                          </div>
-                                          <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
-                                            <p className="font-semibold text-green-700">Generated UWA:</p>
-                                            <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
-                                          </div>
-                                          <div className="flex items-center mt-3 justify-between">
-                                            <div>
-                                              <Button variant="outline" size="sm" className="text-xs mr-2">
-                                                <RefreshCw className="h-3 w-3 mr-1" /> Refresh
-                                              </Button>
-                                              <Button variant="default" size="sm" className="text-xs">
-                                                <Save className="h-3 w-3 mr-1" /> Generate UWA
-                                              </Button>
+                                      // Different UWA generation based on identity type
+                                      if (identityType === 'Machine') {
+                                        if (machineType === 'cloud') {
+                                          // Cloud Machine UWA Generation
+                                          // Based on: Last26InstanceUUID + First2Env + Last7Address + First7OSname
+                                          
+                                          // Sample data for demonstration
+                                          const instanceUUID = "1c-49ca-47ae-bebe-4087c52abbf4";
+                                          const environment = "PR"; // Production
+                                          const address = "2X57+XH+"; // Google open location
+                                          const osName = "centosl"; // OS name
+                                          
+                                          // Generate Machine UWA
+                                          const last26UUID = instanceUUID.slice(-26);
+                                          const first2Env = environment.slice(0, 2);
+                                          const last7Address = address.slice(-7);
+                                          const first7OS = osName.slice(0, 7);
+                                          
+                                          // Rearrange as specified
+                                          const formattedUWA = `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
+                                          
+                                          return (
+                                            <>
+                                              <div className="flex items-center justify-between">
+                                                <p className="text-xs font-medium">
+                                                  Selected template: <span className="text-primary">Machine UWA (Cloud Server)</span>
+                                                </p>
+                                              </div>
+                                              <div className="mt-2 p-2 bg-muted rounded border text-xs font-mono">
+                                                <p><span className="font-semibold">Instance UUID:</span> {instanceUUID}</p>
+                                                <p><span className="font-semibold">Environment:</span> {environment}</p>
+                                                <p><span className="font-semibold">Address:</span> {address}</p>
+                                                <p><span className="font-semibold">OS Name:</span> {osName}</p>
+                                              </div>
+                                              <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
+                                                <p className="font-semibold text-green-700">Generated UWA:</p>
+                                                <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                              </div>
+                                            </>
+                                          );
+                                        } else {
+                                          // Physical Machine UWA Generation
+                                          // Uses IMEI/MAC/SN
+                                          
+                                          // Sample data for demonstration
+                                          const imei = "990000862471854";
+                                          const macAddress = "00:1B:44:11:3A:B7";
+                                          const serialNumber = "SN-2024-001";
+                                          
+                                          // Generate physical device UWA
+                                          // Format: CLX-[first4IMEI]-[last6IMEI]-[first6MAC]-[last6MAC]-[first6Serial]-[last6Serial]
+                                          const first4IMEI = imei.slice(0, 4);
+                                          const last6IMEI = imei.slice(-6);
+                                          const cleanMAC = macAddress.replace(/:/g, "");
+                                          const first6MAC = cleanMAC.slice(0, 6);
+                                          const last6MAC = cleanMAC.slice(-6);
+                                          const first6Serial = serialNumber.slice(0, 6);
+                                          const last6Serial = serialNumber.slice(-6);
+                                          
+                                          const formattedUWA = `CLX-${first4IMEI}${last6IMEI}-${first6MAC}${last6MAC}-${first6Serial}${last6Serial}`;
+                                          
+                                          return (
+                                            <>
+                                              <div className="flex items-center justify-between">
+                                                <p className="text-xs font-medium">
+                                                  Selected template: <span className="text-primary">Machine UWA (Physical Device)</span>
+                                                </p>
+                                              </div>
+                                              <div className="mt-2 p-2 bg-muted rounded border text-xs font-mono">
+                                                <p><span className="font-semibold">IMEI:</span> {imei}</p>
+                                                <p><span className="font-semibold">MAC Address:</span> {macAddress}</p>
+                                                <p><span className="font-semibold">Serial Number:</span> {serialNumber}</p>
+                                              </div>
+                                              <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
+                                                <p className="font-semibold text-green-700">Generated UWA:</p>
+                                                <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                              </div>
+                                            </>
+                                          );
+                                        }
+                                      } else if (identityType === 'Human') {
+                                        // Human UWA template - sample implementation
+                                        const driverId = "DL859405382";
+                                        const biometricId = "FP8294-A12B";
+                                        const employeeId = "EMP2024-503";
+                                        const formattedUWA = `CLX-HU${driverId.slice(0,4)}-${driverId.slice(4,8)}-${biometricId.slice(0,6)}-${employeeId.slice(4)}`;
+                                        
+                                        return (
+                                          <>
+                                            <div className="flex items-center justify-between">
+                                              <p className="text-xs font-medium">
+                                                Selected template: <span className="text-primary">Human UWA</span>
+                                              </p>
                                             </div>
-                                            <p className="text-xs text-muted-foreground">Always starts with CLX</p>
-                                          </div>
-                                        </>
-                                      );
+                                            <div className="mt-2 p-2 bg-muted rounded border text-xs font-mono">
+                                              <p><span className="font-semibold">Driver's License:</span> {driverId}</p>
+                                              <p><span className="font-semibold">Biometric ID:</span> {biometricId}</p>
+                                              <p><span className="font-semibold">Employee ID:</span> {employeeId}</p>
+                                            </div>
+                                            <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
+                                              <p className="font-semibold text-green-700">Generated UWA:</p>
+                                              <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                            </div>
+                                          </>
+                                        );
+                                      } else if (identityType === 'API') {
+                                        // API UWA template - sample implementation
+                                        const apiKey = "api_3a7b9c4d2e1f";
+                                        const certId = "CERT-API-5832-XZ";
+                                        const tokenHash = "jwt_token_hash_8a9d4f2";
+                                        const formattedUWA = `CLX-AP${apiKey.slice(4,8)}-${certId.slice(5,9)}-${tokenHash.slice(4,12)}`;
+                                        
+                                        return (
+                                          <>
+                                            <div className="flex items-center justify-between">
+                                              <p className="text-xs font-medium">
+                                                Selected template: <span className="text-primary">API UWA</span>
+                                              </p>
+                                            </div>
+                                            <div className="mt-2 p-2 bg-muted rounded border text-xs font-mono">
+                                              <p><span className="font-semibold">API Key:</span> {apiKey}</p>
+                                              <p><span className="font-semibold">Certificate ID:</span> {certId}</p>
+                                              <p><span className="font-semibold">Token Hash:</span> {tokenHash}</p>
+                                            </div>
+                                            <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
+                                              <p className="font-semibold text-green-700">Generated UWA:</p>
+                                              <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                            </div>
+                                          </>
+                                        );
+                                      } else {
+                                        // Third-Party UWA template - sample implementation
+                                        const taxId = "81-3792415";
+                                        const corpId = "DUNS-729548361";
+                                        const partnerCode = "PART-XY-321";
+                                        const formattedUWA = `CLX-TP${taxId.replace('-','')}-${corpId.slice(5,13)}-${partnerCode.slice(5)}`;
+                                        
+                                        return (
+                                          <>
+                                            <div className="flex items-center justify-between">
+                                              <p className="text-xs font-medium">
+                                                Selected template: <span className="text-primary">Third-Party UWA</span>
+                                              </p>
+                                            </div>
+                                            <div className="mt-2 p-2 bg-muted rounded border text-xs font-mono">
+                                              <p><span className="font-semibold">Tax ID:</span> {taxId}</p>
+                                              <p><span className="font-semibold">Corporate ID:</span> {corpId}</p>
+                                              <p><span className="font-semibold">Partner Code:</span> {partnerCode}</p>
+                                            </div>
+                                            <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
+                                              <p className="font-semibold text-green-700">Generated UWA:</p>
+                                              <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                            </div>
+                                          </>
+                                        );
+                                      }
                                     })()}
+                                    
+                                    <div className="flex items-center mt-3 justify-between">
+                                      <div>
+                                        <Button variant="outline" size="sm" className="text-xs mr-2">
+                                          <RefreshCw className="h-3 w-3 mr-1" /> Refresh
+                                        </Button>
+                                        <Button variant="default" size="sm" className="text-xs">
+                                          <Save className="h-3 w-3 mr-1" /> Generate UWA
+                                        </Button>
+                                      </div>
+                                      <p className="text-xs text-muted-foreground">Always starts with CLX</p>
+                                    </div>
                                   </div>
                                 </div>
                               </div>
