@@ -431,6 +431,9 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
       serialNumber: serialNumber || 'Not specified',
       sensitivityLevel: form.getValues('deviceInventoryTracking.sensitivityClassification') || 'Medium',
       owner: owner || 'Not specified',
+      macAddress: form.getValues('deviceInventoryTracking.macAddress') || '',
+      ipAddress: form.getValues('deviceInventoryTracking.ipAddress') || '',
+      environment: form.getValues('deviceInventoryTracking.environment') || '',
       networkZone: form.getValues('deviceInventoryTracking.networkSegment')?.join(', ') || '',
       operatingSystem: form.getValues('deviceInventoryTracking.operatingSystem') || '',
       lastPatchDate: form.getValues('deviceInventoryTracking.lastPatchDate') || '',
@@ -4249,6 +4252,36 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                               <FormControl>
                                 <Input placeholder="Enter MAC address" {...field} />
                               </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.environment"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Environment</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select environment" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="production">Production</SelectItem>
+                                  <SelectItem value="staging">Staging/Testing</SelectItem>
+                                  <SelectItem value="development">Development</SelectItem>
+                                  <SelectItem value="qa">QA</SelectItem>
+                                  <SelectItem value="dr">Disaster Recovery</SelectItem>
+                                  <SelectItem value="training">Training</SelectItem>
+                                  <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                              </Select>
                               <FormMessage />
                             </FormItem>
                           )}
