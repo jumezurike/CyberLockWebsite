@@ -456,6 +456,9 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
     form.setValue('deviceInventoryTracking.deviceType', []);
     form.setValue('deviceInventoryTracking.operatingSystem', '');
     form.setValue('deviceInventoryTracking.networkSegment', []);
+    form.setValue('deviceInventoryTracking.macAddress', '');
+    form.setValue('deviceInventoryTracking.ipAddress', '');
+    form.setValue('deviceInventoryTracking.environment', '');
     
     // Show success message
     alert('Device added successfully to inventory.');
@@ -479,6 +482,18 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
       
       if (deviceToEdit.operatingSystem) {
         form.setValue('deviceInventoryTracking.operatingSystem', deviceToEdit.operatingSystem);
+      }
+      
+      if (deviceToEdit.macAddress) {
+        form.setValue('deviceInventoryTracking.macAddress', deviceToEdit.macAddress);
+      }
+      
+      if (deviceToEdit.ipAddress) {
+        form.setValue('deviceInventoryTracking.ipAddress', deviceToEdit.ipAddress);
+      }
+      
+      if (deviceToEdit.environment) {
+        form.setValue('deviceInventoryTracking.environment', deviceToEdit.environment);
       }
       
       if (deviceToEdit.lastPatchDate) {
@@ -516,6 +531,9 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
     form.setValue('deviceInventoryTracking.owner', '');
     form.setValue('deviceInventoryTracking.operatingSystem', '');
     form.setValue('deviceInventoryTracking.networkSegment', []);
+    form.setValue('deviceInventoryTracking.macAddress', '');
+    form.setValue('deviceInventoryTracking.ipAddress', '');
+    form.setValue('deviceInventoryTracking.environment', '');
   };
   
   const saveEditedDevice = () => {
