@@ -54,7 +54,7 @@ export default function Footer() {
       </div>
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
           <div>
             <div className="mb-4">
               <img 
@@ -109,6 +109,16 @@ export default function Footer() {
               <li><Link href="/#contact" className="text-neutral-300 hover:text-secondary">Contact</Link></li>
               <li><Link href="/#" className="text-neutral-300 hover:text-secondary">Partners</Link></li>
               <li><Link href="/privacy-policy" className="text-neutral-300 hover:text-secondary">Legal Documents</Link></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h4 className="text-lg font-semibold mb-4">Developers</h4>
+            <ul className="space-y-2">
+              <li><Link href="/accessibility-demo" className="text-neutral-300 hover:text-secondary">Accessibility Demo</Link></li>
+              <li><Link href="/#" className="text-neutral-300 hover:text-secondary">API Documentation</Link></li>
+              <li><Link href="/#" className="text-neutral-300 hover:text-secondary">Technical Guides</Link></li>
+              <li><Link href="/#" className="text-neutral-300 hover:text-secondary">Integration Resources</Link></li>
             </ul>
           </div>
         </div>
