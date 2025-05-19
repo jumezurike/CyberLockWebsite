@@ -5360,7 +5360,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                   <SelectItem value="smart-card">Smart Card</SelectItem>
                                   <SelectItem value="sso">Single Sign-On</SelectItem>
                                   <SelectItem value="token">Token-based</SelectItem>
-                                  <SelectItem value="uwa">UWA (Universal Web Authentication)</SelectItem>
+                                  <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
                                 </SelectGroup>
                                 
                                 <SelectGroup>
