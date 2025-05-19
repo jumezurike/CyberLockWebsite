@@ -6071,7 +6071,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                             <>
                                               <div className="flex items-center justify-between">
                                                 <p className="text-xs font-medium">
-                                                  Selected template: <span className="text-primary">Machine UWA (Cloud Server)</span>
+                                                  Selected template: <span className="text-primary">Machine UWA (Virtual Machine)</span>
                                                 </p>
                                               </div>
                                               <div className="mt-2 p-2 bg-muted rounded border text-xs font-mono">
