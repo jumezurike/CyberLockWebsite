@@ -102,12 +102,12 @@ export default function ComprehensiveDeviceInventory() {
       {
         id: "dev-001",
         deviceType: "Workstation",
-        makeModel: "Dell Latitude 5520",
-        serialNumber: "DELLLT5520123456",
-        sensitivityLevel: "Medium",
+        makeModel: "Dell Latitude 5520 | Corp Asset | Win11",
+        serialNumber: "DELLLT5520123456 | HQ-IT-WS-1234",
+        sensitivityLevel: "Medium | Corporate Data Access",
         networkZone: "Corporate",
         lastKnownLocation: "HQ - Floor 3",
-        owner: "John Smith",
+        owner: "John Smith | IT Department | Authorized",
         ownerId: "user-123",
         ownerName: "John Smith",
         patchStatus: "Up to date",
@@ -332,6 +332,58 @@ export default function ComprehensiveDeviceInventory() {
             action: "Policy Update",
             description: "MDM policy updated to require biometric authentication",
             user: "Mobile Admin"
+          }
+        ]
+      },
+      {
+        id: "dev-006",
+        deviceType: "Transportation Device",
+        makeModel: "Toyota Prius | Hybrid Vehicle | Connected Car | VIN:1HGBH41JXMN109186",
+        serialNumber: "VIN:1HGBH41JXMN109186 | Fleet-23-458",
+        sensitivityLevel: "High | Contains GPS & Telematics",
+        networkZone: "Vehicle Network",
+        lastKnownLocation: "Mobile - GPS Tracked",
+        owner: "Medical Transport Division | Authorized Driver: Mark Wilson",
+        ownerId: "dept-transport",
+        ownerName: "Medical Transport Division",
+        patchStatus: "Update Required",
+        lastLoginDate: "2025-05-14",
+        osVersion: "V3.2.1",
+        operatingSystem: "Automotive OS",
+        securitySoftware: ["Vehicle Firewall", "OTA Security Module", "Telematics Protection"],
+        authorizedUsers: ["Authorized Drivers", "Fleet Management", "IT Security"],
+        acquisitionDate: "2024-02-10",
+        expectedLifespan: "8 years",
+        ownershipType: "Corporate Fleet",
+        disposalPlan: "Secure Systems Wipe & Certified Disposal",
+        socMonitoring: {
+          splunk: true,
+          wazuh: true,
+          suricata: true,
+          ntopng: true,
+          misp: true,
+          openvas: true,
+          jira: true
+        },
+        lastUpdated: "2025-05-12T09:45:00Z",
+        historyEntries: [
+          {
+            date: "2025-05-12T09:45:00Z",
+            action: "Security Scan",
+            description: "Connected vehicle systems scanned for vulnerabilities",
+            user: "Fleet Security Officer"
+          },
+          {
+            date: "2025-04-25T14:20:00Z",
+            action: "GPS Update",
+            description: "GPS firmware updated to latest secure version",
+            user: "Vehicle Systems Admin"
+          },
+          {
+            date: "2025-03-18T11:30:00Z",
+            action: "Connection Alert",
+            description: "Unauthorized connection attempt detected and blocked",
+            user: "Automated System"
           }
         ]
       }
