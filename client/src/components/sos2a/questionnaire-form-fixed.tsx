@@ -5979,7 +5979,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                             instanceUUID: "1c-49ca-47ae-bebe-4087c52abbf4",
                                             environment: "PR",
                                             address: "2X57+XH+",
-                                            osName: "centosl"
+                                            osName: "centosl",
+                                            // Clear physical device identifiers that don't apply to cloud servers
+                                            imei: "",
+                                            macAddress: "",
+                                            serialNumber: ""
                                           });
                                         }}
                                         disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
@@ -5999,7 +6003,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                             instanceUUID: "vm-3fa-41de-b5be-3087c52a55d2",
                                             environment: "VM",
                                             address: "3X57+VM+",
-                                            osName: "ubuntu2"
+                                            osName: "ubuntu2",
+                                            // Clear physical device identifiers that don't apply to virtual machines
+                                            imei: "",
+                                            macAddress: "",
+                                            serialNumber: ""
                                           });
                                         }}
                                         disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
