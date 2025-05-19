@@ -5960,13 +5960,16 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                     </div>
                                   </div>
                                   
-                                  <div className="mt-4">
-                                    <h6 className="text-xs font-medium mb-2">Machine Type</h6>
+                                  <div className="mt-4 p-3 border rounded-md bg-slate-50">
+                                    <h6 className="text-sm font-medium mb-2 flex items-center">
+                                      <Server className="h-4 w-4 mr-1.5" /> 
+                                      Machine Type for UWA Generation
+                                    </h6>
                                     <div className="flex gap-2 mb-3">
                                       <Button 
                                         size="sm" 
                                         variant={form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? 'default' : 'outline'} 
-                                        className="text-xs"
+                                        className={`text-xs ${form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? 'border-blue-300 bg-blue-50 hover:bg-blue-100' : ''}`}
                                         onClick={() => {
                                           form.setValue('identityBehaviorHygiene.machineType', 'cloud');
                                           // Update Custom UWA inputs to match cloud server format
@@ -5981,12 +5984,12 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         }}
                                         disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
                                       >
-                                        Cloud Server
+                                        <CloudCog className="h-3 w-3 mr-1" /> Cloud Server
                                       </Button>
                                       <Button 
                                         size="sm" 
                                         variant={form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'default' : 'outline'} 
-                                        className="text-xs"
+                                        className={`text-xs ${form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'border-green-300 bg-green-50 hover:bg-green-100' : ''}`}
                                         onClick={() => {
                                           form.setValue('identityBehaviorHygiene.machineType', 'physical');
                                           // Update Custom UWA inputs to match physical device format
@@ -5995,12 +5998,13 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                             // Reset to physical device defaults
                                             imei: "990000862471854",
                                             macAddress: "00:1B:44:11:3A:B7",
-                                            serialNumber: "SN-2024-001"
+                                            serialNumber: "SN-2024-001",
+                                            deviceModel: "PowerEdge R740"
                                           });
                                         }}
                                         disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
                                       >
-                                        Physical Device
+                                        <Cpu className="h-3 w-3 mr-1" /> Physical Device
                                       </Button>
                                     </div>
                                     
@@ -6009,6 +6013,9 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       <div className="px-2 py-1.5 bg-blue-50 border border-blue-100 rounded text-xs mb-2">
                                         <p className="text-blue-700 font-medium">Cloud Server UWA Format:</p>
                                         <p className="text-blue-600">Uses Last26InstanceUUID + First2Env + Last7Address + First7OSname</p>
+                                        <div className="mt-1.5 text-blue-700 flex items-center text-[10px]">
+                                          <Info className="h-3 w-3 mr-1" /> The custom UWA generation below will update with cloud server fields
+                                        </div>
                                       </div>
                                     )}
                                     
@@ -6016,6 +6023,9 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       <div className="px-2 py-1.5 bg-green-50 border border-green-100 rounded text-xs mb-2">
                                         <p className="text-green-700 font-medium">Physical Device UWA Format:</p>
                                         <p className="text-green-600">Uses IMEI/MAC/Serial Number and other device identifiers</p>
+                                        <div className="mt-1.5 text-green-700 flex items-center text-[10px]">
+                                          <Info className="h-3 w-3 mr-1" /> The custom UWA generation below will update with physical device fields
+                                        </div>
                                       </div>
                                     )}
                                   </div>
