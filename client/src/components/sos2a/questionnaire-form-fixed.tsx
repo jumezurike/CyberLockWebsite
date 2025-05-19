@@ -5963,7 +5963,23 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                 <p><span className="font-semibold">OS Name:</span> {osName}</p>
                                               </div>
                                               <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
-                                                <p className="font-semibold text-green-700">Generated UWA:</p>
+                                                <div className="flex items-center justify-between">
+                                                  <p className="font-semibold text-green-700">Generated UWA:</p>
+                                                  <Button 
+                                                    size="sm" 
+                                                    variant="outline" 
+                                                    className="h-6 py-0 px-2 text-xs"
+                                                    onClick={() => {
+                                                      navigator.clipboard.writeText(formattedUWA).then(() => {
+                                                        alert("UWA copied to clipboard!");
+                                                      }).catch(err => {
+                                                        console.error('Could not copy text: ', err);
+                                                      });
+                                                    }}
+                                                  >
+                                                    <Copy className="h-3 w-3 mr-1" /> Copy
+                                                  </Button>
+                                                </div>
                                                 <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
                                               </div>
                                               <div className="mt-2 text-xs text-muted-foreground">
