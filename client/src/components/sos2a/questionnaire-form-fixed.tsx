@@ -206,6 +206,23 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
   const [generatedUwa, setGeneratedUwa] = useState<string>("");
   const [showGeneratedUwa, setShowGeneratedUwa] = useState<boolean>(false);
   
+  // Add a function to generate UWA for cloud machines
+  const generateCloudUwa = (
+    instanceUUID: string, 
+    environment: string, 
+    address: string, 
+    osName: string
+  ): string => {
+    // Extract components according to formula
+    const last26UUID = instanceUUID.slice(-26);  // Last 26 chars of UUID
+    const first2Env = environment.slice(0, 2);   // First 2 chars of environment
+    const last7Address = address.slice(-7);      // Last 7 chars of Google location
+    const first7OS = osName.slice(0, 7);         // First 7 chars of OS name
+    
+    // Format with CLX prefix and 7-character chunks
+    return `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
+  };
+  
   // CSV template handling
   const generateCsvTemplate = () => {
     const header = 'Device Type,Make/Model,Serial Number,Sensitivity Level,Network Zone,Operating System,Last Patch Date,Patch Status,Encryption Status,Authorized Users,Notes';
@@ -5930,7 +5947,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                           
                                           // 3. Rearrange with prefix and 7-character chunking for readability
                                           // Start with CLX prefix, then first2Env, then chunk the rest into 7-character segments
-                                          const formattedUWA = `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
+                                          const formattedUWA = generateCloudUwa(instanceUUID, environment, address, osName);
                                           
                                           return (
                                             <>
@@ -6028,18 +6045,24 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                   className="mt-2 text-xs" 
                                                   variant="default"
                                                   onClick={() => {
-                                                    // Generate UWA from custom inputs
-                                                    const last26UUID = customUwaInputs.instanceUUID.slice(-26);
-                                                    const first2Env = customUwaInputs.environment.slice(0, 2);
-                                                    const last7Address = customUwaInputs.address.slice(-7);
-                                                    const first7OS = customUwaInputs.osName.slice(0, 7);
+                                                    // Generate UWA from custom inputs using our helper function
+                                                    const formattedCustomUwa = generateCloudUwa(
+                                                      customUwaInputs.instanceUUID,
+                                                      customUwaInputs.environment,
+                                                      customUwaInputs.address,
+                                                      customUwaInputs.osName
+                                                    );
                                                     
-                                                    // Format with CLX prefix and 7-character chunks
-                                                    const formattedCustomUwa = `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
-                                                    
-                                                    // Set the generated UWA
+                                                    // Set the generated UWA and show it
                                                     setGeneratedUwa(formattedCustomUwa);
                                                     setShowGeneratedUwa(true);
+                                                    
+                                                    // Try to copy to clipboard automatically
+                                                    try {
+                                                      navigator.clipboard.writeText(formattedCustomUwa);
+                                                    } catch (err) {
+                                                      console.error('Could not copy text: ', err);
+                                                    }
                                                   }}
                                                 >
                                                   <Save className="h-3 w-3 mr-1" /> Generate Custom UWA
