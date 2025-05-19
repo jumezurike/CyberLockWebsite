@@ -5746,6 +5746,19 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                           <div className="mt-3">
                             <div className="flex flex-col gap-2">
                               <h6 className="text-xs font-medium">Selected Identity Matrix Fields</h6>
+                              <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-2">
+                                <div className="flex items-start">
+                                  <div className="text-blue-500 mr-2 mt-0.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-medium text-blue-800">Advanced Feature - Universal Wallet Address (UWA)</p>
+                                    <p className="text-xs text-blue-700 mt-1">
+                                      The UWA system is an optional advanced identity feature that organizations can integrate as their security posture matures. This preview demonstrates how selected identity components are transformed into secure, portable identifiers across your infrastructure.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
                               <p className="text-xs text-muted-foreground">
                                 The UWA (Universal Wallet Address) will be generated using the fields marked above
                               </p>
@@ -5885,7 +5898,6 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       if (identityType === 'Machine') {
                                         if (machineType === 'cloud') {
                                           // Cloud Machine UWA Generation
-                                          // Based on: Last26InstanceUUID + First2Env + Last7Address + First7OSname
                                           
                                           // Sample data for demonstration
                                           const instanceUUID = "1c-49ca-47ae-bebe-4087c52abbf4";
@@ -5899,8 +5911,15 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                           const last7Address = address.slice(-7);
                                           const first7OS = osName.slice(0, 7);
                                           
-                                          // Rearrange as specified
-                                          const formattedUWA = `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
+                                          // Process UUID into 7-character chunks
+                                          // Split the UUID into chunks - ensure we maintain readability with 7-char segments
+                                          const chunk1 = first2Env + last26UUID.slice(0, 5); // PR + first 5 of UUID
+                                          const chunk2 = last26UUID.slice(5, 12);  // Next 7 chars
+                                          const chunk3 = last26UUID.slice(12, 19); // Next 7 chars
+                                          const chunk4 = last26UUID.slice(19);     // Remaining chars
+                                          
+                                          // CLX-PR1c49c-a47aebe-be4087c-52abbf4-2X57+XH+-centosl
+                                          const formattedUWA = `CLX-${chunk1}-${chunk2}-${chunk3}-${chunk4}-${last7Address}-${first7OS}`;
                                           
                                           return (
                                             <>
@@ -5919,11 +5938,15 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                 <p className="font-semibold text-green-700">Generated UWA:</p>
                                                 <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
                                               </div>
+                                              <div className="mt-2 text-xs text-muted-foreground">
+                                                <p>Algorithm: Last26InstanceUUID + First2Env + Last7Address + First7OSname</p>
+                                                <p>Formatted in 7-character chunks for readability</p>
+                                              </div>
                                             </>
                                           );
                                         } else {
                                           // Physical Machine UWA Generation
-                                          // Uses IMEI/MAC/SN
+                                          // Uses IMEI/MAC/SN - these rarely change (stable for 5+ years)
                                           
                                           // Sample data for demonstration
                                           const imei = "990000862471854";
@@ -5931,16 +5954,19 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                           const serialNumber = "SN-2024-001";
                                           
                                           // Generate physical device UWA
-                                          // Format: CLX-[first4IMEI]-[last6IMEI]-[first6MAC]-[last6MAC]-[first6Serial]-[last6Serial]
-                                          const first4IMEI = imei.slice(0, 4);
-                                          const last6IMEI = imei.slice(-6);
+                                          // Clean the input data
                                           const cleanMAC = macAddress.replace(/:/g, "");
-                                          const first6MAC = cleanMAC.slice(0, 6);
-                                          const last6MAC = cleanMAC.slice(-6);
-                                          const first6Serial = serialNumber.slice(0, 6);
-                                          const last6Serial = serialNumber.slice(-6);
                                           
-                                          const formattedUWA = `CLX-${first4IMEI}${last6IMEI}-${first6MAC}${last6MAC}-${first6Serial}${last6Serial}`;
+                                          // Break into 7-character chunks for readability
+                                          // Format: CLX-PH[IMEI chunks]-[MAC chunks]-[Serial chunks]
+                                          const chunk1 = "PH" + imei.slice(0, 5); // Prefix + first 5 of IMEI
+                                          const chunk2 = imei.slice(5, 12);      // Next 7 chars of IMEI
+                                          const chunk3 = imei.slice(12);         // Remaining IMEI chars
+                                          const chunk4 = cleanMAC.slice(0, 7);   // First 7 of MAC
+                                          const chunk5 = cleanMAC.slice(7);      // Remaining MAC chars
+                                          const chunk6 = serialNumber.replace(/-/g, ""); // Clean Serial Number
+                                          
+                                          const formattedUWA = `CLX-${chunk1}-${chunk2}-${chunk3}-${chunk4}-${chunk5}-${chunk6}`;
                                           
                                           return (
                                             <>
@@ -5958,6 +5984,10 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                 <p className="font-semibold text-green-700">Generated UWA:</p>
                                                 <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
                                               </div>
+                                              <div className="mt-2 text-xs text-muted-foreground">
+                                                <p>Uses device identifiers that rarely change (5+ years stability)</p>
+                                                <p>Formatted in 7-character chunks for readability</p>
+                                              </div>
                                             </>
                                           );
                                         }
@@ -5966,7 +5996,16 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         const driverId = "DL859405382";
                                         const biometricId = "FP8294-A12B";
                                         const employeeId = "EMP2024-503";
-                                        const formattedUWA = `CLX-HU${driverId.slice(0,4)}-${driverId.slice(4,8)}-${biometricId.slice(0,6)}-${employeeId.slice(4)}`;
+                                        const ssn = "123-45-6789";
+                                        
+                                        // Process into 7-character chunks for readability
+                                        const chunk1 = "HU" + driverId.slice(2, 7); // Human prefix + 5 chars from driver ID
+                                        const chunk2 = driverId.slice(7) + biometricId.slice(0, 4); // Remaining driver ID + start of biometric
+                                        const chunk3 = biometricId.slice(4) + employeeId.slice(0, 2); // Rest of biometric + start of employee ID
+                                        const chunk4 = employeeId.slice(2) + ssn.slice(0, 2); // Rest of employee ID + start of SSN
+                                        const chunk5 = ssn.slice(2).replace(/-/g, ""); // Remaining SSN with hyphens removed
+                                        
+                                        const formattedUWA = `CLX-${chunk1}-${chunk2}-${chunk3}-${chunk4}-${chunk5}`;
                                         
                                         return (
                                           <>
@@ -5979,10 +6018,15 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                               <p><span className="font-semibold">Driver's License:</span> {driverId}</p>
                                               <p><span className="font-semibold">Biometric ID:</span> {biometricId}</p>
                                               <p><span className="font-semibold">Employee ID:</span> {employeeId}</p>
+                                              <p><span className="font-semibold">SSN:</span> {ssn}</p>
                                             </div>
                                             <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
                                               <p className="font-semibold text-green-700">Generated UWA:</p>
                                               <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                            </div>
+                                            <div className="mt-2 text-xs text-muted-foreground">
+                                              <p>Combines government IDs, biometrics, and employee identifiers</p>
+                                              <p>Formatted in 7-character chunks for readability</p>
                                             </div>
                                           </>
                                         );
@@ -5991,7 +6035,18 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         const apiKey = "api_3a7b9c4d2e1f";
                                         const certId = "CERT-API-5832-XZ";
                                         const tokenHash = "jwt_token_hash_8a9d4f2";
-                                        const formattedUWA = `CLX-AP${apiKey.slice(4,8)}-${certId.slice(5,9)}-${tokenHash.slice(4,12)}`;
+                                        const serviceId = "SVC-452-AUTH-98";
+                                        
+                                        // Process into 7-character chunks for readability
+                                        const chunk1 = "AP" + apiKey.slice(0, 5); // API prefix + first 5 of API key
+                                        const chunk2 = apiKey.slice(5, 12);       // Next 7 chars of API key
+                                        const chunk3 = apiKey.slice(12) + certId.slice(0, 4); // Rest of API key + start of cert
+                                        const chunk4 = certId.slice(4, 11);       // Next 7 chars of cert ID
+                                        const chunk5 = certId.slice(11) + tokenHash.slice(0, 3); // Rest of cert + start of token
+                                        const chunk6 = tokenHash.slice(3, 10);    // Middle of token hash
+                                        const chunk7 = tokenHash.slice(10) + serviceId.slice(0, 3); // Rest of token + start of service
+                                        
+                                        const formattedUWA = `CLX-${chunk1}-${chunk2}-${chunk3}-${chunk4}-${chunk5}-${chunk6}-${chunk7}`;
                                         
                                         return (
                                           <>
@@ -6004,10 +6059,15 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                               <p><span className="font-semibold">API Key:</span> {apiKey}</p>
                                               <p><span className="font-semibold">Certificate ID:</span> {certId}</p>
                                               <p><span className="font-semibold">Token Hash:</span> {tokenHash}</p>
+                                              <p><span className="font-semibold">Service ID:</span> {serviceId}</p>
                                             </div>
                                             <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
                                               <p className="font-semibold text-green-700">Generated UWA:</p>
                                               <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                            </div>
+                                            <div className="mt-2 text-xs text-muted-foreground">
+                                              <p>Uses API credentials, certificate IDs, and token hashes</p>
+                                              <p>Formatted in 7-character chunks for readability</p>
                                             </div>
                                           </>
                                         );
@@ -6016,7 +6076,16 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         const taxId = "81-3792415";
                                         const corpId = "DUNS-729548361";
                                         const partnerCode = "PART-XY-321";
-                                        const formattedUWA = `CLX-TP${taxId.replace('-','')}-${corpId.slice(5,13)}-${partnerCode.slice(5)}`;
+                                        const vendorId = "VENDOR-87654";
+                                        
+                                        // Process into 7-character chunks for readability
+                                        const chunk1 = "TP" + taxId.replace(/-/g, "").slice(0, 5); // TP prefix + first 5 of tax ID
+                                        const chunk2 = corpId.replace(/-/g, "").slice(0, 7); // First 7 of corp ID (DUNS)
+                                        const chunk3 = corpId.replace(/-/g, "").slice(7) + partnerCode.slice(0, 2); // Rest of corp ID + start of partner code
+                                        const chunk4 = partnerCode.replace(/-/g, "").slice(2); // Rest of partner code
+                                        const chunk5 = vendorId.replace(/-/g, ""); // Vendor ID
+                                        
+                                        const formattedUWA = `CLX-${chunk1}-${chunk2}-${chunk3}-${chunk4}-${chunk5}`;
                                         
                                         return (
                                           <>
@@ -6029,10 +6098,15 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                               <p><span className="font-semibold">Tax ID:</span> {taxId}</p>
                                               <p><span className="font-semibold">Corporate ID:</span> {corpId}</p>
                                               <p><span className="font-semibold">Partner Code:</span> {partnerCode}</p>
+                                              <p><span className="font-semibold">Vendor ID:</span> {vendorId}</p>
                                             </div>
                                             <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
                                               <p className="font-semibold text-green-700">Generated UWA:</p>
                                               <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                            </div>
+                                            <div className="mt-2 text-xs text-muted-foreground">
+                                              <p>Based on business credentials and vendor certifications</p>
+                                              <p>Formatted in 7-character chunks for readability</p>
                                             </div>
                                           </>
                                         );
