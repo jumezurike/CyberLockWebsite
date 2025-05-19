@@ -5905,21 +5905,19 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                           const address = "2X57+XH+"; // Google open location
                                           const osName = "centosl"; // OS name
                                           
-                                          // Generate Machine UWA
-                                          const last26UUID = instanceUUID.slice(-26);
-                                          const first2Env = environment.slice(0, 2);
-                                          const last7Address = address.slice(-7);
-                                          const first7OS = osName.slice(0, 7);
+                                          // 1. Extract components according to formula
+                                          const last26UUID = instanceUUID.slice(-26);  // Last 26 chars of UUID
+                                          const first2Env = environment.slice(0, 2);   // First 2 chars of environment
+                                          const last7Address = address.slice(-7);      // Last 7 chars of Google location
+                                          const first7OS = osName.slice(0, 7);         // First 7 chars of OS name
                                           
-                                          // Process UUID into 7-character chunks
-                                          // Split the UUID into chunks - ensure we maintain readability with 7-char segments
-                                          const chunk1 = first2Env + last26UUID.slice(0, 5); // PR + first 5 of UUID
-                                          const chunk2 = last26UUID.slice(5, 12);  // Next 7 chars
-                                          const chunk3 = last26UUID.slice(12, 19); // Next 7 chars
-                                          const chunk4 = last26UUID.slice(19);     // Remaining chars
+                                          // 2. Concatenate in the specified sequence
+                                          // Formula: Last26InstanceUUID + First2Env + Last7Address + First7OSname
+                                          const rawUWA = last26UUID + first2Env + last7Address + first7OS;
                                           
-                                          // CLX-PR1c49c-a47aebe-be4087c-52abbf4-2X57+XH+-centosl
-                                          const formattedUWA = `CLX-${chunk1}-${chunk2}-${chunk3}-${chunk4}-${last7Address}-${first7OS}`;
+                                          // 3. Rearrange with prefix and 7-character chunking for readability
+                                          // Start with CLX prefix, then first2Env, then chunk the rest into 7-character segments
+                                          const formattedUWA = `CLX-${first2Env}${last26UUID.slice(0,5)}-${last26UUID.slice(5,12)}-${last26UUID.slice(12,19)}-${last26UUID.slice(19)}-${last7Address}-${first7OS}`;
                                           
                                           return (
                                             <>
