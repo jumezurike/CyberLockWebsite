@@ -5150,7 +5150,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                               <SelectGroup>
                                 <SelectLabel>Advanced Authentication</SelectLabel>
                                 <SelectItem value="mfa">MFA (Multi-Factor Authentication)</SelectItem>
-                                <SelectItem value="uwa">UWA (Advanced Authentication)</SelectItem>
+                                <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
                               </SelectGroup>
                               
                               <SelectGroup>
@@ -5370,7 +5370,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                 <SelectGroup>
                                   <SelectLabel>Advanced Authentication</SelectLabel>
                                   <SelectItem value="mfa">MFA (Multi-Factor Authentication)</SelectItem>
-                                  <SelectItem value="uwa">UWA (Advanced Authentication)</SelectItem>
+                                  <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
                                 </SelectGroup>
                                 
                                 <SelectGroup>
