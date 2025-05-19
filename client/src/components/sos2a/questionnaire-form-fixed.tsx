@@ -5137,15 +5137,36 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                             </SelectTrigger>
                             <SelectContent>
                               <SelectItem value="All Methods">All Methods</SelectItem>
-                              <SelectItem value="Driver's License">Driver's License</SelectItem>
-                              <SelectItem value="Passport">Passport</SelectItem>
-                              <SelectItem value="National ID">National ID</SelectItem>
-                              <SelectItem value="Military ID">Military ID</SelectItem>
-                              <SelectItem value="State ID">State ID</SelectItem>
-                              <SelectItem value="Birth Certificate">Birth Certificate</SelectItem>
-                              <SelectItem value="Social Security Card">Social Security Card</SelectItem>
-                              <SelectItem value="Certificate of Citizenship">Certificate of Citizenship</SelectItem>
-                              <SelectItem value="UWA">UWA (Universal Web Authentication)</SelectItem>
+                              <SelectGroup>
+                                <SelectLabel>Standard Authentication</SelectLabel>
+                                <SelectItem value="username-password">Username/Password</SelectItem>
+                                <SelectItem value="employee-id">Employee ID</SelectItem>
+                                <SelectItem value="certificate">Certificate</SelectItem>
+                                <SelectItem value="smart-card">Smart Card</SelectItem>
+                                <SelectItem value="sso">Single Sign-On</SelectItem>
+                                <SelectItem value="token">Token-based</SelectItem>
+                                <SelectItem value="uwa">UWA (Universal Web Authentication)</SelectItem>
+                              </SelectGroup>
+                              
+                              <SelectGroup>
+                                <SelectLabel>Biometric</SelectLabel>
+                                <SelectItem value="biometric-fingerprint">Biometric - Fingerprint</SelectItem>
+                                <SelectItem value="biometric-voice">Biometric - Voice</SelectItem>
+                                <SelectItem value="biometric-facial">Biometric - Facial</SelectItem>
+                                <SelectItem value="biometric-iris">Biometric - Iris</SelectItem>
+                              </SelectGroup>
+                              
+                              <SelectGroup>
+                                <SelectLabel>Government IDs</SelectLabel>
+                                <SelectItem value="drivers-license">Driver's License</SelectItem>
+                                <SelectItem value="passport">Passport</SelectItem>
+                                <SelectItem value="national-id">National ID</SelectItem>
+                                <SelectItem value="military-id">Military ID</SelectItem>
+                                <SelectItem value="state-id">State ID</SelectItem>
+                                <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
+                                <SelectItem value="social-security">Social Security Card</SelectItem>
+                                <SelectItem value="citizenship-certificate">Certificate of Citizenship</SelectItem>
+                              </SelectGroup>
                             </SelectContent>
                           </Select>
                         </div>
@@ -5331,16 +5352,37 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="username-password">Username/Password</SelectItem>
-                                <SelectItem value="employee-id">Employee ID</SelectItem>
-                                <SelectItem value="certificate">Certificate</SelectItem>
-                                <SelectItem value="biometric-fingerprint">Biometric - Fingerprint</SelectItem>
-                                <SelectItem value="biometric-voice">Biometric - Voice</SelectItem>
-                                <SelectItem value="biometric-facial">Biometric - Facial</SelectItem>
-                                <SelectItem value="biometric-iris">Biometric - Iris</SelectItem>
-                                <SelectItem value="smart-card">Smart Card</SelectItem>
-                                <SelectItem value="sso">Single Sign-On</SelectItem>
-                                <SelectItem value="token">Token-based</SelectItem>
+                                <SelectGroup>
+                                  <SelectLabel>Standard Authentication</SelectLabel>
+                                  <SelectItem value="username-password">Username/Password</SelectItem>
+                                  <SelectItem value="employee-id">Employee ID</SelectItem>
+                                  <SelectItem value="certificate">Certificate</SelectItem>
+                                  <SelectItem value="smart-card">Smart Card</SelectItem>
+                                  <SelectItem value="sso">Single Sign-On</SelectItem>
+                                  <SelectItem value="token">Token-based</SelectItem>
+                                  <SelectItem value="uwa">UWA (Universal Web Authentication)</SelectItem>
+                                </SelectGroup>
+                                
+                                <SelectGroup>
+                                  <SelectLabel>Biometric</SelectLabel>
+                                  <SelectItem value="biometric-fingerprint">Biometric - Fingerprint</SelectItem>
+                                  <SelectItem value="biometric-voice">Biometric - Voice</SelectItem>
+                                  <SelectItem value="biometric-facial">Biometric - Facial</SelectItem>
+                                  <SelectItem value="biometric-iris">Biometric - Iris</SelectItem>
+                                </SelectGroup>
+                                
+                                <SelectGroup>
+                                  <SelectLabel>Government IDs</SelectLabel>
+                                  <SelectItem value="drivers-license">Driver's License</SelectItem>
+                                  <SelectItem value="passport">Passport</SelectItem>
+                                  <SelectItem value="national-id">National ID</SelectItem>
+                                  <SelectItem value="military-id">Military ID</SelectItem>
+                                  <SelectItem value="state-id">State ID</SelectItem>
+                                  <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
+                                  <SelectItem value="social-security">Social Security Card</SelectItem>
+                                  <SelectItem value="citizenship-certificate">Certificate of Citizenship</SelectItem>
+                                </SelectGroup>
+                                
                                 <SelectItem value="other">Other</SelectItem>
                               </SelectContent>
                             </Select>
