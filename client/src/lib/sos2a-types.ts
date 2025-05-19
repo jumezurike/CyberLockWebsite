@@ -85,6 +85,21 @@ export interface DeviceInventoryTracking {
   assignedPolicies?: string[];
 }
 
+export interface IdentityComponent {
+  id: string;
+  identityType: string;
+  userId: string;
+  fullName: string;
+  role: string;
+  accessLevel: string;
+  department: string;
+  contactInfo: string;
+  assignedRiskLevel: string;
+  mfaEnabled: boolean;
+  lastReview: string;
+  status: string;
+}
+
 export interface IdentityBehaviorHygiene {
   // 1. Identification
   identificationMethod?: string;
