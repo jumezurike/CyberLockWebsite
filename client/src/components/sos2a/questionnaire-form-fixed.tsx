@@ -5905,13 +5905,22 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                   
                                   <div className="mt-4">
                                     <h6 className="text-xs font-medium mb-2">Machine Type</h6>
-                                    <div className="flex gap-2">
+                                    <div className="flex gap-2 mb-3">
                                       <Button 
                                         size="sm" 
                                         variant={form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? 'default' : 'outline'} 
                                         className="text-xs"
                                         onClick={() => {
                                           form.setValue('identityBehaviorHygiene.machineType', 'cloud');
+                                          // Update Custom UWA inputs to match cloud server format
+                                          setCustomUwaInputs({
+                                            ...customUwaInputs,
+                                            // Reset to cloud server defaults
+                                            instanceUUID: "1c-49ca-47ae-bebe-4087c52abbf4",
+                                            environment: "PR",
+                                            address: "2X57+XH+",
+                                            osName: "centosl"
+                                          });
                                         }}
                                         disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
                                       >
@@ -5923,12 +5932,35 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         className="text-xs"
                                         onClick={() => {
                                           form.setValue('identityBehaviorHygiene.machineType', 'physical');
+                                          // Update Custom UWA inputs to match physical device format
+                                          setCustomUwaInputs({
+                                            ...customUwaInputs,
+                                            // Reset to physical device defaults
+                                            imei: "990000862471854",
+                                            macAddress: "00:1B:44:11:3A:B7",
+                                            serialNumber: "SN-2024-001"
+                                          });
                                         }}
                                         disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
                                       >
                                         Physical Device
                                       </Button>
                                     </div>
+                                    
+                                    {/* Display machine type-specific help text */}
+                                    {form.watch('identityBehaviorHygiene.machineType') === 'cloud' && (
+                                      <div className="px-2 py-1.5 bg-blue-50 border border-blue-100 rounded text-xs mb-2">
+                                        <p className="text-blue-700 font-medium">Cloud Server UWA Format:</p>
+                                        <p className="text-blue-600">Uses Last26InstanceUUID + First2Env + Last7Address + First7OSname</p>
+                                      </div>
+                                    )}
+                                    
+                                    {form.watch('identityBehaviorHygiene.machineType') === 'physical' && (
+                                      <div className="px-2 py-1.5 bg-green-50 border border-green-100 rounded text-xs mb-2">
+                                        <p className="text-green-700 font-medium">Physical Device UWA Format:</p>
+                                        <p className="text-green-600">Uses IMEI/MAC/Serial Number and other device identifiers</p>
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                                 
@@ -6003,101 +6035,214 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                               </div>
                                               
                                               <div className="mt-3 border-t pt-3">
-                                                <h6 className="text-xs font-medium mb-2">Generate Your Own UWA</h6>
-                                                <div className="grid grid-cols-2 gap-2">
+                                                <h6 className="text-xs font-medium mb-2">
+                                                  Generate Your Own UWA 
+                                                  <span className="ml-2 text-primary">
+                                                    ({form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? 'Cloud Server' : 'Physical Device'})
+                                                  </span>
+                                                </h6>
+                                                
+                                                {/* Form fields based on machine type */}
+                                                {form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? (
                                                   <div>
-                                                    <label className="text-xs font-medium">Instance UUID</label>
-                                                    <Input 
-                                                      className="mt-1 text-xs h-8" 
-                                                      placeholder="e.g., 1c-49ca-47ae-bebe-4087c52abbf4"
-                                                      value={customUwaInputs.instanceUUID}
-                                                      onChange={(e) => {
-                                                        setCustomUwaInputs({
-                                                          ...customUwaInputs,
-                                                          instanceUUID: e.target.value
-                                                        });
-                                                      }}
-                                                    />
-                                                  </div>
-                                                  <div>
-                                                    <label className="text-xs font-medium">Environment</label>
-                                                    <Select 
-                                                      defaultValue={customUwaInputs.environment}
-                                                      onValueChange={(value) => {
-                                                        setCustomUwaInputs({
-                                                          ...customUwaInputs,
-                                                          environment: value
-                                                        });
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                      <div>
+                                                        <label className="text-xs font-medium">Instance UUID</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., 1c-49ca-47ae-bebe-4087c52abbf4"
+                                                          value={customUwaInputs.instanceUUID}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              instanceUUID: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">Environment</label>
+                                                        <Select 
+                                                          defaultValue={customUwaInputs.environment}
+                                                          onValueChange={(value) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              environment: value
+                                                            });
+                                                          }}
+                                                        >
+                                                          <SelectTrigger className="mt-1 text-xs h-8">
+                                                            <SelectValue placeholder="Select environment" />
+                                                          </SelectTrigger>
+                                                          <SelectContent>
+                                                            <SelectItem value="PR">Production (PR)</SelectItem>
+                                                            <SelectItem value="ST">Staging (ST)</SelectItem>
+                                                            <SelectItem value="DV">Development (DV)</SelectItem>
+                                                            <SelectItem value="TS">Test (TS)</SelectItem>
+                                                          </SelectContent>
+                                                        </Select>
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">Google Location</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., 2X57+XH+"
+                                                          value={customUwaInputs.address}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              address: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">OS Name</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., centosl"
+                                                          value={customUwaInputs.osName}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              osName: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                    </div>
+                                                    
+                                                    <Button 
+                                                      size="sm" 
+                                                      className="mt-2 text-xs" 
+                                                      variant="default"
+                                                      onClick={() => {
+                                                        // Generate UWA from custom inputs using our helper function
+                                                        const formattedCustomUwa = generateCloudUwa(
+                                                          customUwaInputs.instanceUUID,
+                                                          customUwaInputs.environment,
+                                                          customUwaInputs.address,
+                                                          customUwaInputs.osName
+                                                        );
+                                                        
+                                                        // Set the generated UWA and show it
+                                                        setGeneratedUwa(formattedCustomUwa);
+                                                        setShowGeneratedUwa(true);
+                                                        
+                                                        // Try to copy to clipboard automatically
+                                                        try {
+                                                          navigator.clipboard.writeText(formattedCustomUwa);
+                                                        } catch (err) {
+                                                          console.error('Could not copy text: ', err);
+                                                        }
                                                       }}
                                                     >
-                                                      <SelectTrigger className="mt-1 text-xs h-8">
-                                                        <SelectValue placeholder="Select environment" />
-                                                      </SelectTrigger>
-                                                      <SelectContent>
-                                                        <SelectItem value="PR">Production (PR)</SelectItem>
-                                                        <SelectItem value="ST">Staging (ST)</SelectItem>
-                                                        <SelectItem value="DV">Development (DV)</SelectItem>
-                                                        <SelectItem value="TS">Test (TS)</SelectItem>
-                                                      </SelectContent>
-                                                    </Select>
+                                                      <Save className="h-3 w-3 mr-1" /> Generate Cloud UWA
+                                                    </Button>
                                                   </div>
+                                                ) : (
                                                   <div>
-                                                    <label className="text-xs font-medium">Google Location</label>
-                                                    <Input 
-                                                      className="mt-1 text-xs h-8" 
-                                                      placeholder="e.g., 2X57+XH+"
-                                                      value={customUwaInputs.address}
-                                                      onChange={(e) => {
-                                                        setCustomUwaInputs({
-                                                          ...customUwaInputs,
-                                                          address: e.target.value
-                                                        });
-                                                      }}
-                                                    />
-                                                  </div>
-                                                  <div>
-                                                    <label className="text-xs font-medium">OS Name</label>
-                                                    <Input 
-                                                      className="mt-1 text-xs h-8" 
-                                                      placeholder="e.g., centosl"
-                                                      value={customUwaInputs.osName}
-                                                      onChange={(e) => {
-                                                        setCustomUwaInputs({
-                                                          ...customUwaInputs,
-                                                          osName: e.target.value
-                                                        });
-                                                      }}
-                                                    />
-                                                  </div>
-                                                </div>
-                                                
-                                                <Button 
-                                                  size="sm" 
-                                                  className="mt-2 text-xs" 
-                                                  variant="default"
-                                                  onClick={() => {
-                                                    // Generate UWA from custom inputs using our helper function
-                                                    const formattedCustomUwa = generateCloudUwa(
-                                                      customUwaInputs.instanceUUID,
-                                                      customUwaInputs.environment,
-                                                      customUwaInputs.address,
-                                                      customUwaInputs.osName
-                                                    );
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                      <div>
+                                                        <label className="text-xs font-medium">IMEI</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., 990000862471854"
+                                                          value={customUwaInputs.imei || ''}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              imei: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">MAC Address</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., 00:1B:44:11:3A:B7"
+                                                          value={customUwaInputs.macAddress || ''}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              macAddress: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">Serial Number</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., SN-2024-001"
+                                                          value={customUwaInputs.serialNumber || ''}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              serialNumber: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">Device Model</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., PowerEdge R740"
+                                                          value={customUwaInputs.deviceModel || ''}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              deviceModel: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                    </div>
                                                     
-                                                    // Set the generated UWA and show it
-                                                    setGeneratedUwa(formattedCustomUwa);
-                                                    setShowGeneratedUwa(true);
-                                                    
-                                                    // Try to copy to clipboard automatically
-                                                    try {
-                                                      navigator.clipboard.writeText(formattedCustomUwa);
-                                                    } catch (err) {
-                                                      console.error('Could not copy text: ', err);
-                                                    }
-                                                  }}
-                                                >
-                                                  <Save className="h-3 w-3 mr-1" /> Generate Custom UWA
-                                                </Button>
+                                                    <Button 
+                                                      size="sm" 
+                                                      className="mt-2 text-xs" 
+                                                      variant="default"
+                                                      onClick={() => {
+                                                        // Generate Physical Device UWA
+                                                        // Clean inputs of non-alphanumeric characters
+                                                        const cleanImei = (customUwaInputs.imei || '').replace(/\D/g, '');
+                                                        const cleanMac = (customUwaInputs.macAddress || '').replace(/\W/g, '');
+                                                        const cleanSN = (customUwaInputs.serialNumber || '').replace(/[^a-zA-Z0-9-]/g, '');
+                                                        const cleanModel = (customUwaInputs.deviceModel || '').replace(/[^a-zA-Z0-9]/g, '');
+                                                        
+                                                        // Combine all parts
+                                                        const combinedString = `${cleanImei}${cleanMac}${cleanSN}${cleanModel}`;
+                                                        
+                                                        // Format with CLX prefix and 7-character chunks
+                                                        const chunks = [];
+                                                        chunks.push('CLX');
+                                                        
+                                                        // Break the combined string into chunks of 7 characters
+                                                        for (let i = 0; i < combinedString.length; i += 7) {
+                                                          chunks.push(combinedString.substring(i, i + 7));
+                                                        }
+                                                        
+                                                        const formattedCustomUwa = chunks.join('-');
+                                                        
+                                                        // Set the generated UWA and show it
+                                                        setGeneratedUwa(formattedCustomUwa);
+                                                        setShowGeneratedUwa(true);
+                                                        
+                                                        // Try to copy to clipboard automatically
+                                                        try {
+                                                          navigator.clipboard.writeText(formattedCustomUwa);
+                                                        } catch (err) {
+                                                          console.error('Could not copy text: ', err);
+                                                        }
+                                                      }}
+                                                    >
+                                                      <Save className="h-3 w-3 mr-1" /> Generate Physical UWA
+                                                    </Button>
+                                                  </div>
+                                                )}
                                                 
                                                 {showGeneratedUwa && (
                                                   <div className="mt-3 p-2 bg-green-50 rounded border border-green-200 text-xs">
