@@ -6274,15 +6274,186 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                     
                                     <div className="flex items-center mt-3 justify-between">
                                       <div>
-                                        <Button variant="outline" size="sm" className="text-xs mr-2">
+                                        <Button 
+                                          variant="outline" 
+                                          size="sm" 
+                                          className="text-xs mr-2"
+                                          onClick={() => {
+                                            // Reset form values for UWA section
+                                            setShowGeneratedUwa(false);
+                                            setGeneratedUwa('');
+                                            
+                                            // Reset custom UWA inputs to defaults
+                                            setCustomUwaInputs({
+                                              instanceUUID: "1c-49ca-47ae-bebe-4087c52abbf4",
+                                              environment: "PR",
+                                              address: "2X57+XH+",
+                                              osName: "centosl"
+                                            });
+                                          }}
+                                        >
                                           <RefreshCw className="h-3 w-3 mr-1" /> Refresh
                                         </Button>
-                                        <Button variant="default" size="sm" className="text-xs">
+                                        <Button 
+                                          variant="default" 
+                                          size="sm" 
+                                          className="text-xs"
+                                          onClick={() => {
+                                            const identityType = form.watch('identityBehaviorHygiene.selectedIdentityType') || 'Machine';
+                                            const machineType = form.watch('identityBehaviorHygiene.machineType') || 'cloud';
+                                            
+                                            let generatedUwa = '';
+                                            
+                                            // Generate UWA based on identity type
+                                            if (identityType === 'Machine') {
+                                              if (machineType === 'cloud') {
+                                                // Cloud server UWA generation
+                                                generatedUwa = generateCloudUwa(
+                                                  "1c-49ca-47ae-bebe-4087c52abbf4", // Instance UUID
+                                                  "PR", // Production environment
+                                                  "2X57+XH+", // Google open location
+                                                  "centosl" // OS name
+                                                );
+                                              } else {
+                                                // Physical device UWA generation
+                                                const imei = "490154203237518";
+                                                const macAddress = "00:1B:44:11:3A:B7";
+                                                const serialNumber = "S/N-XG47-8102-HP";
+                                                
+                                                // Remove non-alphanumeric characters
+                                                const cleanImei = imei.replace(/\D/g, '');
+                                                const cleanMac = macAddress.replace(/\W/g, '');
+                                                const cleanSerial = serialNumber.replace(/\W/g, '');
+                                                
+                                                // Combine first 7 of IMEI + first 7 of MAC + first 7 of Serial
+                                                const combinedId = cleanImei.slice(0, 7) + 
+                                                                  cleanMac.slice(0, 7) + 
+                                                                  cleanSerial.slice(0, 7);
+                                                
+                                                // Format with CLX prefix and in 7-char chunks
+                                                generatedUwa = 'CLX-' + combinedId.match(/.{1,7}/g)?.join('-');
+                                              }
+                                            } else if (identityType === 'Human') {
+                                              // Human UWA generation
+                                              const driverId = "DL859405382";
+                                              const biometricId = "FP8294-A12B";
+                                              const employeeId = "EMP2024-503";
+                                              const ssn = "123-45-6789";
+                                              
+                                              // Clean up the IDs
+                                              const cleanDriverId = driverId.replace(/\D/g, '').slice(-8);
+                                              const cleanBiometric = biometricId.replace(/\W/g, '').slice(-6);
+                                              const cleanEmployeeId = employeeId.replace(/\D/g, '').slice(-6);
+                                              const cleanSSN = ssn.replace(/\D/g, '').slice(-4);
+                                              
+                                              // Combine into one string
+                                              const combinedId = cleanDriverId + cleanBiometric + cleanEmployeeId + cleanSSN;
+                                              
+                                              // Format with CLX prefix and in 7-char chunks
+                                              generatedUwa = 'CLX-' + combinedId.match(/.{1,7}/g)?.join('-');
+                                            } else if (identityType === 'API') {
+                                              // API UWA generation
+                                              const apiKey = "api_3a7b9c4d2e1f";
+                                              const certId = "CERT-API-5832-XZ";
+                                              const tokenHash = "tk_7fb3e92a1c4d";
+                                              const serviceId = "svc_8b72ec";
+                                              
+                                              // Clean and extract parts
+                                              const cleanApiKey = apiKey.replace(/\W/g, '').slice(-8);
+                                              const cleanCertId = certId.replace(/\W/g, '').slice(-8);
+                                              const cleanToken = tokenHash.replace(/\W/g, '').slice(-8);
+                                              const cleanServiceId = serviceId.replace(/\W/g, '').slice(-6);
+                                              
+                                              // Combine into one string
+                                              const combinedId = cleanApiKey + cleanCertId + cleanToken + cleanServiceId;
+                                              
+                                              // Format with CLX prefix and in 7-char chunks
+                                              generatedUwa = 'CLX-' + combinedId.match(/.{1,7}/g)?.join('-');
+                                            } else if (identityType === 'Third-Party') {
+                                              // Third-Party UWA generation
+                                              const vendorId = "VEN-78291";
+                                              const contractId = "CT-2025-8801";
+                                              const securityClearance = "SC-L2-42";
+                                              const businessId = "BIZ-88421";
+                                              
+                                              // Clean and extract parts
+                                              const cleanVendorId = vendorId.replace(/\W/g, '').slice(-8);
+                                              const cleanContractId = contractId.replace(/\W/g, '').slice(-8);
+                                              const cleanSecurity = securityClearance.replace(/\W/g, '').slice(-6);
+                                              const cleanBusinessId = businessId.replace(/\W/g, '').slice(-6);
+                                              
+                                              // Combine into one string
+                                              const combinedId = cleanVendorId + cleanContractId + cleanSecurity + cleanBusinessId;
+                                              
+                                              // Format with CLX prefix and in 7-char chunks
+                                              generatedUwa = 'CLX-' + combinedId.match(/.{1,7}/g)?.join('-');
+                                            }
+                                            
+                                            // Set generated UWA and display it
+                                            setGeneratedUwa(generatedUwa);
+                                            setShowGeneratedUwa(true);
+                                            
+                                            // Try to copy to clipboard automatically
+                                            try {
+                                              navigator.clipboard.writeText(generatedUwa);
+                                              toast({
+                                                title: "UWA Generated",
+                                                description: "UWA has been copied to clipboard!",
+                                                variant: "success",
+                                              });
+                                            } catch (err) {
+                                              console.error('Could not copy text: ', err);
+                                            }
+                                          }}
+                                        >
                                           <Save className="h-3 w-3 mr-1" /> Generate UWA
                                         </Button>
                                       </div>
                                       <p className="text-xs text-muted-foreground">Always starts with CLX</p>
                                     </div>
+                                    
+                                    {/* Display area for generated UWA from the main Generate UWA button */}
+                                    {showGeneratedUwa && (
+                                      <div className="mt-4 p-3 bg-green-50 rounded border border-green-200 text-xs">
+                                        <div className="flex items-center justify-between">
+                                          <p className="font-semibold text-green-700">Generated UWA:</p>
+                                          <Button 
+                                            size="sm" 
+                                            variant="ghost" 
+                                            className="h-6 w-6 p-0" 
+                                            onClick={() => setShowGeneratedUwa(false)}
+                                          >
+                                            <X className="h-3 w-3" />
+                                          </Button>
+                                        </div>
+                                        <p className="font-mono text-green-800 mt-1 break-all">{generatedUwa}</p>
+                                        
+                                        <div className="mt-2 flex items-center">
+                                          <Button 
+                                            size="sm" 
+                                            variant="outline" 
+                                            className="h-6 py-0 px-2 text-xs"
+                                            onClick={() => {
+                                              navigator.clipboard.writeText(generatedUwa).then(() => {
+                                                toast({
+                                                  title: "Copied!",
+                                                  description: "UWA has been copied to clipboard",
+                                                  variant: "success",
+                                                });
+                                              }).catch(err => {
+                                                console.error('Could not copy text: ', err);
+                                              });
+                                            }}
+                                          >
+                                            <Copy className="h-3 w-3 mr-1" /> Copy Again
+                                          </Button>
+                                          <p className="ml-2 text-xs text-muted-foreground">
+                                            Your UWA has been automatically copied to clipboard
+                                          </p>
+                                        </div>
+                                      </div>
+                                    )}
+                                    
                                   </div>
                                 </div>
                               </div>
