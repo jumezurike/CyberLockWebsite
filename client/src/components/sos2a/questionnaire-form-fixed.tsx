@@ -6009,7 +6009,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       <Button 
                                         size="sm" 
                                         variant={form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'default' : 'outline'} 
-                                        className={`text-xs ${form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'border-green-300 bg-green-50 hover:bg-green-100' : ''}`}
+                                        className={`text-xs ${form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'border-emerald-400 bg-emerald-50 hover:bg-emerald-100 text-emerald-800' : ''}`}
                                         onClick={() => {
                                           form.setValue('identityBehaviorHygiene.machineType', 'physical');
                                           // Update Custom UWA inputs to match physical device format
@@ -6050,10 +6050,10 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                     )}
                                     
                                     {form.watch('identityBehaviorHygiene.machineType') === 'physical' && (
-                                      <div className="px-2 py-1.5 bg-green-50 border border-green-100 rounded text-xs mb-2">
-                                        <p className="text-green-700 font-medium">Physical Device UWA Format:</p>
-                                        <p className="text-green-600">Uses IMEI/MAC/Serial Number and other device identifiers</p>
-                                        <div className="mt-1.5 text-green-700 flex items-center text-[10px]">
+                                      <div className="px-2 py-1.5 bg-emerald-50 border border-emerald-200 rounded text-xs mb-2">
+                                        <p className="text-emerald-800 font-medium">Physical Device UWA Format:</p>
+                                        <p className="text-emerald-700">Uses IMEI/MAC/Serial Number and other device identifiers</p>
+                                        <div className="mt-1.5 text-emerald-800 flex items-center text-[10px]">
                                           <Info className="h-3 w-3 mr-1" /> The custom UWA generation below will update with physical device fields
                                         </div>
                                       </div>
