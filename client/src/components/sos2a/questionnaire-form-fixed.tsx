@@ -5210,60 +5210,149 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                               </tr>
                             </thead>
                             <tbody className="divide-y">
-                              <tr className="hover:bg-muted/20">
-                                <td className="py-2 px-3">Government ID</td>
-                                <td className="py-2 px-3">Human</td>
-                                <td className="py-2 px-3">Driver's License</td>
-                                <td className="py-2 px-3">
-                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
-                                </td>
-                              </tr>
-                              <tr className="hover:bg-muted/20">
-                                <td className="py-2 px-3">Digital Identity</td>
-                                <td className="py-2 px-3">Human</td>
-                                <td className="py-2 px-3">UUID</td>
-                                <td className="py-2 px-3">
-                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
-                                </td>
-                              </tr>
-                              <tr className="hover:bg-muted/20">
-                                <td className="py-2 px-3">Biometric</td>
-                                <td className="py-2 px-3">Human</td>
-                                <td className="py-2 px-3">Fingerprint</td>
-                                <td className="py-2 px-3">
-                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Optional</span>
-                                </td>
-                              </tr>
-                              <tr className="hover:bg-muted/20">
-                                <td className="py-2 px-3">Device Authentication</td>
-                                <td className="py-2 px-3">Machine</td>
-                                <td className="py-2 px-3">IMEI/Serial</td>
-                                <td className="py-2 px-3">
-                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
-                                </td>
-                              </tr>
-                              <tr className="hover:bg-muted/20">
-                                <td className="py-2 px-3">Digital Signature</td>
-                                <td className="py-2 px-3">API</td>
-                                <td className="py-2 px-3">API Key</td>
-                                <td className="py-2 px-3">
-                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
-                                </td>
-                              </tr>
-                              <tr className="hover:bg-muted/20">
-                                <td className="py-2 px-3">Business Credential</td>
-                                <td className="py-2 px-3">Third-Party</td>
-                                <td className="py-2 px-3">Business License</td>
-                                <td className="py-2 px-3">
-                                  <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
-                                </td>
-                              </tr>
+                              {(() => {
+                                // Get the selected filters
+                                const selectedIdentityType = form.watch('identityBehaviorHygiene.selectedIdentityType') || 'All Types';
+                                const selectedMethod = form.watch('identityBehaviorHygiene.selectedIdentificationMethod') || 'All Methods';
+                                
+                                // Define all 31 identity components with their properties
+                                const allIdentityComponents = [
+                                  // Human components (14)
+                                  { componentType: 'Government ID', identityType: 'Human', verificationType: "Driver's License", required: true, authType: 'government-id' },
+                                  { componentType: 'Government ID', identityType: 'Human', verificationType: "Passport", required: true, authType: 'government-id' },
+                                  { componentType: 'Government ID', identityType: 'Human', verificationType: "National ID", required: true, authType: 'government-id' },
+                                  { componentType: 'Government ID', identityType: 'Human', verificationType: "Military ID", required: false, authType: 'government-id' },
+                                  { componentType: 'Government ID', identityType: 'Human', verificationType: "State ID", required: false, authType: 'government-id' },
+                                  { componentType: 'Digital Identity', identityType: 'Human', verificationType: "UUID", required: true, authType: 'standard' },
+                                  { componentType: 'Digital Identity', identityType: 'Human', verificationType: "Employee ID", required: true, authType: 'standard' },
+                                  { componentType: 'Biometric', identityType: 'Human', verificationType: "Fingerprint", required: false, authType: 'biometric' },
+                                  { componentType: 'Biometric', identityType: 'Human', verificationType: "Facial", required: false, authType: 'biometric' },
+                                  { componentType: 'Biometric', identityType: 'Human', verificationType: "Voice", required: false, authType: 'biometric' },
+                                  { componentType: 'Biometric', identityType: 'Human', verificationType: "Iris", required: false, authType: 'biometric' },
+                                  { componentType: 'Advanced Authentication', identityType: 'Human', verificationType: "MFA App-based", required: true, authType: 'mfa' },
+                                  { componentType: 'Advanced Authentication', identityType: 'Human', verificationType: "MFA SMS", required: false, authType: 'mfa' },
+                                  { componentType: 'Universal Wallet Address', identityType: 'Human', verificationType: "Human-UWA", required: true, authType: 'uwa' },
+                                  
+                                  // Machine components (5)
+                                  { componentType: 'Device Authentication', identityType: 'Machine', verificationType: "IMEI/Serial", required: true, authType: 'standard' },
+                                  { componentType: 'Device Authentication', identityType: 'Machine', verificationType: "MAC Address", required: true, authType: 'standard' },
+                                  { componentType: 'Digital Certificate', identityType: 'Machine', verificationType: "X.509 Certificate", required: true, authType: 'certificate' },
+                                  { componentType: 'Device Identity', identityType: 'Machine', verificationType: "Device ID", required: true, authType: 'standard' },
+                                  { componentType: 'Universal Wallet Address', identityType: 'Machine', verificationType: "Device-UWA", required: true, authType: 'uwa' },
+                                  
+                                  // API components (5)
+                                  { componentType: 'Digital Signature', identityType: 'API', verificationType: "API Key", required: true, authType: 'standard' },
+                                  { componentType: 'Digital Signature', identityType: 'API', verificationType: "OAuth Token", required: false, authType: 'token' },
+                                  { componentType: 'Digital Signature', identityType: 'API', verificationType: "JWT", required: false, authType: 'token' },
+                                  { componentType: 'Digital Certificate', identityType: 'API', verificationType: "Service Certificate", required: true, authType: 'certificate' },
+                                  { componentType: 'Universal Wallet Address', identityType: 'API', verificationType: "API-UWA", required: true, authType: 'uwa' },
+                                  
+                                  // Third-Party components (7)
+                                  { componentType: 'Business Credential', identityType: 'Third-Party', verificationType: "Business License", required: true, authType: 'standard' },
+                                  { componentType: 'Business Credential', identityType: 'Third-Party', verificationType: "Tax ID", required: true, authType: 'standard' },
+                                  { componentType: 'Digital Certificate', identityType: 'Third-Party', verificationType: "Partner Certificate", required: true, authType: 'certificate' },
+                                  { componentType: 'Advanced Authentication', identityType: 'Third-Party', verificationType: "Hardware Token", required: true, authType: 'mfa' },
+                                  { componentType: 'Government ID', identityType: 'Third-Party', verificationType: "Corporate Registration", required: true, authType: 'government-id' },
+                                  { componentType: 'Universal Wallet Address', identityType: 'Third-Party', verificationType: "Vendor-UWA", required: true, authType: 'uwa' },
+                                  { componentType: 'Legal Agreement', identityType: 'Third-Party', verificationType: "Signed Agreement", required: true, authType: 'standard' },
+                                ];
+                                
+                                // Filter components based on selected filters
+                                let filteredComponents = allIdentityComponents;
+                                
+                                // Filter by identity type
+                                if (selectedIdentityType !== 'All Types') {
+                                  filteredComponents = filteredComponents.filter(comp => 
+                                    comp.identityType === selectedIdentityType
+                                  );
+                                }
+                                
+                                // Filter by authentication method
+                                if (selectedMethod !== 'All Methods') {
+                                  // Map the authentication method to component types
+                                  if (selectedMethod === 'uwa') {
+                                    filteredComponents = filteredComponents.filter(comp => 
+                                      comp.authType === 'uwa'
+                                    );
+                                  } else if (selectedMethod === 'mfa') {
+                                    filteredComponents = filteredComponents.filter(comp => 
+                                      comp.authType === 'mfa'
+                                    );
+                                  } else if (selectedMethod.startsWith('biometric')) {
+                                    filteredComponents = filteredComponents.filter(comp => 
+                                      comp.authType === 'biometric'
+                                    );
+                                  } else if (['drivers-license', 'passport', 'national-id', 'military-id', 'state-id'].includes(selectedMethod)) {
+                                    filteredComponents = filteredComponents.filter(comp => 
+                                      comp.authType === 'government-id'
+                                    );
+                                  } else if (['username-password', 'employee-id'].includes(selectedMethod)) {
+                                    filteredComponents = filteredComponents.filter(comp => 
+                                      comp.authType === 'standard'
+                                    );
+                                  } else if (['certificate', 'smart-card'].includes(selectedMethod)) {
+                                    filteredComponents = filteredComponents.filter(comp => 
+                                      comp.authType === 'certificate'
+                                    );
+                                  } else if (['token', 'sso'].includes(selectedMethod)) {
+                                    filteredComponents = filteredComponents.filter(comp => 
+                                      comp.authType === 'token'
+                                    );
+                                  }
+                                }
+                                
+                                // If no components match filters, show message
+                                if (filteredComponents.length === 0) {
+                                  return (
+                                    <tr>
+                                      <td colSpan={4} className="py-4 px-3 text-center text-gray-500">
+                                        No components match the selected filters. Try selecting different filters.
+                                      </td>
+                                    </tr>
+                                  );
+                                }
+                                
+                                // Return the filtered components
+                                return filteredComponents.map((component, index) => (
+                                  <tr key={index} className="hover:bg-muted/20">
+                                    <td className="py-2 px-3">{component.componentType}</td>
+                                    <td className="py-2 px-3">{component.identityType}</td>
+                                    <td className="py-2 px-3">{component.verificationType}</td>
+                                    <td className="py-2 px-3">
+                                      {component.required ? (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">Yes</span>
+                                      ) : (
+                                        <span className="px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">Optional</span>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ));
+                              })()}
                             </tbody>
                           </table>
                         </div>
                         
                         <div className="mt-2 text-xs text-muted-foreground flex justify-between items-center">
-                          <div>Showing 6 components</div>
+                          <div>
+                            Showing {(() => {
+                              const selectedIdentityType = form.watch('identityBehaviorHygiene.selectedIdentityType') || 'All Types';
+                              const selectedMethod = form.watch('identityBehaviorHygiene.selectedIdentificationMethod') || 'All Methods';
+                              
+                              if (selectedIdentityType === 'All Types' && selectedMethod === 'All Methods') {
+                                return '31';
+                              } else if (selectedIdentityType !== 'All Types' && selectedMethod === 'All Methods') {
+                                const countMap = {
+                                  'Human': 14,
+                                  'Machine': 5,
+                                  'API': 5,
+                                  'Third-Party': 7
+                                };
+                                return countMap[selectedIdentityType] || 'filtered';
+                              } else {
+                                return 'filtered';
+                              }
+                            })()} components
+                          </div>
                           <div className="flex space-x-2">
                             <Button variant="outline" size="sm" className="h-7 px-2">
                               <span>Previous</span>
