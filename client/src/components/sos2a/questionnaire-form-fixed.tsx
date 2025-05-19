@@ -5204,7 +5204,14 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                           <h5 className="text-sm font-medium mb-3">UWA Component Selection Matrix</h5>
                           <p className="text-xs text-muted-foreground mb-3">
                             Select the components needed for your UWA intermediate representation. Required fields depend on identity type.
+                            Organizations can customize which fields to include in their UWA generation based on their specific needs.
                           </p>
+                          <div className="flex items-center gap-2 mb-3">
+                            <AlertCircle className="h-4 w-4 text-amber-500" />
+                            <p className="text-xs text-amber-500">
+                              The matrix below shows an example configuration. All 31 identity components can be used to create a customized UWA.
+                            </p>
+                          </div>
                           
                           <div className="overflow-x-auto">
                             <table className="w-full text-sm border">
@@ -5320,13 +5327,59 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                               <p className="text-xs text-muted-foreground">
                                 The UWA (Universal Wallet Address) will be generated using the fields marked above
                               </p>
-                              <div className="mt-2 flex items-center justify-between">
-                                <p className="text-xs font-medium">
-                                  Fields selected: 8 / 14
-                                </p>
-                                <Button size="sm" variant="outline" className="text-xs">
-                                  <RefreshCw className="h-3 w-3 mr-1" /> Update UWA Matrix
-                                </Button>
+                              
+                              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="p-3 border rounded-md">
+                                  <h6 className="text-xs font-medium mb-2">UWA Templates by Identity Type</h6>
+                                  <div className="flex flex-col gap-2">
+                                    <div className="flex items-center justify-between">
+                                      <Button size="sm" variant="outline" className="text-xs w-full justify-start">
+                                        <span className="mr-1">🧑</span> Human UWA Template
+                                      </Button>
+                                      <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <Button size="sm" variant="outline" className="text-xs w-full justify-start">
+                                        <span className="mr-1">💻</span> Machine UWA Template
+                                      </Button>
+                                      <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <Button size="sm" variant="outline" className="text-xs w-full justify-start">
+                                        <span className="mr-1">⚙️</span> API UWA Template
+                                      </Button>
+                                      <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <Button size="sm" variant="outline" className="text-xs w-full justify-start">
+                                        <span className="mr-1">🏢</span> Third-Party UWA Template
+                                      </Button>
+                                      <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                    </div>
+                                  </div>
+                                </div>
+                                
+                                <div className="p-3 border rounded-md">
+                                  <h6 className="text-xs font-medium mb-2">UWA Generation Controls</h6>
+                                  <div className="flex flex-col gap-2">
+                                    <div className="flex items-center justify-between">
+                                      <p className="text-xs font-medium">
+                                        Fields selected: <span className="text-primary">8</span> / 14
+                                      </p>
+                                    </div>
+                                    <div className="text-xs text-muted-foreground">
+                                      Minimum required: 5 fields
+                                    </div>
+                                    <div className="flex items-center mt-2">
+                                      <Button size="sm" variant="outline" className="text-xs mr-2">
+                                        <Save className="h-3 w-3 mr-1" /> Save Template
+                                      </Button>
+                                      <Button size="sm" variant="outline" className="text-xs">
+                                        <RefreshCw className="h-3 w-3 mr-1" /> Update Matrix
+                                      </Button>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           </div>
