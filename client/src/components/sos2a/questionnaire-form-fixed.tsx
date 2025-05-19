@@ -5111,18 +5111,44 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                         <div className="ml-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-full">Filter</div>
                       </div>
                       <p className="text-xs text-gray-500 mb-2">Select an identity type to filter the identity component inventory list below</p>
-                      <Select defaultValue="All Types">
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="All Types" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="All Types">All Types</SelectItem>
-                          <SelectItem value="Human">Human</SelectItem>
-                          <SelectItem value="Machine">Machine</SelectItem>
-                          <SelectItem value="API">API</SelectItem>
-                          <SelectItem value="Third-Party">Third-Party</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      
+                      <div className="flex flex-wrap gap-4">
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Identity Type</label>
+                          <Select defaultValue="All Types">
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="All Types" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="All Types">All Types</SelectItem>
+                              <SelectItem value="Human">Human</SelectItem>
+                              <SelectItem value="Machine">Machine</SelectItem>
+                              <SelectItem value="API">API</SelectItem>
+                              <SelectItem value="Third-Party">Third-Party</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium mb-1">Identification Method</label>
+                          <Select defaultValue="All Methods">
+                            <SelectTrigger className="w-[180px]">
+                              <SelectValue placeholder="All Methods" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="All Methods">All Methods</SelectItem>
+                              <SelectItem value="Driver's License">Driver's License</SelectItem>
+                              <SelectItem value="Passport">Passport</SelectItem>
+                              <SelectItem value="National ID">National ID</SelectItem>
+                              <SelectItem value="Military ID">Military ID</SelectItem>
+                              <SelectItem value="State ID">State ID</SelectItem>
+                              <SelectItem value="Birth Certificate">Birth Certificate</SelectItem>
+                              <SelectItem value="Social Security Card">Social Security Card</SelectItem>
+                              <SelectItem value="Certificate of Citizenship">Certificate of Citizenship</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
                       
                       {/* Identity Component Inventory */}
                       <div className="mt-4">
