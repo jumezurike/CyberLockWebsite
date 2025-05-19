@@ -135,6 +135,11 @@ export default function Header() {
                     Lightbulb Moments
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/accessibility-demo" className="text-neutral-100 hover:text-secondary cursor-pointer">
+                    Accessibility Demo
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
             <Link href="/rasbita" className="bg-red-600 hover:bg-red-700 text-white py-2 px-4 mr-2 rounded-md shadow-sm transition duration-150 ease-in-out flex items-center">
