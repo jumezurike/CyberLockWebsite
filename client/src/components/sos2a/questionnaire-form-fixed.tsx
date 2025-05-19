@@ -5440,7 +5440,6 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                   { componentType: 'Advanced Authentication', identityType: 'Third-Party', verificationType: "Hardware Token", required: true, authType: 'mfa' },
                                   { componentType: 'Government ID', identityType: 'Third-Party', verificationType: "Corporate Registration", required: true, authType: 'government-id' },
                                   { componentType: 'Universal Wallet Address', identityType: 'Third-Party', verificationType: "Vendor-UWA", required: true, authType: 'uwa' },
-                                  { componentType: 'Legal Agreement', identityType: 'Third-Party', verificationType: "Signed Agreement", required: true, authType: 'standard' },
                                 ];
                                 
                                 // Filter components based on selected filters
