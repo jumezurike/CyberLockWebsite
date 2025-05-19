@@ -78,7 +78,7 @@ export default function ContactSection() {
                   <i className="fas fa-phone text-accent mt-1 mr-3"></i>
                   <div>
                     <h3 className="font-medium mb-1">Call Us</h3>
-                    <p className="text-neutral-100">(555) 123-4567</p>
+                    <p className="text-neutral-100">(763) 291-6314</p>
                   </div>
                 </div>
                 
@@ -86,7 +86,7 @@ export default function ContactSection() {
                   <i className="fas fa-map-marker-alt text-accent mt-1 mr-3"></i>
                   <div>
                     <h3 className="font-medium mb-1">Visit Us</h3>
-                    <p className="text-neutral-100">123 Security Avenue, Suite 200<br/>Cyber City, CS 10101</p>
+                    <p className="text-neutral-100">1225 Laurel St.<br/>Columbia, SC 29201</p>
                   </div>
                 </div>
               </div>
