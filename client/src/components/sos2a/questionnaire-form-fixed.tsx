@@ -7502,7 +7502,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                           }
                                                         }}
                                                       >
-                                                        <Trash className="h-3 w-3 text-red-500" />
+                                                        <Trash2 className="h-3 w-3 text-red-500" />
                                                       </Button>
                                                     </div>
                                                   </td>
