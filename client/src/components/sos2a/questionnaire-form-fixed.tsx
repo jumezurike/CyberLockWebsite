@@ -33,16 +33,7 @@ function safeArray<T>(arr: T[] | undefined): T[] {
 const formSchema = z.object({
   // 1. Business Information
   businessName: z.string().min(2, "Business name is required"),
-  businessAddress: z.string()
-    .min(5, "Business address is required")
-    .refine(
-      (address) => {
-        // Regular expression for matching IPv4 and IPv6 addresses
-        const ipRegex = /^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^[A-F0-9:]+$/i;
-        return !ipRegex.test(address);
-      },
-      { message: "Please enter a physical address, not an IP address" }
-    ),
+  businessAddress: z.string().min(5, "Business address is required"),
   businessLocation: z.object({
     city: z.string().min(2, "City is required"),
     state: z.string().min(2, "State is required"),
@@ -1153,13 +1144,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       name="businessAddress"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Business/Office/Home Address</FormLabel>
+                          <FormLabel>Business Address</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter physical address (not IP address)" {...field} />
+                            <Input placeholder="Business address" {...field} />
                           </FormControl>
-                          <FormDescription>
-                            Please enter a physical address, not an IP address.
-                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -3681,7 +3669,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <div className="font-medium">Business Name:</div>
                           <div>{form.getValues("businessName")}</div>
                           
-                          <div className="font-medium">Business/Office/Home Address:</div>
+                          <div className="font-medium">Business Address:</div>
                           <div>{form.getValues("businessAddress")}</div>
                           
                           <div className="font-medium">Location:</div>
