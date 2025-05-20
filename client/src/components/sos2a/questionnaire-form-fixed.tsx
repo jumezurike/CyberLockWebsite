@@ -1194,9 +1194,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       name="businessAddress"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Business Address</FormLabel>
+                          <FormLabel>Business/Office/Home Address</FormLabel>
                           <FormControl>
-                            <Input placeholder="Business address" {...field} />
+                            <Input placeholder="Enter your business address (No P.O. Box)" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
