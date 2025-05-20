@@ -6747,6 +6747,80 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                             Your UWA has been automatically copied to clipboard
                                           </p>
                                         </div>
+                                        
+                                        {/* UWA Records Table */}
+                                        {uwaRecords.length > 0 && (
+                                          <div className="mt-4 border rounded-md p-3">
+                                            <h6 className="text-xs font-medium mb-2 flex items-center justify-between">
+                                              <span>UWA Records</span>
+                                              <div className="flex space-x-1">
+                                                <Button variant="ghost" size="xs" className="h-6 px-2 text-xs">
+                                                  <FileText className="h-3 w-3 mr-1" /> Export
+                                                </Button>
+                                              </div>
+                                            </h6>
+                                            
+                                            <div className="overflow-x-auto">
+                                              <table className="min-w-full border-collapse text-xs">
+                                                <thead className="bg-muted/30">
+                                                  <tr>
+                                                    <th className="py-1 px-2 text-left font-medium border">UWA</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">Identity type</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">Identification method</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">ServerID</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">UUID</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">SN</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">MAKE/MODEL</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">OS</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">Server/OWNER/COMPANY</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">MAC</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">UWA/N SHADOW</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">ENVIRONMENT</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">IP address</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">EIN/BIZ #</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">ADDRESS</th>
+                                                    <th className="py-1 px-2 text-left font-medium border">Actions</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {uwaRecords.map((record, index) => (
+                                                    <tr key={index} className={index === uwaRecords.length - 1 ? "bg-green-50" : ""}>
+                                                      <td className="py-1 px-2 border">{record.uwaValue}</td>
+                                                      <td className="py-1 px-2 border">{record.identityType || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.identificationMethod || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.serverId || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.instanceUUID || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.serialNumber || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.makeModel || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.osName || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.companyName || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.macAddress || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.uwaShadow || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.environment || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.ipAddress || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.einBusinessNumber || '-'}</td>
+                                                      <td className="py-1 px-2 border">{record.address || '-'}</td>
+                                                      <td className="py-1 px-2 border">
+                                                        <div className="flex space-x-1">
+                                                          <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
+                                                            <Pencil className="h-3 w-3" />
+                                                          </Button>
+                                                          <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
+                                                            <Trash2 className="h-3 w-3" />
+                                                          </Button>
+                                                        </div>
+                                                      </td>
+                                                    </tr>
+                                                  ))}
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                            
+                                            <div className="mt-2 text-xs text-muted-foreground">
+                                              <p>Record #{uwaRecords.length} • Created {new Date().toLocaleString()}</p>
+                                            </div>
+                                          </div>
+                                        )}
                                       </div>
                                     )}
                                     
