@@ -7141,7 +7141,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                       <h6 className="text-xs font-medium mb-2">UWA Records</h6>
                                       <p className="text-xs text-muted-foreground mb-2">
                                         This table shows all UWA records and the components used to create each UWA. 
-                                        Fields with an "X" were used to derive the UWA.
+                                        Highlighted fields with values were used to derive the UWA.
                                       </p>
                                       <div className="overflow-x-auto">
                                         <table className="min-w-full border-collapse text-xs">
@@ -7175,11 +7175,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                   </td>
                                                   
                                                   {/* Identity Type */}
-                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'identityType') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'identityType') ? 'bg-green-50 font-medium' : ''}`}>
                                                     {editingRecord === record.id && editingField === 'identityType' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7196,11 +7196,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                   </td>
                                                   
                                                   {/* Identification Method */}
-                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'identificationMethod') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'identificationMethod') ? 'bg-green-50 font-medium' : ''}`}>
                                                     {editingRecord === record.id && editingField === 'identificationMethod' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7217,11 +7217,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                   </td>
                                                   
                                                   {/* Server ID */}
-                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'serverId') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'serverId') ? 'bg-green-50 font-medium' : ''}`}>
                                                     {editingRecord === record.id && editingField === 'serverId' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7238,11 +7238,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                   </td>
                                                   
                                                   {/* UUID */}
-                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'instanceUUID') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'instanceUUID') ? 'bg-green-50 font-medium' : ''}`}>
                                                     {editingRecord === record.id && editingField === 'instanceUUID' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7263,7 +7263,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     {editingRecord === record.id && editingField === 'serialNumber' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7284,7 +7284,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     {editingRecord === record.id && editingField === 'makeModel' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7301,11 +7301,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                   </td>
                                                   
                                                   {/* OS */}
-                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'osName') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'osName') ? 'bg-green-50 font-medium' : ''}`}>
                                                     {editingRecord === record.id && editingField === 'osName' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7326,7 +7326,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     {editingRecord === record.id && editingField === 'companyName' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7347,7 +7347,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     {editingRecord === record.id && editingField === 'macAddress' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7368,7 +7368,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     {editingRecord === record.id && editingField === 'uwaShadow' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7385,11 +7385,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                   </td>
                                                   
                                                   {/* Environment */}
-                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'environment') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'environment') ? 'bg-green-50 font-medium' : ''}`}>
                                                     {editingRecord === record.id && editingField === 'environment' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7410,7 +7410,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     {editingRecord === record.id && editingField === 'ipAddress' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7431,7 +7431,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                     {editingRecord === record.id && editingField === 'einBusinessNumber' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
@@ -7448,11 +7448,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                   </td>
                                                   
                                                   {/* Address */}
-                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'address') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                  <td className={`py-1 px-2 border ${isUsedInUwa(record, 'address') ? 'bg-green-50 font-medium' : ''}`}>
                                                     {editingRecord === record.id && editingField === 'address' ? (
                                                       <input 
                                                         type="text" 
-                                                        className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                        className="w-full p-0.5 text-xs border border-green-300 focus:outline-none focus:ring-1 focus:ring-green-500"
                                                         value={editValue}
                                                         onChange={handleEditChange}
                                                         onBlur={handleEditBlur}
