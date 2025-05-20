@@ -257,6 +257,135 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
     return chunks.join('-');
   };
   
+  // Track which record is being edited
+  const [editingRecord, setEditingRecord] = useState<number | null>(null);
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState<string>("");
+  
+  // Helper function to identify which components were used for a specific UWA record
+  const isUsedInUwa = (record: any, fieldName: string): boolean => {
+    // If the record doesn't exist or the field is empty, it's not used
+    if (!record || !record[fieldName]) return false;
+    
+    const machineType = record.identityType === 'Machine' ? 
+                        (record.instanceUUID ? 'cloud' : 'physical') : 'n/a';
+    
+    // Logic to identify key components used in UWA generation based on machine type
+    if (machineType === 'cloud') {
+      // Virtual machine UWA components
+      return ['instanceUUID', 'environment', 'osName', 'address'].includes(fieldName);
+    } else if (machineType === 'physical') {
+      // Physical device UWA components
+      return ['serialNumber', 'macAddress', 'makeModel'].includes(fieldName);
+    }
+    
+    // Common fields for all UWAs
+    return ['uwaValue', 'identityType', 'serverId'].includes(fieldName);
+  };
+  
+  // Handle inline editing of UWA records
+  const handleEditStart = (recordId: number, field: string, value: string) => {
+    setEditingRecord(recordId);
+    setEditingField(field);
+    setEditValue(value);
+  };
+  
+  const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditValue(e.target.value);
+  };
+  
+  const handleEditBlur = () => {
+    if (editingRecord !== null && editingField !== null) {
+      // Update the specific record and field
+      const updatedRecords = uwaRecords.map(record => {
+        if (record.id === editingRecord) {
+          return {
+            ...record,
+            [editingField]: editValue
+          };
+        }
+        return record;
+      });
+      
+      // Update records state
+      setUwaRecords(updatedRecords);
+      
+      // Reset editing state
+      setEditingRecord(null);
+      setEditingField(null);
+    }
+  };
+  
+  // Handle record deletion
+  const handleDeleteRecord = (recordId: number) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this UWA record?");
+    if (confirmDelete) {
+      const updatedRecords = uwaRecords.filter(record => record.id !== recordId);
+      setUwaRecords(updatedRecords);
+    }
+  };
+  
+  // Export UWA records to CSV
+  const exportUwaRecords = () => {
+    if (uwaRecords.length === 0) {
+      toast({
+        title: "No Records",
+        description: "There are no UWA records to export.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
+    // Define CSV header
+    const headers = [
+      'UWA', 'Identity Type', 'Identification Method', 'ServerID', 'UUID', 'Serial Number',
+      'Make/Model', 'OS', 'Company', 'MAC Address', 'UWA Shadow', 'Environment',
+      'IP Address', 'EIN/Business Number', 'Address', 'Created At'
+    ];
+    
+    // Convert records to CSV rows
+    const rows = uwaRecords.map(record => [
+      record.uwaValue,
+      record.identityType,
+      record.identificationMethod,
+      record.serverId || '',
+      record.instanceUUID || '',
+      record.serialNumber || '',
+      record.makeModel || '',
+      record.osName || '',
+      record.companyName || '',
+      record.macAddress || '',
+      record.uwaShadow || '',
+      record.environment || '',
+      record.ipAddress || '',
+      record.einBusinessNumber || '',
+      record.address || '',
+      new Date(record.createdAt).toLocaleString()
+    ]);
+    
+    // Combine headers and rows
+    const csvContent = [
+      headers.join(','),
+      ...rows.map(row => row.map(value => `"${String(value).replace(/"/g, '""')}"`).join(','))
+    ].join('\n');
+    
+    // Create and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `uwa_records_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast({
+      title: "Export Complete",
+      description: `${uwaRecords.length} UWA records exported to CSV.`,
+      variant: "success",
+    });
+  };
+  
   // Save UWA record with component values
   const saveUwaRecord = (uwaValue: string) => {
     if (!uwaValue) return;
@@ -6752,10 +6881,15 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         {uwaRecords.length > 0 && (
                                           <div className="mt-4 border rounded-md p-3">
                                             <h6 className="text-xs font-medium mb-2 flex items-center justify-between">
-                                              <span>UWA Records</span>
+                                              <span>UWA Records ({uwaRecords.length})</span>
                                               <div className="flex space-x-1">
-                                                <Button variant="ghost" size="xs" className="h-6 px-2 text-xs">
-                                                  <FileText className="h-3 w-3 mr-1" /> Export
+                                                <Button 
+                                                  variant="ghost" 
+                                                  size="xs" 
+                                                  className="h-6 px-2 text-xs"
+                                                  onClick={exportUwaRecords}
+                                                >
+                                                  <FileText className="h-3 w-3 mr-1" /> Export CSV
                                                 </Button>
                                               </div>
                                             </h6>
@@ -6785,27 +6919,298 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                 <tbody>
                                                   {uwaRecords.map((record, index) => (
                                                     <tr key={index} className={index === uwaRecords.length - 1 ? "bg-green-50" : ""}>
-                                                      <td className="py-1 px-2 border">{record.uwaValue}</td>
-                                                      <td className="py-1 px-2 border">{record.identityType || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.identificationMethod || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.serverId || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.instanceUUID || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.serialNumber || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.makeModel || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.osName || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.companyName || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.macAddress || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.uwaShadow || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.environment || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.ipAddress || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.einBusinessNumber || '-'}</td>
-                                                      <td className="py-1 px-2 border">{record.address || '-'}</td>
+                                                      {/* UWA Value - Read-only */}
+                                                      <td className="py-1 px-2 border bg-amber-50 font-medium">
+                                                        {record.uwaValue}
+                                                      </td>
+                                                      
+                                                      {/* Identity Type */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'identityType') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'identityType' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'identityType', record.identityType || '')}
+                                                          >
+                                                            {record.identityType || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* Identification Method */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'identificationMethod') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'identificationMethod' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'identificationMethod', record.identificationMethod || '')}
+                                                          >
+                                                            {record.identificationMethod || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* Server ID */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'serverId') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'serverId' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'serverId', record.serverId || '')}
+                                                          >
+                                                            {record.serverId || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* Instance UUID */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'instanceUUID') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'instanceUUID' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'instanceUUID', record.instanceUUID || '')}
+                                                          >
+                                                            {record.instanceUUID || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* Serial Number */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'serialNumber') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'serialNumber' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'serialNumber', record.serialNumber || '')}
+                                                          >
+                                                            {record.serialNumber || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* Make/Model */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'makeModel') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'makeModel' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'makeModel', record.makeModel || '')}
+                                                          >
+                                                            {record.makeModel || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* OS Name */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'osName') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'osName' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'osName', record.osName || '')}
+                                                          >
+                                                            {record.osName || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* Company Name */}
+                                                      <td className="py-1 px-2 border">
+                                                        {editingRecord === record.id && editingField === 'companyName' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'companyName', record.companyName || '')}
+                                                          >
+                                                            {record.companyName || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* MAC Address */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'macAddress') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'macAddress' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'macAddress', record.macAddress || '')}
+                                                          >
+                                                            {record.macAddress || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* UWA Shadow */}
+                                                      <td className="py-1 px-2 border">
+                                                        {record.uwaShadow || '-'}
+                                                      </td>
+                                                      
+                                                      {/* Environment */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'environment') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'environment' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'environment', record.environment || '')}
+                                                          >
+                                                            {record.environment || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* IP Address */}
+                                                      <td className="py-1 px-2 border">
+                                                        {editingRecord === record.id && editingField === 'ipAddress' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'ipAddress', record.ipAddress || '')}
+                                                          >
+                                                            {record.ipAddress || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* EIN/Business Number */}
+                                                      <td className="py-1 px-2 border">
+                                                        {editingRecord === record.id && editingField === 'einBusinessNumber' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'einBusinessNumber', record.einBusinessNumber || '')}
+                                                          >
+                                                            {record.einBusinessNumber || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* Address */}
+                                                      <td className={`py-1 px-2 border ${isUsedInUwa(record, 'address') ? 'bg-blue-50 font-medium' : ''}`}>
+                                                        {editingRecord === record.id && editingField === 'address' ? (
+                                                          <input 
+                                                            type="text" 
+                                                            className="w-full p-0.5 text-xs border border-blue-300 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                                                            value={editValue}
+                                                            onChange={handleEditChange}
+                                                            onBlur={handleEditBlur}
+                                                            autoFocus
+                                                          />
+                                                        ) : (
+                                                          <div 
+                                                            className="cursor-text"
+                                                            onClick={() => handleEditStart(record.id, 'address', record.address || '')}
+                                                          >
+                                                            {record.address || '-'}
+                                                          </div>
+                                                        )}
+                                                      </td>
+                                                      
+                                                      {/* Actions */}
                                                       <td className="py-1 px-2 border">
                                                         <div className="flex space-x-1">
-                                                          <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
-                                                            <Pencil className="h-3 w-3" />
-                                                          </Button>
-                                                          <Button variant="ghost" size="sm" className="h-5 w-5 p-0">
+                                                          <Button 
+                                                            variant="ghost" 
+                                                            size="sm" 
+                                                            className="h-5 w-5 p-0"
+                                                            onClick={() => handleDeleteRecord(record.id)}
+                                                          >
                                                             <Trash2 className="h-3 w-3" />
                                                           </Button>
                                                         </div>
