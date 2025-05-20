@@ -281,16 +281,20 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
     // If the record doesn't exist or the field is empty, it's not used
     if (!record || !record[fieldName]) return false;
     
-    const machineType = record.identityType === 'Machine' ? 
-                        (record.instanceUUID ? 'cloud' : 'physical') : 'n/a';
-    
-    // Logic to identify key components used in UWA generation based on machine type
-    if (machineType === 'cloud') {
-      // Virtual machine UWA components
-      return ['instanceUUID', 'environment', 'osName', 'address'].includes(fieldName);
-    } else if (machineType === 'physical') {
-      // Physical device UWA components
-      return ['serialNumber', 'macAddress', 'makeModel'].includes(fieldName);
+    // For Machine UWAs - match exactly what's shown in the screenshot
+    if (record.identityType === 'Machine') {
+      // These are the exact fields marked with 'x' in the screenshot
+      const fieldsUsedInMachineUwa = [
+        'identityType',            // x
+        'identificationMethod',    // x
+        'serverId',                // x
+        'instanceUUID',            // x
+        'osName',                  // x
+        'environment',             // x
+        'address'                  // x
+      ];
+      
+      return fieldsUsedInMachineUwa.includes(fieldName);
     }
     
     // Common fields for all UWAs
