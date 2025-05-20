@@ -360,11 +360,29 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
           
           if (!response.ok) {
             console.error('Failed to update UWA record in database');
+            toast({
+              title: "Update Failed",
+              description: "Changes saved locally but not in database.",
+              variant: "destructive",
+            });
           } else {
             console.log(`UWA record ID ${editingRecord} updated in database`);
+            // Show a small visual indicator that the update was successful
+            const successIndicator = document.createElement('div');
+            successIndicator.className = 'fixed bottom-4 right-4 bg-green-100 text-green-700 px-4 py-2 rounded-md text-sm shadow-md z-50';
+            successIndicator.textContent = 'UWA record updated in database';
+            document.body.appendChild(successIndicator);
+            setTimeout(() => {
+              successIndicator.remove();
+            }, 2000);
           }
         } catch (error) {
           console.error('Error updating UWA record in database:', error);
+          toast({
+            title: "Database Error",
+            description: "Changes saved locally but not in database.",
+            variant: "destructive",
+          });
         }
       }
       
