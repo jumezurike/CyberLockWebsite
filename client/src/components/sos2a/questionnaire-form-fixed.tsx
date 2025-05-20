@@ -1156,10 +1156,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <FormLabel>Business/Office/Home Address</FormLabel>
                           <FormControl>
                             <Input placeholder="Enter physical address (not IP address)" {...field} />
-                            <FormDescription>
-                              Please enter a physical address, not an IP address.
-                            </FormDescription>
                           </FormControl>
+                          <FormDescription>
+                            Please enter a physical address, not an IP address.
+                          </FormDescription>
                           <FormMessage />
                         </FormItem>
                       )}
