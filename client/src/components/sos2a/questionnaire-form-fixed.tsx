@@ -7161,7 +7161,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                               <th className="py-1 px-2 text-left font-medium border">ENVIRONMENT</th>
                                               <th className="py-1 px-2 text-left font-medium border">IP address</th>
                                               <th className="py-1 px-2 text-left font-medium border">EIN/BIZ #</th>
-                                              <th className="py-1 px-2 text-left font-medium border">ADDRESS</th>
+                                              <th className="py-1 px-2 text-left font-medium border">Business/Office/Home Address</th>
                                               <th className="py-1 px-2 text-left font-medium border">Actions</th>
                                             </tr>
                                           </thead>
