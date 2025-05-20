@@ -294,7 +294,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditValue(e.target.value);
   };
-  
+
   const handleEditBlur = async () => {
     if (editingRecord !== null && editingField !== null) {
       // Update the specific record and field in local state
@@ -360,22 +360,11 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
           
           if (!response.ok) {
             console.error('Failed to update UWA record in database');
-            // Only show error notifications, not success (to avoid UI noise)
-            toast({
-              title: "Update Failed",
-              description: "Changes saved locally but not in database.",
-              variant: "destructive",
-            });
           } else {
             console.log(`UWA record ID ${editingRecord} updated in database`);
           }
         } catch (error) {
           console.error('Error updating UWA record in database:', error);
-          toast({
-            title: "Database Error",
-            description: "Changes saved locally but not in database.",
-            variant: "destructive",
-          });
         }
       }
       
