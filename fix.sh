@@ -1,9 +1,7 @@
 #!/bin/bash
-# Create a backup
+
+# Make a backup of the current file
 cp client/src/components/sos2a/questionnaire-form-fixed.tsx client/src/components/sos2a/questionnaire-form-fixed.tsx.bak
 
-# Fix the missing closing parenthesis
-sed -i '3761s/                  <\/div>/                  <\/div>\n                  )}/' client/src/components/sos2a/questionnaire-form-fixed.tsx
-
-# Check if the fix was applied
-grep -A 3 -B 3 "Classification Section" client/src/components/sos2a/questionnaire-form-fixed.tsx
+# Replace "Address" with "Business/Office/Home Address" in the table
+sed -i 's/font-medium">Address</font-medium">Business\/Office\/Home Address</' client/src/components/sos2a/questionnaire-form-fixed.tsx
