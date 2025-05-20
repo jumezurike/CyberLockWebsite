@@ -208,6 +208,25 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
   });
   const [generatedUwa, setGeneratedUwa] = useState<string>("");
   const [showGeneratedUwa, setShowGeneratedUwa] = useState<boolean>(false);
+  const [uwaRecords, setUwaRecords] = useState<Array<{
+    id: number;
+    createdAt: string;
+    uwaValue: string;
+    identityType: string;
+    identificationMethod: string;
+    serverId?: string;
+    instanceUUID?: string;
+    serialNumber?: string;
+    makeModel?: string;
+    osName?: string;
+    companyName?: string;
+    macAddress?: string;
+    uwaShadow?: string;
+    environment?: string;
+    ipAddress?: string;
+    einBusinessNumber?: string;
+    address?: string;
+  }>>([]);
   
   // Add a function to generate UWA for cloud machines
   const generateCloudUwa = (
@@ -238,6 +257,49 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
     return chunks.join('-');
   };
   
+  // Save UWA record with component values
+  const saveUwaRecord = (uwaValue: string) => {
+    if (!uwaValue) return;
+    
+    const identityType = form.watch('identityBehaviorHygiene.selectedIdentityType') || 'Machine';
+    const machineType = form.watch('identityBehaviorHygiene.machineType') || 'cloud';
+    const identificationMethod = form.watch('identityBehaviorHygiene.identificationMethod') || 'Standard';
+    
+    // Create new record with available data
+    const newRecord = {
+      id: uwaRecords.length + 1,
+      createdAt: new Date().toISOString(),
+      uwaValue,
+      identityType,
+      identificationMethod,
+      serverId: 'SRVID001', // Default or from form if available
+      companyName: 'Acme Healthcare', // Default or from form if available
+      ipAddress: '192.168.1.10', // Default or from form if available
+      einBusinessNumber: 'BIZ-12345', // Default or from form if available
+      uwaShadow: `CLX-SHADOW-${uwaValue.substring(4, 11)}`,
+    };
+    
+    // Add machine-type specific information
+    if (identityType === 'Machine') {
+      if (machineType === 'cloud') {
+        // Virtual machine specific data
+        newRecord.instanceUUID = customUwaInputs.instanceUUID;
+        newRecord.osName = customUwaInputs.osName;
+        newRecord.environment = customUwaInputs.environment;
+        newRecord.address = customUwaInputs.address;
+      } else {
+        // Physical device specific data
+        newRecord.serialNumber = customUwaInputs.serialNumber;
+        newRecord.macAddress = customUwaInputs.macAddress;
+        newRecord.makeModel = customUwaInputs.deviceModel;
+        newRecord.address = '1225 Laurel St. Columbia, SC 29201';
+      }
+    }
+    
+    // Add to records
+    setUwaRecords([...uwaRecords, newRecord]);
+  };
+
   // CSV template handling
   const generateCsvTemplate = () => {
     const header = 'Device Type,Make/Model,Serial Number,Sensitivity Level,Network Zone,Operating System,Last Patch Date,Patch Status,Encryption Status,Authorized Users,Notes';
@@ -6624,12 +6686,15 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                             setGeneratedUwa(generatedUwa);
                                             setShowGeneratedUwa(true);
                                             
+                                            // Save UWA record with component values
+                                            saveUwaRecord(generatedUwa);
+                                            
                                             // Try to copy to clipboard automatically
                                             try {
                                               navigator.clipboard.writeText(generatedUwa);
                                               toast({
                                                 title: "UWA Generated",
-                                                description: "UWA has been copied to clipboard!",
+                                                description: "UWA has been copied to clipboard and saved to records!",
                                                 variant: "success",
                                               });
                                             } catch (err) {
