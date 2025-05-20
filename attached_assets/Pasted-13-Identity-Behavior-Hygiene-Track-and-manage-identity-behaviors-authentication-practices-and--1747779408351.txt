@@ -1,0 +1,388 @@
+13. Identity Behavior & Hygiene
+Track and manage identity behaviors, authentication practices, and security hygiene measures.
+
+Universal Identity Verification System (UIVS)
+For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+
+Manage User Identities
+Download Template
+Filter by Identity Type
+Filter
+Select an identity type to filter the identity component inventory list below
+
+Identity Type
+
+All Types
+
+Identification Method
+
+All Methods
+
+Identity Component Inventory
+Add Identity Component
+UWA Component Selection Matrix
+Select the components needed for your UWA intermediate representation. Required fields depend on identity type. Organizations can customize which fields to include in their UWA generation based on their specific needs.
+
+The matrix below shows an example configuration. All 31 identity components can be used to create a customized UWA.
+
+Components of Identification	Human	Machine	API	Third-Party
+Name	
+			
+
+Address	
+			
+
+Birthplace	
+			
+Date of Birth	
+			
+PIN	
+
+Not used for UWA
+
+Not used for UWA
+
+Not used for UWA
+
+Not used for UWA
+SN/IMEI	
+	
+		
+Ph#/EIN/SSN/BVN	
+			
+
+Driver License/Passport	
+			
+Primary Auth Device IMEI/IOT S/N	
+			
+Make/Model+OS	
+	
+		
+Manufacturing Date (DOM)		
+		
+EC2/DO ID/MAC/SN		
+	
+	
+OS		
+	
+	
+UUID		
+	
+	
+Server ID		
+	
+	
+Environment (PR/ST/TD)		
+	
+	
+IP Address		
+	
+	
+Business Certifications				
+
+Business Licenses				
+
+Utility Bills				
+
+Selected Identity Matrix Fields
+Advanced Feature - Universal Wallet Address (UWA)
+
+The UWA system is an optional advanced identity feature that organizations can integrate as their security posture matures. This preview demonstrates how selected identity components are transformed into secure, portable identifiers across your infrastructure.
+
+The UWA (Universal Wallet Address) will be generated using the fields marked above
+
+UWA Templates by Identity Type
+
+🧑
+Human UWA Template
+
+
+💻
+Machine UWA Template
+
+
+⚙️
+API UWA Template
+
+
+🏢
+Third-Party UWA Template
+
+Machine Type for UWA Generation
+Virtual Machine
+Physical Device
+Virtual UWA Format (VM):
+
+Uses InstanceUUID + Environment + Address + OSname
+
+Uses instance identifiers instead of hardware identifiers
+UWA Generation Preview
+Selected template: Machine UWA (Virtual Machine)
+
+Instance UUID: 1c-49ca-47ae-bebe-4087c52abbf4
+
+Environment: PR
+
+Address: 2X57+XH+
+
+OS Name: centosl
+
+Generated UWA:
+
+Copy
+CLX-PR9ca-4-7ae-beb-e-4087c-52abbf4-X57+XH+-centosl
+
+Algorithm: Last26InstanceUUID + First2Env + Last7Address + First7OSname
+
+Formatted in 7-character chunks for readability
+
+Generate Your Own UWA(Cloud Server)
+Instance UUID
+1c-49ca-47ae-bebe-4087c52abbf4
+Environment
+Production (PR)
+
+Google Location
+2X57+XH+
+OS Name
+centosl
+Generate Cloud UWA
+RefreshGenerate UWA
+Always starts with CLX
+
+Component Type	Identity Type	Verification Type	Required
+Device Authentication	Machine	IMEI/Serial	Yes
+Device Authentication	Machine	MAC Address	Yes
+Digital Certificate	Machine	X.509 Certificate	Yes
+Device Identity	Machine	Device ID	Yes
+Universal Wallet Address	Machine	Device-UWA	Yes
+Showing 5 components
+
+Previous
+
+Next
+1. Identification
+User ID
+Employee ID, service account name
+
+Enter user ID
+Full Name / Role
+Enter full name and role
+Contact Info
+Email, phone for emergency access
+
+Enter contact information
+Identity Type
+Select identity type
+
+Identification Method
+Select identification method
+
+2. Authentication Practices
+MFA Types
+Select all MFA types that are implemented
+
+
+Mobile App Authenticator
+
+Hardware Tokens/Keys
+
+Biometrics
+
+Push Notifications
+
+Phone Calls
+
+Biometric Authentication
+Do you use biometric authentication?
+
+Biometric Types
+Select all biometric types that are used
+
+
+Fingerprint
+
+Facial Recognition
+
+Voice Recognition
+
+Iris Scanning
+
+Palm Vein/Hand Geometry
+
+Behavioral Biometrics
+Access Behavior
+Login Patterns
+Select typical login patterns
+
+Remote Access Frequency
+Select remote access frequency
+
+Typical Session Duration
+Select typical session duration
+
+
+Abnormal Access Detection
+Do you have systems to detect abnormal access patterns?
+
+
+Location-Based Access Controls
+Do you restrict access based on geographic location?
+
+4. Identity Protection
+
+Identity Protection Training
+Do you provide identity protection training to users?
+
+Last Training Completion Date
+mm/dd/yyyy
+Phishing Awareness Level
+Select phishing awareness level
+
+
+Security Incident History
+Have you experienced identity-related security incidents in the past 12 months?
+
+Incident Details
+If you had incidents, please provide brief details about the nature and impact
+5. Privileged Access Management
+
+Privileged Account Inventory
+Do you maintain an inventory of privileged accounts?
+
+
+Just-In-Time Access
+Do you implement just-in-time access for privileged accounts?
+
+
+Privilege Escalation Controls
+Do you have controls to prevent unauthorized privilege escalation?
+
+Admin Account Review Frequency
+Select review frequency
+
+
+Separation of Duties
+Do you implement separation of duties for privileged operations?
+
+6. Lifecycle & Governance
+Onboarding Process Status
+Select onboarding process status
+
+Onboarding/Offboarding Date
+mm/dd/yyyy
+
+Formal Offboarding Process
+Do you have a formal offboarding process to revoke access?
+
+
+Account Dormancy Monitoring
+Do you monitor and manage dormant/inactive accounts?
+
+Access Review Frequency
+Select access review frequency
+
+
+Role Change Management Process
+Do you have a process to manage access rights when users change roles?
+
+Access Review Schedule
+Select review schedule
+
+
+Certification Status
+Is this identity compliant with NIST/ISO audits?
+
+Incident History
+Past violations, e.g., policy breaches
+
+Describe any past security incidents
+Authentication Practices
+
+Password Policy Compliance
+Do you have a formal password policy that meets industry standards?
+
+Password Policy Details
+Describe your password policy requirements (length, complexity, rotation, etc.)
+
+Multi-Factor Authentication (MFA)
+Do you implement multi-factor authentication?
+
+MFA Types
+Select all MFA types that are implemented
+
+
+SMS/Text Messages
+
+Email Codes
+Classification
+Access Tier
+Select access tier
+
+Department / Team
+Enter department or team
+Assigned Risk Level
+E.g., "High" for finance admins
+
+
+Select risk level
+
+Federated Identity Source
+Select identity source
+
+7. Access 3. Access & Permissions Permissions
+Assigned Roles
+RBAC groups, e.g., "Finance-ReadOnly"
+
+Enter assigned roles
+Entitlements
+Specific permissions like "SQL DB Admin"
+
+Enter specific permissions
+Access Duration
+Select access duration
+
+MFA Status
+
+MFA Method
+MFA Method
+
+8. Security Posture
+Password Hygiene
+Last changed, complexity, reuse status
+
+Describe password hygiene
+
+Breached Credential Checks
+Do you check for breached credentials via services like HaveIBeenPwned?
+
+Session Timeout Settings
+Select session timeout
+
+
+Unused Account Detection
+Do you detect and manage accounts inactive for 90+ days?
+
+
+Privilege Escalation Alerts
+Do you monitor and alert on sudo/root usage logs?
+
+9. Behavior Monitoring
+Typical Login Patterns
+Time, location, device
+
+Describe typical login patterns
+
+Anomaly Detection Flags
+Do you detect impossible travel, brute force attempts, etc.?
+
+Data Access Trends
+Unusual file downloads, cloud API calls
+
+Describe data access monitoring
+Tool/Command Usage
+E.g., PowerShell, RDP, SSH frequency
+
+Describe tool/command usage monitoring
+Previous Step
+Next Step

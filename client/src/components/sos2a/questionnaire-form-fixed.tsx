@@ -4415,9 +4415,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* UWA Records Table */}
                   <div className="mt-8 border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">Machine Identity Components</h4>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      The table below shows authentication components for machine identities used in UWA generation.
-                    </p>
                     <UwaRecordsTable />
                   </div>
                   
