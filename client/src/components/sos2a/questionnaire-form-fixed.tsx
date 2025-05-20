@@ -295,9 +295,9 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
     setEditValue(e.target.value);
   };
   
-  const handleEditBlur = () => {
+  const handleEditBlur = async () => {
     if (editingRecord !== null && editingField !== null) {
-      // Update the specific record and field
+      // Update the specific record and field in local state
       const updatedRecords = uwaRecords.map(record => {
         if (record.id === editingRecord) {
           return {
@@ -308,8 +308,76 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
         return record;
       });
       
-      // Update records state
+      // Update local records state immediately for responsive UI
       setUwaRecords(updatedRecords);
+      
+      // Find the updated record to send to database
+      const updatedRecord = updatedRecords.find(r => r.id === editingRecord);
+      
+      // Only update database for records with database IDs
+      // Skip local-only records that haven't been saved to database yet
+      if (updatedRecord && typeof editingRecord === 'number' && editingRecord > 0) {
+        try {
+          // Build component data JSON for database update
+          const componentData: Record<string, any> = {
+            identificationMethod: updatedRecord.identificationMethod || 'Standard',
+            serverId: updatedRecord.serverId || 'Unknown',
+            companyName: updatedRecord.companyName || 'Unknown',
+            ipAddress: updatedRecord.ipAddress || '0.0.0.0',
+            einBusinessNumber: updatedRecord.einBusinessNumber || 'Unknown',
+            uwaShadow: updatedRecord.uwaShadow || `CLX-SHADOW-${updatedRecord.uwaValue.substring(0, 7)}`,
+          };
+          
+          // Add machine-specific fields if they exist
+          if (updatedRecord.instanceUUID) componentData.instanceUUID = updatedRecord.instanceUUID;
+          if (updatedRecord.osName) componentData.osName = updatedRecord.osName;
+          if (updatedRecord.environment) componentData.environment = updatedRecord.environment;
+          if (updatedRecord.address) componentData.address = updatedRecord.address;
+          if (updatedRecord.serialNumber) componentData.serialNumber = updatedRecord.serialNumber;
+          if (updatedRecord.macAddress) componentData.macAddress = updatedRecord.macAddress;
+          if (updatedRecord.makeModel) componentData.makeModel = updatedRecord.makeModel;
+          
+          // Determine machine type from available fields
+          const machineType = updatedRecord.instanceUUID ? 'cloud' : 
+                             (updatedRecord.serialNumber || updatedRecord.macAddress) ? 'physical' : 
+                             'cloud'; // Default to cloud if unclear
+          
+          // Send update to database
+          const response = await fetch(`/api/uwas/${editingRecord}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              uwaValue: updatedRecord.uwaValue,
+              identityType: updatedRecord.identityType || 'Machine',
+              machineType,
+              associatedName: updatedRecord.companyName || 'Unknown',
+              componentData,
+              status: 'active'
+            })
+          });
+          
+          if (!response.ok) {
+            console.error('Failed to update UWA record in database');
+            // Only show error notifications, not success (to avoid UI noise)
+            toast({
+              title: "Update Failed",
+              description: "Changes saved locally but not in database.",
+              variant: "destructive",
+            });
+          } else {
+            console.log(`UWA record ID ${editingRecord} updated in database`);
+          }
+        } catch (error) {
+          console.error('Error updating UWA record in database:', error);
+          toast({
+            title: "Database Error",
+            description: "Changes saved locally but not in database.",
+            variant: "destructive",
+          });
+        }
+      }
       
       // Reset editing state
       setEditingRecord(null);
