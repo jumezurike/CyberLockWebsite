@@ -4689,10 +4689,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="short">Short (<1 hour)</SelectItem>
+                                <SelectItem value="short">Short {"(<1 hour)"}</SelectItem>
                                 <SelectItem value="medium">Medium (1-4 hours)</SelectItem>
                                 <SelectItem value="long">Long (4-8 hours)</SelectItem>
-                                <SelectItem value="extended">Extended (>8 hours)</SelectItem>
+                                <SelectItem value="extended">Extended {">8 hours"}</SelectItem>
                                 <SelectItem value="all-day">All Day Sessions</SelectItem>
                               </SelectContent>
                             </Select>
