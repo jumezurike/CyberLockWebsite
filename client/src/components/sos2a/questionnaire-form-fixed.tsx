@@ -309,6 +309,22 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
   };
   
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // If editing the address field, check for IP address pattern
+    if (editingField === 'address') {
+      // IP address regex pattern
+      const ipRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
+      
+      // If it looks like an IP address, display a warning toast and don't update
+      if (ipRegex.test(e.target.value)) {
+        toast({
+          title: "Invalid Address Format",
+          description: "IP addresses are not allowed in the Business/Office/Home Address field.",
+          variant: "destructive",
+        });
+        return; // Don't update the value
+      }
+    }
+    
     setEditValue(e.target.value);
   };
   
