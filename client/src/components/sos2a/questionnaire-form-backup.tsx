@@ -5767,7 +5767,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                   </td>
                                 </tr>
                                 <tr className="hover:bg-muted/5">
-                                  <td className="py-2 px-3 border-r font-medium">Business/Office/Home Address</td>
+                                  <td className="py-2 px-3 border-r font-medium">Address</td>
                                   <td className="py-2 px-3 border-r">
                                     <Checkbox 
                                       checked={true} 
