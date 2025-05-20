@@ -7190,7 +7190,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                         className="cursor-text"
                                                         onClick={() => handleEditStart(record.id, 'identityType', record.identityType || '')}
                                                       >
-                                                        {isUsedInUwa(record, 'identityType') ? 'X' : (record.identityType || '-')}
+                                                        {isUsedInUwa(record, 'identityType') ? record.identityType : '-'}
                                                       </div>
                                                     )}
                                                   </td>
@@ -7211,7 +7211,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                         className="cursor-text"
                                                         onClick={() => handleEditStart(record.id, 'identificationMethod', record.identificationMethod || '')}
                                                       >
-                                                        {isUsedInUwa(record, 'identificationMethod') ? 'X' : (record.identificationMethod || '-')}
+                                                        {isUsedInUwa(record, 'identificationMethod') ? record.identificationMethod : '-'}
                                                       </div>
                                                     )}
                                                   </td>
@@ -7232,7 +7232,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                         className="cursor-text"
                                                         onClick={() => handleEditStart(record.id, 'serverId', record.serverId || '')}
                                                       >
-                                                        {isUsedInUwa(record, 'serverId') ? 'X' : (record.serverId || '-')}
+                                                        {isUsedInUwa(record, 'serverId') ? record.serverId : '-'}
                                                       </div>
                                                     )}
                                                   </td>
@@ -7253,7 +7253,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                         className="cursor-text"
                                                         onClick={() => handleEditStart(record.id, 'instanceUUID', record.instanceUUID || '')}
                                                       >
-                                                        {isUsedInUwa(record, 'instanceUUID') ? 'X' : (record.instanceUUID || '-')}
+                                                        {isUsedInUwa(record, 'instanceUUID') ? record.instanceUUID : '-'}
                                                       </div>
                                                     )}
                                                   </td>
@@ -7316,7 +7316,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                         className="cursor-text"
                                                         onClick={() => handleEditStart(record.id, 'osName', record.osName || '')}
                                                       >
-                                                        {isUsedInUwa(record, 'osName') ? 'X' : (record.osName || '-')}
+                                                        {isUsedInUwa(record, 'osName') ? record.osName : '-'}
                                                       </div>
                                                     )}
                                                   </td>
@@ -7400,7 +7400,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                         className="cursor-text"
                                                         onClick={() => handleEditStart(record.id, 'environment', record.environment || '')}
                                                       >
-                                                        {isUsedInUwa(record, 'environment') ? 'X' : (record.environment || '-')}
+                                                        {isUsedInUwa(record, 'environment') ? record.environment : '-'}
                                                       </div>
                                                     )}
                                                   </td>
@@ -7463,7 +7463,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                                         className="cursor-text"
                                                         onClick={() => handleEditStart(record.id, 'address', record.address || '')}
                                                       >
-                                                        {isUsedInUwa(record, 'address') ? 'X' : (record.address || '-')}
+                                                        {isUsedInUwa(record, 'address') ? record.address : '-'}
                                                       </div>
                                                     )}
                                                   </td>
