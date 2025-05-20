@@ -28,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useQuery } from "@tanstack/react-query";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Upload, FileSpreadsheet } from "lucide-react";
 import { Sos2aFormData } from "@/lib/sos2a-types";
@@ -386,16 +387,22 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
     });
   };
   
-  // Save UWA record with component values
-  const saveUwaRecord = (uwaValue: string) => {
+  // Save UWA record with component values and persist to database
+  const saveUwaRecord = async (uwaValue: string) => {
     if (!uwaValue) return;
     
-    const identityType = form.watch('identityBehaviorHygiene.selectedIdentityType') || 'Machine';
-    const machineType = form.watch('identityBehaviorHygiene.machineType') || 'cloud';
-    const identificationMethod = form.watch('identityBehaviorHygiene.identificationMethod') || 'Standard';
+    // Get form field values using type-safe paths
+    const identityTypeField = form.getValues("identityBehaviorHygiene.selectedIdentityType");
+    const machineTypeField = form.getValues("identityBehaviorHygiene.machineType");
+    const identificationMethodField = form.getValues("identityBehaviorHygiene.identificationMethod");
+    
+    // Safely convert to strings with defaults
+    const identityType = typeof identityTypeField === 'string' ? identityTypeField : 'Machine';
+    const machineType = typeof machineTypeField === 'string' ? machineTypeField : 'cloud';
+    const identificationMethod = typeof identificationMethodField === 'string' ? identificationMethodField : 'Standard';
     
     // Create new record with available data
-    const newRecord = {
+    const newRecord: any = {
       id: uwaRecords.length + 1,
       createdAt: new Date().toISOString(),
       uwaValue,
@@ -408,6 +415,16 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
       uwaShadow: `CLX-SHADOW-${uwaValue.substring(4, 11)}`,
     };
     
+    // Prepare component data as JSON
+    let componentData: Record<string, any> = {
+      identificationMethod,
+      serverId: 'SRVID001',
+      companyName: 'Acme Healthcare',
+      ipAddress: '192.168.1.10',
+      einBusinessNumber: 'BIZ-12345',
+      uwaShadow: `CLX-SHADOW-${uwaValue.substring(4, 11)}`,
+    };
+    
     // Add machine-type specific information
     if (identityType === 'Machine') {
       if (machineType === 'cloud') {
@@ -416,17 +433,78 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
         newRecord.osName = customUwaInputs.osName;
         newRecord.environment = customUwaInputs.environment;
         newRecord.address = customUwaInputs.address;
+        
+        // Add to componentData
+        componentData = {
+          ...componentData,
+          instanceUUID: customUwaInputs.instanceUUID,
+          osName: customUwaInputs.osName,
+          environment: customUwaInputs.environment,
+          address: customUwaInputs.address,
+        };
       } else {
         // Physical device specific data
         newRecord.serialNumber = customUwaInputs.serialNumber;
         newRecord.macAddress = customUwaInputs.macAddress;
-        newRecord.makeModel = customUwaInputs.deviceModel;
+        newRecord.makeModel = customUwaInputs.serialNumber; // Using serialNumber as makeModel
         newRecord.address = '1225 Laurel St. Columbia, SC 29201';
+        
+        // Add to componentData
+        componentData = {
+          ...componentData,
+          serialNumber: customUwaInputs.serialNumber,
+          macAddress: customUwaInputs.macAddress,
+          makeModel: customUwaInputs.serialNumber, // Using serialNumber as makeModel
+          address: '1225 Laurel St. Columbia, SC 29201',
+        };
       }
     }
     
-    // Add to records
+    // Add to local records first for immediate display
     setUwaRecords([...uwaRecords, newRecord]);
+    
+    // Save to database
+    try {
+      const response = await fetch('/api/uwas', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uwaValue,
+          identityType,
+          machineType: identityType === 'Machine' ? machineType : undefined,
+          associatedName: componentData.companyName,
+          componentData,
+          status: 'active'
+        })
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Failed to save UWA to database:', errorData);
+        toast({
+          title: "Database Error",
+          description: "Failed to save UWA permanently. Local copy available.",
+          variant: "destructive",
+        });
+      } else {
+        const savedUwa = await response.json();
+        console.log('UWA saved to database with ID:', savedUwa.id);
+        toast({
+          title: "UWA Saved",
+          description: "UWA record permanently stored in database.",
+          variant: "default",
+        });
+      }
+    } catch (error) {
+      console.error('Error saving UWA to database:', error);
+      toast({
+        title: "Connection Error",
+        description: "Could not connect to database. Local copy available.",
+        variant: "destructive",
+      });
+    }
   };
 
   // CSV template handling
