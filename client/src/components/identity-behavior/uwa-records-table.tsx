@@ -1,84 +1,86 @@
 import React from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { Copy, Eye, Trash2 } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Copy, Eye, Trash } from "lucide-react";
 
-// Sample UWA records data
-const uwaRecords = [
-  {
-    uwaValue: "CLX-PR9ca-4-7ae-bebe-4087c-52abb-f4-X57+XH+-centosl",
-    identityType: "Machine",
-    identificationMethod: "Serial Number",
-    serverId: "srv-34522",
-    uuid: "1c-49ca-47ae-bebe-4087c52abbf4",
-    sn: "HG653-887L",
-    makeModel: "Dell PowerEdge R740",
-    os: "centosl",
-    owner: "Healthcare Analytics",
-    mac: "80:18:44:e0:af:c6",
-    uwaShadow: "...fc52abbf4X57",
-    environment: "PR",
-    ipAddress: "10.45.67.89",
-    ein: "94-3751004",
-    address: "2X57+XH+"
-  },
-  {
-    uwaValue: "CLX-PD-31a3b-45c2-d8f0-7g41-89h2-1j-2k-linuxsvr",
-    identityType: "Machine",
-    identificationMethod: "Serial Number",
-    serverId: "srv-67891",
-    uuid: "a3b45c2d-8f07-g418-9h21-j2k3l4m5n6o7",
-    sn: "JK129-556P",
-    makeModel: "HPE ProLiant DL380",
-    os: "linuxsvr",
-    owner: "Medical Records",
-    mac: "a4:6e:2b:91:d5:37",
-    uwaShadow: "...4m5n6o7TX8+Y",
-    environment: "PD",
-    ipAddress: "10.22.33.44",
-    ein: "94-3751004",
-    address: "TX8+YJ+"
-  }
-];
+const UwaRecordsTable = () => {
+  // Sample data matching the screenshot
+  const uwaRecords = [
+    {
+      uwa: "CLX-PR8c4-47ae-bebe-4087c52abdf4",
+      identityType: "Machine",
+      idMethod: "Serial Number",
+      serverId: "srv-34522",
+      uuid: "1c-49ca-47ae-bebe-4087c52abdf4",
+      sn: "HX653-9871",
+      makeModel: "Dell PowerEdge R740",
+      entityType: "virtual machine"
+    },
+    {
+      uwa: "CLX-PD-31a8ji-ebhs-39j5-acdoi4",
+      identityType: "Machine",
+      idMethod: "Serial Number",
+      serverId: "srv-67891",
+      uuid: "a8d45c3f...",
+      sn: "JK129-556P",
+      makeModel: "HPE ProLiant DL380",
+      entityType: "Virtual machine"
+    }
+  ];
 
-export default function UwaRecordsTable() {
   return (
-    <div className="overflow-x-auto">
-      <Table className="min-w-full border-collapse text-xs">
-        <TableHeader className="bg-muted/30">
+    <div className="border rounded-md overflow-hidden">
+      <div className="p-4 bg-muted/20">
+        <h3 className="font-medium">UWA+Components</h3>
+      </div>
+      
+      <Table>
+        <TableHeader className="bg-muted/10">
           <TableRow>
-            <TableHead className="py-1 px-2 text-left font-medium border">UWA</TableHead>
-            <TableHead className="py-1 px-2 text-left font-medium border">Identity type</TableHead>
-            <TableHead className="py-1 px-2 text-left font-medium border">ID method</TableHead>
-            <TableHead className="py-1 px-2 text-left font-medium border">ServerID</TableHead>
-            <TableHead className="py-1 px-2 text-left font-medium border">UUID</TableHead>
-            <TableHead className="py-1 px-2 text-left font-medium border">SN</TableHead>
-            <TableHead className="py-1 px-2 text-left font-medium border">MAKE/MODEL</TableHead>
-            <TableHead className="py-1 px-2 text-left font-medium border">Actions</TableHead>
+            <TableHead>UWA</TableHead>
+            <TableHead>Identity type</TableHead>
+            <TableHead>ID method</TableHead>
+            <TableHead>ServerID</TableHead>
+            <TableHead>UUID</TableHead>
+            <TableHead>SN</TableHead>
+            <TableHead>MAKE/MODEL</TableHead>
+            <TableHead>Entity type</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {uwaRecords.map((record, index) => (
-            <TableRow key={index} className={index === uwaRecords.length - 1 ? "bg-green-50" : ""}>
-              <TableCell className="py-1 px-2 border bg-amber-50 font-medium text-xs">
-                {record.uwaValue.substring(0, 12)}...
+            <TableRow key={index}>
+              <TableCell className="font-mono text-xs">{record.uwa}</TableCell>
+              <TableCell>{record.identityType}</TableCell>
+              <TableCell>{record.idMethod}</TableCell>
+              <TableCell>{record.serverId}</TableCell>
+              <TableCell className="font-mono text-xs">{record.uuid}</TableCell>
+              <TableCell>{record.sn}</TableCell>
+              <TableCell>{record.makeModel}</TableCell>
+              <TableCell>
+                <Badge variant="outline" className="lowercase">
+                  {record.entityType}
+                </Badge>
+                {index === 1 && (
+                  <div className="mt-1">
+                    <Badge variant="default" className="bg-green-500 hover:bg-green-600 text-xs">
+                      Yes
+                    </Badge>
+                  </div>
+                )}
               </TableCell>
-              <TableCell className="py-1 px-2 border">{record.identityType}</TableCell>
-              <TableCell className="py-1 px-2 border">{record.identificationMethod}</TableCell>
-              <TableCell className="py-1 px-2 border">{record.serverId}</TableCell>
-              <TableCell className="py-1 px-2 border bg-green-100">{`${record.uuid.substring(0, 8)}...`}</TableCell>
-              <TableCell className="py-1 px-2 border">{record.sn}</TableCell>
-              <TableCell className="py-1 px-2 border">{record.makeModel}</TableCell>
-              <TableCell className="py-1 px-2 border">
+              <TableCell>
                 <div className="flex space-x-1">
-                  <Button variant="ghost" size="icon" className="h-6 w-6" title="View Details">
-                    <Eye className="h-3 w-3" />
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Eye className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-6 w-6" title="Copy UWA">
-                    <Copy className="h-3 w-3" />
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Copy className="h-4 w-4" />
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-6 w-6 text-destructive" title="Delete">
-                    <Trash2 className="h-3 w-3" />
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive">
+                    <Trash className="h-4 w-4" />
                   </Button>
                 </div>
               </TableCell>
@@ -88,4 +90,6 @@ export default function UwaRecordsTable() {
       </Table>
     </div>
   );
-}
+};
+
+export default UwaRecordsTable;
