@@ -4411,11 +4411,259 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
+
+                  {/* Universal Identity Verification System (UIVS) */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">Universal Identity Verification System (UIVS)</h4>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+                    </p>
+                    <div className="flex justify-between items-center mb-4">
+                      <h5 className="text-sm font-medium">Manage User Identities</h5>
+                      <Button variant="outline" size="sm" className="text-xs">
+                        Download Template
+                      </Button>
+                    </div>
+                    
+                    <div className="mb-4">
+                      <h5 className="text-sm font-medium mb-2">Filter by Identity Type</h5>
+                      <div className="flex gap-2 items-end">
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.filterIdentityType"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormLabel className="text-xs">Identity Type</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value || "all"}
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="text-xs">
+                                    <SelectValue placeholder="All Types" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="all">All Types</SelectItem>
+                                  <SelectItem value="human">Human</SelectItem>
+                                  <SelectItem value="machine">Machine</SelectItem>
+                                  <SelectItem value="api">API</SelectItem>
+                                  <SelectItem value="third-party">Third-Party</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.filterIdentificationMethod"
+                          render={({ field }) => (
+                            <FormItem className="flex-1">
+                              <FormLabel className="text-xs">Identification Method</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value || "all"}
+                              >
+                                <FormControl>
+                                  <SelectTrigger className="text-xs">
+                                    <SelectValue placeholder="All Methods" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="all">All Methods</SelectItem>
+                                  <SelectItem value="username">Username</SelectItem>
+                                  <SelectItem value="email">Email</SelectItem>
+                                  <SelectItem value="serial">Serial Number</SelectItem>
+                                  <SelectItem value="certificate">Certificate</SelectItem>
+                                  <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <Button size="sm" className="text-xs">Filter</Button>
+                      </div>
+                    </div>
+                  </div>
                   
                   {/* UWA Records Table */}
-                  <div className="mt-8 border rounded-md p-4 mb-6">
+                  <div className="mt-4 border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">Machine Identity Components</h4>
                     <UwaRecordsTable />
+                    <div className="flex justify-end mt-4">
+                      <Button size="sm" variant="outline" className="text-xs mr-2">Previous</Button>
+                      <Button size="sm" className="text-xs">Next</Button>
+                    </div>
+                  </div>
+                  
+                  {/* UWA Generation Preview */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">UWA Generation Preview</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                      <div>
+                        <h5 className="text-sm font-medium mb-3">Machine Type for UWA Generation</h5>
+                        <div className="flex gap-4 mb-4">
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.machineType"
+                            render={({ field }) => (
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <div className="flex items-center space-x-2">
+                                    <input
+                                      type="radio"
+                                      checked={field.value === "virtual"}
+                                      onChange={() => field.onChange("virtual")}
+                                      className="h-4 w-4 rounded border-muted text-primary"
+                                    />
+                                    <label className="text-sm">Virtual Machine</label>
+                                  </div>
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.machineType"
+                            render={({ field }) => (
+                              <FormItem className="flex items-center space-x-3 space-y-0">
+                                <FormControl>
+                                  <div className="flex items-center space-x-2">
+                                    <input
+                                      type="radio"
+                                      checked={field.value === "physical"}
+                                      onChange={() => field.onChange("physical")}
+                                      className="h-4 w-4 rounded border-muted text-primary"
+                                    />
+                                    <label className="text-sm">Physical Device</label>
+                                  </div>
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        
+                        <div className="mb-4 p-3 bg-muted/20 rounded-md text-xs">
+                          <p className="font-medium">Virtual UWA Format (VM):</p>
+                          <ul className="list-disc pl-5 mt-2 space-y-1">
+                            <li>Uses InstanceUUID + Environment + Address + OSname</li>
+                            <li>Uses instance identifiers instead of hardware identifiers</li>
+                          </ul>
+                        </div>
+                        
+                        <h5 className="text-sm font-medium mb-3">Selected template: Machine UWA (Virtual Machine)</h5>
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-xs font-medium">Instance UUID:</label>
+                            <p className="text-xs">1c-49ca-47ae-bebe-4087c52abbf4</p>
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium">Environment:</label>
+                            <p className="text-xs">PR</p>
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium">Address:</label>
+                            <p className="text-xs">2X57+XH+</p>
+                          </div>
+                          <div>
+                            <label className="text-xs font-medium">OS Name:</label>
+                            <p className="text-xs">centosl</p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <h5 className="text-sm font-medium mb-3">Generated UWA:</h5>
+                        <div className="bg-muted/10 p-3 rounded-md mb-4 flex justify-between items-center">
+                          <code className="text-xs font-mono">CLX-PR9ca-4-7ae-beb-e-4087c-52abbf4-X57+XH+-centosl</code>
+                          <Button variant="ghost" size="icon" className="h-6 w-6">
+                            <Copy className="h-3 w-3" />
+                          </Button>
+                        </div>
+                        
+                        <div className="text-xs space-y-2 mb-4">
+                          <p><span className="font-medium">Algorithm:</span> Last26InstanceUUID + First2Env + Last7Address + First7OSname</p>
+                          <p><span className="font-medium">Formatted in 7-character chunks for readability</span></p>
+                        </div>
+                        
+                        <h5 className="text-sm font-medium mb-3">Generate Your Own UWA (Cloud Server)</h5>
+                        <div className="space-y-3">
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.instanceUUID"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs">Instance UUID</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="e.g., 1c-49ca-47ae-bebe-4087c52abbf4" {...field} className="text-xs h-8" />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.environment"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs">Environment</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value || "PR"}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger className="text-xs h-8">
+                                      <SelectValue placeholder="Select environment" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="PR">Production (PR)</SelectItem>
+                                    <SelectItem value="ST">Staging (ST)</SelectItem>
+                                    <SelectItem value="DE">Development (DE)</SelectItem>
+                                    <SelectItem value="TE">Testing (TE)</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.location"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs">Google Location</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="e.g., 2X57+XH+" {...field} className="text-xs h-8" />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="identityBehaviorHygiene.osName"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-xs">OS Name</FormLabel>
+                                <FormControl>
+                                  <Input placeholder="e.g., centosl" {...field} className="text-xs h-8" />
+                                </FormControl>
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <div className="flex gap-2 mt-3">
+                            <Button size="sm" variant="outline" className="text-xs">Refresh</Button>
+                            <Button size="sm" className="text-xs">Generate UWA</Button>
+                          </div>
+                          
+                          <p className="text-xs text-muted-foreground mt-2">Always starts with CLX</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                   
                   {/* 1. Identification Section */}
