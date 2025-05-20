@@ -387,6 +387,54 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
     });
   };
   
+  // Helper function to convert DB UWA records to local format
+  const convertDbUwaToLocalFormat = (dbUwa: any) => {
+    if (!dbUwa) return null;
+    
+    // Extract component data for easier access
+    const componentData = dbUwa.componentData || {};
+    
+    return {
+      id: dbUwa.id,
+      createdAt: new Date(dbUwa.createdAt).toISOString(),
+      uwaValue: dbUwa.uwaValue,
+      identityType: dbUwa.identityType,
+      identificationMethod: componentData.identificationMethod || 'Standard',
+      serverId: componentData.serverId || 'Unknown',
+      instanceUUID: componentData.instanceUUID,
+      serialNumber: componentData.serialNumber,
+      macAddress: componentData.macAddress,
+      ipAddress: componentData.ipAddress || '0.0.0.0',
+      makeModel: componentData.makeModel,
+      osName: componentData.osName,
+      environment: componentData.environment,
+      companyName: dbUwa.associatedName || componentData.companyName || 'Unknown',
+      einBusinessNumber: componentData.einBusinessNumber,
+      uwaShadow: componentData.uwaShadow || `CLX-SHADOW-${dbUwa.uwaValue.substring(4, 11)}`,
+      address: componentData.address
+    };
+  };
+
+  // Load UWA records from database on initial load
+  useEffect(() => {
+    const loadUwaRecordsFromDb = async () => {
+      try {
+        const response = await fetch('/api/uwas');
+        if (response.ok) {
+          const data = await response.json();
+          // Convert database records to local format
+          const convertedRecords = data.map((dbUwa: any) => convertDbUwaToLocalFormat(dbUwa)).filter(Boolean);
+          setUwaRecords(convertedRecords);
+          console.log(`Loaded ${convertedRecords.length} UWA records from database`);
+        }
+      } catch (error) {
+        console.error('Error loading UWA records from database:', error);
+      }
+    };
+    
+    loadUwaRecordsFromDb();
+  }, []);
+  
   // Save UWA record with component values and persist to database
   const saveUwaRecord = async (uwaValue: string) => {
     if (!uwaValue) return;
@@ -6959,7 +7007,45 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
                                         {uwaRecords.length > 0 && (
                                           <div className="mt-4 border rounded-md p-3">
                                             <h6 className="text-xs font-medium mb-2 flex items-center justify-between">
-                                              <span>UWA Records ({uwaRecords.length})</span>
+                                              <div className="flex items-center gap-2">
+                                                <span>UWA Records ({uwaRecords.length})</span>
+                                                {/* Database connection status */}
+                                                <Button 
+                                                  variant="outline" 
+                                                  size="icon" 
+                                                  onClick={async () => {
+                                                    try {
+                                                      const response = await fetch('/api/uwas');
+                                                      if (response.ok) {
+                                                        const data = await response.json();
+                                                        const convertedRecords = data.map((dbUwa: any) => convertDbUwaToLocalFormat(dbUwa)).filter(Boolean);
+                                                        setUwaRecords(convertedRecords);
+                                                        toast({
+                                                          title: "Records Refreshed",
+                                                          description: `Loaded ${convertedRecords.length} UWA records from database.`,
+                                                          variant: "default",
+                                                        });
+                                                      } else {
+                                                        toast({
+                                                          title: "Refresh Failed",
+                                                          description: "Could not load records from database.",
+                                                          variant: "destructive",
+                                                        });
+                                                      }
+                                                    } catch (error) {
+                                                      console.error('Error refreshing UWA records:', error);
+                                                      toast({
+                                                        title: "Connection Error",
+                                                        description: "Could not connect to database.",
+                                                        variant: "destructive",
+                                                      });
+                                                    }
+                                                  }}
+                                                  title="Refresh UWA records from database"
+                                                >
+                                                  <RefreshCw className="h-4 w-4" />
+                                                </Button>
+                                              </div>
                                               <div className="flex space-x-1">
                                                 <Button 
                                                   variant="ghost" 
