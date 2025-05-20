@@ -263,6 +263,19 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
   const [editingField, setEditingField] = useState<string | null>(null);
   const [editValue, setEditValue] = useState<string>("");
   
+  // State for component requirements table editing
+  const [editingComponent, setEditingComponent] = useState<number | null>(null);
+  const [editingComponentField, setEditingComponentField] = useState<string | null>(null);
+  const [componentEditValue, setComponentEditValue] = useState<string>("");
+  const [requirementsComponents, setRequirementsComponents] = useState<Array<{
+    id: number;
+    componentType: string;
+    identityType: string;
+    verificationType: string;
+    required: boolean;
+    authType: string;
+  }>>([]);
+  
   // Helper function to identify which components were used for a specific UWA record
   const isUsedInUwa = (record: any, fieldName: string): boolean => {
     // If the record doesn't exist or the field is empty, it's not used
@@ -293,6 +306,87 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
   
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEditValue(e.target.value);
+  };
+  
+  // Handle editing for component requirements table
+  const handleComponentEditStart = (componentId: number, field: string, currentValue: string | boolean) => {
+    setEditingComponent(componentId);
+    setEditingComponentField(field);
+    setComponentEditValue(typeof currentValue === 'boolean' ? currentValue.toString() : currentValue);
+  };
+  
+  // Update the component edit value as user types
+  const handleComponentEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setComponentEditValue(e.target.value);
+  };
+  
+  // Save changes to component requirements when input loses focus
+  const handleComponentEditBlur = async () => {
+    if (editingComponent !== null && editingComponentField !== null) {
+      // Update local state immediately for responsive UI
+      const updatedComponents = requirementsComponents.map(component => {
+        if (component.id === editingComponent) {
+          // Convert string to boolean for required field
+          const newValue = editingComponentField === 'required' 
+            ? componentEditValue.toLowerCase() === 'true' 
+            : componentEditValue;
+            
+          return {
+            ...component,
+            [editingComponentField]: newValue
+          };
+        }
+        return component;
+      });
+      
+      setRequirementsComponents(updatedComponents);
+      
+      try {
+        // Updated component from state
+        const updatedComponent = updatedComponents.find(c => c.id === editingComponent);
+        
+        if (updatedComponent) {
+          // Attempt to save to database
+          const response = await fetch(`/api/component-requirements/${editingComponent}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedComponent)
+          });
+          
+          if (!response.ok) {
+            console.error('Failed to update component requirement');
+            toast({
+              title: "Update Failed",
+              description: "Changes saved locally but not in database.",
+              variant: "destructive",
+            });
+          } else {
+            console.log(`Component requirement ID ${editingComponent} updated`);
+            // Show success indicator
+            const successIndicator = document.createElement('div');
+            successIndicator.className = 'fixed bottom-4 right-4 bg-green-100 text-green-700 px-4 py-2 rounded-md text-sm shadow-md z-50';
+            successIndicator.textContent = 'Component requirement updated';
+            document.body.appendChild(successIndicator);
+            setTimeout(() => {
+              successIndicator.remove();
+            }, 2000);
+          }
+        }
+      } catch (error) {
+        console.error('Error updating component requirement:', error);
+        toast({
+          title: "Database Error",
+          description: "Changes saved locally but not in database.",
+          variant: "destructive",
+        });
+      }
+      
+      // Reset editing state
+      setEditingComponent(null);
+      setEditingComponentField(null);
+    }
   };
 
   const handleEditBlur = async () => {
