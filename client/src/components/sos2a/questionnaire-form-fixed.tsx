@@ -5836,7 +5836,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       Next Step
                     </Button>
                   </div>
-                </div>
               </TabsContent>
               
               {/* 14. Contact and Confirmation Tab */}
