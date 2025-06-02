@@ -20,6 +20,11 @@ export const UwaRecordsTable = () => {
   const [selectedEntityType, setSelectedEntityType] = useState<string>("");
   const [components, setComponents] = useState<UWAComponents>({});
   const [recordCounter, setRecordCounter] = useState(1);
+  
+  // Filter states
+  const [filterIdentityType, setFilterIdentityType] = useState<string>("all");
+  const [filterIdentificationMethod, setFilterIdentificationMethod] = useState<string>("all");
+  
   const { toast } = useToast();
 
   // Helper function to format UWA in 7-character chunks
@@ -30,6 +35,13 @@ export const UwaRecordsTable = () => {
     }
     return chunks.join('-');
   };
+
+  // Filter records based on selected filters
+  const filteredRecords = records.filter(record => {
+    const identityTypeMatch = filterIdentityType === "all" || record.entityType === filterIdentityType;
+    const methodMatch = filterIdentificationMethod === "all" || record.components.name?.toLowerCase().includes(filterIdentificationMethod.toLowerCase());
+    return identityTypeMatch && methodMatch;
+  });
 
   // Handle component input changes
   const handleComponentChange = useCallback((field: keyof UWAComponents, value: string) => {
@@ -387,16 +399,66 @@ export const UwaRecordsTable = () => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Add Record Button */}
-          <div className="flex justify-between items-center mb-6">
-            <div className="flex items-center space-x-2">
-              <Badge variant="outline">Total Records: {records.length}</Badge>
-              <Badge variant="outline">Active: {records.filter(r => r.isActive).length}</Badge>
+          {/* Filter and Add Record Section */}
+          <div className="space-y-4 mb-6">
+            {/* Filter Controls */}
+            <div className="flex gap-4 items-center">
+              <div className="flex-1">
+                <Label htmlFor="filter-identity-type" className="text-sm font-medium">Filter by Identity Type</Label>
+                <Select value={filterIdentityType} onValueChange={setFilterIdentityType}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Types" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Types</SelectItem>
+                    <SelectItem value="human">Human/Person</SelectItem>
+                    <SelectItem value="machine-server">Machine/Server</SelectItem>
+                    <SelectItem value="machine-auto">Machine/Auto</SelectItem>
+                    <SelectItem value="business">Business Owner</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              <div className="flex-1">
+                <Label htmlFor="filter-identification-method" className="text-sm font-medium">Identification Method</Label>
+                <Select value={filterIdentificationMethod} onValueChange={setFilterIdentificationMethod}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Methods" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">All Methods</SelectItem>
+                    <SelectItem value="username">Username/Password</SelectItem>
+                    <SelectItem value="employee">Employee ID</SelectItem>
+                    <SelectItem value="certificate">Certificate</SelectItem>
+                    <SelectItem value="smart-card">Smart Card</SelectItem>
+                    <SelectItem value="sso">Single Sign-On</SelectItem>
+                    <SelectItem value="token">Token-based</SelectItem>
+                    <SelectItem value="uwa">UWA</SelectItem>
+                    <SelectItem value="mfa">MFA</SelectItem>
+                    <SelectItem value="fingerprint">Fingerprint</SelectItem>
+                    <SelectItem value="voice">Voice</SelectItem>
+                    <SelectItem value="facial">Facial</SelectItem>
+                    <SelectItem value="iris">Iris</SelectItem>
+                    <SelectItem value="driver-license">Driver License</SelectItem>
+                    <SelectItem value="passport">Passport</SelectItem>
+                    <SelectItem value="national-id">National ID</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
-            <Button onClick={() => setIsAddingRecord(true)} disabled={isAddingRecord || editingRecord}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add UWA Record
-            </Button>
+            
+            {/* Stats and Add Button */}
+            <div className="flex justify-between items-center">
+              <div className="flex items-center space-x-2">
+                <Badge variant="outline">Total Records: {records.length}</Badge>
+                <Badge variant="outline">Active: {records.filter(r => r.isActive).length}</Badge>
+                <Badge variant="secondary">Filtered: {filteredRecords.length}</Badge>
+              </div>
+              <Button onClick={() => setIsAddingRecord(true)} disabled={isAddingRecord || !!editingRecord}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add UWA Record
+              </Button>
+            </div>
           </div>
 
           {/* Add/Edit Form */}
@@ -463,14 +525,17 @@ export const UwaRecordsTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {records.length === 0 ? (
+                {filteredRecords.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={19} className="text-center py-8 text-gray-500">
-                      No UWA records found. Create your first record to begin tracking digital identities.
+                      {records.length === 0 
+                        ? "No UWA records found. Create your first record to begin tracking digital identities."
+                        : "No records match the current filters. Try adjusting your filter criteria."
+                      }
                     </TableCell>
                   </TableRow>
                 ) : (
-                  records.map((record) => (
+                  filteredRecords.map((record) => (
                     <TableRow key={record.id}>
                       <TableCell className="font-mono text-xs">
                         {formatUWAChunks(record.uwa).substring(0, 15)}...
