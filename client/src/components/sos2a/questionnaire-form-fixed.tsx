@@ -4896,21 +4896,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </Button>
                     </div>
 
-                    {/* UWA Component Configuration Matrix */}
+                    {/* UWA Component Configuration Matrix - OPTIONAL */}
                     <div className="border rounded-lg p-4 mb-6 bg-gradient-to-r from-indigo-50 to-purple-50">
-                      <h4 className="font-medium mb-3 text-indigo-900">UWA Component Selection Matrix</h4>
+                      <div className="flex items-center gap-2 mb-3">
+                        <h4 className="font-medium text-indigo-900">UWA Component Selection Matrix</h4>
+                        <Badge variant="secondary" className="text-xs">OPTIONAL</Badge>
+                      </div>
                       <p className="text-sm text-indigo-700 mb-4">
-                        Configure which of the 31 identity components to use for UWA generation. Organizations can customize component requirements based on their specific needs while maintaining the core algorithms.
+                        <strong>Optional Advanced Feature:</strong> Configure which of the 31 identity components to use for UWA generation. This is not required to complete the assessment and proceed to the next section.
                       </p>
                       
                       <UwaComponentMatrix />
                     </div>
 
-                    {/* UWA Records Management Section */}
+                    {/* UWA Records Management Section - OPTIONAL */}
                     <div className="border rounded-lg p-4 mb-6 bg-gradient-to-r from-purple-50 to-blue-50">
-                      <h4 className="font-medium mb-3 text-purple-900">UWA Records & Identity Component Tracking</h4>
+                      <div className="flex items-center gap-2 mb-3">
+                        <h4 className="font-medium text-purple-900">UWA Records & Identity Component Tracking</h4>
+                        <Badge variant="secondary" className="text-xs">OPTIONAL</Badge>
+                      </div>
                       <p className="text-sm text-purple-700 mb-4">
-                        Generate and manage Universal Wallet Addresses with lifetime component tracking for digital identity verification.
+                        <strong>Optional Advanced Feature:</strong> Generate and manage Universal Wallet Addresses with lifetime component tracking. You can skip this and continue with the assessment.
                       </p>
                       
                       <UwaRecordsTable />
