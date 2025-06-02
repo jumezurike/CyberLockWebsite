@@ -443,7 +443,7 @@ export const UwaRecordsTable = () => {
                   <TableHead className="w-[50px] text-xs">O S</TableHead>
                   <TableHead className="w-[90px] text-xs">Server/O SWNS/CO MPANY</TableHead>
                   <TableHead className="w-[60px] text-xs">MA C</TableHead>
-                  <TableHead className="w-[70px] text-xs">WAN/ BWDS BMG</TableHead>
+                  <TableHead className="w-[70px] text-xs">WAN/BW</TableHead>
                   <TableHead className="w-[80px] text-xs">ENVIRO NMENT</TableHead>
                   <TableHead className="w-[90px] text-xs">IP address</TableHead>
                   <TableHead className="w-[70px] text-xs">EIN/BIZ#</TableHead>
@@ -479,25 +479,25 @@ export const UwaRecordsTable = () => {
                         {record.components.serverId || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
-                        {record.components.uuid ? record.components.uuid.substring(0, 8) + '...' : 'X'}
+                        {record.components.instanceUuid ? record.components.instanceUuid.substring(0, 8) + '...' : 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
                         {record.components.serialNumber || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
-                        {record.components.makeModel || 'X'}
+                        {record.components.makeModelOs || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
                         {record.components.osName || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
-                        {record.components.company || 'X'}
+                        {record.components.businessCertifications || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
                         {record.components.macAddress || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
-                        {record.components.wanBwds || 'X'}
+                        {record.components.utilityBills || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
                         {record.components.environment || 'X'}
@@ -506,7 +506,7 @@ export const UwaRecordsTable = () => {
                         {record.components.ipAddress || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
-                        {record.components.ein || record.components.businessNumber || 'X'}
+                        {record.components.phoneEinSsn || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
                         {record.components.address || 'X'}
