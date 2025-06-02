@@ -22,6 +22,15 @@ export const UwaRecordsTable = () => {
   const [recordCounter, setRecordCounter] = useState(1);
   const { toast } = useToast();
 
+  // Helper function to format UWA in 7-character chunks
+  const formatUWAChunks = (uwa: string): string => {
+    const chunks: string[] = [];
+    for (let i = 0; i < uwa.length; i += 7) {
+      chunks.push(uwa.substring(i, i + 7));
+    }
+    return chunks.join('-');
+  };
+
   // Handle component input changes
   const handleComponentChange = useCallback((field: keyof UWAComponents, value: string) => {
     setComponents(prev => ({
@@ -61,7 +70,7 @@ export const UwaRecordsTable = () => {
 
       toast({
         title: "UWA Generated Successfully",
-        description: `New UWA record #${recordCounter} created: ${uwa.substring(0, 20)}...`,
+        description: `New UWA record #${recordCounter} created: ${formatUWAChunks(uwa).substring(0, 23)}...`,
       });
     } catch (error) {
       toast({
@@ -464,7 +473,7 @@ export const UwaRecordsTable = () => {
                   records.map((record) => (
                     <TableRow key={record.id}>
                       <TableCell className="font-mono text-xs">
-                        {record.uwa.substring(0, 12)}...
+                        {formatUWAChunks(record.uwa).substring(0, 15)}...
                       </TableCell>
                       <TableCell className="text-xs">
                         <Badge variant="secondary" className="text-xs">
