@@ -1,0 +1,69 @@
+
+1. Name: “Josiah J. Umezurike” if middle is not available replace with 0 for car
+2. Address: “1225 Laurel St. Columbia, SC 29201-&gt; google open location-&gt;2X57+XH
+3. Birthplace: GXCR+WF (google open location)
+4. DOB: 03/23/1974
+5. PIN: 894320-&gt; DON’T USE THIS for UWA it changes often
+6. SN/IMEI: 6732448576765342
+7. Ph#/EIN/SSN or BVN: 83-2086239
+8. Driver License or Passport: ”alphanumricspecial”
+9. Smart phone: This could be fixed on the phone since we don’t have access.
+10. Smart phone: “Primary auth device imei or IOT s/n”
+11. Make/model+OS= “galaxy 10 android”
+12. car date of manufacturing (DOM): 1209 MM/YY
+13. Name: “Josiah J. Umezurike”
+14. ADDRESS: “1225 Laurel St. Columbia, SC 29201-&gt; google open location-&gt;2X57+XH
+15. Birthplace: GXCR+WF (google open location)
+16. DOB: 03/23/1974
+17. PIN: 894320-&gt; DON’T USE THIS for UWA it changes often
+18. EC2 or DO ID/ MAC/ SN : 897987937938439936732448576765342
+19. OS
+20. EIN/SSN or BVN: 83-2086239
+21. Driver License or Passport: ”alphanumricspecial”
+22. Smart phone: This could be fixed on the phone since we don’t have access.
+23. Smart phone: “Primary auth device imei or IOT s/n”
+24. Make/model+OS= “galaxy 10 android”
+25. UUID
+26. SERVER ID
+27. ENVIRONMENT e,g Production = PR , Staging = ST , Test/Dev=TD
+28. IP
+29. Certifications Business holder
+30. Business LicensesBusiness holder
+31. Utility BillsBusiness holder
+
+
+
+
+For Machine (server) entity:
+Last26InstanceUUID+First2Env+ Last7Address(google open)+First7OSname 
+
+1c-49ca-47ae-bebe-4087c52abbf4-PR-2X57+XH+-centosl
+→chunk it in 7s add CLX in front of the long 42 digit characters.
+UWA: CLX-PR1c49c-a47aebe-be4087c-52abbf4-2X57+XH+-centosl
+
+Use s/n if physical server. 
+
+
+For Business owner entity:
+
+8DOB+Last5EIN+InitialsFLName+Last13NumbersIMEI+Last7BirthPlace(google open)+  Last7Address(google open)
+
+03231974-86239JU-2448576765342-GXCR+WF-2X57+XH
+We now format it in our way by chunking in 7s with CLX prefix→
+UWA : CLX0323197-486239J-U244857-6765342-GXCR+WF-2X57+XH
+
+Note: In order to use this as individual or person entity replace  Last7Address(google open) with Last7DriverLic
+
+
+For Machine(auto) entity:
+
+4DOM+Vin#+InitialFLname+Plate#+Last7NumbersIMEI+Last7Address(google open)
+If plate number is 7 character then reduce IMEI requirement to 5; If plate number is 6 IMEI will be 6… if plate number is 5 then IMEI will be 7….
+
+e.g Car:
+4DOM+Vin#+InitialFLname+7Plate#+Last5NumbersIMEI+Last7Address(google open)
+
+Note: for phone numbers less than 12 add 00 at the beginning.
+DOB <-> is replaced with DOM :date of manufacture
+If machine is auto mobile or vehicle the VIN, platenumes, imiei or any unique id
+

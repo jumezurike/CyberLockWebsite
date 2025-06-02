@@ -1,95 +1,543 @@
-import React from 'react';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Copy, Eye, Trash } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus, Edit2, Trash2, Eye, Save, X } from "lucide-react";
+import { UWAGenerator, type UWAComponents, type UWARecord } from "@/lib/uwa-generator";
+import { useToast } from "@/hooks/use-toast";
 
-const UwaRecordsTable = () => {
-  // Sample data matching the screenshot
-  const uwaRecords = [
-    {
-      uwa: "CLX-PR8c4-47ae-bebe-4087c52abdf4",
-      identityType: "Machine",
-      idMethod: "Serial Number",
-      serverId: "srv-34522",
-      uuid: "1c-49ca-47ae-bebe-4087c52abdf4",
-      sn: "HX653-9871",
-      makeModel: "Dell PowerEdge R740",
-      entityType: "virtual machine"
-    },
-    {
-      uwa: "CLX-PD-31a8ji-ebhs-39j5-acdoi4",
-      identityType: "Machine",
-      idMethod: "Serial Number",
-      serverId: "srv-67891",
-      uuid: "a8d45c3f...",
-      sn: "JK129-556P",
-      makeModel: "HPE ProLiant DL380",
-      entityType: "Virtual machine"
+export const UwaRecordsTable = () => {
+  const [records, setRecords] = useState<UWARecord[]>([]);
+  const [isAddingRecord, setIsAddingRecord] = useState(false);
+  const [editingRecord, setEditingRecord] = useState<UWARecord | null>(null);
+  const [selectedEntityType, setSelectedEntityType] = useState<string>("");
+  const [components, setComponents] = useState<UWAComponents>({});
+  const [recordCounter, setRecordCounter] = useState(1);
+  const { toast } = useToast();
+
+  // Handle component input changes
+  const handleComponentChange = useCallback((field: keyof UWAComponents, value: string) => {
+    setComponents(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  }, []);
+
+  // Generate UWA from components
+  const generateUWA = useCallback(() => {
+    if (!selectedEntityType) {
+      toast({
+        title: "Entity Type Required",
+        description: "Please select an entity type before generating UWA",
+        variant: "destructive"
+      });
+      return;
     }
-  ];
+
+    try {
+      const uwa = UWAGenerator.generateUWA(selectedEntityType, components);
+      
+      const newRecord: UWARecord = {
+        id: recordCounter,
+        uwa,
+        entityType: selectedEntityType as any,
+        components: { ...components },
+        createdAt: new Date(),
+        isActive: true
+      };
+
+      setRecords(prev => [...prev, newRecord]);
+      setRecordCounter(prev => prev + 1);
+      setComponents({});
+      setSelectedEntityType("");
+      setIsAddingRecord(false);
+
+      toast({
+        title: "UWA Generated Successfully",
+        description: `New UWA record #${recordCounter} created: ${uwa.substring(0, 20)}...`,
+      });
+    } catch (error) {
+      toast({
+        title: "Generation Failed",
+        description: error instanceof Error ? error.message : "Failed to generate UWA",
+        variant: "destructive"
+      });
+    }
+  }, [selectedEntityType, components, recordCounter, toast]);
+
+  // Update existing record
+  const updateRecord = useCallback(() => {
+    if (!editingRecord) return;
+
+    try {
+      const updatedUWA = UWAGenerator.generateUWA(editingRecord.entityType, components);
+      
+      setRecords(prev => prev.map(record => 
+        record.id === editingRecord.id 
+          ? {
+              ...record,
+              uwa: updatedUWA,
+              components: { ...components },
+              updatedAt: new Date()
+            }
+          : record
+      ));
+
+      setEditingRecord(null);
+      setComponents({});
+      setSelectedEntityType("");
+
+      toast({
+        title: "Record Updated",
+        description: `UWA record #${editingRecord.id} has been updated`,
+      });
+    } catch (error) {
+      toast({
+        title: "Update Failed",
+        description: error instanceof Error ? error.message : "Failed to update record",
+        variant: "destructive"
+      });
+    }
+  }, [editingRecord, components, toast]);
+
+  // Delete record
+  const deleteRecord = useCallback((id: number) => {
+    setRecords(prev => prev.filter(record => record.id !== id));
+    toast({
+      title: "Record Deleted",
+      description: `UWA record #${id} has been permanently deleted`,
+    });
+  }, [toast]);
+
+  // Start editing record
+  const startEditing = useCallback((record: UWARecord) => {
+    setEditingRecord(record);
+    setComponents(record.components);
+    setSelectedEntityType(record.entityType);
+  }, []);
+
+  // Cancel editing
+  const cancelEditing = useCallback(() => {
+    setEditingRecord(null);
+    setComponents({});
+    setSelectedEntityType("");
+    setIsAddingRecord(false);
+  }, []);
+
+  // Component input fields for different entity types
+  const renderComponentFields = () => {
+    const commonFields = (
+      <>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label htmlFor="name">Full Name</Label>
+            <Input
+              id="name"
+              value={components.name || ""}
+              onChange={(e) => handleComponentChange("name", e.target.value)}
+              placeholder="e.g., Josiah J. Umezurike"
+            />
+          </div>
+          <div>
+            <Label htmlFor="address">Address (Google Open Location)</Label>
+            <Input
+              id="address"
+              value={components.address || ""}
+              onChange={(e) => handleComponentChange("address", e.target.value)}
+              placeholder="e.g., 1225 Laurel St. Columbia, SC 29201->2X57+XH"
+            />
+          </div>
+        </div>
+      </>
+    );
+
+    switch (selectedEntityType) {
+      case 'machine-server':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="instanceUuid">Instance UUID</Label>
+                <Input
+                  id="instanceUuid"
+                  value={components.instanceUuid || ""}
+                  onChange={(e) => handleComponentChange("instanceUuid", e.target.value)}
+                  placeholder="e.g., 1c-49ca-47ae-bebe-4087c52abbf4"
+                />
+              </div>
+              <div>
+                <Label htmlFor="environment">Environment</Label>
+                <Select value={components.environment || ""} onValueChange={(value) => handleComponentChange("environment", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select environment" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="PR">Production (PR)</SelectItem>
+                    <SelectItem value="ST">Staging (ST)</SelectItem>
+                    <SelectItem value="TD">Test/Dev (TD)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="osName">OS Name</Label>
+                <Input
+                  id="osName"
+                  value={components.osName || ""}
+                  onChange={(e) => handleComponentChange("osName", e.target.value)}
+                  placeholder="e.g., centosl"
+                />
+              </div>
+              <div>
+                <Label htmlFor="address">Address (Google Location)</Label>
+                <Input
+                  id="address"
+                  value={components.address || ""}
+                  onChange={(e) => handleComponentChange("address", e.target.value)}
+                  placeholder="e.g., 2X57+XH"
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'business':
+        return (
+          <div className="space-y-4">
+            {commonFields}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                <Input
+                  id="dateOfBirth"
+                  value={components.dateOfBirth || ""}
+                  onChange={(e) => handleComponentChange("dateOfBirth", e.target.value)}
+                  placeholder="MM/DD/YYYY - e.g., 03/23/1974"
+                />
+              </div>
+              <div>
+                <Label htmlFor="phoneEinSsn">EIN/SSN/BVN</Label>
+                <Input
+                  id="phoneEinSsn"
+                  value={components.phoneEinSsn || ""}
+                  onChange={(e) => handleComponentChange("phoneEinSsn", e.target.value)}
+                  placeholder="e.g., 83-2086239"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="imeiSn">IMEI/Serial Number</Label>
+                <Input
+                  id="imeiSn"
+                  value={components.imeiSn || ""}
+                  onChange={(e) => handleComponentChange("imeiSn", e.target.value)}
+                  placeholder="e.g., 6732448576765342"
+                />
+              </div>
+              <div>
+                <Label htmlFor="birthplace">Birthplace (Google Location)</Label>
+                <Input
+                  id="birthplace"
+                  value={components.birthplace || ""}
+                  onChange={(e) => handleComponentChange("birthplace", e.target.value)}
+                  placeholder="e.g., GXCR+WF"
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'human':
+        return (
+          <div className="space-y-4">
+            {commonFields}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                <Input
+                  id="dateOfBirth"
+                  value={components.dateOfBirth || ""}
+                  onChange={(e) => handleComponentChange("dateOfBirth", e.target.value)}
+                  placeholder="MM/DD/YYYY - e.g., 03/23/1974"
+                />
+              </div>
+              <div>
+                <Label htmlFor="phoneEinSsn">Phone/EIN/SSN</Label>
+                <Input
+                  id="phoneEinSsn"
+                  value={components.phoneEinSsn || ""}
+                  onChange={(e) => handleComponentChange("phoneEinSsn", e.target.value)}
+                  placeholder="e.g., 83-2086239"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="imeiSn">IMEI/Device Serial</Label>
+                <Input
+                  id="imeiSn"
+                  value={components.imeiSn || ""}
+                  onChange={(e) => handleComponentChange("imeiSn", e.target.value)}
+                  placeholder="e.g., 6732448576765342"
+                />
+              </div>
+              <div>
+                <Label htmlFor="birthplace">Birthplace (Google Location)</Label>
+                <Input
+                  id="birthplace"
+                  value={components.birthplace || ""}
+                  onChange={(e) => handleComponentChange("birthplace", e.target.value)}
+                  placeholder="e.g., GXCR+WF"
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="driverLicensePassport">Driver License/Passport</Label>
+              <Input
+                id="driverLicensePassport"
+                value={components.driverLicensePassport || ""}
+                onChange={(e) => handleComponentChange("driverLicensePassport", e.target.value)}
+                placeholder="Alphanumeric identifier"
+              />
+            </div>
+          </div>
+        );
+
+      case 'machine-auto':
+        return (
+          <div className="space-y-4">
+            {commonFields}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="dateOfManufacture">Date of Manufacture</Label>
+                <Input
+                  id="dateOfManufacture"
+                  value={components.dateOfManufacture || ""}
+                  onChange={(e) => handleComponentChange("dateOfManufacture", e.target.value)}
+                  placeholder="MM/YY - e.g., 12/09"
+                />
+              </div>
+              <div>
+                <Label htmlFor="vinNumber">VIN Number</Label>
+                <Input
+                  id="vinNumber"
+                  value={components.vinNumber || ""}
+                  onChange={(e) => handleComponentChange("vinNumber", e.target.value)}
+                  placeholder="Vehicle Identification Number"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="plateNumber">Plate Number</Label>
+                <Input
+                  id="plateNumber"
+                  value={components.plateNumber || ""}
+                  onChange={(e) => handleComponentChange("plateNumber", e.target.value)}
+                  placeholder="License plate number"
+                />
+              </div>
+              <div>
+                <Label htmlFor="imeiSn">IMEI/Device Serial</Label>
+                <Input
+                  id="imeiSn"
+                  value={components.imeiSn || ""}
+                  onChange={(e) => handleComponentChange("imeiSn", e.target.value)}
+                  placeholder="Device identifier"
+                />
+              </div>
+            </div>
+          </div>
+        );
+
+      default:
+        return (
+          <div className="text-center py-8 text-gray-500">
+            Please select an entity type to see component fields
+          </div>
+        );
+    }
+  };
 
   return (
-    <div className="border rounded-md overflow-hidden">
-      <div className="p-4 bg-muted/20">
-        <h3 className="font-medium">UWA+Components</h3>
-      </div>
-      
-      <Table>
-        <TableHeader className="bg-muted/10">
-          <TableRow>
-            <TableHead>UWA</TableHead>
-            <TableHead>Identity type</TableHead>
-            <TableHead>ID method</TableHead>
-            <TableHead>ServerID</TableHead>
-            <TableHead>UUID</TableHead>
-            <TableHead>SN</TableHead>
-            <TableHead>MAKE/MODEL</TableHead>
-            <TableHead>Entity type</TableHead>
-            <TableHead>Actions</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {uwaRecords.map((record, index) => (
-            <TableRow key={index}>
-              <TableCell className="font-mono text-xs">{record.uwa}</TableCell>
-              <TableCell>{record.identityType}</TableCell>
-              <TableCell>{record.idMethod}</TableCell>
-              <TableCell>{record.serverId}</TableCell>
-              <TableCell className="font-mono text-xs">{record.uuid}</TableCell>
-              <TableCell>{record.sn}</TableCell>
-              <TableCell>{record.makeModel}</TableCell>
-              <TableCell>
-                <Badge variant="outline" className="lowercase">
-                  {record.entityType}
-                </Badge>
-                {index === 1 && (
-                  <div className="mt-1">
-                    <Badge variant="default" className="bg-green-500 hover:bg-green-600 text-xs">
-                      Yes
-                    </Badge>
-                  </div>
-                )}
-              </TableCell>
-              <TableCell>
-                <div className="flex space-x-1">
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <Eye className="h-4 w-4" />
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>UWA Records Management</CardTitle>
+          <CardDescription>
+            Lifetime tracking of Universal Wallet Addresses and their component DNA
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {/* Add Record Button */}
+          <div className="flex justify-between items-center mb-6">
+            <div className="flex items-center space-x-2">
+              <Badge variant="outline">Total Records: {records.length}</Badge>
+              <Badge variant="outline">Active: {records.filter(r => r.isActive).length}</Badge>
+            </div>
+            <Button onClick={() => setIsAddingRecord(true)} disabled={isAddingRecord || editingRecord}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add UWA Record
+            </Button>
+          </div>
+
+          {/* Add/Edit Form */}
+          {(isAddingRecord || editingRecord) && (
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>{editingRecord ? `Edit Record #${editingRecord.id}` : 'Create New UWA Record'}</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <Label htmlFor="entityType">Entity Type</Label>
+                  <Select value={selectedEntityType} onValueChange={setSelectedEntityType}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select entity type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="human">Human/Person</SelectItem>
+                      <SelectItem value="machine-server">Machine/Server</SelectItem>
+                      <SelectItem value="machine-auto">Machine/Auto</SelectItem>
+                      <SelectItem value="business">Business Owner</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                {renderComponentFields()}
+
+                <div className="flex justify-end space-x-2 pt-4">
+                  <Button variant="outline" onClick={cancelEditing}>
+                    <X className="h-4 w-4 mr-2" />
+                    Cancel
                   </Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8">
-                    <Copy className="h-4 w-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive">
-                    <Trash className="h-4 w-4" />
+                  <Button onClick={editingRecord ? updateRecord : generateUWA}>
+                    <Save className="h-4 w-4 mr-2" />
+                    {editingRecord ? 'Update Record' : 'Generate UWA'}
                   </Button>
                 </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Records Table */}
+          <div className="border rounded-lg">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>ID</TableHead>
+                  <TableHead>UWA</TableHead>
+                  <TableHead>Entity Type</TableHead>
+                  <TableHead>Created</TableHead>
+                  <TableHead>Updated</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {records.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                      No UWA records found. Create your first record to begin tracking digital identities.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  records.map((record) => (
+                    <TableRow key={record.id}>
+                      <TableCell className="font-medium">#{record.id}</TableCell>
+                      <TableCell className="font-mono text-xs">
+                        {record.uwa.substring(0, 25)}...
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="secondary">
+                          {record.entityType.replace('-', ' ')}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-sm text-gray-600">
+                        {record.createdAt.toLocaleString()}
+                      </TableCell>
+                      <TableCell className="text-sm text-gray-600">
+                        {record.updatedAt ? record.updatedAt.toLocaleString() : '-'}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={record.isActive ? "default" : "secondary"}>
+                          {record.isActive ? "Active" : "Inactive"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex space-x-1">
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="ghost" size="sm">
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-2xl">
+                              <DialogHeader>
+                                <DialogTitle>UWA Record #{record.id} Details</DialogTitle>
+                                <DialogDescription>
+                                  Complete component breakdown and UWA generation details
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="space-y-4">
+                                <div>
+                                  <Label>Generated UWA</Label>
+                                  <div className="font-mono text-sm bg-gray-100 p-2 rounded">
+                                    {record.uwa}
+                                  </div>
+                                </div>
+                                <div>
+                                  <Label>Components Used</Label>
+                                  <div className="bg-gray-50 p-4 rounded space-y-2">
+                                    {Object.entries(record.components).map(([key, value]) => (
+                                      value && (
+                                        <div key={key} className="flex justify-between">
+                                          <span className="font-medium capitalize">
+                                            {key.replace(/([A-Z])/g, ' $1').trim()}:
+                                          </span>
+                                          <span className="font-mono text-sm">{value}</span>
+                                        </div>
+                                      )
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </DialogContent>
+                          </Dialog>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => startEditing(record)}
+                            disabled={!!editingRecord || isAddingRecord}
+                          >
+                            <Edit2 className="h-4 w-4" />
+                          </Button>
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => deleteRecord(record.id)}
+                            className="text-red-600 hover:text-red-700"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
-
-export default UwaRecordsTable;

@@ -24,7 +24,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
-import UwaRecordsTable from "../identity-behavior/uwa-records-table";
+import { UwaRecordsTable } from "../identity-behavior/uwa-records-table";
 import { useToast } from "@/hooks/use-toast";
 import { FivePillarScorecard, DeviceRiskAssessment, OrganizationalVulnerabilities } from "@/lib/five-pillar-scorecard";
 
@@ -4892,6 +4892,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       >
                         Download Template
                       </Button>
+                    </div>
+
+                    {/* UWA Records Management Section */}
+                    <div className="border rounded-lg p-4 mb-6 bg-gradient-to-r from-purple-50 to-blue-50">
+                      <h4 className="font-medium mb-3 text-purple-900">UWA Records & Identity Component Tracking</h4>
+                      <p className="text-sm text-purple-700 mb-4">
+                        Generate and manage Universal Wallet Addresses with lifetime component tracking for digital identity verification.
+                      </p>
+                      
+                      <UwaRecordsTable />
                     </div>
 
                     {/* Filter Controls */}
