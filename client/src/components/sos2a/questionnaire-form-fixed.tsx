@@ -5074,33 +5074,29 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="header-1" disabled className="font-semibold text-gray-600">1. Standard Authentication</SelectItem>
-                                <SelectItem value="username-password">Username/Password</SelectItem>
-                                <SelectItem value="employee-id">Employee ID</SelectItem>
-                                <SelectItem value="certificate">Certificate</SelectItem>
-                                <SelectItem value="smart-card">Smart Card</SelectItem>
-                                <SelectItem value="single-sign-on">Single Sign-On</SelectItem>
-                                <SelectItem value="token-based">Token-based</SelectItem>
+                                <SelectItem value="username-password">1. Standard - Username/Password</SelectItem>
+                                <SelectItem value="employee-id">1. Standard - Employee ID</SelectItem>
+                                <SelectItem value="certificate">1. Standard - Certificate</SelectItem>
+                                <SelectItem value="smart-card">1. Standard - Smart Card</SelectItem>
+                                <SelectItem value="single-sign-on">1. Standard - Single Sign-On</SelectItem>
+                                <SelectItem value="token-based">1. Standard - Token-based</SelectItem>
                                 
-                                <SelectItem value="header-2" disabled className="font-semibold text-gray-600 mt-2">2. Advanced Authentication</SelectItem>
-                                <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
-                                <SelectItem value="mfa">MFA (Multi-Factor Authentication)</SelectItem>
+                                <SelectItem value="uwa">2. Advanced - UWA (Universal Wallet Address)</SelectItem>
+                                <SelectItem value="mfa">2. Advanced - MFA (Multi-Factor Authentication)</SelectItem>
                                 
-                                <SelectItem value="header-3" disabled className="font-semibold text-gray-600 mt-2">3. Biometric</SelectItem>
-                                <SelectItem value="fingerprint">Fingerprint</SelectItem>
-                                <SelectItem value="voice">Voice</SelectItem>
-                                <SelectItem value="facial">Facial</SelectItem>
-                                <SelectItem value="iris">Iris</SelectItem>
+                                <SelectItem value="fingerprint">3. Biometric - Fingerprint</SelectItem>
+                                <SelectItem value="voice">3. Biometric - Voice</SelectItem>
+                                <SelectItem value="facial">3. Biometric - Facial</SelectItem>
+                                <SelectItem value="iris">3. Biometric - Iris</SelectItem>
                                 
-                                <SelectItem value="header-4" disabled className="font-semibold text-gray-600 mt-2">4. Government ID</SelectItem>
-                                <SelectItem value="driver-license">Driver License</SelectItem>
-                                <SelectItem value="passport">Passport</SelectItem>
-                                <SelectItem value="national-id">National ID</SelectItem>
-                                <SelectItem value="military-id">Military ID</SelectItem>
-                                <SelectItem value="state-id">State ID</SelectItem>
-                                <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
-                                <SelectItem value="social-security-card">Social Security Card</SelectItem>
-                                <SelectItem value="certificate-of-citizenship">Certificate of Citizenship</SelectItem>
+                                <SelectItem value="driver-license">4. Government ID - Driver License</SelectItem>
+                                <SelectItem value="passport">4. Government ID - Passport</SelectItem>
+                                <SelectItem value="national-id">4. Government ID - National ID</SelectItem>
+                                <SelectItem value="military-id">4. Government ID - Military ID</SelectItem>
+                                <SelectItem value="state-id">4. Government ID - State ID</SelectItem>
+                                <SelectItem value="birth-certificate">4. Government ID - Birth Certificate</SelectItem>
+                                <SelectItem value="social-security-card">4. Government ID - Social Security Card</SelectItem>
+                                <SelectItem value="certificate-of-citizenship">4. Government ID - Certificate of Citizenship</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
