@@ -4969,107 +4969,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       Try generating a UWA with the fields below. This is a working preview of the optional advanced identity feature.
                     </p>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <Label>Machine Type for UWA Generation</Label>
-                        <FormField
-                          control={form.control}
-                          name="identityBehaviorHygiene.uwaPreviewMachineType"
-                          render={({ field }) => (
-                            <FormItem>
-                              <Select onValueChange={field.onChange} defaultValue="virtual">
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="virtual">Virtual Machine</SelectItem>
-                                  <SelectItem value="physical">Physical Device</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <div className="mt-4 space-y-2">
-                          {form.watch("identityBehaviorHygiene.uwaPreviewMachineType") === "physical" ? (
-                            <>
-                              <div className="text-sm">
-                                <Label>Serial Number:</Label>
-                                <Input defaultValue="SN123456789" className="mt-1" />
-                              </div>
-                              <div className="text-sm">
-                                <Label>MAC Address:</Label>
-                                <Input defaultValue="00:1B:44:11:3A:B7" className="mt-1" />
-                              </div>
-                              <div className="text-sm">
-                                <Label>IMEI/Device ID:</Label>
-                                <Input defaultValue="356789012345678" className="mt-1" />
-                              </div>
-                              <div className="text-sm">
-                                <Label>Google Location:</Label>
-                                <Input defaultValue="2X57+XH+" className="mt-1" />
-                              </div>
-                              <div className="text-sm">
-                                <Label>Make/Model:</Label>
-                                <Input defaultValue="Dell-OptiPlex" className="mt-1" />
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <div className="text-sm">
-                                <Label>Instance UUID:</Label>
-                                <Input defaultValue="1c-49ca-47ae-bebe-4087c52abbf4" className="mt-1" />
-                              </div>
-                              <div className="text-sm">
-                                <Label>Environment:</Label>
-                                <Select defaultValue="PR">
-                                  <SelectTrigger>
-                                    <SelectValue />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="PR">Production (PR)</SelectItem>
-                                    <SelectItem value="ST">Staging (ST)</SelectItem>
-                                    <SelectItem value="TD">Testing (TD)</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                              <div className="text-sm">
-                                <Label>Google Location:</Label>
-                                <Input defaultValue="2X57+XH+" className="mt-1" />
-                              </div>
-                              <div className="text-sm">
-                                <Label>OS Name:</Label>
-                                <Input defaultValue="centosl" className="mt-1" />
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      
-                      <div>
-                        <Label>Generated UWA:</Label>
-                        <div className="mt-2 p-3 bg-white border rounded font-mono text-sm">
-                          {form.watch("identityBehaviorHygiene.uwaPreviewMachineType") === "physical" 
-                            ? "CLX1234-5678901-2345678-9012345-6789012-3456789-0123456"
-                            : "CLX-PR9ca-4-7ae-beb-e-4087c-52abbf4-X57+XH+-centosl"
-                          }
-                        </div>
-                        <p className="text-xs text-gray-600 mt-2">
-                          Algorithm: {form.watch("identityBehaviorHygiene.uwaPreviewMachineType") === "physical" 
-                            ? "SerialNumber + MAC + IMEI + Location + MakeModel"
-                            : "Last26InstanceUUID + First2Env + Last7Address + First7OSname"
-                          }
-                        </p>
-                        <p className="text-xs text-gray-600">
-                          Formatted in 7-character chunks for readability
-                        </p>
-                        
-                        <Button className="mt-4 w-full" type="button">
-                          Generate Cloud UWA
-                        </Button>
-                      </div>
+                    <div className="text-center p-6 bg-gray-50 rounded-md">
+                      <p className="text-sm text-gray-600 mb-4">
+                        Interactive UWA generation preview will be available in the full Identity Management section.
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        For now, you can use the "Add New UWA Record" button in the UWA Records Management table below to generate real UWAs.
+                      </p>
                     </div>
                   </div>
                   
