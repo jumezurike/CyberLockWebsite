@@ -4953,67 +4953,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
 
-                  {/* UWA Component Selection Matrix */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">UWA Component Selection Matrix</h4>
-                    <p className="text-sm text-muted-foreground mb-4">
-                      Select the components needed for your UWA intermediate representation. Required fields depend on identity type. Organizations can customize which fields to include in their UWA generation based on their specific needs.
-                    </p>
-                    
-                    <div className="overflow-x-auto">
-                      <table className="w-full border-collapse border border-gray-300">
-                        <thead>
-                          <tr className="bg-gray-50">
-                            <th className="border border-gray-300 p-2 text-left">Components of Identification</th>
-                            <th className="border border-gray-300 p-2 text-center">Human</th>
-                            <th className="border border-gray-300 p-2 text-center">Machine</th>
-                            <th className="border border-gray-300 p-2 text-center">API</th>
-                            <th className="border border-gray-300 p-2 text-center">Third-Party</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {[
-                            { component: 'Name', human: true, machine: false, api: false, thirdParty: false },
-                            { component: 'Address', human: true, machine: false, api: false, thirdParty: false },
-                            { component: 'Birthplace', human: true, machine: false, api: false, thirdParty: false },
-                            { component: 'Date of Birth', human: true, machine: false, api: false, thirdParty: false },
-                            { component: 'PIN', human: false, machine: false, api: false, thirdParty: false, note: 'Not used for UWA' },
-                            { component: 'SN/IMEI', human: true, machine: true, api: false, thirdParty: false },
-                            { component: 'Ph#/EIN/SSN/BVN', human: true, machine: false, api: false, thirdParty: false },
-                            { component: 'Driver License/Passport', human: true, machine: false, api: false, thirdParty: false },
-                            { component: 'Primary Auth Device IMEI/IOT S/N', human: true, machine: false, api: false, thirdParty: false },
-                            { component: 'Make/Model+OS', human: false, machine: true, api: false, thirdParty: false },
-                            { component: 'Manufacturing Date (DOM)', human: false, machine: true, api: false, thirdParty: false },
-                            { component: 'EC2/DO ID/MAC/SN', human: false, machine: true, api: true, thirdParty: false },
-                            { component: 'OS', human: false, machine: true, api: true, thirdParty: false },
-                            { component: 'UUID', human: false, machine: true, api: true, thirdParty: false },
-                            { component: 'Server ID', human: false, machine: true, api: true, thirdParty: false },
-                            { component: 'Environment (PR/ST/TD)', human: false, machine: true, api: true, thirdParty: false },
-                            { component: 'IP Address', human: false, machine: true, api: true, thirdParty: false },
-                            { component: 'Business Certifications', human: false, machine: false, api: false, thirdParty: true },
-                            { component: 'Business Licenses', human: false, machine: false, api: false, thirdParty: true },
-                            { component: 'Utility Bills', human: false, machine: false, api: false, thirdParty: true },
-                          ].map((row, index) => (
-                            <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
-                              <td className="border border-gray-300 p-2">{row.component}</td>
-                              <td className="border border-gray-300 p-2 text-center">
-                                {row.note ? <span className="text-xs text-gray-500">{row.note}</span> : (row.human ? '✓' : '')}
-                              </td>
-                              <td className="border border-gray-300 p-2 text-center">
-                                {row.note ? <span className="text-xs text-gray-500">{row.note}</span> : (row.machine ? '✓' : '')}
-                              </td>
-                              <td className="border border-gray-300 p-2 text-center">
-                                {row.note ? <span className="text-xs text-gray-500">{row.note}</span> : (row.api ? '✓' : '')}
-                              </td>
-                              <td className="border border-gray-300 p-2 text-center">
-                                {row.note ? <span className="text-xs text-gray-500">{row.note}</span> : (row.thirdParty ? '✓' : '')}
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+
 
                   {/* UWA Generation Preview */}
                   <div className="border rounded-md p-4 mb-6 bg-green-50">
