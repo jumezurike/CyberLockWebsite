@@ -26,7 +26,7 @@ import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
 import UwaRecordsTable from "../identity-behavior/uwa-records-table";
 import { useToast } from "@/hooks/use-toast";
-import { calculateDeviceRiskLevel, getRiskLevelColor } from "@/lib/risk-assessment-matrix";
+import { FivePillarScorecard, DeviceRiskAssessment, OrganizationalVulnerabilities } from "@/lib/five-pillar-scorecard";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -180,30 +180,70 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const [eulaAccepted, setEulaAccepted] = useState(false);
   const { toast } = useToast();
   
-  // Dynamic Risk Assessment Function
-  const calculateDynamicRiskLevel = (deviceType: string): string => {
+  // Device-Specific Risk Assessment (Section 12 - separate from organizational vulnerabilities)
+  const calculateDeviceOperationalRisk = (deviceData: any): DeviceRiskAssessment => {
+    // Operational risk based on device usage patterns
+    let operationalRisk = 0;
+    if (deviceData.networkAccess?.includes('Public Internet')) operationalRisk += 20;
+    if (deviceData.remoteAccessCapability) operationalRisk += 15;
+    if (deviceData.dataClassification?.includes('Sensitive')) operationalRisk += 25;
+    if (deviceData.lastSecurityUpdate && new Date(deviceData.lastSecurityUpdate) < new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)) operationalRisk += 20;
+    
+    // Technical risk based on device configuration
+    let technicalRisk = 0;
+    if (!deviceData.encryptionStatus?.includes('Full Disk Encryption')) technicalRisk += 30;
+    if (!deviceData.antivirusInstalled) technicalRisk += 25;
+    if (!deviceData.firewallEnabled) technicalRisk += 20;
+    if (deviceData.operatingSystem?.includes('Legacy') || deviceData.operatingSystem?.includes('Unsupported')) technicalRisk += 35;
+    
+    // Business impact based on device criticality
+    let businessImpact = 0;
+    if (deviceData.deviceType?.includes('Server')) businessImpact += 40;
+    if (deviceData.deviceType?.includes('Network Equipment')) businessImpact += 35;
+    if (deviceData.owner?.includes('Executive') || deviceData.owner?.includes('Administrator')) businessImpact += 25;
+    
+    const overallRisk = (operationalRisk + technicalRisk + businessImpact) / 3;
+    
+    let riskLevel: 'Very Low' | 'Low' | 'Medium' | 'High' | 'Very High';
+    if (overallRisk >= 80) riskLevel = 'Very High';
+    else if (overallRisk >= 60) riskLevel = 'High';
+    else if (overallRisk >= 40) riskLevel = 'Medium';
+    else if (overallRisk >= 20) riskLevel = 'Low';
+    else riskLevel = 'Very Low';
+    
+    return {
+      deviceId: deviceData.deviceId || 'Unknown',
+      deviceType: deviceData.deviceType || 'Unknown',
+      operationalRisk,
+      technicalRisk,
+      businessImpact,
+      overallRiskLevel: riskLevel
+    };
+  };
+
+  // Organizational Vulnerability Assessment (Section 3 - separate from device risk)
+  const assessOrganizationalVulnerabilities = (): OrganizationalVulnerabilities => {
     const formData = form.getValues();
     
-    // Get identified vulnerabilities from Section 3
-    const identifiedVulnerabilities = [
-      ...(formData.primaryConcerns || []),
-      ...(formData.securityRisks || []),
-      ...(formData.websiteVulnerabilities || []),
-      ...(formData.endDeviceVulnerabilities || []),
-      ...(formData.vulnerabilities || [])
-    ];
+    const vulnerabilities: OrganizationalVulnerabilities = {
+      primaryConcerns: formData.primaryConcerns || [],
+      securityRisks: formData.securityRisks || [],
+      websiteVulnerabilities: formData.websiteVulnerabilities || [],
+      endDeviceVulnerabilities: formData.endDeviceVulnerabilities || [],
+      overallVulnerabilityScore: 0
+    };
     
-    // Get implemented security measures from Section 4
-    const securityMeasures = formData.securityMeasures || [];
+    // Calculate overall vulnerability score based on identified concerns
+    const totalConcerns = [
+      ...vulnerabilities.primaryConcerns,
+      ...vulnerabilities.securityRisks,
+      ...vulnerabilities.websiteVulnerabilities,
+      ...vulnerabilities.endDeviceVulnerabilities
+    ].length;
     
-    // Calculate risk using the matrix
-    const riskAssessment = calculateDeviceRiskLevel(
-      deviceType || 'workstation',
-      identifiedVulnerabilities,
-      securityMeasures
-    );
+    vulnerabilities.overallVulnerabilityScore = Math.min(100, totalConcerns * 5);
     
-    return riskAssessment.riskLevel;
+    return vulnerabilities;
   };
   
   // CSV Import functionality for Device Inventory
