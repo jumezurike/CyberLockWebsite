@@ -3603,18 +3603,35 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                     
                     {/* Import Section */}
-                    <div className="border rounded-md p-4 mb-6">
-                      <h4 className="font-medium mb-2">Import Device Inventory</h4>
-                      <p className="text-sm text-gray-600 mb-4">
-                        Use these options to import existing device inventory data or download a template.
+                    <div className="bg-gradient-to-r from-purple-50 to-blue-50 border-2 border-purple-200 rounded-xl p-6 mb-6 shadow-md">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-3 h-3 bg-purple-500 rounded-full animate-pulse"></div>
+                        <h4 className="text-xl font-bold text-purple-800">📥 Import Device Inventory</h4>
+                      </div>
+                      <p className="text-gray-700 font-medium mb-6 text-base">
+                        🚀 Use these options to import existing device inventory data or download a template to get started quickly.
                       </p>
-                      <div className="flex gap-4">
-                        <Button className="bg-purple-600 hover:bg-purple-700">
-                          Import CSV
-                        </Button>
-                        <Button variant="outline">
-                          Download Template
-                        </Button>
+                      <div className="flex flex-col lg:flex-row gap-6 w-full">
+                        <div className="bg-white border-2 border-dashed border-purple-300 rounded-lg p-4 hover:border-purple-500 transition-colors">
+                          <div className="text-center">
+                            <div className="text-3xl mb-2">📊</div>
+                            <h5 className="font-semibold text-gray-800 mb-2">Import Existing Data</h5>
+                            <p className="text-sm text-gray-600 mb-4">Upload your CSV file with device information</p>
+                            <Button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all">
+                              📤 Import CSV
+                            </Button>
+                          </div>
+                        </div>
+                        <div className="bg-white border-2 border-dashed border-blue-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+                          <div className="text-center">
+                            <div className="text-3xl mb-2">📋</div>
+                            <h5 className="font-semibold text-gray-800 mb-2">Get Template</h5>
+                            <p className="text-sm text-gray-600 mb-4">Download a pre-formatted CSV template</p>
+                            <Button variant="outline" className="border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all">
+                              📥 Download Template
+                            </Button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
