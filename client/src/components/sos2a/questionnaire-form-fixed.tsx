@@ -203,19 +203,17 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     if (deviceData.owner?.includes('Executive') || deviceData.owner?.includes('Administrator')) impactScore += 1;
     if (deviceData.backupStatus?.includes('Not Backed Up')) impactScore += 1;
     
-    // Convert to likelihood categories
+    // Convert to likelihood categories (Improbable → Unlikely → Moderate → Likely → Most Likely)
     let likelihoodLevel: string;
-    if (likelihoodScore >= 5) likelihoodLevel = 'Certain';
-    else if (likelihoodScore >= 4) likelihoodLevel = 'Most Likely';
+    if (likelihoodScore >= 4) likelihoodLevel = 'Most Likely';
     else if (likelihoodScore >= 3) likelihoodLevel = 'Likely';
-    else if (likelihoodScore >= 2.5) likelihoodLevel = 'Moderate';
+    else if (likelihoodScore >= 2) likelihoodLevel = 'Moderate';
     else if (likelihoodScore >= 1.5) likelihoodLevel = 'Unlikely';
-    else if (likelihoodScore >= 1) likelihoodLevel = 'Rare';
     else likelihoodLevel = 'Improbable';
     
-    // Convert to impact categories
+    // Convert to impact categories (Insignificant → Minor → Moderate → Major → Critical)
     let impactLevel: string;
-    if (impactScore >= 4) impactLevel = 'Catastrophic';
+    if (impactScore >= 4) impactLevel = 'Critical';
     else if (impactScore >= 3) impactLevel = 'Major';
     else if (impactScore >= 2) impactLevel = 'Moderate';
     else if (impactScore >= 1.5) impactLevel = 'Minor';
@@ -223,13 +221,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     
     // Calculate overall risk level based on likelihood x impact matrix
     const riskMatrix = {
-      'Improbable': { 'Insignificant': 'Very Low', 'Minor': 'Very Low', 'Moderate': 'Low', 'Major': 'Medium', 'Catastrophic': 'High' },
-      'Rare': { 'Insignificant': 'Very Low', 'Minor': 'Low', 'Moderate': 'Low', 'Major': 'Medium', 'Catastrophic': 'High' },
-      'Unlikely': { 'Insignificant': 'Low', 'Minor': 'Low', 'Moderate': 'Medium', 'Major': 'High', 'Catastrophic': 'Very High' },
-      'Moderate': { 'Insignificant': 'Low', 'Minor': 'Medium', 'Moderate': 'Medium', 'Major': 'High', 'Catastrophic': 'Very High' },
-      'Likely': { 'Insignificant': 'Medium', 'Minor': 'Medium', 'Moderate': 'High', 'Major': 'Very High', 'Catastrophic': 'Very High' },
-      'Most Likely': { 'Insignificant': 'Medium', 'Minor': 'High', 'Moderate': 'High', 'Major': 'Very High', 'Catastrophic': 'Very High' },
-      'Certain': { 'Insignificant': 'High', 'Minor': 'High', 'Moderate': 'Very High', 'Major': 'Very High', 'Catastrophic': 'Very High' }
+      'Improbable': { 'Insignificant': 'Very Low', 'Minor': 'Very Low', 'Moderate': 'Low', 'Major': 'Medium', 'Critical': 'High' },
+      'Unlikely': { 'Insignificant': 'Low', 'Minor': 'Low', 'Moderate': 'Medium', 'Major': 'High', 'Critical': 'Very High' },
+      'Moderate': { 'Insignificant': 'Low', 'Minor': 'Medium', 'Moderate': 'Medium', 'Major': 'High', 'Critical': 'Very High' },
+      'Likely': { 'Insignificant': 'Medium', 'Minor': 'Medium', 'Moderate': 'High', 'Major': 'Very High', 'Critical': 'Very High' },
+      'Most Likely': { 'Insignificant': 'Medium', 'Minor': 'High', 'Moderate': 'High', 'Major': 'Very High', 'Critical': 'Very High' }
     };
     
     const overallRiskLevel = riskMatrix[likelihoodLevel as keyof typeof riskMatrix]?.[impactLevel as keyof typeof riskMatrix[keyof typeof riskMatrix]] || 'Medium';
