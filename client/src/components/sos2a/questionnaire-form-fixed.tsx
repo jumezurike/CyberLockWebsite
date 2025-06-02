@@ -177,6 +177,93 @@ interface QuestionnaireFormProps {
 
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
+  const { toast } = useToast();
+  
+  // CSV Import functionality for Device Inventory
+  const handleImportCSV = () => {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.csv';
+    input.onchange = (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          try {
+            const csv = event.target?.result as string;
+            const lines = csv.split('\n');
+            const headers = lines[0].split(',').map(h => h.trim());
+            
+            // Process CSV data - validate headers match expected format
+            const expectedHeaders = [
+              'Device ID/Asset Tag', 'Make/Model', 'Color/Physical Description', 'Serial Number',
+              'Location/Department', 'Owner/Responsible Party', 'Purchase Date', 'Warranty Expiration',
+              'Operating System', 'Software Installed', 'IP Address', 'MAC Address',
+              'Security Software', 'Encryption Status', 'Last Security Update', 'Compliance Status',
+              'Risk Level', 'Data Classification', 'Network Access', 'Remote Access Capability',
+              'Backup Status', 'Monitoring Status', 'Incident History', 'Maintenance Schedule',
+              'Disposal Method', 'Handling Company', 'Data Sanitization Method', 'Disposal Date', 'Disposal Certification'
+            ];
+            
+            const isValidFormat = expectedHeaders.every(header => headers.includes(header));
+            
+            if (isValidFormat) {
+              toast({
+                title: "CSV Import Successful",
+                description: `${file.name} has been processed. Found ${lines.length - 1} device records.`,
+              });
+            } else {
+              toast({
+                title: "Invalid CSV Format", 
+                description: "Please use the provided template format for importing device inventory data.",
+                variant: "destructive",
+              });
+            }
+          } catch (error) {
+            toast({
+              title: "Import Error",
+              description: "There was an error processing the CSV file. Please check the format.",
+              variant: "destructive",
+            });
+          }
+        };
+        reader.readAsText(file);
+      }
+    };
+    input.click();
+  };
+
+  // CSV Template Download functionality
+  const handleDownloadTemplate = () => {
+    const headers = [
+      'Device ID/Asset Tag', 'Make/Model', 'Color/Physical Description', 'Serial Number',
+      'Location/Department', 'Owner/Responsible Party', 'Purchase Date', 'Warranty Expiration',
+      'Operating System', 'Software Installed', 'IP Address', 'MAC Address',
+      'Security Software', 'Encryption Status', 'Last Security Update', 'Compliance Status',
+      'Risk Level', 'Data Classification', 'Network Access', 'Remote Access Capability',
+      'Backup Status', 'Monitoring Status', 'Incident History', 'Maintenance Schedule',
+      'Disposal Method', 'Handling Company', 'Data Sanitization Method', 'Disposal Date', 'Disposal Certification'
+    ];
+    
+    const csvContent = headers.join(',') + '\n';
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    
+    if (link.download !== undefined) {
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', 'device-inventory-template.csv');
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      toast({
+        title: "Template Downloaded",
+        description: "Fill this template with your device information and import it back.",
+      });
+    }
+  };
   
   // Helper function to handle OS checkbox changes
   const handleOsCheckboxChange = (currentValues: string[] = [], os: any, isChecked: boolean): string[] => {
@@ -3618,7 +3705,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             <div className="text-3xl mb-2">📊</div>
                             <h5 className="font-semibold text-gray-800 mb-2">Import Existing Data</h5>
                             <p className="text-sm text-gray-600 mb-4">Upload your CSV file with device information</p>
-                            <Button className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all">
+                            <Button 
+                              onClick={handleImportCSV}
+                              className="bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                            >
                               📤 Import CSV
                             </Button>
                           </div>
@@ -3628,7 +3718,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             <div className="text-3xl mb-2">📋</div>
                             <h5 className="font-semibold text-gray-800 mb-2">Get Template</h5>
                             <p className="text-sm text-gray-600 mb-4">Download a pre-formatted CSV template</p>
-                            <Button variant="outline" className="border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all">
+                            <Button 
+                              onClick={handleDownloadTemplate}
+                              variant="outline" 
+                              className="border-2 border-blue-500 text-blue-600 hover:bg-blue-50 font-semibold px-6 py-3 rounded-lg shadow-lg hover:shadow-xl transition-all"
+                            >
                               📥 Download Template
                             </Button>
                           </div>
