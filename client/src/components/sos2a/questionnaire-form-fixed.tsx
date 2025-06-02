@@ -26,6 +26,7 @@ import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
 import UwaRecordsTable from "../identity-behavior/uwa-records-table";
 import { useToast } from "@/hooks/use-toast";
+import { calculateDeviceRiskLevel, getRiskLevelColor } from "@/lib/risk-assessment-matrix";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -178,6 +179,32 @@ interface QuestionnaireFormProps {
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
   const { toast } = useToast();
+  
+  // Dynamic Risk Assessment Function
+  const calculateDynamicRiskLevel = (deviceType: string): string => {
+    const formData = form.getValues();
+    
+    // Get identified vulnerabilities from Section 3
+    const identifiedVulnerabilities = [
+      ...(formData.primaryConcerns || []),
+      ...(formData.securityRisks || []),
+      ...(formData.websiteVulnerabilities || []),
+      ...(formData.endDeviceVulnerabilities || []),
+      ...(formData.vulnerabilities || [])
+    ];
+    
+    // Get implemented security measures from Section 4
+    const securityMeasures = formData.securityMeasures || [];
+    
+    // Calculate risk using the matrix
+    const riskAssessment = calculateDeviceRiskLevel(
+      deviceType || 'workstation',
+      identifiedVulnerabilities,
+      securityMeasures
+    );
+    
+    return riskAssessment.riskLevel;
+  };
   
   // CSV Import functionality for Device Inventory
   const handleImportCSV = () => {
