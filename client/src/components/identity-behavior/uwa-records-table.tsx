@@ -505,6 +505,8 @@ export const UwaRecordsTable = () => {
               <TableHeader>
                 <TableRow>
                   <TableHead className="w-[80px] text-xs">UWA(Generated)</TableHead>
+                  <TableHead className="w-[90px] text-xs">Identity type</TableHead>
+                  <TableHead className="w-[100px] text-xs">Identification method</TableHead>
                   <TableHead className="w-[70px] text-xs">Server/ID</TableHead>
                   <TableHead className="w-[70px] text-xs">UUID</TableHead>
                   <TableHead className="w-[70px] text-xs">SN/MODEL</TableHead>
@@ -525,7 +527,7 @@ export const UwaRecordsTable = () => {
               <TableBody>
                 {filteredRecords.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={16} className="text-center py-8 text-gray-500">
+                    <TableCell colSpan={18} className="text-center py-8 text-gray-500">
                       {records.length === 0 
                         ? "No UWA records found. Create your first record to begin tracking digital identities."
                         : "No records match the current filters. Try adjusting your filter criteria."
@@ -537,6 +539,14 @@ export const UwaRecordsTable = () => {
                     <TableRow key={record.id}>
                       <TableCell className="font-mono text-xs">
                         {formatUWAChunks(record.uwa).substring(0, 15)}...
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        <Badge variant="secondary" className="text-xs">
+                          {record.entityType.replace('-', ' ')}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.name || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
                         {record.components.serverId || 'X'}
