@@ -180,44 +180,66 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const [eulaAccepted, setEulaAccepted] = useState(false);
   const { toast } = useToast();
   
-  // Device-Specific Risk Assessment (Section 12 - separate from organizational vulnerabilities)
-  const calculateDeviceOperationalRisk = (deviceData: any): DeviceRiskAssessment => {
-    // Operational risk based on device usage patterns
-    let operationalRisk = 0;
-    if (deviceData.networkAccess?.includes('Public Internet')) operationalRisk += 20;
-    if (deviceData.remoteAccessCapability) operationalRisk += 15;
-    if (deviceData.dataClassification?.includes('Sensitive')) operationalRisk += 25;
-    if (deviceData.lastSecurityUpdate && new Date(deviceData.lastSecurityUpdate) < new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)) operationalRisk += 20;
+  // Device-Specific Likelihood vs Impact Risk Assessment (Section 12)
+  const calculateDeviceLikelihoodImpactRisk = (deviceData: any) => {
+    // Calculate likelihood factors (probability scale)
+    let likelihoodScore = 1; // Start with "Improbable"
     
-    // Technical risk based on device configuration
-    let technicalRisk = 0;
-    if (!deviceData.encryptionStatus?.includes('Full Disk Encryption')) technicalRisk += 30;
-    if (!deviceData.antivirusInstalled) technicalRisk += 25;
-    if (!deviceData.firewallEnabled) technicalRisk += 20;
-    if (deviceData.operatingSystem?.includes('Legacy') || deviceData.operatingSystem?.includes('Unsupported')) technicalRisk += 35;
+    // Increase likelihood based on device vulnerabilities
+    if (deviceData.networkAccess?.includes('Public Internet')) likelihoodScore += 1;
+    if (deviceData.remoteAccessCapability) likelihoodScore += 0.5;
+    if (!deviceData.encryptionStatus?.includes('Full Disk Encryption')) likelihoodScore += 1;
+    if (!deviceData.securitySoftware?.includes('Antivirus')) likelihoodScore += 0.5;
+    if (deviceData.operatingSystem?.includes('Legacy') || deviceData.operatingSystem?.includes('Unsupported')) likelihoodScore += 1.5;
+    if (deviceData.lastSecurityUpdate && new Date(deviceData.lastSecurityUpdate) < new Date(Date.now() - 90 * 24 * 60 * 60 * 1000)) likelihoodScore += 1;
     
-    // Business impact based on device criticality
-    let businessImpact = 0;
-    if (deviceData.deviceType?.includes('Server')) businessImpact += 40;
-    if (deviceData.deviceType?.includes('Network Equipment')) businessImpact += 35;
-    if (deviceData.owner?.includes('Executive') || deviceData.owner?.includes('Administrator')) businessImpact += 25;
+    // Calculate impact factors (consequence severity)
+    let impactScore = 1; // Start with minimal impact
     
-    const overallRisk = (operationalRisk + technicalRisk + businessImpact) / 3;
+    // Increase impact based on device criticality and data sensitivity
+    if (deviceData.deviceType?.includes('Server')) impactScore += 2;
+    if (deviceData.deviceType?.includes('Network Equipment')) impactScore += 2;
+    if (deviceData.dataClassification?.includes('Sensitive') || deviceData.dataClassification?.includes('Confidential')) impactScore += 1.5;
+    if (deviceData.owner?.includes('Executive') || deviceData.owner?.includes('Administrator')) impactScore += 1;
+    if (deviceData.backupStatus?.includes('Not Backed Up')) impactScore += 1;
     
-    let riskLevel: 'Very Low' | 'Low' | 'Medium' | 'High' | 'Very High';
-    if (overallRisk >= 80) riskLevel = 'Very High';
-    else if (overallRisk >= 60) riskLevel = 'High';
-    else if (overallRisk >= 40) riskLevel = 'Medium';
-    else if (overallRisk >= 20) riskLevel = 'Low';
-    else riskLevel = 'Very Low';
+    // Convert to likelihood categories
+    let likelihoodLevel: string;
+    if (likelihoodScore >= 5) likelihoodLevel = 'Certain';
+    else if (likelihoodScore >= 4) likelihoodLevel = 'Most Likely';
+    else if (likelihoodScore >= 3) likelihoodLevel = 'Likely';
+    else if (likelihoodScore >= 2.5) likelihoodLevel = 'Moderate';
+    else if (likelihoodScore >= 1.5) likelihoodLevel = 'Unlikely';
+    else if (likelihoodScore >= 1) likelihoodLevel = 'Rare';
+    else likelihoodLevel = 'Improbable';
+    
+    // Convert to impact categories
+    let impactLevel: string;
+    if (impactScore >= 4) impactLevel = 'Catastrophic';
+    else if (impactScore >= 3) impactLevel = 'Major';
+    else if (impactScore >= 2) impactLevel = 'Moderate';
+    else if (impactScore >= 1.5) impactLevel = 'Minor';
+    else impactLevel = 'Insignificant';
+    
+    // Calculate overall risk level based on likelihood x impact matrix
+    const riskMatrix = {
+      'Improbable': { 'Insignificant': 'Very Low', 'Minor': 'Very Low', 'Moderate': 'Low', 'Major': 'Medium', 'Catastrophic': 'High' },
+      'Rare': { 'Insignificant': 'Very Low', 'Minor': 'Low', 'Moderate': 'Low', 'Major': 'Medium', 'Catastrophic': 'High' },
+      'Unlikely': { 'Insignificant': 'Low', 'Minor': 'Low', 'Moderate': 'Medium', 'Major': 'High', 'Catastrophic': 'Very High' },
+      'Moderate': { 'Insignificant': 'Low', 'Minor': 'Medium', 'Moderate': 'Medium', 'Major': 'High', 'Catastrophic': 'Very High' },
+      'Likely': { 'Insignificant': 'Medium', 'Minor': 'Medium', 'Moderate': 'High', 'Major': 'Very High', 'Catastrophic': 'Very High' },
+      'Most Likely': { 'Insignificant': 'Medium', 'Minor': 'High', 'Moderate': 'High', 'Major': 'Very High', 'Catastrophic': 'Very High' },
+      'Certain': { 'Insignificant': 'High', 'Minor': 'High', 'Moderate': 'Very High', 'Major': 'Very High', 'Catastrophic': 'Very High' }
+    };
+    
+    const overallRiskLevel = riskMatrix[likelihoodLevel as keyof typeof riskMatrix]?.[impactLevel as keyof typeof riskMatrix[keyof typeof riskMatrix]] || 'Medium';
     
     return {
-      deviceId: deviceData.deviceId || 'Unknown',
-      deviceType: deviceData.deviceType || 'Unknown',
-      operationalRisk,
-      technicalRisk,
-      businessImpact,
-      overallRiskLevel: riskLevel
+      likelihood: likelihoodLevel,
+      impact: impactLevel,
+      overallRiskLevel,
+      likelihoodScore: Math.round(likelihoodScore * 10) / 10,
+      impactScore: Math.round(impactScore * 10) / 10
     };
   };
 
