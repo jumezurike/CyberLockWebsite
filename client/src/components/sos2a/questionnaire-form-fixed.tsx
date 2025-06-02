@@ -4964,9 +4964,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
                   {/* UWA Generation Preview */}
                   <div className="border rounded-md p-4 mb-6 bg-green-50">
-                    <h4 className="font-medium mb-4 text-green-900">UWA Generation Preview</h4>
+                    <h4 className="font-medium mb-4 text-green-900">UWA Generation Preview - Interactive Demo</h4>
                     <p className="text-sm text-green-700 mb-4">
-                      The UWA (Universal Wallet Address) will be generated using the fields marked above. This is an optional advanced identity feature.
+                      Try generating a UWA with the fields below. This is a working preview of the optional advanced identity feature.
                     </p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
