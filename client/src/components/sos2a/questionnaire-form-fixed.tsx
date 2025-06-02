@@ -5058,35 +5058,168 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         )}
                       />
 
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.identificationMethod"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Identification Method</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select identification method" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="username">Username</SelectItem>
-                                <SelectItem value="email">Email Address</SelectItem>
-                                <SelectItem value="employee-id">Employee ID</SelectItem>
-                                <SelectItem value="badge">Badge Number</SelectItem>
-                                <SelectItem value="device-id">Device ID</SelectItem>
-                                <SelectItem value="certificate">Certificate</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                      <div>
+                        <FormLabel className="mb-2 block">Identification Methods</FormLabel>
+                        <FormDescription className="mb-3">
+                          Select all identification methods that are used in your organization
+                        </FormDescription>
+                        
+                        {/* Standard Authentication */}
+                        <div className="mb-4 p-3 border rounded-md">
+                          <h6 className="font-medium text-sm mb-2">1. Standard Authentication</h6>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            {["Username/Password", "Employee ID", "Certificate", "Smart Card", "Single Sign-On", "Token-based"].map((method) => (
+                              <FormField
+                                key={method}
+                                control={form.control}
+                                name="identityBehaviorHygiene.standardAuthMethods"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={method}
+                                      className="flex items-start space-x-2"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(method)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), method]
+                                              : field.value?.filter(
+                                                  (value) => value !== method
+                                                ) || [];
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal text-sm cursor-pointer">
+                                        {method}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Advanced Authentication */}
+                        <div className="mb-4 p-3 border rounded-md">
+                          <h6 className="font-medium text-sm mb-2">2. Advanced Authentication</h6>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            {["UWA (Universal Wallet Address)", "MFA (Multi-Factor Authentication)"].map((method) => (
+                              <FormField
+                                key={method}
+                                control={form.control}
+                                name="identityBehaviorHygiene.advancedAuthMethods"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={method}
+                                      className="flex items-start space-x-2"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(method)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), method]
+                                              : field.value?.filter(
+                                                  (value) => value !== method
+                                                ) || [];
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal text-sm cursor-pointer">
+                                        {method}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Biometric */}
+                        <div className="mb-4 p-3 border rounded-md">
+                          <h6 className="font-medium text-sm mb-2">3. Biometric</h6>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            {["Fingerprint", "Voice", "Facial", "Iris"].map((method) => (
+                              <FormField
+                                key={method}
+                                control={form.control}
+                                name="identityBehaviorHygiene.biometricAuthMethods"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={method}
+                                      className="flex items-start space-x-2"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(method)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), method]
+                                              : field.value?.filter(
+                                                  (value) => value !== method
+                                                ) || [];
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal text-sm cursor-pointer">
+                                        {method}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Government ID */}
+                        <div className="mb-4 p-3 border rounded-md">
+                          <h6 className="font-medium text-sm mb-2">4. Government ID</h6>
+                          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            {["Driver License", "Passport", "National ID", "Military ID", "State ID", "Birth Certificate", "Social Security Card", "Certificate of Citizenship"].map((method) => (
+                              <FormField
+                                key={method}
+                                control={form.control}
+                                name="identityBehaviorHygiene.governmentIdMethods"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={method}
+                                      className="flex items-start space-x-2"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(method)}
+                                          onCheckedChange={(checked) => {
+                                            const updatedValue = checked
+                                              ? [...(field.value || []), method]
+                                              : field.value?.filter(
+                                                  (value) => value !== method
+                                                ) || [];
+                                            field.onChange(updatedValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal text-sm cursor-pointer">
+                                        {method}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
