@@ -3553,29 +3553,35 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                     
                     {/* Filter Devices Section */}
-                    <div className="mb-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-sm font-medium text-blue-700 bg-blue-100 px-2 py-1 rounded">Filter Devices</span>
-                        <span className="text-sm font-medium text-blue-700 bg-blue-100 px-2 py-1 rounded">Filter Tool</span>
+                    <div className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 border-2 border-blue-200 rounded-lg p-4">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                          <span className="text-lg font-semibold text-blue-800 bg-blue-200 px-3 py-1 rounded-full shadow-sm">Filter Devices</span>
+                        </div>
+                        <span className="text-sm font-medium text-purple-700 bg-purple-200 px-3 py-1 rounded-full shadow-sm">Filter Tool</span>
                       </div>
-                      <p className="text-sm text-gray-600 mb-2">Select a device type to filter the inventory list below</p>
-                      <Select defaultValue="All Types">
-                        <SelectTrigger className="w-48">
-                          <SelectValue placeholder="All Types" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="All Types">All Types</SelectItem>
-                          <SelectItem value="Workstations">Workstations</SelectItem>
-                          <SelectItem value="Laptops">Laptops</SelectItem>
-                          <SelectItem value="Mobile Devices">Mobile Devices</SelectItem>
-                          <SelectItem value="Servers">Servers</SelectItem>
-                          <SelectItem value="Network Equipment">Network Equipment</SelectItem>
-                          <SelectItem value="IoT Devices">IoT Devices</SelectItem>
-                          <SelectItem value="Medical Devices">Medical Devices</SelectItem>
-                          <SelectItem value="Transportation Devices">Transportation Devices</SelectItem>
-                          <SelectItem value="Other">Other</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <p className="text-sm text-gray-700 font-medium mb-3">🔍 Select a device type to filter the inventory list below</p>
+                      <div className="bg-white border-2 border-dashed border-blue-300 rounded-lg p-3">
+                        <label className="block text-sm font-semibold text-gray-700 mb-2">Device Type Filter:</label>
+                        <Select defaultValue="All Types">
+                          <SelectTrigger className="w-64 h-12 text-base font-medium border-2 border-blue-300 bg-white shadow-lg hover:border-blue-500 focus:border-purple-500 transition-colors">
+                            <SelectValue placeholder="All Types" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white border-2 border-blue-200 shadow-xl">
+                            <SelectItem value="All Types" className="text-base font-medium py-3">📋 All Types</SelectItem>
+                            <SelectItem value="Workstations" className="text-base py-3">🖥️ Workstations</SelectItem>
+                            <SelectItem value="Laptops" className="text-base py-3">💻 Laptops</SelectItem>
+                            <SelectItem value="Mobile Devices" className="text-base py-3">📱 Mobile Devices</SelectItem>
+                            <SelectItem value="Servers" className="text-base py-3">🖲️ Servers</SelectItem>
+                            <SelectItem value="Network Equipment" className="text-base py-3">🌐 Network Equipment</SelectItem>
+                            <SelectItem value="IoT Devices" className="text-base py-3">🔗 IoT Devices</SelectItem>
+                            <SelectItem value="Medical Devices" className="text-base py-3">🏥 Medical Devices</SelectItem>
+                            <SelectItem value="Transportation Devices" className="text-base py-3">🚗 Transportation Devices</SelectItem>
+                            <SelectItem value="Other" className="text-base py-3">❓ Other</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </div>
                     
                     {/* Device Table */}
