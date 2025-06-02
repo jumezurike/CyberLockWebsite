@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
@@ -25,6 +25,7 @@ import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
 import UwaRecordsTable from "../identity-behavior/uwa-records-table";
+import { useToast } from "@/hooks/use-toast";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
