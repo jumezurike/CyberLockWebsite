@@ -4455,6 +4455,123 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       />
                     </div>
                   </div>
+                  
+                  {/* 7. Lifecycle Management Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">7. Lifecycle Management</h4>
+                    <div className="space-y-6">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.disposalMethod"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Disposal Method</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select disposal method" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="secure-wipe">Secure Wipe</SelectItem>
+                                  <SelectItem value="physical-destruction">Physical Destruction</SelectItem>
+                                  <SelectItem value="certified-disposal">Certified Disposal</SelectItem>
+                                  <SelectItem value="resale">Resale</SelectItem>
+                                  <SelectItem value="donation">Donation</SelectItem>
+                                  <SelectItem value="recycling">Recycling</SelectItem>
+                                  <SelectItem value="not-applicable">Not Applicable</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.handlingCompany"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Handling Company / Service Provider</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter handling company or service provider" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.dataSanitizationMethod"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Data Sanitization Method</FormLabel>
+                              <Select 
+                                onValueChange={field.onChange}
+                                defaultValue={field.value}
+                              >
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select sanitization method" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="dod-5220-22-m">DOD 5220.22-M</SelectItem>
+                                  <SelectItem value="nist-800-88">NIST 800-88</SelectItem>
+                                  <SelectItem value="secure-erase">Secure Erase</SelectItem>
+                                  <SelectItem value="cryptographic-erase">Cryptographic Erase</SelectItem>
+                                  <SelectItem value="physical-destruction">Physical Destruction</SelectItem>
+                                  <SelectItem value="degaussing">Degaussing</SelectItem>
+                                  <SelectItem value="not-performed">Not Performed</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.disposalDate"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Disposal Date (if applicable)</FormLabel>
+                              <FormControl>
+                                <Input type="date" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.disposalCertification"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Disposal Certification Available?</FormLabel>
+                              <FormDescription>
+                                Check if you have disposal certification documentation
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
                 </div>
                 
                 <div className="flex justify-end space-x-4">
