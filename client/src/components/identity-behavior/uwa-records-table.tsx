@@ -504,17 +504,15 @@ export const UwaRecordsTable = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[80px] text-xs">UWA(G enerat ed)</TableHead>
-                  <TableHead className="w-[90px] text-xs">Identity type</TableHead>
-                  <TableHead className="w-[100px] text-xs">Identificatio n method</TableHead>
-                  <TableHead className="w-[70px] text-xs">Server/I D</TableHead>
+                  <TableHead className="w-[80px] text-xs">UWA(Generated)</TableHead>
+                  <TableHead className="w-[70px] text-xs">Server/ID</TableHead>
                   <TableHead className="w-[70px] text-xs">UUID</TableHead>
-                  <TableHead className="w-[70px] text-xs">SN/ MODEL</TableHead>
-                  <TableHead className="w-[70px] text-xs">MAKE/MO DEL</TableHead>
-                  <TableHead className="w-[50px] text-xs">O S</TableHead>
+                  <TableHead className="w-[70px] text-xs">SN/MODEL</TableHead>
+                  <TableHead className="w-[70px] text-xs">MAKE/MODEL</TableHead>
+                  <TableHead className="w-[50px] text-xs">OS</TableHead>
                   <TableHead className="w-[90px] text-xs">SERVER/OWNER/COMPANY</TableHead>
-                  <TableHead className="w-[60px] text-xs">MA C</TableHead>
-                  <TableHead className="w-[80px] text-xs">ENVIRO NMENT</TableHead>
+                  <TableHead className="w-[60px] text-xs">MAC</TableHead>
+                  <TableHead className="w-[80px] text-xs">ENVIRONMENT</TableHead>
                   <TableHead className="w-[90px] text-xs">IP address</TableHead>
                   <TableHead className="w-[70px] text-xs">EIN/BIZ#</TableHead>
                   <TableHead className="w-[80px] text-xs">ADDRESS</TableHead>
@@ -527,7 +525,7 @@ export const UwaRecordsTable = () => {
               <TableBody>
                 {filteredRecords.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={19} className="text-center py-8 text-gray-500">
+                    <TableCell colSpan={16} className="text-center py-8 text-gray-500">
                       {records.length === 0 
                         ? "No UWA records found. Create your first record to begin tracking digital identities."
                         : "No records match the current filters. Try adjusting your filter criteria."
@@ -539,14 +537,6 @@ export const UwaRecordsTable = () => {
                     <TableRow key={record.id}>
                       <TableCell className="font-mono text-xs">
                         {formatUWAChunks(record.uwa).substring(0, 15)}...
-                      </TableCell>
-                      <TableCell className="text-xs">
-                        <Badge variant="secondary" className="text-xs">
-                          {record.entityType.replace('-', ' ')}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-xs">
-                        {record.components.name || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
                         {record.components.serverId || 'X'}
