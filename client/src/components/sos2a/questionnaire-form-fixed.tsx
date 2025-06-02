@@ -4801,6 +4801,265 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
+
+                  {/* Universal Identity Verification System (UIVS) */}
+                  <div className="border rounded-md p-4 mb-6 bg-blue-50">
+                    <h4 className="font-medium mb-2 text-blue-900">Universal Identity Verification System (UIVS)</h4>
+                    <p className="text-sm text-blue-700 mb-4">
+                      For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+                    </p>
+                    
+                    <div className="flex flex-wrap gap-3 mb-4">
+                      <Button 
+                        type="button" 
+                        variant="outline" 
+                        onClick={() => {
+                          const input = document.createElement('input');
+                          input.type = 'file';
+                          input.accept = '.csv';
+                          input.onchange = (e) => {
+                            const file = (e.target as HTMLInputElement).files?.[0];
+                            if (file) {
+                              const reader = new FileReader();
+                              reader.onload = (event) => {
+                                const csvContent = event.target?.result as string;
+                                const lines = csvContent.split('\n');
+                                const headers = lines[0].split(',').map(h => h.trim());
+                                
+                                const expectedHeaders = [
+                                  'User ID', 'Full Name/Role', 'Contact Info', 'Identity Type', 'Identification Method',
+                                  'MFA Types', 'Biometric Types', 'Login Patterns', 'Remote Access Frequency', 'Session Duration',
+                                  'Location Controls', 'Training Date', 'Phishing Awareness', 'Security Incidents', 'Privileged Account',
+                                  'JIT Access', 'Escalation Controls', 'Admin Review', 'Separation Duties', 'Onboarding Status',
+                                  'Offboarding Process', 'Access Review', 'Role Change Process', 'Certification Status'
+                                ];
+                                
+                                const isValidFormat = expectedHeaders.every(header => headers.includes(header));
+                                
+                                if (isValidFormat) {
+                                  toast({
+                                    title: "Identity CSV Import Successful",
+                                    description: `${file.name} has been processed. Found ${lines.length - 1} identity records.`,
+                                  });
+                                } else {
+                                  toast({
+                                    title: "Invalid CSV Format",
+                                    description: "Please use the provided template for identity data import.",
+                                    variant: "destructive",
+                                  });
+                                }
+                              };
+                              reader.readAsText(file);
+                            }
+                          };
+                          input.click();
+                        }}
+                      >
+                        Import Identity CSV
+                      </Button>
+                      
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        onClick={() => {
+                          const headers = [
+                            'User ID', 'Full Name/Role', 'Contact Info', 'Identity Type', 'Identification Method',
+                            'MFA Types', 'Biometric Types', 'Login Patterns', 'Remote Access Frequency', 'Session Duration',
+                            'Location Controls', 'Training Date', 'Phishing Awareness', 'Security Incidents', 'Privileged Account',
+                            'JIT Access', 'Escalation Controls', 'Admin Review', 'Separation Duties', 'Onboarding Status',
+                            'Offboarding Process', 'Access Review', 'Role Change Process', 'Certification Status'
+                          ];
+                          
+                          const csvContent = headers.join(',') + '\n';
+                          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                          const link = document.createElement('a');
+                          
+                          if (link.download !== undefined) {
+                            const url = URL.createObjectURL(blob);
+                            link.setAttribute('href', url);
+                            link.setAttribute('download', 'identity_template.csv');
+                            link.style.visibility = 'hidden';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                          }
+                          
+                          toast({
+                            title: "Template Downloaded",
+                            description: "Identity management CSV template has been downloaded.",
+                          });
+                        }}
+                      >
+                        Download Template
+                      </Button>
+                    </div>
+
+                    {/* Filter Controls */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                      <div>
+                        <Label htmlFor="identityTypeFilter">Filter by Identity Type</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="All Types" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Types</SelectItem>
+                            <SelectItem value="human">Human</SelectItem>
+                            <SelectItem value="machine">Machine</SelectItem>
+                            <SelectItem value="api">API</SelectItem>
+                            <SelectItem value="third-party">Third-Party</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div>
+                        <Label htmlFor="identificationMethodFilter">Identification Method</Label>
+                        <Select>
+                          <SelectTrigger>
+                            <SelectValue placeholder="All Methods" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Methods</SelectItem>
+                            <SelectItem value="username">Username</SelectItem>
+                            <SelectItem value="email">Email</SelectItem>
+                            <SelectItem value="biometric">Biometric</SelectItem>
+                            <SelectItem value="smart-card">Smart Card</SelectItem>
+                            <SelectItem value="certificate">Certificate</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* UWA Component Selection Matrix */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">UWA Component Selection Matrix</h4>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      Select the components needed for your UWA intermediate representation. Required fields depend on identity type. Organizations can customize which fields to include in their UWA generation based on their specific needs.
+                    </p>
+                    
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse border border-gray-300">
+                        <thead>
+                          <tr className="bg-gray-50">
+                            <th className="border border-gray-300 p-2 text-left">Components of Identification</th>
+                            <th className="border border-gray-300 p-2 text-center">Human</th>
+                            <th className="border border-gray-300 p-2 text-center">Machine</th>
+                            <th className="border border-gray-300 p-2 text-center">API</th>
+                            <th className="border border-gray-300 p-2 text-center">Third-Party</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {[
+                            { component: 'Name', human: true, machine: false, api: false, thirdParty: false },
+                            { component: 'Address', human: true, machine: false, api: false, thirdParty: false },
+                            { component: 'Birthplace', human: true, machine: false, api: false, thirdParty: false },
+                            { component: 'Date of Birth', human: true, machine: false, api: false, thirdParty: false },
+                            { component: 'PIN', human: false, machine: false, api: false, thirdParty: false, note: 'Not used for UWA' },
+                            { component: 'SN/IMEI', human: true, machine: true, api: false, thirdParty: false },
+                            { component: 'Ph#/EIN/SSN/BVN', human: true, machine: false, api: false, thirdParty: false },
+                            { component: 'Driver License/Passport', human: true, machine: false, api: false, thirdParty: false },
+                            { component: 'Primary Auth Device IMEI/IOT S/N', human: true, machine: false, api: false, thirdParty: false },
+                            { component: 'Make/Model+OS', human: false, machine: true, api: false, thirdParty: false },
+                            { component: 'Manufacturing Date (DOM)', human: false, machine: true, api: false, thirdParty: false },
+                            { component: 'EC2/DO ID/MAC/SN', human: false, machine: true, api: true, thirdParty: false },
+                            { component: 'OS', human: false, machine: true, api: true, thirdParty: false },
+                            { component: 'UUID', human: false, machine: true, api: true, thirdParty: false },
+                            { component: 'Server ID', human: false, machine: true, api: true, thirdParty: false },
+                            { component: 'Environment (PR/ST/TD)', human: false, machine: true, api: true, thirdParty: false },
+                            { component: 'IP Address', human: false, machine: true, api: true, thirdParty: false },
+                            { component: 'Business Certifications', human: false, machine: false, api: false, thirdParty: true },
+                            { component: 'Business Licenses', human: false, machine: false, api: false, thirdParty: true },
+                            { component: 'Utility Bills', human: false, machine: false, api: false, thirdParty: true },
+                          ].map((row, index) => (
+                            <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
+                              <td className="border border-gray-300 p-2">{row.component}</td>
+                              <td className="border border-gray-300 p-2 text-center">
+                                {row.note ? <span className="text-xs text-gray-500">{row.note}</span> : (row.human ? '✓' : '')}
+                              </td>
+                              <td className="border border-gray-300 p-2 text-center">
+                                {row.note ? <span className="text-xs text-gray-500">{row.note}</span> : (row.machine ? '✓' : '')}
+                              </td>
+                              <td className="border border-gray-300 p-2 text-center">
+                                {row.note ? <span className="text-xs text-gray-500">{row.note}</span> : (row.api ? '✓' : '')}
+                              </td>
+                              <td className="border border-gray-300 p-2 text-center">
+                                {row.note ? <span className="text-xs text-gray-500">{row.note}</span> : (row.thirdParty ? '✓' : '')}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+
+                  {/* UWA Generation Preview */}
+                  <div className="border rounded-md p-4 mb-6 bg-green-50">
+                    <h4 className="font-medium mb-4 text-green-900">UWA Generation Preview</h4>
+                    <p className="text-sm text-green-700 mb-4">
+                      The UWA (Universal Wallet Address) will be generated using the fields marked above. This is an optional advanced identity feature.
+                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div>
+                        <Label>Machine Type for UWA Generation</Label>
+                        <Select defaultValue="virtual">
+                          <SelectTrigger>
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="virtual">Virtual Machine</SelectItem>
+                            <SelectItem value="physical">Physical Device</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        
+                        <div className="mt-4 space-y-2">
+                          <div className="text-sm">
+                            <Label>Instance UUID:</Label>
+                            <Input defaultValue="1c-49ca-47ae-bebe-4087c52abbf4" className="mt-1" />
+                          </div>
+                          <div className="text-sm">
+                            <Label>Environment:</Label>
+                            <Select defaultValue="PR">
+                              <SelectTrigger>
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="PR">Production (PR)</SelectItem>
+                                <SelectItem value="ST">Staging (ST)</SelectItem>
+                                <SelectItem value="TD">Testing (TD)</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                          <div className="text-sm">
+                            <Label>Google Location:</Label>
+                            <Input defaultValue="2X57+XH+" className="mt-1" />
+                          </div>
+                          <div className="text-sm">
+                            <Label>OS Name:</Label>
+                            <Input defaultValue="centosl" className="mt-1" />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label>Generated UWA:</Label>
+                        <div className="mt-2 p-3 bg-white border rounded font-mono text-sm">
+                          CLX-PR9ca-4-7ae-beb-e-4087c-52abbf4-X57+XH+-centosl
+                        </div>
+                        <p className="text-xs text-gray-600 mt-2">
+                          Algorithm: Last26InstanceUUID + First2Env + Last7Address + First7OSname
+                        </p>
+                        <p className="text-xs text-gray-600">
+                          Formatted in 7-character chunks for readability
+                        </p>
+                        
+                        <Button className="mt-4 w-full" type="button">
+                          Generate Cloud UWA
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                   
                   {/* 1. Identification */}
                   <div className="border rounded-md p-4 mb-6">
