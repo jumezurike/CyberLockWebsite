@@ -4923,41 +4923,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       <UwaRecordsTable />
                     </div>
 
-                    {/* Filter Controls */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                      <div>
-                        <Label htmlFor="identityTypeFilter">Filter by Identity Type</Label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="All Types" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Types</SelectItem>
-                            <SelectItem value="human">Human</SelectItem>
-                            <SelectItem value="machine">Machine</SelectItem>
-                            <SelectItem value="api">API</SelectItem>
-                            <SelectItem value="third-party">Third-Party</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div>
-                        <Label htmlFor="identificationMethodFilter">Identification Method</Label>
-                        <Select>
-                          <SelectTrigger>
-                            <SelectValue placeholder="All Methods" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all">All Methods</SelectItem>
-                            <SelectItem value="username">Username</SelectItem>
-                            <SelectItem value="email">Email</SelectItem>
-                            <SelectItem value="biometric">Biometric</SelectItem>
-                            <SelectItem value="smart-card">Smart Card</SelectItem>
-                            <SelectItem value="certificate">Certificate</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
+
                   </div>
 
 
