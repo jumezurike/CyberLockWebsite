@@ -5074,18 +5074,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
+                                <SelectItem value="" disabled className="font-semibold text-gray-600">1. Standard Authentication</SelectItem>
                                 <SelectItem value="username-password">Username/Password</SelectItem>
                                 <SelectItem value="employee-id">Employee ID</SelectItem>
                                 <SelectItem value="certificate">Certificate</SelectItem>
                                 <SelectItem value="smart-card">Smart Card</SelectItem>
                                 <SelectItem value="single-sign-on">Single Sign-On</SelectItem>
                                 <SelectItem value="token-based">Token-based</SelectItem>
+                                
+                                <SelectItem value="" disabled className="font-semibold text-gray-600 mt-2">2. Advanced Authentication</SelectItem>
                                 <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
                                 <SelectItem value="mfa">MFA (Multi-Factor Authentication)</SelectItem>
+                                
+                                <SelectItem value="" disabled className="font-semibold text-gray-600 mt-2">3. Biometric</SelectItem>
                                 <SelectItem value="fingerprint">Fingerprint</SelectItem>
                                 <SelectItem value="voice">Voice</SelectItem>
                                 <SelectItem value="facial">Facial</SelectItem>
                                 <SelectItem value="iris">Iris</SelectItem>
+                                
+                                <SelectItem value="" disabled className="font-semibold text-gray-600 mt-2">4. Government ID</SelectItem>
                                 <SelectItem value="driver-license">Driver License</SelectItem>
                                 <SelectItem value="passport">Passport</SelectItem>
                                 <SelectItem value="national-id">National ID</SelectItem>
