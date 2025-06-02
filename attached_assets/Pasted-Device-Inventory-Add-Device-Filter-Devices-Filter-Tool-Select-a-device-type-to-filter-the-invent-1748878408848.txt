@@ -1,0 +1,249 @@
+Device Inventory
+Add Device
+Filter Devices
+Filter Tool
+Select a device type to filter the inventory list below
+
+
+All Types
+
+Device Type
+Make/Model
+Serial/Asset #
+Risk Level
+Owner
+Operating System
+MAC Address
+IP Address
+Environment
+No devices added yet. Click "Add Device" to begin tracking devices.
+Import Device Inventory
+Use these options to import existing device inventory data or download a template.
+
+Import CSV
+Download Template
+1. Identification
+Device ID / Asset Tag
+Enter device ID or asset tag
+Make / Model
+Enter device make and model
+Color / Physical Description
+Enter device color or description
+Serial Number
+Enter device serial number
+Owner / Assigned User
+Enter device owner or assigned user
+Device Nickname or Label (if used)
+Enter device nickname or label
+2. Classification
+Device Type
+Select all that apply
+
+
+Laptop
+
+Desktop
+
+Server
+
+Mobile
+
+Tablet
+
+Router
+
+Switch
+
+Firewall
+
+IoT Device
+
+Smartwatch
+
+Printer
+
+Transportation Device
+
+Other
+Endpoint Category
+Select all that apply
+
+
+User Device
+
+Shared Asset
+
+Infrastructure Device
+
+Monitoring System
+
+Security Device
+Operating System & Version
+Enter OS and version (e.g., Windows 11, macOS 14.1)
+Browser(s) Installed + Engine
+Select all that apply
+
+
+Chrome (Chromium)
+
+Firefox (Gecko)
+
+Safari (WebKit)
+
+Edge (Chromium)
+
+Opera (Chromium)
+
+Brave (Chromium)
+
+Internet Explorer (Trident)
+3. Network & Location
+IP Address(es)
+Enter IP address(es)
+MAC Address
+Enter MAC address
+Environment
+Select environment
+
+Last Known Location
+Enter location (Office/Room/Geotag)
+Assigned Department / Business Unit
+Enter department or business unit
+Network Zone
+Select all that apply
+
+
+DMZ
+
+Internal
+
+Guest
+
+Management
+
+Secured/Isolated
+
+IoT Network
+
+VPN
+4. Security Posture
+Encryption Status
+Select all that apply
+
+
+Full Disk Encryption
+
+File-Level Encryption
+
+Removable Media Encryption
+
+No Encryption
+
+Partial Encryption
+
+Unknown
+
+Antivirus / EDR Installed?
+Check if antivirus or endpoint detection and response is installed
+
+
+Firewall Active?
+Check if device firewall is active
+
+
+TPM Present?
+Check if Trusted Platform Module is present
+
+Patch Status (OS, App, Firmware)
+Select patch status
+
+
+VPN Usage / MDM Enrollment?
+Check if device uses VPN or is enrolled in Mobile Device Management
+
+Security Compliance Level
+Select all that apply
+
+
+HIPAA
+
+CMMC
+
+ISO 27001
+
+NIST 800-171
+
+SOC 2
+
+PCI DSS
+
+GDPR
+
+FISMA
+
+None
+5. Lifecycle Management
+Disposal/Decommission Location
+Select disposal location
+
+Handling Company/Organization
+Enter specific company name (e.g., Each1Teach1 Tech)
+Enter the specific company handling the disposal/recycling
+
+Data Sanitization Method
+Select data sanitization method
+
+6. Usage & Monitoring
+Last Login Date
+mm/dd/yyyy
+Last Network Check-in
+mm/dd/yyyy
+Device Activity / Status
+Select device status
+
+Device Risk Score (Optional)
+If available from your SIEM/EDR, enter a risk score from 0-100
+
+Enter risk score (0-100)
+7. Lifecycle & Ownership
+Maintenance
+Track procurement, warranty, and management details
+
+Procurement Date / Vendor
+Enter procurement date and vendor
+Warranty Expiration
+mm/dd/yyyy
+Device Lifecycle Status
+Select lifecycle status
+
+Disposal/Decommission Location
+Where device was sent if disposed
+
+Handling Company/Organization
+Enter specific company name (e.g., Each1Teach1 Tech)
+Enter the specific company handling the disposal/recycling
+
+Data Sanitization Method
+How data was removed/destroyed
+
+Assigned Policies or Group Tags
+Select all that apply
+
+
+Finance Only
+
+Executive
+
+IT Admin
+
+Developer
+
+Guest Access
+
+Restricted Access
+
+BYOD
+
+Remote Worker
+
+Standard User

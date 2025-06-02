@@ -3543,6 +3543,76 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage your organization's devices to improve security visibility and control.
                   </p>
                   
+                  {/* Device Inventory Management */}
+                  <div className="mb-6">
+                    <div className="flex justify-between items-center mb-4">
+                      <h4 className="font-medium">Device Inventory</h4>
+                      <Button className="bg-purple-600 hover:bg-purple-700">
+                        Add Device
+                      </Button>
+                    </div>
+                    
+                    {/* Filter Devices Section */}
+                    <div className="mb-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-sm font-medium text-blue-700 bg-blue-100 px-2 py-1 rounded">Filter Devices</span>
+                        <span className="text-sm font-medium text-blue-700 bg-blue-100 px-2 py-1 rounded">Filter Tool</span>
+                      </div>
+                      <p className="text-sm text-gray-600 mb-2">Select a device type to filter the inventory list below</p>
+                      <Select defaultValue="All Types">
+                        <SelectTrigger className="w-48">
+                          <SelectValue placeholder="All Types" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="All Types">All Types</SelectItem>
+                          <SelectItem value="Workstations">Workstations</SelectItem>
+                          <SelectItem value="Laptops">Laptops</SelectItem>
+                          <SelectItem value="Mobile Devices">Mobile Devices</SelectItem>
+                          <SelectItem value="Servers">Servers</SelectItem>
+                          <SelectItem value="Network Equipment">Network Equipment</SelectItem>
+                          <SelectItem value="IoT Devices">IoT Devices</SelectItem>
+                          <SelectItem value="Medical Devices">Medical Devices</SelectItem>
+                          <SelectItem value="Transportation Devices">Transportation Devices</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    {/* Device Table */}
+                    <div className="border rounded-md overflow-hidden mb-6">
+                      <div className="grid grid-cols-9 bg-gray-50 p-3 border-b border-gray-200 text-sm font-medium text-gray-700">
+                        <div>Device Type</div>
+                        <div>Make/Model</div>
+                        <div>Serial/Asset #</div>
+                        <div>Risk Level</div>
+                        <div>Owner</div>
+                        <div>Operating System</div>
+                        <div>MAC Address</div>
+                        <div>IP Address</div>
+                        <div>Environment</div>
+                      </div>
+                      <div className="p-6 text-center text-gray-500 bg-white">
+                        No devices added yet. Click "Add Device" to begin tracking devices.
+                      </div>
+                    </div>
+                    
+                    {/* Import Section */}
+                    <div className="border rounded-md p-4 mb-6">
+                      <h4 className="font-medium mb-2">Import Device Inventory</h4>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Use these options to import existing device inventory data or download a template.
+                      </p>
+                      <div className="flex gap-4">
+                        <Button className="bg-purple-600 hover:bg-purple-700">
+                          Import CSV
+                        </Button>
+                        <Button variant="outline">
+                          Download Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
