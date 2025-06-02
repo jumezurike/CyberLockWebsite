@@ -433,42 +433,92 @@ export const UwaRecordsTable = () => {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
-                  <TableHead>UWA</TableHead>
-                  <TableHead>Entity Type</TableHead>
-                  <TableHead>Created</TableHead>
-                  <TableHead>Updated</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
+                  <TableHead className="w-[80px] text-xs">UWA(G enerat ed)</TableHead>
+                  <TableHead className="w-[90px] text-xs">Identity type</TableHead>
+                  <TableHead className="w-[100px] text-xs">Identificatio n method</TableHead>
+                  <TableHead className="w-[70px] text-xs">Server/I D</TableHead>
+                  <TableHead className="w-[70px] text-xs">UUID</TableHead>
+                  <TableHead className="w-[70px] text-xs">SN/ MODEL</TableHead>
+                  <TableHead className="w-[70px] text-xs">MAKE/MO DEL</TableHead>
+                  <TableHead className="w-[50px] text-xs">O S</TableHead>
+                  <TableHead className="w-[90px] text-xs">Server/O SWNS/CO MPANY</TableHead>
+                  <TableHead className="w-[60px] text-xs">MA C</TableHead>
+                  <TableHead className="w-[70px] text-xs">WAN/ BWDS BMG</TableHead>
+                  <TableHead className="w-[80px] text-xs">ENVIRO NMENT</TableHead>
+                  <TableHead className="w-[90px] text-xs">IP address</TableHead>
+                  <TableHead className="w-[70px] text-xs">EIN/BIZ#</TableHead>
+                  <TableHead className="w-[80px] text-xs">ADDRESS</TableHead>
+                  <TableHead className="w-[80px] text-xs">Created</TableHead>
+                  <TableHead className="w-[80px] text-xs">Updated</TableHead>
+                  <TableHead className="w-[70px] text-xs">Status</TableHead>
+                  <TableHead className="w-[100px] text-xs">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {records.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={7} className="text-center py-8 text-gray-500">
+                    <TableCell colSpan={19} className="text-center py-8 text-gray-500">
                       No UWA records found. Create your first record to begin tracking digital identities.
                     </TableCell>
                   </TableRow>
                 ) : (
                   records.map((record) => (
                     <TableRow key={record.id}>
-                      <TableCell className="font-medium">#{record.id}</TableCell>
                       <TableCell className="font-mono text-xs">
-                        {record.uwa.substring(0, 25)}...
+                        {record.uwa.substring(0, 12)}...
                       </TableCell>
-                      <TableCell>
-                        <Badge variant="secondary">
+                      <TableCell className="text-xs">
+                        <Badge variant="secondary" className="text-xs">
                           {record.entityType.replace('-', ' ')}
                         </Badge>
                       </TableCell>
-                      <TableCell className="text-sm text-gray-600">
-                        {record.createdAt.toLocaleString()}
+                      <TableCell className="text-xs">
+                        {record.components.name || 'X'}
                       </TableCell>
-                      <TableCell className="text-sm text-gray-600">
-                        {record.updatedAt ? record.updatedAt.toLocaleString() : '-'}
+                      <TableCell className="text-xs">
+                        {record.components.serverId || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.uuid ? record.components.uuid.substring(0, 8) + '...' : 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.serialNumber || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.makeModel || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.osName || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.company || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.macAddress || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.wanBwds || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.environment || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.ipAddress || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.ein || record.components.businessNumber || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs">
+                        {record.components.address || 'X'}
+                      </TableCell>
+                      <TableCell className="text-xs text-gray-600">
+                        {record.createdAt.toLocaleDateString()}
+                      </TableCell>
+                      <TableCell className="text-xs text-gray-600">
+                        {record.updatedAt ? record.updatedAt.toLocaleDateString() : '-'}
                       </TableCell>
                       <TableCell>
-                        <Badge variant={record.isActive ? "default" : "secondary"}>
+                        <Badge variant={record.isActive ? "default" : "secondary"} className="text-xs">
                           {record.isActive ? "Active" : "Inactive"}
                         </Badge>
                       </TableCell>
