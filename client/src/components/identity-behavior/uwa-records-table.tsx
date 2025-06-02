@@ -411,10 +411,12 @@ export const UwaRecordsTable = () => {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="human">Human/Person</SelectItem>
-                    <SelectItem value="machine-server">Machine/Server</SelectItem>
-                    <SelectItem value="machine-auto">Machine/Auto</SelectItem>
-                    <SelectItem value="business">Business Owner</SelectItem>
+                    <SelectItem value="physical-machine">Physical Machine</SelectItem>
+                    <SelectItem value="virtual-machine">Virtual Machine</SelectItem>
+                    <SelectItem value="human-individual">Human/Individual</SelectItem>
+                    <SelectItem value="business-owner">Business Owner</SelectItem>
+                    <SelectItem value="user-account">User Account</SelectItem>
+                    <SelectItem value="service-account">Service Account</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -475,10 +477,12 @@ export const UwaRecordsTable = () => {
                       <SelectValue placeholder="Select entity type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="human">Human/Person</SelectItem>
-                      <SelectItem value="machine-server">Machine/Server</SelectItem>
-                      <SelectItem value="machine-auto">Machine/Auto</SelectItem>
-                      <SelectItem value="business">Business Owner</SelectItem>
+                      <SelectItem value="physical-machine">Physical Machine</SelectItem>
+                      <SelectItem value="virtual-machine">Virtual Machine</SelectItem>
+                      <SelectItem value="human-individual">Human/Individual</SelectItem>
+                      <SelectItem value="business-owner">Business Owner</SelectItem>
+                      <SelectItem value="user-account">User Account</SelectItem>
+                      <SelectItem value="service-account">Service Account</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
