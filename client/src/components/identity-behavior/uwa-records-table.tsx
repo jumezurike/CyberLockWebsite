@@ -441,9 +441,8 @@ export const UwaRecordsTable = () => {
                   <TableHead className="w-[70px] text-xs">SN/ MODEL</TableHead>
                   <TableHead className="w-[70px] text-xs">MAKE/MO DEL</TableHead>
                   <TableHead className="w-[50px] text-xs">O S</TableHead>
-                  <TableHead className="w-[90px] text-xs">Server/O SWNS/CO MPANY</TableHead>
+                  <TableHead className="w-[90px] text-xs">SERVER/OWNER/COMPANY</TableHead>
                   <TableHead className="w-[60px] text-xs">MA C</TableHead>
-                  <TableHead className="w-[70px] text-xs">WAN/BW</TableHead>
                   <TableHead className="w-[80px] text-xs">ENVIRO NMENT</TableHead>
                   <TableHead className="w-[90px] text-xs">IP address</TableHead>
                   <TableHead className="w-[70px] text-xs">EIN/BIZ#</TableHead>
@@ -495,9 +494,6 @@ export const UwaRecordsTable = () => {
                       </TableCell>
                       <TableCell className="text-xs">
                         {record.components.macAddress || 'X'}
-                      </TableCell>
-                      <TableCell className="text-xs">
-                        {record.components.utilityBills || 'X'}
                       </TableCell>
                       <TableCell className="text-xs">
                         {record.components.environment || 'X'}
