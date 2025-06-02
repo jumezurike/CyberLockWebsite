@@ -26,6 +26,7 @@ import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
 import { UwaRecordsTable } from "../identity-behavior/uwa-records-table";
+import { UwaComponentMatrix } from "../identity-behavior/uwa-component-matrix";
 import { useToast } from "@/hooks/use-toast";
 import { FivePillarScorecard, DeviceRiskAssessment, OrganizationalVulnerabilities } from "@/lib/five-pillar-scorecard";
 
@@ -4893,6 +4894,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       >
                         Download Template
                       </Button>
+                    </div>
+
+                    {/* UWA Component Configuration Matrix */}
+                    <div className="border rounded-lg p-4 mb-6 bg-gradient-to-r from-indigo-50 to-purple-50">
+                      <h4 className="font-medium mb-3 text-indigo-900">UWA Component Selection Matrix</h4>
+                      <p className="text-sm text-indigo-700 mb-4">
+                        Configure which of the 31 identity components to use for UWA generation. Organizations can customize component requirements based on their specific needs while maintaining the core algorithms.
+                      </p>
+                      
+                      <UwaComponentMatrix />
                     </div>
 
                     {/* UWA Records Management Section */}
