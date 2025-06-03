@@ -38,7 +38,7 @@ export interface UWAComponents {
 export interface UWARecord {
   id: number;
   uwa: string;
-  entityType: 'human' | 'machine-server' | 'machine-auto' | 'business' | 'api' | 'third-party';
+  entityType: 'physical-machine' | 'virtual-machine' | 'human-individual' | 'business-owner' | 'user-account' | 'service-account';
   components: UWAComponents;
   createdAt: Date;
   updatedAt?: Date;
@@ -182,14 +182,16 @@ export class UWAGenerator {
   // Generate UWA based on entity type
   static generateUWA(entityType: string, components: UWAComponents): string {
     switch (entityType) {
-      case 'machine-server':
+      case 'physical-machine':
+      case 'virtual-machine':
         return this.generateServerUWA(components);
-      case 'business':
+      case 'business-owner':
         return this.generateBusinessUWA(components);
-      case 'machine-auto':
-        return this.generateAutoUWA(components);
-      case 'human':
+      case 'human-individual':
         return this.generatePersonUWA(components);
+      case 'user-account':
+      case 'service-account':
+        return this.generatePersonUWA(components); // Use person UWA for account types
       default:
         throw new Error(`Unsupported entity type: ${entityType}`);
     }
