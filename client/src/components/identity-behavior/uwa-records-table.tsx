@@ -180,7 +180,8 @@ export const UwaRecordsTable = () => {
     );
 
     switch (selectedEntityType) {
-      case 'machine-server':
+      case 'physical-machine':
+      case 'virtual-machine':
         return (
           <div className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -230,7 +231,7 @@ export const UwaRecordsTable = () => {
           </div>
         );
 
-      case 'business':
+      case 'business-owner':
         return (
           <div className="space-y-4">
             {commonFields}
@@ -277,7 +278,7 @@ export const UwaRecordsTable = () => {
           </div>
         );
 
-      case 'human':
+      case 'human-individual':
         return (
           <div className="space-y-4">
             {commonFields}
@@ -376,6 +377,63 @@ export const UwaRecordsTable = () => {
                   placeholder="Device identifier"
                 />
               </div>
+            </div>
+          </div>
+        );
+
+      case 'user-account':
+      case 'service-account':
+        return (
+          <div className="space-y-4">
+            {commonFields}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="dateOfBirth">Date of Birth</Label>
+                <Input
+                  id="dateOfBirth"
+                  value={components.dateOfBirth || ""}
+                  onChange={(e) => handleComponentChange("dateOfBirth", e.target.value)}
+                  placeholder="MM/DD/YYYY - e.g., 03/23/1974"
+                />
+              </div>
+              <div>
+                <Label htmlFor="phoneEinSsn">Phone/EIN/SSN</Label>
+                <Input
+                  id="phoneEinSsn"
+                  value={components.phoneEinSsn || ""}
+                  onChange={(e) => handleComponentChange("phoneEinSsn", e.target.value)}
+                  placeholder="e.g., 83-2086239"
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="imeiSn">IMEI/Serial Number</Label>
+                <Input
+                  id="imeiSn"
+                  value={components.imeiSn || ""}
+                  onChange={(e) => handleComponentChange("imeiSn", e.target.value)}
+                  placeholder="e.g., 6732448576765342"
+                />
+              </div>
+              <div>
+                <Label htmlFor="birthplace">Birthplace (Google Location)</Label>
+                <Input
+                  id="birthplace"
+                  value={components.birthplace || ""}
+                  onChange={(e) => handleComponentChange("birthplace", e.target.value)}
+                  placeholder="e.g., GXCR+WF"
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="driverLicensePassport">Driver License/Passport</Label>
+              <Input
+                id="driverLicensePassport"
+                value={components.driverLicensePassport || ""}
+                onChange={(e) => handleComponentChange("driverLicensePassport", e.target.value)}
+                placeholder="Alphanumeric identifier"
+              />
             </div>
           </div>
         );
