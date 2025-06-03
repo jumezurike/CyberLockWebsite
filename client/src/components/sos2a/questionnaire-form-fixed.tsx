@@ -30,6 +30,7 @@ import { UwaRecordsTable } from "../identity-behavior/uwa-records-table";
 import { UwaComponentMatrix } from "../identity-behavior/uwa-component-matrix";
 import { useToast } from "@/hooks/use-toast";
 import { FivePillarScorecard, DeviceRiskAssessment, OrganizationalVulnerabilities } from "@/lib/five-pillar-scorecard";
+import { Database, Upload, Download } from "lucide-react";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -4812,12 +4813,36 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
                     </p>
                     
-                    <div className="flex flex-wrap gap-3 mb-4">
-                      <Button 
-                        type="button" 
-                        variant="outline" 
-                        onClick={() => {
-                          const input = document.createElement('input');
+                    {/* Action Buttons Row with Clear Terminology */}
+                    <div className="bg-white p-4 rounded-lg border border-gray-200 mb-4">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        {/* Manage DNA Button */}
+                        <div className="space-y-2">
+                          <Button 
+                            type="button" 
+                            variant="default"
+                            className="w-full bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold flex items-center justify-center"
+                            onClick={() => {
+                              // Navigate to UWA Records section or show DDNA manager
+                              window.location.href = "#identity-behavior";
+                            }}
+                          >
+                            <Database className="mr-2 h-4 w-4" />
+                            Manage DNA
+                          </Button>
+                          <p className="text-xs text-gray-600 text-center">
+                            <strong>DNA:</strong> Data Nuclear Aggregate - smallest integral of digital identity. Access the Digital Data Nucleic Authority (DDNA) repository for UWA lookup and secure communication.
+                          </p>
+                        </div>
+
+                        {/* Import Identity CSV Button */}
+                        <div className="space-y-2">
+                          <Button 
+                            type="button" 
+                            variant="outline" 
+                            className="w-full border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700 font-semibold flex items-center justify-center"
+                            onClick={() => {
+                              const input = document.createElement('input');
                           input.type = 'file';
                           input.accept = '.csv';
                           input.onchange = (e) => {
@@ -4858,15 +4883,66 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           input.click();
                         }}
                       >
-                        Import Identity CSV
-                      </Button>
-                      
-                      <Button 
-                        type="button" 
-                        variant="outline"
-                        onClick={() => {
-                          const headers = [
-                            'User ID', 'Full Name/Role', 'Contact Info', 'Identity Type', 'Identification Method',
+                            <Upload className="mr-2 h-4 w-4" />
+                            Import Identity CSV
+                          </Button>
+                          <p className="text-xs text-gray-600 text-center">
+                            <strong>CSV Import:</strong> Upload organizational identity data in standardized format. Bulk import user records for comprehensive identity management.
+                          </p>
+                        </div>
+
+                        {/* Download Template Button */}
+                        <div className="space-y-2">
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            className="w-full border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 font-semibold flex items-center justify-center"
+                            onClick={() => {
+                              const headers = [
+                                'User ID', 'Full Name/Role', 'Contact Info', 'Identity Type', 'Identification Method',
+                                'MFA Types', 'Biometric Types', 'Login Patterns', 'Remote Access Frequency', 'Session Duration',
+                                'Location Controls', 'Training Date', 'Phishing Awareness', 'Security Incidents', 'Privileged Account',
+                                'JIT Access', 'Escalation Controls', 'Admin Review', 'Separation Duties', 'Onboarding Status',
+                                'Offboarding Process', 'Access Review', 'Role Change Process', 'Certification Status'
+                              ];
+                              
+                              const csvContent = headers.join(',') + '\n';
+                              const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                              const link = document.createElement('a');
+                              
+                              if (link.download !== undefined) {
+                                const url = URL.createObjectURL(blob);
+                                link.setAttribute('href', url);
+                                link.setAttribute('download', 'identity_template.csv');
+                                link.style.visibility = 'hidden';
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                              }
+                              
+                              toast({
+                                title: "Template Downloaded",
+                                description: "CSV template for identity data import has been downloaded.",
+                              });
+                            }}
+                          >
+                            <Download className="mr-2 h-4 w-4" />
+                            Download Template
+                          </Button>
+                          <p className="text-xs text-gray-600 text-center">
+                            <strong>CSV Template:</strong> Download standardized format for identity data. Ensures proper structure for successful import and UWA generation.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                  </div>
+                
+                  {/* UWA Records Table */}
+                  <UwaRecordsTable />
+                  
+                  {/* UWA Component Matrix */}
+                  <UwaComponentMatrix />
                             'MFA Types', 'Biometric Types', 'Login Patterns', 'Remote Access Frequency', 'Session Duration',
                             'Location Controls', 'Training Date', 'Phishing Awareness', 'Security Incidents', 'Privileged Account',
                             'JIT Access', 'Escalation Controls', 'Admin Review', 'Separation Duties', 'Onboarding Status',
