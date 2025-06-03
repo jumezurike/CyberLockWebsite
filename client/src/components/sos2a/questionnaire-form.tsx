@@ -24,6 +24,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
+import { AlertCircle, UserPlus, FileDown } from "lucide-react";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -1080,6 +1081,85 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="review" className="bg-[#7936b0] text-white hover:bg-[#6b2aa2]">15. Review & Submit Your Questionnaire</TabsTrigger>
                 <TabsTrigger value="" disabled></TabsTrigger>
               </TabsList>
+
+              {/* 13. Identity Behavior & Hygiene Tab */}
+              <TabsContent value="identity-behavior" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">13. Identity Behavior & Hygiene</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Track and manage identity behaviors, authentication practices, and security hygiene measures.
+                  </p>
+                  
+                  {/* Universal Identity Verification System (UIVS) Section */}
+                  <div className="border rounded-md p-4 mb-6 bg-blue-50">
+                    <h4 className="font-medium text-blue-700 mb-2">Universal Identity Verification System (UIVS)</h4>
+                    <p className="text-sm mb-4">
+                      For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+                    </p>
+                    
+                    {/* UWA Matrix Form */}
+                    <div className="p-4 border rounded-md mb-4 bg-muted/10">
+                      <h5 className="text-sm font-medium mb-3">UWA Component Selection Matrix</h5>
+                      <p className="text-xs text-muted-foreground mb-3">
+                        Select the components needed for your UWA intermediate representation. Required fields depend on identity type.
+                        Organizations can customize which fields to include in their UWA generation based on their specific needs.
+                      </p>
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="h-4 w-4 text-amber-500">⚠</span>
+                        <p className="text-xs text-amber-500">
+                          The matrix below shows an example configuration. All 31 identity components can be used to create a customized UWA.
+                        </p>
+                      </div>
+                      
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-sm border">
+                          <thead className="bg-muted/50">
+                            <tr>
+                              <th className="py-2 px-3 text-left font-medium text-xs border-r">Components of Identification</th>
+                              <th className="py-2 px-3 text-left font-medium text-xs border-r">Human</th>
+                              <th className="py-2 px-3 text-left font-medium text-xs border-r">Machine</th>
+                              <th className="py-2 px-3 text-left font-medium text-xs border-r">API</th>
+                              <th className="py-2 px-3 text-left font-medium text-xs">Third-Party</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y">
+                            <tr className="hover:bg-muted/5">
+                              <td className="py-2 px-3 border-r font-medium">Name</td>
+                              <td className="py-2 px-3 border-r">
+                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
+                              </td>
+                              <td className="py-2 px-3 border-r">
+                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
+                              </td>
+                              <td className="py-2 px-3 border-r">
+                                <Checkbox checked={false} />
+                              </td>
+                              <td className="py-2 px-3">
+                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
+                              </td>
+                            </tr>
+                            <tr className="hover:bg-muted/5">
+                              <td className="py-2 px-3 border-r font-medium">Address</td>
+                              <td className="py-2 px-3 border-r">
+                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
+                              </td>
+                              <td className="py-2 px-3 border-r">
+                                <Checkbox checked={false} />
+                              </td>
+                              <td className="py-2 px-3 border-r">
+                                <Checkbox checked={false} />
+                              </td>
+                              <td className="py-2 px-3">
+                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
               
               {/* Business Information Tab */}
               <TabsContent value="business" className="space-y-6">
