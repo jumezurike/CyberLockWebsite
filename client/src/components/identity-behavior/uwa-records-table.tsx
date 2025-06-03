@@ -506,76 +506,95 @@ export const UwaRecordsTable = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>UWA Records Management</CardTitle>
-          <CardDescription>
-            Lifetime tracking of Universal Wallet Addresses and their component DNA
+    <div className="space-y-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+      <Card className="border-l-4 border-l-blue-500 shadow-lg">
+        <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
+          <CardTitle className="text-2xl font-bold flex items-center gap-2">
+            🔐 UWA Records Management
+          </CardTitle>
+          <CardDescription className="text-blue-100">
+            Lifetime tracking of Universal Wallet Addresses and their component DNA for secure identity verification
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="bg-white">
           {/* Filter and Add Record Section */}
-          <div className="space-y-4 mb-6">
+          <div className="space-y-4 mb-6 p-4 bg-gradient-to-r from-gray-50 to-blue-50 rounded-lg border">
             {/* Filter Controls */}
-            <div className="flex gap-4 items-center">
-              <div className="flex-1">
-                <Label htmlFor="filter-identity-type" className="text-sm font-medium">Filter by Identity Type</Label>
-                <Select value={filterIdentityType} onValueChange={setFilterIdentityType}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Types" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Types</SelectItem>
-                    <SelectItem value="physical-machine">Physical Machine</SelectItem>
-                    <SelectItem value="virtual-machine">Virtual Machine</SelectItem>
-                    <SelectItem value="human-individual">Human/Individual</SelectItem>
-                    <SelectItem value="business-owner">Business Owner</SelectItem>
-                    <SelectItem value="user-account">User Account</SelectItem>
-                    <SelectItem value="service-account">Service Account</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              
-              <div className="flex-1">
-                <Label htmlFor="filter-identification-method" className="text-sm font-medium">Identification Method</Label>
-                <Select value={filterIdentificationMethod} onValueChange={setFilterIdentificationMethod}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Methods" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All Methods</SelectItem>
-                    <SelectItem value="username">Username/Password</SelectItem>
-                    <SelectItem value="employee">Employee ID</SelectItem>
-                    <SelectItem value="certificate">Certificate</SelectItem>
-                    <SelectItem value="smart-card">Smart Card</SelectItem>
-                    <SelectItem value="sso">Single Sign-On</SelectItem>
-                    <SelectItem value="token">Token-based</SelectItem>
-                    <SelectItem value="uwa">UWA</SelectItem>
-                    <SelectItem value="mfa">MFA</SelectItem>
-                    <SelectItem value="fingerprint">Fingerprint</SelectItem>
-                    <SelectItem value="voice">Voice</SelectItem>
-                    <SelectItem value="facial">Facial</SelectItem>
-                    <SelectItem value="iris">Iris</SelectItem>
-                    <SelectItem value="driver-license">Driver License</SelectItem>
-                    <SelectItem value="passport">Passport</SelectItem>
-                    <SelectItem value="national-id">National ID</SelectItem>
-                  </SelectContent>
-                </Select>
+            <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-l-green-400">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3 flex items-center gap-2">
+                🔍 Filter Records
+              </h3>
+              <div className="flex gap-4 items-end">
+                <div className="flex-1">
+                  <Label htmlFor="filter-identity-type" className="text-sm font-medium text-green-700">Identity Type</Label>
+                  <Select value={filterIdentityType} onValueChange={setFilterIdentityType}>
+                    <SelectTrigger className="border-green-200 focus:border-green-400">
+                      <SelectValue placeholder="All Types" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Types</SelectItem>
+                      <SelectItem value="physical-machine">Physical Machine</SelectItem>
+                      <SelectItem value="virtual-machine">Virtual Machine</SelectItem>
+                      <SelectItem value="human-individual">Human/Individual</SelectItem>
+                      <SelectItem value="business-owner">Business Owner</SelectItem>
+                      <SelectItem value="user-account">User Account</SelectItem>
+                      <SelectItem value="service-account">Service Account</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div className="flex-1">
+                  <Label htmlFor="filter-identification-method" className="text-sm font-medium text-blue-700">Identification Method</Label>
+                  <Select value={filterIdentificationMethod} onValueChange={setFilterIdentificationMethod}>
+                    <SelectTrigger className="border-blue-200 focus:border-blue-400">
+                      <SelectValue placeholder="All Methods" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Methods</SelectItem>
+                      <SelectItem value="username">Username/Password</SelectItem>
+                      <SelectItem value="employee">Employee ID</SelectItem>
+                      <SelectItem value="certificate">Certificate</SelectItem>
+                      <SelectItem value="smart-card">Smart Card</SelectItem>
+                      <SelectItem value="sso">Single Sign-On</SelectItem>
+                      <SelectItem value="token">Token-based</SelectItem>
+                      <SelectItem value="uwa">UWA</SelectItem>
+                      <SelectItem value="mfa">MFA</SelectItem>
+                      <SelectItem value="fingerprint">Fingerprint</SelectItem>
+                      <SelectItem value="voice">Voice</SelectItem>
+                      <SelectItem value="facial">Facial</SelectItem>
+                      <SelectItem value="iris">Iris</SelectItem>
+                      <SelectItem value="driver-license">Driver License</SelectItem>
+                      <SelectItem value="passport">Passport</SelectItem>
+                      <SelectItem value="national-id">National ID</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
             </div>
             
             {/* Stats and Add Button */}
-            <div className="flex justify-between items-center">
-              <div className="flex items-center space-x-2">
-                <Badge variant="outline">Total Records: {records.length}</Badge>
-                <Badge variant="outline">Active: {records.filter(r => r.isActive).length}</Badge>
-                <Badge variant="secondary">Filtered: {filteredRecords.length}</Badge>
+            <div className="bg-white p-4 rounded-lg shadow-sm border-l-4 border-l-purple-400">
+              <div className="flex justify-between items-center">
+                <div className="flex items-center space-x-2">
+                  <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    Total Records: {records.length}
+                  </Badge>
+                  <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                    Active: {records.filter(r => r.isActive).length}
+                  </Badge>
+                  <Badge variant="secondary" className="bg-purple-50 text-purple-700 border-purple-200">
+                    Filtered: {filteredRecords.length}
+                  </Badge>
+                </div>
+                <Button 
+                  onClick={() => setIsAddingRecord(true)} 
+                  disabled={isAddingRecord || !!editingRecord}
+                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add UWA Record
+                </Button>
               </div>
-              <Button onClick={() => setIsAddingRecord(true)} disabled={isAddingRecord || !!editingRecord}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add UWA Record
-              </Button>
             </div>
           </div>
 
