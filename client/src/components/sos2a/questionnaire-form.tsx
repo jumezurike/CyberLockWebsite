@@ -25,6 +25,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
+import { UwaRecordsTable } from "../identity-behavior/uwa-records-table";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -4412,7 +4413,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage identity behaviors, authentication practices, and user access patterns.
                   </p>
 
-
+                  {/* UWA Records Management Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">UWA Records Management</h4>
+                    <UwaRecordsTable />
+                  </div>
                   
                   {/* 2. Authentication Practices Section */}
                   <div className="border rounded-md p-4 mb-6">
