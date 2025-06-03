@@ -16,10 +16,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Badge } from "@/components/ui/badge";
 import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
@@ -49,8 +47,8 @@ const formSchema = z.object({
   customIndustry: z.string().optional(),
   showCustomIndustry: z.boolean().default(false),
   employeeCount: z.string().min(1, "Employee count is required"),
-  businessServices: z.array(z.string()).min(1, "At least one business service is required"),
-  operationMode: z.array(z.string()).min(1, "At least one operation mode is required"),
+  businessServices: z.array(z.string()).default([]),
+  operationMode: z.array(z.string()).default([]),
   contactName: z.string().min(1, "Contact name is required"),
   contactEmail: z.string().email("Valid email is required"),
 });
@@ -64,7 +62,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const [eulaAccepted, setEulaAccepted] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const form = useForm<Sos2aFormData>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       businessName: "",
