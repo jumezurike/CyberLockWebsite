@@ -25,6 +25,7 @@ import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
 import { AlertCircle, UserPlus, FileDown } from "lucide-react";
+import { Section13Content } from "./section13-elegant";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -1090,72 +1091,82 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
                   
-                  {/* Universal Identity Verification System (UIVS) Section */}
-                  <div className="border rounded-md p-4 mb-6 bg-blue-50">
-                    <h4 className="font-medium text-blue-700 mb-2">Universal Identity Verification System (UIVS)</h4>
-                    <p className="text-sm mb-4">
-                      For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
-                    </p>
-                    
-                    {/* UWA Matrix Form */}
-                    <div className="p-4 border rounded-md mb-4 bg-muted/10">
-                      <h5 className="text-sm font-medium mb-3">UWA Component Selection Matrix</h5>
-                      <p className="text-xs text-muted-foreground mb-3">
-                        Select the components needed for your UWA intermediate representation. Required fields depend on identity type.
-                        Organizations can customize which fields to include in their UWA generation based on their specific needs.
-                      </p>
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="h-4 w-4 text-amber-500">⚠</span>
-                        <p className="text-xs text-amber-500">
-                          The matrix below shows an example configuration. All 31 identity components can be used to create a customized UWA.
-                        </p>
-                      </div>
+                  {/* 1. Identification Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">1. Identification</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.userId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>User ID</FormLabel>
+                            <FormDescription>Employee ID, service account name</FormDescription>
+                            <FormControl>
+                              <Input placeholder="Enter user ID" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                       
-                      <div className="overflow-x-auto">
-                        <table className="w-full text-sm border">
-                          <thead className="bg-muted/50">
-                            <tr>
-                              <th className="py-2 px-3 text-left font-medium text-xs border-r">Components of Identification</th>
-                              <th className="py-2 px-3 text-left font-medium text-xs border-r">Human</th>
-                              <th className="py-2 px-3 text-left font-medium text-xs border-r">Machine</th>
-                              <th className="py-2 px-3 text-left font-medium text-xs border-r">API</th>
-                              <th className="py-2 px-3 text-left font-medium text-xs">Third-Party</th>
-                            </tr>
-                          </thead>
-                          <tbody className="divide-y">
-                            <tr className="hover:bg-muted/5">
-                              <td className="py-2 px-3 border-r font-medium">Name</td>
-                              <td className="py-2 px-3 border-r">
-                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
-                              </td>
-                              <td className="py-2 px-3 border-r">
-                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
-                              </td>
-                              <td className="py-2 px-3 border-r">
-                                <Checkbox checked={false} />
-                              </td>
-                              <td className="py-2 px-3">
-                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
-                              </td>
-                            </tr>
-                            <tr className="hover:bg-muted/5">
-                              <td className="py-2 px-3 border-r font-medium">Address</td>
-                              <td className="py-2 px-3 border-r">
-                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
-                              </td>
-                              <td className="py-2 px-3 border-r">
-                                <Checkbox checked={false} />
-                              </td>
-                              <td className="py-2 px-3 border-r">
-                                <Checkbox checked={false} />
-                              </td>
-                              <td className="py-2 px-3">
-                                <Checkbox checked={true} className="data-[state=checked]:bg-primary" />
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.fullNameRole"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Full Name / Role</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter full name and role" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.contactInfo"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact Info</FormLabel>
+                            <FormDescription>Email, phone for emergency access</FormDescription>
+                            <FormControl>
+                              <Input placeholder="Enter contact information" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.identityType"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Identity Type</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identity type" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="employee">Employee</SelectItem>
+                                <SelectItem value="contractor">Contractor</SelectItem>
+                                <SelectItem value="vendor">Vendor</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="system-account">System Account</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   </div>
                 </div>
