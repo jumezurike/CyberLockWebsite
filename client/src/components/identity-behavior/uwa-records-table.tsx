@@ -600,7 +600,7 @@ export const UwaRecordsTable = () => {
 
           {/* Add/Edit Form */}
           {(isAddingRecord || editingRecord) && (
-            <Card className="mb-6">
+            <Card className="mb-6 border-l-4 border-l-orange-500">
               <CardHeader>
                 <CardTitle>{editingRecord ? `Edit Record #${editingRecord.id}` : 'Create New UWA Record'}</CardTitle>
                 <CardDescription>
@@ -648,13 +648,13 @@ export const UwaRecordsTable = () => {
           )}
 
           {/* Records Table */}
-          <div className="border rounded-lg">
+          <div className="border-2 border-gray-200 rounded-lg shadow-sm">
             <Table>
-              <TableHeader>
+              <TableHeader className="bg-gray-50 border-b-2 border-gray-200">
                 <TableRow>
-                  <TableHead className="w-[80px] text-xs">UWA(Generated)</TableHead>
-                  <TableHead className="w-[90px] text-xs">Identity type</TableHead>
-                  <TableHead className="w-[100px] text-xs">Identification method</TableHead>
+                  <TableHead className="w-[80px] text-xs font-semibold text-gray-700">UWA(Generated)</TableHead>
+                  <TableHead className="w-[90px] text-xs font-semibold text-gray-700">Identity type</TableHead>
+                  <TableHead className="w-[100px] text-xs font-semibold text-gray-700">Identification method</TableHead>
                   <TableHead className="w-[70px] text-xs">Server/ID</TableHead>
                   <TableHead className="w-[70px] text-xs">UUID</TableHead>
                   <TableHead className="w-[70px] text-xs">SN/MODEL</TableHead>
