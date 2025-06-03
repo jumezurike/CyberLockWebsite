@@ -1000,3 +1000,5 @@ export const UwaRecordsTable = () => {
     </div>
   );
 };
+
+export default UwaRecordsTable;
