@@ -506,7 +506,7 @@ export const UwaRecordsTable = () => {
   };
 
   return (
-    <div className="space-y-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div className="space-y-6 p-6 bg-gradient-to-br from-blue-50 to-indigo-100">
       <Card className="border-l-4 border-l-blue-500 shadow-lg">
         <CardHeader className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-t-lg">
           <CardTitle className="text-2xl font-bold flex items-center gap-2">
