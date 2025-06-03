@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Sos2aFormData, MatrixItem, AssessmentReport, SecurityRisk } from "@/lib/sos2a-types";
 import { format, formatDistanceToNow, formatDistance, differenceInDays, parseISO } from "date-fns";
-import QuestionnaireForm from "@/components/sos2a/questionnaire-form-fixed";
+import QuestionnaireForm from "@/components/sos2a/questionnaire-form-simple";
 import MatrixForm from "@/components/sos2a/matrix-form";
 import GapAnalysis from "@/components/sos2a/gap-analysis";
 import ReportDisplay from "@/components/sos2a/report-display";
