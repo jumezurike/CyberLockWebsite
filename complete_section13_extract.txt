@@ -1,0 +1,1000 @@
+              {/* 13. Identity Behavior & Hygiene Tab */}
+              <TabsContent value="identity-behavior" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">13. Identity Behavior & Hygiene</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Track and manage identity behaviors, authentication practices, and security hygiene measures.
+                  </p>
+                  
+                  {/* Universal Identity Verification System (UIVS) Section */}
+                  <div className="border rounded-md p-4 mb-6 bg-blue-50">
+                    <h4 className="font-medium text-blue-700 mb-2">Universal Identity Verification System (UIVS)</h4>
+                    <p className="text-sm mb-4">
+                      For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <Button 
+                        type="button" 
+                        variant="default" 
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.location.href = "/identity-management";
+                        }}
+                      >
+                        <UserPlus className="w-4 h-4 mr-2" /> Manage User Identities
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="default" 
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Download the user identity template CSV
+                          const csvHeader = "user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source";
+                          
+                          // Sample data rows provided in the template
+                          const sampleData = [
+                            "EMP001,John,Smith,john.smith@example.com,IT Manager,Information Technology,human,privileged,drivers_license,NY-DMV,yes,app+sms,Headquarters,jane.doe@example.com,Full Time,2025-04-15,2025-03-01,\"ERP, CRM, IT Admin Portal\",9:00-17:00,medium,30,yes,60,yes,Active Directory",
+                            "EMP002,Sarah,Johnson,sarah.johnson@example.com,Finance Director,Finance,human,admin,state_id,CA-DMV,yes,hardware,Headquarters,executive@example.com,Full Time,2025-04-20,2025-03-01,\"ERP, Finance Portal, Expense System\",8:00-18:00,high,30,yes,30,yes,Okta SSO",
+                            "SVC001,Backup,Service,backup-service@system.internal,Automated Process,Operations,machine,standard,not_applicable,not_applicable,no,,Data Center,john.smith@example.com,System,2025-01-15,N/A,\"Backup System, Storage Access\",,low,365,no,0,yes,Local",
+                            "API001,Payment,Gateway,api-monitor@example.com,External Service,Finance,api,limited,not_applicable,not_applicable,yes,api-key,Cloud,sarah.johnson@example.com,Service,2025-03-30,N/A,\"Payment Processing System\",,high,90,yes,15,yes,AWS IAM",
+                            "VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,passport,US-State-Dept,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,\"Ticketing System, Knowledge Base\",9:00-20:00,medium,45,yes,20,yes,External IDP"
+                          ];
+                          
+                          const csvContent = csvHeader + "\n" + sampleData.join("\n");
+                          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                          const url = URL.createObjectURL(blob);
+                          const link = document.createElement('a');
+                          link.setAttribute('href', url);
+                          link.setAttribute('download', 'user-identity-template.csv');
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }}
+                      >
+                        <FileDown className="w-4 h-4 mr-2" /> Download Template
+                      </Button>
+                    </div>
+                    
+                    {/* Components section removed as requested */}
+                    <div className="mt-4">
+
+                        {/* UWA Matrix Form */}
+                        <div className="p-4 border rounded-md mb-4 bg-muted/10">
+                          <h5 className="text-sm font-medium mb-3">UWA Component Selection Matrix</h5>
+                          <p className="text-xs text-muted-foreground mb-3">
+                            Select the components needed for your UWA intermediate representation. Required fields depend on identity type.
+                            Organizations can customize which fields to include in their UWA generation based on their specific needs.
+                          </p>
+                          <div className="flex items-center gap-2 mb-3">
+                            <AlertCircle className="h-4 w-4 text-amber-500" />
+                            <p className="text-xs text-amber-500">
+                              The matrix below shows an example configuration. All 31 identity components can be used to create a customized UWA.
+                            </p>
+                          </div>
+                          
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-sm border">
+                              <thead className="bg-muted/50">
+                                <tr>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Components of Identification</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Human</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Machine</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">API</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs">Third-Party</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y">
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Name</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Address</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Birthplace</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Date of Birth</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">PIN</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">SN/IMEI</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Ph#/EIN/SSN/BVN</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Driver License/Passport</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Primary Auth Device IMEI/IOT S/N</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Make/Model+OS</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Manufacturing Date (DOM)</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">EC2/DO ID/MAC/SN</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">OS</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">UUID</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Server ID</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Environment (PR/ST/TD)</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">IP Address</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Business Certifications</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Business Licenses</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Utility Bills</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          
+                          <div className="mt-3">
+                            <div className="flex flex-col gap-2">
+                              <h6 className="text-xs font-medium">Selected Identity Matrix Fields</h6>
+                              <div className="bg-blue-50 border border-blue-200 rounded-md p-3 mb-2">
+                                <div className="flex items-start">
+                                  <div className="text-blue-500 mr-2 mt-0.5">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-info"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs font-medium text-blue-800">Advanced Feature - Universal Wallet Address (UWA)</p>
+                                    <p className="text-xs text-blue-700 mt-1">
+                                      The UWA system is an optional advanced identity feature that organizations can integrate as their security posture matures. This preview demonstrates how selected identity components are transformed into secure, portable identifiers across your infrastructure.
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                              <p className="text-xs text-muted-foreground">
+                                The UWA (Universal Wallet Address) will be generated using the fields marked above
+                              </p>
+                              
+                              <div className="mt-2 grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="p-3 border rounded-md">
+                                  <h6 className="text-xs font-medium mb-2">UWA Templates by Identity Type</h6>
+                                  <div className="flex flex-col gap-2">
+                                    <div className="flex items-center justify-between">
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.selectedIdentityType') === 'Human' ? 'default' : 'outline'} 
+                                        className="text-xs w-full justify-start"
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.selectedIdentityType', 'Human');
+                                        }}
+                                      >
+                                        <span className="mr-1">🧑</span> Human UWA Template
+                                      </Button>
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger>
+                                            <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="w-80 text-xs">Human UWA uses driver license, biometrics, and other personal identifiers</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <Button
+                                        size="sm"
+                                        variant={form.watch('identityBehaviorHygiene.selectedIdentityType') === 'Machine' ? 'default' : 'outline'}
+                                        className="text-xs w-full justify-start"
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.selectedIdentityType', 'Machine');
+                                        }}
+                                      >
+                                        <span className="mr-1">💻</span> Machine UWA Template
+                                      </Button>
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger>
+                                            <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="w-80 text-xs">For cloud machines: UUID + Environment + Location + OS</p>
+                                            <p className="w-80 text-xs">For physical devices: IMEI/MAC/SN</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.selectedIdentityType') === 'API' ? 'default' : 'outline'} 
+                                        className="text-xs w-full justify-start"
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.selectedIdentityType', 'API');
+                                        }}
+                                      >
+                                        <span className="mr-1">⚙️</span> API UWA Template
+                                      </Button>
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger>
+                                            <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="w-80 text-xs">API UWA uses digital signatures and certificates</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.selectedIdentityType') === 'Third-Party' ? 'default' : 'outline'} 
+                                        className="text-xs w-full justify-start"
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.selectedIdentityType', 'Third-Party');
+                                        }}
+                                      >
+                                        <span className="mr-1">🏢</span> Third-Party UWA Template
+                                      </Button>
+                                      <TooltipProvider>
+                                        <Tooltip>
+                                          <TooltipTrigger>
+                                            <HelpCircle className="h-3 w-3 text-muted-foreground" />
+                                          </TooltipTrigger>
+                                          <TooltipContent>
+                                            <p className="w-80 text-xs">Third-Party UWA uses business credentials and certifications</p>
+                                          </TooltipContent>
+                                        </Tooltip>
+                                      </TooltipProvider>
+                                    </div>
+                                  </div>
+                                  
+                                  <div className="mt-4 p-3 border rounded-md bg-slate-50">
+                                    <h6 className="text-sm font-medium mb-2 flex items-center">
+                                      <Server className="h-4 w-4 mr-1.5" /> 
+                                      Machine Type for UWA Generation
+                                    </h6>
+                                    <div className="flex flex-wrap gap-2 mb-3">
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? 'default' : 'outline'} 
+                                        className={`text-xs ${form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? 'border-blue-300 bg-blue-50 hover:bg-blue-100' : ''}`}
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.machineType', 'cloud');
+                                          // Update Custom UWA inputs to match cloud server format
+                                          setCustomUwaInputs({
+                                            ...customUwaInputs,
+                                            // Reset to cloud server defaults
+                                            instanceUUID: "1c-49ca-47ae-bebe-4087c52abbf4",
+                                            environment: "PR",
+                                            address: "2X57+XH+",
+                                            osName: "centosl",
+                                            // Clear physical device identifiers that don't apply to cloud servers
+                                            imei: "",
+                                            macAddress: "",
+                                            serialNumber: ""
+                                          });
+                                        }}
+                                        disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
+                                      >
+                                        <Monitor className="h-3 w-3 mr-1" /> Virtual Machine
+                                      </Button>
+                                      <Button 
+                                        size="sm" 
+                                        variant={form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'default' : 'outline'} 
+                                        className={`text-xs ${form.watch('identityBehaviorHygiene.machineType') === 'physical' ? 'border-emerald-400 bg-emerald-50 hover:bg-emerald-100 text-emerald-800' : ''}`}
+                                        onClick={() => {
+                                          form.setValue('identityBehaviorHygiene.machineType', 'physical');
+                                          // Update Custom UWA inputs to match physical device format
+                                          setCustomUwaInputs({
+                                            ...customUwaInputs,
+                                            // Reset to physical device defaults
+                                            imei: "990000862471854",
+                                            macAddress: "00:1B:44:11:3A:B7",
+                                            serialNumber: "SN-2024-001",
+                                            deviceModel: "PowerEdge R740"
+                                          });
+                                        }}
+                                        disabled={form.watch('identityBehaviorHygiene.selectedIdentityType') !== 'Machine'}
+                                      >
+                                        <Cpu className="h-3 w-3 mr-1" /> Physical Device
+                                      </Button>
+                                    </div>
+                                    
+                                    {/* Display machine type-specific help text */}
+                                    {form.watch('identityBehaviorHygiene.machineType') === 'cloud' && (
+                                      <div className="px-2 py-1.5 bg-blue-50 border border-blue-100 rounded text-xs mb-2">
+                                        <p className="text-blue-700 font-medium">Virtual UWA Format (VM):</p>
+                                        <p className="text-blue-600">Uses InstanceUUID + Environment + Address + OSname</p>
+                                        <div className="mt-1.5 text-blue-700 flex items-center text-[10px]">
+                                          <Info className="h-3 w-3 mr-1" /> Uses instance identifiers instead of hardware identifiers
+                                        </div>
+                                      </div>
+                                    )}
+                                    
+                                    {form.watch('identityBehaviorHygiene.machineType') === 'physical' && (
+                                      <div className="px-2 py-1.5 bg-emerald-50 border border-emerald-200 rounded text-xs mb-2">
+                                        <p className="text-emerald-800 font-medium">Physical Device UWA Format:</p>
+                                        <p className="text-emerald-700">Uses IMEI/MAC/Serial Number and other device identifiers</p>
+                                        <div className="mt-1.5 text-emerald-800 flex items-center text-[10px]">
+                                          <Info className="h-3 w-3 mr-1" /> Distinct from virtual UWAs - uses hardware identifiers instead of Instance UUID
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                
+                                <div className="p-3 border rounded-md">
+                                  <h6 className="text-xs font-medium mb-2">UWA Generation Preview</h6>
+                                  <div className="flex flex-col gap-2">
+                                    {(() => {
+                                      const identityType = form.watch('identityBehaviorHygiene.selectedIdentityType') || 'Machine';
+                                      const machineType = form.watch('identityBehaviorHygiene.machineType') || 'cloud';
+                                      
+                                      // Different UWA generation based on identity type
+                                      if (identityType === 'Machine') {
+                                        if (machineType === 'cloud') {
+                                          // Cloud Machine UWA Generation
+                                          
+                                          // Sample data for demonstration
+                                          const instanceUUID = "1c-49ca-47ae-bebe-4087c52abbf4";
+                                          const environment = "PR"; // Production
+                                          const address = "2X57+XH+"; // Google open location
+                                          const osName = "centosl"; // OS name
+                                          
+                                          // 1. Extract components according to formula
+                                          const last26UUID = instanceUUID.slice(-26);  // Last 26 chars of UUID
+                                          const first2Env = environment.slice(0, 2);   // First 2 chars of environment
+                                          const last7Address = address.slice(-7);      // Last 7 chars of Google location
+                                          const first7OS = osName.slice(0, 7);         // First 7 chars of OS name
+                                          
+                                          // 2. Concatenate in the specified sequence
+                                          // Formula: Last26InstanceUUID + First2Env + Last7Address + First7OSname
+                                          const rawUWA = last26UUID + first2Env + last7Address + first7OS;
+                                          
+                                          // 3. Rearrange with prefix and 7-character chunking for readability
+                                          // Start with CLX prefix, then first2Env, then chunk the rest into 7-character segments
+                                          const formattedUWA = generateCloudUwa(instanceUUID, environment, address, osName);
+                                          
+                                          return (
+                                            <>
+                                              <div className="flex items-center justify-between">
+                                                <p className="text-xs font-medium">
+                                                  Selected template: <span className="text-primary">Machine UWA (Virtual Machine)</span>
+                                                </p>
+                                              </div>
+                                              <div className="mt-2 p-2 bg-muted rounded border text-xs font-mono">
+                                                <p><span className="font-semibold">Instance UUID:</span> {instanceUUID}</p>
+                                                <p><span className="font-semibold">Environment:</span> {environment}</p>
+                                                <p><span className="font-semibold">Address:</span> {address}</p>
+                                                <p><span className="font-semibold">OS Name:</span> {osName}</p>
+                                              </div>
+                                              <div className="mt-2 p-2 bg-green-50 rounded border border-green-200 text-xs">
+                                                <div className="flex items-center justify-between">
+                                                  <p className="font-semibold text-green-700">Generated UWA:</p>
+                                                  <Button 
+                                                    size="sm" 
+                                                    variant="outline" 
+                                                    className="h-6 py-0 px-2 text-xs"
+                                                    onClick={() => {
+                                                      navigator.clipboard.writeText(formattedUWA).then(() => {
+                                                        alert("UWA copied to clipboard!");
+                                                      }).catch(err => {
+                                                        console.error('Could not copy text: ', err);
+                                                      });
+                                                    }}
+                                                  >
+                                                    <Copy className="h-3 w-3 mr-1" /> Copy
+                                                  </Button>
+                                                </div>
+                                                <p className="font-mono text-green-800 mt-1 break-all">{formattedUWA}</p>
+                                              </div>
+                                              <div className="mt-2 text-xs text-muted-foreground">
+                                                <p>Algorithm: Last26InstanceUUID + First2Env + Last7Address + First7OSname</p>
+                                                <p>Formatted in 7-character chunks for readability</p>
+                                              </div>
+                                              
+                                              <div className="mt-3 border-t pt-3">
+                                                <h6 className="text-xs font-medium mb-2">
+                                                  Generate Your Own UWA 
+                                                  <span className="ml-2 text-primary">
+                                                    ({form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? 'Cloud Server' : 'Physical Device'})
+                                                  </span>
+                                                </h6>
+                                                
+                                                {/* Form fields based on machine type */}
+                                                {form.watch('identityBehaviorHygiene.machineType') === 'cloud' ? (
+                                                  <div>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                      <div>
+                                                        <label className="text-xs font-medium">Instance UUID</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., 1c-49ca-47ae-bebe-4087c52abbf4"
+                                                          value={customUwaInputs.instanceUUID}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              instanceUUID: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">Environment</label>
+                                                        <Select 
+                                                          defaultValue={customUwaInputs.environment}
+                                                          onValueChange={(value) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              environment: value
+                                                            });
+                                                          }}
+                                                        >
+                                                          <SelectTrigger className="mt-1 text-xs h-8">
+                                                            <SelectValue placeholder="Select environment" />
+                                                          </SelectTrigger>
+                                                          <SelectContent>
+                                                            <SelectItem value="PR">Production (PR)</SelectItem>
+                                                            <SelectItem value="ST">Staging (ST)</SelectItem>
+                                                            <SelectItem value="DV">Development (DV)</SelectItem>
+                                                            <SelectItem value="TS">Test (TS)</SelectItem>
+                                                          </SelectContent>
+                                                        </Select>
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">Google Location</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., 2X57+XH+"
+                                                          value={customUwaInputs.address}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              address: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">OS Name</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., centosl"
+                                                          value={customUwaInputs.osName}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              osName: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                    </div>
+                                                    
+                                                    <Button 
+                                                      size="sm" 
+                                                      className="mt-2 text-xs" 
+                                                      variant="default"
+                                                      onClick={() => {
+                                                        // Generate UWA from custom inputs using our helper function
+                                                        const formattedCustomUwa = generateCloudUwa(
+                                                          customUwaInputs.instanceUUID,
+                                                          customUwaInputs.environment,
+                                                          customUwaInputs.address,
+                                                          customUwaInputs.osName
+                                                        );
+                                                        
+                                                        // Set the generated UWA and show it
+                                                        setGeneratedUwa(formattedCustomUwa);
+                                                        setShowGeneratedUwa(true);
+                                                        
+                                                        // Try to copy to clipboard automatically
+                                                        try {
+                                                          navigator.clipboard.writeText(formattedCustomUwa);
+                                                        } catch (err) {
+                                                          console.error('Could not copy text: ', err);
+                                                        }
+                                                      }}
+                                                    >
+                                                      <Save className="h-3 w-3 mr-1" /> Generate Cloud UWA
+                                                    </Button>
+                                                  </div>
+                                                ) : (
+                                                  <div>
+                                                    <div className="grid grid-cols-2 gap-2">
+                                                      <div>
+                                                        <label className="text-xs font-medium">IMEI</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., 990000862471854"
+                                                          value={customUwaInputs.imei || ''}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
+                                                              imei: e.target.value
+                                                            });
+                                                          }}
+                                                        />
+                                                      </div>
+                                                      <div>
+                                                        <label className="text-xs font-medium">MAC Address</label>
+                                                        <Input 
+                                                          className="mt-1 text-xs h-8" 
+                                                          placeholder="e.g., 00:1B:44:11:3A:B7"
+                                                          value={customUwaInputs.macAddress || ''}
+                                                          onChange={(e) => {
+                                                            setCustomUwaInputs({
+                                                              ...customUwaInputs,
