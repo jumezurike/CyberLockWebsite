@@ -16,9 +16,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Sos2aFormData } from "@/lib/sos2a-types";
 import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-mappings";
@@ -26,6 +28,7 @@ import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
 import { UwaRecordsTable } from "../identity-behavior/uwa-records-table";
+import { UserPlus, FileDown, AlertCircle, Plus, Copy, RefreshCw } from "lucide-react";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -4410,16 +4413,934 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">13. Identity Behavior & Hygiene</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    Track and manage identity behaviors, authentication practices, and user access patterns.
+                    Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
+                  
+                  {/* Universal Identity Verification System (UIVS) Section */}
+                  <div className="border rounded-md p-4 mb-6 bg-blue-50">
+                    <h4 className="font-medium text-blue-700 mb-2">Universal Identity Verification System (UIVS)</h4>
+                    <p className="text-sm mb-4">
+                      For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+                    </p>
+                    <div className="flex flex-wrap gap-3">
+                      <Button 
+                        type="button" 
+                        variant="default" 
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.location.href = "/identity-management";
+                        }}
+                      >
+                        <UserPlus className="w-4 h-4 mr-2" /> Manage User Identities
+                      </Button>
+                      <Button 
+                        type="button" 
+                        variant="default" 
+                        size="sm"
+                        className="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          // Download the user identity template CSV
+                          const csvHeader = "user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source";
+                          
+                          // Sample data rows provided in the template
+                          const sampleData = [
+                            "EMP001,John,Smith,john.smith@example.com,IT Manager,Information Technology,human,privileged,drivers_license,NY-DMV,yes,app+sms,Headquarters,jane.doe@example.com,Full Time,2025-04-15,2025-03-01,\"ERP, CRM, IT Admin Portal\",9:00-17:00,medium,30,yes,60,yes,Active Directory",
+                            "EMP002,Sarah,Johnson,sarah.johnson@example.com,Finance Director,Finance,human,admin,state_id,CA-DMV,yes,hardware,Headquarters,executive@example.com,Full Time,2025-04-20,2025-03-01,\"ERP, Finance Portal, Expense System\",8:00-18:00,high,30,yes,30,yes,Okta SSO",
+                            "SVC001,Backup,Service,backup-service@system.internal,Automated Process,Operations,machine,standard,not_applicable,not_applicable,no,,Data Center,john.smith@example.com,System,2025-01-15,N/A,\"Backup System, Storage Access\",,low,365,no,0,yes,Local",
+                            "API001,Payment,Gateway,api-monitor@example.com,External Service,Finance,api,limited,not_applicable,not_applicable,yes,api-key,Cloud,sarah.johnson@example.com,Service,2025-03-30,N/A,\"Payment Processing System\",,high,90,yes,15,yes,AWS IAM",
+                            "VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,passport,US-State-Dept,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,\"Ticketing System, Knowledge Base\",9:00-20:00,medium,45,yes,20,yes,External IDP"
+                          ];
+                          
+                          const csvContent = csvHeader + "\n" + sampleData.join("\n");
+                          const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+                          const url = URL.createObjectURL(blob);
+                          const link = document.createElement('a');
+                          link.setAttribute('href', url);
+                          link.setAttribute('download', 'user-identity-template.csv');
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }}
+                      >
+                        <FileDown className="w-4 h-4 mr-2" /> Download Template
+                      </Button>
+                    </div>
+                    
+                    {/* Components section removed as requested */}
+                    <div className="mt-4">
 
-                  {/* UWA Records Management Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">UWA Records Management</h4>
-                    <UwaRecordsTable />
+                        {/* UWA Matrix Form */}
+                        <div className="p-4 border rounded-md mb-4 bg-muted/10">
+                          <h5 className="text-sm font-medium mb-3">UWA Component Selection Matrix</h5>
+                          <p className="text-xs text-muted-foreground mb-3">
+                            Select the components needed for your UWA intermediate representation. Required fields depend on identity type.
+                            Organizations can customize which fields to include in their UWA generation based on their specific needs.
+                          </p>
+                          <div className="flex items-center gap-2 mb-3">
+                            <AlertCircle className="h-4 w-4 text-amber-500" />
+                            <p className="text-xs text-amber-500">
+                              The matrix below shows an example configuration. All 31 identity components can be used to create a customized UWA.
+                            </p>
+                          </div>
+                          
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-sm border">
+                              <thead className="bg-muted/50">
+                                <tr>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Components of Identification</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Human</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">Machine</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs border-r">API</th>
+                                  <th className="py-2 px-3 text-left font-medium text-xs">Third-Party</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y">
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Name</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Address</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Birthplace</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true} 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Date of Birth</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      disabled 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">PIN</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <div className="flex items-center">
+                                      <Checkbox 
+                                        disabled 
+                                        className="data-[state=checked]:bg-primary" 
+                                      />
+                                      <span className="ml-2 text-xs text-red-500">Not used for UWA</span>
+                                    </div>
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">SN/IMEI</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Ph#/EIN/SSN/BVN</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Driver License/Passport</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Primary Auth Device IMEI/IOT S/N</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Make/Model+OS</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Manufacturing Date (DOM)</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">EC2/DO ID/MAC/SN</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">OS</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">UUID</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Server ID</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Environment (PR/ST/TD)</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">IP Address</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Business Certifications</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Business Licenses</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                                <tr className="hover:bg-muted/5">
+                                  <td className="py-2 px-3 border-r font-medium">Utility Bills</td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3 border-r">
+                                    <Checkbox 
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                  <td className="py-2 px-3">
+                                    <Checkbox 
+                                      checked={true}
+                                      className="data-[state=checked]:bg-primary" 
+                                    />
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                          <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                            <p className="text-sm font-medium text-blue-700 mb-2">Selected Identity Matrix Fields</p>
+                            <div className="flex flex-wrap gap-2">
+                              <Badge variant="secondary" className="text-xs">Name (Human, Third-Party)</Badge>
+                              <Badge variant="secondary" className="text-xs">Address (Human, Third-Party)</Badge>
+                              <Badge variant="secondary" className="text-xs">Birthplace (Human)</Badge>
+                              <Badge variant="secondary" className="text-xs">Date of Birth (Human)</Badge>
+                              <Badge variant="secondary" className="text-xs">SN/IMEI (Human, Machine)</Badge>
+                              <Badge variant="secondary" className="text-xs">Ph#/EIN/SSN/BVN (Human, Third-Party)</Badge>
+                              <Badge variant="secondary" className="text-xs">Driver License/Passport (Human, Third-Party)</Badge>
+                              <Badge variant="secondary" className="text-xs">Primary Auth Device (Human, Machine)</Badge>
+                              <Badge variant="secondary" className="text-xs">Make/Model+OS (Human, Machine, API)</Badge>
+                              <Badge variant="secondary" className="text-xs">Manufacturing Date (Machine)</Badge>
+                              <Badge variant="secondary" className="text-xs">EC2/DO ID/MAC/SN (Machine)</Badge>
+                              <Badge variant="secondary" className="text-xs">OS (Machine, API)</Badge>
+                              <Badge variant="secondary" className="text-xs">UUID (Machine, API)</Badge>
+                              <Badge variant="secondary" className="text-xs">Server ID (Machine, API)</Badge>
+                              <Badge variant="secondary" className="text-xs">Environment (Machine, API)</Badge>
+                              <Badge variant="secondary" className="text-xs">IP Address (Machine, API)</Badge>
+                              <Badge variant="secondary" className="text-xs">Business Certifications (Third-Party)</Badge>
+                              <Badge variant="secondary" className="text-xs">Business Licenses (Third-Party)</Badge>
+                              <Badge variant="secondary" className="text-xs">Utility Bills (Third-Party)</Badge>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Advanced UWA Feature */}
+                        <div className="p-4 border rounded-md mb-4 bg-amber-50">
+                          <h5 className="text-sm font-medium text-amber-700 mb-2">Advanced Feature - Universal Wallet Address (UWA)</h5>
+                          <p className="text-xs text-amber-600 mb-3">
+                            The UWA system is an optional advanced identity feature that organizations can integrate as their security posture matures. 
+                            This preview demonstrates how selected identity components are transformed into secure, portable identifiers across your infrastructure.
+                          </p>
+                          <div className="bg-white p-3 border border-amber-200 rounded text-xs">
+                            <p className="font-medium text-amber-700">The UWA (Universal Wallet Address) will be generated using the fields marked above</p>
+                          </div>
+                        </div>
+
+                        {/* UWA Templates */}
+                        <div className="p-4 border rounded-md mb-4">
+                          <h5 className="text-sm font-medium mb-3">UWA Templates by Identity Type</h5>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <div className="p-3 border rounded-md text-center bg-gradient-to-br from-blue-50 to-blue-100">
+                              <div className="text-2xl mb-2">🧑</div>
+                              <p className="text-xs font-medium">Human UWA Template</p>
+                            </div>
+                            <div className="p-3 border rounded-md text-center bg-gradient-to-br from-green-50 to-green-100">
+                              <div className="text-2xl mb-2">💻</div>
+                              <p className="text-xs font-medium">Machine UWA Template</p>
+                            </div>
+                            <div className="p-3 border rounded-md text-center bg-gradient-to-br from-purple-50 to-purple-100">
+                              <div className="text-2xl mb-2">⚙️</div>
+                              <p className="text-xs font-medium">API UWA Template</p>
+                            </div>
+                            <div className="p-3 border rounded-md text-center bg-gradient-to-br from-orange-50 to-orange-100">
+                              <div className="text-2xl mb-2">🏢</div>
+                              <p className="text-xs font-medium">Third-Party UWA Template</p>
+                            </div>
+                          </div>
+
+                          {/* Machine Type Selection */}
+                          <div className="mt-4 p-3 border rounded-md bg-gray-50">
+                            <p className="text-sm font-medium mb-2">Machine Type for UWA Generation</p>
+                            <div className="flex gap-4">
+                              <label className="flex items-center">
+                                <input type="radio" name="machineType" value="vm" defaultChecked className="mr-2" />
+                                <span className="text-sm">Virtual Machine</span>
+                              </label>
+                              <label className="flex items-center">
+                                <input type="radio" name="machineType" value="physical" className="mr-2" />
+                                <span className="text-sm">Physical Device</span>
+                              </label>
+                            </div>
+                            <div className="mt-2 p-2 bg-blue-100 border border-blue-200 rounded text-xs">
+                              <p className="font-medium text-blue-700">Virtual UWA Format (VM):</p>
+                              <p className="text-blue-600">Uses InstanceUUID + Environment + Address + OSname</p>
+                              <p className="text-blue-500 text-xs mt-1">Uses instance identifiers instead of hardware identifiers</p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* UWA Generation Preview */}
+                        <div className="p-4 border rounded-md mb-4 bg-gray-50">
+                          <h5 className="text-sm font-medium mb-3">UWA Generation Preview</h5>
+                          <p className="text-xs text-muted-foreground mb-3">Selected template: Machine UWA (Virtual Machine)</p>
+                          
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                              <Label className="text-xs">Instance UUID:</Label>
+                              <div className="text-sm font-mono bg-white p-2 border rounded">1c-49ca-47ae-bebe-4087c52abbf4</div>
+                            </div>
+                            <div>
+                              <Label className="text-xs">Environment:</Label>
+                              <div className="text-sm font-mono bg-white p-2 border rounded">PR</div>
+                            </div>
+                            <div>
+                              <Label className="text-xs">Address:</Label>
+                              <div className="text-sm font-mono bg-white p-2 border rounded">2X57+XH+</div>
+                            </div>
+                            <div>
+                              <Label className="text-xs">OS Name:</Label>
+                              <div className="text-sm font-mono bg-white p-2 border rounded">centosl</div>
+                            </div>
+                          </div>
+                          
+                          <div className="p-3 bg-white border rounded-md">
+                            <div className="flex items-center justify-between mb-2">
+                              <Label className="text-sm font-medium">Generated UWA:</Label>
+                              <Button size="sm" variant="outline" className="text-xs">
+                                <Copy className="w-3 h-3 mr-1" />
+                                Copy
+                              </Button>
+                            </div>
+                            <div className="font-mono text-sm bg-green-50 p-2 border border-green-200 rounded">
+                              CLX-PR9ca-4-7ae-beb-e-4087c-52abbf4-X57+XH+-centosl
+                            </div>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              Algorithm: Last26InstanceUUID + First2Env + Last7Address + First7OSname
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Formatted in 7-character chunks for readability
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* UWA Generation Form */}
+                        <div className="p-4 border rounded-md mb-4">
+                          <h5 className="text-sm font-medium mb-3">Generate Your Own UWA(Cloud Server)</h5>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="instanceUuid" className="text-sm">Instance UUID</Label>
+                              <Input 
+                                id="instanceUuid" 
+                                defaultValue="1c-49ca-47ae-bebe-4087c52abbf4" 
+                                className="text-sm font-mono"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="environment" className="text-sm">Environment</Label>
+                              <Select defaultValue="PR">
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select environment" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="PR">Production (PR)</SelectItem>
+                                  <SelectItem value="ST">Staging (ST)</SelectItem>
+                                  <SelectItem value="TD">Test/Dev (TD)</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            <div>
+                              <Label htmlFor="googleLocation" className="text-sm">Google Location</Label>
+                              <Input 
+                                id="googleLocation" 
+                                defaultValue="2X57+XH+" 
+                                className="text-sm font-mono"
+                                placeholder="Plus code format"
+                              />
+                            </div>
+                            <div>
+                              <Label htmlFor="osName" className="text-sm">OS Name</Label>
+                              <Input 
+                                id="osName" 
+                                defaultValue="centosl" 
+                                className="text-sm font-mono"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex gap-2 mt-4">
+                            <Button 
+                              size="sm" 
+                              className="bg-blue-600 hover:bg-blue-700"
+                            >
+                              <RefreshCw className="w-4 h-4 mr-2" />
+                              Generate Cloud UWA
+                            </Button>
+                            <Button 
+                              size="sm" 
+                              variant="outline"
+                            >
+                              <RefreshCw className="w-4 h-4 mr-2" />
+                              Generate UWA
+                            </Button>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-2">
+                            Always starts with CLX
+                          </p>
+                        </div>
+
+                        {/* Identity Component Inventory Table */}
+                        <div className="p-4 border rounded-md mb-4">
+                          <h5 className="text-sm font-medium mb-3">Identity Component Inventory</h5>
+                          
+                          {/* Filter Section */}
+                          <div className="flex flex-wrap gap-4 mb-4">
+                            <div className="border-2 border-blue-200 p-3 rounded-md bg-blue-50 flex-1 min-w-48">
+                              <div className="flex items-center mb-1">
+                                <span className="block text-sm font-medium">Filter by Identity Type</span>
+                                <div className="ml-1 px-2 py-0.5 text-xs bg-blue-100 text-blue-800 rounded-full">Filter</div>
+                              </div>
+                              <p className="text-xs text-blue-600 mb-2">Select an identity type to filter the identity component inventory list below</p>
+                              <Select defaultValue="all">
+                                <SelectTrigger className="w-full bg-white border-blue-300">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All Types</SelectItem>
+                                  <SelectItem value="human">Human</SelectItem>
+                                  <SelectItem value="machine">Machine</SelectItem>
+                                  <SelectItem value="api">API</SelectItem>
+                                  <SelectItem value="third-party">Third-Party</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                            
+                            <div className="border-2 border-green-200 p-3 rounded-md bg-green-50 flex-1 min-w-48">
+                              <div className="flex items-center mb-1">
+                                <span className="block text-sm font-medium">Identification Method</span>
+                                <div className="ml-1 px-2 py-0.5 text-xs bg-green-100 text-green-800 rounded-full">Filter</div>
+                              </div>
+                              <p className="text-xs text-green-600 mb-2">Select identification method type</p>
+                              <Select defaultValue="all">
+                                <SelectTrigger className="w-full bg-white border-green-300">
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All Methods</SelectItem>
+                                  <SelectItem value="biometric">Biometric</SelectItem>
+                                  <SelectItem value="credential">Credential-based</SelectItem>
+                                  <SelectItem value="certificate">Certificate-based</SelectItem>
+                                  <SelectItem value="token">Token-based</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            </div>
+                          </div>
+
+                          <div className="mb-4">
+                            <Button size="sm" className="bg-purple-600 hover:bg-purple-700">
+                              <Plus className="w-4 h-4 mr-2" />
+                              Add Identity Component
+                            </Button>
+                          </div>
+
+                          {/* Sample Identity Component Table */}
+                          <div className="border rounded-md overflow-hidden">
+                            <Table>
+                              <TableHeader>
+                                <TableRow className="bg-gray-100">
+                                  <TableHead className="text-xs">Component Type</TableHead>
+                                  <TableHead className="text-xs">Identity Type</TableHead>
+                                  <TableHead className="text-xs">Verification Type</TableHead>
+                                  <TableHead className="text-xs">Required</TableHead>
+                                </TableRow>
+                              </TableHeader>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className="text-sm">Device Authentication</TableCell>
+                                  <TableCell>
+                                    <Badge variant="outline" className="text-xs">Machine</Badge>
+                                  </TableCell>
+                                  <TableCell className="text-sm">IMEI/Serial</TableCell>
+                                  <TableCell>
+                                    <Badge variant="destructive" className="text-xs">Yes</Badge>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="text-sm">Device Authentication</TableCell>
+                                  <TableCell>
+                                    <Badge variant="outline" className="text-xs">Machine</Badge>
+                                  </TableCell>
+                                  <TableCell className="text-sm">MAC Address</TableCell>
+                                  <TableCell>
+                                    <Badge variant="destructive" className="text-xs">Yes</Badge>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="text-sm">Digital Certificate</TableCell>
+                                  <TableCell>
+                                    <Badge variant="outline" className="text-xs">Machine</Badge>
+                                  </TableCell>
+                                  <TableCell className="text-sm">X.509 Certificate</TableCell>
+                                  <TableCell>
+                                    <Badge variant="destructive" className="text-xs">Yes</Badge>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="text-sm">Device Identity</TableCell>
+                                  <TableCell>
+                                    <Badge variant="outline" className="text-xs">Machine</Badge>
+                                  </TableCell>
+                                  <TableCell className="text-sm">Device ID</TableCell>
+                                  <TableCell>
+                                    <Badge variant="destructive" className="text-xs">Yes</Badge>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className="text-sm">Universal Wallet Address</TableCell>
+                                  <TableCell>
+                                    <Badge variant="outline" className="text-xs">Machine</Badge>
+                                  </TableCell>
+                                  <TableCell className="text-sm">Device-UWA</TableCell>
+                                  <TableCell>
+                                    <Badge variant="destructive" className="text-xs">Yes</Badge>
+                                  </TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </div>
+
+                          <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
+                            <span>Showing 5 components</span>
+                            <div className="flex gap-2">
+                              <Button variant="outline" size="sm" disabled>
+                                Previous
+                              </Button>
+                              <Button variant="outline" size="sm">
+                                Next
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
                   </div>
                   
-                  {/* 2. Authentication Practices Section */}
+                  {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">2. Authentication Practices</h4>
                     <div className="space-y-6">
