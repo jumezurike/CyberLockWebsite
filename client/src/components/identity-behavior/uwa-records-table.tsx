@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Edit2, Trash2, Eye, Save, X } from "lucide-react";
+import { Plus, Edit2, Trash2, Eye, Save, X, Database } from "lucide-react";
 import { UWAGenerator, type UWAComponents, type UWARecord } from "@/lib/uwa-generator";
 import { useToast } from "@/hooks/use-toast";
 
@@ -18,6 +18,7 @@ export const UwaRecordsTable = () => {
   const [isAddingRecord, setIsAddingRecord] = useState(false);
   const [editingRecord, setEditingRecord] = useState<UWARecord | null>(null);
   const [selectedEntityType, setSelectedEntityType] = useState<string>("");
+  const [isDdnaManagerOpen, setIsDdnaManagerOpen] = useState(false);
   const [components, setComponents] = useState<UWAComponents>({});
   const [recordCounter, setRecordCounter] = useState(1);
   
@@ -586,14 +587,23 @@ export const UwaRecordsTable = () => {
                     Filtered: {filteredRecords.length}
                   </Badge>
                 </div>
-                <Button 
-                  onClick={() => setIsAddingRecord(true)} 
-                  disabled={isAddingRecord || !!editingRecord}
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
-                >
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add UWA Record
-                </Button>
+                <div className="flex gap-2">
+                  <Button 
+                    onClick={() => setIsDdnaManagerOpen(true)}
+                    className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-semibold"
+                  >
+                    <Database className="h-4 w-4 mr-2" />
+                    Manage DNA
+                  </Button>
+                  <Button 
+                    onClick={() => setIsAddingRecord(true)} 
+                    disabled={isAddingRecord || !!editingRecord}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add UWA Record
+                  </Button>
+                </div>
               </div>
             </div>
           </div>
@@ -804,6 +814,187 @@ export const UwaRecordsTable = () => {
               </TableBody>
             </Table>
           </div>
+
+          {/* DDNA Manager Dialog */}
+          <Dialog open={isDdnaManagerOpen} onOpenChange={setIsDdnaManagerOpen}>
+            <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle className="text-2xl font-bold text-orange-700 flex items-center gap-2">
+                  <Database className="h-6 w-6" />
+                  Digital Data Nucleic Authority (DDNA)
+                </DialogTitle>
+                <DialogDescription className="text-gray-600">
+                  <strong>Universal Identification Verification System (UIVS)</strong><br />
+                  <span className="text-sm">One source of truth created from proofs, provenance, identity, identification, and proof of security of information by encrypted verification, validation, and evaluation. The end goal is identity verification.</span>
+                </DialogDescription>
+              </DialogHeader>
+              
+              <div className="space-y-6">
+                <Card className="border-l-4 border-l-orange-500">
+                  <CardHeader className="bg-gradient-to-r from-orange-50 to-red-50">
+                    <CardTitle className="text-orange-800">DNA Repository</CardTitle>
+                    <CardDescription>
+                      <strong>Data Nuclear Aggregate (DNA)</strong> - The smallest integral of an identity in the digital space. 
+                      Collection of DNAs creates the Digital Data Nucleic Authority (DDNA).
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <Tabs defaultValue="lookup" className="w-full">
+                      <TabsList className="grid w-full grid-cols-3">
+                        <TabsTrigger value="lookup">UWA Lookup</TabsTrigger>
+                        <TabsTrigger value="shadows">UWA Shadows</TabsTrigger>
+                        <TabsTrigger value="repository">DNA Repository</TabsTrigger>
+                      </TabsList>
+                      
+                      <TabsContent value="lookup" className="space-y-4">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-lg">Digital Phone Book</CardTitle>
+                            <CardDescription>
+                              Look up UWAs by using phone numbers, emails, or other DNA components attached to identity records.
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            <div className="grid grid-cols-2 gap-4">
+                              <div>
+                                <Label htmlFor="lookup-phone">Phone Number</Label>
+                                <Input 
+                                  id="lookup-phone" 
+                                  placeholder="Enter phone number..."
+                                  className="border-orange-200 focus:border-orange-400"
+                                />
+                              </div>
+                              <div>
+                                <Label htmlFor="lookup-email">Email Address</Label>
+                                <Input 
+                                  id="lookup-email" 
+                                  placeholder="Enter email address..."
+                                  className="border-orange-200 focus:border-orange-400"
+                                />
+                              </div>
+                            </div>
+                            <Button className="w-full bg-orange-600 hover:bg-orange-700">
+                              <Database className="h-4 w-4 mr-2" />
+                              Search DDNA Repository
+                            </Button>
+                            
+                            {/* Results Area */}
+                            <div className="mt-4 p-4 bg-gray-50 rounded-lg border">
+                              <p className="text-gray-500 text-center">
+                                Enter phone number or email to search for associated UWAs
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </TabsContent>
+                      
+                      <TabsContent value="shadows" className="space-y-4">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-lg">UWA Shadow Communication</CardTitle>
+                            <CardDescription>
+                              Locate UWA shadows to securely communicate with recipients or UWA owners through encrypted channels.
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent className="space-y-4">
+                            <div>
+                              <Label htmlFor="target-uwa">Target UWA</Label>
+                              <Input 
+                                id="target-uwa" 
+                                placeholder="CLX-XXXXXXX-XXXXXXX-XXXXXXX-XXXXXXX-XXXXXXX-XXXXXXX"
+                                className="border-orange-200 focus:border-orange-400"
+                              />
+                            </div>
+                            <Button className="w-full bg-red-600 hover:bg-red-700">
+                              <Eye className="h-4 w-4 mr-2" />
+                              Locate UWA Shadow
+                            </Button>
+                            
+                            {/* Shadow Results */}
+                            <div className="mt-4 p-4 bg-gray-50 rounded-lg border">
+                              <p className="text-gray-500 text-center">
+                                Enter UWA to locate communication shadows and establish secure channels
+                              </p>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </TabsContent>
+                      
+                      <TabsContent value="repository" className="space-y-4">
+                        <Card>
+                          <CardHeader>
+                            <CardTitle className="text-lg">DNA Component Repository</CardTitle>
+                            <CardDescription>
+                              Centralized repository containing all DNA records with atomic identity components.
+                            </CardDescription>
+                          </CardHeader>
+                          <CardContent>
+                            <div className="grid grid-cols-3 gap-4 mb-4">
+                              <div className="text-center p-4 bg-blue-50 rounded-lg">
+                                <div className="text-2xl font-bold text-blue-600">{records.length}</div>
+                                <div className="text-sm text-blue-700">Total DNA Records</div>
+                              </div>
+                              <div className="text-center p-4 bg-green-50 rounded-lg">
+                                <div className="text-2xl font-bold text-green-600">{records.filter(r => r.isActive).length}</div>
+                                <div className="text-sm text-green-700">Active DNAs</div>
+                              </div>
+                              <div className="text-center p-4 bg-purple-50 rounded-lg">
+                                <div className="text-2xl font-bold text-purple-600">
+                                  {new Set(records.map(r => r.identityType)).size}
+                                </div>
+                                <div className="text-sm text-purple-700">Entity Types</div>
+                              </div>
+                            </div>
+                            
+                            <div className="border rounded-lg">
+                              <Table>
+                                <TableHeader className="bg-gray-50">
+                                  <TableRow>
+                                    <TableHead className="text-xs font-semibold">UWA</TableHead>
+                                    <TableHead className="text-xs font-semibold">Entity Type</TableHead>
+                                    <TableHead className="text-xs font-semibold">DNA Components</TableHead>
+                                    <TableHead className="text-xs font-semibold">Status</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  {records.slice(0, 5).map((record) => (
+                                    <TableRow key={record.id}>
+                                      <TableCell className="text-xs font-mono">
+                                        {record.uwa.substring(0, 20)}...
+                                      </TableCell>
+                                      <TableCell className="text-xs">{record.identityType}</TableCell>
+                                      <TableCell className="text-xs">
+                                        {Object.entries(record.components)
+                                          .filter(([_, value]) => value)
+                                          .map(([key, _]) => key)
+                                          .slice(0, 3)
+                                          .join(', ')}
+                                      </TableCell>
+                                      <TableCell>
+                                        <Badge variant={record.isActive ? "default" : "secondary"} className="text-xs">
+                                          {record.isActive ? "Active" : "Inactive"}
+                                        </Badge>
+                                      </TableCell>
+                                    </TableRow>
+                                  ))}
+                                </TableBody>
+                              </Table>
+                            </div>
+                            
+                            {records.length > 5 && (
+                              <p className="text-center text-gray-500 text-sm mt-2">
+                                Showing 5 of {records.length} DNA records
+                              </p>
+                            )}
+                          </CardContent>
+                        </Card>
+                      </TabsContent>
+                    </Tabs>
+                  </CardContent>
+                </Card>
+              </div>
+            </DialogContent>
+          </Dialog>
         </CardContent>
       </Card>
     </div>
