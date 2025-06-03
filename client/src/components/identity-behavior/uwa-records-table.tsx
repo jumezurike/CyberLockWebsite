@@ -584,6 +584,15 @@ export const UwaRecordsTable = () => {
             <Card className="mb-6">
               <CardHeader>
                 <CardTitle>{editingRecord ? `Edit Record #${editingRecord.id}` : 'Create New UWA Record'}</CardTitle>
+                <CardDescription>
+                  <strong>Location Input:</strong> For authentication/authorization security, get authentic Plus Codes from{" "}
+                  <a href="https://plus.codes/" target="_blank" rel="noopener noreferrer" className="text-blue-500 underline">
+                    plus.codes
+                  </a>{" "}
+                  for precise location-based identity verification. Alternative: enter regular addresses for auto-conversion.
+                  <br />
+                  <em className="text-sm text-gray-600">UWA strings are encrypted for secure communication and resource access.</em>
+                </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
