@@ -47,12 +47,39 @@ export interface UWARecord {
 
 export class UWAGenerator {
   
-  // Machine (Server) Entity UWA Generation
-  static generateServerUWA(components: UWAComponents): string {
+  // Physical Machine Entity UWA Generation
+  static generatePhysicalMachineUWA(components: UWAComponents): string {
+    const { serialNumber, environment, address, osName, macAddress } = components;
+    
+    if (!serialNumber || !environment || !address || !osName) {
+      throw new Error('Missing required components for physical machine UWA generation');
+    }
+    
+    // Extract components according to algorithm
+    const cleanSerial = serialNumber.replace(/[^A-Z0-9]/g, '').toUpperCase();
+    const first2Env = environment.slice(0, 2).toUpperCase();
+    const last7Address = this.extractGoogleLocation(address).slice(-7);
+    const first7OsName = osName.slice(0, 7).toUpperCase();
+    
+    // Calculate how many characters we have so far
+    let combined = `${cleanSerial}${first2Env}${last7Address}${first7OsName}`;
+    
+    // If we need more characters to reach 42, use MAC address
+    if (combined.length < 42 && macAddress) {
+      const cleanMac = macAddress.replace(/[^A-Z0-9]/g, '').toUpperCase();
+      const neededChars = 42 - combined.length;
+      combined += cleanMac.slice(0, neededChars);
+    }
+    
+    return this.chunkAndFormat(combined);
+  }
+
+  // Virtual Machine Entity UWA Generation
+  static generateVirtualMachineUWA(components: UWAComponents): string {
     const { instanceUuid, environment, address, osName } = components;
     
     if (!instanceUuid || !environment || !address || !osName) {
-      throw new Error('Missing required components for server UWA generation');
+      throw new Error('Missing required components for virtual machine UWA generation');
     }
     
     // Extract components according to algorithm
@@ -64,7 +91,6 @@ export class UWAGenerator {
     // Combine: Last26InstanceUUID + First2Env + Last7Address + First7OSname
     const combined = `${last26Uuid}${first2Env}${last7Address}${first7OsName}`;
     
-    // Chunk in 7s with CLX prefix
     return this.chunkAndFormat(combined);
   }
   
@@ -194,8 +220,9 @@ export class UWAGenerator {
   static generateUWA(entityType: string, components: UWAComponents): string {
     switch (entityType) {
       case 'physical-machine':
+        return this.generatePhysicalMachineUWA(components);
       case 'virtual-machine':
-        return this.generateServerUWA(components);
+        return this.generateVirtualMachineUWA(components);
       case 'business-owner':
         return this.generateBusinessUWA(components);
       case 'human-individual':

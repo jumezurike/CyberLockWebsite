@@ -181,6 +181,64 @@ export const UwaRecordsTable = () => {
 
     switch (selectedEntityType) {
       case 'physical-machine':
+        return (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="serialNumber">Serial Number</Label>
+                <Input
+                  id="serialNumber"
+                  value={components.serialNumber || ""}
+                  onChange={(e) => handleComponentChange("serialNumber", e.target.value)}
+                  placeholder="e.g., SN123456789"
+                />
+              </div>
+              <div>
+                <Label htmlFor="environment">Environment</Label>
+                <Select value={components.environment || ""} onValueChange={(value) => handleComponentChange("environment", value)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select environment" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="PR">Production (PR)</SelectItem>
+                    <SelectItem value="ST">Staging (ST)</SelectItem>
+                    <SelectItem value="TD">Test/Dev (TD)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="osName">OS Name</Label>
+                <Input
+                  id="osName"
+                  value={components.osName || ""}
+                  onChange={(e) => handleComponentChange("osName", e.target.value)}
+                  placeholder="e.g., centosl"
+                />
+              </div>
+              <div>
+                <Label htmlFor="address">Address (Google Location)</Label>
+                <Input
+                  id="address"
+                  value={components.address || ""}
+                  onChange={(e) => handleComponentChange("address", e.target.value)}
+                  placeholder="e.g., 2X57+XH"
+                />
+              </div>
+            </div>
+            <div>
+              <Label htmlFor="macAddress">MAC Address (if needed for length)</Label>
+              <Input
+                id="macAddress"
+                value={components.macAddress || ""}
+                onChange={(e) => handleComponentChange("macAddress", e.target.value)}
+                placeholder="e.g., 00:1A:2B:3C:4D:5E"
+              />
+            </div>
+          </div>
+        );
+
       case 'virtual-machine':
         return (
           <div className="space-y-4">
