@@ -166,32 +166,43 @@ export class UWAGenerator {
   
   // Helper: Extract Google Open Location code from address
   private static extractGoogleLocation(address: string): string {
+    console.log('Input address:', address);
+    
     // Look for Google Plus Code pattern (e.g., "2X57+XH")
-    const plusCodeMatch = address.match(/[0-9A-Z]{4}\+[0-9A-Z]{2,}/);
+    const plusCodeMatch = address.match(/[0-9A-Z]{4}\+[0-9A-Z]{2,}/i);
     if (plusCodeMatch) {
-      return plusCodeMatch[0];
+      const result = plusCodeMatch[0].toUpperCase();
+      console.log('Found Plus Code:', result);
+      return result;
     }
     
     // Check if address contains arrow notation for conversion
-    const arrowMatch = address.match(/->([A-Z0-9+]+)$/);
+    const arrowMatch = address.match(/->([A-Z0-9+]+)$/i);
     if (arrowMatch) {
-      return arrowMatch[1];
+      const result = arrowMatch[1].toUpperCase();
+      console.log('Found arrow notation:', result);
+      return result;
     }
     
     // If it's a standard address format, convert to Google Plus Code format
     // For demonstration: extract key alphanumeric characters and format as Plus Code
-    const cleanAddress = address.replace(/[^A-Z0-9]/g, '').toUpperCase();
+    const cleanAddress = address.replace(/[^A-Z0-9]/gi, '').toUpperCase();
+    console.log('Cleaned address:', cleanAddress);
     
     if (cleanAddress.length >= 6) {
       // Format as Plus Code: XXXX+XX
       const firstPart = cleanAddress.substring(0, 4);
       const secondPart = cleanAddress.substring(4, 6);
-      return `${firstPart}+${secondPart}`;
+      const result = `${firstPart}+${secondPart}`;
+      console.log('Generated Plus Code:', result);
+      return result;
     }
     
     // Fallback: pad if too short
     const paddedAddress = cleanAddress.padEnd(6, '0');
-    return `${paddedAddress.substring(0, 4)}+${paddedAddress.substring(4, 6)}`;
+    const result = `${paddedAddress.substring(0, 4)}+${paddedAddress.substring(4, 6)}`;
+    console.log('Padded Plus Code:', result);
+    return result;
   }
   
   // Helper: Extract initials from full name
