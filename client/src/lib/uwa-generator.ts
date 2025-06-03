@@ -164,45 +164,46 @@ export class UWAGenerator {
     return this.chunkAndFormat(combined);
   }
   
-  // Helper: Extract Google Open Location code from address
+  // Helper: Extract location identifier from address
   private static extractGoogleLocation(address: string): string {
-    console.log('Input address:', address);
-    
     // Look for Google Plus Code pattern (e.g., "2X57+XH")
     const plusCodeMatch = address.match(/[0-9A-Z]{4}\+[0-9A-Z]{2,}/i);
     if (plusCodeMatch) {
-      const result = plusCodeMatch[0].toUpperCase();
-      console.log('Found Plus Code:', result);
-      return result;
+      return plusCodeMatch[0].toUpperCase();
     }
     
     // Check if address contains arrow notation for conversion
     const arrowMatch = address.match(/->([A-Z0-9+]+)$/i);
     if (arrowMatch) {
-      const result = arrowMatch[1].toUpperCase();
-      console.log('Found arrow notation:', result);
-      return result;
+      return arrowMatch[1].toUpperCase();
     }
     
-    // If it's a standard address format, convert to Google Plus Code format
-    // For demonstration: extract key alphanumeric characters and format as Plus Code
-    const cleanAddress = address.replace(/[^A-Z0-9]/gi, '').toUpperCase();
-    console.log('Cleaned address:', cleanAddress);
+    // For regular addresses, create a location identifier from key components
+    // Extract numbers and first letters of words to create identifier
+    const words = address.toUpperCase().split(/\s+/);
+    let locationId = '';
     
-    if (cleanAddress.length >= 6) {
-      // Format as Plus Code: XXXX+XX
-      const firstPart = cleanAddress.substring(0, 4);
-      const secondPart = cleanAddress.substring(4, 6);
-      const result = `${firstPart}+${secondPart}`;
-      console.log('Generated Plus Code:', result);
-      return result;
+    // Get numbers from address (street number, zip, etc.)
+    const numbers = address.match(/\d+/g) || [];
+    if (numbers.length > 0) {
+      locationId += numbers[0].substring(0, 4).padEnd(4, '0');
+    } else {
+      locationId += '0000';
     }
     
-    // Fallback: pad if too short
-    const paddedAddress = cleanAddress.padEnd(6, '0');
-    const result = `${paddedAddress.substring(0, 4)}+${paddedAddress.substring(4, 6)}`;
-    console.log('Padded Plus Code:', result);
-    return result;
+    // Get first letters of significant words (skip common words)
+    const skipWords = ['ST', 'STREET', 'AVE', 'AVENUE', 'RD', 'ROAD', 'BLVD', 'BOULEVARD', 'DR', 'DRIVE'];
+    for (const word of words) {
+      if (word.length > 1 && !skipWords.includes(word) && locationId.length < 6) {
+        locationId += word.charAt(0);
+      }
+    }
+    
+    // Ensure we have at least 6 characters
+    locationId = locationId.substring(0, 6).padEnd(6, 'X');
+    
+    // Format as location code: XXXX+XX
+    return `${locationId.substring(0, 4)}+${locationId.substring(4, 6)}`;
   }
   
   // Helper: Extract initials from full name
