@@ -1097,48 +1097,32 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.userId"
+                        name="identityBehaviorHygiene.identificationMethod"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>User ID</FormLabel>
-                            <FormDescription>Employee ID, service account name</FormDescription>
-                            <FormControl>
-                              <Input placeholder="Enter user ID" {...field} />
-                            </FormControl>
+                            <FormLabel>Identification Method</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identification method" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="username">Username</SelectItem>
+                                <SelectItem value="email">Email Address</SelectItem>
+                                <SelectItem value="employee-id">Employee ID</SelectItem>
+                                <SelectItem value="badge">Badge Number</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.fullNameRole"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Full Name / Role</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter full name and role" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.contactInfo"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Contact Info</FormLabel>
-                            <FormDescription>Email, phone for emergency access</FormDescription>
-                            <FormControl>
-                              <Input placeholder="Enter contact information" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
+
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.identityType"
@@ -1168,6 +1152,71 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         )}
                       />
                     </div>
+                  </div>
+                  
+                  {/* UWA Records Table Section */}
+                  <div className="space-y-4 mt-8">
+                    <div className="bg-muted/10 p-4 rounded-md">
+                      <h3 className="font-medium mb-2">UWA+Components</h3>
+                      <p className="text-sm text-muted-foreground">
+                        Components used to derive this identity's Universal Wallet Address
+                      </p>
+                    </div>
+                    
+                    <div className="border rounded-md overflow-hidden">
+                      <div className="bg-muted/10 p-3 border-b">
+                        <h4 className="text-sm font-medium">UWA Records Table</h4>
+                      </div>
+                      
+                      <div className="p-4">
+                        <div className="overflow-x-auto">
+                          <table className="w-full text-sm">
+                            <thead>
+                              <tr className="border-b">
+                                <th className="text-left py-2 px-3">UWA</th>
+                                <th className="text-left py-2 px-3">Identity type</th>
+                                <th className="text-left py-2 px-3">ID method</th>
+                                <th className="text-left py-2 px-3">SERVER/OWNER/COMPANY</th>
+                                <th className="text-left py-2 px-3">UUID</th>
+                                <th className="text-left py-2 px-3">SN</th>
+                                <th className="text-left py-2 px-3">MAKE/MODEL</th>
+                                <th className="text-left py-2 px-3">Entity type</th>
+                                <th className="text-left py-2 px-3">Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr className="text-center py-8">
+                                <td colSpan={9} className="text-muted-foreground">
+                                  No UWA records generated yet
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end space-x-4">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        const deviceTab = document.querySelector('[value="device-inventory"]') as HTMLElement;
+                        if (deviceTab) deviceTab.click();
+                      }}
+                    >
+                      Previous Step
+                    </Button>
+                    <Button 
+                      type="button"
+                      onClick={() => {
+                        const contactTab = document.querySelector('[value="contact"]') as HTMLElement;
+                        if (contactTab) contactTab.click();
+                      }}
+                    >
+                      Next Step
+                    </Button>
                   </div>
                 </div>
               </TabsContent>
