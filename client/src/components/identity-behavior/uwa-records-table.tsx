@@ -940,7 +940,7 @@ export const UwaRecordsTable = () => {
                               </div>
                               <div className="text-center p-4 bg-purple-50 rounded-lg">
                                 <div className="text-2xl font-bold text-purple-600">
-                                  {new Set(records.map(r => r.identityType)).size}
+                                  {new Set(records.map(r => r.entityType)).size}
                                 </div>
                                 <div className="text-sm text-purple-700">Entity Types</div>
                               </div>
@@ -962,7 +962,7 @@ export const UwaRecordsTable = () => {
                                       <TableCell className="text-xs font-mono">
                                         {record.uwa.substring(0, 20)}...
                                       </TableCell>
-                                      <TableCell className="text-xs">{record.identityType}</TableCell>
+                                      <TableCell className="text-xs">{record.entityType}</TableCell>
                                       <TableCell className="text-xs">
                                         {Object.entries(record.components)
                                           .filter(([_, value]) => value)
