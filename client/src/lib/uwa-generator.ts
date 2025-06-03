@@ -165,18 +165,29 @@ export class UWAGenerator {
   
   // Helper: Format UWA by chunking in 7s with CLX prefix
   private static chunkAndFormat(combined: string): string {
-    const chunks = [];
-    for (let i = 0; i < combined.length; i += 7) {
-      chunks.push(combined.slice(i, i + 7));
+    // Ensure we have exactly 42 characters for proper 7-character chunking
+    let processedString = combined.toUpperCase().replace(/[^A-Z0-9]/g, '');
+    
+    // Pad or truncate to ensure proper length for 6 chunks of 7 characters each
+    if (processedString.length < 42) {
+      processedString = processedString.padEnd(42, '0');
+    } else if (processedString.length > 42) {
+      processedString = processedString.substring(0, 42);
     }
     
-    return `CLX${chunks.join('-')}`;
+    const chunks = [];
+    for (let i = 0; i < processedString.length; i += 7) {
+      chunks.push(processedString.slice(i, i + 7));
+    }
+    
+    return `CLX-${chunks.join('-')}`;
   }
   
   // Validate UWA format
   static validateUWA(uwa: string): boolean {
-    // Should start with CLX and be approximately 45 characters
-    return uwa.startsWith('CLX') && uwa.length >= 40 && uwa.length <= 50;
+    // Should start with CLX- and have exactly 6 chunks of 7 characters each
+    const pattern = /^CLX-[A-Z0-9]{7}-[A-Z0-9]{7}-[A-Z0-9]{7}-[A-Z0-9]{7}-[A-Z0-9]{7}-[A-Z0-9]{7}$/;
+    return pattern.test(uwa);
   }
   
   // Generate UWA based on entity type
