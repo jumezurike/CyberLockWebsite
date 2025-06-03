@@ -14,7 +14,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "@/components/ui/badge";
 import type { Sos2aFormData } from "@/lib/sos2a-types";
-import { formSchema } from "@/lib/sos2a-types";
 
 export function QuestionnaireForm() {
   const { toast } = useToast();
