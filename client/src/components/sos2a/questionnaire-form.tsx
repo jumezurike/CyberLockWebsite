@@ -5169,6 +5169,129 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
+                  {/* UWA Records Management Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <h4 className="font-medium">UWA Records Management</h4>
+                        <p className="text-sm text-muted-foreground">
+                          Manage Universal Wallet Address components and tracking
+                        </p>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button variant="outline" size="sm">
+                          Import Identity CSV
+                        </Button>
+                        <Button variant="outline" size="sm">
+                          Download Template
+                        </Button>
+                        <Button variant="default" size="sm" className="bg-[#7936b0] hover:bg-[#6b2aa2]">
+                          Manage DNA
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Filter Controls */}
+                    <div className="flex space-x-4 mb-4">
+                      <div className="flex-1">
+                        <label className="text-sm font-medium">Filter by Identity Type</label>
+                        <select className="w-full mt-1 px-3 py-2 border rounded-md">
+                          <option value="">All Types</option>
+                          <option value="Physical Machine">Physical Machine</option>
+                          <option value="Virtual Machine">Virtual Machine</option>
+                          <option value="Human/Individual">Human/Individual</option>
+                          <option value="Business Owner">Business Owner</option>
+                          <option value="User Account">User Account</option>
+                          <option value="Service Account">Service Account</option>
+                        </select>
+                      </div>
+                      <div className="flex-1">
+                        <label className="text-sm font-medium">Identification Method</label>
+                        <select className="w-full mt-1 px-3 py-2 border rounded-md">
+                          <option value="">All Methods</option>
+                          <option value="Serial Number">Serial Number</option>
+                          <option value="MAC Address">MAC Address</option>
+                          <option value="Biometric">Biometric</option>
+                          <option value="Certificate">Certificate</option>
+                          <option value="Token">Token</option>
+                          <option value="Username/Password">Username/Password</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* UWA Records Table */}
+                    <div className="border rounded-md overflow-hidden">
+                      <table className="w-full">
+                        <thead className="bg-muted/10">
+                          <tr>
+                            <th className="text-left p-3 text-sm font-medium">UWA</th>
+                            <th className="text-left p-3 text-sm font-medium">Identity Type</th>
+                            <th className="text-left p-3 text-sm font-medium">ID Method</th>
+                            <th className="text-left p-3 text-sm font-medium">Server ID</th>
+                            <th className="text-left p-3 text-sm font-medium">UUID</th>
+                            <th className="text-left p-3 text-sm font-medium">SN</th>
+                            <th className="text-left p-3 text-sm font-medium">Make/Model</th>
+                            <th className="text-left p-3 text-sm font-medium">Entity Type</th>
+                            <th className="text-left p-3 text-sm font-medium">Actions</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="border-t">
+                            <td className="p-3 font-mono text-xs">CLX-PR8c4-47ae-bebe-4087c52abdf4</td>
+                            <td className="p-3">Machine</td>
+                            <td className="p-3">Serial Number</td>
+                            <td className="p-3">srv-34522</td>
+                            <td className="p-3 font-mono text-xs">1c-49ca-47ae-bebe-4087c52abdf4</td>
+                            <td className="p-3">HX653-9871</td>
+                            <td className="p-3">Dell PowerEdge R740</td>
+                            <td className="p-3">
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                virtual machine
+                              </span>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex space-x-1">
+                                <button className="p-1 hover:bg-gray-100 rounded">👁</button>
+                                <button className="p-1 hover:bg-gray-100 rounded">📋</button>
+                                <button className="p-1 hover:bg-gray-100 rounded text-red-600">🗑</button>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr className="border-t bg-muted/5">
+                            <td className="p-3 font-mono text-xs">CLX-PD-31a8ji-ebhs-39j5-acdoi4</td>
+                            <td className="p-3">Machine</td>
+                            <td className="p-3">Serial Number</td>
+                            <td className="p-3">srv-67891</td>
+                            <td className="p-3 font-mono text-xs">a8d45c3f...</td>
+                            <td className="p-3">JK129-556P</td>
+                            <td className="p-3">HPE ProLiant DL380</td>
+                            <td className="p-3">
+                              <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                                Virtual machine
+                              </span>
+                              <div className="mt-1">
+                                <span className="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-500 text-white">
+                                  Yes
+                                </span>
+                              </div>
+                            </td>
+                            <td className="p-3">
+                              <div className="flex space-x-1">
+                                <button className="p-1 hover:bg-gray-100 rounded">👁</button>
+                                <button className="p-1 hover:bg-gray-100 rounded">📋</button>
+                                <button className="p-1 hover:bg-gray-100 rounded text-red-600">🗑</button>
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="mt-4 text-sm text-muted-foreground">
+                      Showing 2 of 2 UWA records
+                    </div>
+                  </div>
+                  
                   <div className="flex justify-end space-x-4">
                     <Button
                       type="button"
