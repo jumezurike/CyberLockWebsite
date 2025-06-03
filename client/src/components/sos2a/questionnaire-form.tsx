@@ -5653,6 +5653,7 @@ export default function QuestionnaireForm({ onSubmit, selectedTab }: Questionnai
               
               {/* 13. Identity Behavior & Hygiene Tab */}
               <TabsContent value="identity-behavior" className="space-y-6">
+                <div>
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">13. Identity Behavior & Hygiene</h3>
                   <p className="text-sm text-muted-foreground mb-4">
