@@ -4420,72 +4420,18 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
-                    <div className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.userId"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>User ID</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Employee ID, service account name" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.fullNameRole"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Full Name / Role</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter full name and role" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.contactInfo"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Contact Info</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Email, phone for emergency access" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
+                    <div className="space-y-4">
+                      {/* User ID / Employee ID and Identification Method on same row */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <FormField
                           control={form.control}
-                          name="identityBehaviorHygiene.identityType"
+                          name="identityBehaviorHygiene.userId"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Identity Type</FormLabel>
-                              <Select 
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select identity type" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="human">Human</SelectItem>
-                                  <SelectItem value="machine">Machine</SelectItem>
-                                  <SelectItem value="third-party">Third Party (Hybrid)</SelectItem>
-                                  <SelectItem value="api">API</SelectItem>
-                                </SelectContent>
-                              </Select>
+                              <FormLabel>User ID / Employee ID</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter user ID or employee ID" {...field} />
+                              </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
@@ -4496,7 +4442,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           name="identityBehaviorHygiene.identificationMethod"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Identification Method</FormLabel>
+                              <FormLabel>Identification Method Name</FormLabel>
                               <Select 
                                 onValueChange={field.onChange}
                                 defaultValue={field.value}
@@ -4544,6 +4490,100 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                   <SelectItem value="certificate-of-citizenship">Certificate of Citizenship</SelectItem>
                                 </SelectContent>
                               </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* First Name and Last Name on same row */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.firstName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>First Name</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter first name" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.lastName"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Last Name</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter last name" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Role */}
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.role"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Role</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger className="w-full max-w-xs">
+                                  <SelectValue placeholder="Select role" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="user">User</SelectItem>
+                                <SelectItem value="administrator">Administrator</SelectItem>
+                                <SelectItem value="super-user">Super User</SelectItem>
+                                <SelectItem value="manager">Manager</SelectItem>
+                                <SelectItem value="employee">Employee</SelectItem>
+                                <SelectItem value="contractor">Contractor</SelectItem>
+                                <SelectItem value="vendor">Vendor</SelectItem>
+                                <SelectItem value="guest">Guest</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      {/* Contact Information - Email and Phone Number on same row */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.email"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Email</FormLabel>
+                              <FormControl>
+                                <Input type="email" placeholder="Enter email address" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name="identityBehaviorHygiene.phoneNumber"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Phone Number</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter phone number" {...field} />
+                              </FormControl>
                               <FormMessage />
                             </FormItem>
                           )}
