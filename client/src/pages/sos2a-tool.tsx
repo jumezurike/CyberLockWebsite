@@ -333,29 +333,81 @@ export default function Sos2aTool() {
   };
   
   // Handle final submission after review
-  const handleFinalSubmit = () => {
-    setShowReviewModal(false);
-    setStep('matrix');
-    // Update the current step in localStorage
-    localStorage.setItem('sos2a_current_step', 'matrix');
+  const handleFinalSubmit = async () => {
+    if (!formData) return;
     
-    toast({
-      title: "Assessment confirmed",
-      description: "Moving to Interview & Matrix Population step. This is where our expert system will apply industry-specific knowledge to your assessment.",
-    });
-    
-    // Check if user provided architecture diagrams
-    const hasArchitectureDiagrams = formData?.hasArchitectureDiagrams === true;
-    
-    if (!hasArchitectureDiagrams) {
-      // If no diagrams, show informative toast about threat modeling component
-      setTimeout(() => {
-        toast({
-          title: "Architecture Diagrams Not Provided",
-          description: "The Architecture Threat Modeling component will be marked as 'Not Assessed' in your report. You can upload diagrams later for a more complete assessment.",
-          duration: 6000,
-        });
-      }, 3000);
+    setIsLoading(true);
+    try {
+      // Prepare assessment data for submission
+      const assessmentData = {
+        businessName: formData.businessName,
+        industry: formData.showCustomIndustry ? formData.customIndustry : formData.industry,
+        employeeCount: formData.employeeCount,
+        securityMeasures: formData.securityMeasures || [],
+        primaryConcerns: formData.primaryConcerns || [],
+        contactInfo: formData.contactInfo,
+        reportType: formData.reportType,
+        matrixData: formData, // Store the entire form data as matrix data
+        findings: {
+          hasArchitectureDiagrams: formData.hasArchitectureDiagrams,
+          submittedAt: new Date().toISOString(),
+          businessLocation: formData.businessLocation,
+          businessServices: formData.businessServices,
+          operationMode: formData.operationMode,
+          internetPresence: formData.internetPresence
+        }
+      };
+
+      // Submit to database
+      const response = await fetch('/api/assessments', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(assessmentData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const createdAssessment = await response.json();
+      console.log("Assessment saved to database:", createdAssessment);
+
+      // Clear localStorage data since it's now persisted
+      localStorage.removeItem('sos2a_form_data');
+      
+      setShowReviewModal(false);
+      setStep('matrix');
+      localStorage.setItem('sos2a_current_step', 'matrix');
+      
+      toast({
+        title: "Assessment saved successfully",
+        description: "Your questionnaire has been saved to the database. Moving to Interview & Matrix Population step.",
+      });
+      
+      // Check if user provided architecture diagrams
+      const hasArchitectureDiagrams = formData?.hasArchitectureDiagrams === true;
+      
+      if (!hasArchitectureDiagrams) {
+        setTimeout(() => {
+          toast({
+            title: "Architecture Diagrams Not Provided",
+            description: "The Architecture Threat Modeling component will be marked as 'Not Assessed' in your report. You can upload diagrams later for a more complete assessment.",
+            duration: 6000,
+          });
+        }, 3000);
+      }
+
+    } catch (error) {
+      console.error("Error saving assessment:", error);
+      toast({
+        title: "Error saving assessment",
+        description: "Failed to save your assessment to the database. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
   
