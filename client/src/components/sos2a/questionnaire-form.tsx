@@ -1040,23 +1040,25 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     // Step 3: Matrix Population (when infrastructure data is added)
     if (formValues.operationMode) completedSteps = 3;
     
-    // Step 4: RASBITA Governance (when governance sections are complete)
-    if (formValues.ismsCompliance?.length > 0) completedSteps = 4;
+    // Step 4: RASBITA Governance (when security measures are defined)
+    if (formValues.securityMeasures?.length > 0) completedSteps = 4;
     
-    // Step 5: RASBITA Score (when risk assessment is done)
-    if (formValues.securityIncidents?.length > 0) completedSteps = 5;
+    // Step 5: RASBITA Score (when compliance data exists)
+    if (formValues.complianceRequirements) completedSteps = 5;
     
-    // Step 6: Gap Analysis (when compliance requirements are defined)
-    if (formValues.complianceRequirements?.length > 0) completedSteps = 6;
+    // Step 6: Gap Analysis (when regulatory requirements are defined)
+    if (formValues.regulatoryRequirements?.length > 0) completedSteps = 6;
     
-    // Step 7: Architecture Analysis (when threat modeling data exists)
-    if (formValues.infrastructureComponents?.length > 0) completedSteps = 7;
+    // Step 7: Architecture Analysis (when standards are selected)
+    if (formValues.standardsGuidelines?.length > 0) completedSteps = 7;
     
-    // Step 8: Preliminary Report (when assessment type is selected)
-    if (formValues.reportType) completedSteps = 8;
+    // Step 8: Preliminary Report (when assessment type is selected and contact info complete)
+    if (formValues.reportType && formValues.contactInfo?.name) completedSteps = 8;
     
-    // Step 9: Comprehensive Report (when form is complete and submitted)
-    if (formValues.contactInfo?.name && formValues.reportType === "comprehensive") completedSteps = 9;
+    // Step 9: Comprehensive Report (when all major sections complete - ready for executive scorecard)
+    if (formValues.contactInfo?.name && formValues.reportType && 
+        formValues.complianceRequirements && 
+        formValues.securityMeasures?.length > 0) completedSteps = 9;
     
     return completedSteps;
   };
@@ -1122,9 +1124,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
           )}
           
           {currentStep === 9 && (
-            <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-800">
+            <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded text-sm text-green-800">
               <CheckCircle className="h-4 w-4 inline mr-1" />
-              Assessment complete! Ready for comprehensive analysis and executive summary scorecard.
+              <strong>Comprehensive Report Phase:</strong> Assessment data complete. Ready for quantitative analysis, executive summary scorecard, and mitigation/remediation strategies.
+            </div>
+          )}
+          
+          {currentStep === 8 && (
+            <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
+              <Clock className="h-4 w-4 inline mr-1" />
+              <strong>Preliminary Report Phase:</strong> Qualitative assessment ready. Complete remaining sections for comprehensive analysis.
             </div>
           )}
         </div>
