@@ -4495,6 +4495,33 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
                       <FormField
                         control={form.control}
+                        name="identityBehaviorHygiene.identityType"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Identity Type</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identity type" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="human">Human</SelectItem>
+                                <SelectItem value="machine">Machine</SelectItem>
+                                <SelectItem value="third-party">Third Party (Hybrid)</SelectItem>
+                                <SelectItem value="api">API</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
                         name="identityBehaviorHygiene.firstName"
                         render={({ field }) => (
                           <FormItem>
