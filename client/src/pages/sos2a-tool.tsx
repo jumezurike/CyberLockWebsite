@@ -173,11 +173,31 @@ export default function Sos2aTool() {
   
   const { toast } = useToast();
   
+  // Load saved assessments from database
+  const loadSavedAssessments = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/assessments');
+      if (response.ok) {
+        const assessments = await response.json();
+        setSavedAssessments(assessments);
+        console.log("Loaded assessments from database:", assessments);
+      }
+    } catch (error) {
+      console.error("Error loading saved assessments:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Load saved form data from localStorage on component mount
   useEffect(() => {
     const savedFormData = localStorage.getItem('sos2a_form_data');
     const savedMatrixData = localStorage.getItem('sos2a_matrix_data');
     const savedStep = localStorage.getItem('sos2a_current_step');
+    
+    // Load saved assessments from database
+    loadSavedAssessments();
     
     if (savedFormData) {
       try {
