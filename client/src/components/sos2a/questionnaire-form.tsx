@@ -4420,35 +4420,49 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-6">
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.identificationMethod"
+                        name="identityBehaviorHygiene.userId"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Identification Method</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select identification method" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="username">Username</SelectItem>
-                                <SelectItem value="email">Email Address</SelectItem>
-                                <SelectItem value="employee-id">Employee ID</SelectItem>
-                                <SelectItem value="badge">Badge Number</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <FormLabel>User ID</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Employee ID, service account name" {...field} />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
-
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.fullNameRole"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Full Name / Role</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter full name and role" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.contactInfo"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact Info</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Email, phone for emergency access" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.identityType"
@@ -4470,7 +4484,38 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 <SelectItem value="vendor">Vendor</SelectItem>
                                 <SelectItem value="service-account">Service Account</SelectItem>
                                 <SelectItem value="system-account">System Account</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
+                                <SelectItem value="admin">Administrator</SelectItem>
+                                <SelectItem value="guest">Guest</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.identificationMethod"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Identification Method</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identification method" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="username-password">Username/Password</SelectItem>
+                                <SelectItem value="employee-id">Employee ID</SelectItem>
+                                <SelectItem value="email">Email Address</SelectItem>
+                                <SelectItem value="badge-id">Badge ID</SelectItem>
+                                <SelectItem value="certificate">Digital Certificate</SelectItem>
+                                <SelectItem value="biometric">Biometric</SelectItem>
+                                <SelectItem value="smart-card">Smart Card</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
