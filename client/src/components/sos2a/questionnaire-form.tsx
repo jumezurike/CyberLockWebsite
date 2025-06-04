@@ -4474,7 +4474,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               defaultValue={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger>
+                                <SelectTrigger className="w-full max-w-xs">
                                   <SelectValue placeholder="Select identity type" />
                                 </SelectTrigger>
                               </FormControl>
@@ -4501,7 +4501,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               defaultValue={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger>
+                                <SelectTrigger className="w-full max-w-md">
                                   <SelectValue placeholder="Select identification method" />
                                 </SelectTrigger>
                               </FormControl>
