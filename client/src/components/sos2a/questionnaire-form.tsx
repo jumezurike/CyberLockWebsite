@@ -26,7 +26,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
-import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash } from "lucide-react";
+import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
 
 // Helper function to safely handle potentially undefined arrays
@@ -1029,9 +1029,106 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   
   // We already have a handleOsCheckboxChange function defined above
 
+  // Calculate workflow progress based on form completion
+  const calculateWorkflowProgress = () => {
+    const formValues = form.getValues();
+    let completedSteps = 1; // Always start with step 1 (Inquiry & Questionnaire)
+    
+    // Step 2: Interview & Matrix Population (when business info is complete)
+    if (formValues.businessName && formValues.industry) completedSteps = 2;
+    
+    // Step 3: Matrix Population (when infrastructure data is added)
+    if (formValues.operationMode) completedSteps = 3;
+    
+    // Step 4: RASBITA Governance (when governance sections are complete)
+    if (formValues.ismsCompliance?.length > 0) completedSteps = 4;
+    
+    // Step 5: RASBITA Score (when risk assessment is done)
+    if (formValues.securityIncidents?.length > 0) completedSteps = 5;
+    
+    // Step 6: Gap Analysis (when compliance requirements are defined)
+    if (formValues.complianceRequirements?.length > 0) completedSteps = 6;
+    
+    // Step 7: Architecture Analysis (when threat modeling data exists)
+    if (formValues.infrastructureComponents?.length > 0) completedSteps = 7;
+    
+    // Step 8: Preliminary Report (when assessment type is selected)
+    if (formValues.reportType) completedSteps = 8;
+    
+    // Step 9: Comprehensive Report (when form is complete and submitted)
+    if (formValues.contactInfo?.name && formValues.reportType === "comprehensive") completedSteps = 9;
+    
+    return completedSteps;
+  };
+
+  const currentStep = calculateWorkflowProgress();
+  const workflowSteps = [
+    { id: 1, title: "Inquiry & Questionnaire", description: "Initial Data Collection" },
+    { id: 2, title: "Interview & Matrix Population", description: "Stakeholder Input" },
+    { id: 3, title: "Matrix Population", description: "Infrastructure Data" },
+    { id: 4, title: "RASBITA Governance", description: "Cybersecurity Governance Maturity" },
+    { id: 5, title: "RASBITA Score", description: "Cost-Benefit Analysis" },
+    { id: 6, title: "Gap Analysis", description: "Security Parameters" },
+    { id: 7, title: "Architecture Analysis", description: "Threat Modeling" },
+    { id: 8, title: "Preliminary Report", description: "Qualitative Assessment" },
+    { id: 9, title: "Comprehensive Report", description: "Quantitative Analysis" }
+  ];
+
   return (
     <Card className="w-full">
       <CardContent className="p-6">
+        {/* SOS2A Workflow Progress Header */}
+        <div className="mb-6 p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg border">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-lg font-semibold text-primary">SOS²A Assessment Progress</h3>
+            <Badge variant="secondary" className="text-sm">
+              Step {currentStep} of 9
+            </Badge>
+          </div>
+          
+          <div className="grid grid-cols-3 md:grid-cols-9 gap-2 mb-3">
+            {workflowSteps.map((step) => (
+              <div key={step.id} className="flex flex-col items-center text-center">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${
+                  step.id <= currentStep 
+                    ? 'bg-primary text-white' 
+                    : step.id === currentStep + 1
+                    ? 'bg-orange-500 text-white'
+                    : 'bg-gray-200 text-gray-500'
+                }`}>
+                  {step.id <= currentStep ? (
+                    <CheckCircle className="h-4 w-4" />
+                  ) : step.id === currentStep + 1 ? (
+                    <Clock className="h-4 w-4" />
+                  ) : (
+                    step.id
+                  )}
+                </div>
+                <div className="mt-1 text-xs text-gray-600 hidden md:block">
+                  {step.title.split(' ')[0]}
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-sm text-gray-600">
+            <strong>Current Phase:</strong> {workflowSteps[currentStep - 1]?.title} - {workflowSteps[currentStep - 1]?.description}
+          </div>
+          
+          {currentStep < 9 && (
+            <div className="mt-2 text-xs text-gray-500">
+              <strong>Next:</strong> {workflowSteps[currentStep]?.title} - {workflowSteps[currentStep]?.description}
+            </div>
+          )}
+          
+          {currentStep === 9 && (
+            <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded text-sm text-green-800">
+              <CheckCircle className="h-4 w-4 inline mr-1" />
+              Assessment complete! Ready for comprehensive analysis and executive summary scorecard.
+            </div>
+          )}
+        </div>
+
         <Form {...form}>
           <form onSubmit={handleSubmit} className="space-y-8">
             <Tabs defaultValue="business" className="w-full">
