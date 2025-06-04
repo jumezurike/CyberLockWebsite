@@ -32,6 +32,7 @@ import PaymentError from "@/pages/payment-error";
 import DirectNavigation from "@/components/direct-navigation";
 import DeviceInventoryPage from "@/pages/device-inventory";
 import AccessibilityDemo from "@/pages/accessibility-demo";
+import AssessmentWorkflowPage from "@/pages/assessment-workflow";
 
 function Router() {
   const [location] = useLocation();
@@ -48,6 +49,7 @@ function Router() {
         <Switch>
           <Route path="/" component={Home} />
           <Route path="/sos2a-tool" component={Sos2aTool} />
+          <Route path="/assessment-workflow" component={AssessmentWorkflowPage} />
           <Route path="/color-demo" component={ColorDemo} />
           <Route path="/early-access" component={EarlyAccess} />
           <Route path="/dashboard" component={Dashboard} />
