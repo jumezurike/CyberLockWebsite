@@ -148,23 +148,9 @@ export default function Header() {
               </svg>
               RASBITA
             </Link>
-            <DropdownMenu>
-              <DropdownMenuTrigger className="bg-secondary hover:bg-green-600 text-white py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out flex items-center">
-                SOS²A Tools <ChevronDown className="h-4 w-4 ml-1" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-primary border border-neutral-700">
-                <DropdownMenuItem asChild>
-                  <Link href="/assessment-workflow" className="text-neutral-100 hover:text-secondary cursor-pointer">
-                    9-Step Workflow
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/sos2a-tool" className="text-neutral-100 hover:text-secondary cursor-pointer">
-                    Assessment Form
-                  </Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Link href="/sos2a-tool" className="bg-secondary hover:bg-green-600 text-white py-2 px-4 rounded-md shadow-sm transition duration-150 ease-in-out">
+              Get Started
+            </Link>
           </div>
           <div className="flex items-center sm:hidden">
             <button 
