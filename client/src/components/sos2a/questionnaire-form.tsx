@@ -4970,9 +4970,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 7. Access Behavior Section */}
+                  {/* 4. Access Behavior Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">7. Access Behavior</h4>
+                    <h4 className="font-medium mb-4">4. Access Behavior</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
@@ -5104,9 +5104,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 4. Identity Protection Section */}
+                  {/* 5. Identity Protection Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">4. Identity Protection</h4>
+                    <h4 className="font-medium mb-4">5. Identity Protection</h4>
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
@@ -5216,7 +5216,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   
                   {/* 5. Privileged Access Management Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Privileged Access Management</h4>
+                    <h4 className="font-medium mb-4">6. Privileged Access Management</h4>
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <FormField
@@ -5337,7 +5337,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   
                   {/* 6. Identity Lifecycle Management Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">6. Identity Lifecycle Management</h4>
+                    <h4 className="font-medium mb-4">7. Identity Lifecycle Management</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
