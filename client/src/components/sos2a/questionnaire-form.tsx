@@ -4420,114 +4420,107 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
-                    <div className="space-y-4">
-                      {/* User ID / Employee ID and Identification Method on same row */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={form.control}
-                          name="identityBehaviorHygiene.userId"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>User ID / Employee ID</FormLabel>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.userId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>User ID / Employee ID</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter user ID or employee ID" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.identificationMethod"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Identification Method Name</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
                               <FormControl>
-                                <Input placeholder="Enter user ID or employee ID" {...field} />
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identification method" />
+                                </SelectTrigger>
                               </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                              <SelectContent>
+                                {/* Standard Authentication */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100">1. Standard Authentication</div>
+                                <SelectItem value="username-password">Username / Password</SelectItem>
+                                <SelectItem value="employee-id">Employee ID</SelectItem>
+                                <SelectItem value="vendor-id">Vendor ID</SelectItem>
+                                <SelectItem value="contractor-id">Contractor ID</SelectItem>
+                                <SelectItem value="certificate">Certificate</SelectItem>
+                                <SelectItem value="smart-card">Smart Card</SelectItem>
+                                <SelectItem value="single-sign-on">Single Sign-On</SelectItem>
+                                <SelectItem value="token-based">Token-Based</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="system-account">System Account</SelectItem>
+                                
+                                {/* Advanced Authentication */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">2. Advanced Authentication</div>
+                                <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
+                                <SelectItem value="mfa">MFA (Multi Factor Authentication)</SelectItem>
+                                
+                                {/* Biometric */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">3. Biometric</div>
+                                <SelectItem value="fingerprint">Fingerprint</SelectItem>
+                                <SelectItem value="voice">Voice</SelectItem>
+                                <SelectItem value="facial">Facial</SelectItem>
+                                <SelectItem value="iris">Iris</SelectItem>
+                                
+                                {/* Government ID */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">4. Government ID</div>
+                                <SelectItem value="driver-license">Driver License</SelectItem>
+                                <SelectItem value="passport">Passport</SelectItem>
+                                <SelectItem value="national-id">National ID</SelectItem>
+                                <SelectItem value="military-id">Military ID</SelectItem>
+                                <SelectItem value="state-id">State ID</SelectItem>
+                                <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
+                                <SelectItem value="social-security-card">Social Security Card</SelectItem>
+                                <SelectItem value="certificate-of-citizenship">Certificate of Citizenship</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                        <FormField
-                          control={form.control}
-                          name="identityBehaviorHygiene.identificationMethod"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Identification Method Name</FormLabel>
-                              <Select 
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select identification method" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  {/* Standard Authentication */}
-                                  <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100">1. Standard Authentication</div>
-                                  <SelectItem value="username-password">Username / Password</SelectItem>
-                                  <SelectItem value="employee-id">Employee ID</SelectItem>
-                                  <SelectItem value="vendor-id">Vendor ID</SelectItem>
-                                  <SelectItem value="contractor-id">Contractor ID</SelectItem>
-                                  <SelectItem value="certificate">Certificate</SelectItem>
-                                  <SelectItem value="smart-card">Smart Card</SelectItem>
-                                  <SelectItem value="single-sign-on">Single Sign-On</SelectItem>
-                                  <SelectItem value="token-based">Token-Based</SelectItem>
-                                  <SelectItem value="service-account">Service Account</SelectItem>
-                                  <SelectItem value="system-account">System Account</SelectItem>
-                                  
-                                  {/* Advanced Authentication */}
-                                  <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">2. Advanced Authentication</div>
-                                  <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
-                                  <SelectItem value="mfa">MFA (Multi Factor Authentication)</SelectItem>
-                                  
-                                  {/* Biometric */}
-                                  <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">3. Biometric</div>
-                                  <SelectItem value="fingerprint">Fingerprint</SelectItem>
-                                  <SelectItem value="voice">Voice</SelectItem>
-                                  <SelectItem value="facial">Facial</SelectItem>
-                                  <SelectItem value="iris">Iris</SelectItem>
-                                  
-                                  {/* Government ID */}
-                                  <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">4. Government ID</div>
-                                  <SelectItem value="driver-license">Driver License</SelectItem>
-                                  <SelectItem value="passport">Passport</SelectItem>
-                                  <SelectItem value="national-id">National ID</SelectItem>
-                                  <SelectItem value="military-id">Military ID</SelectItem>
-                                  <SelectItem value="state-id">State ID</SelectItem>
-                                  <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
-                                  <SelectItem value="social-security-card">Social Security Card</SelectItem>
-                                  <SelectItem value="certificate-of-citizenship">Certificate of Citizenship</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.firstName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter first name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                      {/* First Name and Last Name on same row */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={form.control}
-                          name="identityBehaviorHygiene.firstName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>First Name</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Enter first name" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.lastName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Last Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter last name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                        <FormField
-                          control={form.control}
-                          name="identityBehaviorHygiene.lastName"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Last Name</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Enter last name" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-
-                      {/* Role */}
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.role"
@@ -4539,7 +4532,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               defaultValue={field.value}
                             >
                               <FormControl>
-                                <SelectTrigger className="w-full max-w-xs">
+                                <SelectTrigger>
                                   <SelectValue placeholder="Select role" />
                                 </SelectTrigger>
                               </FormControl>
@@ -4559,36 +4552,33 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         )}
                       />
 
-                      {/* Contact Information - Email and Phone Number on same row */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <FormField
-                          control={form.control}
-                          name="identityBehaviorHygiene.email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Email</FormLabel>
-                              <FormControl>
-                                <Input type="email" placeholder="Enter email address" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input type="email" placeholder="Enter email address" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                        <FormField
-                          control={form.control}
-                          name="identityBehaviorHygiene.phoneNumber"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Phone Number</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Enter phone number" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.phoneNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone Number</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter phone number" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
                     </div>
                   </div>
                   
