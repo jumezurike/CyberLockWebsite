@@ -4507,24 +4507,32 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               </FormControl>
                               <SelectContent>
                                 {/* Standard Authentication */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100">1. Standard Authentication</div>
                                 <SelectItem value="username-password">Username / Password</SelectItem>
                                 <SelectItem value="employee-id">Employee ID</SelectItem>
+                                <SelectItem value="vendor-id">Vendor ID</SelectItem>
+                                <SelectItem value="contractor-id">Contractor ID</SelectItem>
                                 <SelectItem value="certificate">Certificate</SelectItem>
                                 <SelectItem value="smart-card">Smart Card</SelectItem>
                                 <SelectItem value="single-sign-on">Single Sign-On</SelectItem>
                                 <SelectItem value="token-based">Token-Based</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="system-account">System Account</SelectItem>
                                 
                                 {/* Advanced Authentication */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">2. Advanced Authentication</div>
                                 <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
                                 <SelectItem value="mfa">MFA (Multi Factor Authentication)</SelectItem>
                                 
                                 {/* Biometric */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">3. Biometric</div>
                                 <SelectItem value="fingerprint">Fingerprint</SelectItem>
                                 <SelectItem value="voice">Voice</SelectItem>
                                 <SelectItem value="facial">Facial</SelectItem>
                                 <SelectItem value="iris">Iris</SelectItem>
                                 
                                 {/* Government ID */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">4. Government ID</div>
                                 <SelectItem value="driver-license">Driver License</SelectItem>
                                 <SelectItem value="passport">Passport</SelectItem>
                                 <SelectItem value="national-id">National ID</SelectItem>
