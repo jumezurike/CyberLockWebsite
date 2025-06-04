@@ -4814,7 +4814,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 3. Access & Permissions Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">3. Access & Permissions</h4>
-                    <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.assignedRoles"
@@ -4973,7 +4973,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 4. Access Behavior Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">4. Access Behavior</h4>
-                    <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.loginPatterns"
@@ -5107,7 +5107,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 5. Identity Protection Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">5. Identity Protection</h4>
-                    <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
                           control={form.control}
@@ -5217,7 +5217,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 5. Privileged Access Management Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">6. Privileged Access Management</h4>
-                    <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <FormField
                           control={form.control}
@@ -5338,7 +5338,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 6. Identity Lifecycle Management Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">7. Identity Lifecycle Management</h4>
-                    <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.onboardingStatus"
@@ -5466,7 +5466,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 8. Security Posture Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">8. Security Posture</h4>
-                    <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.passwordHygiene"
@@ -5579,7 +5579,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   {/* 9. Behavior Monitoring Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">9. Behavior Monitoring</h4>
-                    <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.typicalLoginPatterns"
