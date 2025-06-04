@@ -4479,13 +4479,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="employee">Employee</SelectItem>
-                                <SelectItem value="contractor">Contractor</SelectItem>
-                                <SelectItem value="vendor">Vendor</SelectItem>
-                                <SelectItem value="service-account">Service Account</SelectItem>
-                                <SelectItem value="system-account">System Account</SelectItem>
-                                <SelectItem value="admin">Administrator</SelectItem>
-                                <SelectItem value="guest">Guest</SelectItem>
+                                <SelectItem value="human">Human</SelectItem>
+                                <SelectItem value="machine">Machine</SelectItem>
+                                <SelectItem value="third-party">Third Party (Hybrid)</SelectItem>
+                                <SelectItem value="api">API</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
