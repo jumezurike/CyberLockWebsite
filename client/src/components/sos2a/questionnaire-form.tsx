@@ -4682,9 +4682,168 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 3. Access Behavior Section */}
+                  {/* 3. Access & Permissions Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Access Behavior</h4>
+                    <h4 className="font-medium mb-4">3. Access & Permissions</h4>
+                    <div className="space-y-6">
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.assignedRoles"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Assigned Roles</FormLabel>
+                            <FormControl>
+                              <Input placeholder="RBAC groups, e.g., 'Finance-ReadOnly'" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.entitlements"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Entitlements</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Specific permissions like 'SQL DB Admin'" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.accessDuration"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Access Duration</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select access duration" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="permanent">Permanent</SelectItem>
+                                <SelectItem value="temporary">Temporary</SelectItem>
+                                <SelectItem value="project-based">Project-Based</SelectItem>
+                                <SelectItem value="time-limited">Time-Limited</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.accessTier"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Access Tier</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select access tier" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="basic">Basic</SelectItem>
+                                <SelectItem value="standard">Standard</SelectItem>
+                                <SelectItem value="elevated">Elevated</SelectItem>
+                                <SelectItem value="privileged">Privileged</SelectItem>
+                                <SelectItem value="administrative">Administrative</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.departmentTeam"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Department / Team</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter department or team" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.assignedRiskLevel"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Assigned Risk Level</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select risk level" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="low">Low</SelectItem>
+                                <SelectItem value="medium">Medium</SelectItem>
+                                <SelectItem value="high">High</SelectItem>
+                                <SelectItem value="critical">Critical</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.federatedIdentitySource"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Federated Identity Source</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identity source" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="active-directory">Active Directory</SelectItem>
+                                <SelectItem value="azure-ad">Azure AD</SelectItem>
+                                <SelectItem value="okta">Okta</SelectItem>
+                                <SelectItem value="saml">SAML</SelectItem>
+                                <SelectItem value="oauth">OAuth</SelectItem>
+                                <SelectItem value="local">Local Account</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* 7. Access Behavior Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">7. Access Behavior</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
@@ -5175,23 +5334,58 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 7. Session Management Section */}
+                  {/* 8. Security Posture Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">7. Session Management</h4>
+                    <h4 className="font-medium mb-4">8. Security Posture</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.sessionTimeout"
+                        name="identityBehaviorHygiene.passwordHygiene"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Session Timeout Policy</FormLabel>
+                            <FormLabel>Password Hygiene</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Last changed, complexity, reuse status" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.breachedCredentialChecks"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Breached Credential Checks</FormLabel>
+                              <FormDescription>
+                                Do you check for breached credentials via services like HaveIBeenPwned?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.sessionTimeoutSettings"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Session Timeout Settings</FormLabel>
                             <Select 
                               onValueChange={field.onChange}
                               defaultValue={field.value}
                             >
                               <FormControl>
                                 <SelectTrigger>
-                                  <SelectValue placeholder="Select session timeout duration" />
+                                  <SelectValue placeholder="Select session timeout" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
@@ -5201,7 +5395,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 <SelectItem value="2-hours">2 Hours</SelectItem>
                                 <SelectItem value="4-hours">4 Hours</SelectItem>
                                 <SelectItem value="8-hours">8 Hours</SelectItem>
-                                <SelectItem value="no-timeout">No Automatic Timeout</SelectItem>
+                                <SelectItem value="no-timeout">No Timeout</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -5211,7 +5405,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.concurrentSessions"
+                        name="identityBehaviorHygiene.unusedAccountDetection"
                         render={({ field }) => (
                           <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                             <FormControl>
@@ -5221,9 +5415,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel>Concurrent Session Control</FormLabel>
+                              <FormLabel>Unused Account Detection</FormLabel>
                               <FormDescription>
-                                Do you limit concurrent sessions per user?
+                                Do you detect and manage accounts inactive for 90+ days?
                               </FormDescription>
                             </div>
                           </FormItem>
@@ -5232,70 +5426,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.sessionSecurity"
-                        render={() => (
-                          <FormItem>
-                            <div className="mb-4">
-                              <FormLabel>Session Security Measures</FormLabel>
-                              <FormDescription>
-                                Select all session security measures implemented
-                              </FormDescription>
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {[
-                                "HTTPS/TLS Encryption",
-                                "Session Token Rotation", 
-                                "Secure Cookie Flags",
-                                "IP Address Validation",
-                                "Device Fingerprinting",
-                                "Geographic Location Checks"
-                              ].map((measure) => (
-                                <FormField
-                                  key={measure}
-                                  control={form.control}
-                                  name="identityBehaviorHygiene.sessionSecurity"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={measure}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(measure)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), measure]
-                                                : field.value?.filter(
-                                                    (value) => value !== measure
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
-                                          {measure}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
-                              ))}
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 8. Account Management Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">8. Account Management</h4>
-                    <div className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.accountLockout"
+                        name="identityBehaviorHygiene.privilegeEscalationAlerts"
                         render={({ field }) => (
                           <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                             <FormControl>
@@ -5305,187 +5436,30 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel>Account Lockout Policy</FormLabel>
+                              <FormLabel>Privilege Escalation Alerts</FormLabel>
                               <FormDescription>
-                                Do you have automated account lockout after failed attempts?
+                                Do you monitor and alert on sudo/root usage logs?
                               </FormDescription>
                             </div>
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.lockoutThreshold"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Failed Login Threshold</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select failed login threshold" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="3-attempts">3 Attempts</SelectItem>
-                                <SelectItem value="5-attempts">5 Attempts</SelectItem>
-                                <SelectItem value="10-attempts">10 Attempts</SelectItem>
-                                <SelectItem value="15-attempts">15 Attempts</SelectItem>
-                                <SelectItem value="no-limit">No Limit</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.accountRecovery"
-                        render={() => (
-                          <FormItem>
-                            <div className="mb-4">
-                              <FormLabel>Account Recovery Methods</FormLabel>
-                              <FormDescription>
-                                Select all account recovery methods available
-                              </FormDescription>
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {[
-                                "Email Reset Links",
-                                "SMS/Phone Verification", 
-                                "Security Questions",
-                                "Administrator Reset",
-                                "Identity Verification",
-                                "Self-Service Portal"
-                              ].map((method) => (
-                                <FormField
-                                  key={method}
-                                  control={form.control}
-                                  name="identityBehaviorHygiene.accountRecovery"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={method}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(method)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), method]
-                                                : field.value?.filter(
-                                                    (value) => value !== method
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
-                                          {method}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
-                              ))}
-                            </div>
-                            <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
                   </div>
                   
-                  {/* 9. Privacy & Data Protection Section */}
+                  {/* 9. Behavior Monitoring Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">9. Privacy & Data Protection</h4>
+                    <h4 className="font-medium mb-4">9. Behavior Monitoring</h4>
                     <div className="space-y-6">
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.dataEncryption"
-                        render={() => (
-                          <FormItem>
-                            <div className="mb-4">
-                              <FormLabel>Data Encryption Standards</FormLabel>
-                              <FormDescription>
-                                Select all encryption standards used for identity data
-                              </FormDescription>
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {[
-                                "AES-256 Encryption",
-                                "TLS 1.3", 
-                                "End-to-End Encryption",
-                                "Database Encryption",
-                                "File System Encryption",
-                                "Application-Level Encryption"
-                              ].map((standard) => (
-                                <FormField
-                                  key={standard}
-                                  control={form.control}
-                                  name="identityBehaviorHygiene.dataEncryption"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={standard}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(standard)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), standard]
-                                                : field.value?.filter(
-                                                    (value) => value !== standard
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
-                                          {standard}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
-                              ))}
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.dataRetention"
+                        name="identityBehaviorHygiene.typicalLoginPatterns"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Data Retention Policy</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select data retention period" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="30-days">30 Days</SelectItem>
-                                <SelectItem value="90-days">90 Days</SelectItem>
-                                <SelectItem value="1-year">1 Year</SelectItem>
-                                <SelectItem value="3-years">3 Years</SelectItem>
-                                <SelectItem value="7-years">7 Years</SelectItem>
-                                <SelectItem value="indefinite">Indefinite</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <FormLabel>Typical Login Patterns</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Time, location, device" {...field} />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -5493,70 +5467,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.privacyCompliance"
-                        render={() => (
-                          <FormItem>
-                            <div className="mb-4">
-                              <FormLabel>Privacy Compliance Standards</FormLabel>
-                              <FormDescription>
-                                Select all privacy standards your organization complies with
-                              </FormDescription>
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {[
-                                "GDPR",
-                                "CCPA", 
-                                "PIPEDA",
-                                "LGPD",
-                                "HIPAA",
-                                "SOX"
-                              ].map((standard) => (
-                                <FormField
-                                  key={standard}
-                                  control={form.control}
-                                  name="identityBehaviorHygiene.privacyCompliance"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={standard}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(standard)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), standard]
-                                                : field.value?.filter(
-                                                    (value) => value !== standard
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
-                                          {standard}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
-                              ))}
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* 10. Security Training & Awareness Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">10. Security Training & Awareness</h4>
-                    <div className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.securityTraining"
+                        name="identityBehaviorHygiene.anomalyDetectionFlags"
                         render={({ field }) => (
                           <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
                             <FormControl>
@@ -5566,9 +5477,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               />
                             </FormControl>
                             <div className="space-y-1 leading-none">
-                              <FormLabel>Regular Security Training</FormLabel>
+                              <FormLabel>Anomaly Detection Flags</FormLabel>
                               <FormDescription>
-                                Do you provide regular security awareness training to users?
+                                Do you detect impossible travel, brute force attempts, etc.?
                               </FormDescription>
                             </div>
                           </FormItem>
@@ -5577,28 +5488,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.trainingFrequency"
+                        name="identityBehaviorHygiene.dataAccessTrends"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Training Frequency</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select training frequency" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="monthly">Monthly</SelectItem>
-                                <SelectItem value="quarterly">Quarterly</SelectItem>
-                                <SelectItem value="bi-annually">Bi-Annually</SelectItem>
-                                <SelectItem value="annually">Annually</SelectItem>
-                                <SelectItem value="ad-hoc">As Needed</SelectItem>
-                                <SelectItem value="none">No Regular Training</SelectItem>
-                              </SelectContent>
-                            </Select>
+                            <FormLabel>Data Access Trends</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Unusual file downloads, cloud API calls" {...field} />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -5606,64 +5502,20 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       
                       <FormField
                         control={form.control}
-                        name="identityBehaviorHygiene.trainingTopics"
-                        render={() => (
+                        name="identityBehaviorHygiene.toolCommandUsage"
+                        render={({ field }) => (
                           <FormItem>
-                            <div className="mb-4">
-                              <FormLabel>Training Topics Covered</FormLabel>
-                              <FormDescription>
-                                Select all security topics covered in your training programs
-                              </FormDescription>
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {[
-                                "Password Security",
-                                "Phishing Awareness", 
-                                "Social Engineering",
-                                "Data Protection",
-                                "Device Security",
-                                "Remote Work Security",
-                                "Incident Reporting",
-                                "Privacy Regulations"
-                              ].map((topic) => (
-                                <FormField
-                                  key={topic}
-                                  control={form.control}
-                                  name="identityBehaviorHygiene.trainingTopics"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={topic}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(topic)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), topic]
-                                                : field.value?.filter(
-                                                    (value) => value !== topic
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
-                                          {topic}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
-                              ))}
-                            </div>
+                            <FormLabel>Tool/Command Usage</FormLabel>
+                            <FormControl>
+                              <Input placeholder="E.g., PowerShell, RDP, SSH frequency" {...field} />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
                       />
                     </div>
                   </div>
+
                   
                   <div className="flex justify-end space-x-4">
                     <Button
