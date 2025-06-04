@@ -356,43 +356,111 @@ export default function Sos2aTool() {
   const handleFinalSubmit = async () => {
     if (!formData) return;
     
+    // Prevent double submissions
+    if (isLoading) {
+      toast({
+        title: "Submission in progress",
+        description: "Please wait for the current submission to complete.",
+      });
+      return;
+    }
+    
     setIsLoading(true);
     try {
-      // Prepare assessment data for submission
-      const assessmentData = {
-        businessName: formData.businessName,
-        industry: formData.showCustomIndustry ? formData.customIndustry : formData.industry,
-        employeeCount: formData.employeeCount,
-        securityMeasures: formData.securityMeasures || [],
-        primaryConcerns: formData.primaryConcerns || [],
-        contactInfo: formData.contactInfo,
-        reportType: formData.reportType,
-        matrixData: formData, // Store the entire form data as matrix data
-        findings: {
-          hasArchitectureDiagrams: formData.hasArchitectureDiagrams,
-          submittedAt: new Date().toISOString(),
-          businessLocation: formData.businessLocation,
-          businessServices: formData.businessServices,
-          operationMode: formData.operationMode,
-          internetPresence: formData.internetPresence
+      // Check for recent duplicates (within last 5 minutes)
+      const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+      const recentDuplicates = savedAssessments.filter(assessment => 
+        assessment.businessName === formData.businessName &&
+        new Date(assessment.createdAt) > fiveMinutesAgo
+      );
+
+      if (recentDuplicates.length > 0) {
+        // Update the most recent duplicate instead of creating new
+        const mostRecentId = recentDuplicates[0].id;
+        
+        const assessmentData = {
+          businessName: formData.businessName,
+          industry: formData.showCustomIndustry ? formData.customIndustry : formData.industry,
+          employeeCount: formData.employeeCount,
+          securityMeasures: formData.securityMeasures || [],
+          primaryConcerns: formData.primaryConcerns || [],
+          contactInfo: formData.contactInfo,
+          reportType: formData.reportType,
+          matrixData: formData, // Store the entire form data as matrix data
+          findings: {
+            hasArchitectureDiagrams: formData.hasArchitectureDiagrams,
+            submittedAt: new Date().toISOString(),
+            businessLocation: formData.businessLocation,
+            businessServices: formData.businessServices,
+            operationMode: formData.operationMode,
+            internetPresence: formData.internetPresence,
+            updatedDuplicate: true
+          }
+        };
+
+        const response = await fetch(`/api/assessments/${mostRecentId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(assessmentData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      };
 
-      // Submit to database
-      const response = await fetch('/api/assessments', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(assessmentData),
-      });
+        const updatedAssessment = await response.json();
+        console.log("Assessment updated (deduplication):", updatedAssessment);
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        toast({
+          title: "Assessment updated",
+          description: "Previous submission was updated with latest data to avoid duplicates.",
+        });
+      } else {
+        // Create new assessment
+        const assessmentData = {
+          businessName: formData.businessName,
+          industry: formData.showCustomIndustry ? formData.customIndustry : formData.industry,
+          employeeCount: formData.employeeCount,
+          securityMeasures: formData.securityMeasures || [],
+          primaryConcerns: formData.primaryConcerns || [],
+          contactInfo: formData.contactInfo,
+          reportType: formData.reportType,
+          matrixData: formData, // Store the entire form data as matrix data
+          findings: {
+            hasArchitectureDiagrams: formData.hasArchitectureDiagrams,
+            submittedAt: new Date().toISOString(),
+            businessLocation: formData.businessLocation,
+            businessServices: formData.businessServices,
+            operationMode: formData.operationMode,
+            internetPresence: formData.internetPresence
+          }
+        };
+
+        const response = await fetch('/api/assessments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(assessmentData),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const createdAssessment = await response.json();
+        console.log("Assessment saved to database:", createdAssessment);
+
+        toast({
+          title: "Assessment saved successfully",
+          description: "Your questionnaire has been saved to the database.",
+        });
       }
 
-      const createdAssessment = await response.json();
-      console.log("Assessment saved to database:", createdAssessment);
+      // Refresh the saved assessments list
+      await loadSavedAssessments();
 
       // Clear localStorage data since it's now persisted
       localStorage.removeItem('sos2a_form_data');
@@ -400,11 +468,6 @@ export default function Sos2aTool() {
       setShowReviewModal(false);
       setStep('matrix');
       localStorage.setItem('sos2a_current_step', 'matrix');
-      
-      toast({
-        title: "Assessment saved successfully",
-        description: "Your questionnaire has been saved to the database. Moving to Interview & Matrix Population step.",
-      });
       
       // Check if user provided architecture diagrams
       const hasArchitectureDiagrams = formData?.hasArchitectureDiagrams === true;
