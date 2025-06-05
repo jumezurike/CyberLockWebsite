@@ -4424,9 +4424,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </FormControl>
                                 <SelectContent>
                                   <SelectItem value="production">Production</SelectItem>
+                                  <SelectItem value="staging-testing">Staging/Testing</SelectItem>
                                   <SelectItem value="development">Development</SelectItem>
-                                  <SelectItem value="test">Test</SelectItem>
-                                  <SelectItem value="staging">Staging</SelectItem>
+                                  <SelectItem value="qa">QA</SelectItem>
+                                  <SelectItem value="disaster-recovery">Disaster Recovery</SelectItem>
+                                  <SelectItem value="training">Training</SelectItem>
+                                  <SelectItem value="other">Other</SelectItem>
                                 </SelectContent>
                               </Select>
                               <FormMessage />
