@@ -3903,6 +3903,169 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                     
+                    {/* Device Inventory Table */}
+                    <div className="mt-6">
+                      {filteredDevices.length > 0 ? (
+                        <div className="rounded-md border overflow-hidden">
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                              <thead className="bg-gray-100">
+                                <tr>
+                                  <th className="p-3 text-left font-medium">Device ID</th>
+                                  <th className="p-3 text-left font-medium">Type</th>
+                                  <th className="p-3 text-left font-medium">Make/Model</th>
+                                  <th className="p-3 text-left font-medium">Owner</th>
+                                  <th className="p-3 text-left font-medium">Environment</th>
+                                  <th className="p-3 text-left font-medium">Risk Level</th>
+                                  <th className="p-3 text-left font-medium">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {filteredDevices.map((device) => (
+                                  <tr key={device.id} className="border-t hover:bg-gray-50">
+                                    <td className="p-3">{device.deviceId}</td>
+                                    <td className="p-3">{device.deviceType}</td>
+                                    <td className="p-3">{device.makeModel}</td>
+                                    <td className="p-3">{device.owner}</td>
+                                    <td className="p-3">{device.environment}</td>
+                                    <td className="p-3">
+                                      <span className={`px-2 py-1 rounded text-xs ${
+                                        device.riskLevel === 'High' ? 'bg-red-100 text-red-700' :
+                                        device.riskLevel === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                                        'bg-green-100 text-green-700'
+                                      }`}>
+                                        {device.riskLevel}
+                                      </span>
+                                    </td>
+                                    <td className="p-3">
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => removeDeviceFromInventory(device.id)}
+                                      >
+                                        Remove
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 text-gray-500">
+                          <p>No devices in inventory. Click "Add Device" to get started.</p>
+                        </div>
+                      )}
+                    </div>
+                    
+                    {/* Add Device Form Modal */}
+                    {showAddDeviceForm && (
+                      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                        <div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
+                          <h3 className="text-lg font-semibold mb-4">Add New Device</h3>
+                          <form onSubmit={(e) => {
+                            e.preventDefault();
+                            const formData = new FormData(e.target as HTMLFormElement);
+                            const deviceData = {
+                              deviceId: formData.get('deviceId') as string,
+                              deviceType: formData.get('deviceType') as string,
+                              makeModel: formData.get('makeModel') as string,
+                              owner: formData.get('owner') as string,
+                              environment: formData.get('environment') as string,
+                              riskLevel: formData.get('riskLevel') as string,
+                              serialNumber: formData.get('serialNumber') as string,
+                              ipAddress: formData.get('ipAddress') as string,
+                              macAddress: formData.get('macAddress') as string,
+                              operatingSystem: formData.get('operatingSystem') as string
+                            };
+                            addDeviceToInventory(deviceData);
+                          }}>
+                            <div className="space-y-4">
+                              <div>
+                                <label className="block text-sm font-medium mb-1">Device ID *</label>
+                                <input
+                                  name="deviceId"
+                                  type="text"
+                                  required
+                                  className="w-full border rounded px-3 py-2"
+                                  placeholder="e.g., DEV-001"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium mb-1">Device Type *</label>
+                                <select name="deviceType" required className="w-full border rounded px-3 py-2">
+                                  <option value="">Select Type</option>
+                                  <option value="laptop">Laptop</option>
+                                  <option value="desktop">Desktop</option>
+                                  <option value="server">Server</option>
+                                  <option value="mobile">Mobile Device</option>
+                                  <option value="tablet">Tablet</option>
+                                  <option value="router">Router</option>
+                                  <option value="switch">Switch</option>
+                                  <option value="firewall">Firewall</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium mb-1">Make/Model *</label>
+                                <input
+                                  name="makeModel"
+                                  type="text"
+                                  required
+                                  className="w-full border rounded px-3 py-2"
+                                  placeholder="e.g., Dell OptiPlex 7090"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium mb-1">Owner *</label>
+                                <select name="owner" required className="w-full border rounded px-3 py-2">
+                                  <option value="">Select Owner</option>
+                                  <option value="system-administrator">System Administrator</option>
+                                  <option value="it-manager">IT Manager</option>
+                                  <option value="security-analyst">Security Analyst</option>
+                                  <option value="it-department">IT Department</option>
+                                  <option value="finance-department">Finance Department</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium mb-1">Environment *</label>
+                                <select name="environment" required className="w-full border rounded px-3 py-2">
+                                  <option value="">Select Environment</option>
+                                  <option value="production">Production</option>
+                                  <option value="staging-testing">Staging/Testing</option>
+                                  <option value="development">Development</option>
+                                  <option value="qa">QA</option>
+                                  <option value="disaster-recovery">Disaster Recovery</option>
+                                  <option value="training">Training</option>
+                                </select>
+                              </div>
+                              <div>
+                                <label className="block text-sm font-medium mb-1">Risk Level *</label>
+                                <select name="riskLevel" required className="w-full border rounded px-3 py-2">
+                                  <option value="Low">Low</option>
+                                  <option value="Medium" selected>Medium</option>
+                                  <option value="High">High</option>
+                                </select>
+                              </div>
+                            </div>
+                            <div className="flex gap-3 mt-6">
+                              <Button type="submit" className="bg-purple-600 hover:bg-purple-700 text-white flex-1">
+                                Add Device
+                              </Button>
+                              <Button 
+                                type="button" 
+                                variant="outline" 
+                                onClick={() => setShowAddDeviceForm(false)}
+                                className="flex-1"
+                              >
+                                Cancel
+                              </Button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    )}
+                    
                     {/* Import Device Inventory Section */}
                     <div className="mt-6 p-4 bg-gray-50 rounded-lg">
                       <h5 className="font-medium mb-2">Import Device Inventory</h5>
