@@ -28,6 +28,7 @@ import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
 import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
+import { useToast } from "@/hooks/use-toast";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -3702,28 +3703,50 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     
                     {/* Device Inventory Table */}
                     <div className="border rounded-lg overflow-hidden">
-                      <table className="w-full">
-                        <thead className="bg-gray-50 border-b">
-                          <tr>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Device Type</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Make/Model</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Serial/Asset #</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Risk Level</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Owner</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Operating System</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">MAC Address</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">IP Address</th>
-                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Environment</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td colSpan={9} className="px-4 py-8 text-center text-gray-500">
-                              No devices added yet. Click "Add Device" to begin tracking devices.
-                            </td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <div className="overflow-x-auto">
+                        <table className="w-full min-w-[2400px]">
+                          <thead className="bg-gray-50 border-b">
+                            <tr>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Device ID/Asset Tag</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Make/Model</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Color/Physical Description</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Serial Number</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Location/Department</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Owner/Responsible Party</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Purchase Date</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Warranty Expiration</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Operating System</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Software Installed</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">IP Address</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">MAC Address</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Security Software</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Encryption Status</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Last Security Update</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Compliance Status</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[100px]">Risk Level</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Data Classification</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Network Access</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Remote Access Capability</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Backup Status</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Monitoring Status</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Incident History</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Maintenance Schedule</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Disposal Method</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Handling Company</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Data Sanitization Method</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Disposal Date</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Disposal Certification</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td colSpan={29} className="px-4 py-8 text-center text-gray-500">
+                                No devices added yet. Click "Add Device" to begin tracking comprehensive device information.
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
                     
                     {/* Import Device Inventory Section */}
@@ -3733,11 +3756,24 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         Use these options to import existing device inventory data or download a template.
                       </p>
                       <div className="flex gap-3">
-                        <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                        <Button 
+                          className="bg-purple-600 hover:bg-purple-700 text-white"
+                          onClick={() => {
+                            const input = document.createElement('input');
+                            input.type = 'file';
+                            input.accept = '.csv';
+                            input.onchange = handleCSVImport;
+                            input.click();
+                          }}
+                        >
                           <Upload className="h-4 w-4 mr-2" />
                           Import CSV
                         </Button>
-                        <Button variant="outline" className="border-gray-300">
+                        <Button 
+                          variant="outline" 
+                          className="border-gray-300"
+                          onClick={downloadCSVTemplate}
+                        >
                           <Download className="h-4 w-4 mr-2" />
                           Download Template
                         </Button>
@@ -3924,6 +3960,79 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             <FormLabel>Device Nickname or Label (if used)</FormLabel>
                             <FormControl>
                               <Input placeholder="Enter device nickname or label" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.colorPhysicalDescription"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Color/Physical Description</FormLabel>
+                            <FormControl>
+                              <Input placeholder="e.g., Black Dell laptop, Silver iPhone" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.locationDepartment"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Location/Department</FormLabel>
+                            <FormControl>
+                              <Input placeholder="e.g., IT Department, Building A Floor 3" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.purchaseDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Purchase Date</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.warrantyExpiration"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Warranty Expiration</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.softwareInstalled"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Software Installed</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                placeholder="List major software applications installed" 
+                                {...field} 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
