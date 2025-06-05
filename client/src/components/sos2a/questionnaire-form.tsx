@@ -3683,9 +3683,19 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <SelectItem value="desktop">Desktop</SelectItem>
                           <SelectItem value="server">Server</SelectItem>
                           <SelectItem value="mobile">Mobile Device</SelectItem>
+                          <SelectItem value="tablet">Tablet</SelectItem>
                           <SelectItem value="printer">Printer</SelectItem>
-                          <SelectItem value="network">Network Equipment</SelectItem>
+                          <SelectItem value="scanner">Scanner</SelectItem>
+                          <SelectItem value="router">Network Equipment - Router</SelectItem>
+                          <SelectItem value="switch">Network Equipment - Switch</SelectItem>
+                          <SelectItem value="firewall">Network Equipment - Firewall</SelectItem>
+                          <SelectItem value="nas">Network Equipment - NAS</SelectItem>
+                          <SelectItem value="san">Network Equipment - SAN</SelectItem>
+                          <SelectItem value="internet-gateway">Network Equipment - Internet Gateway</SelectItem>
                           <SelectItem value="iot">IoT Device</SelectItem>
+                          <SelectItem value="camera">Security Camera</SelectItem>
+                          <SelectItem value="phone">VoIP Phone</SelectItem>
+                          <SelectItem value="storage">External Storage</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -3938,7 +3948,28 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               </FormDescription>
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {["Laptop", "Desktop", "Server", "Mobile", "Tablet", "Router", "Switch", "Firewall", "IoT Device", "Smartwatch", "Printer", "Transportation Device", "Other"].map((type) => (
+                              {[
+                                "Laptop", 
+                                "Desktop", 
+                                "Server", 
+                                "Mobile Device", 
+                                "Tablet", 
+                                "Printer", 
+                                "Scanner",
+                                "Router", 
+                                "Switch", 
+                                "Firewall", 
+                                "NAS", 
+                                "SAN", 
+                                "Internet Gateway",
+                                "IoT Device", 
+                                "Security Camera", 
+                                "VoIP Phone",
+                                "External Storage",
+                                "Smartwatch", 
+                                "Transportation Device", 
+                                "Other"
+                              ].map((type) => (
                                 <FormField
                                   key={type}
                                   control={form.control}
