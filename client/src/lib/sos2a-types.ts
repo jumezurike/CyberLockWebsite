@@ -583,11 +583,16 @@ export interface MatrixItem {
     deviceRiskScore?: number;
     
     // Section 7: Lifecycle & Ownership
-    procurementDate?: string;
-    procurementVendor?: string;
+    procurementDateVendor?: string;
     warrantyExpiration?: string;
     deviceLifecycleStatus?: string;
+    disposalDecommissionLocation?: string;
+    handlingCompanyOrganization?: string;
     assignedPolicies?: string[];
+    
+    // Legacy fields for backward compatibility
+    procurementDate?: string;
+    procurementVendor?: string;
     
     // Legacy fields for backward compatibility
     inventorySystem?: boolean;

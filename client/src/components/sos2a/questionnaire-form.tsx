@@ -4572,31 +4572,24 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   
                   {/* 7. Lifecycle & Ownership Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">7. Lifecycle & Ownership</h4>
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-orange-600">📋</span>
+                      <h4 className="font-medium">7. Lifecycle & Ownership</h4>
+                      <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Maintenance</span>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-6">Track procurement, warranty, and management details</p>
+                    
                     <div className="space-y-6">
+                      {/* First Row - Procurement and Warranty */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
                           control={form.control}
-                          name="deviceInventoryTracking.procurementDate"
+                          name="deviceInventoryTracking.procurementDateVendor"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Procurement Date</FormLabel>
+                              <FormLabel>Procurement Date / Vendor</FormLabel>
                               <FormControl>
-                                <Input type="date" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.procurementVendor"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Procurement Vendor</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Enter vendor name" {...field} />
+                                <Input placeholder="Enter procurement date and vendor" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
@@ -4616,7 +4609,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </FormItem>
                           )}
                         />
-                        
+                      </div>
+                      
+                      {/* Second Row - Lifecycle Status and Disposal */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
                           control={form.control}
                           name="deviceInventoryTracking.deviceLifecycleStatus"
@@ -4644,8 +4640,57 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </FormItem>
                           )}
                         />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.disposalDecommissionLocation"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Disposal/Decommission Location</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Where device was sent if disposed" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </div>
                       
+                      {/* Third Row - Handling Company and Data Sanitization */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.handlingCompanyOrganization"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Handling Company/Organization</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter specific company name (e.g., Each1Teach1 Tech)" {...field} />
+                              </FormControl>
+                              <FormDescription className="text-xs">
+                                Enter the specific company handling the disposal/recycling
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.dataSanitizationMethod"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Data Sanitization Method</FormLabel>
+                              <FormControl>
+                                <Input placeholder="How data was removed/destroyed" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                      
+                      {/* Assigned Policies Section */}
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.assignedPolicies"
@@ -4653,11 +4698,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           <FormItem>
                             <div className="mb-4">
                               <FormLabel>Assigned Policies or Group Tags</FormLabel>
-                              <FormDescription>
+                              <FormDescription className="text-xs">
                                 Select all that apply
                               </FormDescription>
                             </div>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                            <div className="grid grid-cols-3 gap-4">
                               {[
                                 "Finance Only", 
                                 "Executive", 
@@ -4692,7 +4737,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                             }}
                                           />
                                         </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
+                                        <FormLabel className="font-normal cursor-pointer text-sm">
                                           {policy}
                                         </FormLabel>
                                       </FormItem>
