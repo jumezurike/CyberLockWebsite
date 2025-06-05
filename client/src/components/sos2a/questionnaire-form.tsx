@@ -4570,9 +4570,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 6. Lifecycle & Ownership Section */}
+                  {/* 7. Lifecycle & Ownership Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">6. Lifecycle & Ownership</h4>
+                    <h4 className="font-medium mb-4">7. Lifecycle & Ownership</h4>
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
