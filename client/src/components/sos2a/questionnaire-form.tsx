@@ -181,6 +181,11 @@ interface QuestionnaireFormProps {
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
   const { toast } = useToast();
+  
+  // Independent device inventory state
+  const [deviceInventory, setDeviceInventory] = useState<any[]>([]);
+  const [showAddDeviceForm, setShowAddDeviceForm] = useState(false);
+  const [deviceTypeFilter, setDeviceTypeFilter] = useState("all-types");
 
   // CSV Template Download Function
   const downloadCSVTemplate = () => {
@@ -282,6 +287,47 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     
     reader.readAsText(file);
   };
+
+  // Add device to independent inventory
+  const addDeviceToInventory = (deviceData: any) => {
+    const newDevice = {
+      id: Date.now(),
+      deviceId: deviceData.deviceId || `DEV-${Date.now()}`,
+      makeModel: deviceData.makeModel || '',
+      serialNumber: deviceData.serialNumber || '',
+      deviceType: deviceData.deviceType || '',
+      owner: deviceData.owner || '',
+      operatingSystem: deviceData.operatingSystem || '',
+      ipAddress: deviceData.ipAddress || '',
+      macAddress: deviceData.macAddress || '',
+      environment: deviceData.environment || '',
+      riskLevel: deviceData.riskLevel || 'Medium',
+      ...deviceData
+    };
+    
+    setDeviceInventory(prev => [...prev, newDevice]);
+    setShowAddDeviceForm(false);
+    
+    toast({
+      title: "Device Added",
+      description: `Device ${newDevice.deviceId} has been added to inventory.`,
+    });
+  };
+
+  // Remove device from inventory
+  const removeDeviceFromInventory = (deviceId: number) => {
+    setDeviceInventory(prev => prev.filter(device => device.id !== deviceId));
+    
+    toast({
+      title: "Device Removed",
+      description: "Device has been removed from inventory.",
+    });
+  };
+
+  // Filter devices based on type
+  const filteredDevices = deviceTypeFilter === "all-types" 
+    ? deviceInventory 
+    : deviceInventory.filter(device => device.deviceType === deviceTypeFilter);
   
   // Helper function to handle OS checkbox changes
   const handleOsCheckboxChange = (currentValues: string[] = [], os: any, isChecked: boolean): string[] => {
@@ -3761,7 +3807,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium text-lg">Device Inventory</h4>
-                      <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                      <Button 
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                        onClick={() => setShowAddDeviceForm(true)}
+                      >
                         <Plus className="h-4 w-4 mr-2" />
                         Add Device
                       </Button>
@@ -3776,7 +3825,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                       <p className="text-sm text-blue-700 mb-3">Select a device type to filter the inventory list below</p>
                       
-                      <Select defaultValue="all-types">
+                      <Select 
+                        defaultValue="all-types" 
+                        onValueChange={setDeviceTypeFilter}
+                      >
                         <SelectTrigger className="w-48 bg-white border-blue-300">
                           <SelectValue placeholder="All Types" />
                         </SelectTrigger>
