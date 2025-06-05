@@ -3857,9 +3857,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       <p className="text-sm text-gray-600 mb-4">
                         Use these options to import existing device inventory data or download a template.
                       </p>
-                      <div className="flex gap-3">
+                      <div className="flex gap-3 w-full">
                         <Button 
-                          className="bg-purple-600 hover:bg-purple-700 text-white"
+                          className="bg-purple-600 hover:bg-purple-700 text-white flex-1"
                           onClick={() => {
                             const input = document.createElement('input');
                             input.type = 'file';
@@ -3873,7 +3873,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         </Button>
                         <Button 
                           variant="outline" 
-                          className="border-gray-300"
+                          className="border-gray-300 flex-1"
                           onClick={downloadCSVTemplate}
                         >
                           <Download className="h-4 w-4 mr-2" />
