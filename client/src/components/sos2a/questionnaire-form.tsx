@@ -3705,7 +3705,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         name="deviceInventoryTracking.owner"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>User/Owner (drop down list)</FormLabel>
+                            <FormLabel>User/Owner</FormLabel>
                             <Select onValueChange={field.onChange} defaultValue={field.value}>
                               <FormControl>
                                 <SelectTrigger>

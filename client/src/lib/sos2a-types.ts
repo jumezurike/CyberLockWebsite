@@ -539,6 +539,57 @@ export interface MatrixItem {
   };
   
   deviceInventoryTracking?: {
+    // Section 1: Identification
+    deviceId?: string;
+    assetTag?: string;
+    makeModel?: string;
+    serialNumber?: string;
+    owner?: string;
+    ownerContact?: string;
+    role?: string;
+    
+    // Section 2: Classification
+    deviceType?: string;
+    operatingSystem?: string;
+    osVersion?: string;
+    purpose?: string;
+    classification?: string;
+    transportationDeviceType?: string;
+    browserEngine?: string;
+    
+    // Section 3: Network & Location
+    ipAddress?: string;
+    macAddress?: string;
+    networkLocation?: string;
+    environment?: string;
+    networkZones?: string[];
+    
+    // Section 4: Security Posture
+    encryptionStatus?: string[];
+    antivirusStatus?: string;
+    patchStatus?: string;
+    vpnMdmEnrollment?: boolean;
+    securityComplianceLevel?: string[];
+    
+    // Section 5: Lifecycle Management
+    disposalLocation?: string;
+    handlingCompany?: string;
+    dataSanitizationMethod?: string;
+    
+    // Section 6: Usage & Monitoring
+    lastLoginDate?: string;
+    lastNetworkCheckin?: string;
+    deviceStatus?: string;
+    deviceRiskScore?: number;
+    
+    // Section 7: Lifecycle & Ownership
+    procurementDate?: string;
+    procurementVendor?: string;
+    warrantyExpiration?: string;
+    deviceLifecycleStatus?: string;
+    assignedPolicies?: string[];
+    
+    // Legacy fields for backward compatibility
     inventorySystem?: boolean;
     updatedRegularly?: boolean;
     assetTagging?: boolean;
