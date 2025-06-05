@@ -4571,185 +4571,210 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                   
                   {/* 7. Lifecycle & Ownership Section */}
-                  <div className="border rounded-md p-4 mb-6">
+                  <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 mb-6 shadow-sm">
                     <div className="flex items-center gap-2 mb-4">
-                      <span className="text-orange-600">📋</span>
-                      <h4 className="font-medium">7. Lifecycle & Ownership</h4>
-                      <span className="bg-orange-100 text-orange-800 text-xs px-2 py-1 rounded">Maintenance</span>
+                      <span className="text-2xl">📋</span>
+                      <h4 className="font-semibold text-lg text-gray-800">7. Lifecycle & Ownership</h4>
+                      <span className="bg-orange-100 text-orange-800 text-xs px-3 py-1 rounded-full font-medium border border-orange-200">Maintenance</span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-6">Track procurement, warranty, and management details</p>
+                    <p className="text-sm text-gray-600 mb-6 font-medium">Track procurement, warranty, and management details</p>
                     
-                    <div className="space-y-6">
-                      {/* First Row - Procurement and Warranty */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.procurementDateVendor"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Procurement Date / Vendor</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Enter procurement date and vendor" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.warrantyExpiration"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Warranty Expiration</FormLabel>
-                              <FormControl>
-                                <Input type="date" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                      
-                      {/* Second Row - Lifecycle Status and Disposal */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.deviceLifecycleStatus"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Device Lifecycle Status</FormLabel>
-                              <Select 
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
+                    <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                      <div className="space-y-6">
+                        {/* First Row - Procurement and Warranty */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.procurementDateVendor"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Procurement Date / Vendor</FormLabel>
                                 <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select lifecycle status" />
-                                  </SelectTrigger>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    placeholder="Enter procurement date and vendor" 
+                                    {...field} 
+                                  />
                                 </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="in-use">In Use</SelectItem>
-                                  <SelectItem value="in-storage">In Storage</SelectItem>
-                                  <SelectItem value="decommissioned">Decommissioned</SelectItem>
-                                  <SelectItem value="pending-disposal">Pending Disposal</SelectItem>
-                                  <SelectItem value="disposed">Disposed</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.disposalDecommissionLocation"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Disposal/Decommission Location</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Where device was sent if disposed" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.warrantyExpiration"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Warranty Expiration</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    type="date" 
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                       
-                      {/* Third Row - Handling Company and Data Sanitization */}
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.handlingCompanyOrganization"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Handling Company/Organization</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Enter specific company name (e.g., Each1Teach1 Tech)" {...field} />
-                              </FormControl>
-                              <FormDescription className="text-xs">
-                                Enter the specific company handling the disposal/recycling
-                              </FormDescription>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                        {/* Second Row - Lifecycle Status and Disposal */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.deviceLifecycleStatus"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Device Lifecycle Status</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger className="border-gray-300 focus:border-orange-500 focus:ring-orange-500">
+                                      <SelectValue placeholder="Select lifecycle status" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="in-use">In Use</SelectItem>
+                                    <SelectItem value="in-storage">In Storage</SelectItem>
+                                    <SelectItem value="decommissioned">Decommissioned</SelectItem>
+                                    <SelectItem value="pending-disposal">Pending Disposal</SelectItem>
+                                    <SelectItem value="disposed">Disposed</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.disposalDecommissionLocation"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Disposal/Decommission Location</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    placeholder="Where device was sent if disposed" 
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                         
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.dataSanitizationMethod"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Data Sanitization Method</FormLabel>
-                              <FormControl>
-                                <Input placeholder="How data was removed/destroyed" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
+                        {/* Third Row - Handling Company and Data Sanitization */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.handlingCompanyOrganization"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Handling Company/Organization</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    placeholder="Enter specific company name (e.g., Each1Teach1 Tech)" 
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormDescription className="text-xs text-gray-500">
+                                  Enter the specific company handling the disposal/recycling
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.dataSanitizationMethod"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Data Sanitization Method</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    placeholder="How data was removed/destroyed" 
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        
+                        {/* Assigned Policies Section */}
+                        <div className="border-t border-gray-200 pt-6">
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.assignedPolicies"
+                            render={() => (
+                              <FormItem>
+                                <div className="mb-4">
+                                  <FormLabel className="text-gray-700 font-medium">Assigned Policies or Group Tags</FormLabel>
+                                  <FormDescription className="text-xs text-gray-500">
+                                    Select all that apply
+                                  </FormDescription>
+                                </div>
+                                <div className="grid grid-cols-3 gap-4">
+                                  {[
+                                    "Finance Only", 
+                                    "Executive", 
+                                    "IT Admin",
+                                    "Developer",
+                                    "Guest Access",
+                                    "Restricted Access",
+                                    "BYOD",
+                                    "Remote Worker",
+                                    "Standard User"
+                                  ].map((policy) => (
+                                    <FormField
+                                      key={policy}
+                                      control={form.control}
+                                      name="deviceInventoryTracking.assignedPolicies"
+                                      render={({ field }) => {
+                                        return (
+                                          <FormItem
+                                            key={policy}
+                                            className="flex flex-row items-start space-x-3 space-y-0"
+                                          >
+                                            <FormControl>
+                                              <Checkbox
+                                                className="accent-orange-500"
+                                                checked={field.value?.includes(policy)}
+                                                onCheckedChange={(checked) => {
+                                                  const updatedValue = checked
+                                                    ? [...(field.value || []), policy]
+                                                    : field.value?.filter(
+                                                        (value) => value !== policy
+                                                      ) || [];
+                                                  field.onChange(updatedValue);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal cursor-pointer text-sm text-gray-700">
+                                              {policy}
+                                            </FormLabel>
+                                          </FormItem>
+                                        );
+                                      }}
+                                    />
+                                  ))}
+                                </div>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                       </div>
-                      
-                      {/* Assigned Policies Section */}
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.assignedPolicies"
-                        render={() => (
-                          <FormItem>
-                            <div className="mb-4">
-                              <FormLabel>Assigned Policies or Group Tags</FormLabel>
-                              <FormDescription className="text-xs">
-                                Select all that apply
-                              </FormDescription>
-                            </div>
-                            <div className="grid grid-cols-3 gap-4">
-                              {[
-                                "Finance Only", 
-                                "Executive", 
-                                "IT Admin",
-                                "Developer",
-                                "Guest Access",
-                                "Restricted Access",
-                                "BYOD",
-                                "Remote Worker",
-                                "Standard User"
-                              ].map((policy) => (
-                                <FormField
-                                  key={policy}
-                                  control={form.control}
-                                  name="deviceInventoryTracking.assignedPolicies"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={policy}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(policy)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), policy]
-                                                : field.value?.filter(
-                                                    (value) => value !== policy
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer text-sm">
-                                          {policy}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
-                              ))}
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
                     </div>
                   </div>
                 </div>
