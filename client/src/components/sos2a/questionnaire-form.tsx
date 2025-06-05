@@ -3942,16 +3942,23 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="john-smith">John Smith</SelectItem>
-                                <SelectItem value="jane-doe">Jane Doe</SelectItem>
                                 <SelectItem value="system-administrator">System Administrator</SelectItem>
                                 <SelectItem value="it-manager">IT Manager</SelectItem>
+                                <SelectItem value="network-administrator">Network Administrator</SelectItem>
+                                <SelectItem value="security-analyst">Security Analyst</SelectItem>
+                                <SelectItem value="database-administrator">Database Administrator</SelectItem>
                                 <SelectItem value="service-account">Service Account</SelectItem>
-                                <SelectItem value="shared-device">Shared Device</SelectItem>
-                                <SelectItem value="guest-user">Guest User</SelectItem>
+                                <SelectItem value="shared-workstation">Shared Workstation</SelectItem>
                                 <SelectItem value="executive-team">Executive Team</SelectItem>
-                                <SelectItem value="developer-team">Developer Team</SelectItem>
-                                <SelectItem value="finance-team">Finance Team</SelectItem>
+                                <SelectItem value="it-department">IT Department</SelectItem>
+                                <SelectItem value="finance-department">Finance Department</SelectItem>
+                                <SelectItem value="hr-department">HR Department</SelectItem>
+                                <SelectItem value="operations-team">Operations Team</SelectItem>
+                                <SelectItem value="development-team">Development Team</SelectItem>
+                                <SelectItem value="guest-access">Guest Access</SelectItem>
+                                <SelectItem value="contractor">Contractor</SelectItem>
+                                <SelectItem value="vendor">Vendor</SelectItem>
+                                <SelectItem value="unassigned">Unassigned</SelectItem>
                                 <SelectItem value="other">Other</SelectItem>
                               </SelectContent>
                             </Select>
