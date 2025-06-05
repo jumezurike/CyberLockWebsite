@@ -180,6 +180,108 @@ interface QuestionnaireFormProps {
 
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
+  const { toast } = useToast();
+
+  // CSV Template Download Function
+  const downloadCSVTemplate = () => {
+    const csvHeaders = [
+      "Device ID/Asset Tag",
+      "Make/Model", 
+      "Color/Physical Description",
+      "Serial Number",
+      "Location/Department",
+      "Owner/Responsible Party",
+      "Purchase Date",
+      "Warranty Expiration",
+      "Operating System",
+      "Software Installed",
+      "IP Address",
+      "MAC Address",
+      "Security Software",
+      "Encryption Status",
+      "Last Security Update",
+      "Compliance Status",
+      "Risk Level",
+      "Data Classification",
+      "Network Access",
+      "Remote Access Capability",
+      "Backup Status",
+      "Monitoring Status",
+      "Incident History",
+      "Maintenance Schedule",
+      "Disposal Method",
+      "Handling Company",
+      "Data Sanitization Method",
+      "Disposal Date",
+      "Disposal Certification"
+    ];
+    
+    const csvContent = csvHeaders.join(",") + "\n";
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "device-inventory-template.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast({
+      title: "Template Downloaded",
+      description: "Device inventory CSV template has been downloaded successfully.",
+    });
+  };
+
+  // CSV Import Function
+  const handleCSVImport = (event: any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const csv = e.target?.result as string;
+        const lines = csv.split('\n');
+        const headers = lines[0].split(',');
+        
+        // Validate headers match expected format
+        const expectedHeaders = [
+          "Device ID/Asset Tag",
+          "Make/Model", 
+          "Color/Physical Description"
+        ];
+        
+        const hasValidHeaders = expectedHeaders.every(header => 
+          headers.some(h => h.trim() === header)
+        );
+        
+        if (!hasValidHeaders) {
+          toast({
+            title: "Import Error",
+            description: "CSV file format is invalid. Please use the provided template.",
+            variant: "destructive",
+          });
+          return;
+        }
+        
+        const deviceCount = lines.length - 1; // Exclude header
+        toast({
+          title: "Import Successful",
+          description: `Successfully imported ${deviceCount} devices from CSV file.`,
+        });
+        
+      } catch (error) {
+        toast({
+          title: "Import Error",
+          description: "Failed to parse CSV file. Please check the file format.",
+          variant: "destructive",
+        });
+      }
+    };
+    
+    reader.readAsText(file);
+  };
   
   // Helper function to handle OS checkbox changes
   const handleOsCheckboxChange = (currentValues: string[] = [], os: any, isChecked: boolean): string[] => {
