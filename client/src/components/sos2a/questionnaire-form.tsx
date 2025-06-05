@@ -4403,9 +4403,85 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 5. Usage & Monitoring Section */}
+                  {/* 5. Lifecycle Management Section - Disposal and data sanitization */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Usage & Monitoring</h4>
+                    <h4 className="font-medium mb-4">5. Lifecycle Management</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.disposalLocation"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Disposal/Decommission Location</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select disposal location" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="on-site-secure">On-site Secure Facility</SelectItem>
+                                <SelectItem value="certified-recycler">Certified Recycler</SelectItem>
+                                <SelectItem value="manufacturer-return">Manufacturer Return Program</SelectItem>
+                                <SelectItem value="third-party-vendor">Third-party Vendor</SelectItem>
+                                <SelectItem value="government-facility">Government Facility</SelectItem>
+                                <SelectItem value="pending">Pending Disposal</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.handlingCompany"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Handling Company/Organization</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter specific company name (e.g., Each1Teach1 Tech)" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                              Enter the specific company handling the disposal/recycling
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.dataSanitizationMethod"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Data Sanitization Method</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select data sanitization method" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="dod-5220-22m">DoD 5220.22-M (3-pass)</SelectItem>
+                                <SelectItem value="nist-800-88">NIST 800-88 Guidelines</SelectItem>
+                                <SelectItem value="physical-destruction">Physical Destruction</SelectItem>
+                                <SelectItem value="degaussing">Degaussing</SelectItem>
+                                <SelectItem value="crypto-erase">Cryptographic Erasure</SelectItem>
+                                <SelectItem value="secure-format">Secure Format</SelectItem>
+                                <SelectItem value="not-performed">Not Performed</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* 6. Usage & Monitoring Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">6. Usage & Monitoring</h4>
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
@@ -4504,9 +4580,23 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           name="deviceInventoryTracking.procurementDate"
                           render={({ field }) => (
                             <FormItem>
-                              <FormLabel>Procurement Date / Vendor</FormLabel>
+                              <FormLabel>Procurement Date</FormLabel>
                               <FormControl>
-                                <Input placeholder="Enter procurement date and vendor" {...field} />
+                                <Input type="date" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.procurementVendor"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Procurement Vendor</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Enter vendor name" {...field} />
                               </FormControl>
                               <FormMessage />
                             </FormItem>
