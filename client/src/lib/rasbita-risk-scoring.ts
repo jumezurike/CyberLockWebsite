@@ -1,13 +1,33 @@
-// RASBITA Risk Scoring System
+// Preventive Device Risk Scoring System
 // Connects Section #3 Security Risks to Section #12 Device Risk Scores
+// IMPORTANT: This is NOT RASBITA - this is preventive qualitative assessment
 
-export interface RasbitaRiskFactor {
+export interface PreventiveRiskFactor {
   id: string;
   name: string;
   likelihood: 'rare' | 'unlikely' | 'likely' | 'very-likely' | 'most-certain';
   impact: 'trivial' | 'minor' | 'moderate' | 'major' | 'extreme';
   likelihoodScore: number; // 1-5
   impactScore: number; // 1-5
+}
+
+export interface WazuhRiskData {
+  agentId: string;
+  riskScore: number; // 0-100 from Wazuh
+  lastUpdated: string;
+  alerts: WazuhAlert[];
+}
+
+export interface WazuhAlert {
+  id: string;
+  level: number;
+  description: string;
+  rule: {
+    id: number;
+    description: string;
+    level: number;
+  };
+  timestamp: string;
 }
 
 // Likelihood mapping to numerical values
@@ -28,8 +48,8 @@ const IMPACT_SCORES = {
   'extreme': 5
 };
 
-// Security risks from Section #3 mapped to RASBITA factors
-export const SECURITY_RISK_RASBITA_MAPPING: Record<string, RasbitaRiskFactor> = {
+// Security risks from Section #3 mapped to preventive risk factors
+export const SECURITY_RISK_PREVENTIVE_MAPPING: Record<string, PreventiveRiskFactor> = {
   // Website Security Risks
   'phishing-spoofing-web': {
     id: 'phishing-spoofing-web',
@@ -219,18 +239,25 @@ export const SECURITY_RISK_RASBITA_MAPPING: Record<string, RasbitaRiskFactor> = 
 export function calculateDeviceRiskScore(
   organizationSecurityRisks: string[],
   deviceType: string = 'workstation',
-  deviceCount: number = 1
+  deviceCount: number = 1,
+  wazuhRiskData?: WazuhRiskData
 ): number {
+  // If Wazuh SIEM data is available, use it
+  if (wazuhRiskData && wazuhRiskData.riskScore > 0) {
+    return Math.min(Math.max(wazuhRiskData.riskScore, 0), 100);
+  }
+
+  // Otherwise, calculate preventive risk score
   if (!organizationSecurityRisks || organizationSecurityRisks.length === 0) {
     return 0;
   }
 
   let totalRiskScore = 0;
-  const applicableRisks: RasbitaRiskFactor[] = [];
+  const applicableRisks: PreventiveRiskFactor[] = [];
 
-  // Get RASBITA factors for the organization's feared security risks
+  // Get preventive risk factors for the organization's feared security risks
   organizationSecurityRisks.forEach(riskId => {
-    const riskFactor = SECURITY_RISK_RASBITA_MAPPING[riskId];
+    const riskFactor = SECURITY_RISK_PREVENTIVE_MAPPING[riskId];
     if (riskFactor) {
       applicableRisks.push(riskFactor);
     }
