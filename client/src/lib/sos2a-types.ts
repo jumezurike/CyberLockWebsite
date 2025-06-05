@@ -34,41 +34,61 @@ export interface PolicyDocuments {
 }
 
 export interface DeviceInventoryTracking {
-  // 1. Identification
+  // 1. Identification - Enhanced with structured user/owner and contact
   deviceId?: string;
   makeModel?: string;
-  colorDescription?: string;
   serialNumber?: string;
-  owner?: string;
+  owner?: string; // Dropdown selection
+  firstName?: string;
+  lastName?: string;
+  role?: string; // User, Administrator, Super User, etc.
+  contactEmail?: string; // Linked to owner
+  contactPhone?: string; // Linked to owner
   deviceNickname?: string;
+  colorDescription?: string; // Keep for backward compatibility
   
-  // 2. Classification
-  deviceType?: string[];
-  endpointCategory?: string[];
+  // 2. Classification - Expanded with browser engines
+  deviceType?: string[]; // Laptop, Desktop, Server, Mobile, Tablet, Router, Switch, Firewall, IoT Device, Smartwatch, Printer, Transportation Device, Other
+  endpointCategory?: string[]; // User Device, Shared Asset, Infrastructure Device, Monitoring System, Security Device
   operatingSystem?: string;
-  browsersInstalled?: string[];
+  browsersInstalled?: string[]; // Chrome (Chromium), Firefox (Gecko), Safari (WebKit), Edge (Chromium), Opera (Chromium), Brave (Chromium), Internet Explorer (Trident)
   
-  // 3. Network & Location
+  // 3. Network & Location - Added environment field
   ipAddress?: string;
   macAddress?: string;
-  networkZone?: string[];
+  environment?: string; // Production, Development, Test, Staging
   lastKnownLocation?: string;
   assignedDepartment?: string;
+  networkZone?: string[]; // DMZ, Internal, Guest, Management, Secured/Isolated, IoT Network, VPN
   
-  // 4. Security Posture
-  encryptionStatus?: string[];
+  // 4. Security Posture - Enhanced encryption and compliance options
+  encryptionStatus?: string[]; // Full Disk Encryption, File-Level Encryption, Removable Media Encryption, No Encryption, Partial Encryption, Unknown
   antivirusInstalled?: boolean;
   firewallActive?: boolean;
-  patchStatus?: string;
-  securityComplianceLevel?: string[];
-  vpnMdmEnrollment?: boolean;
   tpmPresent?: boolean;
+  patchStatus?: string; // OS, App, Firmware patch status
+  vpnMdmEnrollment?: boolean;
+  securityComplianceLevel?: string[]; // HIPAA, CMMC, ISO 27001, NIST 800-171, SOC 2, PCI DSS, GDPR, FISMA, None
   
-  // 5. Usage & Monitoring
+  // 5. Lifecycle Management - Disposal and data sanitization
+  disposalLocation?: string;
+  handlingCompany?: string; // e.g., Each1Teach1 Tech
+  dataSanitizationMethod?: string;
+  
+  // 6. Usage & Monitoring - Streamlined
   lastLoginDate?: string;
   lastNetworkCheckin?: string;
-  deviceStatus?: string;
-  deviceRiskScore?: number;
+  deviceStatus?: string; // Device Activity / Status
+  deviceRiskScore?: number; // 0-100 from SIEM/EDR
+  
+  // 7. Lifecycle & Ownership - Maintenance and policy tracking
+  procurementDate?: string;
+  procurementVendor?: string;
+  warrantyExpiration?: string;
+  deviceLifecycleStatus?: string;
+  assignedPolicies?: string[]; // Finance Only, Executive, IT Admin, Developer, Guest Access, Restricted Access, BYOD, Remote Worker, Standard User
+  
+  // Backward compatibility fields
   backupStatus?: boolean;
   backupFrequency?: string;
   backupType?: string;
@@ -76,13 +96,7 @@ export interface DeviceInventoryTracking {
   backupFolder?: string;
   backupRetentionPeriod?: string;
   backupLastTested?: string;
-  backupDetails?: string; // For backward compatibility and free-form notes
-  
-  // 6. Lifecycle & Ownership
-  procurementDate?: string;
-  warrantyExpiration?: string;
-  deviceLifecycleStatus?: string;
-  assignedPolicies?: string[];
+  backupDetails?: string;
 }
 
 export interface IdentityComponent {

@@ -3654,7 +3654,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage your organization's devices to improve security visibility and control.
                   </p>
                   
-                  {/* 1. Identification Section */}
+                  {/* 1. Identification Section - Enhanced */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -3688,20 +3688,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       
                       <FormField
                         control={form.control}
-                        name="deviceInventoryTracking.colorDescription"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Color / Physical Description</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter device color or description" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
                         name="deviceInventoryTracking.serialNumber"
                         render={({ field }) => (
                           <FormItem>
@@ -3719,9 +3705,120 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         name="deviceInventoryTracking.owner"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Owner / Assigned User</FormLabel>
+                            <FormLabel>User/Owner (drop down list)</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select device owner/user" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="john-smith">John Smith</SelectItem>
+                                <SelectItem value="jane-doe">Jane Doe</SelectItem>
+                                <SelectItem value="system-administrator">System Administrator</SelectItem>
+                                <SelectItem value="it-manager">IT Manager</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="shared-device">Shared Device</SelectItem>
+                                <SelectItem value="guest-user">Guest User</SelectItem>
+                                <SelectItem value="executive-team">Executive Team</SelectItem>
+                                <SelectItem value="developer-team">Developer Team</SelectItem>
+                                <SelectItem value="finance-team">Finance Team</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.firstName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter device owner or assigned user" {...field} />
+                              <Input placeholder="Enter first name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.lastName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Last Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter last name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.role"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Role</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select user role" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="user">User</SelectItem>
+                                <SelectItem value="administrator">Administrator</SelectItem>
+                                <SelectItem value="super-user">Super User</SelectItem>
+                                <SelectItem value="it-admin">IT Admin</SelectItem>
+                                <SelectItem value="developer">Developer</SelectItem>
+                                <SelectItem value="manager">Manager</SelectItem>
+                                <SelectItem value="executive">Executive</SelectItem>
+                                <SelectItem value="guest">Guest</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="contractor">Contractor</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.contactEmail"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact: Email</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="email" 
+                                placeholder="Enter email address" 
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.contactPhone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact: Phone Number</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="tel" 
+                                placeholder="Enter phone number" 
+                                {...field} 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3760,7 +3857,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               </FormDescription>
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {["Laptop", "Desktop", "Server", "Mobile", "Tablet", "Router", "Switch", "Firewall", "IoT Device", "Smartwatch", "Printer", "Other"].map((type) => (
+                              {["Laptop", "Desktop", "Server", "Mobile", "Tablet", "Router", "Switch", "Firewall", "IoT Device", "Smartwatch", "Printer", "Transportation Device", "Other"].map((type) => (
                                 <FormField
                                   key={type}
                                   control={form.control}
@@ -3978,6 +4075,30 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               <FormControl>
                                 <Input placeholder="Enter department or business unit" {...field} />
                               </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.environment"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Environment</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select environment" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="production">Production</SelectItem>
+                                  <SelectItem value="development">Development</SelectItem>
+                                  <SelectItem value="test">Test</SelectItem>
+                                  <SelectItem value="staging">Staging</SelectItem>
+                                </SelectContent>
+                              </Select>
                               <FormMessage />
                             </FormItem>
                           )}
