@@ -5147,28 +5147,56 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <FormField
                           control={form.control}
                           name="deviceInventoryTracking.deviceRiskScore"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Device Risk Score (Optional)</FormLabel>
-                              <FormDescription>
-                                If available from your SIEM/EDR, enter a risk score from 0-100
-                              </FormDescription>
-                              <FormControl>
-                                <Input 
-                                  type="number" 
-                                  min="0" 
-                                  max="100" 
-                                  placeholder="Enter risk score (0-100)"
-                                  {...field}
-                                  onChange={e => {
-                                    const value = e.target.value === '' ? undefined : Number(e.target.value);
-                                    field.onChange(value);
-                                  }}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
+                          render={({ field }) => {
+                            const deviceType = form.watch("deviceInventoryTracking.deviceType");
+                            const ipAddress = form.watch("deviceInventoryTracking.ipAddress");
+                            const calculatedScore = deviceType ? calculateDeviceRisk(deviceType, ipAddress || "") : 0;
+                            
+                            return (
+                              <FormItem>
+                                <FormLabel>Device Risk Score</FormLabel>
+                                <FormDescription>
+                                  Auto-calculated from Section #3 security risks. Override with SIEM/EDR data if available.
+                                </FormDescription>
+                                <div className="space-y-2">
+                                  <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-md">
+                                    <span className="text-sm text-gray-600">Calculated Score:</span>
+                                    <Badge 
+                                      variant={
+                                        calculatedScore >= 80 ? "destructive" :
+                                        calculatedScore >= 60 ? "default" :
+                                        calculatedScore >= 40 ? "secondary" : "outline"
+                                      }
+                                    >
+                                      {calculatedScore}/100
+                                    </Badge>
+                                    <Button
+                                      type="button"
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => field.onChange(calculatedScore)}
+                                    >
+                                      Use Calculated
+                                    </Button>
+                                  </div>
+                                  <FormControl>
+                                    <Input 
+                                      type="number" 
+                                      min="0" 
+                                      max="100" 
+                                      placeholder={`Auto-calculated: ${calculatedScore} (override if needed)`}
+                                      {...field}
+                                      onChange={e => {
+                                        const value = e.target.value === '' ? undefined : Number(e.target.value);
+                                        field.onChange(value);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </div>
+                                <FormMessage />
+                              </FormItem>
+                            );
+                          }}
                         />
                       </div>
                     </div>
