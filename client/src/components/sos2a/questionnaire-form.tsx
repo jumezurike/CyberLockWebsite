@@ -29,6 +29,7 @@ import { EulaAgreement } from "./eula-agreement";
 import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
 import { useToast } from "@/hooks/use-toast";
+import { calculateDeviceRiskScore, getRiskLevelFromScore, fetchWazuhRiskScore } from "@/lib/rasbita-risk-scoring";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -328,6 +329,18 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const filteredDevices = deviceTypeFilter === "all-types" 
     ? deviceInventory 
     : deviceInventory.filter(device => device.deviceType === deviceTypeFilter);
+
+  // Calculate device risk score based on Section #3 security risks
+  const calculateDeviceRisk = (deviceType: string, ipAddress?: string) => {
+    const formValues = form.getValues();
+    const organizationSecurityRisks = [
+      ...(formValues.securityRisks || []),
+      ...(formValues.websiteVulnerabilities || []),
+      ...(formValues.endDeviceVulnerabilities || [])
+    ];
+
+    return calculateDeviceRiskScore(organizationSecurityRisks, deviceType);
+  };
   
   // Helper function to handle OS checkbox changes
   const handleOsCheckboxChange = (currentValues: string[] = [], os: any, isChecked: boolean): string[] => {
@@ -4837,6 +4850,49 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </FormItem>
                           )}
                         />
+                      </div>
+                      
+                      {/* Automatic Device Risk Score Display */}
+                      <div className="border rounded-md p-4 bg-blue-50">
+                        <h5 className="font-medium mb-3 text-blue-800">Automatic Device Risk Assessment</h5>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <p className="text-sm text-gray-600">
+                              Risk Score (Based on Section #3 Security Risks):
+                            </p>
+                            <div className="flex items-center space-x-3">
+                              {(() => {
+                                const deviceType = form.watch("deviceInventoryTracking.deviceType");
+                                const ipAddress = form.watch("deviceInventoryTracking.ipAddress");
+                                const riskScore = deviceType ? calculateDeviceRisk(deviceType, ipAddress || "") : 0;
+                                const riskLevel = getRiskLevelFromScore(riskScore);
+                                
+                                return (
+                                  <>
+                                    <Badge 
+                                      variant={
+                                        riskScore >= 80 ? "destructive" :
+                                        riskScore >= 60 ? "default" :
+                                        riskScore >= 40 ? "secondary" : "outline"
+                                      }
+                                      className="text-lg px-3 py-1"
+                                    >
+                                      {riskScore}/100
+                                    </Badge>
+                                    <span className="text-sm font-medium">
+                                      {riskLevel}
+                                    </span>
+                                  </>
+                                );
+                              })()}
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <p className="text-xs text-gray-500">
+                              This score is automatically calculated based on your organization's security risks from Section #3 and the device type selected above.
+                            </p>
+                          </div>
+                        </div>
                       </div>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

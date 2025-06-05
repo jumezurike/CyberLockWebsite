@@ -305,8 +305,114 @@ export function getRiskLevelFromScore(score: number): string {
 }
 
 // Get applicable risks for display
-export function getApplicableRisks(organizationSecurityRisks: string[]): RasbitaRiskFactor[] {
+export function getApplicableRisks(organizationSecurityRisks: string[]): PreventiveRiskFactor[] {
   return organizationSecurityRisks
-    .map(riskId => SECURITY_RISK_RASBITA_MAPPING[riskId])
+    .map(riskId => SECURITY_RISK_PREVENTIVE_MAPPING[riskId])
     .filter(Boolean);
+}
+
+// Wazuh SIEM integration functions
+export async function fetchWazuhRiskScore(
+  deviceIpAddress: string,
+  wazuhApiUrl?: string,
+  authToken?: string
+): Promise<WazuhRiskData | null> {
+  if (!wazuhApiUrl || !authToken) {
+    return null;
+  }
+
+  try {
+    const response = await fetch(`${wazuhApiUrl}/agents?ip=${deviceIpAddress}`, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      console.warn('Wazuh API request failed:', response.status);
+      return null;
+    }
+
+    const data = await response.json();
+    
+    // Extract risk score from Wazuh agent data
+    if (data.data && data.data.affected_items && data.data.affected_items.length > 0) {
+      const agent = data.data.affected_items[0];
+      
+      // Calculate risk score based on Wazuh alerts and status
+      const riskScore = calculateWazuhRiskScore(agent);
+      
+      return {
+        agentId: agent.id,
+        riskScore,
+        lastUpdated: new Date().toISOString(),
+        alerts: agent.alerts || []
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.warn('Error fetching Wazuh data:', error);
+    return null;
+  }
+}
+
+// Calculate risk score from Wazuh agent data
+function calculateWazuhRiskScore(agentData: any): number {
+  let riskScore = 0;
+
+  // Base score from agent status
+  if (agentData.status === 'disconnected') {
+    riskScore += 30;
+  } else if (agentData.status === 'never_connected') {
+    riskScore += 50;
+  }
+
+  // Add risk from recent alerts
+  if (agentData.alerts) {
+    agentData.alerts.forEach((alert: any) => {
+      if (alert.rule && alert.rule.level) {
+        // Wazuh alert levels: 0-15
+        // Map to risk score contribution
+        const alertRisk = Math.min(alert.rule.level * 3, 25);
+        riskScore += alertRisk;
+      }
+    });
+  }
+
+  // Cap at 100
+  return Math.min(riskScore, 100);
+}
+
+// Gap analysis between calculated and Wazuh scores
+export function performGapAnalysis(
+  calculatedScore: number,
+  wazuhScore: number
+): {
+  drift: number;
+  accuracy: string;
+  recommendation: string;
+} {
+  const drift = Math.abs(calculatedScore - wazuhScore);
+  
+  let accuracy: string;
+  let recommendation: string;
+
+  if (drift <= 10) {
+    accuracy = 'High';
+    recommendation = 'Calculated score aligns well with SIEM data';
+  } else if (drift <= 25) {
+    accuracy = 'Medium';
+    recommendation = 'Minor adjustments needed to risk calculation methodology';
+  } else {
+    accuracy = 'Low';
+    recommendation = 'Significant gap detected - review risk factor assignments';
+  }
+
+  return {
+    drift,
+    accuracy,
+    recommendation
+  };
 }
