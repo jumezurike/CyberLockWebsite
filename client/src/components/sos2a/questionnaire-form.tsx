@@ -26,7 +26,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
-import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight } from "lucide-react";
+import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
 
 // Helper function to safely handle potentially undefined arrays
@@ -3653,6 +3653,87 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and manage your organization's devices to improve security visibility and control.
                   </p>
+                  
+                  {/* Device Inventory Management Section */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="font-medium text-lg">Device Inventory</h4>
+                      <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Device
+                      </Button>
+                    </div>
+                    
+                    {/* Filter Section */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Filter className="h-4 w-4 text-blue-600" />
+                        <span className="font-medium text-blue-800">Filter Devices</span>
+                        <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">Filter Tool</span>
+                      </div>
+                      <p className="text-sm text-blue-700 mb-3">Select a device type to filter the inventory list below</p>
+                      
+                      <Select defaultValue="all-types">
+                        <SelectTrigger className="w-48 bg-white border-blue-300">
+                          <SelectValue placeholder="All Types" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all-types">All Types</SelectItem>
+                          <SelectItem value="laptop">Laptop</SelectItem>
+                          <SelectItem value="desktop">Desktop</SelectItem>
+                          <SelectItem value="server">Server</SelectItem>
+                          <SelectItem value="mobile">Mobile Device</SelectItem>
+                          <SelectItem value="printer">Printer</SelectItem>
+                          <SelectItem value="network">Network Equipment</SelectItem>
+                          <SelectItem value="iot">IoT Device</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    {/* Device Inventory Table */}
+                    <div className="border rounded-lg overflow-hidden">
+                      <table className="w-full">
+                        <thead className="bg-gray-50 border-b">
+                          <tr>
+                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Device Type</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Make/Model</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Serial/Asset #</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Risk Level</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Owner</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Operating System</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">MAC Address</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">IP Address</th>
+                            <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Environment</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td colSpan={9} className="px-4 py-8 text-center text-gray-500">
+                              No devices added yet. Click "Add Device" to begin tracking devices.
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    
+                    {/* Import Device Inventory Section */}
+                    <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                      <h5 className="font-medium mb-2">Import Device Inventory</h5>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Use these options to import existing device inventory data or download a template.
+                      </p>
+                      <div className="flex gap-3">
+                        <Button className="bg-purple-600 hover:bg-purple-700 text-white">
+                          <Upload className="h-4 w-4 mr-2" />
+                          Import CSV
+                        </Button>
+                        <Button variant="outline" className="border-gray-300">
+                          <Download className="h-4 w-4 mr-2" />
+                          Download Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                   
                   {/* 1. Identification Section - Enhanced */}
                   <div className="border rounded-md p-4 mb-6">
