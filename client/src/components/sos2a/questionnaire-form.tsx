@@ -3821,9 +3821,13 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium text-lg">Device Inventory</h4>
-                      <div className="text-sm text-muted-foreground">
-                        Use the form below to add comprehensive device information with automatic risk scoring
-                      </div>
+                      <Button 
+                        className="bg-purple-600 hover:bg-purple-700 text-white shadow-lg"
+                        onClick={() => setShowAddDeviceForm(true)}
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Device
+                      </Button>
                     </div>
                     
                     {/* Filter Section */}
@@ -3968,8 +3972,184 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         </div>
                       )}
                     </div>
-                    
+                    {/* Add Device Form Modal */}
+                    {showAddDeviceForm && (
+                      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md border border-gray-200">
+                          <div className="p-6">
+                            <div className="flex items-center justify-between mb-6">
+                              <div className="flex items-center gap-3">
+                                <div className="p-2 bg-purple-100 rounded-xl">
+                                  <Plus className="h-5 w-5 text-purple-600" />
+                                </div>
+                                <h3 className="text-xl font-semibold text-gray-900">Add New Device</h3>
+                              </div>
+                              <Button
+                                type="button"
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setShowAddDeviceForm(false)}
+                                className="h-8 w-8 p-0 hover:bg-gray-100 rounded-full"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+                            
+                            <form onSubmit={(e) => {
+                              e.preventDefault();
+                              const formData = new FormData(e.target as HTMLFormElement);
+                              
+                              const deviceType = formData.get('deviceType') as string;
+                              const makeModel = formData.get('makeModel') as string;
+                              const serialNumber = formData.get('serialNumber') as string;
+                              const owner = formData.get('owner') as string;
 
+                              const errors = [];
+                              if (!deviceType) errors.push("Device type must be selected");
+                              if (!makeModel?.trim()) errors.push("Make/Model is required");
+                              if (!serialNumber?.trim()) errors.push("Serial Number is required");
+                              if (!owner) errors.push("Owner/Assigned User is required");
+
+                              if (errors.length > 0) {
+                                toast({
+                                  title: "Please correct the following issues before adding the device:",
+                                  description: (
+                                    <div className="text-left mt-2">
+                                      {errors.map((error, index) => (
+                                        <div key={index} className="flex items-start gap-2 mb-1">
+                                          <span className="text-red-500 mt-0.5">-</span>
+                                          <span>{error}</span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ),
+                                  variant: "destructive",
+                                });
+                                return;
+                              }
+
+                              const deviceData = {
+                                deviceId: formData.get('deviceId') as string || `DEV-${Date.now()}`,
+                                deviceType,
+                                makeModel,
+                                owner,
+                                environment: formData.get('environment') as string || 'production',
+                                riskLevel: 'Medium',
+                                serialNumber,
+                                ipAddress: '',
+                                macAddress: '',
+                                operatingSystem: ''
+                              };
+                              addDeviceToInventory(deviceData);
+                              setShowAddDeviceForm(false);
+                            }} className="space-y-4">
+                              
+                              <div>
+                                <Label htmlFor="deviceId" className="text-sm font-medium text-gray-700 mb-2 block">
+                                  Device ID / Asset Tag
+                                </Label>
+                                <Input
+                                  id="deviceId"
+                                  name="deviceId"
+                                  type="text"
+                                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  placeholder="Auto-generated if left blank"
+                                />
+                              </div>
+
+                              <div>
+                                <Label htmlFor="deviceType" className="text-sm font-medium text-gray-700 mb-2 block">
+                                  Device Type <span className="text-red-500">*</span>
+                                </Label>
+                                <select 
+                                  id="deviceType"
+                                  name="deviceType" 
+                                  required 
+                                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white"
+                                >
+                                  <option value="">Select device type</option>
+                                  <option value="laptop">Laptop</option>
+                                  <option value="desktop">Desktop</option>
+                                  <option value="server">Server</option>
+                                  <option value="mobile">Mobile Device</option>
+                                  <option value="tablet">Tablet</option>
+                                  <option value="router">Router</option>
+                                  <option value="switch">Network Switch</option>
+                                  <option value="firewall">Firewall</option>
+                                  <option value="printer">Printer</option>
+                                </select>
+                              </div>
+
+                              <div>
+                                <Label htmlFor="makeModel" className="text-sm font-medium text-gray-700 mb-2 block">
+                                  Make / Model <span className="text-red-500">*</span>
+                                </Label>
+                                <Input
+                                  id="makeModel"
+                                  name="makeModel"
+                                  type="text"
+                                  required
+                                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  placeholder="e.g., Dell OptiPlex 7090"
+                                />
+                              </div>
+
+                              <div>
+                                <Label htmlFor="serialNumber" className="text-sm font-medium text-gray-700 mb-2 block">
+                                  Serial Number <span className="text-red-500">*</span>
+                                </Label>
+                                <Input
+                                  id="serialNumber"
+                                  name="serialNumber"
+                                  type="text"
+                                  required
+                                  className="w-full border-gray-300 focus:border-purple-500 focus:ring-purple-500"
+                                  placeholder="Device serial number"
+                                />
+                              </div>
+
+                              <div>
+                                <Label htmlFor="owner" className="text-sm font-medium text-gray-700 mb-2 block">
+                                  Owner / Assigned User <span className="text-red-500">*</span>
+                                </Label>
+                                <select 
+                                  id="owner"
+                                  name="owner" 
+                                  required 
+                                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:border-purple-500 focus:ring-1 focus:ring-purple-500 bg-white"
+                                >
+                                  <option value="">Select owner/user</option>
+                                  <option value="system-administrator">System Administrator</option>
+                                  <option value="it-manager">IT Manager</option>
+                                  <option value="security-analyst">Security Analyst</option>
+                                  <option value="it-department">IT Department</option>
+                                  <option value="finance-department">Finance Department</option>
+                                  <option value="hr-department">HR Department</option>
+                                  <option value="operations">Operations</option>
+                                </select>
+                              </div>
+
+                              <div className="flex gap-3 pt-4 border-t">
+                                <Button 
+                                  type="button" 
+                                  variant="outline" 
+                                  onClick={() => setShowAddDeviceForm(false)}
+                                  className="flex-1 border-gray-300 hover:bg-gray-50"
+                                >
+                                  Cancel
+                                </Button>
+                                <Button 
+                                  type="submit" 
+                                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white shadow-lg"
+                                >
+                                  Add Device
+                                </Button>
+                              </div>
+                            </form>
+                          </div>
+                        </div>
+                      </div>
+                    )}
                     
                     {/* Import Device Inventory Section */}
                     <div className="mt-6 p-4 bg-gray-50 rounded-lg">
