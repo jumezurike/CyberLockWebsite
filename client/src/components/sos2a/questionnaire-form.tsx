@@ -273,16 +273,18 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   // Handle UWA generation
   const handleGenerateUWA = () => {
     const identityData = {
-      firstName: form.watch('identityBehaviorHygiene.firstName'),
-      lastName: form.watch('identityBehaviorHygiene.lastName'),
-      email: form.watch('identityBehaviorHygiene.email'),
-      role: form.watch('identityBehaviorHygiene.role'),
-      identityType: form.watch('identityBehaviorHygiene.identityType'),
-      userId: form.watch('identityBehaviorHygiene.userId')
+      firstName: form.getValues('identityBehaviorHygiene.firstName'),
+      lastName: form.getValues('identityBehaviorHygiene.lastName'),
+      email: form.getValues('identityBehaviorHygiene.email'),
+      role: form.getValues('identityBehaviorHygiene.role'),
+      identityType: form.getValues('identityBehaviorHygiene.identityType'),
+      userId: form.getValues('identityBehaviorHygiene.userId')
     };
     
     // Get selected components from the matrix
-    const selectedComponents = matrixConfig.filter(comp => comp.required || comp.optional);
+    const selectedComponents = matrixConfig.filter(comp => 
+      comp.human || comp.machinePhysical || comp.machineVirtual || comp.api || comp.thirdParty
+    );
     
     const newUWA = generateUWA(identityData, selectedComponents);
     setGeneratedUWA(newUWA);
@@ -5959,10 +5961,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                       className="text-xs bg-green-600 hover:bg-green-700 text-white"
                                       onClick={(e) => {
                                         e.stopPropagation();
-                                        toast({
-                                          title: "UWA Generation",
-                                          description: "Generating Universal Wallet Address from identity + identification components...",
-                                        });
+                                        handleGenerateUWA();
                                       }}
                                     >
                                       Generate UWA
