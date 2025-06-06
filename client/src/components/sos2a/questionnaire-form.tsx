@@ -5792,9 +5792,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               </FormControl>
                               <SelectContent>
                                 <SelectItem value="human">Human</SelectItem>
-                                <SelectItem value="machine">Machine</SelectItem>
-                                <SelectItem value="third-party">Third Party (Hybrid)</SelectItem>
+                                <SelectItem value="machine-physical">Machine Physical</SelectItem>
+                                <SelectItem value="machine-virtual">Machine Virtual</SelectItem>
                                 <SelectItem value="api">API</SelectItem>
+                                <SelectItem value="third-party">Third-Party</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
