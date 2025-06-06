@@ -4012,7 +4012,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
                               if (errors.length > 0) {
                                 toast({
-                                  title: "Please correct the following issues before adding the device:",
+                                  title: "Please add the following required information:",
                                   description: (
                                     <div className="text-left mt-2">
                                       {errors.map((error, index) => (
@@ -4021,6 +4021,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                           <span>{error}</span>
                                         </div>
                                       ))}
+                                      <div className="mt-3 pt-2 border-t text-sm text-gray-600">
+                                        After adding this basic information, you'll continue filling out the complete device details in the main form below.
+                                      </div>
                                     </div>
                                   ),
                                   variant: "destructive",
