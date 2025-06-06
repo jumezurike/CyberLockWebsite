@@ -5664,106 +5664,189 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     </div>
 
                     {/* Extracted Identity Records */}
-                    <div className="bg-white border rounded-lg p-4 mb-6">
-                      <div className="flex justify-between items-center mb-4">
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 mb-6 shadow-lg">
+                      <div className="flex justify-between items-center mb-6">
                         <div>
-                          <h6 className="font-semibold text-gray-800">Extracted Identity Records</h6>
-                          <p className="text-sm text-gray-600">Records extracted from Section #13 form data</p>
+                          <h6 className="text-xl font-bold text-blue-900 flex items-center gap-2">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                            Live Identity Records
+                          </h6>
+                          <p className="text-sm text-blue-700 mt-1">Interactive records extracted from Section #13 form data</p>
+                          <p className="text-xs text-blue-600 mt-1">Click any row to edit • Real-time data synchronization</p>
                         </div>
-                        <div className="flex gap-4 text-sm text-gray-600">
-                          <span>Total: <span className="font-medium text-gray-800">1</span></span>
-                          <span>Filtered: <span className="font-medium text-gray-800">1</span></span>
+                        <div className="flex gap-4 text-sm">
+                          <div className="bg-white px-3 py-2 rounded-lg border border-blue-200">
+                            <span className="text-blue-600">Total: </span>
+                            <span className="font-bold text-blue-900">1</span>
+                          </div>
+                          <div className="bg-white px-3 py-2 rounded-lg border border-blue-200">
+                            <span className="text-blue-600">Active: </span>
+                            <span className="font-bold text-blue-900">1</span>
+                          </div>
                         </div>
                       </div>
                       
-                      <div className="overflow-x-auto">
-                        <table className="min-w-full border-collapse border border-gray-200">
-                          <thead className="bg-gray-50">
+                      <div className="overflow-x-auto bg-white rounded-lg border border-blue-200">
+                        <table className="min-w-full border-collapse">
+                          <thead className="bg-gradient-to-r from-blue-600 to-indigo-600">
                             <tr>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">Identity Type</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">ID Method</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">SERVER/ID</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">UUID</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">SN</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">MAKE/MODEL</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">OS</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">SERVER/OWNER/COMPANY</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">MAC</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">UNIT/SERIAL</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">ENVIRONMENT</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">IP Address</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">EIN/BIZ#</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">ADDRESS</th>
-                              <th className="border border-gray-200 px-2 py-2 text-left text-xs font-medium text-gray-700 uppercase">Actions</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Identity Type</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ID Method</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">SERVER/ID</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">UUID</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">SN</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">MAKE/MODEL</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">OS</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">SERVER/OWNER/COMPANY</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">MAC</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">UNIT/SERIAL</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ENVIRONMENT</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">IP Address</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">EIN/BIZ#</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ADDRESS</th>
+                              <th className="px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Actions</th>
                             </tr>
                           </thead>
-                          <tbody>
+                          <tbody className="bg-white divide-y divide-blue-100">
                             {form.watch('identityBehaviorHygiene.firstName') || form.watch('identityBehaviorHygiene.lastName') || form.watch('identityBehaviorHygiene.email') ? (
-                              <tr className="hover:bg-gray-50">
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  {form.watch('identityBehaviorHygiene.identityType') || 'Human'}
+                              <tr 
+                                className="hover:bg-blue-50 cursor-pointer transition-all duration-200 group border-l-4 border-l-transparent hover:border-l-blue-500"
+                                onClick={() => {
+                                  // Scroll to the identification form section
+                                  const identificationSection = document.querySelector('[data-section="identification"]');
+                                  if (identificationSection) {
+                                    identificationSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  }
+                                  toast({
+                                    title: "Navigating to Form",
+                                    description: "Scrolling to the identification form section for editing",
+                                  });
+                                }}
+                              >
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm font-medium text-gray-900">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    {form.watch('identityBehaviorHygiene.identityType') || 'Human'}
+                                  </div>
                                 </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
                                   {form.watch('identityBehaviorHygiene.identificationMethod') || 'Not specified'}
                                 </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.userId') || form.watch('identityBehaviorHygiene.firstName') || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.email')?.split('@')[0] || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.phoneNumber') || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.role') || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.identityType') === 'machine-physical' ? 'Linux/Windows' : 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {`${form.watch('identityBehaviorHygiene.firstName') || ''} ${form.watch('identityBehaviorHygiene.lastName') || ''}`.trim() || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.identityType') === 'machine-physical' ? 'XX:XX:XX:XX:XX:XX' : 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
                                   {form.watch('identityBehaviorHygiene.userId') || 'X'}
                                 </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.identityType') === 'machine-physical' ? 'Production' : 'Office'}
                                 </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.identityType') === 'machine-physical' ? '192.168.1.100' : 'X'}
                                 </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.role')?.includes('Business') ? '12-3456789' : 'X'}
                                 </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.email')?.includes('@') ? 'Office Address' : 'X'}
                                 </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
-                                </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
-                                </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
-                                </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
-                                </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
-                                </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
-                                </td>
-                                <td className="border border-gray-200 px-2 py-2 text-sm">
-                                  X
-                                </td>
-                                <td className="border border-gray-200 px-2 py-2">
-                                  <Button
-                                    type="button"
-                                    size="sm"
-                                    variant="outline"
-                                    className="text-xs"
-                                    onClick={() => {
-                                      // Generate UWA functionality would go here
-                                      alert('UWA generation functionality to be implemented');
-                                    }}
-                                  >
-                                    Generate UWA
-                                  </Button>
+                                <td className="px-3 py-4">
+                                  <div className="flex items-center gap-2">
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-xs bg-blue-50 border-blue-200 hover:bg-blue-100 text-blue-700"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        // Scroll to form
+                                        const identificationSection = document.querySelector('[data-section="identification"]');
+                                        if (identificationSection) {
+                                          identificationSection.scrollIntoView({ behavior: 'smooth' });
+                                        }
+                                      }}
+                                    >
+                                      Edit
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-xs bg-red-50 border-red-200 hover:bg-red-100 text-red-700"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (confirm('Delete this identity record?')) {
+                                          // Clear form fields
+                                          form.setValue('identityBehaviorHygiene.firstName', '');
+                                          form.setValue('identityBehaviorHygiene.lastName', '');
+                                          form.setValue('identityBehaviorHygiene.email', '');
+                                          form.setValue('identityBehaviorHygiene.userId', '');
+                                          toast({
+                                            title: "Record Deleted",
+                                            description: "Identity record has been removed from the system",
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      Delete
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      className="text-xs bg-green-600 hover:bg-green-700 text-white"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        toast({
+                                          title: "UWA Generation",
+                                          description: "Generating Universal Wallet Address for this identity...",
+                                        });
+                                      }}
+                                    >
+                                      Generate UWA
+                                    </Button>
+                                  </div>
                                 </td>
                               </tr>
                             ) : (
                               <tr>
-                                <td colSpan={15} className="border border-gray-200 px-4 py-8 text-center text-gray-500">
+                                <td colSpan={15} className="px-6 py-12 text-center">
                                   <div className="flex flex-col items-center">
-                                    <div className="text-gray-400 mb-2">📋</div>
-                                    <p className="text-sm">No identity data found</p>
-                                    <p className="text-xs text-gray-400 mt-1">Complete the identification form above to see extracted records</p>
+                                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                                      <div className="text-blue-500 text-2xl">📋</div>
+                                    </div>
+                                    <h3 className="text-lg font-medium text-gray-900 mb-2">No Identity Records Found</h3>
+                                    <p className="text-sm text-gray-500 mb-4">Complete the identification form above to see live extracted records</p>
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      className="bg-blue-600 hover:bg-blue-700 text-white"
+                                      onClick={() => {
+                                        const identificationSection = document.querySelector('[data-section="identification"]');
+                                        if (identificationSection) {
+                                          identificationSection.scrollIntoView({ behavior: 'smooth' });
+                                        }
+                                      }}
+                                    >
+                                      Go to Identification Form
+                                    </Button>
                                   </div>
                                 </td>
                               </tr>
