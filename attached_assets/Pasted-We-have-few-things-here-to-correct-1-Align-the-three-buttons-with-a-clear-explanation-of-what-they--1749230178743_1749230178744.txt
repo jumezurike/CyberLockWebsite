@@ -1,0 +1,32 @@
+We have few things here to correct 1. Align the three buttons with a clear explanation of what they are. Users must know that the template in question contains the same #13 form fields but as spreasheet for user multi identity inventory and management.  Once filled it is uploaded and commited to db for extraction.  2. There 31   1. Name: “Josiah J. Umezurike” if middle is not available replace with 0 for car
+2. Address: “1225 Laurel St. Columbia, SC 29201-&gt; google open location-&gt;2X57+XH
+3. Birthplace: GXCR+WF (google open location)
+4. DOB: 03/23/1974
+5. PIN: 894320-&gt; DON’T USE THIS for UWA it changes often
+6. SN/IMEI: 6732448576765342
+7. Ph#/EIN/SSN or BVN: 83-2086239
+8. Driver License or Passport: ”alphanumricspecial”
+9. Smart phone: This could be fixed on the phone since we don’t have access.
+10. Smart phone: “Primary auth device imei or IOT s/n”
+11. Make/model+OS= “galaxy 10 android”
+12. car date of manufacturing (DOM): 1209 MM/YY
+13. Name: “Josiah J. Umezurike”
+14. ADDRESS: “1225 Laurel St. Columbia, SC 29201-&gt; google open location-&gt;2X57+XH
+15. Birthplace: GXCR+WF (google open location)
+16. DOB: 03/23/1974
+17. PIN: 894320-&gt; DON’T USE THIS for UWA it changes often
+18. EC2 or DO ID/ MAC/ SN : 897987937938439936732448576765342
+19. OS
+20. EIN/SSN or BVN: 83-2086239
+21. Driver License or Passport: ”alphanumricspecial”
+22. Smart phone: This could be fixed on the phone since we don’t have access.
+23. Smart phone: “Primary auth device imei or IOT s/n”
+24. Make/model+OS= “galaxy 10 android”
+25. UUID
+26. SERVER ID
+27. ENVIRONMENT e,g Production = PR , Staging = ST , Test/Dev=TD
+28. IP
+29. Certifications Business holder
+30. Business LicensesBusiness holder
+31. Utility BillsBusiness holder
+ things or factors considered as the compoments of identifiction: those are extractable for buiding UNIVERSAL WALLET ADDRESS (UWA) and finally data nuclear agregator (DNA). I will explan this later.  3. The Filter by Identity Type and identification method is then applied to these extractibles as shown in the screenshot. Make sure they are aligned correctly. If you have made this enhancement great if not please take a good look again. Let me know if you understand this. 
