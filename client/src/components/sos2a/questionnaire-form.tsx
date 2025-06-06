@@ -5852,7 +5852,8 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                       <div className="text-blue-500 text-2xl">📋</div>
                                     </div>
                                     <h3 className="text-lg font-medium text-gray-900 mb-2">No Identity Records Found</h3>
-                                    <p className="text-sm text-gray-500 mb-4">Complete the identification form above to see live extracted records</p>
+                                    <p className="text-sm text-gray-500 mb-4">Complete the identification form below to see live extracted records</p>
+                                    <p className="text-xs text-blue-600 mb-4">For multiple identities, use the CSV template above</p>
                                     <Button
                                       type="button"
                                       size="sm"
