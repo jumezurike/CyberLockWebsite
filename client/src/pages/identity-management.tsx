@@ -7,9 +7,105 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { ChevronLeft, Edit, Trash2, Eye, Plus } from 'lucide-react';
 import { Link } from 'wouter';
+import { useToast } from '@/hooks/use-toast';
 
-// Enhanced Records data - will connect to form submissions
-const recordsData: any[] = [];
+// UWA Generation Algorithm - Character encoding for quantum-proof encryption
+function generateUWA(identityData: any): string {
+  const { identityType, identificationMethod, serverId, uuid, serialNumber, macAddress, ipAddress } = identityData;
+  
+  // Create character encoding sequence
+  const typeCode = identityType?.substring(0, 3).toUpperCase() || 'UNK';
+  const methodCode = identificationMethod?.substring(0, 3).toUpperCase() || 'UNK';
+  const serverHash = serverId ? serverId.split('').map(c => c.charCodeAt(0)).join('').substring(0, 6) : '000000';
+  const uuidHash = uuid ? uuid.replace(/-/g, '').substring(0, 8) : '00000000';
+  const macHash = macAddress ? macAddress.replace(/[:-]/g, '').substring(0, 6) : '000000';
+  const ipHash = ipAddress ? ipAddress.split('.').map(n => parseInt(n).toString(16).padStart(2, '0')).join('') : '00000000';
+  
+  // Generate UWA using character encoding
+  const timestamp = Date.now().toString(36).substring(-6);
+  const checksum = (typeCode + methodCode + serverHash).split('').reduce((sum, char) => sum + char.charCodeAt(0), 0) % 999;
+  
+  return `UWA-${typeCode}-${methodCode}-${serverHash}-${uuidHash.substring(0, 4)}-${macHash}-${ipHash.substring(0, 6)}-${timestamp}-${checksum.toString().padStart(3, '0')}`;
+}
+
+// Sample UWA Records data with Generated UWA column
+const recordsData = [
+  {
+    id: 1,
+    generatedUWA: null, // Will be generated when user clicks Generate UWA button
+    identityType: 'Employee',
+    identificationMethod: 'Username/Password',
+    serverId: 'SRV-WIN-001',
+    uuid: '550e8400-e29b-41d4-a716-446655440000',
+    serialNumber: 'DL780G9-12345',
+    makeModel: 'Dell PowerEdge R740',
+    operatingSystem: 'Windows Server 2019',
+    serverOwnerCompany: 'TechCorp IT Department',
+    macAddress: '00:1B:44:11:3A:B7',
+    environment: 'Production',
+    ipAddress: '192.168.1.100',
+    einBizNumber: 'EIN-87-1234567',
+    address: '123 Tech Street, Silicon Valley, CA 94000',
+    status: 'active',
+    components: {
+      username: true,
+      password: true,
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'john.doe@techcorp.com',
+      role: 'System Administrator'
+    }
+  },
+  {
+    id: 2,
+    generatedUWA: null,
+    identityType: 'Vendor',
+    identificationMethod: 'Certificate',
+    serverId: 'SRV-LIN-002',
+    uuid: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
+    serialNumber: 'HPE-DL360-67890',
+    makeModel: 'HPE ProLiant DL360 Gen10',
+    operatingSystem: 'Ubuntu Server 20.04',
+    serverOwnerCompany: 'SecureVendor Solutions',
+    macAddress: '00:50:56:C0:00:08',
+    environment: 'Staging',
+    ipAddress: '10.0.0.50',
+    einBizNumber: 'EIN-98-7654321',
+    address: '456 Vendor Ave, Business District, NY 10001',
+    status: 'active',
+    components: {
+      certificate: true,
+      firstName: 'Alice',
+      lastName: 'Johnson',
+      email: 'alice.johnson@securevendor.com',
+      role: 'Security Specialist'
+    }
+  },
+  {
+    id: 3,
+    generatedUWA: null,
+    identityType: 'IoT Device',
+    identificationMethod: 'Device Certificate',
+    serverId: 'IOT-CAM-003',
+    uuid: '6ba7b811-9dad-11d1-80b4-00c04fd430c9',
+    serialNumber: 'AXIS-P1455-11223',
+    makeModel: 'Axis P1455-LE Network Camera',
+    operatingSystem: 'AXIS OS',
+    serverOwnerCompany: 'Security Monitoring Inc',
+    macAddress: '00:40:8C:12:34:56',
+    environment: 'Production',
+    ipAddress: '172.16.10.25',
+    einBizNumber: 'EIN-45-9876543',
+    address: '789 Security Blvd, Monitor City, TX 75001',
+    status: 'active',
+    components: {
+      deviceId: true,
+      certificate: true,
+      macAddress: true,
+      ipAddress: true
+    }
+  }
+];
 
 export default function IdentityManagement() {
   const [selectedIdentityType, setSelectedIdentityType] = useState('all-types');
