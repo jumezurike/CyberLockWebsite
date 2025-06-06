@@ -188,6 +188,58 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const [deviceInventory, setDeviceInventory] = useState<any[]>([]);
   const [deviceTypeFilter, setDeviceTypeFilter] = useState("all-types");
 
+  // Default matrix configuration
+  const defaultMatrixConfig = [
+    { component: "Name", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Home Address (Google Open Location)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Birthplace GXCR+WF (Google Open Location)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "DOB", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "PIN", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false, note: "Don't use for UWA - changes often" },
+    { component: "Device SN", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Ph#/EIN/SSN or BVN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Driver License", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Smart Phone OS ID", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "IOT Serial + IMEI", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Make/Model+OS", human: true, machinePhysical: true, machineVirtual: true, api: false, thirdParty: false },
+    { component: "DOM", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "BVN/NIN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Business Address", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Virtual Address (Google Open Location)", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "DOB (Duplicate)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "PIN (Don't use for UWA - changes often)", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "EC2/DO ID/MAC/SN", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "OS", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
+    { component: "EIN/SSN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Passport", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Drone ID", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Smart Phone IMEI", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Make/Model+OS (Duplicate)", human: true, machinePhysical: true, machineVirtual: true, api: false, thirdParty: false },
+    { component: "UUID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "Server ID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "Environment (Production=PR, Staging=ST, Test/Dev=TD)", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "IP Address", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
+    { component: "Certifications", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Business Licenses", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Utility Bills", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true }
+  ];
+
+  // State for matrix configuration
+  const [matrixConfig, setMatrixConfig] = useState(defaultMatrixConfig);
+
+  const updateMatrixConfig = (index: number, field: string, value: boolean) => {
+    const newConfig = [...matrixConfig];
+    newConfig[index] = { ...newConfig[index], [field]: value };
+    setMatrixConfig(newConfig);
+  };
+
+  const resetToDefault = () => {
+    setMatrixConfig([...defaultMatrixConfig]);
+    toast({
+      title: "Reset to Default Configuration",
+      description: "Components reset to security best practice defaults",
+    });
+  };
+
   // CSV Template Download Function
   const downloadCSVTemplate = () => {
     const csvHeaders = [
@@ -5506,12 +5558,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           type="button" 
                           size="sm"
                           variant="outline"
-                          onClick={() => {
-                            toast({
-                              title: "Reset to Default Configuration",
-                              description: "Components reset to security best practice defaults",
-                            });
-                          }}
+                          onClick={resetToDefault}
                         >
                           <RotateCcw className="h-4 w-4 mr-2" />
                           Reset to Default
@@ -5577,39 +5624,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </tr>
                           </thead>
                           <tbody>
-                            {[
-                              { component: "Name", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-                              { component: "Home Address (Google Open Location)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-                              { component: "Birthplace GXCR+WF (Google Open Location)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "DOB", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "PIN", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false, note: "Don't use for UWA - changes often" },
-                              { component: "Device SN", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "Ph#/EIN/SSN or BVN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-                              { component: "Driver License", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "Smart Phone OS ID", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "IOT Serial + IMEI", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "Make/Model+OS", human: true, machinePhysical: true, machineVirtual: true, api: false, thirdParty: false },
-                              { component: "DOM", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "BVN/NIN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-                              { component: "Business Address", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-                              { component: "Virtual Address (Google Open Location)", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
-                              { component: "DOB (Duplicate)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "PIN (Don't use for UWA - changes often)", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "EC2/DO ID/MAC/SN", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
-                              { component: "OS", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
-                              { component: "EIN/SSN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-                              { component: "Passport", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "Drone ID", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "Smart Phone IMEI", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-                              { component: "Make/Model+OS (Duplicate)", human: true, machinePhysical: true, machineVirtual: true, api: false, thirdParty: false },
-                              { component: "UUID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
-                              { component: "Server ID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
-                              { component: "Environment (Production=PR, Staging=ST, Test/Dev=TD)", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
-                              { component: "IP Address", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
-                              { component: "Certifications", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-                              { component: "Business Licenses", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-                              { component: "Utility Bills", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true }
-                            ].map((row, index) => (
+                            {matrixConfig.map((row, index) => (
                               <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                                 <td className="border border-gray-300 px-4 py-3 font-medium text-gray-700">
                                   {row.component}
@@ -5618,35 +5633,55 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                   {row.note ? (
                                     <span className="text-xs text-red-600">{row.note}</span>
                                   ) : (
-                                    <Checkbox checked={row.human} className="mx-auto" />
+                                    <Checkbox 
+                                      checked={row.human} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'human', !!checked)}
+                                      className="mx-auto" 
+                                    />
                                   )}
                                 </td>
                                 <td className="border border-gray-300 px-4 py-3 text-center">
                                   {row.note ? (
                                     <span className="text-xs text-red-600">{row.note}</span>
                                   ) : (
-                                    <Checkbox checked={row.machinePhysical} className="mx-auto" />
+                                    <Checkbox 
+                                      checked={row.machinePhysical} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'machinePhysical', !!checked)}
+                                      className="mx-auto" 
+                                    />
                                   )}
                                 </td>
                                 <td className="border border-gray-300 px-4 py-3 text-center">
                                   {row.note ? (
                                     <span className="text-xs text-red-600">{row.note}</span>
                                   ) : (
-                                    <Checkbox checked={row.machineVirtual} className="mx-auto" />
+                                    <Checkbox 
+                                      checked={row.machineVirtual} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'machineVirtual', !!checked)}
+                                      className="mx-auto" 
+                                    />
                                   )}
                                 </td>
                                 <td className="border border-gray-300 px-4 py-3 text-center">
                                   {row.note ? (
                                     <span className="text-xs text-red-600">{row.note}</span>
                                   ) : (
-                                    <Checkbox checked={row.api} className="mx-auto" />
+                                    <Checkbox 
+                                      checked={row.api} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'api', !!checked)}
+                                      className="mx-auto" 
+                                    />
                                   )}
                                 </td>
                                 <td className="border border-gray-300 px-4 py-3 text-center">
                                   {row.note ? (
                                     <span className="text-xs text-red-600">{row.note}</span>
                                   ) : (
-                                    <Checkbox checked={row.thirdParty} className="mx-auto" />
+                                    <Checkbox 
+                                      checked={row.thirdParty} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'thirdParty', !!checked)}
+                                      className="mx-auto" 
+                                    />
                                   )}
                                 </td>
                               </tr>
