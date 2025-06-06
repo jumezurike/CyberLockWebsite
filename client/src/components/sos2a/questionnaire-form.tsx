@@ -27,7 +27,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
-import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, X, Monitor, Cpu, CloudCog } from "lucide-react";
+import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, Monitor, Cpu, CloudCog } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
 import { useToast } from "@/hooks/use-toast";
 import { calculateDeviceRiskScore, getRiskLevelFromScore, fetchWazuhRiskScore } from "@/lib/rasbita-risk-scoring";
@@ -186,7 +186,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   
   // Independent device inventory state
   const [deviceInventory, setDeviceInventory] = useState<any[]>([]);
-  const [showAddDeviceForm, setShowAddDeviceForm] = useState(false);
   const [deviceTypeFilter, setDeviceTypeFilter] = useState("all-types");
 
   // CSV Template Download Function
@@ -308,7 +307,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     };
     
     setDeviceInventory(prev => [...prev, newDevice]);
-    setShowAddDeviceForm(false);
     
     toast({
       title: "Device Added",
