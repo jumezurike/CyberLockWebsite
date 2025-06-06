@@ -5528,12 +5528,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                             type="button" 
                             variant="outline"
                             className="w-full border-blue-300 text-blue-700 hover:bg-blue-100 mb-3"
-                            onClick={() => {
-                              toast({
-                                title: "Download Template",
-                                description: "Downloading spreadsheet template with Section #13 form fields for bulk identity management...",
-                              });
-                            }}
+                            onClick={downloadIdentityTemplate}
                           >
                             <Download className="h-4 w-4 mr-2" />
                             Download Template
@@ -5544,23 +5539,31 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                         </div>
                         
                         <div className="bg-white border border-blue-200 rounded-lg p-4">
-                          <Button 
-                            type="button" 
-                            variant="outline"
-                            className="w-full border-blue-300 text-blue-700 hover:bg-blue-100 mb-3"
-                            onClick={() => {
-                              toast({
-                                title: "Import User CSV",
-                                description: "Select your completed spreadsheet to upload and commit identity data to the database...",
-                              });
-                            }}
-                          >
-                            <Upload className="h-4 w-4 mr-2" />
-                            Import User CSV
-                          </Button>
+                          <div className="relative">
+                            <input
+                              type="file"
+                              accept=".csv"
+                              onChange={handleIdentityUpload}
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            />
+                            <Button 
+                              type="button" 
+                              variant="outline"
+                              className="w-full border-blue-300 text-blue-700 hover:bg-blue-100 mb-3"
+                            >
+                              <Upload className="h-4 w-4 mr-2" />
+                              Import User CSV
+                            </Button>
+                          </div>
                           <p className="text-xs text-gray-600">
                             Upload your completed spreadsheet template to commit multiple user identities to the database for extraction.
                           </p>
+                          {uploadedIdentities.length > 0 && (
+                            <div className="text-sm text-green-600 flex items-center gap-1 mt-2">
+                              <CheckCircle className="w-4 h-4" />
+                              {uploadedIdentities.length} identities loaded
+                            </div>
+                          )}
                         </div>
                       </div>
                       
