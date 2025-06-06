@@ -131,6 +131,25 @@ export default function IdentityManagement() {
                   </SelectContent>
                 </Select>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-2">
+                  Component Category
+                </label>
+                <p className="text-xs text-gray-600 mb-3">Filter by component type for targeted analysis</p>
+                <Select value={componentFilter} onValueChange={setComponentFilter}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="All Components" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all-components">All Components</SelectItem>
+                    <SelectItem value="authentication">Authentication Components</SelectItem>
+                    <SelectItem value="identification">Identification Components</SelectItem>
+                    <SelectItem value="authorization">Authorization Components</SelectItem>
+                    <SelectItem value="technical">Technical Components</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </CardContent>
         </Card>
