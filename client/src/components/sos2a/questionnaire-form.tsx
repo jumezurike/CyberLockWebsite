@@ -5616,11 +5616,38 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="all-methods">All Methods</SelectItem>
+                                
+                                {/* Standard Authentication */}
                                 <SelectItem value="username-password">Username/Password</SelectItem>
-                                <SelectItem value="biometric">Biometric</SelectItem>
+                                <SelectItem value="employee-id">Employee ID</SelectItem>
+                                <SelectItem value="vendor-id">Vendor ID</SelectItem>
+                                <SelectItem value="contractor-id">Contractor ID</SelectItem>
                                 <SelectItem value="certificate">Certificate</SelectItem>
-                                <SelectItem value="token">Token-Based</SelectItem>
-                                <SelectItem value="mfa">Multi-Factor</SelectItem>
+                                <SelectItem value="smart-card">Smart Card</SelectItem>
+                                <SelectItem value="single-sign-on">Single Sign-On</SelectItem>
+                                <SelectItem value="token-based">Token-Based</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="system-account">System Account</SelectItem>
+                                
+                                {/* Advanced Authentication */}
+                                <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
+                                <SelectItem value="mfa">MFA (Multi-Factor Authentication)</SelectItem>
+                                
+                                {/* Biometric */}
+                                <SelectItem value="fingerprint">Fingerprint</SelectItem>
+                                <SelectItem value="voice">Voice</SelectItem>
+                                <SelectItem value="facial">Facial</SelectItem>
+                                <SelectItem value="iris">Iris</SelectItem>
+                                
+                                {/* Government ID */}
+                                <SelectItem value="driver-license">Driver License</SelectItem>
+                                <SelectItem value="passport">Passport</SelectItem>
+                                <SelectItem value="national-id">National ID</SelectItem>
+                                <SelectItem value="military-id">Military ID</SelectItem>
+                                <SelectItem value="state-id">State ID</SelectItem>
+                                <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
+                                <SelectItem value="social-security-card">Social Security Card</SelectItem>
+                                <SelectItem value="certificate-of-citizenship">Certificate of Citizenship</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
