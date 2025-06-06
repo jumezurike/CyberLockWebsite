@@ -5618,6 +5618,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 <SelectItem value="all-methods">All Methods</SelectItem>
                                 
                                 {/* Standard Authentication */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100">1. Standard Authentication</div>
                                 <SelectItem value="username-password">Username / Password</SelectItem>
                                 <SelectItem value="employee-id">Employee ID</SelectItem>
                                 <SelectItem value="vendor-id">Vendor ID</SelectItem>
@@ -5630,16 +5631,19 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 <SelectItem value="system-account">System Account</SelectItem>
                                 
                                 {/* Advanced Authentication */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">2. Advanced Authentication</div>
                                 <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
                                 <SelectItem value="mfa">MFA (Multi Factor Authentication)</SelectItem>
                                 
                                 {/* Biometric */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">3. Biometric</div>
                                 <SelectItem value="fingerprint">Fingerprint</SelectItem>
                                 <SelectItem value="voice">Voice</SelectItem>
                                 <SelectItem value="facial">Facial</SelectItem>
                                 <SelectItem value="iris">Iris</SelectItem>
                                 
                                 {/* Government ID */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">4. Government ID</div>
                                 <SelectItem value="driver-license">Driver License</SelectItem>
                                 <SelectItem value="passport">Passport</SelectItem>
                                 <SelectItem value="national-id">National ID</SelectItem>
@@ -5683,7 +5687,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                             </tr>
                           </thead>
                           <tbody>
-                            {formValues.identityBehaviorHygiene?.firstName || formValues.identityBehaviorHygiene?.lastName || formValues.identityBehaviorHygiene?.email ? (
+                            {form.watch('identityBehaviorHygiene.firstName') || form.watch('identityBehaviorHygiene.lastName') || form.watch('identityBehaviorHygiene.email') ? (
                               <tr className="hover:bg-gray-50">
                                 <td className="border border-gray-200 px-3 py-2">
                                   <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
@@ -5691,22 +5695,22 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                   </span>
                                 </td>
                                 <td className="border border-gray-200 px-3 py-2 text-sm">
-                                  {formValues.identityBehaviorHygiene?.identityType || 'Human'}
+                                  {form.watch('identityBehaviorHygiene.identityType') || 'Human'}
                                 </td>
                                 <td className="border border-gray-200 px-3 py-2 text-sm">
-                                  {formValues.identityBehaviorHygiene?.identificationMethod || 'Not specified'}
+                                  {form.watch('identityBehaviorHygiene.identificationMethod') || 'Not specified'}
                                 </td>
                                 <td className="border border-gray-200 px-3 py-2 text-sm">
-                                  {`${formValues.identityBehaviorHygiene?.firstName || ''} ${formValues.identityBehaviorHygiene?.lastName || ''}`.trim() || 'Not provided'}
+                                  {`${form.watch('identityBehaviorHygiene.firstName') || ''} ${form.watch('identityBehaviorHygiene.lastName') || ''}`.trim() || 'Not provided'}
                                 </td>
                                 <td className="border border-gray-200 px-3 py-2 text-sm">
-                                  {formValues.identityBehaviorHygiene?.email || 'Not provided'}
+                                  {form.watch('identityBehaviorHygiene.email') || 'Not provided'}
                                 </td>
                                 <td className="border border-gray-200 px-3 py-2 text-sm">
-                                  {formValues.identityBehaviorHygiene?.role || 'Not specified'}
+                                  {form.watch('identityBehaviorHygiene.role') || 'Not specified'}
                                 </td>
                                 <td className="border border-gray-200 px-3 py-2 text-sm">
-                                  {formValues.identityBehaviorHygiene?.userId || 'Not provided'}
+                                  {form.watch('identityBehaviorHygiene.userId') || 'Not provided'}
                                 </td>
                                 <td className="border border-gray-200 px-3 py-2">
                                   <Button
