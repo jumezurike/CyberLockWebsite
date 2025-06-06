@@ -5655,6 +5655,89 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                       </div>
                     </div>
 
+                    {/* Extracted Identity Records */}
+                    <div className="bg-white border rounded-lg p-4 mb-6">
+                      <div className="flex justify-between items-center mb-4">
+                        <div>
+                          <h6 className="font-semibold text-gray-800">Extracted Identity Records</h6>
+                          <p className="text-sm text-gray-600">Records extracted from Section #13 form data</p>
+                        </div>
+                        <div className="flex gap-4 text-sm text-gray-600">
+                          <span>Total: <span className="font-medium text-gray-800">1</span></span>
+                          <span>Filtered: <span className="font-medium text-gray-800">1</span></span>
+                        </div>
+                      </div>
+                      
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full border-collapse border border-gray-200">
+                          <thead className="bg-gray-50">
+                            <tr>
+                              <th className="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">UWA Status</th>
+                              <th className="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">Identity Type</th>
+                              <th className="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">ID Method</th>
+                              <th className="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">Full Name</th>
+                              <th className="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">Email</th>
+                              <th className="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">Role</th>
+                              <th className="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">User ID</th>
+                              <th className="border border-gray-200 px-3 py-2 text-left text-xs font-medium text-gray-700 uppercase">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {formValues.identityBehaviorHygiene?.firstName || formValues.identityBehaviorHygiene?.lastName || formValues.identityBehaviorHygiene?.email ? (
+                              <tr className="hover:bg-gray-50">
+                                <td className="border border-gray-200 px-3 py-2">
+                                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                    Pending
+                                  </span>
+                                </td>
+                                <td className="border border-gray-200 px-3 py-2 text-sm">
+                                  {formValues.identityBehaviorHygiene?.identityType || 'Human'}
+                                </td>
+                                <td className="border border-gray-200 px-3 py-2 text-sm">
+                                  {formValues.identityBehaviorHygiene?.identificationMethod || 'Not specified'}
+                                </td>
+                                <td className="border border-gray-200 px-3 py-2 text-sm">
+                                  {`${formValues.identityBehaviorHygiene?.firstName || ''} ${formValues.identityBehaviorHygiene?.lastName || ''}`.trim() || 'Not provided'}
+                                </td>
+                                <td className="border border-gray-200 px-3 py-2 text-sm">
+                                  {formValues.identityBehaviorHygiene?.email || 'Not provided'}
+                                </td>
+                                <td className="border border-gray-200 px-3 py-2 text-sm">
+                                  {formValues.identityBehaviorHygiene?.role || 'Not specified'}
+                                </td>
+                                <td className="border border-gray-200 px-3 py-2 text-sm">
+                                  {formValues.identityBehaviorHygiene?.userId || 'Not provided'}
+                                </td>
+                                <td className="border border-gray-200 px-3 py-2">
+                                  <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="outline"
+                                    className="text-xs"
+                                    onClick={() => {
+                                      // Generate UWA functionality would go here
+                                      alert('UWA generation functionality to be implemented');
+                                    }}
+                                  >
+                                    Generate UWA
+                                  </Button>
+                                </td>
+                              </tr>
+                            ) : (
+                              <tr>
+                                <td colSpan={8} className="border border-gray-200 px-4 py-8 text-center text-gray-500">
+                                  <div className="flex flex-col items-center">
+                                    <div className="text-gray-400 mb-2">📋</div>
+                                    <p className="text-sm">No identity data found</p>
+                                    <p className="text-xs text-gray-400 mt-1">Complete the identification form above to see extracted records</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
 
                     {/* Identity Component Inventory Header */}
                     <div className="flex justify-between items-center mb-4">
