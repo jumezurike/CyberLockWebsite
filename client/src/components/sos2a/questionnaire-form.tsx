@@ -5852,21 +5852,8 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                       <div className="text-blue-500 text-2xl">📋</div>
                                     </div>
                                     <h3 className="text-lg font-medium text-gray-900 mb-2">No Identity Records Found</h3>
-                                    <p className="text-sm text-gray-500 mb-4">Complete the identification form below to see live extracted records</p>
-                                    <p className="text-xs text-blue-600 mb-4">For multiple identities, use the CSV template above</p>
-                                    <Button
-                                      type="button"
-                                      size="sm"
-                                      className="bg-blue-600 hover:bg-blue-700 text-white"
-                                      onClick={() => {
-                                        const identificationSection = document.querySelector('[data-section="identification"]');
-                                        if (identificationSection) {
-                                          identificationSection.scrollIntoView({ behavior: 'smooth' });
-                                        }
-                                      }}
-                                    >
-                                      Go to Identification Form
-                                    </Button>
+                                    <p className="text-sm text-gray-500 mb-2">Complete the identification form below to see live extracted records</p>
+                                    <p className="text-xs text-blue-600">For multiple identities, use the CSV template above</p>
                                   </div>
                                 </td>
                               </tr>
