@@ -253,21 +253,21 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     const name = `${identityData.firstName || ''} ${identityData.lastName || ''}`.trim();
     const email = identityData.email || '';
     
-    // Create hash from selected components
+    // Create component identifier string
     const componentString = selectedComponents.map(comp => comp.component).join('|');
     const dataString = `${identityType}|${name}|${email}|${componentString}`;
     
-    // Generate a deterministic UWA-like address
-    let hash = 0;
+    // Generate UWA using character encoding (preparing for quantum-proof encryption)
+    let addressCode = 0;
     for (let i = 0; i < dataString.length; i++) {
       const char = dataString.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash; // Convert to 32-bit integer
+      addressCode = ((addressCode << 3) ^ char) + (i * 7);
     }
     
-    // Convert to hex and format as UWA
-    const hexHash = Math.abs(hash).toString(16).padStart(8, '0');
-    return `UWA${hexHash.substring(0, 6).toUpperCase()}${Date.now().toString().slice(-4)}`;
+    // Format as UWA address (placeholder for quantum encryption integration)
+    const baseCode = Math.abs(addressCode).toString(36).toUpperCase();
+    const timestamp = Date.now().toString().slice(-4);
+    return `UWA${baseCode.substring(0, 6).padStart(6, '0')}${timestamp}`;
   };
 
   // Handle UWA generation
