@@ -143,8 +143,8 @@ export default function IdentityManagement() {
         if (record.id === recordId && !record.generatedUWA) {
           const newUWA = generateUWA(record);
           toast({
-            title: "UWA Generated Successfully",
-            description: `Generated UWA: ${newUWA}`,
+            title: "DNA Formed Successfully",
+            description: `Record + UWA = DNA. Collection of DNA creates DDNA`,
           });
           return { ...record, generatedUWA: newUWA };
         }
@@ -290,17 +290,24 @@ export default function IdentityManagement() {
           </CardContent>
         </Card>
 
-        {/* Record Counters and Add Button */}
+        {/* DDNA Record Management Header */}
         <div className="flex justify-between items-center mb-4">
-          <div className="flex space-x-6 text-sm">
-            <span>Total Records: <Badge variant="outline">{totalRecords}</Badge></span>
-            <span>Active: <Badge variant="outline">{activeRecords}</Badge></span>
-            <span>Filtered: <Badge variant="secondary">{filteredCount}</Badge></span>
+          <div className="flex flex-col">
+            <h3 className="text-lg font-semibold text-gray-800">DDNA Record Management</h3>
+            <p className="text-sm text-gray-600">Lifetime tracking of Universal Wallet Addresses as intermediate DNA representation</p>
+            <p className="text-xs text-blue-600 mt-1">Collection of DNA forms Digital Data Nucleic Authority (DDNA)</p>
           </div>
-          <Button className="bg-purple-600 hover:bg-purple-700">
-            <Plus className="mr-2 h-4 w-4" />
-            Add UWA Record
-          </Button>
+          <div className="flex flex-col items-end space-y-2">
+            <div className="flex space-x-4 text-sm">
+              <span>Total Records: <Badge variant="outline">{totalRecords}</Badge></span>
+              <span>Active DNA: <Badge variant="outline">{activeRecords}</Badge></span>
+              <span>Filtered: <Badge variant="secondary">{filteredCount}</Badge></span>
+            </div>
+            <Button className="bg-purple-600 hover:bg-purple-700">
+              <Plus className="mr-2 h-4 w-4" />
+              Add DDNA Record
+            </Button>
+          </div>
         </div>
 
         {/* Records Table */}
@@ -309,14 +316,14 @@ export default function IdentityManagement() {
 
             {filteredRecords.length === 0 ? (
               <div className="text-center py-8">
-                <p className="text-gray-500">No UWA records found. Create your first record to begin tracking digital identities.</p>
+                <p className="text-gray-500">No DDNA records found. Create your first record to begin lifetime tracking of digital identities.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>UWA(Generated)</TableHead>
+                      <TableHead>DNA (UWA Generated)</TableHead>
                       <TableHead>Identity Type</TableHead>
                       <TableHead>Identification Method</TableHead>
                       <TableHead>Server/ID</TableHead>
@@ -343,14 +350,17 @@ export default function IdentityManagement() {
                         <TableCell className="font-medium">
                           {record.generatedUWA ? (
                             <div className="flex flex-col">
-                              <span className="text-xs font-mono text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                              <span className="text-xs font-bold text-green-700 bg-green-50 px-2 py-1 rounded border border-green-200">
+                                🧬 DNA FORMED
+                              </span>
+                              <span className="text-xs font-mono text-blue-600 bg-blue-50 px-2 py-1 rounded mt-1">
                                 {record.generatedUWA}
                               </span>
-                              <span className="text-xs text-green-600 mt-1">✓ Generated</span>
+                              <span className="text-xs text-green-600 mt-1">✓ Ready for DDNA Collection</span>
                             </div>
                           ) : (
                             <div className="flex flex-col items-start">
-                              <span className="text-xs text-gray-500">Not Generated</span>
+                              <span className="text-xs text-gray-500 bg-gray-50 px-2 py-1 rounded">Record Only (No DNA)</span>
                               <Button 
                                 size="sm" 
                                 variant="outline" 
@@ -360,7 +370,7 @@ export default function IdentityManagement() {
                                   handleGenerateUWA(record.id);
                                 }}
                               >
-                                Generate UWA
+                                Generate UWA → Form DNA
                               </Button>
                             </div>
                           )}
