@@ -214,7 +214,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { component: "Drone ID", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
     { component: "Smart Phone IMEI", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
     { component: "Make/Model+OS (Duplicate)", human: true, machinePhysical: true, machineVirtual: true, api: false, thirdParty: false },
-    { component: "UUID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "UUID", human: false, machinePhysical: false, machineVirtual: true, api: false, thirdParty: false },
     { component: "Server ID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
     { component: "Environment (Production=PR, Staging=ST, Test/Dev=TD)", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
     { component: "IP Address", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
