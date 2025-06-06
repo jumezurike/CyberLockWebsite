@@ -5472,13 +5472,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         </div>
                         
                         <div>
-                          <div className="mb-2">
+                          <div className="flex items-center gap-2 mb-2">
                             <label className="text-sm font-medium text-gray-700">
                               Identification Method
                             </label>
                           </div>
+                          <p className="text-xs text-gray-500 mb-3">Select an identification method to filter components</p>
                           <div className="space-y-1">
-                            <label className="text-xs font-medium text-gray-600">Identification Method</label>
+                            <label className="text-xs font-medium text-gray-600">Method</label>
                             <Select defaultValue="all-methods">
                               <SelectTrigger className="w-full">
                                 <SelectValue placeholder="All Methods" />
@@ -5601,7 +5602,14 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                   {row.note ? (
                                     <span className="text-xs text-red-600">{row.note}</span>
                                   ) : (
-                                    <Checkbox checked={row.machine} className="mx-auto" />
+                                    <Checkbox checked={row.machinePhysical} className="mx-auto" />
+                                  )}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox checked={row.machineVirtual} className="mx-auto" />
                                   )}
                                 </td>
                                 <td className="border border-gray-300 px-4 py-3 text-center">
