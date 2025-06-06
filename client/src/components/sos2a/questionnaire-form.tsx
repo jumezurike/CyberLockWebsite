@@ -5719,10 +5719,10 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                         <div>
                           <h6 className="text-xl font-bold text-blue-900 flex items-center gap-2">
                             <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                            Live Identity Records
+                            UWA Record Management
                           </h6>
-                          <p className="text-sm text-blue-700 mt-1">Interactive records extracted from Section #13 form data</p>
-                          <p className="text-xs text-blue-600 mt-1">Click any row to edit • Real-time data synchronization</p>
+                          <p className="text-sm text-blue-700 mt-1">Live identity records with Universal Wallet Address tracking</p>
+                          <p className="text-xs text-blue-600 mt-1">Click any row to edit • Generate UWA • Real-time synchronization</p>
                         </div>
                         <div className="flex gap-4 text-sm">
                           <div className="bg-white px-3 py-2 rounded-lg border border-blue-200">
@@ -5754,6 +5754,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">IP Address</th>
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">EIN/BIZ#</th>
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ADDRESS</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Generated UWA</th>
                               <th className="px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Actions</th>
                             </tr>
                           </thead>
@@ -5818,6 +5819,19 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
                                   {form.watch('identityBehaviorHygiene.email')?.includes('@') ? 'Office Address' : 'X'}
                                 </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm">
+                                  <div className="flex items-center gap-2">
+                                    <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-mono rounded">
+                                      {form.watch('identityBehaviorHygiene.firstName') && form.watch('identityBehaviorHygiene.lastName') 
+                                        ? `UWA-${form.watch('identityBehaviorHygiene.firstName')?.slice(0,2).toUpperCase()}${form.watch('identityBehaviorHygiene.lastName')?.slice(0,2).toUpperCase()}-${Date.now().toString().slice(-6)}`
+                                        : 'Not Generated'
+                                      }
+                                    </span>
+                                    {form.watch('identityBehaviorHygiene.firstName') && form.watch('identityBehaviorHygiene.lastName') && (
+                                      <span className="w-2 h-2 bg-green-500 rounded-full" title="UWA Generated"></span>
+                                    )}
+                                  </div>
+                                </td>
                                 <td className="px-3 py-4">
                                   <div className="flex items-center gap-2">
                                     <Button
@@ -5877,7 +5891,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                               </tr>
                             ) : (
                               <tr>
-                                <td colSpan={15} className="px-6 py-12 text-center">
+                                <td colSpan={16} className="px-6 py-12 text-center">
                                   <div className="flex flex-col items-center">
                                     <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                                       <div className="text-blue-500 text-2xl">📋</div>
