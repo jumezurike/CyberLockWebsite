@@ -5572,8 +5572,8 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     </div>
 
                     {/* Filter Controls */}
-                    <div className="bg-blue-50 border border-blue-300 rounded-lg p-4 mb-6">
-                      <h6 className="font-medium text-blue-800 mb-4">🔍 Filter Options - TESTING LOCATION</h6>
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+                      <h6 className="font-medium text-gray-800 mb-4">Filter Options</h6>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                           <div className="flex items-center gap-2 mb-2">
