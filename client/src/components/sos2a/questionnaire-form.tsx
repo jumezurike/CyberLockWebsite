@@ -5492,13 +5492,18 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
 
-                  {/* Universal Identity Verification System (UIVS) */}
+                  {/* Universal Identity Verification System (UIVS) - Optional Enhancement */}
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
-                    <h4 className="text-lg font-semibold text-blue-800 mb-3">
-                      Universal Identity Verification System (UIVS)
-                    </h4>
+                    <div className="flex items-center gap-2 mb-3">
+                      <h4 className="text-lg font-semibold text-blue-800">
+                        Universal Identity Verification System (UIVS)
+                      </h4>
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                        Optional Enhancement
+                      </span>
+                    </div>
                     <p className="text-blue-700 mb-6">
-                      For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+                      <strong>Optional:</strong> For organizations wanting advanced identity management, our UIVS system can import and manage multiple users with Universal Wallet Address generation. You can skip this section if not needed for your assessment.
                     </p>
                     
                     {/* Action Buttons with Clear Explanations */}
@@ -5574,6 +5579,26 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                         <p className="text-sm text-yellow-800">
                           <strong>Workflow:</strong> Download template → Fill with identity data → Upload CSV → Data commits to database for extraction
                         </p>
+                      </div>
+                      
+                      <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                        <p className="text-sm text-gray-700 mb-3">
+                          <strong>Note:</strong> UIVS is completely optional. You can proceed with the assessment using the basic identification form below.
+                        </p>
+                        <Button 
+                          type="button" 
+                          variant="outline"
+                          size="sm"
+                          className="text-gray-600 border-gray-300"
+                          onClick={() => {
+                            const formSection = document.querySelector('[data-section="identification-form"]');
+                            if (formSection) {
+                              formSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          }}
+                        >
+                          Skip to Basic Form
+                        </Button>
                       </div>
                     </div>
 
