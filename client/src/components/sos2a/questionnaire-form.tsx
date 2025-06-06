@@ -5628,47 +5628,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                       </div>
                     </div>
 
-                    {/* CSV Template Actions */}
-                    <div className="border rounded-md p-4 mb-6 bg-gray-50">
-                      <h5 className="font-medium mb-3">Identity Data Management</h5>
-                      <p className="text-sm text-gray-600 mb-4">
-                        Download the template to collect identity data or upload existing identity records for bulk processing.
-                      </p>
-                      <div className="flex flex-wrap gap-3">
-                        <Button 
-                          type="button" 
-                          variant="outline" 
-                          onClick={downloadIdentityTemplate}
-                          className="flex items-center gap-2"
-                        >
-                          <Download className="w-4 h-4" />
-                          Download Template
-                        </Button>
-                        <div className="relative">
-                          <input
-                            type="file"
-                            accept=".csv"
-                            onChange={handleIdentityUpload}
-                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            id="identity-upload"
-                          />
-                          <Button 
-                            type="button" 
-                            variant="outline"
-                            className="flex items-center gap-2"
-                          >
-                            <Upload className="w-4 h-4" />
-                            Upload Identity Data
-                          </Button>
-                        </div>
-                        {uploadedIdentities.length > 0 && (
-                          <div className="text-sm text-green-600 flex items-center gap-1">
-                            <CheckCircle className="w-4 h-4" />
-                            {uploadedIdentities.length} identities loaded
-                          </div>
-                        )}
-                      </div>
-                    </div>
+
 
                     {/* Identity Component Inventory Header */}
                     <div className="flex justify-between items-center mb-4">
