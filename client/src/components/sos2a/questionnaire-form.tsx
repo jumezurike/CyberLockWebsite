@@ -190,37 +190,51 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
   // Default matrix configuration
   const defaultMatrixConfig = [
-    { component: "Name", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-    { component: "Home Address (Google Open Location)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-    { component: "Birthplace (Google Open Location)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-    { component: "DOB", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-    { component: "PIN", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false, note: "Don't use for UWA - changes often" },
-    { component: "Device SN", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-    { component: "Ph#/EIN/SSN or BVN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-    { component: "Driver License", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-    { component: "Smart Phone OS ID", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-    { component: "IOT Serial + IMEI", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-    { component: "Make/Model+OS", human: true, machinePhysical: true, machineVirtual: true, api: false, thirdParty: false },
-    { component: "DOM", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-    { component: "BVN/NIN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-    { component: "Business Address", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-    { component: "Virtual Address (Google Open Location)", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
-    { component: "DOB (Duplicate)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-    { component: "PIN (Don't use for UWA - changes often)", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-    { component: "EC2/DO ID/MAC/SN", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
-    { component: "OS", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
-    { component: "EIN/SSN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-    { component: "Passport", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
-    { component: "Drone ID", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-    { component: "Smart Phone IMEI", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
-    { component: "Make/Model+OS (Duplicate)", human: true, machinePhysical: true, machineVirtual: true, api: false, thirdParty: false },
-    { component: "UUID", human: false, machinePhysical: false, machineVirtual: true, api: false, thirdParty: false },
-    { component: "Server ID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
-    { component: "Environment (Production=PR, Staging=ST, Test/Dev=TD)", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    // Driver's License Components
+    { component: "Full Name (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Driver License Number", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Date of Birth (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Address (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Photo (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Signature (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Height/Weight (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Eye Color (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Expiration Date (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    
+    // Passport Components
+    { component: "Passport Number", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Country of Issue (Passport)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Place of Birth (Passport)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Nationality (Passport)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "MRZ Code (Passport)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    
+    // Social Security/National ID Components
+    { component: "Social Security Number", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "National ID Number", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Tax ID/EIN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    
+    // Device/Machine Components
+    { component: "Device Serial Number", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "MAC Address", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
+    { component: "IMEI Number", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Device Model Number", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Operating System Version", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
     { component: "IP Address", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
-    { component: "Certifications", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-    { component: "Business Licenses", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-    { component: "Utility Bills", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true }
+    
+    // Business/Organization Components
+    { component: "Business License Number", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Business Registration Address", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Professional License Number", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    
+    // Biometric Components
+    { component: "Fingerprint Hash", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Facial Recognition Hash", human: true, machinePhysical: false, machineVirtual: false, api: true, thirdParty: false },
+    
+    // Virtual/API Components
+    { component: "User Account ID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "API Key Hash", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "Digital Certificate Serial", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "OAuth Token Hash", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false }
   ];
 
   // State for matrix configuration
