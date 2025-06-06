@@ -225,6 +225,9 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
 
   // State for matrix configuration
   const [matrixConfig, setMatrixConfig] = useState(defaultMatrixConfig);
+  
+  // Identity upload state
+  const [uploadedIdentities, setUploadedIdentities] = useState<any[]>([]);
 
   const updateMatrixConfig = (index: number, field: string, value: boolean) => {
     const newConfig = [...matrixConfig];
@@ -238,6 +241,70 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       title: "Reset to Default Configuration",
       description: "Components reset to security best practice defaults",
     });
+  };
+
+  // CSV template download function
+  const downloadIdentityTemplate = () => {
+    const csvContent = `user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source
+EMP001,John,Smith,john.smith@example.com,IT Manager,Information Technology,human,privileged,drivers_license,NY-DMV,yes,app+sms,Headquarters,jane.doe@example.com,Full Time,2025-04-15,2025-03-01,"ERP, CRM, IT Admin Portal",9:00-17:00,medium,30,yes,60,yes,Active Directory
+EMP002,Sarah,Johnson,sarah.johnson@example.com,Finance Director,Finance,human,admin,state_id,CA-DMV,yes,hardware,Headquarters,executive@example.com,Full Time,2025-04-20,2025-03-01,"ERP, Finance Portal, Expense System",8:00-18:00,high,30,yes,30,yes,Okta SSO
+SVC001,Backup,Service,backup-service@system.internal,Automated Process,Operations,machine-physical,standard,not_applicable,not_applicable,no,,Data Center,john.smith@example.com,System,2025-01-15,N/A,"Backup System, Storage Access",,low,365,no,0,yes,Local
+API001,Payment,Gateway,api-monitor@example.com,External Service,Finance,api,limited,not_applicable,not_applicable,yes,api-key,Cloud,sarah.johnson@example.com,Service,2025-03-30,N/A,"Payment Processing System",,high,90,yes,15,yes,AWS IAM
+VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,passport,US-State-Dept,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,"Ticketing System, Knowledge Base",9:00-20:00,medium,45,yes,20,yes,External IDP`;
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "user-identity-template.csv");
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast({
+      title: "Template Downloaded",
+      description: "User identity template CSV has been downloaded successfully",
+    });
+  };
+
+  // CSV upload handler
+  const handleIdentityUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const csv = e.target?.result as string;
+        const lines = csv.split('\n');
+        const headers = lines[0].split(',');
+        
+        const identities = lines.slice(1)
+          .filter(line => line.trim())
+          .map(line => {
+            const values = line.split(',');
+            const identity: any = {};
+            headers.forEach((header, index) => {
+              identity[header.trim()] = values[index]?.trim() || '';
+            });
+            return identity;
+          });
+
+        setUploadedIdentities(identities);
+        toast({
+          title: "Identities Uploaded",
+          description: `Successfully loaded ${identities.length} identity records`,
+        });
+      } catch (error) {
+        toast({
+          title: "Upload Error",
+          description: "Failed to parse CSV file. Please check the format.",
+          variant: "destructive",
+        });
+      }
+    };
+    reader.readAsText(file);
   };
 
   // CSV Template Download Function
@@ -5547,6 +5614,48 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </Select>
                           </div>
                         </div>
+                      </div>
+                    </div>
+
+                    {/* CSV Template Actions */}
+                    <div className="border rounded-md p-4 mb-6 bg-gray-50">
+                      <h5 className="font-medium mb-3">Identity Data Management</h5>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Download the template to collect identity data or upload existing identity records for bulk processing.
+                      </p>
+                      <div className="flex flex-wrap gap-3">
+                        <Button 
+                          type="button" 
+                          variant="outline" 
+                          onClick={downloadIdentityTemplate}
+                          className="flex items-center gap-2"
+                        >
+                          <Download className="w-4 h-4" />
+                          Download Template
+                        </Button>
+                        <div className="relative">
+                          <input
+                            type="file"
+                            accept=".csv"
+                            onChange={handleIdentityUpload}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            id="identity-upload"
+                          />
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            className="flex items-center gap-2"
+                          >
+                            <Upload className="w-4 h-4" />
+                            Upload Identity Data
+                          </Button>
+                        </div>
+                        {uploadedIdentities.length > 0 && (
+                          <div className="text-sm text-green-600 flex items-center gap-1">
+                            <CheckCircle className="w-4 h-4" />
+                            {uploadedIdentities.length} identities loaded
+                          </div>
+                        )}
                       </div>
                     </div>
 
