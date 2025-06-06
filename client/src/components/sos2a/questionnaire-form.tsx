@@ -5618,7 +5618,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 <SelectItem value="all-methods">All Methods</SelectItem>
                                 
                                 {/* Standard Authentication */}
-                                <SelectItem value="username-password">Username/Password</SelectItem>
+                                <SelectItem value="username-password">Username / Password</SelectItem>
                                 <SelectItem value="employee-id">Employee ID</SelectItem>
                                 <SelectItem value="vendor-id">Vendor ID</SelectItem>
                                 <SelectItem value="contractor-id">Contractor ID</SelectItem>
@@ -5631,7 +5631,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 
                                 {/* Advanced Authentication */}
                                 <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
-                                <SelectItem value="mfa">MFA (Multi-Factor Authentication)</SelectItem>
+                                <SelectItem value="mfa">MFA (Multi Factor Authentication)</SelectItem>
                                 
                                 {/* Biometric */}
                                 <SelectItem value="fingerprint">Fingerprint</SelectItem>
@@ -5655,44 +5655,6 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                       </div>
                     </div>
 
-                    {/* Identity Records Table */}
-                    <div className="bg-white border rounded-lg p-4 mb-6">
-                      <div className="flex justify-between items-center mb-4">
-                        <div>
-                          <h6 className="font-medium text-gray-800">Identity Records</h6>
-                          <p className="text-sm text-gray-600">Records extracted from form data for UWA generation</p>
-                        </div>
-                        <div className="flex gap-4 text-sm">
-                          <span>Total Records: <span className="font-medium">0</span></span>
-                          <span>Active: <span className="font-medium">0</span></span>
-                          <span>Filtered: <span className="font-medium">0</span></span>
-                        </div>
-                      </div>
-                      
-                      <div className="overflow-x-auto">
-                        <table className="min-w-full border-collapse border border-gray-300">
-                          <thead>
-                            <tr className="bg-gray-50">
-                              <th className="border border-gray-300 px-3 py-2 text-left text-sm font-medium">UWA Generated</th>
-                              <th className="border border-gray-300 px-3 py-2 text-left text-sm font-medium">Identity Type</th>
-                              <th className="border border-gray-300 px-3 py-2 text-left text-sm font-medium">ID Method</th>
-                              <th className="border border-gray-300 px-3 py-2 text-left text-sm font-medium">Name</th>
-                              <th className="border border-gray-300 px-3 py-2 text-left text-sm font-medium">Email</th>
-                              <th className="border border-gray-300 px-3 py-2 text-left text-sm font-medium">Role</th>
-                              <th className="border border-gray-300 px-3 py-2 text-left text-sm font-medium">Components</th>
-                              <th className="border border-gray-300 px-3 py-2 text-left text-sm font-medium">Status</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr>
-                              <td colSpan={8} className="border border-gray-300 px-4 py-8 text-center text-gray-500">
-                                No identity records found. Complete the form sections above to populate this table.
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
 
                     {/* Identity Component Inventory Header */}
                     <div className="flex justify-between items-center mb-4">
