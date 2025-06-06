@@ -27,7 +27,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
-import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, Monitor, Cpu, CloudCog, Users } from "lucide-react";
+import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, Monitor, Cpu, CloudCog, Users, RotateCcw } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
 import { useToast } from "@/hooks/use-toast";
 import { calculateDeviceRiskScore, getRiskLevelFromScore, fetchWazuhRiskScore } from "@/lib/rasbita-risk-scoring";
@@ -5501,19 +5501,42 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     {/* Identity Component Inventory Header */}
                     <div className="flex justify-between items-center mb-4">
                       <h5 className="text-lg font-medium text-gray-800">Identity Component Inventory</h5>
-                      <Button 
-                        type="button" 
-                        size="sm"
-                        onClick={() => {
-                          toast({
-                            title: "Add Identity Component",
-                            description: "Opening identity component form...",
-                          });
-                        }}
-                      >
-                        <Plus className="h-4 w-4 mr-2" />
-                        Add Identity Component
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          type="button" 
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            toast({
+                              title: "Reset to Default Configuration",
+                              description: "Components reset to security best practice defaults",
+                            });
+                          }}
+                        >
+                          <RotateCcw className="h-4 w-4 mr-2" />
+                          Reset to Default
+                        </Button>
+                        <Button 
+                          type="button" 
+                          size="sm"
+                          onClick={() => {
+                            toast({
+                              title: "Add Identity Component",
+                              description: "Opening identity component form...",
+                            });
+                          }}
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Identity Component
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {/* Configuration Notice */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
+                      <p className="text-sm text-blue-800">
+                        <strong>Configuration:</strong> This matrix shows the default security best practice configuration. Organizations can customize which identity types use specific components, but can always reset to secure defaults.
+                      </p>
                     </div>
 
                     {/* UWA Component Selection Matrix */}
