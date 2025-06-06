@@ -31,23 +31,51 @@ interface UWARecord {
   components: any;
 }
 
-// UWA Generation Algorithm - Character encoding for quantum-proof encryption
+// UWA Generation using proper CLX algorithm based on entity type
 function generateUWA(identityData: any): string {
-  const { identityType, identificationMethod, serverId, uuid, serialNumber, macAddress, ipAddress } = identityData;
+  const { identityType, serverId, uuid, serialNumber, operatingSystem, macAddress, address, environment } = identityData;
   
-  // Create character encoding sequence
-  const typeCode = identityType?.substring(0, 3).toUpperCase() || 'UNK';
-  const methodCode = identificationMethod?.substring(0, 3).toUpperCase() || 'UNK';
-  const serverHash = serverId ? serverId.split('').map(c => c.charCodeAt(0)).join('').substring(0, 6) : '000000';
-  const uuidHash = uuid ? uuid.replace(/-/g, '').substring(0, 8) : '00000000';
-  const macHash = macAddress ? macAddress.replace(/[:-]/g, '').substring(0, 6) : '000000';
-  const ipHash = ipAddress ? ipAddress.split('.').map(n => parseInt(n).toString(16).padStart(2, '0')).join('') : '00000000';
-  
-  // Generate UWA using character encoding
-  const timestamp = Date.now().toString(36).substring(-6);
-  const checksum = (typeCode + methodCode + serverHash).split('').reduce((sum, char) => sum + char.charCodeAt(0), 0) % 999;
-  
-  return `UWA-${typeCode}-${methodCode}-${serverHash}-${uuidHash.substring(0, 4)}-${macHash}-${ipHash.substring(0, 6)}-${timestamp}-${checksum.toString().padStart(3, '0')}`;
+  try {
+    // Map identity types to entity types for proper UWA generation
+    let entityType = 'physical-machine'; // default
+    if (identityType === 'Employee' || identityType === 'Vendor') {
+      entityType = 'human-individual';
+    } else if (identityType === 'IoT Device') {
+      entityType = 'physical-machine';
+    } else if (environment === 'virtual' || environment === 'cloud') {
+      entityType = 'virtual-machine';
+    }
+    
+    // Prepare components based on entity type requirements
+    const components: UWAComponents = {};
+    
+    if (entityType === 'physical-machine') {
+      components.serialNumber = serialNumber || `SN${Date.now()}`;
+      components.environment = environment || 'production';
+      components.address = address || '123 Main St, City, State';
+      components.osName = operatingSystem || 'Unknown OS';
+      components.macAddress = macAddress || '00:00:00:00:00:00';
+    } else if (entityType === 'virtual-machine') {
+      components.instanceUuid = uuid || `vm-${Date.now()}`;
+      components.environment = environment || 'virtual';
+      components.address = address || '123 Main St, City, State';
+      components.osName = operatingSystem || 'Unknown OS';
+    } else if (entityType === 'human-individual') {
+      components.dateOfBirth = '01011990'; // placeholder for demo
+      components.phoneEinSsn = serverId || '12345';
+      components.name = `${identityType} User`;
+      components.imeiSn = serialNumber || '123456789012345';
+      components.birthplace = address || '123 Main St, City, State';
+      components.driverLicensePassport = uuid || 'DL123456789';
+    }
+    
+    return UWAGenerator.generateUWA(entityType, components);
+  } catch (error) {
+    console.error('UWA generation error:', error);
+    // Fallback to simple CLX format if generation fails
+    const timestamp = Date.now().toString(36).substring(-6);
+    return `CLX-ERROR-${timestamp.toUpperCase().padEnd(7, '0')}-0000000-0000000-0000000-0000000-0000000`;
+  }
 }
 
 // Sample UWA Records data with Generated UWA column
