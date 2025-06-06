@@ -27,7 +27,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
-import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, Monitor, Cpu, CloudCog, Users, RotateCcw } from "lucide-react";
+import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, Monitor, Cpu, CloudCog, Users, RotateCcw, Wallet } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
 import { useToast } from "@/hooks/use-toast";
 import { calculateDeviceRiskScore, getRiskLevelFromScore, fetchWazuhRiskScore } from "@/lib/rasbita-risk-scoring";
@@ -5507,16 +5507,22 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                         <div className="bg-white border border-blue-200 rounded-lg p-4">
                           <Button 
                             type="button" 
-                            className="w-full bg-blue-600 hover:bg-blue-700 mb-3"
+                            className="w-full bg-green-600 hover:bg-green-700 mb-3"
                             onClick={() => {
-                              window.location.href = "/identity-management";
+                              toast({
+                                title: "UWA Management Activated",
+                                description: "Opening Universal Wallet Address management dashboard...",
+                              });
+                              setTimeout(() => {
+                                window.location.href = "/identity-management";
+                              }, 1000);
                             }}
                           >
                             <Users className="h-4 w-4 mr-2" />
-                            Manage User Identities
+                            Manage User & Create UWA
                           </Button>
                           <p className="text-xs text-gray-600">
-                            Access the identity management dashboard to view, edit, and organize all user identities in your system.
+                            Access the identity management dashboard to view, edit, organize all user identities and create Universal Wallet Addresses.
                           </p>
                         </div>
                         
