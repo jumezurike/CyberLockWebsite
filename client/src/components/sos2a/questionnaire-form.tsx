@@ -192,7 +192,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   const defaultMatrixConfig = [
     { component: "Name", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
     { component: "Home Address (Google Open Location)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
-    { component: "Birthplace GXCR+WF (Google Open Location)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Birthplace (Google Open Location)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
     { component: "DOB", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
     { component: "PIN", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false, note: "Don't use for UWA - changes often" },
     { component: "Device SN", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
