@@ -5371,91 +5371,128 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
                     </p>
                     
-                    {/* Action Buttons */}
-                    <div className="flex flex-wrap gap-3 mb-6">
-                      <Button 
-                        type="button" 
-                        className="bg-blue-600 hover:bg-blue-700"
-                        onClick={() => {
-                          toast({
-                            title: "Manage User Identities",
-                            description: "Opening identity management interface...",
-                          });
-                        }}
-                      >
-                        <Users className="h-4 w-4 mr-2" />
-                        Manage User Identities
-                      </Button>
+                    {/* Action Buttons with Clear Explanations */}
+                    <div className="space-y-4 mb-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="bg-white border border-blue-200 rounded-lg p-4">
+                          <Button 
+                            type="button" 
+                            className="w-full bg-blue-600 hover:bg-blue-700 mb-3"
+                            onClick={() => {
+                              toast({
+                                title: "Manage User Identities",
+                                description: "Opening identity management interface...",
+                              });
+                            }}
+                          >
+                            <Users className="h-4 w-4 mr-2" />
+                            Manage User Identities
+                          </Button>
+                          <p className="text-xs text-gray-600">
+                            Access the identity management dashboard to view, edit, and organize all user identities in your system.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-white border border-blue-200 rounded-lg p-4">
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            className="w-full border-blue-300 text-blue-700 hover:bg-blue-100 mb-3"
+                            onClick={() => {
+                              toast({
+                                title: "Download Template",
+                                description: "Downloading spreadsheet template with Section #13 form fields for bulk identity management...",
+                              });
+                            }}
+                          >
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Template
+                          </Button>
+                          <p className="text-xs text-gray-600">
+                            Downloads a spreadsheet template containing the same Section #13 form field data for multi-identity inventory management.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-white border border-blue-200 rounded-lg p-4">
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            className="w-full border-blue-300 text-blue-700 hover:bg-blue-100 mb-3"
+                            onClick={() => {
+                              toast({
+                                title: "Import User CSV",
+                                description: "Select your completed spreadsheet to upload and commit identity data to the database...",
+                              });
+                            }}
+                          >
+                            <Upload className="h-4 w-4 mr-2" />
+                            Import User CSV
+                          </Button>
+                          <p className="text-xs text-gray-600">
+                            Upload your completed spreadsheet template to commit multiple user identities to the database for extraction.
+                          </p>
+                        </div>
+                      </div>
                       
-                      <Button 
-                        type="button" 
-                        variant="outline"
-                        className="border-blue-300 text-blue-700 hover:bg-blue-100"
-                        onClick={() => {
-                          toast({
-                            title: "Download Template",
-                            description: "Identity import template will be downloaded shortly...",
-                          });
-                        }}
-                      >
-                        <Download className="h-4 w-4 mr-2" />
-                        Download Template
-                      </Button>
-                      
-                      <Button 
-                        type="button" 
-                        variant="outline"
-                        className="border-blue-300 text-blue-700 hover:bg-blue-100"
-                        onClick={() => {
-                          toast({
-                            title: "Import User CSV",
-                            description: "Please select your CSV file to import user identities...",
-                          });
-                        }}
-                      >
-                        <Upload className="h-4 w-4 mr-2" />
-                        Import User CSV
-                      </Button>
+                      <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
+                        <p className="text-sm text-yellow-800">
+                          <strong>Workflow:</strong> Download template → Fill with identity data → Upload CSV → Data commits to database for extraction
+                        </p>
+                      </div>
                     </div>
 
                     {/* Filter Controls */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                      <div>
-                        <label className="text-sm font-medium text-gray-700 mb-2 block">
-                          Filter by Identity Type <span className="text-blue-600 bg-blue-100 px-2 py-1 rounded text-xs ml-2">Filter</span>
-                        </label>
-                        <p className="text-xs text-gray-500 mb-2">Select an identity type to filter the identity component inventory list below</p>
-                        <Select defaultValue="all-types">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select identity type" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all-types">All Types</SelectItem>
-                            <SelectItem value="human">Human</SelectItem>
-                            <SelectItem value="machine">Machine</SelectItem>
-                            <SelectItem value="api">API</SelectItem>
-                            <SelectItem value="third-party">Third-Party</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      
-                      <div>
-                        <label className="text-sm font-medium text-gray-700 mb-2 block">
-                          Identification Method
-                        </label>
-                        <Select defaultValue="all-methods">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select identification method" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="all-methods">All Methods</SelectItem>
-                            <SelectItem value="username-password">Username/Password</SelectItem>
-                            <SelectItem value="biometric">Biometric</SelectItem>
-                            <SelectItem value="certificate">Certificate</SelectItem>
-                            <SelectItem value="token">Token-Based</SelectItem>
-                            <SelectItem value="mfa">Multi-Factor</SelectItem>
-                          </SelectContent>
-                        </Select>
+                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
+                      <h6 className="font-medium text-gray-800 mb-4">Filter Options</h6>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                          <div className="flex items-center gap-2 mb-2">
+                            <label className="text-sm font-medium text-gray-700">
+                              Filter by Identity Type
+                            </label>
+                            <span className="text-blue-600 bg-blue-100 px-2 py-1 rounded text-xs">Filter</span>
+                          </div>
+                          <p className="text-xs text-gray-500 mb-3">Select an identity type to filter the identity component inventory list below</p>
+                          <div className="space-y-1">
+                            <label className="text-xs font-medium text-gray-600">Identity Type</label>
+                            <Select defaultValue="all-types">
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="All Types" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="all-types">All Types</SelectItem>
+                                <SelectItem value="human">Human</SelectItem>
+                                <SelectItem value="machine">Machine</SelectItem>
+                                <SelectItem value="api">API</SelectItem>
+                                <SelectItem value="third-party">Third-Party</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <div className="mb-2">
+                            <label className="text-sm font-medium text-gray-700">
+                              Identification Method
+                            </label>
+                          </div>
+                          <div className="space-y-1">
+                            <label className="text-xs font-medium text-gray-600">Identification Method</label>
+                            <Select defaultValue="all-methods">
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="All Methods" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="all-methods">All Methods</SelectItem>
+                                <SelectItem value="username-password">Username/Password</SelectItem>
+                                <SelectItem value="biometric">Biometric</SelectItem>
+                                <SelectItem value="certificate">Certificate</SelectItem>
+                                <SelectItem value="token">Token-Based</SelectItem>
+                                <SelectItem value="mfa">Multi-Factor</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
