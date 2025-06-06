@@ -4,66 +4,117 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Users, AlertTriangle, Download, Upload, ChevronLeft, Fingerprint } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Users, AlertTriangle, Download, Upload, ChevronLeft, Fingerprint, Edit, Trash2, Plus, Eye } from 'lucide-react';
 import { Link } from 'wouter';
 import CleanIdentityManagement from '@/components/identity-behavior/clean-identity-management';
 
-// Sample data for demonstration purposes
-const identitiesData = [
+// UWA Records with complete identity component tracking
+const uwaRecordsData = [
   {
     id: 'EMP001',
+    uwaGenerated: 'UWA-HUM-001-2025',
+    identityType: 'human',
+    identificationMethod: 'biometric',
+    serverId: 'AD-SRV-01',
+    uuid: '550e8400-e29b-41d4-a716-446655440000',
+    snModel: 'EMP-BADGE-001',
+    makeModel: 'HID ProxCard',
+    os: 'Windows 11',
+    serverOwnerCompany: 'CyberLockX Internal',
+    mac: '00:1B:44:11:3A:B7',
+    environment: 'Production',
+    ipAddress: '192.168.1.100',
+    einBiz: 'EIN-123456789',
+    address: '123 Business Ave, Tech City, TC 12345',
     name: 'John Smith',
     email: 'john.smith@example.com',
     role: 'IT Manager',
     department: 'Information Technology',
-    type: 'human',
-    accessLevel: 'privileged',
-    lastActive: '2025-05-01',
-    riskLevel: 'low'
-  },
-  {
-    id: 'EMP002',
-    name: 'Sarah Johnson',
-    email: 'sarah.johnson@example.com',
-    role: 'Finance Director',
-    department: 'Finance',
-    type: 'human',
-    accessLevel: 'admin',
-    lastActive: '2025-05-11',
-    riskLevel: 'high'
+    components: {
+      firstName: true,
+      lastName: true,
+      email: true,
+      phoneNumber: true,
+      userId: true,
+      role: true,
+      department: true,
+      biometric: true,
+      governmentId: true,
+      mfa: true,
+      location: true,
+      manager: true,
+      accessLevel: true,
+      assignedRoles: true,
+      entitlements: true
+    }
   },
   {
     id: 'SVC001',
+    uwaGenerated: 'UWA-MAC-001-2025',
+    identityType: 'machine-physical',
+    identificationMethod: 'certificate',
+    serverId: 'BACKUP-SRV-01',
+    uuid: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
+    snModel: 'DELL-PE-R750',
+    makeModel: 'Dell PowerEdge R750',
+    os: 'Ubuntu Server 22.04',
+    serverOwnerCompany: 'CyberLockX Internal',
+    mac: '00:50:56:A0:00:01',
+    environment: 'Production',
+    ipAddress: '192.168.1.50',
+    einBiz: 'EIN-123456789',
+    address: 'Data Center A, Rack 15',
     name: 'Backup Service',
     email: 'backup-service@system.internal',
     role: 'Automated Process',
     department: 'Operations',
-    type: 'machine',
-    accessLevel: 'standard',
-    lastActive: '2025-05-12',
-    riskLevel: 'medium'
+    components: {
+      deviceId: true,
+      serialNumber: true,
+      manufacturer: true,
+      model: true,
+      operatingSystem: true,
+      macAddress: true,
+      ipAddress: true,
+      certificate: true,
+      location: true,
+      assignedDepartment: true,
+      accessLevel: true,
+      networkSegment: true
+    }
   },
   {
     id: 'API001',
+    uwaGenerated: 'UWA-API-001-2025',
+    identityType: 'api',
+    identificationMethod: 'api-key',
+    serverId: 'PAY-API-01',
+    uuid: null, // APIs don't use UUID
+    snModel: 'STRIPE-API-V2',
+    makeModel: 'Stripe Payment API',
+    os: 'Cloud Service',
+    serverOwnerCompany: 'Stripe Inc.',
+    mac: null,
+    environment: 'Production',
+    ipAddress: '52.14.118.240',
+    einBiz: 'EIN-987654321',
+    address: 'Cloud Infrastructure',
     name: 'Payment Gateway',
     email: 'api-monitor@example.com',
     role: 'External Service',
     department: 'Finance',
-    type: 'api',
-    accessLevel: 'limited',
-    lastActive: '2025-05-10',
-    riskLevel: 'high'
-  },
-  {
-    id: 'VEN001',
-    name: 'Tech Support Inc.',
-    email: 'support@techsupport.example.com',
-    role: 'Technical Support',
-    department: 'External',
-    type: 'third-party',
-    accessLevel: 'limited',
-    lastActive: '2025-04-30',
-    riskLevel: 'medium'
+    components: {
+      apiKey: true,
+      serviceEndpoint: true,
+      accessLevel: true,
+      rateLimit: true,
+      authentication: true,
+      authorization: true,
+      monitoring: true,
+      logging: true
+    }
   }
 ];
 
@@ -93,17 +144,23 @@ const recentActivities = [
 ];
 
 export default function IdentityManagement() {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [activeTab, setActiveTab] = useState('uwa-records');
+  const [selectedIdentityType, setSelectedIdentityType] = useState('all-types');
+  const [selectedIdentificationMethod, setSelectedIdentificationMethod] = useState('all-methods');
+  const [selectedRecord, setSelectedRecord] = useState(null);
   
-  // Count high risk identities
-  const highRiskCount = identitiesData.filter(id => id.riskLevel === 'high').length;
+  // Filter records based on selected filters
+  const filteredRecords = uwaRecordsData.filter(record => {
+    const typeMatch = selectedIdentityType === 'all-types' || record.identityType === selectedIdentityType;
+    const methodMatch = selectedIdentificationMethod === 'all-methods' || record.identificationMethod === selectedIdentificationMethod;
+    return typeMatch && methodMatch;
+  });
   
-  // Count by identity type
-  const humanCount = identitiesData.filter(id => id.type === 'human').length;
-  const machineCount = identitiesData.filter(id => id.type === 'machine').length;
-  const apiCount = identitiesData.filter(id => id.type === 'api').length;
-  const thirdPartyCount = identitiesData.filter(id => id.type === 'third-party').length;
-  
+  // Component availability summary
+  const getComponentStatus = (record, componentName) => {
+    return record.components && record.components[componentName] ? 'X' : '';
+  };
+
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       <div className="p-6">
