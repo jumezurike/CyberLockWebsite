@@ -5905,10 +5905,20 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     </div>
                     
                     {/* Configuration Notice */}
-                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-                      <p className="text-sm text-blue-800">
-                        <strong>Configuration:</strong> This matrix shows the default security best practice configuration. Organizations can customize which identity types use specific components, but can always reset to secure defaults.
-                      </p>
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-5 mb-6">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-white text-xs font-bold">i</span>
+                        </div>
+                        <div>
+                          <h6 className="font-bold text-blue-900 mb-2">Identity Collection Method Selection</h6>
+                          <div className="space-y-2 text-sm text-blue-800">
+                            <p><strong>Multiple Identity Types:</strong> Use the CSV template above for bulk data collection and import</p>
+                            <p><strong>Single Identity Type:</strong> Use the individual form below for direct data entry</p>
+                            <p className="text-xs text-blue-600 mt-3">Organizations can customize which identity types use specific components, but can always reset to secure defaults.</p>
+                          </div>
+                        </div>
+                      </div>
                     </div>
 
                     {/* UWA Component Selection Matrix */}
@@ -6066,6 +6076,45 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     </div>
                   </div>
                   
+                  {/* Clear Separator and Instructions */}
+                  <div className="my-8">
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t-2 border-gray-300"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="bg-white px-6 py-2 text-gray-500 font-medium border border-gray-300 rounded-full">
+                          OR
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Single Identity Form Instructions */}
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6 mb-6 shadow-lg">
+                    <div className="flex items-start gap-4">
+                      <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-sm font-bold">1</span>
+                      </div>
+                      <div>
+                        <h5 className="text-xl font-bold text-green-900 mb-3">Single Identity Type Collection</h5>
+                        <div className="space-y-2 text-sm text-green-800">
+                          <p className="font-medium">Use this form below for individual identity data entry:</p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>Direct form completion for one identity at a time</li>
+                            <li>Real-time validation and component mapping</li>
+                            <li>Immediate UWA generation upon completion</li>
+                          </ul>
+                        </div>
+                        <div className="mt-4 p-3 bg-white border border-green-200 rounded-lg">
+                          <p className="text-xs text-green-700 font-medium">
+                            Perfect for organizations with limited identities or testing purposes
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
