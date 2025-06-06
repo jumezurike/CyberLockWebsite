@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -26,7 +27,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
-import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download } from "lucide-react";
+import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, X, Monitor, Cpu, CloudCog } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
 import { useToast } from "@/hooks/use-toast";
 import { calculateDeviceRiskScore, getRiskLevelFromScore, fetchWazuhRiskScore } from "@/lib/rasbita-risk-scoring";
