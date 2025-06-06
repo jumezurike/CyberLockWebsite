@@ -27,7 +27,7 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
-import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, Monitor, Cpu, CloudCog } from "lucide-react";
+import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, Monitor, Cpu, CloudCog, Users } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
 import { useToast } from "@/hooks/use-toast";
 import { calculateDeviceRiskScore, getRiskLevelFromScore, fetchWazuhRiskScore } from "@/lib/rasbita-risk-scoring";
@@ -5361,6 +5361,225 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
+
+                  {/* Universal Identity Verification System (UIVS) */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+                    <h4 className="text-lg font-semibold text-blue-800 mb-3">
+                      Universal Identity Verification System (UIVS)
+                    </h4>
+                    <p className="text-blue-700 mb-6">
+                      For organizations with multiple users, we recommend using our Identity Management system to import and manage all your users in one place with our patented Universal Identity Verification System (UIVS).
+                    </p>
+                    
+                    {/* Action Buttons */}
+                    <div className="flex flex-wrap gap-3 mb-6">
+                      <Button 
+                        type="button" 
+                        className="bg-blue-600 hover:bg-blue-700"
+                        onClick={() => {
+                          toast({
+                            title: "Manage User Identities",
+                            description: "Opening identity management interface...",
+                          });
+                        }}
+                      >
+                        <Users className="h-4 w-4 mr-2" />
+                        Manage User Identities
+                      </Button>
+                      
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        className="border-blue-300 text-blue-700 hover:bg-blue-100"
+                        onClick={() => {
+                          toast({
+                            title: "Download Template",
+                            description: "Identity import template will be downloaded shortly...",
+                          });
+                        }}
+                      >
+                        <Download className="h-4 w-4 mr-2" />
+                        Download Template
+                      </Button>
+                      
+                      <Button 
+                        type="button" 
+                        variant="outline"
+                        className="border-blue-300 text-blue-700 hover:bg-blue-100"
+                        onClick={() => {
+                          toast({
+                            title: "Import User CSV",
+                            description: "Please select your CSV file to import user identities...",
+                          });
+                        }}
+                      >
+                        <Upload className="h-4 w-4 mr-2" />
+                        Import User CSV
+                      </Button>
+                    </div>
+
+                    {/* Filter Controls */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                      <div>
+                        <label className="text-sm font-medium text-gray-700 mb-2 block">
+                          Filter by Identity Type <span className="text-blue-600 bg-blue-100 px-2 py-1 rounded text-xs ml-2">Filter</span>
+                        </label>
+                        <p className="text-xs text-gray-500 mb-2">Select an identity type to filter the identity component inventory list below</p>
+                        <Select defaultValue="all-types">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select identity type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all-types">All Types</SelectItem>
+                            <SelectItem value="human">Human</SelectItem>
+                            <SelectItem value="machine">Machine</SelectItem>
+                            <SelectItem value="api">API</SelectItem>
+                            <SelectItem value="third-party">Third-Party</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      
+                      <div>
+                        <label className="text-sm font-medium text-gray-700 mb-2 block">
+                          Identification Method
+                        </label>
+                        <Select defaultValue="all-methods">
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select identification method" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all-methods">All Methods</SelectItem>
+                            <SelectItem value="username-password">Username/Password</SelectItem>
+                            <SelectItem value="biometric">Biometric</SelectItem>
+                            <SelectItem value="certificate">Certificate</SelectItem>
+                            <SelectItem value="token">Token-Based</SelectItem>
+                            <SelectItem value="mfa">Multi-Factor</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+
+                    {/* Identity Component Inventory Header */}
+                    <div className="flex justify-between items-center mb-4">
+                      <h5 className="text-lg font-medium text-gray-800">Identity Component Inventory</h5>
+                      <Button 
+                        type="button" 
+                        size="sm"
+                        onClick={() => {
+                          toast({
+                            title: "Add Identity Component",
+                            description: "Opening identity component form...",
+                          });
+                        }}
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Identity Component
+                      </Button>
+                    </div>
+
+                    {/* UWA Component Selection Matrix */}
+                    <div className="border rounded-lg p-6 bg-white">
+                      <h6 className="font-medium text-gray-800 mb-3">UWA Component Selection Matrix</h6>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Select the components needed for your UWA intermediate representation. Required fields depend on identity type. Organizations can customize which fields to include in their UWA generation based on their specific needs.
+                      </p>
+                      <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4">
+                        <p className="text-sm text-yellow-800">
+                          ⚠️ The matrix below shows an example configuration. All 31 identity components can be used to create a customized UWA.
+                        </p>
+                      </div>
+
+                      {/* Matrix Table */}
+                      <div className="overflow-x-auto">
+                        <table className="min-w-full border-collapse border border-gray-300">
+                          <thead>
+                            <tr className="bg-gray-50">
+                              <th className="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">
+                                Components of Identification
+                              </th>
+                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
+                                Human
+                              </th>
+                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
+                                Machine
+                              </th>
+                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
+                                API
+                              </th>
+                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
+                                Third-Party
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {[
+                              { component: "Name", human: true, machine: false, api: false, thirdParty: true },
+                              { component: "Address", human: true, machine: false, api: false, thirdParty: true },
+                              { component: "Birthplace", human: true, machine: false, api: false, thirdParty: false },
+                              { component: "Date of Birth", human: true, machine: false, api: false, thirdParty: false },
+                              { component: "PIN", human: false, machine: false, api: false, thirdParty: false, note: "Not used for UWA" },
+                              { component: "SN/IMEI", human: true, machine: true, api: false, thirdParty: false },
+                              { component: "Ph#/EIN/SSN/BVN", human: true, machine: false, api: false, thirdParty: true },
+                              { component: "Driver License/Passport", human: true, machine: false, api: false, thirdParty: false },
+                              { component: "Primary Auth Device IMEI/IOT S/N", human: true, machine: false, api: false, thirdParty: false },
+                              { component: "Make/Model+OS", human: true, machine: true, api: false, thirdParty: false },
+                              { component: "Manufacturing Date (DOM)", human: false, machine: true, api: false, thirdParty: false },
+                              { component: "EC2/DO ID/MAC/SN", human: false, machine: true, api: true, thirdParty: false },
+                              { component: "OS", human: false, machine: true, api: true, thirdParty: false },
+                              { component: "UUID", human: false, machine: true, api: true, thirdParty: false },
+                              { component: "Server ID", human: false, machine: true, api: true, thirdParty: false },
+                              { component: "Environment (PR/ST/TD)", human: false, machine: true, api: true, thirdParty: false },
+                              { component: "IP Address", human: false, machine: true, api: true, thirdParty: false },
+                              { component: "Business Certifications", human: false, machine: false, api: false, thirdParty: true },
+                              { component: "Business Licenses", human: false, machine: false, api: false, thirdParty: true },
+                              { component: "Utility Bills", human: false, machine: false, api: false, thirdParty: true }
+                            ].map((row, index) => (
+                              <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                                <td className="border border-gray-300 px-4 py-3 font-medium text-gray-700">
+                                  {row.component}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox checked={row.human} className="mx-auto" />
+                                  )}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox checked={row.machine} className="mx-auto" />
+                                  )}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox checked={row.api} className="mx-auto" />
+                                  )}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox checked={row.thirdParty} className="mx-auto" />
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+                        <p className="text-sm font-medium text-blue-800">Selected Identity Matrix Fields</p>
+                        <p className="text-xs text-blue-600 mt-1">
+                          Components selected above will be used to generate the Universal Wallet Address (UWA) for identity verification.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
