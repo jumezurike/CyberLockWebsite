@@ -5618,40 +5618,44 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 <SelectItem value="all-methods">All Methods</SelectItem>
                                 
                                 {/* Standard Authentication */}
-                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100">1. Standard Authentication</div>
-                                <SelectItem value="username-password">Username / Password</SelectItem>
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100">Standard Authentication</div>
+                                <SelectItem value="username-password">Username/Password</SelectItem>
                                 <SelectItem value="employee-id">Employee ID</SelectItem>
                                 <SelectItem value="vendor-id">Vendor ID</SelectItem>
                                 <SelectItem value="contractor-id">Contractor ID</SelectItem>
                                 <SelectItem value="certificate">Certificate</SelectItem>
                                 <SelectItem value="smart-card">Smart Card</SelectItem>
-                                <SelectItem value="single-sign-on">Single Sign-On</SelectItem>
-                                <SelectItem value="token-based">Token-Based</SelectItem>
+                                <SelectItem value="sso">Single Sign-On</SelectItem>
+                                <SelectItem value="token">Token-based</SelectItem>
                                 <SelectItem value="service-account">Service Account</SelectItem>
                                 <SelectItem value="system-account">System Account</SelectItem>
                                 
                                 {/* Advanced Authentication */}
-                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">2. Advanced Authentication</div>
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">Advanced Authentication</div>
+                                <SelectItem value="mfa">MFA (Multi-Factor Authentication)</SelectItem>
                                 <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
-                                <SelectItem value="mfa">MFA (Multi Factor Authentication)</SelectItem>
                                 
                                 {/* Biometric */}
-                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">3. Biometric</div>
-                                <SelectItem value="fingerprint">Fingerprint</SelectItem>
-                                <SelectItem value="voice">Voice</SelectItem>
-                                <SelectItem value="facial">Facial</SelectItem>
-                                <SelectItem value="iris">Iris</SelectItem>
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">Biometric</div>
+                                <SelectItem value="biometric-fingerprint">Biometric - Fingerprint</SelectItem>
+                                <SelectItem value="biometric-voice">Biometric - Voice</SelectItem>
+                                <SelectItem value="biometric-facial">Biometric - Facial</SelectItem>
+                                <SelectItem value="biometric-iris">Biometric - Iris</SelectItem>
                                 
-                                {/* Government ID */}
-                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">4. Government ID</div>
-                                <SelectItem value="driver-license">Driver License</SelectItem>
+                                {/* Government IDs */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">Government IDs</div>
+                                <SelectItem value="drivers-license">Driver's License</SelectItem>
                                 <SelectItem value="passport">Passport</SelectItem>
                                 <SelectItem value="national-id">National ID</SelectItem>
                                 <SelectItem value="military-id">Military ID</SelectItem>
                                 <SelectItem value="state-id">State ID</SelectItem>
                                 <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
-                                <SelectItem value="social-security-card">Social Security Card</SelectItem>
-                                <SelectItem value="certificate-of-citizenship">Certificate of Citizenship</SelectItem>
+                                <SelectItem value="social-security">Social Security Card</SelectItem>
+                                <SelectItem value="citizenship-certificate">Certificate of Citizenship</SelectItem>
+                                
+                                {/* Additional Options */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">Other</div>
+                                <SelectItem value="other">Other</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
