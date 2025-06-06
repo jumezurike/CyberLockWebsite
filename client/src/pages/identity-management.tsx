@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ChevronLeft, Edit, Trash2, Eye, Plus } from 'lucide-react';
 import { Link } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
+import { UWAGenerator, type UWAComponents } from '@/lib/uwa-generator';
 
 // UWA Record Type
 interface UWARecord {
