@@ -5539,7 +5539,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 Human
                               </th>
                               <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
-                                Machine
+                                Machine Physical
+                              </th>
+                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
+                                Machine Virtual
                               </th>
                               <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
                                 API
@@ -5551,37 +5554,37 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           </thead>
                           <tbody>
                             {[
-                              { component: "Name", human: true, machine: false, api: false, thirdParty: true },
-                              { component: "Address", human: true, machine: false, api: false, thirdParty: true },
-                              { component: "Birthplace", human: true, machine: false, api: false, thirdParty: false },
-                              { component: "Date of Birth (DOB)", human: true, machine: false, api: false, thirdParty: false },
-                              { component: "PIN", human: false, machine: false, api: false, thirdParty: false, note: "Don't use for UWA - changes often" },
-                              { component: "SN/IMEI", human: true, machine: true, api: false, thirdParty: false },
-                              { component: "Ph#/EIN/SSN/BVN", human: true, machine: false, api: false, thirdParty: true },
-                              { component: "Driver License/Passport", human: true, machine: false, api: false, thirdParty: false },
-                              { component: "Smart Phone Access", human: true, machine: false, api: false, thirdParty: false, note: "Fixed on phone - no access" },
-                              { component: "Primary Auth Device IMEI/IOT S/N", human: true, machine: false, api: false, thirdParty: false },
-                              { component: "Make/Model+OS", human: true, machine: true, api: false, thirdParty: false },
-                              { component: "Manufacturing Date (DOM)", human: false, machine: true, api: false, thirdParty: false },
-                              { component: "Name (Duplicate Entry)", human: true, machine: false, api: false, thirdParty: true },
-                              { component: "Address (Duplicate Entry)", human: true, machine: false, api: false, thirdParty: true },
-                              { component: "Birthplace (Duplicate Entry)", human: true, machine: false, api: false, thirdParty: false },
-                              { component: "DOB (Duplicate Entry)", human: true, machine: false, api: false, thirdParty: false },
-                              { component: "PIN (Duplicate Entry)", human: false, machine: false, api: false, thirdParty: false, note: "Don't use for UWA" },
-                              { component: "EC2/DO ID/MAC/SN", human: false, machine: true, api: true, thirdParty: false },
-                              { component: "OS", human: false, machine: true, api: true, thirdParty: false },
-                              { component: "EIN/SSN/BVN (Duplicate)", human: true, machine: false, api: false, thirdParty: true },
-                              { component: "Driver License/Passport (Duplicate)", human: true, machine: false, api: false, thirdParty: false },
-                              { component: "Smart Phone (Duplicate)", human: true, machine: false, api: false, thirdParty: false, note: "Fixed on phone" },
-                              { component: "Primary Auth Device (Duplicate)", human: true, machine: false, api: false, thirdParty: false },
-                              { component: "Make/Model+OS (Duplicate)", human: true, machine: true, api: false, thirdParty: false },
-                              { component: "UUID", human: false, machine: true, api: true, thirdParty: false },
-                              { component: "Server ID", human: false, machine: true, api: true, thirdParty: false },
-                              { component: "Environment (PR/ST/TD)", human: false, machine: true, api: true, thirdParty: false },
-                              { component: "IP Address", human: false, machine: true, api: true, thirdParty: false },
-                              { component: "Business Certifications", human: false, machine: false, api: false, thirdParty: true },
-                              { component: "Business Licenses", human: false, machine: false, api: false, thirdParty: true },
-                              { component: "Utility Bills", human: false, machine: false, api: false, thirdParty: true }
+                              { component: "Name", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+                              { component: "Address", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+                              { component: "Birthplace", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "Date of Birth (DOB)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "PIN", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false, note: "Don't use for UWA - changes often" },
+                              { component: "SN/IMEI", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "Ph#/EIN/SSN/BVN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+                              { component: "Driver License/Passport", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "Smart Phone Access", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false, note: "Fixed on phone - no access" },
+                              { component: "Primary Auth Device IMEI/IOT S/N", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "Make/Model+OS", human: true, machinePhysical: true, machineVirtual: true, api: false, thirdParty: false },
+                              { component: "Manufacturing Date (DOM)", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "Name (Duplicate Entry)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+                              { component: "Address (Duplicate Entry)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+                              { component: "Birthplace (Duplicate Entry)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "DOB (Duplicate Entry)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "PIN (Duplicate Entry)", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false, note: "Don't use for UWA" },
+                              { component: "EC2/DO ID/MAC/SN", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+                              { component: "OS", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
+                              { component: "EIN/SSN/BVN (Duplicate)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+                              { component: "Driver License/Passport (Duplicate)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "Smart Phone (Duplicate)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false, note: "Fixed on phone" },
+                              { component: "Primary Auth Device (Duplicate)", human: true, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+                              { component: "Make/Model+OS (Duplicate)", human: true, machinePhysical: true, machineVirtual: true, api: false, thirdParty: false },
+                              { component: "UUID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+                              { component: "Server ID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+                              { component: "Environment (PR/ST/TD)", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+                              { component: "IP Address", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
+                              { component: "Business Certifications", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+                              { component: "Business Licenses", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+                              { component: "Utility Bills", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true }
                             ].map((row, index) => (
                               <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
                                 <td className="border border-gray-300 px-4 py-3 font-medium text-gray-700">
