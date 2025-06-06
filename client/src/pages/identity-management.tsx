@@ -200,6 +200,7 @@ export default function IdentityManagement() {
     if (!record.components) return false;
     
     const componentSets = {
+      'identity': ['name', 'dateOfBirth', 'socialSecurityNumber', 'driverLicense', 'passport', 'birthplace', 'address', 'phoneNumber'],
       'authentication': ['username', 'password', 'mfa', 'biometric'],
       'identification': ['firstName', 'lastName', 'email', 'userId'],
       'authorization': ['role', 'department', 'accessLevel', 'entitlements'],
@@ -308,6 +309,7 @@ export default function IdentityManagement() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all-components">All Components</SelectItem>
+                    <SelectItem value="identity">Identity Components</SelectItem>
                     <SelectItem value="authentication">Authentication Components</SelectItem>
                     <SelectItem value="identification">Identification Components</SelectItem>
                     <SelectItem value="authorization">Authorization Components</SelectItem>
