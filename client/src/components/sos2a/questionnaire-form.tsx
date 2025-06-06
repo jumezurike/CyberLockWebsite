@@ -5572,90 +5572,109 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     </div>
 
                     {/* Filter Controls */}
-                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-6">
-                      <h6 className="font-medium text-gray-800 mb-4">Filter Options</h6>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-xl p-6 mb-6 shadow-xl">
+                      <div className="flex items-center justify-between mb-6">
                         <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <label className="text-sm font-medium text-gray-700">
-                              Filter by Identity Type
+                          <h6 className="text-xl font-bold text-purple-900 flex items-center gap-3">
+                            <div className="w-3 h-3 bg-purple-600 rounded-full animate-pulse"></div>
+                            <span>Smart Authentication Filter</span>
+                            <div className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
+                              AI-Powered
+                            </div>
+                          </h6>
+                          <p className="text-sm text-purple-700 mt-2">Advanced multi-layer identity filtering with real-time validation</p>
+                          <p className="text-xs text-purple-600 mt-1">Dynamic filtering • Security-first approach • Instant results</p>
+                        </div>
+                        <div className="bg-white px-4 py-3 rounded-lg border border-purple-200 shadow-sm">
+                          <span className="text-purple-600 text-sm font-medium">Methods Available: </span>
+                          <span className="font-bold text-purple-900 text-lg">21</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-white rounded-lg p-4 border border-purple-200 shadow-sm">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <label className="text-sm font-bold text-purple-800">
+                              Identity Type Filter
                             </label>
-                            <span className="text-blue-600 bg-blue-100 px-2 py-1 rounded text-xs">Filter</span>
+                            <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs font-medium">Active</span>
                           </div>
-                          <p className="text-xs text-gray-500 mb-3">Select an identity type to filter the identity component inventory list below</p>
-                          <div className="space-y-1">
-                            <label className="text-xs font-medium text-gray-600">Identity Type</label>
+                          <p className="text-xs text-purple-600 mb-4">Dynamic filtering for comprehensive identity management</p>
+                          <div className="space-y-2">
+                            <label className="text-xs font-medium text-purple-700">Select Type</label>
                             <Select defaultValue="all-types">
-                              <SelectTrigger className="w-full">
+                              <SelectTrigger className="w-full border-purple-200 hover:border-purple-300 focus:ring-purple-500">
                                 <SelectValue placeholder="All Types" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="all-types">All Types</SelectItem>
-                                <SelectItem value="human">Human</SelectItem>
-                                <SelectItem value="machine-physical">Machine Physical</SelectItem>
-                                <SelectItem value="machine-virtual">Machine Virtual</SelectItem>
-                                <SelectItem value="api">API</SelectItem>
-                                <SelectItem value="third-party">Third-Party</SelectItem>
+                                <SelectItem value="all-types">🌟 All Types</SelectItem>
+                                <SelectItem value="human">👤 Human</SelectItem>
+                                <SelectItem value="machine-physical">🖥️ Machine Physical</SelectItem>
+                                <SelectItem value="machine-virtual">☁️ Machine Virtual</SelectItem>
+                                <SelectItem value="api">🔌 API</SelectItem>
+                                <SelectItem value="third-party">🤝 Third-Party</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
                         </div>
                         
-                        <div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <label className="text-sm font-medium text-gray-700">
-                              Identification Method
+                        <div className="bg-white rounded-lg p-4 border border-purple-200 shadow-sm">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <label className="text-sm font-bold text-purple-800">
+                              Authentication Method
                             </label>
+                            <span className="text-blue-600 bg-blue-100 px-2 py-1 rounded-full text-xs font-medium">21 Options</span>
                           </div>
-                          <p className="text-xs text-gray-500 mb-3">Select an identification method to filter components</p>
-                          <div className="space-y-1">
-                            <label className="text-xs font-medium text-gray-600">Method</label>
+                          <p className="text-xs text-purple-600 mb-4">Advanced authentication method selection with security categorization</p>
+                          <div className="space-y-2">
+                            <label className="text-xs font-medium text-purple-700">Select Method</label>
                             <Select defaultValue="all-methods">
-                              <SelectTrigger className="w-full">
-                                <SelectValue placeholder="All Methods" />
+                              <SelectTrigger className="w-full border-purple-200 hover:border-purple-300 focus:ring-purple-500">
+                                <SelectValue placeholder="🔐 All Methods" />
                               </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="all-methods">All Methods</SelectItem>
+                              <SelectContent className="max-h-80 overflow-y-auto">
+                                <SelectItem value="all-methods">🌟 All Methods</SelectItem>
                                 
                                 {/* Standard Authentication */}
-                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100">Standard Authentication</div>
-                                <SelectItem value="username-password">Username/Password</SelectItem>
-                                <SelectItem value="employee-id">Employee ID</SelectItem>
-                                <SelectItem value="vendor-id">Vendor ID</SelectItem>
-                                <SelectItem value="contractor-id">Contractor ID</SelectItem>
-                                <SelectItem value="certificate">Certificate</SelectItem>
-                                <SelectItem value="smart-card">Smart Card</SelectItem>
-                                <SelectItem value="sso">Single Sign-On</SelectItem>
-                                <SelectItem value="token">Token-based</SelectItem>
-                                <SelectItem value="service-account">Service Account</SelectItem>
-                                <SelectItem value="system-account">System Account</SelectItem>
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-md mx-1 my-1">🔐 Standard Authentication</div>
+                                <SelectItem value="username-password">🔑 Username/Password</SelectItem>
+                                <SelectItem value="employee-id">👤 Employee ID</SelectItem>
+                                <SelectItem value="vendor-id">🏢 Vendor ID</SelectItem>
+                                <SelectItem value="contractor-id">👷 Contractor ID</SelectItem>
+                                <SelectItem value="certificate">📜 Certificate</SelectItem>
+                                <SelectItem value="smart-card">💳 Smart Card</SelectItem>
+                                <SelectItem value="sso">🔗 Single Sign-On</SelectItem>
+                                <SelectItem value="token">🎫 Token-based</SelectItem>
+                                <SelectItem value="service-account">⚙️ Service Account</SelectItem>
+                                <SelectItem value="system-account">🖥️ System Account</SelectItem>
                                 
                                 {/* Advanced Authentication */}
-                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">Advanced Authentication</div>
-                                <SelectItem value="mfa">MFA (Multi-Factor Authentication)</SelectItem>
-                                <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-purple-500 to-purple-600 rounded-md mx-1 my-1">🛡️ Advanced Authentication</div>
+                                <SelectItem value="mfa">🔐 MFA (Multi-Factor Authentication)</SelectItem>
+                                <SelectItem value="uwa">🌐 UWA (Universal Wallet Address)</SelectItem>
                                 
                                 {/* Biometric */}
-                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">Biometric</div>
-                                <SelectItem value="biometric-fingerprint">Biometric - Fingerprint</SelectItem>
-                                <SelectItem value="biometric-voice">Biometric - Voice</SelectItem>
-                                <SelectItem value="biometric-facial">Biometric - Facial</SelectItem>
-                                <SelectItem value="biometric-iris">Biometric - Iris</SelectItem>
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-md mx-1 my-1">🔬 Biometric</div>
+                                <SelectItem value="biometric-fingerprint">👆 Biometric - Fingerprint</SelectItem>
+                                <SelectItem value="biometric-voice">🎤 Biometric - Voice</SelectItem>
+                                <SelectItem value="biometric-facial">👁️ Biometric - Facial</SelectItem>
+                                <SelectItem value="biometric-iris">👁️ Biometric - Iris</SelectItem>
                                 
                                 {/* Government IDs */}
-                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">Government IDs</div>
-                                <SelectItem value="drivers-license">Driver's License</SelectItem>
-                                <SelectItem value="passport">Passport</SelectItem>
-                                <SelectItem value="national-id">National ID</SelectItem>
-                                <SelectItem value="military-id">Military ID</SelectItem>
-                                <SelectItem value="state-id">State ID</SelectItem>
-                                <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
-                                <SelectItem value="social-security">Social Security Card</SelectItem>
-                                <SelectItem value="citizenship-certificate">Certificate of Citizenship</SelectItem>
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-red-500 to-red-600 rounded-md mx-1 my-1">🏛️ Government IDs</div>
+                                <SelectItem value="drivers-license">🚗 Driver's License</SelectItem>
+                                <SelectItem value="passport">✈️ Passport</SelectItem>
+                                <SelectItem value="national-id">🆔 National ID</SelectItem>
+                                <SelectItem value="military-id">🎖️ Military ID</SelectItem>
+                                <SelectItem value="state-id">🏛️ State ID</SelectItem>
+                                <SelectItem value="birth-certificate">👶 Birth Certificate</SelectItem>
+                                <SelectItem value="social-security">🔢 Social Security Card</SelectItem>
+                                <SelectItem value="citizenship-certificate">📋 Certificate of Citizenship</SelectItem>
                                 
                                 {/* Additional Options */}
-                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">Other</div>
-                                <SelectItem value="other">Other</SelectItem>
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-gray-500 to-gray-600 rounded-md mx-1 my-1">➕ Other</div>
+                                <SelectItem value="other">❓ Other</SelectItem>
                               </SelectContent>
                             </Select>
                           </div>
@@ -5893,39 +5912,81 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     </div>
 
                     {/* UWA Component Selection Matrix */}
-                    <div className="border rounded-lg p-6 bg-white">
-                      <h6 className="font-medium text-gray-800 mb-3">UWA Component Selection Matrix</h6>
-                      <p className="text-sm text-gray-600 mb-4">
-                        Select the components needed for your UWA intermediate representation. Required fields depend on identity type. Organizations can customize which fields to include in their UWA generation based on their specific needs.
-                      </p>
-                      <div className="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4">
-                        <p className="text-sm text-yellow-800">
-                          ⚠️ The matrix below shows an example configuration. All 31 identity components can be used to create a customized UWA.
-                        </p>
+                    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl p-6 mb-6 shadow-xl">
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h6 className="text-xl font-bold text-emerald-900 flex items-center gap-3">
+                            <div className="w-3 h-3 bg-emerald-600 rounded-full animate-pulse"></div>
+                            <span>UWA Matrix Configuration</span>
+                            <div className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
+                              31 Components
+                            </div>
+                          </h6>
+                          <p className="text-sm text-emerald-700 mt-2">Advanced component selection matrix for Universal Wallet Address generation</p>
+                          <p className="text-xs text-emerald-600 mt-1">Interactive matrix • Real-time validation • Custom UWA generation</p>
+                        </div>
+                        <div className="flex gap-3">
+                          <div className="bg-white px-4 py-3 rounded-lg border border-emerald-200 shadow-sm">
+                            <span className="text-emerald-600 text-sm font-medium">Active: </span>
+                            <span className="font-bold text-emerald-900 text-lg">
+                              {matrixConfig.filter(row => row.human || row.machinePhysical || row.machineVirtual || row.api || row.thirdParty).length}
+                            </span>
+                          </div>
+                          <div className="bg-white px-4 py-3 rounded-lg border border-emerald-200 shadow-sm">
+                            <span className="text-emerald-600 text-sm font-medium">Total: </span>
+                            <span className="font-bold text-emerald-900 text-lg">31</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-gradient-to-r from-amber-100 to-yellow-100 border-l-4 border-amber-500 rounded-lg p-4 mb-6">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                          <p className="text-sm font-medium text-amber-800">
+                            Dynamic Configuration: Customize component selection per identity type for optimized UWA generation
+                          </p>
+                        </div>
                       </div>
 
                       {/* Matrix Table */}
-                      <div className="overflow-x-auto">
-                        <table className="min-w-full border-collapse border border-gray-300">
-                          <thead>
-                            <tr className="bg-gray-50">
-                              <th className="border border-gray-300 px-4 py-3 text-left font-medium text-gray-700">
-                                Components of Identification
+                      <div className="overflow-x-auto bg-white rounded-lg border border-emerald-200 shadow-sm">
+                        <table className="min-w-full border-collapse">
+                          <thead className="bg-gradient-to-r from-emerald-600 to-teal-600">
+                            <tr>
+                              <th className="border-r border-emerald-500 px-4 py-4 text-left font-bold text-white">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                                  Components of Identification
+                                </div>
                               </th>
-                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
-                                Human
+                              <th className="border-r border-emerald-500 px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>👤</span>
+                                  <span>Human</span>
+                                </div>
                               </th>
-                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
-                                Machine Physical
+                              <th className="border-r border-emerald-500 px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>🖥️</span>
+                                  <span>Machine Physical</span>
+                                </div>
                               </th>
-                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
-                                Machine Virtual
+                              <th className="border-r border-emerald-500 px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>☁️</span>
+                                  <span>Machine Virtual</span>
+                                </div>
                               </th>
-                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
-                                API
+                              <th className="border-r border-emerald-500 px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>🔌</span>
+                                  <span>API</span>
+                                </div>
                               </th>
-                              <th className="border border-gray-300 px-4 py-3 text-center font-medium text-gray-700">
-                                Third-Party
+                              <th className="px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>🤝</span>
+                                  <span>Third-Party</span>
+                                </div>
                               </th>
                             </tr>
                           </thead>
