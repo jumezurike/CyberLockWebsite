@@ -242,6 +242,56 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   
   // Identity upload state
   const [uploadedIdentities, setUploadedIdentities] = useState<any[]>([]);
+  
+  // UWA state management
+  const [generatedUWA, setGeneratedUWA] = useState<string>('');
+  
+  // UWA generation function
+  const generateUWA = (identityData: any, selectedComponents: any[]) => {
+    // Generate UWA based on identity type + identification components
+    const identityType = identityData.role || 'user';
+    const name = `${identityData.firstName || ''} ${identityData.lastName || ''}`.trim();
+    const email = identityData.email || '';
+    
+    // Create hash from selected components
+    const componentString = selectedComponents.map(comp => comp.component).join('|');
+    const dataString = `${identityType}|${name}|${email}|${componentString}`;
+    
+    // Generate a deterministic UWA-like address
+    let hash = 0;
+    for (let i = 0; i < dataString.length; i++) {
+      const char = dataString.charCodeAt(i);
+      hash = ((hash << 5) - hash) + char;
+      hash = hash & hash; // Convert to 32-bit integer
+    }
+    
+    // Convert to hex and format as UWA
+    const hexHash = Math.abs(hash).toString(16).padStart(8, '0');
+    return `UWA${hexHash.substring(0, 6).toUpperCase()}${Date.now().toString().slice(-4)}`;
+  };
+
+  // Handle UWA generation
+  const handleGenerateUWA = () => {
+    const identityData = {
+      firstName: form.watch('identityBehaviorHygiene.firstName'),
+      lastName: form.watch('identityBehaviorHygiene.lastName'),
+      email: form.watch('identityBehaviorHygiene.email'),
+      role: form.watch('identityBehaviorHygiene.role'),
+      identityType: form.watch('identityBehaviorHygiene.identityType'),
+      userId: form.watch('identityBehaviorHygiene.userId')
+    };
+    
+    // Get selected components from the matrix
+    const selectedComponents = matrixConfig.filter(comp => comp.required || comp.optional);
+    
+    const newUWA = generateUWA(identityData, selectedComponents);
+    setGeneratedUWA(newUWA);
+    
+    toast({
+      title: "UWA Generated Successfully",
+      description: `Universal Wallet Address: ${newUWA}`,
+    });
+  };
 
   const updateMatrixConfig = (index: number, field: string, value: boolean) => {
     const newConfig = [...matrixConfig];
@@ -5754,6 +5804,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                         <table className="min-w-full border-collapse">
                           <thead className="bg-gradient-to-r from-blue-600 to-indigo-600">
                             <tr>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Generated UWA</th>
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Identity Type</th>
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ID Method</th>
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">SERVER/ID</th>
@@ -5768,7 +5819,6 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">IP Address</th>
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">EIN/BIZ#</th>
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ADDRESS</th>
-                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Generated UWA</th>
                               <th className="px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Actions</th>
                             </tr>
                           </thead>
@@ -5788,6 +5838,23 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                   });
                                 }}
                               >
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm font-medium text-gray-900">
+                                  <div className="flex items-center gap-2">
+                                    {generatedUWA ? (
+                                      <>
+                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                        <span className="font-mono text-xs bg-green-50 px-2 py-1 rounded border border-green-200 text-green-700">
+                                          {generatedUWA}
+                                        </span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                                        <span className="text-gray-500 text-xs">Not Generated</span>
+                                      </>
+                                    )}
+                                  </div>
+                                </td>
                                 <td className="border-r border-blue-100 px-3 py-4 text-sm font-medium text-gray-900">
                                   <div className="flex items-center gap-2">
                                     <div className="w-2 h-2 bg-green-500 rounded-full"></div>
