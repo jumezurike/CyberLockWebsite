@@ -8,25 +8,42 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { ChevronLeft, Edit, Trash2, Eye, Plus } from 'lucide-react';
 import { Link } from 'wouter';
 
-// Records data - initially empty to match screenshots
+// Enhanced Records data - will connect to form submissions
 const recordsData: any[] = [];
 
 export default function IdentityManagement() {
   const [selectedIdentityType, setSelectedIdentityType] = useState('all-types');
   const [selectedIdentificationMethod, setSelectedIdentificationMethod] = useState('all-methods');
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
+  const [componentFilter, setComponentFilter] = useState('all-components');
   
-  // Filter records based on selected filters
+  // Enhanced filter system
   const filteredRecords = recordsData.filter(record => {
     const typeMatch = selectedIdentityType === 'all-types' || record.identityType === selectedIdentityType;
     const methodMatch = selectedIdentificationMethod === 'all-methods' || record.identificationMethod === selectedIdentificationMethod;
-    return typeMatch && methodMatch;
+    const componentMatch = componentFilter === 'all-components' || hasRequiredComponents(record, componentFilter);
+    return typeMatch && methodMatch && componentMatch;
   });
 
-  // Calculate record counts to match screenshot
+  // Enhanced record calculations
   const totalRecords = recordsData.length;
   const activeRecords = recordsData.filter(record => record.status !== 'inactive').length;
   const filteredCount = filteredRecords.length;
+
+  // Check if record has required components
+  function hasRequiredComponents(record: any, componentType: string): boolean {
+    if (!record.components) return false;
+    
+    const componentSets = {
+      'authentication': ['username', 'password', 'mfa', 'biometric'],
+      'identification': ['firstName', 'lastName', 'email', 'userId'],
+      'authorization': ['role', 'department', 'accessLevel', 'entitlements'],
+      'technical': ['deviceId', 'ipAddress', 'macAddress', 'certificate']
+    };
+    
+    const requiredComponents = componentSets[componentType as keyof typeof componentSets] || [];
+    return requiredComponents.some(component => record.components[component]);
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
@@ -43,11 +60,11 @@ export default function IdentityManagement() {
           </p>
         </div>
         
-        {/* Filter Options */}
+        {/* Enhanced Filter Options */}
         <Card className="mb-6">
           <CardContent className="p-6">
             <h2 className="text-lg font-semibold mb-4">Filter Options</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div>
                 <label className="block text-sm font-medium mb-2 text-blue-600">
                   Filter by Identity Type <Badge variant="outline">Filter</Badge>
