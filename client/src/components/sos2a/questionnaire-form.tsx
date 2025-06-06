@@ -5892,10 +5892,14 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                           type="button" 
                           size="sm"
                           onClick={() => {
-                            toast({
-                              title: "Add Identity Component",
-                              description: "Opening identity component form...",
-                            });
+                            // Scroll to the identification form section
+                            const formSection = document.querySelector('[data-section="identification-form"]');
+                            if (formSection) {
+                              formSection.scrollIntoView({ 
+                                behavior: 'smooth', 
+                                block: 'start' 
+                              });
+                            }
                           }}
                         >
                           <Plus className="h-4 w-4 mr-2" />
@@ -6116,7 +6120,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                   </div>
 
                   {/* 1. Identification Section */}
-                  <div className="border rounded-md p-4 mb-6">
+                  <div data-section="identification-form" className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <FormField
