@@ -5,116 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ChevronLeft, Edit, Trash2, Eye } from 'lucide-react';
+import { ChevronLeft, Edit, Trash2, Eye, Plus } from 'lucide-react';
 import { Link } from 'wouter';
 
-// UWA Records with complete identity component tracking
-const uwaRecordsData = [
-  {
-    id: 'EMP001',
-    uwaGenerated: 'UWA-HUM-001-2025',
-    identityType: 'human',
-    identificationMethod: 'biometric',
-    serverId: 'AD-SRV-01',
-    uuid: '550e8400-e29b-41d4-a716-446655440000',
-    snModel: 'EMP-BADGE-001',
-    makeModel: 'HID ProxCard',
-    os: 'Windows 11',
-    serverOwnerCompany: 'CyberLockX Internal',
-    mac: '00:1B:44:11:3A:B7',
-    environment: 'Production',
-    ipAddress: '192.168.1.100',
-    einBiz: 'EIN-123456789',
-    address: '123 Business Ave, Tech City, TC 12345',
-    name: 'John Smith',
-    email: 'john.smith@example.com',
-    role: 'IT Manager',
-    department: 'Information Technology',
-    components: {
-      firstName: true,
-      lastName: true,
-      email: true,
-      phoneNumber: true,
-      userId: true,
-      role: true,
-      department: true,
-      biometric: true,
-      governmentId: true,
-      mfa: true,
-      location: true,
-      manager: true,
-      accessLevel: true,
-      assignedRoles: true,
-      entitlements: true
-    }
-  },
-  {
-    id: 'SVC001',
-    uwaGenerated: 'UWA-MAC-001-2025',
-    identityType: 'machine-physical',
-    identificationMethod: 'certificate',
-    serverId: 'BACKUP-SRV-01',
-    uuid: '6ba7b810-9dad-11d1-80b4-00c04fd430c8',
-    snModel: 'DELL-PE-R750',
-    makeModel: 'Dell PowerEdge R750',
-    os: 'Ubuntu Server 22.04',
-    serverOwnerCompany: 'CyberLockX Internal',
-    mac: '00:50:56:A0:00:01',
-    environment: 'Production',
-    ipAddress: '192.168.1.50',
-    einBiz: 'EIN-123456789',
-    address: 'Data Center A, Rack 15',
-    name: 'Backup Service',
-    email: 'backup-service@system.internal',
-    role: 'Automated Process',
-    department: 'Operations',
-    components: {
-      deviceId: true,
-      serialNumber: true,
-      manufacturer: true,
-      model: true,
-      operatingSystem: true,
-      macAddress: true,
-      ipAddress: true,
-      certificate: true,
-      location: true,
-      assignedDepartment: true,
-      accessLevel: true,
-      networkSegment: true
-    }
-  },
-  {
-    id: 'API001',
-    uwaGenerated: 'UWA-API-001-2025',
-    identityType: 'api',
-    identificationMethod: 'api-key',
-    serverId: 'PAY-API-01',
-    uuid: null,
-    snModel: 'STRIPE-API-V2',
-    makeModel: 'Stripe Payment API',
-    os: 'Cloud Service',
-    serverOwnerCompany: 'Stripe Inc.',
-    mac: null,
-    environment: 'Production',
-    ipAddress: '52.14.118.240',
-    einBiz: 'EIN-987654321',
-    address: 'Cloud Infrastructure',
-    name: 'Payment Gateway',
-    email: 'api-monitor@example.com',
-    role: 'External Service',
-    department: 'Finance',
-    components: {
-      apiKey: true,
-      serviceEndpoint: true,
-      accessLevel: true,
-      rateLimit: true,
-      authentication: true,
-      authorization: true,
-      monitoring: true,
-      logging: true
-    }
-  }
-];
+// Records data - initially empty to match screenshots
+const recordsData: any[] = [];
 
 export default function IdentityManagement() {
   const [selectedIdentityType, setSelectedIdentityType] = useState('all-types');
@@ -122,11 +17,16 @@ export default function IdentityManagement() {
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
   
   // Filter records based on selected filters
-  const filteredRecords = uwaRecordsData.filter(record => {
+  const filteredRecords = recordsData.filter(record => {
     const typeMatch = selectedIdentityType === 'all-types' || record.identityType === selectedIdentityType;
     const methodMatch = selectedIdentificationMethod === 'all-methods' || record.identificationMethod === selectedIdentificationMethod;
     return typeMatch && methodMatch;
   });
+
+  // Calculate record counts to match screenshot
+  const totalRecords = recordsData.length;
+  const activeRecords = recordsData.filter(record => record.status !== 'inactive').length;
+  const filteredCount = filteredRecords.length;
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
@@ -137,9 +37,9 @@ export default function IdentityManagement() {
             Back to Assessment
           </Link>
           
-          <h1 className="text-3xl font-bold mt-2">UWA Records Management</h1>
+          <h1 className="text-3xl font-bold mt-2">Records Management</h1>
           <p className="text-gray-600 mt-1">
-            Universal Wallet Address component tracking and identity management system.
+            Lifetime tracking of Universal Wallet Addresses and their component DNA
           </p>
         </div>
         
@@ -192,15 +92,22 @@ export default function IdentityManagement() {
           </CardContent>
         </Card>
 
-        {/* UWA Records Table */}
+        {/* Record Counters and Add Button */}
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex space-x-6 text-sm">
+            <span>Total Records: <Badge variant="outline">{totalRecords}</Badge></span>
+            <span>Active: <Badge variant="outline">{activeRecords}</Badge></span>
+            <span>Filtered: <Badge variant="secondary">{filteredCount}</Badge></span>
+          </div>
+          <Button className="bg-purple-600 hover:bg-purple-700">
+            <Plus className="mr-2 h-4 w-4" />
+            Add UWA Record
+          </Button>
+        </div>
+
+        {/* Records Table */}
         <Card>
           <CardContent className="p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-semibold">UWA Records</h2>
-              <div className="text-sm text-gray-600">
-                Showing {filteredRecords.length} records
-              </div>
-            </div>
 
             {filteredRecords.length === 0 ? (
               <div className="text-center py-8">
