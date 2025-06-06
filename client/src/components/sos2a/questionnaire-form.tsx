@@ -5538,10 +5538,10 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                             }}
                           >
                             <Users className="h-4 w-4 mr-2" />
-                            Manage User & Create DNA
+                            Manage User & Create UWA
                           </Button>
                           <p className="text-xs text-gray-600">
-                            Access the DDNA dashboard to view, edit, organize all user identities and create Data Nuclear Aggregates (DNA) for UIVS processing.
+                            Access the identity management dashboard to view, edit, organize all user identities and create Universal Wallet Addresses. When UWA is generated, records become DNA for DDNA collection.
                           </p>
                         </div>
                         
@@ -5733,10 +5733,10 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                         <div>
                           <h6 className="text-xl font-bold text-blue-900 flex items-center gap-2">
                             <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                            DDNA Records Management
+                            UWA Record Management
                           </h6>
-                          <p className="text-sm text-blue-700 mt-1">Digital Data Nuclei Authority (DDNA) - Each record with UWA forms Data Nuclear Aggregate (DNA)</p>
-                          <p className="text-xs text-blue-600 mt-1">Click any row to edit • Generate DNA • Real-time DDNA synchronization</p>
+                          <p className="text-sm text-blue-700 mt-1">Universal Wallet Address generation from identity + identification components</p>
+                          <p className="text-xs text-blue-600 mt-1">Click any row to edit • Generate UWA • Records with UWA become DNA for DDNA</p>
                         </div>
                         <div className="flex gap-4 text-sm">
                           <div className="bg-white px-3 py-2 rounded-lg border border-blue-200">
@@ -5768,7 +5768,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">IP Address</th>
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">EIN/BIZ#</th>
                               <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ADDRESS</th>
-                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Generated DNA</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Generated UWA</th>
                               <th className="px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Actions</th>
                             </tr>
                           </thead>
@@ -5893,12 +5893,12 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                       onClick={(e) => {
                                         e.stopPropagation();
                                         toast({
-                                          title: "DNA Generation",
-                                          description: "Generating Data Nuclear Aggregate (DNA) and adding to DDNA collection...",
+                                          title: "UWA Generation",
+                                          description: "Generating Universal Wallet Address from identity + identification components...",
                                         });
                                       }}
                                     >
-                                      Generate DNA
+                                      Generate UWA
                                     </Button>
                                   </div>
                                 </td>
@@ -5978,13 +5978,13 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                         <div>
                           <h6 className="text-xl font-bold text-emerald-900 flex items-center gap-3">
                             <div className="w-3 h-3 bg-emerald-600 rounded-full animate-pulse"></div>
-                            <span>DDNA Matrix Configuration</span>
+                            <span>UWA Matrix Configuration</span>
                             <div className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
                               31 Components
                             </div>
                           </h6>
-                          <p className="text-sm text-emerald-700 mt-2">Advanced component selection matrix for Data Nuclear Aggregate (DNA) generation within DDNA framework</p>
-                          <p className="text-xs text-emerald-600 mt-1">Interactive matrix • Real-time validation • Custom DNA generation • DDNA aggregation</p>
+                          <p className="text-sm text-emerald-700 mt-2">Advanced component selection matrix for Universal Wallet Address generation from identity types + identification methods</p>
+                          <p className="text-xs text-emerald-600 mt-1">Interactive matrix • Real-time validation • Custom UWA generation • Future DNA/DDNA expansion</p>
                         </div>
                         <div className="flex gap-3">
                           <div className="bg-white px-4 py-3 rounded-lg border border-emerald-200 shadow-sm">
