@@ -5509,10 +5509,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                             type="button" 
                             className="w-full bg-blue-600 hover:bg-blue-700 mb-3"
                             onClick={() => {
-                              toast({
-                                title: "Manage User Identities",
-                                description: "Opening identity management interface...",
-                              });
+                              window.location.href = "/identity-management";
                             }}
                           >
                             <Users className="h-4 w-4 mr-2" />
