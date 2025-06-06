@@ -9,6 +9,27 @@ import { ChevronLeft, Edit, Trash2, Eye, Plus } from 'lucide-react';
 import { Link } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 
+// UWA Record Type
+interface UWARecord {
+  id: number;
+  generatedUWA: string | null;
+  identityType: string;
+  identificationMethod: string;
+  serverId: string;
+  uuid: string;
+  serialNumber: string;
+  makeModel: string;
+  operatingSystem: string;
+  serverOwnerCompany: string;
+  macAddress: string;
+  environment: string;
+  ipAddress: string;
+  einBizNumber: string;
+  address: string;
+  status: string;
+  components: any;
+}
+
 // UWA Generation Algorithm - Character encoding for quantum-proof encryption
 function generateUWA(identityData: any): string {
   const { identityType, identificationMethod, serverId, uuid, serialNumber, macAddress, ipAddress } = identityData;
@@ -29,7 +50,7 @@ function generateUWA(identityData: any): string {
 }
 
 // Sample UWA Records data with Generated UWA column
-const recordsData = [
+const recordsData: UWARecord[] = [
   {
     id: 1,
     generatedUWA: null, // Will be generated when user clicks Generate UWA button
@@ -112,9 +133,28 @@ export default function IdentityManagement() {
   const [selectedIdentificationMethod, setSelectedIdentificationMethod] = useState('all-methods');
   const [selectedRecord, setSelectedRecord] = useState<any>(null);
   const [componentFilter, setComponentFilter] = useState('all-components');
+  const [uwaRecords, setUwaRecords] = useState<UWARecord[]>(recordsData);
+  const { toast } = useToast();
+
+  // Generate UWA for a specific record
+  const handleGenerateUWA = (recordId: number) => {
+    setUwaRecords(prevRecords => 
+      prevRecords.map(record => {
+        if (record.id === recordId && !record.generatedUWA) {
+          const newUWA = generateUWA(record);
+          toast({
+            title: "UWA Generated Successfully",
+            description: `Generated UWA: ${newUWA}`,
+          });
+          return { ...record, generatedUWA: newUWA };
+        }
+        return record;
+      })
+    );
+  };
   
   // Enhanced filter system
-  const filteredRecords = recordsData.filter(record => {
+  const filteredRecords = uwaRecords.filter(record => {
     const typeMatch = selectedIdentityType === 'all-types' || record.identityType === selectedIdentityType;
     const methodMatch = selectedIdentificationMethod === 'all-methods' || record.identificationMethod === selectedIdentificationMethod;
     const componentMatch = componentFilter === 'all-components' || hasRequiredComponents(record, componentFilter);
@@ -122,8 +162,8 @@ export default function IdentityManagement() {
   });
 
   // Enhanced record calculations
-  const totalRecords = recordsData.length;
-  const activeRecords = recordsData.filter(record => record.status !== 'inactive').length;
+  const totalRecords = uwaRecords.length;
+  const activeRecords = uwaRecords.filter(record => record.status !== 'inactive').length;
   const filteredCount = filteredRecords.length;
 
   // Check if record has required components
@@ -300,7 +340,31 @@ export default function IdentityManagement() {
                         className="cursor-pointer hover:bg-gray-50"
                         onClick={() => setSelectedRecord(record)}
                       >
-                        <TableCell className="font-medium">{record.uwaGenerated}</TableCell>
+                        <TableCell className="font-medium">
+                          {record.generatedUWA ? (
+                            <div className="flex flex-col">
+                              <span className="text-xs font-mono text-blue-600 bg-blue-50 px-2 py-1 rounded">
+                                {record.generatedUWA}
+                              </span>
+                              <span className="text-xs text-green-600 mt-1">✓ Generated</span>
+                            </div>
+                          ) : (
+                            <div className="flex flex-col items-start">
+                              <span className="text-xs text-gray-500">Not Generated</span>
+                              <Button 
+                                size="sm" 
+                                variant="outline" 
+                                className="mt-1 h-6 text-xs bg-purple-50 border-purple-200 text-purple-700 hover:bg-purple-100"
+                                onClick={(e) => { 
+                                  e.stopPropagation(); 
+                                  handleGenerateUWA(record.id);
+                                }}
+                              >
+                                Generate UWA
+                              </Button>
+                            </div>
+                          )}
+                        </TableCell>
                         <TableCell>
                           <Badge variant="secondary">{record.identityType}</Badge>
                         </TableCell>
@@ -309,14 +373,14 @@ export default function IdentityManagement() {
                         </TableCell>
                         <TableCell>{record.serverId}</TableCell>
                         <TableCell className="text-xs">{record.uuid || '-'}</TableCell>
-                        <TableCell>{record.snModel}</TableCell>
+                        <TableCell>{record.serialNumber}</TableCell>
                         <TableCell>{record.makeModel}</TableCell>
-                        <TableCell>{record.os}</TableCell>
+                        <TableCell>{record.operatingSystem}</TableCell>
                         <TableCell>{record.serverOwnerCompany}</TableCell>
-                        <TableCell className="text-xs">{record.mac || '-'}</TableCell>
+                        <TableCell className="text-xs">{record.macAddress || '-'}</TableCell>
                         <TableCell>{record.environment}</TableCell>
                         <TableCell>{record.ipAddress}</TableCell>
-                        <TableCell>{record.einBiz}</TableCell>
+                        <TableCell>{record.einBizNumber}</TableCell>
                         <TableCell className="text-xs">{record.address}</TableCell>
                         <TableCell>
                           <div className="flex space-x-2">
@@ -324,7 +388,7 @@ export default function IdentityManagement() {
                               <Edit className="h-3 w-3" />
                             </Button>
                             <Button size="sm" variant="outline" onClick={(e) => { e.stopPropagation(); }}>
-                              <Trash2 className="h-3 w-3" />
+                              <Eye className="h-3 w-3" />
                             </Button>
                           </div>
                         </TableCell>
