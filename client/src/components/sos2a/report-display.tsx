@@ -196,21 +196,11 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <p className="text-xs text-green-600">Security Parameters</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 text-xs text-center">
+                  <div className="grid grid-cols-1 gap-2 text-xs text-center">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">7. Architecture Analysis</p>
-                      <p className="text-xs text-green-600">Threat Modeling</p>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">8</div>
-                      <p className="text-muted-foreground">8. Preliminary Report</p>
-                      <p className="text-xs text-muted-foreground">Qualitative Assessment</p>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-600 flex items-center justify-center mx-auto">9</div>
-                      <p className="text-muted-foreground">9. Comprehensive Report</p>
-                      <p className="text-xs text-muted-foreground">Quantitative Analysis</p>
+                      <p className="text-xs text-green-600">Threat Modeling Complete</p>
                     </div>
                   </div>
                 </div>
@@ -282,21 +272,11 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <p className="text-xs text-green-600">Security Parameters</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 gap-2 text-xs text-center">
+                  <div className="grid grid-cols-1 gap-2 text-xs text-center">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">7. Architecture Analysis</p>
-                      <p className="text-xs text-green-600">Threat Modeling</p>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">8. Preliminary Report</p>
-                      <p className="text-xs text-green-600">Qualitative Assessment</p>
-                    </div>
-                    <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-primary text-white flex items-center justify-center mx-auto">9</div>
-                      <p className="font-medium">9. Comprehensive Report</p>
-                      <p className="text-xs text-green-600">Quantitative Analysis</p>
+                      <p className="text-xs text-green-600">Threat Modeling Complete</p>
                     </div>
                   </div>
                 </div>
