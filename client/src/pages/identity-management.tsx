@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ChevronLeft, Edit, Trash2, Eye, Plus } from 'lucide-react';
+import { ChevronLeft, Edit, Trash2, Eye, Plus, Users, AlertTriangle } from 'lucide-react';
 import { Link } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 import { UWAGenerator, type UWAComponents } from '@/lib/uwa-generator';
@@ -220,8 +220,79 @@ export default function IdentityManagement() {
             Back to Assessment
           </Link>
           
-          <h1 className="text-3xl font-bold mt-2">Records Management</h1>
+          <h1 className="text-3xl font-bold mt-2">Identity Management</h1>
           <p className="text-gray-600 mt-1">
+            Manage and monitor all identity types across your organization using our patented Universal Identity Verification System (UIVS).
+          </p>
+        </div>
+
+        {/* Dashboard Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          {/* Dashboard */}
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4">Dashboard</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-600">Total Identities</p>
+                  <div className="flex items-center mt-1">
+                    <Users className="h-5 w-5 text-blue-600 mr-2" />
+                    <span className="text-2xl font-bold">{uwaRecords.length}</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">All Recorded Identities</p>
+                  <p className="text-lg font-semibold">{uwaRecords.length}</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* UIVS & Universal Digital Identity */}
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4">UIVS & Universal Digital Identity</h3>
+              <div className="space-y-4">
+                <div>
+                  <p className="text-sm text-gray-600">High Risk Identities</p>
+                  <div className="flex items-center mt-1">
+                    <AlertTriangle className="h-5 w-5 text-red-600 mr-2" />
+                    <span className="text-2xl font-bold text-red-600">0</span>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-gray-600">Pending Identities</p>
+                  <div className="flex items-center mt-1">
+                    <AlertTriangle className="h-5 w-5 text-orange-600 mr-2" />
+                    <span className="text-2xl font-bold text-orange-600">2</span>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Recent Activities */}
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
+              <div>
+                <p className="text-sm text-gray-600 mb-3">Identity Types</p>
+                <p className="text-sm text-gray-600 mb-3">Distribution by category</p>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-800">3 Human</Badge>
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">1 Machine</Badge>
+                  <Badge variant="secondary" className="bg-purple-100 text-purple-800">1 API</Badge>
+                  <Badge variant="secondary" className="bg-orange-100 text-orange-800">1 Third-Party</Badge>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Records Management Section */}
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold mb-2">Records Management</h2>
+          <p className="text-gray-600">
             Lifetime tracking of Universal Wallet Addresses and their component DNA
           </p>
         </div>
