@@ -396,7 +396,10 @@ export default function DNASearch() {
         {searchResults.length > 0 && (
           <Card className="mb-8">
             <CardHeader>
-              <CardTitle>Search Results ({searchResults.length} found)</CardTitle>
+              <CardTitle>DDNA Directory Results ({searchResults.length} found)</CardTitle>
+              <CardDescription>
+                DNA records are encrypted for privacy. Only UWA is visible for secure communication.
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
@@ -409,23 +412,35 @@ export default function DNASearch() {
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-4">
                         <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                          <User className="h-6 w-6 text-blue-600" />
+                          <Fingerprint className="h-6 w-6 text-blue-600" />
                         </div>
                         <div>
-                          <h3 className="font-semibold">{profile.fullName}</h3>
-                          <p className="text-sm text-gray-600">{profile.email}</p>
-                          <p className="text-sm text-gray-600">{profile.phone}</p>
+                          <h3 className="font-semibold text-gray-800">DNA Record Found</h3>
+                          <div className="space-y-1">
+                            <p className="text-sm text-gray-500 font-mono">Name: ████████████</p>
+                            <p className="text-sm text-gray-500 font-mono">Email: ████████████</p>
+                            <p className="text-sm text-gray-500 font-mono">Phone: ████████████</p>
+                            <p className="text-sm text-gray-500 font-mono">Gov ID: ████████████</p>
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <Badge className={getRiskColor(profile.riskClassification)}>
-                          {profile.riskClassification} Risk
+                      <div className="flex flex-col items-end space-y-2">
+                        <Badge className="bg-green-100 text-green-800 font-mono">
+                          UWA: {profile.uwa}
                         </Badge>
                         <div className="flex items-center space-x-1">
-                          {getVerificationIcon(profile.governmentId.verificationStatus)}
-                          <span className="text-sm">{profile.governmentId.verificationStatus}</span>
+                          <Shield className="h-4 w-4 text-green-600" />
+                          <span className="text-xs text-green-600">Encrypted</span>
                         </div>
+                        <Button size="sm" variant="outline" className="text-xs">
+                          Use for Communication
+                        </Button>
                       </div>
+                    </div>
+                    <div className="mt-3 p-3 bg-blue-50 rounded border-l-4 border-blue-400">
+                      <p className="text-sm text-blue-800">
+                        <strong>Communication Ready:</strong> Use UWA {profile.uwa} to send secure messages to this identity.
+                      </p>
                     </div>
                   </div>
                 ))}
