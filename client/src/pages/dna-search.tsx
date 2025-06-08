@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -346,8 +346,11 @@ export default function DNASearch() {
           <CardHeader>
             <CardTitle className="flex items-center">
               <Search className="h-5 w-5 mr-2" />
-              DNA Search Interface
+              DDNA Search Interface
             </CardTitle>
+            <CardDescription>
+              Search the Digital Data Nucleic Authority directory - like a phone book for digital identities. Find UWA for secure communication.
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -382,7 +385,7 @@ export default function DNASearch() {
                   disabled={!searchQuery || isSearching}
                   className="w-full"
                 >
-                  {isSearching ? 'Searching...' : 'Search DNA'}
+                  {isSearching ? 'Searching DDNA...' : 'Search DDNA Directory'}
                 </Button>
               </div>
             </div>
