@@ -227,9 +227,9 @@ export default function IdentityManagement() {
         </div>
 
         {/* Dashboard Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-3 gap-6 mb-8">
           {/* Dashboard */}
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-blue-300">
             <CardContent className="p-6">
               <h3 className="text-lg font-semibold mb-4">Dashboard</h3>
               <div className="space-y-4">
@@ -249,7 +249,7 @@ export default function IdentityManagement() {
           </Card>
 
           {/* UIVS & Universal Digital Identity */}
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-purple-300">
             <CardContent className="p-6">
               <h3 className="text-lg font-semibold mb-4">UIVS & Universal Digital Identity</h3>
               <div className="space-y-4">
@@ -272,7 +272,7 @@ export default function IdentityManagement() {
           </Card>
 
           {/* Recent Activities */}
-          <Card>
+          <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-green-300">
             <CardContent className="p-6">
               <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
               <div>
