@@ -149,18 +149,18 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <div className="relative pt-1">
                   <div className="flex mb-2 items-center justify-between">
                     <div>
-                      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-primary text-white">
-                        Step 7 of 9
+                      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-green-500 text-white">
+                        Assessment Complete
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-semibold inline-block text-primary">
-                        78% Complete
+                      <span className="text-xs font-semibold inline-block text-green-500">
+                        100% Complete
                       </span>
                     </div>
                   </div>
                   <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                    <div style={{ width: "78%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-primary"></div>
+                    <div style={{ width: "100%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"></div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-xs text-center mb-4">
                     <div className="space-y-1">
