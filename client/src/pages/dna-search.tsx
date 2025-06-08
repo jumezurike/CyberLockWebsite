@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { ChevronLeft, Search, Shield, AlertTriangle, CheckCircle, User, Phone, Mail, FileText } from 'lucide-react';
+import { ChevronLeft, Search, Shield, AlertTriangle, CheckCircle, User, Phone, Mail, FileText, Fingerprint } from 'lucide-react';
 import { Link } from 'wouter';
 
 interface DNAProfile {
@@ -148,6 +148,180 @@ export default function DNASearch() {
             Search and verify Universal Wallet Addresses using the Data Nuclear Aggregate (DNA) system
           </p>
         </div>
+
+        {/* UIVS Explanation */}
+        <Card className="mb-8 bg-gradient-to-br from-blue-50 to-purple-50">
+          <CardContent className="p-12">
+            <div className="relative max-w-4xl mx-auto">
+              {/* Central Biometric Icon with Spinning Circle */}
+              <div className="flex flex-col items-center mb-12">
+                <div className="relative">
+                  <div className="absolute inset-0 border-2 border-dashed border-blue-300 rounded-full w-32 h-32 animate-spin" style={{animationDuration: '10s'}}></div>
+                  <div className="w-32 h-32 bg-blue-600 rounded-full flex items-center justify-center">
+                    <Fingerprint className="h-16 w-16 text-white" />
+                  </div>
+                </div>
+                <div className="text-center mt-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-2">Universal Digital Identity</h2>
+                  <p className="text-gray-600 max-w-md">
+                    The DNA forms an immutable, verifiable identity core that combines government-verified credentials with behavioral intelligence.
+                  </p>
+                </div>
+              </div>
+
+              {/* Six Sections Around the Circle */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {/* Government Identity Verification */}
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-3 h-3 bg-red-500 rounded-full mr-3"></div>
+                      <h3 className="font-semibold text-gray-800">Government Identity Verification</h3>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Government ID Type</span>
+                        <Badge className="bg-red-100 text-red-800">Critical</Badge>
+                      </div>
+                      <p className="text-xs text-gray-500">Driver's license, state ID, passport, or other official identification</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Issuing Authority</span>
+                        <Badge className="bg-red-100 text-red-800">Critical</Badge>
+                      </div>
+                      <p className="text-xs text-gray-500">Government entity that issued the identification document</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">ID Verification Status</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Whether the ID has been validated and confirmed</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Core Identity */}
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-3 h-3 bg-purple-500 rounded-full mr-3"></div>
+                      <h3 className="font-semibold text-gray-800">Core Identity</h3>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Full Name</span>
+                        <Badge className="bg-red-100 text-red-800">Critical</Badge>
+                      </div>
+                      <p className="text-xs text-gray-500">Legal name as appears on official documents</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Identity Type</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Human, machine, service account, or API classification</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Unique Identifier</span>
+                        <Badge className="bg-red-100 text-red-800">Critical</Badge>
+                      </div>
+                      <p className="text-xs text-gray-500">Universal ID that persists across all systems</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Organizational Context */}
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-3 h-3 bg-blue-500 rounded-full mr-3"></div>
+                      <h3 className="font-semibold text-gray-800">Organizational Context</h3>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Department/Team</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Organizational unit or functional group</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Role/Position</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Job function or service purpose</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Reporting Hierarchy</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Management chain and responsibility structure</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Access & Entitlements */}
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                      <h3 className="font-semibold text-gray-800">Access & Entitlements</h3>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Access Level</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Privilege tier and permission scope</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">System Entitlements</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Specific rights and access grants across systems</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Authentication Methods</span>
+                      </div>
+                      <p className="text-xs text-gray-500">MFA status and credential mechanisms</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Behavioral Patterns */}
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                      <h3 className="font-semibold text-gray-800">Behavioral Patterns</h3>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Access Patterns</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Typical login hours and behavioral baselines</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Location Data</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Normal physical or network access points</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Security Posture</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Compliance with security policies and training</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Risk Indicators */}
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full mr-3"></div>
+                      <h3 className="font-semibold text-gray-800">Risk Indicators</h3>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Risk Classification</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Assessment of identity risk level</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Anomaly Detection</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Tracking of unusual behaviors or access patterns</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Credential Exposure</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Records of potential credential compromise events</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
 
         {/* Search Interface */}
         <Card className="mb-8">
