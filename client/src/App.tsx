@@ -27,6 +27,9 @@ import BrowserBaselinePage from "@/pages/browser-baseline";
 import LightbulbCapture from "@/components/knowledge-share/lightbulb-capture";
 import Checkout from "@/pages/checkout";
 import IdentityManagement from "@/pages/identity-management";
+import DashboardOverview from "@/pages/dashboard-overview";
+import DNASearch from "@/pages/dna-search";
+import SecurityEvents from "@/pages/security-events";
 import PaymentSuccess from "@/pages/payment-success";
 import PaymentError from "@/pages/payment-error";
 import DirectNavigation from "@/components/direct-navigation";
@@ -67,6 +70,9 @@ function Router() {
           <Route path="/browser-baseline" component={BrowserBaselinePage} />
           <Route path="/device-inventory" component={DeviceInventoryPage} />
           <Route path="/identity-management" component={IdentityManagement} />
+          <Route path="/dashboard-overview" component={DashboardOverview} />
+          <Route path="/dna-search" component={DNASearch} />
+          <Route path="/security-events" component={SecurityEvents} />
           <Route path="/checkout" component={Checkout} />
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/payment-error" component={PaymentError} />

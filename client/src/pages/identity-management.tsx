@@ -229,7 +229,10 @@ export default function IdentityManagement() {
         {/* Dashboard Section */}
         <div className="grid grid-cols-3 gap-8 mb-10">
           {/* Dashboard */}
-          <Card className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-blue-300 group">
+          <Card 
+            className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-blue-300 group"
+            onClick={() => window.location.href = '/dashboard-overview'}
+          >
             <CardContent className="p-8">
               <h3 className="text-xl font-semibold text-gray-800 mb-6">Dashboard</h3>
               <div className="space-y-6">
@@ -251,7 +254,10 @@ export default function IdentityManagement() {
           </Card>
 
           {/* UIVS & Universal Digital Identity */}
-          <Card className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-purple-300 group">
+          <Card 
+            className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-purple-300 group"
+            onClick={() => window.location.href = '/dna-search'}
+          >
             <CardContent className="p-8">
               <h3 className="text-xl font-semibold text-gray-800 mb-6">UIVS & Universal Digital Identity</h3>
               <div className="space-y-6">
@@ -278,7 +284,10 @@ export default function IdentityManagement() {
           </Card>
 
           {/* Recent Activities */}
-          <Card className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-green-300 group">
+          <Card 
+            className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-green-300 group"
+            onClick={() => window.location.href = '/security-events'}
+          >
             <CardContent className="p-8">
               <h3 className="text-xl font-semibold text-gray-800 mb-6">Recent Activities</h3>
               <div>
