@@ -97,7 +97,56 @@ export default function CleanDeviceInventory() {
         </div>
       </div>
       
-      {/* Import Device Inventory section */}
+      {/* Multi-Upload Device Inventory Section */}
+      <div className="border-t pt-8">
+        <h3 className="text-lg font-medium mb-4">Multi-Upload Device Inventory</h3>
+        <p className="text-sm text-gray-600 mb-6">
+          Upload multiple devices at once using CSV import for comprehensive #12 assessment completion.
+        </p>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <FileSpreadsheet className="h-5 w-5 text-blue-600 mr-2" />
+              <h4 className="font-medium">Download Template</h4>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Get the 29-field device inventory template for complete RASBITA assessment.
+            </p>
+            <Button 
+              variant="outline" 
+              onClick={handleDownloadTemplate}
+              className="w-full"
+            >
+              Download CSV Template
+            </Button>
+          </div>
+          
+          <div className="border border-gray-200 rounded-lg p-4">
+            <div className="flex items-center mb-3">
+              <FileSpreadsheet className="h-5 w-5 text-green-600 mr-2" />
+              <h4 className="font-medium">Upload Devices</h4>
+            </div>
+            <p className="text-sm text-gray-600 mb-3">
+              Import your completed device inventory for assessment processing.
+            </p>
+            <Button 
+              onClick={handleImportCSV}
+              className="w-full bg-green-600 hover:bg-green-700"
+            >
+              Import CSV File
+            </Button>
+          </div>
+        </div>
+        
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <h4 className="font-medium text-blue-900 mb-2">RASBITA Assessment Integration</h4>
+          <p className="text-sm text-blue-800">
+            Uploaded devices will be automatically processed through the 5-pillar risk assessment framework 
+            for comprehensive security analysis and scoring.
+          </p>
+        </div>
+      </div>
       <div>
         <h2 className="text-lg font-medium mb-2">Import Device Inventory</h2>
         <p className="text-gray-600 text-sm mb-4">

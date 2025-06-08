@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { ChevronLeft, Edit, Trash2, Eye, Plus, Users, AlertTriangle } from 'lucide-react';
+import { ChevronLeft, Edit, Trash2, Eye, Plus, Users, AlertTriangle, FileSpreadsheet, Upload } from 'lucide-react';
 import { Link } from 'wouter';
 import { useToast } from '@/hooks/use-toast';
 import { UWAGenerator, type UWAComponents } from '@/lib/uwa-generator';
