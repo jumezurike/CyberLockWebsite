@@ -163,20 +163,9 @@ export default function DNASearch() {
 
               {/* Central Layout with sections positioned around circle */}
               <div className="relative h-[700px] w-full">
-                {/* Dashed connecting lines from center to each card */}
+                {/* Large spinning dashed circle that cuts through all cards */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  {/* Line to top-left card */}
-                  <div className="absolute w-80 h-0.5 origin-left transform -rotate-45 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
-                  {/* Line to top-right card */}
-                  <div className="absolute w-80 h-0.5 origin-left transform rotate-45 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
-                  {/* Line to middle-left card */}
-                  <div className="absolute w-80 h-0.5 origin-left transform rotate-180 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
-                  {/* Line to middle-right card */}
-                  <div className="absolute w-80 h-0.5 origin-left -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
-                  {/* Line to bottom-left card */}
-                  <div className="absolute w-80 h-0.5 origin-left transform -rotate-135 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
-                  {/* Line to bottom-right card */}
-                  <div className="absolute w-80 h-0.5 origin-left transform rotate-135 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
+                  <div className="w-[800px] h-[800px] border-4 border-dashed border-gray-400 rounded-full animate-spin" style={{animationDuration: '15s'}}></div>
                 </div>
 
                 {/* Central biometric icon */}
