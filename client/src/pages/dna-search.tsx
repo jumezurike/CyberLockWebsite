@@ -153,28 +153,16 @@ export default function DNASearch() {
         <Card className="mb-8 bg-gradient-to-br from-blue-50 to-purple-50">
           <CardContent className="p-12">
             <div className="relative max-w-4xl mx-auto">
-              {/* Central Biometric Icon with Radiating Dashed Lines */}
+              {/* Central Biometric Icon with Large Spinning Dashed Circle */}
               <div className="flex flex-col items-center mb-12">
-                <div className="relative w-80 h-80">
-                  {/* Large outer dashed circle */}
-                  <div className="absolute inset-0 border-2 border-dashed border-gray-300 rounded-full w-80 h-80"></div>
-                  
-                  {/* Spinning radiating dashed lines through the center */}
-                  <div className="absolute inset-0 animate-spin" style={{animationDuration: '8s'}}>
-                    {/* Vertical line */}
-                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%)'}}></div>
-                    {/* Diagonal lines at 60 degree intervals */}
-                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(60deg)', transformOrigin: 'center center'}}></div>
-                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(120deg)', transformOrigin: 'center center'}}></div>
-                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(180deg)', transformOrigin: 'center center'}}></div>
-                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(240deg)', transformOrigin: 'center center'}}></div>
-                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(300deg)', transformOrigin: 'center center'}}></div>
-                  </div>
+                <div className="relative w-96 h-96">
+                  {/* Large spinning dashed circle that passes through the biometric */}
+                  <div className="absolute inset-0 w-96 h-96 border-4 border-dashed border-gray-400 rounded-full animate-spin" style={{animationDuration: '12s'}}></div>
                   
                   {/* Central biometric icon */}
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
-                      <Fingerprint className="h-12 w-12 text-white" />
+                    <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center shadow-lg z-10">
+                      <Fingerprint className="h-14 w-14 text-white" />
                     </div>
                   </div>
                 </div>
