@@ -153,15 +153,34 @@ export default function DNASearch() {
         <Card className="mb-8 bg-gradient-to-br from-blue-50 to-purple-50">
           <CardContent className="p-12">
             <div className="relative max-w-4xl mx-auto">
-              {/* Central Biometric Icon with Spinning Circle */}
+              {/* Central Biometric Icon with Radiating Dashed Lines */}
               <div className="flex flex-col items-center mb-12">
-                <div className="relative">
-                  <div className="absolute inset-0 border-2 border-dashed border-blue-300 rounded-full w-32 h-32 animate-spin" style={{animationDuration: '10s'}}></div>
-                  <div className="w-32 h-32 bg-blue-600 rounded-full flex items-center justify-center">
-                    <Fingerprint className="h-16 w-16 text-white" />
+                <div className="relative w-80 h-80">
+                  {/* Large outer dashed circle */}
+                  <div className="absolute inset-0 border-2 border-dashed border-gray-300 rounded-full w-80 h-80"></div>
+                  
+                  {/* Radiating dashed lines through the center */}
+                  <div className="absolute inset-0">
+                    {/* Top line */}
+                    <div className="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-gray-300 via-transparent to-gray-300" style={{background: 'repeating-linear-gradient(to bottom, #d1d5db 0px, #d1d5db 8px, transparent 8px, transparent 16px)'}}></div>
+                    {/* Diagonal lines */}
+                    <div className="absolute top-0 left-0 w-full h-full" style={{transform: 'rotate(60deg)'}}>
+                      <div className="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-gray-300 via-transparent to-gray-300" style={{background: 'repeating-linear-gradient(to bottom, #d1d5db 0px, #d1d5db 8px, transparent 8px, transparent 16px)'}}></div>
+                    </div>
+                    <div className="absolute top-0 left-0 w-full h-full" style={{transform: 'rotate(120deg)'}}>
+                      <div className="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-gray-300 via-transparent to-gray-300" style={{background: 'repeating-linear-gradient(to bottom, #d1d5db 0px, #d1d5db 8px, transparent 8px, transparent 16px)'}}></div>
+                    </div>
+                  </div>
+                  
+                  {/* Central biometric icon */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                    <div className="w-20 h-20 bg-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                      <Fingerprint className="h-12 w-12 text-white" />
+                    </div>
                   </div>
                 </div>
-                <div className="text-center mt-6">
+                
+                <div className="text-center mt-8">
                   <h2 className="text-2xl font-bold text-gray-800 mb-2">Universal Digital Identity</h2>
                   <p className="text-gray-600 max-w-md">
                     The DNA forms an immutable, verifiable identity core that combines government-verified credentials with behavioral intelligence.
@@ -169,8 +188,8 @@ export default function DNASearch() {
                 </div>
               </div>
 
-              {/* Six Sections Around the Circle */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* Eight Sections Around the Circle */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* Government Identity Verification */}
                 <Card className="bg-white shadow-sm">
                   <CardContent className="p-6">
@@ -315,6 +334,84 @@ export default function DNASearch() {
                         <span className="text-gray-600">Credential Exposure</span>
                       </div>
                       <p className="text-xs text-gray-500">Records of potential credential compromise events</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Lifecycle Management */}
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-3 h-3 bg-indigo-500 rounded-full mr-3"></div>
+                      <h3 className="font-semibold text-gray-800">Lifecycle Management</h3>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Creation & Onboarding</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Initial provisioning and account creation</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Credential Rotation</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Password changes and certificate renewals</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Deprovisioning Process</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Account deactivation and offboarding workflows</p>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Visual Identity Verification */}
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <div className="flex items-center mb-4">
+                      <div className="w-3 h-3 bg-pink-500 rounded-full mr-3"></div>
+                      <h3 className="font-semibold text-gray-800">Visual Identity Verification</h3>
+                    </div>
+                    <div className="space-y-3 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Color-Coded Profile Image</span>
+                        <Badge className="bg-red-100 text-red-800">Critical</Badge>
+                      </div>
+                      <p className="text-xs text-gray-500">Non-fungible cryptographically signed profile picture with embedded steganographic data</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Image Modification History</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Immutable record of all changes to visual identity elements</p>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Visual Hash Verification</span>
+                      </div>
+                      <p className="text-xs text-gray-500">Cryptographic validation of image integrity and authenticity</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Additional Information */}
+              <div className="mt-12 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Continuous Identity Verification</h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      The DNA continuously verifies all aspects of identity through a multi-layered approach. Government-issued ID creates the strong foundation that anchors the digital identity to a real-world, verifiable entity, enabling powerful accountability throughout the system.
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-white shadow-sm">
+                  <CardContent className="p-6">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Color-Coded Non-Fungible Image Verification</h3>
+                    <div className="text-sm text-gray-600 space-y-3">
+                      <p>
+                        <strong>Advanced Security Feature:</strong> All identity profiles must include a color-coded non-fungible profile image that contains hidden encrypted data using steganography.
+                      </p>
+                      <p>
+                        This creates a cryptographically unique visual identifier that cannot be duplicated or transferred between identities. The embedded data can only be detected and verified through a specialized decryption process.
+                      </p>
+                      <p>
+                        All image changes are permanently recorded in an immutable ledger, creating a complete audit trail of visual identity modifications.
+                      </p>
                     </div>
                   </CardContent>
                 </Card>
