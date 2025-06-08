@@ -87,7 +87,7 @@ const mockDNAProfiles: DNAProfile[] = [
 export default function DNASearch() {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchType, setSearchType] = useState('name');
-  const [searchResults, setSearchResults] = useState<DNAProfile[]>([]);
+  const [searchResults, setSearchResults] = useState<DNAProfile[]>(mockDNAProfiles); // Show sample results by default
   const [selectedProfile, setSelectedProfile] = useState<DNAProfile | null>(null);
   const [isSearching, setIsSearching] = useState(false);
 
