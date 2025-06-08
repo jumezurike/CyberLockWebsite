@@ -1969,7 +1969,8 @@ export default function Sos2aTool() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Assessment Search */}
+          {/* Assessment Search - Hide when displaying report */}
+          {step !== 'report' && (
           <div className="mb-6 border rounded-lg shadow-sm overflow-hidden">
             <div className="bg-blue-50 p-3 border-b flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-blue-600">
@@ -2058,8 +2059,10 @@ export default function Sos2aTool() {
               </div>
             </div>
           </div>
+          )}
           
-          {/* Saved Assessments Section */}
+          {/* Saved Assessments Section - Hide when displaying report */}
+          {step !== 'report' && (
           <div className="mb-6 border rounded-lg shadow-sm">
             <div className="bg-primary/10 p-3 border-b flex items-center">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-primary">
@@ -2175,6 +2178,7 @@ export default function Sos2aTool() {
               </div>
             </div>
           </div>
+          )}
 
           <div className="space-y-4">
             <h2 className="text-lg font-medium">Assessment Progress</h2>
