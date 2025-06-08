@@ -159,17 +159,16 @@ export default function DNASearch() {
                   {/* Large outer dashed circle */}
                   <div className="absolute inset-0 border-2 border-dashed border-gray-300 rounded-full w-80 h-80"></div>
                   
-                  {/* Radiating dashed lines through the center */}
-                  <div className="absolute inset-0">
-                    {/* Top line */}
-                    <div className="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-gray-300 via-transparent to-gray-300" style={{background: 'repeating-linear-gradient(to bottom, #d1d5db 0px, #d1d5db 8px, transparent 8px, transparent 16px)'}}></div>
-                    {/* Diagonal lines */}
-                    <div className="absolute top-0 left-0 w-full h-full" style={{transform: 'rotate(60deg)'}}>
-                      <div className="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-gray-300 via-transparent to-gray-300" style={{background: 'repeating-linear-gradient(to bottom, #d1d5db 0px, #d1d5db 8px, transparent 8px, transparent 16px)'}}></div>
-                    </div>
-                    <div className="absolute top-0 left-0 w-full h-full" style={{transform: 'rotate(120deg)'}}>
-                      <div className="absolute top-0 left-1/2 w-0.5 h-full bg-gradient-to-b from-gray-300 via-transparent to-gray-300" style={{background: 'repeating-linear-gradient(to bottom, #d1d5db 0px, #d1d5db 8px, transparent 8px, transparent 16px)'}}></div>
-                    </div>
+                  {/* Spinning radiating dashed lines through the center */}
+                  <div className="absolute inset-0 animate-spin" style={{animationDuration: '8s'}}>
+                    {/* Vertical line */}
+                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%)'}}></div>
+                    {/* Diagonal lines at 60 degree intervals */}
+                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(60deg)', transformOrigin: 'center center'}}></div>
+                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(120deg)', transformOrigin: 'center center'}}></div>
+                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(180deg)', transformOrigin: 'center center'}}></div>
+                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(240deg)', transformOrigin: 'center center'}}></div>
+                    <div className="absolute top-0 left-1/2 w-0.5 h-full" style={{background: 'repeating-linear-gradient(to bottom, #9ca3af 0px, #9ca3af 6px, transparent 6px, transparent 12px)', transform: 'translateX(-50%) rotate(300deg)', transformOrigin: 'center center'}}></div>
                   </div>
                   
                   {/* Central biometric icon */}
