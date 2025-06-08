@@ -163,18 +163,26 @@ export default function DNASearch() {
 
               {/* Central Layout with sections positioned around circle */}
               <div className="relative h-[700px] w-full">
-                {/* Central biometric icon with large spinning circle */}
+                {/* Dashed connecting lines from center to each card */}
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                  <div className="relative w-[600px] h-[600px]">
-                    {/* Extra large spinning dashed circle that cuts across the cards */}
-                    <div className="absolute inset-0 w-[600px] h-[600px] border-4 border-dashed border-gray-400 rounded-full animate-spin" style={{animationDuration: '12s'}}></div>
-                    
-                    {/* Central biometric icon */}
-                    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                      <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center shadow-lg z-10">
-                        <Fingerprint className="h-14 w-14 text-white" />
-                      </div>
-                    </div>
+                  {/* Line to top-left card */}
+                  <div className="absolute w-80 h-0.5 origin-left transform -rotate-45 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
+                  {/* Line to top-right card */}
+                  <div className="absolute w-80 h-0.5 origin-left transform rotate-45 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
+                  {/* Line to middle-left card */}
+                  <div className="absolute w-80 h-0.5 origin-left transform rotate-180 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
+                  {/* Line to middle-right card */}
+                  <div className="absolute w-80 h-0.5 origin-left -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
+                  {/* Line to bottom-left card */}
+                  <div className="absolute w-80 h-0.5 origin-left transform -rotate-135 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
+                  {/* Line to bottom-right card */}
+                  <div className="absolute w-80 h-0.5 origin-left transform rotate-135 -translate-y-0.5" style={{background: 'repeating-linear-gradient(to right, #9ca3af 0px, #9ca3af 8px, transparent 8px, transparent 16px)'}}></div>
+                </div>
+
+                {/* Central biometric icon */}
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                  <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center shadow-lg z-20">
+                    <Fingerprint className="h-14 w-14 text-white" />
                   </div>
                 </div>
 
