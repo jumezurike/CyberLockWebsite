@@ -227,43 +227,49 @@ export default function IdentityManagement() {
         </div>
 
         {/* Dashboard Section */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-3 gap-8 mb-10">
           {/* Dashboard */}
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-blue-300">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4">Dashboard</h3>
-              <div className="space-y-4">
+          <Card className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-blue-300 group">
+            <CardContent className="p-8">
+              <h3 className="text-xl font-semibold text-gray-800 mb-6">Dashboard</h3>
+              <div className="space-y-6">
                 <div>
-                  <p className="text-sm text-gray-600">Total Identities</p>
-                  <div className="flex items-center mt-1">
-                    <Users className="h-5 w-5 text-blue-600 mr-2" />
-                    <span className="text-2xl font-bold">{uwaRecords.length}</span>
+                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Total Identities</p>
+                  <div className="flex items-center">
+                    <div className="bg-blue-50 p-2 rounded-lg mr-3">
+                      <Users className="h-6 w-6 text-blue-600" />
+                    </div>
+                    <span className="text-3xl font-bold text-gray-900">{uwaRecords.length}</span>
                   </div>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">All Recorded Identities</p>
-                  <p className="text-lg font-semibold">{uwaRecords.length}</p>
+                <div className="pt-4 border-t border-gray-100">
+                  <p className="text-sm font-medium text-gray-500 mb-1">All Recorded Identities</p>
+                  <p className="text-xl font-semibold text-gray-700">{uwaRecords.length}</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* UIVS & Universal Digital Identity */}
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-purple-300">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4">UIVS & Universal Digital Identity</h3>
-              <div className="space-y-4">
+          <Card className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-purple-300 group">
+            <CardContent className="p-8">
+              <h3 className="text-xl font-semibold text-gray-800 mb-6">UIVS & Universal Digital Identity</h3>
+              <div className="space-y-6">
                 <div>
-                  <p className="text-sm text-gray-600">High Risk Identities</p>
-                  <div className="flex items-center mt-1">
-                    <AlertTriangle className="h-5 w-5 text-red-600 mr-2" />
-                    <span className="text-2xl font-bold text-red-600">0</span>
+                  <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">High Risk Identities</p>
+                  <div className="flex items-center">
+                    <div className="bg-red-50 p-2 rounded-lg mr-3">
+                      <AlertTriangle className="h-6 w-6 text-red-600" />
+                    </div>
+                    <span className="text-3xl font-bold text-red-600">0</span>
                   </div>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600">Pending Identities</p>
-                  <div className="flex items-center mt-1">
-                    <AlertTriangle className="h-5 w-5 text-orange-600 mr-2" />
+                <div className="pt-4 border-t border-gray-100">
+                  <p className="text-sm font-medium text-gray-500 mb-2">Pending Identities</p>
+                  <div className="flex items-center">
+                    <div className="bg-orange-50 p-2 rounded-lg mr-3">
+                      <AlertTriangle className="h-5 w-5 text-orange-600" />
+                    </div>
                     <span className="text-2xl font-bold text-orange-600">2</span>
                   </div>
                 </div>
@@ -272,17 +278,17 @@ export default function IdentityManagement() {
           </Card>
 
           {/* Recent Activities */}
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer border-2 hover:border-green-300">
-            <CardContent className="p-6">
-              <h3 className="text-lg font-semibold mb-4">Recent Activities</h3>
+          <Card className="bg-white shadow-sm border border-gray-200 hover:shadow-md transition-all duration-300 cursor-pointer hover:border-green-300 group">
+            <CardContent className="p-8">
+              <h3 className="text-xl font-semibold text-gray-800 mb-6">Recent Activities</h3>
               <div>
-                <p className="text-sm text-gray-600 mb-3">Identity Types</p>
-                <p className="text-sm text-gray-600 mb-3">Distribution by category</p>
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="secondary" className="bg-blue-100 text-blue-800">3 Human</Badge>
-                  <Badge variant="secondary" className="bg-green-100 text-green-800">1 Machine</Badge>
-                  <Badge variant="secondary" className="bg-purple-100 text-purple-800">1 API</Badge>
-                  <Badge variant="secondary" className="bg-orange-100 text-orange-800">1 Third-Party</Badge>
+                <p className="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Identity Types</p>
+                <p className="text-sm text-gray-500 mb-4">Distribution by category</p>
+                <div className="grid grid-cols-2 gap-2">
+                  <Badge className="bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200 transition-colors justify-center py-2">3 Human</Badge>
+                  <Badge className="bg-green-100 text-green-800 border-green-200 hover:bg-green-200 transition-colors justify-center py-2">1 Machine</Badge>
+                  <Badge className="bg-purple-100 text-purple-800 border-purple-200 hover:bg-purple-200 transition-colors justify-center py-2">1 API</Badge>
+                  <Badge className="bg-orange-100 text-orange-800 border-orange-200 hover:bg-orange-200 transition-colors justify-center py-2">1 Third-Party</Badge>
                 </div>
               </div>
             </CardContent>
