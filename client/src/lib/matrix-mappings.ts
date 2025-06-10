@@ -343,7 +343,10 @@ export const assessmentTools = {
     // Other regulatory questionnaires
     { id: "gdpr-compliance", name: "GDPR Compliance Questionnaire", purpose: "EU data protection", applicability: "Organizations processing EU citizen data" },
     { id: "hipaa-privacy", name: "HIPAA Privacy Rule Questionnaire", purpose: "PHI privacy practices", applicability: "Healthcare organizations, business associates" },
-    { id: "hipaa-breach", name: "HIPAA Breach Notification Assessment", purpose: "Breach notification readiness", applicability: "Healthcare organizations" }
+    { id: "hipaa-breach", name: "HIPAA Breach Notification Assessment", purpose: "Breach notification readiness", applicability: "Healthcare organizations" },
+    
+    // Healthcare Security Assessment
+    { id: "hos2a", name: "HOS²A (Healthcare Organizational and System Security Analysis)", purpose: "Comprehensive healthcare cybersecurity assessment", applicability: "Healthcare organizations, hospitals, clinics, medical practices" }
   ],
 
   // Keeping the original structure for backward compatibility
