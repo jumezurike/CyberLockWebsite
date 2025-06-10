@@ -8208,6 +8208,20 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                       type="submit" 
                       className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white font-medium text-lg py-4 w-full"
                       disabled={!eulaAccepted}
+                      onClick={(e) => {
+                        console.log("Submit button clicked");
+                        console.log("EULA accepted:", eulaAccepted);
+                        console.log("Form valid:", form.formState.isValid);
+                        console.log("Form errors:", form.formState.errors);
+                        
+                        if (!eulaAccepted) {
+                          e.preventDefault();
+                          console.log("EULA not accepted, preventing submission");
+                          return;
+                        }
+                        
+                        // Let the form handle submission naturally
+                      }}
                     >
                       Submit Questionnaire
                     </Button>
