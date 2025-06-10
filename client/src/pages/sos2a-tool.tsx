@@ -4507,7 +4507,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.deviceType"
-                        render={() => (
+                        render={({ field }) => (
                           <FormItem>
                             <div className="mb-4">
                               <FormLabel>Device Type</FormLabel>
@@ -4538,36 +4538,26 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 "Transportation Device", 
                                 "Other"
                               ].map((type) => (
-                                <FormField
+                                <div
                                   key={type}
-                                  control={form.control}
-                                  name="deviceInventoryTracking.deviceType"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={type}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(type)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), type]
-                                                : field.value?.filter(
-                                                    (value) => value !== type
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
-                                          {type}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={Array.isArray(field.value) && field.value.includes(type)}
+                                      onCheckedChange={(checked) => {
+                                        const currentValue = Array.isArray(field.value) ? field.value : [];
+                                        const updatedValue = checked === true
+                                          ? [...currentValue, type]
+                                          : currentValue.filter((value) => value !== type);
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal cursor-pointer">
+                                    {type}
+                                  </FormLabel>
+                                </div>
                               ))}
                             </div>
                             <FormMessage />
@@ -4578,7 +4568,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.endpointCategory"
-                        render={() => (
+                        render={({ field }) => (
                           <FormItem>
                             <div className="mb-4">
                               <FormLabel>Endpoint Category</FormLabel>
@@ -4588,36 +4578,26 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                               {["User Device", "Shared Asset", "Infrastructure Device", "Monitoring System", "Security Device"].map((type) => (
-                                <FormField
+                                <div
                                   key={type}
-                                  control={form.control}
-                                  name="deviceInventoryTracking.endpointCategory"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={type}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(type)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), type]
-                                                : field.value?.filter(
-                                                    (value) => value !== type
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
-                                          {type}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={Array.isArray(field.value) && field.value.includes(type)}
+                                      onCheckedChange={(checked) => {
+                                        const currentValue = Array.isArray(field.value) ? field.value : [];
+                                        const updatedValue = checked === true
+                                          ? [...currentValue, type]
+                                          : currentValue.filter((value) => value !== type);
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal cursor-pointer">
+                                    {type}
+                                  </FormLabel>
+                                </div>
                               ))}
                             </div>
                             <FormMessage />
@@ -4642,7 +4622,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                       <FormField
                         control={form.control}
                         name="deviceInventoryTracking.browsersInstalled"
-                        render={() => (
+                        render={({ field }) => (
                           <FormItem>
                             <div className="mb-4">
                               <FormLabel>Browser(s) Installed + Engine</FormLabel>
@@ -4660,36 +4640,26 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 "Brave (Chromium)",
                                 "Internet Explorer (Trident)"
                               ].map((browser) => (
-                                <FormField
+                                <div
                                   key={browser}
-                                  control={form.control}
-                                  name="deviceInventoryTracking.browsersInstalled"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={browser}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(browser)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), browser]
-                                                : field.value?.filter(
-                                                    (value) => value !== browser
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
-                                          {browser}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
+                                  className="flex flex-row items-start space-x-3 space-y-0"
+                                >
+                                  <FormControl>
+                                    <Checkbox
+                                      checked={Array.isArray(field.value) && field.value.includes(browser)}
+                                      onCheckedChange={(checked) => {
+                                        const currentValue = Array.isArray(field.value) ? field.value : [];
+                                        const updatedValue = checked === true
+                                          ? [...currentValue, browser]
+                                          : currentValue.filter((value) => value !== browser);
+                                        field.onChange(updatedValue);
+                                      }}
+                                    />
+                                  </FormControl>
+                                  <FormLabel className="font-normal cursor-pointer">
+                                    {browser}
+                                  </FormLabel>
+                                </div>
                               ))}
                             </div>
                             <FormMessage />
