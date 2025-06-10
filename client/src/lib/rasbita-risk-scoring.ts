@@ -238,7 +238,7 @@ export const SECURITY_RISK_PREVENTIVE_MAPPING: Record<string, PreventiveRiskFact
 // Calculate device risk score (0-100) based on organization's feared security risks
 export function calculateDeviceRiskScore(
   organizationSecurityRisks: string[],
-  deviceType: string = 'workstation',
+  deviceType: string | string[] = 'workstation',
   deviceCount: number = 1,
   wazuhRiskData?: WazuhRiskData
 ): number {
@@ -282,7 +282,18 @@ export function calculateDeviceRiskScore(
     'iot': 1.5
   };
 
-  const multiplier = deviceMultipliers[deviceType.toLowerCase()] || 1.0;
+  // Handle both string and array inputs for deviceType
+  let multiplier = 1.0;
+  if (Array.isArray(deviceType)) {
+    // If array, use the highest risk multiplier from selected types
+    multiplier = deviceType.reduce((max, type) => {
+      const typeMultiplier = deviceMultipliers[type.toLowerCase()] || 1.0;
+      return Math.max(max, typeMultiplier);
+    }, 1.0);
+  } else if (typeof deviceType === 'string') {
+    multiplier = deviceMultipliers[deviceType.toLowerCase()] || 1.0;
+  }
+  
   totalRiskScore = totalRiskScore * multiplier;
 
   // Convert to 0-100 scale
