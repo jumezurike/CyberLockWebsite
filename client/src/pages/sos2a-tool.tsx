@@ -182,6 +182,7 @@ interface QuestionnaireFormProps {
 
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
+  const [activeTab, setActiveTab] = useState("business");
   const { toast } = useToast();
   
   // Independent device inventory state
@@ -1497,7 +1498,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
 
           <Form {...form}>
             <form onSubmit={handleSubmit} className="space-y-8">
-              <Tabs defaultValue="business" className="w-full">
+              <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure">2. Infrastructure Mode</TabsTrigger>
@@ -7640,7 +7641,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button type="button" className="mt-4" onClick={() => document.querySelector('[value="review"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}>
+                  <Button type="button" className="mt-4" onClick={() => setActiveTab("review")}>
                     Continue to Review
                   </Button>
                 </div>
@@ -8220,7 +8221,11 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                           return;
                         }
                         
-                        // Let the form handle submission naturally
+                        // Force form submission by calling handleSubmit directly
+                        e.preventDefault();
+                        const formData = form.getValues();
+                        console.log("Form data being submitted:", formData);
+                        handleSubmit();
                       }}
                     >
                       Submit Questionnaire
