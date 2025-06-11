@@ -1,0 +1,34 @@
+ASSESSMENT PROGRESS UNDERSTANDING - 2025-06-11
+
+RASBITA FRAMEWORK CLARIFICATION:
+- RASBITA-CBF (Cost-Benefit Financial): Cost-benefit analysis with financial values, incident financial impact assessment, ROI calculations
+- RASBITA-RGM (Risk Governance & Management): Risk governance maturity assessment, management framework evaluation
+- Display Rule: Use RASBITA-CBF and RASBITA-RGM ONLY in assessment progress line/phase display, leave all other RASBITA references unchanged
+
+9-PHASE ASSESSMENT PROGRESSION:
+
+PURPLE (Completed in Preliminary Stage):
+1. Inquiry & Questionnaire - Form submission completed
+2. Interview & Matrix Population - Basic stakeholder input gathered  
+3. Matrix Population - Initial infrastructure data collected
+4. RASBITA-RGM - Governance maturity assessment through questionnaire (reduces risk, impact, saves money)
+5. Gap Analysis - Critical phase identifying missing controls from sections 2-13 (what org should have vs what they actually have - gaps create serious vulnerabilities)
+6. Preliminary Report - Qualitative expert opinion analysis
+
+GREEN (Requires Comprehensive Assessment):
+7. Architecture Threat Modeling - Requires deep STRIDE analysis with actual system architecture
+8. RASBITA-CBF - Detailed financial analysis with quantitative ROI calculations and incident data
+9. Comprehensive Report - Final quantitative analysis with 6+ months monitoring data
+
+KEY POINTS:
+- Breaches can happen during preliminary stage - both RASBITA components available for incident response
+- Gap Analysis identifies missing security controls and compliance failures that create high risk
+- Organizations with mature cybersecurity risk governance & management have reduced risk, less impact, and save money
+- Preliminary: Immediate expert analysis, basic financial impact if incidents occur
+- Comprehensive: Deep quantitative analysis with extensive monitoring infrastructure and data collection
+
+CRITICAL BUGS TO FIX:
+1. Phase color coding - preliminary shows all purple incorrectly
+2. "Comprehensive Report Phase" showing during preliminary assessment
+3. Button functionality in sections #12, #13, #14, #15 (recently fixed)
+4. Report generation logic distinguishing preliminary vs comprehensive
