@@ -1422,15 +1422,15 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
 
   const currentStep = calculateWorkflowProgress();
   const workflowSteps = [
-    { id: 1, title: "Inquiry & Questionnaire", description: "Initial Data Collection" },
-    { id: 2, title: "Interview & Matrix Population", description: "Stakeholder Input" },
-    { id: 3, title: "Matrix Population", description: "Infrastructure Data" },
-    { id: 4, title: "RASBITA Governance", description: "Cybersecurity Governance Maturity" },
-    { id: 5, title: "RASBITA Score", description: "Cost-Benefit Analysis" },
-    { id: 6, title: "Gap Analysis", description: "Security Parameters" },
-    { id: 7, title: "Architecture Analysis", description: "Threat Modeling" },
-    { id: 8, title: "Preliminary Report", description: "Qualitative Assessment" },
-    { id: 9, title: "Comprehensive Report", description: "Quantitative Analysis" }
+    { id: 1, title: "Inquiry & Questionnaire", description: "Initial Data Collection", isPreliminay: true },
+    { id: 2, title: "Interview & Matrix Population", description: "Stakeholder Input", isPreliminay: true },
+    { id: 3, title: "Matrix Population", description: "Infrastructure Data", isPreliminay: true },
+    { id: 4, title: "RASBITA-RGM", description: "Risk Governance & Management", isPreliminay: true },
+    { id: 5, title: "Gap Analysis", description: "Identifying Missing Controls from Sections 2-13", isPreliminay: true },
+    { id: 6, title: "Preliminary Report", description: "Qualitative Expert Opinion Analysis", isPreliminay: true },
+    { id: 7, title: "Architecture Threat Modeling", description: "Deep STRIDE Analysis with System Architecture", isPreliminay: false },
+    { id: 8, title: "RASBITA-CBF", description: "Cost-Benefit Financial Analysis", isPreliminay: false },
+    { id: 9, title: "Comprehensive Report", description: "Quantitative Analysis with 6+ Months Monitoring Data", isPreliminay: false }
   ];
 
   return (
@@ -1449,11 +1449,15 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
             {workflowSteps.map((step) => (
               <div key={step.id} className="flex flex-col items-center text-center">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${
-                  step.id <= currentStep 
-                    ? 'bg-primary text-white' 
+                  step.id <= currentStep && step.isPreliminay
+                    ? 'bg-purple-600 text-white' 
+                    : step.id <= currentStep && !step.isPreliminay
+                    ? 'bg-green-600 text-white'
                     : step.id === currentStep + 1
                     ? 'bg-orange-500 text-white'
-                    : 'bg-gray-200 text-gray-500'
+                    : step.isPreliminay
+                    ? 'bg-purple-200 text-purple-700'
+                    : 'bg-green-200 text-green-700'
                 }`}>
                   {step.id <= currentStep ? (
                     <CheckCircle className="h-4 w-4" />
@@ -1480,17 +1484,17 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
             </div>
           )}
           
-          {currentStep === 9 && (
-            <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded text-sm text-green-800">
+          {currentStep >= 6 && (
+            <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
               <CheckCircle className="h-4 w-4 inline mr-1" />
-              <strong>Comprehensive Report Phase:</strong> Assessment data complete. Ready for quantitative analysis, executive summary scorecard, and mitigation/remediation strategies.
+              <strong>Preliminary Report Phase:</strong> Qualitative expert opinion analysis ready. Governance maturity assessed, gaps identified from sections 2-13.
             </div>
           )}
           
-          {currentStep === 8 && (
-            <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
+          {currentStep >= 6 && (
+            <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded text-sm text-green-700">
               <Clock className="h-4 w-4 inline mr-1" />
-              <strong>Preliminary Report Phase:</strong> Qualitative assessment ready. Complete remaining sections for comprehensive analysis.
+              <strong>Comprehensive Assessment Available:</strong> For quantitative analysis with 6+ months monitoring data, architecture threat modeling, and RASBITA-CBF financial analysis.
             </div>
           )}
         </div>

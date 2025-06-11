@@ -24,7 +24,7 @@ export default function AssessmentWorkflow() {
       description: "Initial Data Collection",
       icon: <FileText className="h-5 w-5" />,
       status: "completed",
-      category: "Data Collection"
+      category: "Preliminary Phase"
     },
     {
       id: 2,
@@ -32,7 +32,7 @@ export default function AssessmentWorkflow() {
       description: "Stakeholder Input",
       icon: <Users className="h-5 w-5" />,
       status: "current",
-      category: "Stakeholder Engagement"
+      category: "Preliminary Phase"
     },
     {
       id: 3,
@@ -40,55 +40,55 @@ export default function AssessmentWorkflow() {
       description: "Infrastructure Data",
       icon: <Database className="h-5 w-5" />,
       status: "pending",
-      category: "Infrastructure Assessment"
+      category: "Preliminary Phase"
     },
     {
       id: 4,
-      title: "RASBITA Governance",
-      description: "Cybersecurity Governance Maturity",
+      title: "RASBITA-RGM",
+      description: "Risk Governance & Management",
       icon: <Shield className="h-5 w-5" />,
       status: "pending",
-      category: "Governance Analysis"
+      category: "Preliminary Phase"
     },
     {
       id: 5,
-      title: "RASBITA Score",
-      description: "Cost-Benefit Analysis",
-      icon: <TrendingUp className="h-5 w-5" />,
+      title: "Gap Analysis",
+      description: "Identifying Missing Controls from Sections 2-13",
+      icon: <Search className="h-5 w-5" />,
       status: "pending",
-      category: "Risk Scoring"
+      category: "Preliminary Phase"
     },
     {
       id: 6,
-      title: "Gap Analysis",
-      description: "Security Parameters",
-      icon: <Search className="h-5 w-5" />,
+      title: "Preliminary Report",
+      description: "Qualitative Expert Opinion Analysis",
+      icon: <FileCheck className="h-5 w-5" />,
       status: "pending",
-      category: "Security Assessment"
+      category: "Preliminary Phase"
     },
     {
       id: 7,
-      title: "Architecture Analysis",
-      description: "Threat Modeling",
+      title: "Architecture Threat Modeling",
+      description: "Deep STRIDE Analysis with System Architecture",
       icon: <Building className="h-5 w-5" />,
       status: "pending",
-      category: "Architecture Review"
+      category: "Comprehensive Phase"
     },
     {
       id: 8,
-      title: "Preliminary Report",
-      description: "Qualitative Assessment",
-      icon: <FileCheck className="h-5 w-5" />,
+      title: "RASBITA-CBF",
+      description: "Cost-Benefit Financial Analysis",
+      icon: <TrendingUp className="h-5 w-5" />,
       status: "pending",
-      category: "Preliminary Analysis"
+      category: "Comprehensive Phase"
     },
     {
       id: 9,
       title: "Comprehensive Report",
-      description: "Quantitative Analysis",
+      description: "Quantitative Analysis with 6+ Months Monitoring Data",
       icon: <BarChart className="h-5 w-5" />,
       status: "pending",
-      category: "Final Analysis"
+      category: "Comprehensive Phase"
     }
   ];
 
