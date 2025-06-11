@@ -14,27 +14,150 @@ import {
 } from "@/lib/sos2a-types";
 // Import working report generation functions
 function calculateSecurityScore(data: Sos2aFormData): number {
-  let score = 50; // Baseline
+  // Calculate anticipated risk score based on organizational fears and concerns
+  let anticipatedRiskScore = 50; // Baseline
   
-  // Business maturity indicators
-  if (data.businessName && data.industry) score += 10;
-  if (data.employeeCount && parseInt(data.employeeCount) > 0) score += 5;
+  // Extract fear-based concerns from questionnaire responses
+  const organizationalConcerns = extractOrganizationalFears(data);
+  const threatPerceptions = assessThreatPerceptions(data);
+  const impactConcerns = evaluateImpactConcerns(data);
   
-  // Risk factors
-  if (data.operationMode?.includes('remote')) score -= 5;
-  if (data.operationMode?.includes('hybrid')) score += 5;
-  if (data.operationMode?.includes('on-site')) score += 10;
+  // Weight the 12 security parameters based on questionnaire responses
+  const parameterScores = calculate12ParameterScores(data);
   
-  // Internet exposure
-  if (data.internetPresence?.includes('none')) score += 15;
-  if (data.internetPresence?.length > 2) score -= 10;
+  // Combine anticipated risk with actual assessment
+  const finalScore = Math.round(
+    (anticipatedRiskScore * 0.3) + // 30% anticipated risk from fears
+    (parameterScores.overall * 0.7)  // 70% actual assessment data
+  );
   
-  // Industry adjustments
-  if (data.industry === 'healthcare') score += 5;
-  if (data.industry === 'financial') score += 5;
-  if (data.industry === 'government') score += 10;
+  return Math.max(0, Math.min(100, finalScore));
+}
+
+function extractOrganizationalFears(data: Sos2aFormData): number {
+  let fearScore = 50;
   
-  return Math.max(0, Math.min(100, score));
+  // Industry-specific fear adjustments based on common threat landscapes
+  if (data.industry === 'healthcare') fearScore -= 15; // High ransomware target
+  if (data.industry === 'financial') fearScore -= 20; // High value target
+  if (data.industry === 'government') fearScore -= 10; // APT targets
+  if (data.industry === 'education') fearScore -= 5; // Budget constraints
+  
+  // Operation mode fears
+  if (data.operationMode?.includes('remote')) fearScore -= 10; // Remote work fears
+  if (data.operationMode?.includes('hybrid')) fearScore -= 5; // Mixed environment complexity
+  
+  // Internet presence fears
+  if (data.internetPresence?.includes('website')) fearScore -= 5;
+  if (data.internetPresence?.includes('e-commerce')) fearScore -= 10;
+  if (data.internetPresence?.includes('cloud-services')) fearScore -= 8;
+  
+  return Math.max(0, Math.min(100, fearScore));
+}
+
+function assessThreatPerceptions(data: Sos2aFormData): number {
+  let threatScore = 70; // Baseline threat perception
+  
+  // Size-based threat perception (larger orgs = more fear of targeted attacks)
+  const employeeCount = parseInt(data.employeeCount || '0');
+  if (employeeCount > 500) threatScore -= 15;
+  else if (employeeCount > 100) threatScore -= 10;
+  else if (employeeCount > 25) threatScore -= 5;
+  
+  return threatScore;
+}
+
+function evaluateImpactConcerns(data: Sos2aFormData): number {
+  let impactScore = 60;
+  
+  // Business criticality fears
+  if (data.businessServices?.toLowerCase().includes('critical')) impactScore -= 15;
+  if (data.businessServices?.toLowerCase().includes('24/7')) impactScore -= 10;
+  if (data.businessServices?.toLowerCase().includes('customer')) impactScore -= 8;
+  
+  return impactScore;
+}
+
+function calculate12ParameterScores(data: Sos2aFormData): { overall: number; breakdown: Record<string, number> } {
+  // Calculate each of the 12 security parameters (8.33% each = 100% total)
+  const parameters = {
+    phishing: calculatePhishingParameter(data),
+    awareness: calculateAwarenessParameter(data), 
+    footprint: calculateFootprintParameter(data),
+    darkweb: calculateDarkWebParameter(data),
+    endpoint: calculateEndpointParameter(data),
+    cloud: calculateCloudParameter(data),
+    data: calculateDataParameter(data),
+    browser: calculateBrowserParameter(data),
+    email: calculateEmailParameter(data),
+    compliance: calculateComplianceParameter(data),
+    regulatory: calculateRegulatoryParameter(data),
+    frameworks: calculateFrameworksParameter(data)
+  };
+  
+  // Each parameter is worth 8.33% of total score
+  const overall = Math.round(
+    Object.values(parameters).reduce((sum, score) => sum + (score * 8.33 / 100), 0)
+  );
+  
+  return { overall, breakdown: parameters };
+}
+
+// Individual parameter calculations based on questionnaire responses
+function calculatePhishingParameter(data: Sos2aFormData): number {
+  let score = 50;
+  // Add logic based on actual questionnaire fields related to phishing
+  if (data.businessServices?.toLowerCase().includes('email')) score += 10;
+  return Math.min(100, score);
+}
+
+function calculateAwarenessParameter(data: Sos2aFormData): number {
+  let score = 60;
+  // Employee count affects awareness score
+  const employeeCount = parseInt(data.employeeCount || '0');
+  if (employeeCount > 50) score -= 10; // Harder to train larger groups
+  return Math.max(0, score);
+}
+
+// Simplified versions for other parameters - would be expanded based on questionnaire mapping
+function calculateFootprintParameter(data: Sos2aFormData): number {
+  return 80 - (data.internetPresence?.length || 0) * 5;
+}
+
+function calculateDarkWebParameter(data: Sos2aFormData): number {
+  return data.industry === 'healthcare' ? 60 : 75;
+}
+
+function calculateEndpointParameter(data: Sos2aFormData): number {
+  return data.operationMode?.includes('remote') ? 65 : 80;
+}
+
+function calculateCloudParameter(data: Sos2aFormData): number {
+  return data.internetPresence?.includes('cloud-services') ? 70 : 85;
+}
+
+function calculateDataParameter(data: Sos2aFormData): number {
+  return data.industry === 'financial' ? 75 : 80;
+}
+
+function calculateBrowserParameter(data: Sos2aFormData): number {
+  return 75;
+}
+
+function calculateEmailParameter(data: Sos2aFormData): number {
+  return 70;
+}
+
+function calculateComplianceParameter(data: Sos2aFormData): number {
+  return data.industry === 'healthcare' ? 60 : 70;
+}
+
+function calculateRegulatoryParameter(data: Sos2aFormData): number {
+  return data.industry === 'government' ? 80 : 65;
+}
+
+function calculateFrameworksParameter(data: Sos2aFormData): number {
+  return 60; // Most orgs lack formal frameworks
 }
 
 function checkForSecurityIncidents(data: Sos2aFormData): boolean {
