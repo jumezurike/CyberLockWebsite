@@ -5537,13 +5537,23 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => document.querySelector('[value="isms"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                    onClick={() => {
+                      const tabTrigger = document.querySelector('[data-value="isms"]') as HTMLElement;
+                      if (tabTrigger) {
+                        tabTrigger.click();
+                      }
+                    }}
                   >
                     Previous Step
                   </Button>
                   <Button 
                     type="button"
-                    onClick={() => document.querySelector('[value="identity-behavior"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                    onClick={() => {
+                      const tabTrigger = document.querySelector('[data-value="identity-behavior"]') as HTMLElement;
+                      if (tabTrigger) {
+                        tabTrigger.click();
+                      }
+                    }}
                   >
                     Next Step
                   </Button>
@@ -8040,7 +8050,12 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                           variant="outline" 
                           size="sm"
                           className="text-xs"
-                          onClick={() => document.querySelector('[data-value="acq-tools"]')?.click()}
+                          onClick={() => {
+                            const tabTrigger = document.querySelector('[data-value="acq-tools"]') as HTMLElement;
+                            if (tabTrigger) {
+                              tabTrigger.click();
+                            }
+                          }}
                         >
                           Edit
                         </Button>
