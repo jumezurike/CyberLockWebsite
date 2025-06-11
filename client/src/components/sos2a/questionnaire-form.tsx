@@ -8198,7 +8198,12 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                           variant="outline" 
                           size="sm"
                           className="text-xs"
-                          onClick={() => document.querySelector('[data-value="contact"]')?.click()}
+                          onClick={() => {
+                            const tabTrigger = document.querySelector('[data-value="contact"]') as HTMLElement;
+                            if (tabTrigger) {
+                              tabTrigger.click();
+                            }
+                          }}
                         >
                           Edit
                         </Button>
