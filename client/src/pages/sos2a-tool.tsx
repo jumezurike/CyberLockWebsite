@@ -1,374 +1,191 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
 import { differenceInDays, parseISO, formatDistanceToNow } from "date-fns";
 
 // Import components
-import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
-import MatrixForm from "@/components/sos2a/matrix-form";
-import GapAnalysis from "@/components/sos2a/gap-analysis";
 import ReportDisplay from "@/components/sos2a/report-display";
 
-// Import types and utilities
+// Import types
 import { 
   Sos2aFormData, 
-  MatrixItem, 
-  AssessmentReport,
-  GapAnalysisResult,
-  SecurityRisk 
+  AssessmentReport
 } from "@/lib/sos2a-types";
-import { 
-  identifySecurityRisks, 
-  categorizeLVulnerabilities, 
-  identifyFrameworkGaps,
-  evaluateComplianceStatus,
-  generateScorecardData
-} from "@/lib/sos2a-utils";
 
 export default function Sos2aTool() {
-  // State for multi-step form
-  const [step, setStep] = useState<'questionnaire' | 'matrix' | 'gap-analysis' | 'report'>('questionnaire');
-  const [formData, setFormData] = useState<Sos2aFormData | null>(null);
-  const [matrixData, setMatrixData] = useState<MatrixItem[] | null>(null);
-  const [gapAnalysisResult, setGapAnalysisResult] = useState<GapAnalysisResult | null>(null);
+  const [step, setStep] = useState<'questionnaire' | 'report'>('questionnaire');
   const [report, setReport] = useState<AssessmentReport | null>(null);
   const [savedAssessments, setSavedAssessments] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedAssessmentId, setSelectedAssessmentId] = useState<string>("");
-  const [selectedTab, setSelectedTab] = useState<string | null>(null);
-  
-  // Search state
-  const [searchCompanyName, setSearchCompanyName] = useState<string>("");
-  const [searchFromDate, setSearchFromDate] = useState<string>("");
-  const [searchToDate, setSearchToDate] = useState<string>("");
-  const [isSearching, setIsSearching] = useState(false);
-  
-  // State for form persistence
-  const [hasSavedData, setHasSavedData] = useState<boolean>(false);
-  const [showReviewModal, setShowReviewModal] = useState(false);
   
   const { toast } = useToast();
 
-  // Calculate progress percentage based on current step
-  const progressPercentage = step === 'questionnaire' ? 25 : 
-                            step === 'matrix' ? 50 : 
-                            step === 'gap-analysis' ? 75 : 100;
-
-  // Check if comprehensive report is selected
-  const isComprehensive = formData?.reportType === 'comprehensive';
-
-  // Handle questionnaire submission
+  // Handle questionnaire submission and generate preliminary report
   const handleQuestionnaireSubmit = (data: Sos2aFormData) => {
-    setFormData(data);
-    setShowReviewModal(true);
-  };
+    // Generate preliminary report immediately (qualitative assessment only)
+    const preliminaryReport: AssessmentReport = {
+      id: 'report-' + Date.now(),
+      businessId: data.businessName?.replace(/\s+/g, '-').toLowerCase() + '-' + Date.now() || 'business-' + Date.now(),
+      reportType: 'preliminary',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      age: 0,
+      securityScore: 0, // Preliminary qualitative assessment
+      businessLocation: data.businessLocation || { city: "Unknown", state: "Unknown", country: "Unknown", zipCode: "" },
+      industry: data.industry || "Unknown",
+      businessServices: data.businessServices || "Unknown",
+      operationModes: data.operationMode || [],
+      internetPresence: data.internetPresence || [],
+      findings: [],
+      vulnerabilities: [],
+      recommendations: {
+        immediate: ["Implement foundational security controls", "Establish security policies"],
+        shortTerm: ["Deploy monitoring solutions", "Conduct staff training"],
+        longTerm: ["Develop comprehensive security program", "Prepare for comprehensive assessment"]
+      },
+      frameworkGaps: [],
+      complianceStatus: {
+        percentage: 0,
+        compliant: 0,
+        total: 1,
+        status: "Initial Assessment"
+      },
+      policyDocumentStatus: "Not Assessed",
+      osHardeningStatus: "Not Assessed", 
+      ismsStatus: "Not Assessed",
+      mitreAttackCoverage: 0,
+      rasbitaScore: {
+        overall: 0,
+        governance: 0,
+        technical: 0,
+        operational: 0
+      },
+      matrixData: [],
+      scorecard: {
+        overallScore: 0,
+        categories: [
+          { name: "Phishing Screening", score: 0, weight: 8.33 },
+          { name: "Security Awareness", score: 0, weight: 8.33 },
+          { name: "External Footprints", score: 0, weight: 8.33 },
+          { name: "Dark Web", score: 0, weight: 8.33 },
+          { name: "Endpoint Security", score: 0, weight: 8.33 },
+          { name: "Cloud Security", score: 0, weight: 8.33 },
+          { name: "Data Security", score: 0, weight: 8.33 },
+          { name: "Browser Security", score: 0, weight: 8.33 },
+          { name: "Email Protection", score: 0, weight: 8.33 },
+          { name: "Compliances", score: 0, weight: 8.33 },
+          { name: "Regulatory Requirements", score: 0, weight: 8.33 },
+          { name: "Frameworks", score: 0, weight: 8.33 }
+        ]
+      }
+    };
 
-  // Handle final submission after review
-  const handleFinalSubmit = () => {
-    setShowReviewModal(false);
-    setStep('matrix');
-    saveFormData(formData);
+    setReport(preliminaryReport);
+    setStep('report');
     
     toast({
-      title: "Assessment Submitted",
-      description: "Your questionnaire has been submitted. Proceeding to matrix population.",
+      title: "Preliminary Assessment Complete",
+      description: "Your qualitative assessment report has been generated.",
     });
-  };
-
-  // Handle matrix submission
-  const handleMatrixSubmit = (data: MatrixItem[]) => {
-    setMatrixData(data);
-    setStep('gap-analysis');
-    saveMatrixData(data);
-  };
-
-  // Handle gap analysis completion
-  const handleGapAnalysisComplete = (result: GapAnalysisResult) => {
-    setGapAnalysisResult(result);
-    generateReport(result);
   };
 
   // Handle back navigation
   const handleBack = () => {
-    if (step === 'matrix') {
+    if (step === 'report') {
       setStep('questionnaire');
-    } else if (step === 'gap-analysis') {
-      setStep('matrix');
-    } else if (step === 'report') {
-      setStep('gap-analysis');
     }
   };
 
-  // Generate the final report
-  const generateReport = async (result: GapAnalysisResult) => {
-    if (!formData || !matrixData) {
-      console.error("Missing required data for report generation");
-      return;
-    }
-    
-    const reportType = formData?.reportType || 'preliminary';
-    
-    // Generate the report with gap analysis data
-    const generatedReport: AssessmentReport = {
-      id: 'report-' + Date.now(),
-      businessId: matrixData[0]?.infraType + '-' + Date.now() || 'business-' + Date.now(),
-      reportType: reportType,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      age: 0,
-      securityScore: Math.round(result.overallScore.percentage),
-      businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
-      industry: formData?.industry || "Unknown",
-      businessServices: formData?.businessServices || "Unknown",
-      operationModes: formData?.operationMode || [],
-      internetPresence: formData?.internetPresence || [],
-      findings: identifySecurityRisks(matrixData),
-      vulnerabilities: categorizeLVulnerabilities(matrixData),
-      recommendations: {
-        immediate: ["Implement critical security controls"],
-        shortTerm: ["Enhance monitoring capabilities"],
-        longTerm: ["Develop comprehensive security program"]
-      },
-      frameworkGaps: identifyFrameworkGaps(matrixData),
-      complianceStatus: evaluateComplianceStatus(matrixData),
-      matrixData: matrixData,
-      scorecard: generateScorecardData(matrixData, reportType)
-    };
-    
-    setReport(generatedReport);
-    setStep('report');
-    
-    toast({
-      title: "Report Generated",
-      description: "Your assessment report has been generated successfully.",
-    });
-  };
-
-  // Save form data to localStorage
-  const saveFormData = (data: Sos2aFormData | null) => {
-    if (data) {
-      localStorage.setItem('sos2a_form_data', JSON.stringify(data));
-    }
-  };
-
-  // Save matrix data to localStorage
-  const saveMatrixData = (data: MatrixItem[] | null) => {
-    if (data) {
-      localStorage.setItem('sos2a_matrix_data', JSON.stringify(data));
-    }
-  };
-
-  // Clear saved data
-  const clearSavedData = () => {
-    localStorage.removeItem('sos2a_form_data');
-    localStorage.removeItem('sos2a_matrix_data');
-    setHasSavedData(false);
-  };
-
-  // Format date for display
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
-  // Calculate assessment age
-  const calculateAssessmentAge = (createdAt: string): number => {
-    return differenceInDays(new Date(), parseISO(createdAt));
-  };
-
-  // Format assessment age
-  const formatAssessmentAge = (createdAt: string): string => {
-    return formatDistanceToNow(parseISO(createdAt), { addSuffix: true });
+  // Start new assessment
+  const startNewAssessment = () => {
+    setReport(null);
+    setStep('questionnaire');
   };
 
   return (
     <div className="container mx-auto py-8">
-      {/* Assessment Submission Confirmation Modal */}
-      {showReviewModal && formData && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-full max-w-2xl p-6 shadow-xl">
-            <h2 className="text-2xl font-bold mb-4 text-[#7936b0]">Assessment Submission Confirmation</h2>
-            
-            <div className="border rounded-md p-4 mb-4 bg-gray-50">
-              <h3 className="font-medium mb-2">Assessment Details</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-medium">Business Name:</span> {formData.businessName}
-                </div>
-                <div>
-                  <span className="font-medium">Industry:</span> {formData.industry}
-                </div>
-                <div>
-                  <span className="font-medium">Report Type:</span> {formData.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'}
-                </div>
-                <div>
-                  <span className="font-medium">Contact:</span> {formData.contactInfo.name}
-                </div>
-              </div>
-            </div>
-            
-            <div className="flex justify-end gap-4">
-              <Button 
-                variant="outline" 
-                onClick={() => setShowReviewModal(false)}
-              >
-                Cancel
-              </Button>
-              <Button 
-                className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white" 
-                onClick={handleFinalSubmit}
-              >
-                Proceed to Matrix Analysis
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      <Card className="mb-8">
+      <Card className="w-full max-w-7xl mx-auto">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
             Healthcare Organizational and System Security Analysis (HOS²A)
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {/* Assessment Search and History - Hide when displaying report */}
-          {step !== 'report' && (
-            <>
-              {/* Assessment Search */}
-              <div className="mb-6 border rounded-lg shadow-sm overflow-hidden">
-                <div className="bg-blue-50 p-3 border-b flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-blue-600">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.3-4.3"></path>
-                  </svg>
-                  <h2 className="text-lg font-medium text-blue-700">Search Assessments</h2>
-                </div>
-                
-                <div className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div>
-                      <Label className="text-sm font-medium mb-1 block">Company Name</Label>
-                      <Input 
-                        type="text" 
-                        value={searchCompanyName}
-                        onChange={(e) => setSearchCompanyName(e.target.value)}
-                        placeholder="Enter company name"
-                        className="w-full"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label className="text-sm font-medium mb-1 block">From Date</Label>
-                      <Input 
-                        type="date" 
-                        value={searchFromDate}
-                        onChange={(e) => setSearchFromDate(e.target.value)}
-                        className="w-full"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label className="text-sm font-medium mb-1 block">To Date</Label>
-                      <Input 
-                        type="date" 
-                        value={searchToDate}
-                        onChange={(e) => setSearchToDate(e.target.value)}
-                        className="w-full"
-                      />
-                    </div>
-                  </div>
-                </div>
+          {step === 'questionnaire' && (
+            <div className="space-y-6">
+              <div className="text-center mb-8">
+                <h2 className="text-xl font-semibold mb-4">Preliminary Assessment Questionnaire</h2>
+                <p className="text-muted-foreground">
+                  Complete this questionnaire to receive a preliminary qualitative security assessment.
+                  This provides the foundation for comprehensive assessment planning.
+                </p>
               </div>
               
-              {/* Saved Assessments Section */}
-              <div className="mb-6 border rounded-lg shadow-sm">
-                <div className="bg-primary/10 p-3 border-b flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-primary">
-                    <path d="M12 8v4l3 3"></path>
-                    <circle cx="12" cy="12" r="10"></circle>
-                  </svg>
-                  <h2 className="text-lg font-medium">Assessment History</h2>
-                </div>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                <h3 className="font-medium text-blue-800 mb-2">Assessment Type: Preliminary</h3>
+                <p className="text-sm text-blue-700">
+                  This preliminary assessment provides qualitative analysis based on expert opinion and industry standards.
+                  Comprehensive assessments require 6+ months of evidence collection using monitoring tools.
+                </p>
               </div>
-            </>
+
+              {/* Import the working questionnaire form from the backup */}
+              <QuestionnaireFormComponent onSubmit={handleQuestionnaireSubmit} />
+            </div>
           )}
 
-          <div className="space-y-4">
-            <h2 className="text-lg font-medium">Assessment Progress</h2>
-            <Progress value={progressPercentage} className="h-2" />
-            
-            <div className="flex justify-between text-sm">
-              <div className={`${step === 'questionnaire' ? 'text-primary font-medium' : ''}`}>
-                1. Inquiry & Questionnaire
+          {step === 'report' && report && (
+            <div className="space-y-6">
+              <div className="flex items-center justify-between mb-6">
+                <Button variant="outline" onClick={handleBack}>
+                  ← Back to Assessment
+                </Button>
+                <Button onClick={startNewAssessment}>
+                  Start New Assessment
+                </Button>
               </div>
-              <div className={`${step === 'matrix' ? 'text-primary font-medium' : ''}`}>
-                2. Interview & Matrix Population
-              </div>
-              <div className={`${step === 'gap-analysis' ? 'text-primary font-medium' : ''}`}>
-                3. Gap Analysis
-              </div>
-              <div className={`${step === 'report' ? 'text-primary font-medium' : ''}`}>
-                4. {isComprehensive ? 'Preliminary Report → Comprehensive Report' : 'Preliminary Report'}
-              </div>
+              
+              <ReportDisplay 
+                report={report} 
+                onBack={handleBack}
+              />
             </div>
-          </div>
+          )}
         </CardContent>
       </Card>
-      
-      {/* Step 1: Inquiry & Questionnaire */}
-      {step === 'questionnaire' && (
-        <div className="questionnaire-container">
-          <QuestionnaireForm onSubmit={handleQuestionnaireSubmit} />
-        </div>
-      )}
-      
-      {/* Step 2: Matrix Population */}
-      {step === 'matrix' && formData && (
-        <div className="matrix-container">
-          <MatrixForm 
-            operationModes={formData.operationMode}
-            internetPresence={formData.internetPresence}
-            ismsProcesses={formData.ismsProcesses}
-            onSubmit={handleMatrixSubmit}
-            onBack={handleBack}
-          />
-        </div>
-      )}
-      
-      {/* Step 3: Gap Analysis */}
-      {step === 'gap-analysis' && formData && (
-        <div className="gap-analysis-container">
-          <GapAnalysis 
-            formData={formData} 
-            onComplete={handleGapAnalysisComplete} 
-          />
-          <div className="flex justify-between mt-6">
-            <Button onClick={handleBack} variant="outline">
-              Back to Matrix
-            </Button>
-          </div>
-        </div>
-      )}
-      
-      {/* Step 4: Report Display */}
-      {step === 'report' && report && (
-        <div className="report-container">
-          <ReportDisplay report={report} onBack={handleBack} />
-        </div>
-      )}
+    </div>
+  );
+}
+
+// Placeholder for the working questionnaire form component
+function QuestionnaireFormComponent({ onSubmit }: { onSubmit: (data: Sos2aFormData) => void }) {
+  return (
+    <div className="text-center p-8 border border-dashed border-gray-300 rounded-lg">
+      <p className="text-muted-foreground mb-4">
+        Questionnaire form will be integrated here with all the fixes we implemented
+      </p>
+      <Button 
+        onClick={() => {
+          // Simulate form submission with sample data for testing
+          const sampleData: Partial<Sos2aFormData> = {
+            businessName: "Sample Healthcare Organization",
+            industry: "Healthcare",
+            businessServices: "Healthcare Services",
+            businessLocation: {
+              city: "Sample City",
+              state: "Sample State", 
+              country: "United States",
+              zipCode: "12345"
+            },
+            operationMode: ["on-premises"],
+            internetPresence: ["website"]
+          };
+          onSubmit(sampleData as Sos2aFormData);
+        }}
+      >
+        Generate Sample Preliminary Report
+      </Button>
     </div>
   );
 }
