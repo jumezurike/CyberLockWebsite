@@ -16,7 +16,16 @@ import {
   calculateQualitativeScores,
   calculateGovernanceMaturity,
   checkForIncidents,
-  checkArchitecturalData
+  checkArchitecturalData,
+  generateFindings,
+  identifyVulnerabilities,
+  generateRecommendations,
+  identifyFrameworkGaps,
+  calculateComplianceStatus,
+  assessPolicyStatus,
+  assessOSHardening,
+  assessISMSStatus,
+  calculateMITRECoverage
 } from "@/lib/rasbita-preliminary-scoring";
 
 export default function Sos2aTool() {

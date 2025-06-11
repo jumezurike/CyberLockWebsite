@@ -7,24 +7,23 @@ export interface QualitativeScores {
   overallScore: number;
   technical: number;
   operational: number;
-  scorecard: {
-    overallScore: number;
-    categories: Array<{
-      name: string;
-      score: number;
-      weight: number;
-    }>;
-  };
+  scorecard: Array<{
+    name: string;
+    score: number;
+    weight: number;
+  }>;
 }
 
 export interface GovernanceMaturity {
-  overall: number;
-  governance: number;
-  identify: number;
-  protect: number;
-  detect: number;
-  respond: number;
-  recover: number;
+  total: number;
+  categories: {
+    govern: number;
+    identify: number;
+    protect: number;
+    detect: number;
+    respond: number;
+    recover: number;
+  };
 }
 
 // Pillar 1: Qualitative Assessment (12 Security Parameters)
@@ -104,12 +103,11 @@ export function checkForIncidents(data: Sos2aFormData): boolean {
     'phishing', 'ransomware', 'unauthorized', 'violation'
   ];
 
-  // Check in various text fields for incident mentions
+  // Check in available text fields for incident mentions
   const textFields = [
     data.businessServices,
-    data.currentChallenges,
-    data.securityConcerns,
-    data.previousIncidents
+    data.businessName,
+    data.industry
   ].filter(Boolean);
 
   return textFields.some(field => 
