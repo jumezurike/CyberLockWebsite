@@ -7466,13 +7466,23 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => document.querySelector('[value="device-inventory"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                      onClick={() => {
+                        const tabTrigger = document.querySelector('[data-value="device-inventory"]') as HTMLElement;
+                        if (tabTrigger) {
+                          tabTrigger.click();
+                        }
+                      }}
                     >
                       Previous Step
                     </Button>
                     <Button 
                       type="button"
-                      onClick={() => document.querySelector('[value="contact"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                      onClick={() => {
+                        const tabTrigger = document.querySelector('[data-value="contact"]') as HTMLElement;
+                        if (tabTrigger) {
+                          tabTrigger.click();
+                        }
+                      }}
                     >
                       Next Step
                     </Button>
@@ -7670,7 +7680,12 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button type="button" className="mt-4" onClick={() => document.querySelector('[value="review"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}>
+                  <Button type="button" className="mt-4" onClick={() => {
+                    const tabTrigger = document.querySelector('[data-value="review"]') as HTMLElement;
+                    if (tabTrigger) {
+                      tabTrigger.click();
+                    }
+                  }}>
                     Continue to Review
                   </Button>
                 </div>
@@ -7740,7 +7755,12 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                           variant="outline" 
                           size="sm"
                           className="text-xs"
-                          onClick={() => document.querySelector('[data-value="infrastructure"]')?.click()}
+                          onClick={() => {
+                            const tabTrigger = document.querySelector('[data-value="infrastructure"]') as HTMLElement;
+                            if (tabTrigger) {
+                              tabTrigger.click();
+                            }
+                          }}
                         >
                           Edit Infrastructure
                         </Button>
@@ -7772,7 +7792,12 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                           variant="outline" 
                           size="sm"
                           className="text-xs"
-                          onClick={() => document.querySelector('[data-value="risks"]')?.click()}
+                          onClick={() => {
+                            const tabTrigger = document.querySelector('[data-value="risks"]') as HTMLElement;
+                            if (tabTrigger) {
+                              tabTrigger.click();
+                            }
+                          }}
                         >
                           Edit Risks
                         </Button>
