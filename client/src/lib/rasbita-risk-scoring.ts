@@ -50,6 +50,88 @@ const IMPACT_SCORES = {
 
 // Security risks from Section #3 mapped to preventive risk factors
 export const SECURITY_RISK_PREVENTIVE_MAPPING: Record<string, PreventiveRiskFactor> = {
+  // Primary Organizational Concerns (Fear-Based Assessment)
+  'data-breach': {
+    id: 'data-breach',
+    name: 'Data Breach Concerns',
+    likelihood: 'likely',
+    impact: 'extreme',
+    likelihoodScore: 3,
+    impactScore: 5
+  },
+  'ransomware': {
+    id: 'ransomware',
+    name: 'Ransomware Attacks',
+    likelihood: 'very-likely',
+    impact: 'extreme',
+    likelihoodScore: 4,
+    impactScore: 5
+  },
+  'phishing': {
+    id: 'phishing',
+    name: 'Phishing Attacks',
+    likelihood: 'very-likely',
+    impact: 'major',
+    likelihoodScore: 4,
+    impactScore: 4
+  },
+  'insider-threats': {
+    id: 'insider-threats',
+    name: 'Insider Threats',
+    likelihood: 'unlikely',
+    impact: 'extreme',
+    likelihoodScore: 2,
+    impactScore: 5
+  },
+  'compliance': {
+    id: 'compliance',
+    name: 'Regulatory Compliance Issues',
+    likelihood: 'likely',
+    impact: 'major',
+    likelihoodScore: 3,
+    impactScore: 4
+  },
+  'business-continuity': {
+    id: 'business-continuity',
+    name: 'Business Continuity Disruption',
+    likelihood: 'likely',
+    impact: 'extreme',
+    likelihoodScore: 3,
+    impactScore: 5
+  },
+  'remote-work': {
+    id: 'remote-work',
+    name: 'Remote Work Security',
+    likelihood: 'very-likely',
+    impact: 'major',
+    likelihoodScore: 4,
+    impactScore: 4
+  },
+  'byod': {
+    id: 'byod',
+    name: 'BYOD Security Risks',
+    likelihood: 'very-likely',
+    impact: 'major',
+    likelihoodScore: 4,
+    impactScore: 4
+  },
+  'third-party': {
+    id: 'third-party',
+    name: 'Third-Party/Vendor Risk',
+    likelihood: 'likely',
+    impact: 'major',
+    likelihoodScore: 3,
+    impactScore: 4
+  },
+  'iot': {
+    id: 'iot',
+    name: 'IoT Device Security',
+    likelihood: 'very-likely',
+    impact: 'moderate',
+    likelihoodScore: 4,
+    impactScore: 3
+  },
+
   // Website Security Risks
   'phishing-spoofing-web': {
     id: 'phishing-spoofing-web',
