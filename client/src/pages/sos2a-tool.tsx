@@ -7,11 +7,17 @@ import { differenceInDays, parseISO, formatDistanceToNow } from "date-fns";
 // Import components
 import ReportDisplay from "@/components/sos2a/report-display";
 
-// Import types
+// Import types and scoring functions
 import { 
   Sos2aFormData, 
   AssessmentReport
 } from "@/lib/sos2a-types";
+import { 
+  calculateQualitativeScores,
+  calculateGovernanceMaturity,
+  checkForIncidents,
+  checkArchitecturalData
+} from "@/lib/rasbita-preliminary-scoring";
 
 export default function Sos2aTool() {
   const [step, setStep] = useState<'questionnaire' | 'report'>('questionnaire');
@@ -21,9 +27,21 @@ export default function Sos2aTool() {
   
   const { toast } = useToast();
 
-  // Handle questionnaire submission and generate preliminary report
+  // Generate authentic preliminary report based on RASBITA framework
   const handleQuestionnaireSubmit = (data: Sos2aFormData) => {
-    // Generate preliminary report immediately (qualitative assessment only)
+    // Calculate authentic Pillar 1: Qualitative Assessment (12 parameters)
+    const qualitativeScores = calculateQualitativeScores(data);
+    
+    // Check for incidents to determine if Pillar 3 cost-benefit analysis needed
+    const hasIncidents = checkForIncidents(data);
+    
+    // Calculate Pillar 4: NIST CSF 2.0 Governance maturity
+    const governanceMaturity = calculateGovernanceMaturity(data);
+    
+    // Check for architectural data for Pillar 5
+    const hasArchitecturalData = checkArchitecturalData(data);
+    
+    // Generate authentic preliminary report
     const preliminaryReport: AssessmentReport = {
       id: 'report-' + Date.now(),
       businessId: data.businessName?.replace(/\s+/g, '-').toLowerCase() + '-' + Date.now() || 'business-' + Date.now(),
@@ -31,54 +49,29 @@ export default function Sos2aTool() {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       age: 0,
-      securityScore: 0, // Preliminary qualitative assessment
+      securityScore: qualitativeScores.overallScore,
       businessLocation: data.businessLocation || { city: "Unknown", state: "Unknown", country: "Unknown", zipCode: "" },
       industry: data.industry || "Unknown",
       businessServices: data.businessServices || "Unknown",
       operationModes: data.operationMode || [],
       internetPresence: data.internetPresence || [],
-      findings: [],
-      vulnerabilities: [],
-      recommendations: {
-        immediate: ["Implement foundational security controls", "Establish security policies"],
-        shortTerm: ["Deploy monitoring solutions", "Conduct staff training"],
-        longTerm: ["Develop comprehensive security program", "Prepare for comprehensive assessment"]
-      },
-      frameworkGaps: [],
-      complianceStatus: {
-        percentage: 0,
-        compliant: 0,
-        total: 1,
-        status: "Initial Assessment"
-      },
-      policyDocumentStatus: "Not Assessed",
-      osHardeningStatus: "Not Assessed", 
-      ismsStatus: "Not Assessed",
-      mitreAttackCoverage: 0,
+      findings: generateFindings(data, qualitativeScores),
+      vulnerabilities: identifyVulnerabilities(data, qualitativeScores),
+      recommendations: generateRecommendations(data, qualitativeScores, hasIncidents),
+      frameworkGaps: identifyFrameworkGaps(data),
+      complianceStatus: calculateComplianceStatus(data),
+      policyDocumentStatus: assessPolicyStatus(data),
+      osHardeningStatus: assessOSHardening(data), 
+      ismsStatus: assessISMSStatus(data),
+      mitreAttackCoverage: calculateMITRECoverage(data),
       rasbitaScore: {
-        overall: 0,
-        governance: 0,
-        technical: 0,
-        operational: 0
+        overall: Math.round((qualitativeScores.overallScore + governanceMaturity.overall) / 2),
+        governance: governanceMaturity.governance,
+        technical: qualitativeScores.technical,
+        operational: qualitativeScores.operational
       },
       matrixData: [],
-      scorecard: {
-        overallScore: 0,
-        categories: [
-          { name: "Phishing Screening", score: 0, weight: 8.33 },
-          { name: "Security Awareness", score: 0, weight: 8.33 },
-          { name: "External Footprints", score: 0, weight: 8.33 },
-          { name: "Dark Web", score: 0, weight: 8.33 },
-          { name: "Endpoint Security", score: 0, weight: 8.33 },
-          { name: "Cloud Security", score: 0, weight: 8.33 },
-          { name: "Data Security", score: 0, weight: 8.33 },
-          { name: "Browser Security", score: 0, weight: 8.33 },
-          { name: "Email Protection", score: 0, weight: 8.33 },
-          { name: "Compliances", score: 0, weight: 8.33 },
-          { name: "Regulatory Requirements", score: 0, weight: 8.33 },
-          { name: "Frameworks", score: 0, weight: 8.33 }
-        ]
-      }
+      scorecard: qualitativeScores.scorecard
     };
 
     setReport(preliminaryReport);
@@ -86,7 +79,7 @@ export default function Sos2aTool() {
     
     toast({
       title: "Preliminary Assessment Complete",
-      description: "Your qualitative assessment report has been generated.",
+      description: `RASBITA analysis generated - ${hasIncidents ? 'includes cost-benefit analysis' : 'qualitative assessment focus'}`,
     });
   };
 
