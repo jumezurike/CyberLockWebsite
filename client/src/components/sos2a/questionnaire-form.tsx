@@ -529,7 +529,6 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
   const calculateDeviceRisk = (deviceType: string, ipAddress?: string) => {
     const formValues = form.getValues();
     const organizationSecurityRisks = [
-      ...(formValues.primaryConcerns || []),
       ...(formValues.securityRisks || []),
       ...(formValues.websiteVulnerabilities || []),
       ...(formValues.endDeviceVulnerabilities || [])
