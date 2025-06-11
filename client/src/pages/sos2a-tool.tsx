@@ -6742,6 +6742,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
+                                <SelectItem value="none">None</SelectItem>
                                 <SelectItem value="active-directory">Active Directory</SelectItem>
                                 <SelectItem value="azure-ad">Azure AD</SelectItem>
                                 <SelectItem value="okta">Okta</SelectItem>
@@ -7443,7 +7444,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     </Button>
                     <Button 
                       type="button"
-                      onClick={() => document.querySelector('[value="contact"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                      onClick={() => setActiveTab("contact")}
                     >
                       Next Step
                     </Button>
