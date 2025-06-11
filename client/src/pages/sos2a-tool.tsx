@@ -8212,8 +8212,6 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                       onClick={(e) => {
                         console.log("Submit button clicked");
                         console.log("EULA accepted:", eulaAccepted);
-                        console.log("Form valid:", form.formState.isValid);
-                        console.log("Form errors:", form.formState.errors);
                         
                         if (!eulaAccepted) {
                           e.preventDefault();
@@ -8221,11 +8219,23 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                           return;
                         }
                         
-                        // Force form submission by calling handleSubmit directly
-                        e.preventDefault();
+                        // Get form data and submit directly
                         const formData = form.getValues();
                         console.log("Form data being submitted:", formData);
-                        handleSubmit();
+                        
+                        // Update EULA acceptance and submit
+                        const updatedData = {
+                          ...formData,
+                          eulaAccepted: eulaAccepted
+                        };
+                        
+                        console.log("Calling onSubmit directly");
+                        try {
+                          onSubmit(updatedData);
+                          console.log("Form submission completed");
+                        } catch (error) {
+                          console.error("Form submission error:", error);
+                        }
                       }}
                     >
                       Submit Questionnaire
