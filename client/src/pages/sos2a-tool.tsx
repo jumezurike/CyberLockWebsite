@@ -417,13 +417,7 @@ export default function Sos2aTool() {
               {/* Assessment History Section */}
               <div className="mb-6 border rounded-lg shadow-sm">
                 <div className="bg-primary/10 p-3 border-b flex items-center justify-between">
-                  <div className="flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-primary">
-                      <path d="M12 8v4l3 3"></path>
-                      <circle cx="12" cy="12" r="10"></circle>
-                    </svg>
-                    <h2 className="text-lg font-medium">Assessment History</h2>
-                  </div>
+                  <h2 className="text-lg font-medium">Assessment History</h2>
                   <div className="flex items-center text-sm text-primary font-medium">
                     {filteredAssessments.length} reports
                   </div>
