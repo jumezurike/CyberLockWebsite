@@ -72,6 +72,7 @@ export default function Sos2aTool() {
   const loadSavedAssessments = async () => {
     try {
       const response = await apiRequest("GET", "/api/assessments");
+      console.log("Loaded assessments:", response);
       setSavedAssessments(response);
     } catch (error) {
       console.error("Error loading saved assessments:", error);
