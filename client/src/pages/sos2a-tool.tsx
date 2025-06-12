@@ -137,12 +137,21 @@ export default function Sos2aTool() {
     const matchesName = !searchCompanyName || 
       assessment.businessName?.toLowerCase().includes(searchCompanyName.toLowerCase());
     
-    const assessmentDate = new Date(assessment.createdAt);
-    const fromDate = searchFromDate ? new Date(searchFromDate) : null;
-    const toDate = searchToDate ? new Date(searchToDate) : null;
-    
-    const matchesDate = (!fromDate || assessmentDate >= fromDate) && 
-                       (!toDate || assessmentDate <= toDate);
+    // Handle date filtering more robustly
+    let matchesDate = true;
+    if (searchFromDate || searchToDate) {
+      if (assessment.createdAt) {
+        const assessmentDate = new Date(assessment.createdAt);
+        const fromDate = searchFromDate ? new Date(searchFromDate) : null;
+        const toDate = searchToDate ? new Date(searchToDate) : null;
+        
+        matchesDate = (!fromDate || assessmentDate >= fromDate) && 
+                     (!toDate || assessmentDate <= toDate);
+      } else {
+        // If no createdAt date and date filters are applied, exclude from results
+        matchesDate = false;
+      }
+    }
     
     return matchesName && matchesDate;
   });
