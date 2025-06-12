@@ -207,25 +207,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       setCurrentTab(tabOrder[currentIndex - 1]);
     }
   };
-
-  // Form submission handler
-  const handleSubmit = form.handleSubmit((data: Sos2aFormData) => {
-    try {
-      console.log("Form submitted with data:", data);
-      onSubmit(data);
-      toast({
-        title: "Form Submitted Successfully",
-        description: "Your assessment questionnaire has been submitted for review.",
-      });
-    } catch (error) {
-      console.error("Form submission error:", error);
-      toast({
-        title: "Submission Error",
-        description: "Failed to submit form. Please try again.",
-        variant: "destructive",
-      });
-    }
-  });
   
   // Independent device inventory state
   const [deviceInventory, setDeviceInventory] = useState<any[]>([]);
@@ -743,8 +724,29 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
       eulaAccepted: false,
     },
   });
-  
 
+  // Form submission handler - placed after form definition
+  const handleSubmit = form.handleSubmit((data: Sos2aFormData) => {
+    try {
+      console.log("Form submitted with data:", data);
+      const updatedData = {
+        ...data,
+        eulaAccepted: eulaAccepted
+      };
+      onSubmit(updatedData);
+      toast({
+        title: "Form Submitted Successfully",
+        description: "Your assessment questionnaire has been submitted for review.",
+      });
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Submission Error",
+        description: "Failed to submit form. Please try again.",
+        variant: "destructive",
+      });
+    }
+  });
   
   const operationModes = [
     { id: "isp-modem", label: "ISP Modem" },
@@ -7851,21 +7853,21 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                               "None selected"}</div>
                               
                           <div className="font-medium">Security Risks:</div>
-                          <div>{form.getValues("securityRisks")?.length > 0 ? 
-                              form.getValues("securityRisks").join(", ") : 
+                          <div>{safeArray(form.getValues("securityRisks")).length > 0 ? 
+                              safeArray(form.getValues("securityRisks")).join(", ") : 
                               "None selected"}</div>
                               
                           <div className="font-medium">Website Vulnerabilities:</div>
-                          <div>{form.getValues("websiteVulnerabilities")?.length > 0 ? 
-                              form.getValues("websiteVulnerabilities").map(vulnId => {
+                          <div>{safeArray(form.getValues("websiteVulnerabilities")).length > 0 ? 
+                              safeArray(form.getValues("websiteVulnerabilities")).map(vulnId => {
                                 const vuln = websiteVulnerabilityOptions.find(v => v.id === vulnId);
                                 return vuln ? vuln.label : vulnId;
                               }).join(", ") : 
                               "None identified"}</div>
                               
                           <div className="font-medium">End Device Vulnerabilities:</div>
-                          <div>{form.getValues("endDeviceVulnerabilities")?.length > 0 ? 
-                              form.getValues("endDeviceVulnerabilities").map(vulnId => {
+                          <div>{safeArray(form.getValues("endDeviceVulnerabilities")).length > 0 ? 
+                              safeArray(form.getValues("endDeviceVulnerabilities")).map(vulnId => {
                                 const vuln = endDeviceVulnerabilityOptions.find(v => v.id === vulnId);
                                 return vuln ? vuln.label : vulnId;
                               }).join(", ") : 
