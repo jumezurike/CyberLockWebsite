@@ -1096,7 +1096,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
               </TabsList>
 
               {/* 13. Identity Behavior & Hygiene Tab */}
-              <Section13Content form={form} />
+              {/* Temporary placeholder - removing duplicate */}
               
               {/* Business Information Tab */}
               <TabsContent value="business" className="space-y-6">
