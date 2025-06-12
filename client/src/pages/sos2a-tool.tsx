@@ -6,7 +6,7 @@ import { differenceInDays, parseISO, formatDistanceToNow } from "date-fns";
 
 // Import components
 import ReportDisplay from "@/components/sos2a/report-display";
-import QuestionnaireForm from "@/components/sos2a/questionnaire-form-current";
+import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
 
 // Import types and scoring functions
 import { 
