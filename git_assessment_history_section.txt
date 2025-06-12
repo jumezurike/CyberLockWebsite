@@ -1,0 +1,60 @@
+EXACT ASSESSMENT HISTORY SECTION FROM GIT REPOSITORY
+Commit: d0eb393
+File: client/src/pages/sos2a-tool.tsx
+
+{/* Assessment History Section */}
+<div className="mb-6 border rounded-lg shadow-sm">
+  <div className="bg-primary/10 p-3 border-b flex items-center justify-between">
+    <h2 className="text-lg font-medium">Assessment History</h2>
+    <div className="flex items-center text-sm text-primary font-medium">
+      {filteredAssessments.length} reports
+    </div>
+  </div>
+  
+  <div className="p-4">
+    <div className="space-y-4">
+      <div>
+        <Label className="text-sm font-medium mb-2 block">Select a saved assessment to view</Label>
+        <Select value={selectedAssessmentId} onValueChange={setSelectedAssessmentId}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Load a saved assessment" />
+          </SelectTrigger>
+          <SelectContent>
+            {filteredAssessments.map((assessment) => (
+              <SelectItem key={assessment.id} value={assessment.id.toString()}>
+                {assessment.businessName} - {assessment.industry} ({assessment.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'})
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      
+      <div className="flex gap-3">
+        <Button 
+          onClick={() => selectedAssessmentId && loadAssessmentReport(selectedAssessmentId)}
+          disabled={!selectedAssessmentId || isLoading}
+          className="bg-green-600 hover:bg-green-700 text-white"
+        >
+          Load Report
+        </Button>
+        <Button 
+          onClick={() => {
+            setStep('questionnaire');
+            setFormData({} as any);
+            setSelectedAssessmentId("");
+          }}
+          className="bg-purple-600 hover:bg-purple-700 text-white"
+        >
+          Start New
+        </Button>
+      </div>
+    </div>
+  </div>
+</div>
+
+KEY DIFFERENCES FROM CURRENT IMPLEMENTATION:
+1. NO clock icon in header
+2. Simple layout: title on left, report count on right
+3. Green "Load Report" button, purple "Start New" button
+4. Placeholder text: "Load a saved assessment"
+5. Clean spacing with bg-primary/10 header background
