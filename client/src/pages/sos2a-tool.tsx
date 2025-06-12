@@ -457,23 +457,11 @@ export default function Sos2aTool() {
                       </Button>
                       <Button 
                         onClick={() => {
-                          if (selectedAssessmentId && confirm('Are you sure you want to delete this assessment?')) {
-                            // Delete functionality - will need to implement the deleteAssessment function
-                            console.log('Delete assessment:', selectedAssessmentId);
-                          }
-                        }}
-                        disabled={!selectedAssessmentId || isLoading}
-                        className="bg-red-600 hover:bg-red-700 text-white"
-                      >
-                        Delete
-                      </Button>
-                      <Button 
-                        onClick={() => {
                           setStep('questionnaire');
                           setFormData({} as any);
                           setSelectedAssessmentId("");
                         }}
-                        className="bg-green-600 hover:bg-green-700 text-white"
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
                       >
                         Start New
                       </Button>
