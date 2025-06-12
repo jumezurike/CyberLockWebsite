@@ -374,6 +374,7 @@ export default function Sos2aTool() {
                         value={searchFromDate}
                         onChange={(e) => setSearchFromDate(e.target.value)}
                         className="w-full"
+                        placeholder="mm/dd/yyyy"
                       />
                     </div>
                     
@@ -384,8 +385,33 @@ export default function Sos2aTool() {
                         value={searchToDate}
                         onChange={(e) => setSearchToDate(e.target.value)}
                         className="w-full"
+                        placeholder="mm/dd/yyyy"
                       />
                     </div>
+                  </div>
+                  
+                  <div className="flex justify-end gap-2">
+                    <Button 
+                      variant="outline"
+                      onClick={() => {
+                        setSearchCompanyName("");
+                        setSearchFromDate("");
+                        setSearchToDate("");
+                      }}
+                      className="text-sm"
+                    >
+                      Clear
+                    </Button>
+                    <Button 
+                      onClick={() => {
+                        // Search functionality is automatic via filteredAssessments
+                        // This button can trigger a manual refresh if needed
+                        loadSavedAssessments();
+                      }}
+                      className="bg-purple-600 hover:bg-purple-700 text-white text-sm"
+                    >
+                      Search
+                    </Button>
                   </div>
                 </div>
               </div>
