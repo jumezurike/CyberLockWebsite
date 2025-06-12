@@ -1,0 +1,345 @@
+Healthcare Organizational and System Security Analysis (HOS²A)
+Search Assessments
+Company Name
+Enter company name
+From Date
+
+mm/dd/yyyy
+To Date
+
+mm/dd/yyyy
+Clear
+Search
+Assessment History
+4 reports
+Select a saved assessment to view
+
+Load a saved assessment
+Load Report
+Start New
+Assessment Progress
+1. Inquiry & Questionnaire
+2. Interview & Matrix Population
+3. Gap Analysis
+4. Preliminary Report
+SOS²A Assessment Progress
+Step 5 of 9
+Inquiry
+Interview
+Matrix
+RASBITA
+RASBITA
+Gap
+7
+Architecture
+8
+Preliminary
+9
+Comprehensive
+Current Phase: RASBITA Score - Cost-Benefit Analysis
+Next: Gap Analysis - Security Parameters
+1. Business Info
+2. Infrastructure Mode
+3. Security Risks & Vulnerabilities
+4. Baseline Config
+5. Security Control vs Framework
+6. Compliance Requirements
+7. Regulatory Requirements
+8. Standards & Guidelines
+9. Relevant ACQ Tools
+10. Adversarial Insight (MITRE ATT&CK)
+11. Information Security Management System (ISMS)
+12. Device Inventory Tracking
+13. Identity Behavior & Hygiene
+14. Contact Confirmation
+15. Review & Submit Your Questionnaire
+
+12. Device Inventory Tracking
+Track and manage your organization's devices to improve security visibility and control.
+
+Device Inventory
+Add Device
+Filter Devices
+Filter Tool
+Select a device type to filter the inventory list below
+
+
+All Types
+
+Device ID/Asset Tag	Make/Model	Color/Physical Description	Serial Number	Location/Department	Owner/Responsible Party	Purchase Date	Warranty Expiration	Operating System	Software Installed	IP Address	MAC Address	Security Software	Encryption Status	Last Security Update	Compliance Status	Risk Level	Data Classification	Network Access	Remote Access Capability	Backup Status	Monitoring Status	Incident History	Maintenance Schedule	Disposal Method	Handling Company	Data Sanitization Method	Disposal Date	Disposal Certification
+No devices added yet. Click "Add Device" to begin tracking comprehensive device information.
+No devices in inventory. Click "Add Device" to get started.
+
+Import Device Inventory
+Use these options to import existing device inventory data or download a template.
+
+Import CSV
+Download Template
+1. Identification
+Device ID / Asset Tag
+Enter device ID or asset tag
+Make / Model
+Enter device make and model
+Serial Number
+Enter device serial number
+User/Owner
+Select device owner/user
+
+First Name
+Enter first name
+Last Name
+Enter last name
+Role
+Select user role
+
+Contact: Email
+Enter email address
+Contact: Phone Number
+Enter phone number
+Device Nickname or Label (if used)
+Enter device nickname or label
+Color/Physical Description
+e.g., Black Dell laptop, Silver iPhone
+Location/Department
+e.g., IT Department, Building A Floor 3
+Purchase Date
+mm/dd/yyyy
+Warranty Expiration
+mm/dd/yyyy
+Software Installed
+List major software applications installed
+2. Classification
+Device Type
+Select all that apply
+
+
+Laptop
+
+Desktop
+
+Server
+
+Mobile Device
+
+Tablet
+
+Printer
+
+Scanner
+
+Router
+
+Switch
+
+Firewall
+
+NAS
+
+SAN
+
+Internet Gateway
+
+IoT Device
+
+Security Camera
+
+VoIP Phone
+
+External Storage
+
+Smartwatch
+
+Transportation Device
+
+Other
+Endpoint Category
+Select all that apply
+
+
+User Device
+
+Shared Asset
+
+Infrastructure Device
+
+Monitoring System
+
+Security Device
+Operating System & Version
+Enter OS and version (e.g., Windows 11, macOS 14.1)
+Browser(s) Installed + Engine
+Select all that apply
+
+
+Chrome (Chromium)
+
+Firefox (Gecko)
+
+Safari (WebKit)
+
+Edge (Chromium)
+
+Opera (Chromium)
+
+Brave (Chromium)
+
+Internet Explorer (Trident)
+3. Network & Location
+IP Address(es)
+Enter IP address(es)
+MAC Address
+Enter MAC address
+Last Known Location
+Enter location (Office/Room/Geotag)
+Assigned Department / Business Unit
+Enter department or business unit
+Environment
+Select environment
+
+Network Zone
+Select all that apply
+
+
+DMZ
+
+Internal
+
+Guest
+
+Management
+
+Secured/Isolated
+
+IoT Network
+
+VPN
+4. Security Posture
+Encryption Status
+Select all that apply
+
+
+Full Disk Encryption
+
+File-Level Encryption
+
+Removable Media Encryption
+
+No Encryption
+
+Partial Encryption
+
+Unknown
+
+Antivirus / EDR Installed?
+Check if antivirus or endpoint detection and response is installed
+
+
+Firewall Active?
+Check if device firewall is active
+
+
+TPM Present?
+Check if Trusted Platform Module is present
+
+Automatic Device Risk Assessment
+Risk Score (Based on Section #3 Security Risks):
+
+0/100
+Very Low
+This score is automatically calculated based on your organization's security risks from Section #3 and the device type selected above.
+
+Patch Status (OS, App, Firmware)
+Select patch status
+
+
+VPN Usage / MDM Enrollment?
+Check if device uses VPN or is enrolled in Mobile Device Management
+
+Security Compliance Level
+Select all that apply
+
+
+HIPAA
+
+CMMC
+
+ISO 27001
+
+NIST 800-171
+
+SOC 2
+
+PCI DSS
+
+GDPR
+
+FISMA
+
+None
+5. Lifecycle Management
+Disposal/Decommission Location
+Select disposal location
+
+Handling Company/Organization
+Enter specific company name (e.g., Each1Teach1 Tech)
+Enter the specific company handling the disposal/recycling
+
+Data Sanitization Method
+Select data sanitization method
+
+6. Usage & Monitoring
+Last Login Date
+mm/dd/yyyy
+Last Network Check-in
+mm/dd/yyyy
+Device Activity / Status
+Select device status
+
+Device Risk Score
+Auto-calculated from Section #3 security risks. Override with SIEM/EDR data if available.
+
+Calculated Score:
+0/100
+Use Calculated
+Auto-calculated: 0 (override if needed)
+📋
+7. Lifecycle & Ownership
+Maintenance
+Track procurement, warranty, and management details
+
+Procurement Date / Vendor
+Enter procurement date and vendor
+Warranty Expiration
+mm/dd/yyyy
+Device Lifecycle Status
+Select lifecycle status
+
+Disposal/Decommission Location
+Where device was sent if disposed
+Handling Company/Organization
+Enter specific company name (e.g., Each1Teach1 Tech)
+Enter the specific company handling the disposal/recycling
+
+Data Sanitization Method
+How data was removed/destroyed
+Assigned Policies or Group Tags
+Select all that apply
+
+
+Finance Only
+
+Executive
+
+IT Admin
+
+Developer
+
+Guest Access
+
+Restricted Access
+
+BYOD
+
+Remote Worker
+
+Standard User
