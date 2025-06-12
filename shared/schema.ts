@@ -27,6 +27,10 @@ export const assessments = pgTable("assessments", {
   matrixData: jsonb("matrix_data"),
   findings: jsonb("findings"),
   recommendations: jsonb("recommendations"),
+  status: text("status").default("draft"),
+  reportData: jsonb("report_data"),
+  completedAt: timestamp("completed_at"),
+  riskScore: integer("risk_score"),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

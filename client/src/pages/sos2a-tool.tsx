@@ -133,7 +133,7 @@ export default function Sos2aTool() {
   };
 
   // Filter assessments based on search criteria
-  const filteredAssessments = savedAssessments.filter(assessment => {
+  const filteredAssessments = (savedAssessments || []).filter(assessment => {
     const matchesName = !searchCompanyName || 
       assessment.businessName?.toLowerCase().includes(searchCompanyName.toLowerCase());
     
