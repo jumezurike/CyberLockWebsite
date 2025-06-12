@@ -390,108 +390,59 @@ export default function Sos2aTool() {
                 </div>
               </div>
               
-              {/* Saved Assessments Section */}
+              {/* Assessment History Section */}
               <div className="mb-6 border rounded-lg shadow-sm">
-                <div className="bg-primary/10 p-3 border-b flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-primary">
-                    <path d="M12 8v4l3 3"></path>
-                    <circle cx="12" cy="12" r="10"></circle>
-                  </svg>
-                  <h2 className="text-lg font-medium">Assessment History</h2>
+                <div className="bg-primary/10 p-3 border-b flex items-center justify-between">
+                  <div className="flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-primary">
+                      <path d="M12 8v4l3 3"></path>
+                      <circle cx="12" cy="12" r="10"></circle>
+                    </svg>
+                    <h2 className="text-lg font-medium">Assessment History</h2>
+                  </div>
+                  <div className="flex items-center text-sm text-primary font-medium">
+                    {filteredAssessments.length} reports
+                  </div>
                 </div>
                 
                 <div className="p-4">
-                  {isLoading ? (
-                    <div className="text-center py-8">
-                      <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto mb-4"></div>
-                      <p className="text-gray-600">Loading assessments...</p>
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="text-sm font-medium mb-2 block">Select a saved assessment to view</Label>
+                      <Select value={selectedAssessmentId} onValueChange={setSelectedAssessmentId}>
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Load a saved assessment" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {filteredAssessments.map((assessment) => (
+                            <SelectItem key={assessment.id} value={assessment.id.toString()}>
+                              {assessment.businessName} - {assessment.industry} ({assessment.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'})
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
-                  ) : filteredAssessments.length > 0 ? (
-                    <div className="space-y-3">
-                      {filteredAssessments.map((assessment) => (
-                        <div key={assessment.id} className="border rounded-lg p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-                          <div className="flex justify-between items-start">
-                            <div className="flex-1">
-                              <h3 className="font-semibold text-lg text-gray-900">{assessment.businessName}</h3>
-                              <div className="text-sm text-gray-600 mt-1">
-                                <p><span className="font-medium">Industry:</span> {assessment.industry}</p>
-                                <p><span className="font-medium">Type:</span> {assessment.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'} Report</p>
-                                <p><span className="font-medium">Created:</span> {formatDistanceToNow(new Date(assessment.createdAt), { addSuffix: true })}</p>
-                                {assessment.completedAt && (
-                                  <p><span className="font-medium">Completed:</span> {formatDistanceToNow(new Date(assessment.completedAt), { addSuffix: true })}</p>
-                                )}
-                              </div>
-                            </div>
-                            
-                            <div className="flex gap-2 ml-4">
-                              {assessment.status === 'completed' ? (
-                                <Button 
-                                  onClick={() => loadAssessmentReport(assessment.id)}
-                                  className="bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1"
-                                  disabled={isLoading}
-                                >
-                                  Load Report
-                                </Button>
-                              ) : (
-                                <Button 
-                                  onClick={() => continueAssessment(assessment.id)}
-                                  variant="outline"
-                                  className="text-sm px-3 py-1"
-                                  disabled={isLoading}
-                                >
-                                  Continue
-                                </Button>
-                              )}
-                            </div>
-                          </div>
-                          
-                          <div className="mt-3 flex items-center">
-                            <div className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
-                              assessment.status === 'completed' 
-                                ? 'bg-green-100 text-green-800' 
-                                : assessment.status === 'in-progress'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : 'bg-gray-100 text-gray-800'
-                            }`}>
-                              {assessment.status === 'completed' ? 'Completed' : 
-                               assessment.status === 'in-progress' ? 'In Progress' : 
-                               'Draft'}
-                            </div>
-                            
-                            {assessment.riskScore && (
-                              <div className="ml-3 text-sm">
-                                <span className="font-medium">Risk Score:</span> 
-                                <span className={`ml-1 font-semibold ${
-                                  assessment.riskScore >= 80 ? 'text-red-600' :
-                                  assessment.riskScore >= 60 ? 'text-yellow-600' :
-                                  'text-green-600'
-                                }`}>
-                                  {assessment.riskScore}%
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                    
+                    <div className="flex gap-3">
+                      <Button 
+                        onClick={() => selectedAssessmentId && loadAssessmentReport(selectedAssessmentId)}
+                        disabled={!selectedAssessmentId || isLoading}
+                        className="bg-green-600 hover:bg-green-700 text-white"
+                      >
+                        Load Report
+                      </Button>
+                      <Button 
+                        onClick={() => {
+                          setStep('questionnaire');
+                          setFormData({} as any);
+                          setSelectedAssessmentId("");
+                        }}
+                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                      >
+                        Start New
+                      </Button>
                     </div>
-                  ) : (
-                    <div className="text-center py-8">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="mx-auto mb-4 text-gray-400">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                        <polyline points="14,2 14,8 20,8"></polyline>
-                        <line x1="16" y1="13" x2="8" y2="13"></line>
-                        <line x1="16" y1="17" x2="8" y2="17"></line>
-                        <polyline points="10,9 9,9 8,9"></polyline>
-                      </svg>
-                      <p className="text-gray-600 mb-2">No assessments found</p>
-                      <p className="text-sm text-gray-500">
-                        {searchCompanyName || searchFromDate || searchToDate 
-                          ? "Try adjusting your search criteria"
-                          : "Start a new assessment below"
-                        }
-                      </p>
-                    </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </>
