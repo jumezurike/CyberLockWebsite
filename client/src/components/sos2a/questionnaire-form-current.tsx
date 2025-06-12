@@ -3580,7 +3580,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage your organization's devices to improve security visibility and control.
                   </p>
                   
-                  {/* Device Inventory Table Section */}
+                  {/* Device Inventory Header with Filter and Add Device */}
                   <div className="border rounded-md p-4 mb-6">
                     <div className="flex items-center justify-between mb-4">
                       <h4 className="font-medium">Device Inventory</h4>
@@ -3605,6 +3605,11 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem value="all">All Types</SelectItem>
+                            <SelectItem value="workstation">Workstation</SelectItem>
+                            <SelectItem value="server">Server</SelectItem>
+                            <SelectItem value="mobile">Mobile Device</SelectItem>
+                            <SelectItem value="network">Network Device</SelectItem>
+                            <SelectItem value="iot">IoT Device</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -3615,42 +3620,17 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <table className="w-full text-xs">
                           <thead className="bg-gray-100">
                             <tr>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Device ID/Asset Tag</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Device Type</th>
                               <th className="p-2 text-left font-medium min-w-[120px]">Make/Model</th>
-                              <th className="p-2 text-left font-medium min-w-[150px]">Color/Physical Description</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Serial Number</th>
-                              <th className="p-2 text-left font-medium min-w-[150px]">Location/Department</th>
-                              <th className="p-2 text-left font-medium min-w-[150px]">Owner/Responsible Party</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Purchase Date</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Warranty Expiration</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Operating System</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Software Installed</th>
-                              <th className="p-2 text-left font-medium min-w-[100px]">IP Address</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">MAC Address</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Security Software</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Encryption Status</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Last Security Update</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Compliance Status</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Serial/Asset #</th>
                               <th className="p-2 text-left font-medium min-w-[100px]">Risk Level</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Data Classification</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Network Access</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Remote Access Capability</th>
-                              <th className="p-2 text-left font-medium min-w-[100px]">Backup Status</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Monitoring Status</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Incident History</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Maintenance Schedule</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Disposal Method</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Handling Company</th>
-                              <th className="p-2 text-left font-medium min-w-[120px]">Data Sanitization Method</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Owner</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr>
-                              <td colSpan={27} className="p-8 text-center text-gray-500">
-                                <div className="space-y-2">
-                                  <div>No devices added yet. Click "Add Device" to begin tracking comprehensive device information.</div>
-                                  <div className="text-sm">No devices in inventory. Click "Add Device" to get started.</div>
-                                </div>
+                              <td colSpan={5} className="p-6 text-center text-gray-500">
+                                No devices added yet. Click "Add Device" to begin tracking devices.
                               </td>
                             </tr>
                           </tbody>
