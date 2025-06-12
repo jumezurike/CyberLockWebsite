@@ -1,0 +1,67 @@
+CORRECT ASSESSMENT HISTORY SECTION WITH CLOCK ICON
+From Git Commit: c91bd99
+File: client/src/pages/sos2a-tool.tsx
+
+{/* Assessment History Section */}
+<div className="mb-6 border rounded-lg shadow-sm">
+  <div className="bg-primary/10 p-3 border-b flex items-center justify-between">
+    <div className="flex items-center">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-primary">
+        <path d="M12 8v4l3 3"></path>
+        <circle cx="12" cy="12" r="10"></circle>
+      </svg>
+      <h2 className="text-lg font-medium">Assessment History</h2>
+    </div>
+    <div className="flex items-center text-sm text-primary font-medium">
+      {filteredAssessments.length} reports
+    </div>
+  </div>
+  
+  <div className="p-4">
+    <div className="space-y-4">
+      <div>
+        <Label className="text-sm font-medium mb-2 block">Select a saved assessment to view</Label>
+        <Select value={selectedAssessmentId} onValueChange={setSelectedAssessmentId}>
+          <SelectTrigger className="w-full">
+            <SelectValue placeholder="Load a saved assessment" />
+          </SelectTrigger>
+          <SelectContent>
+            {filteredAssessments.map((assessment) => (
+              <SelectItem key={assessment.id} value={assessment.id.toString()}>
+                {assessment.businessName} - {assessment.industry} ({assessment.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'})
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      
+      <div className="flex gap-3">
+        <Button 
+          onClick={() => selectedAssessmentId && loadAssessmentReport(selectedAssessmentId)}
+          disabled={!selectedAssessmentId || isLoading}
+          className="bg-green-600 hover:bg-green-700 text-white"
+        >
+          Load Report
+        </Button>
+        <Button 
+          onClick={() => {
+            setStep('questionnaire');
+            setFormData({} as any);
+            setSelectedAssessmentId("");
+          }}
+          className="bg-purple-600 hover:bg-purple-700 text-white"
+        >
+          Start New
+        </Button>
+      </div>
+    </div>
+  </div>
+</div>
+
+COMMIT DETAILS:
+- Commit: c91bd99
+- Message: "Restore assessment history interface to match the preferred production version"
+- This version INCLUDES the clock icon (SVG with clock hands and circle)
+- Clock icon positioned before "Assessment History" title
+- Layout: Clock + title on left, report count on right
+- Green "Load Report" and purple "Start New" buttons
