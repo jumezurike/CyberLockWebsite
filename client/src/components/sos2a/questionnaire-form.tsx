@@ -1428,7 +1428,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
     { id: 4, title: "RASBITA-RGM", description: "Risk Governance & Management", isCore: true, requiresMonitoring: false },
     { id: 5, title: "Gap Analysis", description: "Identifying Missing Controls from Sections 2-13", isCore: true, requiresMonitoring: false },
     { id: 6, title: "Preliminary Report", description: "Qualitative Expert Opinion Analysis", isCore: true, requiresMonitoring: false },
-    { id: 7, title: "Architecture Threat Modeling", description: "Deep STRIDE Analysis (if architecture data available)", isCore: false, requiresMonitoring: false },
+    { id: 7, title: "Architecture TM", description: "Deep STRIDE Analysis (if architecture data available)", isCore: false, requiresMonitoring: false },
     { id: 8, title: "RASBITA-CBF", description: "Cost-Benefit Financial Analysis (if incident/financial data available)", isCore: false, requiresMonitoring: false },
     { id: 9, title: "Comprehensive Report", description: "Enhanced Analysis with Extended Monitoring Data", isCore: false, requiresMonitoring: true }
   ];
@@ -1489,7 +1489,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
           {currentStep >= 6 && (
             <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
               <CheckCircle className="h-4 w-4 inline mr-1" />
-              <strong>Preliminary Report Ready:</strong> Core assessment complete. Architecture Threat Modeling and RASBITA-CBF will be included if data is available.
+              <strong>Preliminary Report Ready:</strong> Core assessment complete. Architecture TM and RASBITA-CBF will be included if data is available.
             </div>
           )}
           
