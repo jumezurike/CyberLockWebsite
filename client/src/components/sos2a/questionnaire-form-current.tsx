@@ -3580,6 +3580,105 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage your organization's devices to improve security visibility and control.
                   </p>
                   
+                  {/* Device Inventory Table Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="font-medium">Device Inventory</h4>
+                      <Button 
+                        size="sm"
+                        className="bg-purple-600 hover:bg-purple-700"
+                      >
+                        Add Device
+                      </Button>
+                    </div>
+                    
+                    <div className="mb-4 border-2 border-blue-200 p-4 rounded-md bg-blue-50">
+                      <div className="flex items-center mb-2">
+                        <h5 className="text-sm font-medium text-blue-800">Filter Devices</h5>
+                        <div className="ml-2 px-2 py-0.5 text-xs bg-blue-600 text-white rounded-full">Filter Tool</div>
+                      </div>
+                      <p className="text-xs text-blue-700 mb-3">Select a device type to filter the inventory list below</p>
+                      <div className="bg-white p-2 rounded border border-blue-200">
+                        <Select defaultValue="all">
+                          <SelectTrigger className="w-[200px] bg-white border-blue-300 focus:ring-blue-500">
+                            <SelectValue placeholder="All Types" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="all">All Types</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    
+                    <div className="rounded-md border overflow-hidden mb-6">
+                      <div className="overflow-x-auto">
+                        <table className="w-full text-xs">
+                          <thead className="bg-gray-100">
+                            <tr>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Device ID/Asset Tag</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Make/Model</th>
+                              <th className="p-2 text-left font-medium min-w-[150px]">Color/Physical Description</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Serial Number</th>
+                              <th className="p-2 text-left font-medium min-w-[150px]">Location/Department</th>
+                              <th className="p-2 text-left font-medium min-w-[150px]">Owner/Responsible Party</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Purchase Date</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Warranty Expiration</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Operating System</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Software Installed</th>
+                              <th className="p-2 text-left font-medium min-w-[100px]">IP Address</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">MAC Address</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Security Software</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Encryption Status</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Last Security Update</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Compliance Status</th>
+                              <th className="p-2 text-left font-medium min-w-[100px]">Risk Level</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Data Classification</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Network Access</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Remote Access Capability</th>
+                              <th className="p-2 text-left font-medium min-w-[100px]">Backup Status</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Monitoring Status</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Incident History</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Maintenance Schedule</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Disposal Method</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Handling Company</th>
+                              <th className="p-2 text-left font-medium min-w-[120px]">Data Sanitization Method</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td colSpan={27} className="p-8 text-center text-gray-500">
+                                <div className="space-y-2">
+                                  <div>No devices added yet. Click "Add Device" to begin tracking comprehensive device information.</div>
+                                  <div className="text-sm">No devices in inventory. Click "Add Device" to get started.</div>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    
+                    <div className="border rounded-md p-4 bg-gray-50">
+                      <h5 className="text-sm font-medium mb-2">Import Device Inventory</h5>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        Use these options to import existing device inventory data or download a template.
+                      </p>
+                      <div className="flex gap-3 w-full">
+                        <Button 
+                          className="bg-purple-600 hover:bg-purple-700 text-white flex-1"
+                        >
+                          Import CSV
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          className="border-gray-300 flex-1"
+                        >
+                          Download Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  
                   {/* 1. Identification Section */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
