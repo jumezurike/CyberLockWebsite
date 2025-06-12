@@ -72,8 +72,9 @@ export default function Sos2aTool() {
   const loadSavedAssessments = async () => {
     try {
       const response = await apiRequest("GET", "/api/assessments");
-      console.log("Loaded assessments:", response);
-      setSavedAssessments(response);
+      const data = await response.json();
+      console.log("Loaded assessments:", data);
+      setSavedAssessments(data);
     } catch (error) {
       console.error("Error loading saved assessments:", error);
     }
@@ -84,9 +85,10 @@ export default function Sos2aTool() {
     try {
       setIsLoading(true);
       const response = await apiRequest("GET", `/api/assessments/${assessmentId}/report`);
+      const data = await response.json();
       
-      if (response) {
-        setReport(response);
+      if (data) {
+        setReport(data);
         setStep('report');
         
         toast({
@@ -111,9 +113,10 @@ export default function Sos2aTool() {
     try {
       setIsLoading(true);
       const response = await apiRequest("GET", `/api/assessments/${assessmentId}`);
+      const data = await response.json();
       
-      if (response) {
-        setFormData(response);
+      if (data) {
+        setFormData(data);
         setStep('matrix');
         
         toast({
