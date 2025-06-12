@@ -416,46 +416,64 @@ export default function Sos2aTool() {
               
               {/* Assessment History Section */}
               <div className="mb-6 border rounded-lg shadow-sm">
-                <div className="bg-primary/10 p-3 border-b flex items-center justify-between">
+                <div className="bg-primary/10 p-3 border-b flex items-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-primary">
+                    <path d="M12 8v4l3 3"></path>
+                    <circle cx="12" cy="12" r="10"></circle>
+                  </svg>
                   <h2 className="text-lg font-medium">Assessment History</h2>
-                  <div className="flex items-center text-sm text-primary font-medium">
-                    {filteredAssessments.length} reports
-                  </div>
+                  {filteredAssessments.length > 0 && (
+                    <span className="ml-2 px-2 py-0.5 bg-primary/20 text-primary text-xs rounded-full">
+                      {filteredAssessments.length} {filteredAssessments.length === 1 ? 'report' : 'reports'}
+                    </span>
+                  )}
                 </div>
                 
                 <div className="p-4">
-                  <div className="space-y-4">
-                    <div>
-                      <Label className="text-sm font-medium mb-2 block">Select a saved assessment to view</Label>
-                      <Select value={selectedAssessmentId} onValueChange={setSelectedAssessmentId}>
+                  <div className="flex items-center justify-between gap-4 flex-col md:flex-row">
+                    <div className="w-full md:flex-1">
+                      <label className="text-sm font-medium mb-1 block">
+                        Select a saved assessment to view
+                      </label>
+                      <Select 
+                        value={selectedAssessmentId} 
+                        onValueChange={(value) => setSelectedAssessmentId(value)}
+                        disabled={isLoading}
+                      >
                         <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Load a saved assessment" />
+                          <SelectValue placeholder={filteredAssessments.length > 0 ? "Load a saved assessment" : "No saved assessments found"} />
                         </SelectTrigger>
                         <SelectContent>
-                          {filteredAssessments.map((assessment) => (
-                            <SelectItem key={assessment.id} value={assessment.id.toString()}>
-                              {assessment.businessName} - {assessment.industry} ({assessment.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'})
-                            </SelectItem>
-                          ))}
+                          {filteredAssessments.length === 0 ? (
+                            <div className="p-2 text-center text-muted-foreground text-sm">
+                              No saved assessments found
+                            </div>
+                          ) : (
+                            filteredAssessments.map((assessment) => (
+                              <SelectItem key={assessment.id} value={assessment.id.toString()}>
+                                {assessment.businessName} - {assessment.industry} ({assessment.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'})
+                              </SelectItem>
+                            ))
+                          )}
                         </SelectContent>
                       </Select>
                     </div>
                     
-                    <div className="flex gap-3">
+                    <div className="flex gap-2 w-full md:w-auto">
                       <Button 
                         onClick={() => selectedAssessmentId && loadAssessmentReport(selectedAssessmentId)}
                         disabled={!selectedAssessmentId || isLoading}
-                        className="bg-green-600 hover:bg-green-700 text-white"
+                        className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-none"
                       >
-                        Load Report
+                        {isLoading ? "Loading..." : "Load Report"}
                       </Button>
                       <Button 
                         onClick={() => {
                           setStep('questionnaire');
-                          setFormData({} as any);
+                          setFormData(null);
                           setSelectedAssessmentId("");
                         }}
-                        className="bg-purple-600 hover:bg-purple-700 text-white"
+                        className="bg-purple-600 hover:bg-purple-700 text-white flex-1 md:flex-none"
                       >
                         Start New
                       </Button>
