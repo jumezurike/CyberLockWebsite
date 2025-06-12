@@ -1331,6 +1331,15 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
     { id: "hp-ux-11i-v3", label: "HP-UX 11i v3", category: "Unix-Based OS" },
     { id: "other-unix", label: "Other Unix OS", category: "Unix-Based OS" },
     
+    // macOS
+    { id: "macos-ventura-13", label: "macOS Ventura 13", category: "macOS" },
+    { id: "macos-monterey-12", label: "macOS Monterey 12", category: "macOS" },
+    { id: "macos-big-sur-11", label: "macOS Big Sur 11", category: "macOS" },
+    { id: "macos-catalina-10.15", label: "macOS Catalina 10.15", category: "macOS" },
+    { id: "macos-mojave-10.14", label: "macOS Mojave 10.14", category: "macOS" },
+    { id: "macos-server", label: "macOS Server", category: "macOS" },
+    { id: "other-macos", label: "Other macOS Version", category: "macOS" },
+    
     // Cloud/Container OS
     { id: "gcp-compute-engine", label: "Google Compute Engine (GCE)", category: "Cloud/Container OS" },
     { id: "azure-vm-linux", label: "Azure Virtual Machines (Linux)", category: "Cloud/Container OS" },
