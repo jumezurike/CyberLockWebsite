@@ -58,6 +58,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get assessment report by ID
+  app.get("/api/assessments/:id/report", async (req, res) => {
+    try {
+      const assessment = await storage.getAssessment(parseInt(req.params.id));
+      if (!assessment) {
+        return res.status(404).json({ error: "Assessment not found" });
+      }
+      
+      if (assessment.status !== 'completed' || !assessment.reportData) {
+        return res.status(400).json({ error: "Report not available for this assessment" });
+      }
+      
+      res.json(assessment.reportData);
+    } catch (error) {
+      console.error("Error fetching assessment report:", error);
+      res.status(500).json({ error: "Failed to fetch assessment report" });
+    }
+  });
+
   // Create a new assessment
   app.post("/api/assessments", async (req, res) => {
     try {
