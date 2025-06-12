@@ -5518,18 +5518,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                 </div>
                 
-                <div className="flex justify-between mt-6">
-                  <Button 
-                    type="button"
-                    variant="outline"
-                    onClick={() => document.querySelector('[value="identity-behavior"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
-                  >
-                    Previous Step
-                  </Button>
-                  <Button 
-                    type="button" 
-                    onClick={() => document.querySelector('[value="review"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
-                  >
+                <div className="flex justify-end">
+                  <Button type="button" className="mt-4" onClick={() => document.querySelector('[value="review"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}>
                     Continue to Review
                   </Button>
                 </div>
@@ -6092,17 +6082,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     />
                   </div>
                   
-                  <div className="flex justify-between items-center w-full mt-6">
-                    <Button 
-                      type="button"
-                      variant="outline"
-                      onClick={() => document.querySelector('[value="contact"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
-                    >
-                      Previous Step
-                    </Button>
+                  <div className="flex justify-center w-full">
                     <Button 
                       type="submit" 
-                      className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white font-medium text-lg py-4 px-8"
+                      className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white font-medium text-lg py-4 w-full"
                       disabled={!eulaAccepted}
                       onClick={() => {
                         console.log("Submit button clicked directly");
