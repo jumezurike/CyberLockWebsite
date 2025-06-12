@@ -182,7 +182,50 @@ interface QuestionnaireFormProps {
 
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
+  const [currentTab, setCurrentTab] = useState("business");
   const { toast } = useToast();
+
+  // Tab order for navigation
+  const tabOrder = [
+    "business", "infrastructure", "risks", "baseline", 
+    "security", "compliance", "regulatory", "standards",
+    "acq-tools", "adversarial", "isms", "device-inventory",
+    "identity-behavior", "contact", "review"
+  ];
+
+  // Navigation functions
+  const nextTab = () => {
+    const currentIndex = tabOrder.indexOf(currentTab);
+    if (currentIndex < tabOrder.length - 1) {
+      setCurrentTab(tabOrder[currentIndex + 1]);
+    }
+  };
+
+  const prevTab = () => {
+    const currentIndex = tabOrder.indexOf(currentTab);
+    if (currentIndex > 0) {
+      setCurrentTab(tabOrder[currentIndex - 1]);
+    }
+  };
+
+  // Form submission handler
+  const handleSubmit = form.handleSubmit((data: Sos2aFormData) => {
+    try {
+      console.log("Form submitted with data:", data);
+      onSubmit(data);
+      toast({
+        title: "Form Submitted Successfully",
+        description: "Your assessment questionnaire has been submitted for review.",
+      });
+    } catch (error) {
+      console.error("Form submission error:", error);
+      toast({
+        title: "Submission Error",
+        description: "Failed to submit form. Please try again.",
+        variant: "destructive",
+      });
+    }
+  });
   
   // Independent device inventory state
   const [deviceInventory, setDeviceInventory] = useState<any[]>([]);
@@ -701,25 +744,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
     },
   });
   
-  const handleSubmit = form.handleSubmit((data: Sos2aFormData) => {
-    // Debug logs to check form submission
-    console.log("Form submitted", data);
-    console.log("EULA status:", eulaAccepted);
-    // ISMS Processes are now properly handled
-    
-    // Update the EULA acceptance state in the form data
-    const updatedData = {
-      ...data,
-      eulaAccepted: eulaAccepted
-    };
-    console.log("Calling parent onSubmit with data");
-    try {
-      onSubmit(updatedData);
-      console.log("Parent onSubmit completed");
-    } catch (error) {
-      console.error("Error in form submission:", error);
-    }
-  });
+
   
   const operationModes = [
     { id: "isp-modem", label: "ISP Modem" },
@@ -1503,7 +1528,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
 
           <Form {...form}>
             <form onSubmit={handleSubmit} className="space-y-8">
-              <Tabs defaultValue="business" className="w-full">
+              <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure">2. Infrastructure Mode</TabsTrigger>
