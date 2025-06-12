@@ -344,78 +344,7 @@ export default function Sos2aTool() {
           {/* Assessment Search and History - Hide when displaying report */}
           {step !== 'report' && (
             <>
-              {/* Assessment Search */}
-              <div className="mb-6 border rounded-lg shadow-sm overflow-hidden">
-                <div className="bg-blue-50 p-3 border-b flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-blue-600">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.3-4.3"></path>
-                  </svg>
-                  <h2 className="text-lg font-medium text-blue-700">Search Assessments</h2>
-                </div>
-                
-                <div className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div>
-                      <Label className="text-sm font-medium mb-1 block">Company Name</Label>
-                      <Input 
-                        type="text" 
-                        value={searchCompanyName}
-                        onChange={(e) => setSearchCompanyName(e.target.value)}
-                        placeholder="Enter company name"
-                        className="w-full"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label className="text-sm font-medium mb-1 block">From Date</Label>
-                      <Input 
-                        type="date" 
-                        value={searchFromDate}
-                        onChange={(e) => setSearchFromDate(e.target.value)}
-                        className="w-full"
-                        placeholder="mm/dd/yyyy"
-                      />
-                    </div>
-                    
-                    <div>
-                      <Label className="text-sm font-medium mb-1 block">To Date</Label>
-                      <Input 
-                        type="date" 
-                        value={searchToDate}
-                        onChange={(e) => setSearchToDate(e.target.value)}
-                        className="w-full"
-                        placeholder="mm/dd/yyyy"
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="flex justify-end gap-2">
-                    <Button 
-                      variant="outline"
-                      onClick={() => {
-                        setSearchCompanyName("");
-                        setSearchFromDate("");
-                        setSearchToDate("");
-                      }}
-                      className="text-sm"
-                    >
-                      Clear
-                    </Button>
-                    <Button 
-                      onClick={() => {
-                        // Search functionality is automatic via filteredAssessments
-                        // This button can trigger a manual refresh if needed
-                        loadSavedAssessments();
-                      }}
-                      className="bg-purple-600 hover:bg-purple-700 text-white text-sm"
-                    >
-                      Search
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              
+
               {/* Assessment History Section */}
               <div className="mb-6 border rounded-lg shadow-sm">
                 <div className="bg-primary/10 p-3 border-b flex items-center justify-between">
