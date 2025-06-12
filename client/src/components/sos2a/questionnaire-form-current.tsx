@@ -1995,6 +1995,31 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                     </div>
                                   </div>
                                   
+                                  {/* macOS */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">macOS</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "macOS")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
                                   {/* Cloud/Container OS */}
                                   <div>
                                     <h4 className="text-md font-medium mb-2">Cloud/Container OS</h4>
