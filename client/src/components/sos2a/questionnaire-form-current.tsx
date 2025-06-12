@@ -939,6 +939,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "fedora-latest", label: "Fedora (Latest)", category: "Other Linux" },
     { id: "other-linux", label: "Other Linux Distribution", category: "Other Linux" },
     
+    // macOS
+    { id: "macos-sonoma", label: "macOS Sonoma (14.x)", category: "macOS" },
+    { id: "macos-ventura", label: "macOS Ventura (13.x)", category: "macOS" },
+    { id: "macos-monterey", label: "macOS Monterey (12.x)", category: "macOS" },
+    { id: "macos-big-sur", label: "macOS Big Sur (11.x)", category: "macOS" },
+    { id: "macos-catalina", label: "macOS Catalina (10.15)", category: "macOS" },
+    { id: "macos-mojave", label: "macOS Mojave (10.14)", category: "macOS" },
+    { id: "macos-server", label: "macOS Server", category: "macOS" },
+    { id: "other-macos", label: "Other macOS Version", category: "macOS" },
+    
     // Unix-Based OS
     { id: "ibm-aix-7.2", label: "IBM AIX 7.2", category: "Unix-Based OS" },
     { id: "ibm-aix-7.1", label: "IBM AIX 7.1", category: "Unix-Based OS" },
