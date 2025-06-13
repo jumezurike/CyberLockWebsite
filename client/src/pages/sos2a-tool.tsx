@@ -523,6 +523,10 @@ export default function Sos2aTool() {
                           setStep('questionnaire');
                           setFormData(null);
                           setSelectedAssessmentId("");
+                          toast({
+                            title: "Starting Over",
+                            description: "All saved data has been cleared. You can now begin a new assessment.",
+                          });
                         }}
                         className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-none"
                       >
