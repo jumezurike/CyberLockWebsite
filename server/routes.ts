@@ -66,12 +66,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Assessment not found" });
       }
       
-      // Only allow loading assessments that have proper reportData to preserve historical integrity
-      if (!assessment.reportData) {
+      // Check if assessment has the original data structure that was working at 3 AM
+      if (!assessment.findings && !assessment.matrixData && !assessment.recommendations) {
         return res.status(400).json({ error: "Report not available for this assessment" });
       }
       
-      res.json(assessment.reportData);
+      // Return the assessment data in the original format that was working
+      res.json(assessment);
     } catch (error) {
       console.error("Error fetching assessment report:", error);
       res.status(500).json({ error: "Failed to fetch assessment report" });
