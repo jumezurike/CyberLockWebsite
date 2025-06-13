@@ -1,0 +1,86 @@
+Generated on June 4, 2025 at 06:07 PM
+Current: 8 days ago
+Assessment Lifecycle Info
+This is a preliminary assessment. For a comprehensive assessment with deeper analysis and evidence-based scoring, proceed to the comprehensive assessment path.
+60%
+Security Score
+Preliminary Assessment
+This is a free preliminary assessment for your first engagement. It provides a qualitative overview of your security posture based on expert opinion and industry standards. This report establishes the foundation for building a resilient cybersecurity framework and sets the stage for more detailed analysis. Moving forward with a comprehensive assessment requires implementing the recommended mitigation strategies, including SOC monitoring, incident response, and security controls, followed by 6 months of evidence collection.
+Assessment Progress
+Step 7 of 9
+78% Complete
+✓
+1. Inquiry & Questionnaire
+
+Initial Data Collection
+
+✓
+2. Interview & Matrix Population
+
+Stakeholder Input
+
+✓
+3. Matrix Population
+
+Infrastructure Data
+
+✓
+4. RASBITA Governance
+
+Cybersecurity Governance Maturity
+
+✓
+5. RASBITA Score
+
+Cost-Benefit Analysis
+
+✓
+6. Gap Analysis
+
+Security Parameters
+
+✓
+7. Architecture Analysis
+
+Threat Modeling
+
+8
+8. Preliminary Report
+
+Qualitative Assessment
+
+9
+9. Comprehensive Report
+
+Quantitative Analysis
+
+Executive Summary
+This preliminary report highlights the current cybersecurity state of your organization, with an emphasis on assessing its organizational and system security posture. While this is an initial overview, it is part of a larger effort to align security controls with industry compliance standards, regulations, and best practices. The purpose of this report is to illustrate the need for comprehensive monitoring, threat detection, and an effective incident response system.
+
+As part of this assessment, we've conducted an architectural review using our STRIDE threat modeling methodology, which evaluates your systems for Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, and Elevation of Privilege threats. This analysis has identified architectural vulnerabilities and recommended mitigation controls that are incorporated into our overall risk assessment.
+
+Business Information
+healthcare | Unknown location
+
+RASBITA Score Components
+Overall: N/A%
+RASBITA™
+Summary Findings
+0
+Critical Vulnerabilities
+Greater than 80% probability
+7
+High Risks
+Between 60%-80% probability
+1
+Medium Risks
+Between 30%-60% probability
+9
+Low Risks
+Below 30% probability
+Risk Probability Categories:
+
+Critical – Greater than 80% probability of occurrence
+High – Between 60% and 80% probability of occurrence
+Medium – Between 30% and 60% probability of occurrence
+Low – Below 30% probability of occurrence
