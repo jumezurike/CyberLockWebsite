@@ -294,9 +294,9 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <p className="text-xs text-green-600">Qualitative Assessment</p>
                     </div>
                     <div className="space-y-1">
-                      <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
-                      <p className="font-medium text-green-700">9. Comprehensive Report</p>
-                      <p className="text-xs text-green-600">Quantitative Analysis</p>
+                      <div className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center mx-auto">✓</div>
+                      <p className="font-medium text-purple-700">9. Comprehensive Report</p>
+                      <p className="text-xs text-purple-600">Quantitative Analysis</p>
                     </div>
                   </div>
                 </div>
