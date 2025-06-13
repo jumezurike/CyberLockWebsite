@@ -6015,6 +6015,11 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 <SelectItem value="social-security">🔢 Social Security Card</SelectItem>
                                 <SelectItem value="citizenship-certificate">📋 Certificate of Citizenship</SelectItem>
                                 
+                                {/* Avatar Identification */}
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-md mx-1 my-1">🎭 Avatar Identification</div>
+                                <SelectItem value="picture">📸 Picture</SelectItem>
+                                <SelectItem value="avatar-profile">👤 Avatar Profile</SelectItem>
+                                
                                 {/* Additional Options */}
                                 <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-gray-500 to-gray-600 rounded-md mx-1 my-1">➕ Other</div>
                                 <SelectItem value="other">❓ Other</SelectItem>
@@ -6575,6 +6580,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                 <SelectItem value="machine-virtual">Machine Virtual</SelectItem>
                                 <SelectItem value="api">API</SelectItem>
                                 <SelectItem value="third-party">Third-Party</SelectItem>
+                                <SelectItem value="avatar">Avatar</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
