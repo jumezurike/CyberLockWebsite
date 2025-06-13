@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { differenceInDays, parseISO, formatDistanceToNow } from "date-fns";
+import { ExternalLink } from "lucide-react";
 
 // Import components
 import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
@@ -504,8 +505,9 @@ export default function Sos2aTool() {
                         onClick={() => selectedAssessmentId && loadAssessmentReport(selectedAssessmentId)}
                         disabled={!selectedAssessmentId || isLoading}
                         variant="outline"
-                        className="flex-1 md:flex-none"
+                        className="flex-1 md:flex-none hover:bg-green-50 hover:border-green-300 hover:text-green-700 transition-colors"
                       >
+                        <ExternalLink className="w-4 h-4 mr-2" />
                         {isLoading ? "Loading..." : "Load Report"}
                       </Button>
                       <Button 
