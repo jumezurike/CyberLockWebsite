@@ -3902,6 +3902,27 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     {/* Architecture Threat Modeling section removed from Adversarial Insight tab as requested */}
                   </div>
                 </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </TabsContent>
               
               {/* 11. ISMS Tab */}
@@ -7879,12 +7900,11 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                 </div>
                 
                 <div className="flex justify-end">
-                  <Button type="button" className="mt-4" onClick={() => {
-                    const tabTrigger = document.querySelector('[data-value="review"]') as HTMLElement;
-                    if (tabTrigger) {
-                      tabTrigger.click();
-                    }
-                  }}>
+                  <Button 
+                    type="button" 
+                    className="mt-4 bg-[#7936b0] hover:bg-[#6b2aa2] text-white" 
+                    onClick={() => setCurrentTab("review")}
+                  >
                     Continue to Review
                   </Button>
                 </div>
