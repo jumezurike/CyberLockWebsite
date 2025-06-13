@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { differenceInDays, parseISO, formatDistanceToNow } from "date-fns";
-import { ExternalLink } from "lucide-react";
+import { ExternalLink, Edit } from "lucide-react";
 
 // Import components
 import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
@@ -291,24 +291,7 @@ export default function Sos2aTool() {
     return formatDistanceToNow(parseISO(createdAt), { addSuffix: true });
   };
 
-  // Delete assessment
-  const deleteAssessment = async (assessmentId: string) => {
-    try {
-      await apiRequest("DELETE", `/api/assessments/${assessmentId}`);
-      queryClient.invalidateQueries({ queryKey: ["/api/assessments"] });
-      setSelectedAssessmentId("");
-      toast({
-        title: "Assessment Deleted",
-        description: "The assessment has been deleted successfully.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete assessment. Please try again.",
-        variant: "destructive",
-      });
-    }
-  };
+
 
   return (
     <div className="container mx-auto py-8">
@@ -510,14 +493,7 @@ export default function Sos2aTool() {
                         <ExternalLink className="w-4 h-4 mr-2" />
                         {isLoading ? "Loading..." : "Load Report"}
                       </Button>
-                      <Button 
-                        onClick={() => selectedAssessmentId && deleteAssessment(selectedAssessmentId)}
-                        disabled={!selectedAssessmentId}
-                        variant="destructive"
-                        className="flex-1 md:flex-none"
-                      >
-                        Delete
-                      </Button>
+
                       <Button 
                         onClick={() => {
                           setStep('questionnaire');
@@ -530,6 +506,7 @@ export default function Sos2aTool() {
                         }}
                         className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-none"
                       >
+                        <Edit className="w-4 h-4 mr-2" />
                         Start New
                       </Button>
                     </div>
