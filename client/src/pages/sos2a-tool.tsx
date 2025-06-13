@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
+import { apiRequest, queryClient } from "@/lib/queryClient";
 import { differenceInDays, parseISO, formatDistanceToNow } from "date-fns";
 
 // Import components
@@ -290,6 +290,25 @@ export default function Sos2aTool() {
     return formatDistanceToNow(parseISO(createdAt), { addSuffix: true });
   };
 
+  // Delete assessment
+  const deleteAssessment = async (assessmentId: string) => {
+    try {
+      await apiRequest("DELETE", `/api/assessments/${assessmentId}`);
+      queryClient.invalidateQueries({ queryKey: ["/api/assessments"] });
+      setSelectedAssessmentId("");
+      toast({
+        title: "Assessment Deleted",
+        description: "The assessment has been deleted successfully.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete assessment. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
   return (
     <div className="container mx-auto py-8">
       {/* Assessment Submission Confirmation Modal */}
@@ -461,8 +480,8 @@ export default function Sos2aTool() {
                               
                               // Color coding for duration based on assessment type
                               const durationBgClass = assessment.reportType === 'preliminary' 
-                                ? 'bg-blue-100 text-blue-700' 
-                                : 'bg-green-100 text-green-700';
+                                ? 'bg-green-100 text-green-700' 
+                                : 'bg-blue-100 text-blue-700';
                               
                               return (
                                 <SelectItem key={assessment.id} value={assessment.id.toString()}>
@@ -484,9 +503,18 @@ export default function Sos2aTool() {
                       <Button 
                         onClick={() => selectedAssessmentId && loadAssessmentReport(selectedAssessmentId)}
                         disabled={!selectedAssessmentId || isLoading}
-                        className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-none"
+                        variant="outline"
+                        className="flex-1 md:flex-none"
                       >
                         {isLoading ? "Loading..." : "Load Report"}
+                      </Button>
+                      <Button 
+                        onClick={() => selectedAssessmentId && deleteAssessment(selectedAssessmentId)}
+                        disabled={!selectedAssessmentId}
+                        variant="destructive"
+                        className="flex-1 md:flex-none"
+                      >
+                        Delete
                       </Button>
                       <Button 
                         onClick={() => {
@@ -494,7 +522,7 @@ export default function Sos2aTool() {
                           setFormData(null);
                           setSelectedAssessmentId("");
                         }}
-                        className="bg-purple-600 hover:bg-purple-700 text-white flex-1 md:flex-none"
+                        className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-none"
                       >
                         Start New
                       </Button>
