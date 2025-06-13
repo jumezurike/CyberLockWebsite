@@ -149,18 +149,18 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <div className="relative pt-1">
                   <div className="flex mb-2 items-center justify-between">
                     <div>
-                      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-green-500 text-white">
-                        Assessment Complete
+                      <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full bg-purple-600 text-white">
+                        STEP 7 OF 9
                       </span>
                     </div>
                     <div className="text-right">
-                      <span className="text-xs font-semibold inline-block text-green-500">
-                        100% Complete
+                      <span className="text-xs font-semibold inline-block text-purple-600">
+                        78% Complete
                       </span>
                     </div>
                   </div>
                   <div className="overflow-hidden h-2 mb-4 text-xs flex rounded bg-gray-200">
-                    <div style={{ width: "100%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-green-500"></div>
+                    <div style={{ width: "78%" }} className="shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-purple-600"></div>
                   </div>
                   <div className="grid grid-cols-3 gap-2 text-xs text-center mb-4">
                     <div className="space-y-1">
@@ -196,11 +196,21 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <p className="text-xs text-green-600">Security Parameters</p>
                     </div>
                   </div>
-                  <div className="grid grid-cols-1 gap-2 text-xs text-center">
+                  <div className="grid grid-cols-3 gap-2 text-xs text-center">
                     <div className="space-y-1">
                       <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
                       <p className="font-medium text-green-700">7. Architecture Analysis</p>
                       <p className="text-xs text-green-600">Threat Modeling Complete</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-500 flex items-center justify-center mx-auto">8</div>
+                      <p className="font-medium text-gray-500">8. Preliminary Report</p>
+                      <p className="text-xs text-gray-400">Qualitative Assessment</p>
+                    </div>
+                    <div className="space-y-1">
+                      <div className="w-6 h-6 rounded-full bg-gray-300 text-gray-500 flex items-center justify-center mx-auto">9</div>
+                      <p className="font-medium text-gray-500">9. Comprehensive Report</p>
+                      <p className="text-xs text-gray-400">Quantitative Analysis</p>
                     </div>
                   </div>
                 </div>
