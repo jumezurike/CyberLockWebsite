@@ -8,7 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { differenceInDays, parseISO, formatDistanceToNow } from "date-fns";
-import { ExternalLink, Edit } from "lucide-react";
+import { ExternalLink, Edit, Trash2 } from "lucide-react";
 
 // Import components
 import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
@@ -558,6 +558,7 @@ export default function Sos2aTool() {
                         variant="destructive"
                         className="flex-1 md:flex-none"
                       >
+                        <Trash2 className="w-4 h-4 mr-2" />
                         Delete
                       </Button>
                       <Button 
