@@ -2366,7 +2366,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                   
                                   {/* Unix-Based OS */}
                                   <div>
-                                    <h4 className="text-md font-medium mb-2">Unix-Based OS</h4>
+                                    <h4 className="text-md font-medium mb-2">Unix-Based OS <span className="text-xs text-gray-500 font-normal">(includes macOS)</span></h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                       {operatingSystemOptions
                                         .filter(os => os.category === "Unix-Based OS")
