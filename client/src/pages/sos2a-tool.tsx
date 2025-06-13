@@ -459,13 +459,18 @@ export default function Sos2aTool() {
                               const duration = formatDistanceToNow(createdDate, { addSuffix: true });
                               const statusIcon = assessment.reportType === 'preliminary' ? '✓' : '⚫';
                               
+                              // Color coding for duration based on assessment type
+                              const durationBgClass = assessment.reportType === 'preliminary' 
+                                ? 'bg-blue-100 text-blue-700' 
+                                : 'bg-green-100 text-green-700';
+                              
                               return (
                                 <SelectItem key={assessment.id} value={assessment.id.toString()}>
                                   <div className="flex justify-between items-center w-full">
                                     <span>
                                       {formattedDate} - {assessment.businessName} ({assessment.reportType === 'preliminary' ? 'preliminary' : 'comprehensive'}) {statusIcon}
                                     </span>
-                                    <span className="text-xs bg-muted px-2 py-1 rounded-md text-muted-foreground ml-2">{duration}</span>
+                                    <span className={`text-xs px-2 py-1 rounded-md ml-2 ${durationBgClass}`}>{duration}</span>
                                   </div>
                                 </SelectItem>
                               );
