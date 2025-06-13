@@ -331,6 +331,7 @@ export default function IdentityManagement() {
                     <SelectItem value="human">Human</SelectItem>
                     <SelectItem value="machine-physical">Machine Physical</SelectItem>
                     <SelectItem value="machine-virtual">Machine Virtual</SelectItem>
+                    <SelectItem value="avatar">Avatar</SelectItem>
                     <SelectItem value="api">API</SelectItem>
                     <SelectItem value="third-party">Third-Party</SelectItem>
                   </SelectContent>
@@ -380,6 +381,10 @@ export default function IdentityManagement() {
                     <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
                     <SelectItem value="social-security-card">Social Security Card</SelectItem>
                     <SelectItem value="certificate-of-citizenship">Certificate of Citizenship</SelectItem>
+                    
+                    {/* Avatar Identification */}
+                    <SelectItem value="picture">Picture</SelectItem>
+                    <SelectItem value="avatar-profile">Avatar Profile</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -398,6 +403,7 @@ export default function IdentityManagement() {
                     <SelectItem value="identity">Identity Components</SelectItem>
                     <SelectItem value="authentication">Authentication Components</SelectItem>
                     <SelectItem value="identification">Identification Components</SelectItem>
+                    <SelectItem value="intermediate">Intermediate Components</SelectItem>
                     <SelectItem value="authorization">Authorization Components</SelectItem>
                     <SelectItem value="technical">Technical Components</SelectItem>
                   </SelectContent>
