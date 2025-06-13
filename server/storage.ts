@@ -94,7 +94,7 @@ export class DatabaseStorage implements IStorage {
 
   // Assessment operations
   async getAllAssessments(): Promise<Assessment[]> {
-    return await db.select().from(assessments);
+    return await db.select().from(assessments).where(eq(assessments.isDeleted, false));
   }
   
   async searchAssessments(params: AssessmentSearchParams): Promise<Assessment[]> {
@@ -210,13 +210,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async deleteAssessment(id: number): Promise<boolean> {
-    await db
-      .delete(assessments)
+    const result = await db
+      .update(assessments)
+      .set({ isDeleted: true, updatedAt: new Date() })
       .where(eq(assessments.id, id));
     
-    // Check if the assessment still exists
-    const assessment = await this.getAssessment(id);
-    return !assessment;
+    return result.rowCount > 0;
   }
   
   private calculateSecurityScore(assessment: InsertAssessment): number {

@@ -31,6 +31,7 @@ export const assessments = pgTable("assessments", {
   reportData: jsonb("report_data"),
   completedAt: timestamp("completed_at"),
   riskScore: integer("risk_score"),
+  isDeleted: boolean("is_deleted").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
