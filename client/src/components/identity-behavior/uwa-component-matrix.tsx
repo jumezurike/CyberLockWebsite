@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Save, RefreshCw, Info } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-// The 31 identity components as specified
+// The 31+ identity components as specified
 const identityComponents = [
   { id: "name", label: "Name", category: "Personal" },
   { id: "address", label: "Address", category: "Personal" },
@@ -41,7 +41,10 @@ const identityComponents = [
   { id: "biometricHash", label: "Biometric Hash", category: "Biometric" },
   { id: "geolocationCode", label: "Geolocation Code", category: "Location" },
   { id: "organizationId", label: "Organization ID", category: "Organizational" },
-  { id: "departmentCode", label: "Department Code", category: "Organizational" }
+  { id: "departmentCode", label: "Department Code", category: "Organizational" },
+  // Avatar Identity Components - Intermediate Category
+  { id: "avatarPicture", label: "Avatar Picture", category: "Intermediate", identityType: "Avatar", identificationType: "Picture" },
+  { id: "pictureHash", label: "Picture Hash", category: "Intermediate", identityType: "Avatar", identificationType: "Picture" }
 ];
 
 // Default configuration based on your specifications
@@ -77,7 +80,9 @@ const defaultConfiguration = {
     biometricHash: false,
     geolocationCode: false,
     organizationId: false,
-    departmentCode: false
+    departmentCode: false,
+    avatarPicture: false,
+    pictureHash: false
   },
   machine: {
     name: false,
@@ -110,7 +115,9 @@ const defaultConfiguration = {
     biometricHash: false,
     geolocationCode: false,
     organizationId: false,
-    departmentCode: false
+    departmentCode: false,
+    avatarPicture: false,
+    pictureHash: false
   },
   api: {
     name: false,
@@ -143,7 +150,9 @@ const defaultConfiguration = {
     biometricHash: false,
     geolocationCode: false,
     organizationId: true,
-    departmentCode: false
+    departmentCode: false,
+    avatarPicture: false,
+    pictureHash: false
   },
   thirdParty: {
     name: true,
@@ -176,7 +185,44 @@ const defaultConfiguration = {
     biometricHash: false,
     geolocationCode: false,
     organizationId: true,
-    departmentCode: false
+    departmentCode: false,
+    avatarPicture: false,
+    pictureHash: false
+  },
+  avatar: {
+    name: false,
+    address: false,
+    birthplace: false,
+    dateOfBirth: false,
+    pin: false,
+    snImei: false,
+    phoneEinSsnBvn: false,
+    driverLicensePassport: false,
+    primaryAuthDeviceImei: false,
+    makeModelOs: false,
+    dateOfManufacture: false,
+    ec2DoIdMacSn: false,
+    os: false,
+    uuid: false,
+    serverId: false,
+    environment: false,
+    ipAddress: false,
+    businessCertifications: false,
+    businessLicenses: false,
+    utilityBills: false,
+    macAddress: false,
+    vinNumber: false,
+    plateNumber: false,
+    apiKey: false,
+    clientId: false,
+    certificateFingerprint: false,
+    publicKeyHash: false,
+    biometricHash: false,
+    geolocationCode: false,
+    organizationId: false,
+    departmentCode: false,
+    avatarPicture: true,
+    pictureHash: true
   }
 };
 
