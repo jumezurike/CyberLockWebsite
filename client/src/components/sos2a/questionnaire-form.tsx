@@ -5773,23 +5773,13 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => {
-                      const tabTrigger = document.querySelector('[data-value="isms"]') as HTMLElement;
-                      if (tabTrigger) {
-                        tabTrigger.click();
-                      }
-                    }}
+                    onClick={prevTab}
                   >
                     Previous Step
                   </Button>
                   <Button 
                     type="button"
-                    onClick={() => {
-                      const tabTrigger = document.querySelector('[data-value="identity-behavior"]') as HTMLElement;
-                      if (tabTrigger) {
-                        tabTrigger.click();
-                      }
-                    }}
+                    onClick={nextTab}
                   >
                     Next Step
                   </Button>
@@ -7718,23 +7708,13 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => {
-                        const tabTrigger = document.querySelector('[data-value="device-inventory"]') as HTMLElement;
-                        if (tabTrigger) {
-                          tabTrigger.click();
-                        }
-                      }}
+                      onClick={prevTab}
                     >
                       Previous Step
                     </Button>
                     <Button 
                       type="button"
-                      onClick={() => {
-                        const tabTrigger = document.querySelector('[data-value="contact"]') as HTMLElement;
-                        if (tabTrigger) {
-                          tabTrigger.click();
-                        }
-                      }}
+                      onClick={nextTab}
                     >
                       Next Step
                     </Button>
@@ -7931,11 +7911,18 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                   </div>
                 </div>
                 
-                <div className="flex justify-end">
+                <div className="flex justify-between space-x-4 mt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                  >
+                    Previous Step
+                  </Button>
                   <Button 
                     type="button" 
-                    className="mt-4 bg-[#7936b0] hover:bg-[#6b2aa2] text-white" 
-                    onClick={() => setCurrentTab("review")}
+                    className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white" 
+                    onClick={nextTab}
                   >
                     Continue to Review
                   </Button>
