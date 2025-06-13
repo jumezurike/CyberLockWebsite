@@ -211,11 +211,10 @@ export class DatabaseStorage implements IStorage {
 
   async deleteAssessment(id: number): Promise<boolean> {
     const result = await db
-      .update(assessments)
-      .set({ isDeleted: true, updatedAt: new Date() })
+      .delete(assessments)
       .where(eq(assessments.id, id));
     
-    return result.rowCount > 0;
+    return result.rowCount !== null && result.rowCount > 0;
   }
   
   private calculateSecurityScore(assessment: InsertAssessment): number {

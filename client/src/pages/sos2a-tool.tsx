@@ -53,6 +53,8 @@ export default function Sos2aTool() {
   // State for form persistence
   const [hasSavedData, setHasSavedData] = useState<boolean>(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [assessmentToDelete, setAssessmentToDelete] = useState<string | null>(null);
   
   const { toast } = useToast();
 
@@ -291,10 +293,67 @@ export default function Sos2aTool() {
     return formatDistanceToNow(parseISO(createdAt), { addSuffix: true });
   };
 
+  // Delete assessment with confirmation
+  const handleDeleteClick = (assessmentId: string) => {
+    setAssessmentToDelete(assessmentId);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!assessmentToDelete) return;
+    
+    try {
+      await apiRequest("DELETE", `/api/assessments/${assessmentToDelete}`);
+      queryClient.invalidateQueries({ queryKey: ["/api/assessments"] });
+      setSelectedAssessmentId("");
+      setShowDeleteModal(false);
+      setAssessmentToDelete(null);
+      toast({
+        title: "Assessment Deleted",
+        description: "The assessment has been permanently deleted.",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete assessment. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
 
 
   return (
     <div className="container mx-auto py-8">
+      {/* Delete Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg w-full max-w-md p-6 shadow-xl">
+            <h2 className="text-xl font-bold mb-4 text-red-600">Confirm Deletion</h2>
+            <p className="text-gray-700 mb-6">
+              Are you sure you want to permanently delete this assessment? This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-4">
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowDeleteModal(false);
+                  setAssessmentToDelete(null);
+                }}
+              >
+                Cancel
+              </Button>
+              <Button 
+                variant="destructive"
+                onClick={confirmDelete}
+              >
+                Delete Permanently
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Assessment Submission Confirmation Modal */}
       {showReviewModal && formData && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -493,7 +552,14 @@ export default function Sos2aTool() {
                         <ExternalLink className="w-4 h-4 mr-2" />
                         {isLoading ? "Loading..." : "Load Report"}
                       </Button>
-
+                      <Button 
+                        onClick={() => selectedAssessmentId && handleDeleteClick(selectedAssessmentId)}
+                        disabled={!selectedAssessmentId}
+                        variant="destructive"
+                        className="flex-1 md:flex-none"
+                      >
+                        Delete
+                      </Button>
                       <Button 
                         onClick={() => {
                           setStep('questionnaire');
