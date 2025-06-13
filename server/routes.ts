@@ -66,42 +66,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Assessment not found" });
       }
       
-      console.log("Assessment data check:", {
-        id: assessment.id,
-        hasReportData: !!assessment.reportData,
-        hasFindings: !!assessment.findings,
-        hasMatrixData: !!assessment.matrixData,
-        findingsType: typeof assessment.findings,
-        matrixDataType: typeof assessment.matrixData
-      });
-      
-      // Check if assessment has usable data (reportData, findings, or matrixData)
-      if (!assessment.reportData && !assessment.findings && !assessment.matrixData) {
-        console.log("No usable data found for assessment", assessment.id);
+      // Only allow loading assessments that have proper reportData to preserve historical integrity
+      if (!assessment.reportData) {
         return res.status(400).json({ error: "Report not available for this assessment" });
       }
       
-      // Return reportData if available, otherwise construct from available data
-      if (assessment.reportData) {
-        res.json(assessment.reportData);
-      } else {
-        // Construct basic report from existing assessment data
-        const basicReport = {
-          id: assessment.id,
-          businessName: assessment.businessName,
-          industry: assessment.industry,
-          reportType: assessment.reportType,
-          securityScore: assessment.securityScore || 0,
-          riskScore: assessment.riskScore || 0,
-          findings: assessment.findings || [],
-          recommendations: assessment.recommendations || [],
-          matrixData: assessment.matrixData || [],
-          createdAt: assessment.createdAt,
-          status: assessment.status
-        };
-        console.log("Returning basic report for assessment", assessment.id);
-        res.json(basicReport);
-      }
+      res.json(assessment.reportData);
     } catch (error) {
       console.error("Error fetching assessment report:", error);
       res.status(500).json({ error: "Failed to fetch assessment report" });
