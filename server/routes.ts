@@ -66,11 +66,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Assessment not found" });
       }
       
-      if (assessment.status !== 'completed' || !assessment.reportData) {
+      // Original logic that was working at 3 AM - serve from existing assessment data
+      if (!assessment.findings || !assessment.matrixData) {
         return res.status(400).json({ error: "Report not available for this assessment" });
       }
       
-      res.json(assessment.reportData);
+      // Return the complete assessment with all original 9-step granular process data intact
+      res.json(assessment);
     } catch (error) {
       console.error("Error fetching assessment report:", error);
       res.status(500).json({ error: "Failed to fetch assessment report" });
