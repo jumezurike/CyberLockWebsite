@@ -467,6 +467,10 @@ export default function Sos2aTool() {
                     <Button 
                       onClick={() => {
                         loadSavedAssessments();
+                        toast({
+                          title: "Search Results",
+                          description: `Found ${filteredAssessments.length} assessment(s) matching your criteria.`,
+                        });
                       }}
                       className="bg-purple-600 hover:bg-purple-700 text-white text-sm"
                     >
