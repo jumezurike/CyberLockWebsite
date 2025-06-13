@@ -465,7 +465,7 @@ export default function Sos2aTool() {
                                     <span>
                                       {formattedDate} - {assessment.businessName} ({assessment.reportType === 'preliminary' ? 'preliminary' : 'comprehensive'}) {statusIcon}
                                     </span>
-                                    <span className="text-xs text-muted-foreground ml-2">{duration}</span>
+                                    <span className="text-xs bg-muted px-2 py-1 rounded-md text-muted-foreground ml-2">{duration}</span>
                                   </div>
                                 </SelectItem>
                               );
