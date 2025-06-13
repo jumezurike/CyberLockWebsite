@@ -1329,7 +1329,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
     { id: "solaris-11.4", label: "Solaris 11.4", category: "Unix-Based OS" },
     { id: "solaris-11.3", label: "Solaris 11.3", category: "Unix-Based OS" },
     { id: "hp-ux-11i-v3", label: "HP-UX 11i v3", category: "Unix-Based OS" },
-    { id: "other-unix", label: "Other Unix OS", category: "Unix-Based OS" },
+    { id: "other-unix", label: "Other Unix OS (includes macOS)", category: "Unix-Based OS" },
     
     // macOS
     { id: "macos-ventura-13", label: "macOS Ventura 13", category: "macOS" },
