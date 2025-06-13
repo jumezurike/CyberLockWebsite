@@ -5769,7 +5769,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                   </div>
                 </div>
                 
-                <div className="flex justify-end space-x-4">
+                <div className="flex justify-between">
                   <Button
                     type="button"
                     variant="outline"
