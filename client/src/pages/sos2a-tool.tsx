@@ -449,24 +449,11 @@ export default function Sos2aTool() {
                               No saved assessments found
                             </div>
                           ) : (
-                            filteredAssessments.map((assessment) => {
-                              const createdDate = new Date(assessment.createdAt);
-                              const formattedDate = createdDate.toLocaleDateString('en-US', { 
-                                month: 'short', 
-                                day: 'numeric', 
-                                year: 'numeric' 
-                              });
-                              const duration = formatDistanceToNow(createdDate, { addSuffix: true });
-                              
-                              return (
-                                <SelectItem key={assessment.id} value={assessment.id.toString()}>
-                                  <div className="flex justify-between items-center w-full">
-                                    <span>{formattedDate} - {assessment.businessName} ({assessment.reportType === 'preliminary' ? 'preliminary' : 'comprehensive'})</span>
-                                    <span className="text-xs text-muted-foreground ml-2">{duration}</span>
-                                  </div>
-                                </SelectItem>
-                              );
-                            })
+                            filteredAssessments.map((assessment) => (
+                              <SelectItem key={assessment.id} value={assessment.id.toString()}>
+                                {assessment.businessName} - {assessment.industry} ({assessment.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'})
+                              </SelectItem>
+                            ))
                           )}
                         </SelectContent>
                       </Select>
