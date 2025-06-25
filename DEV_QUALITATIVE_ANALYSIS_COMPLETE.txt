@@ -90,8 +90,35 @@ Core Integration Files:
 - `/client/src/lib/five-pillar-scorecard.ts` - Framework types and calculations
 - `/client/src/lib/sos2a-framework-mappings.ts` - Parameter mappings
 
-Parameter Mapping System:
-- 12 Questionnaire → 10 Gap Analysis → 5 Pillars
+## PARAMETER SYSTEM CLARIFICATION - UPDATED
+
+**CRITICAL CORRECTION:** The gap analysis should use 11 Industry Security Domains (not 10):
+
+**11 Industry Security Domains:**
+1. Access Control
+2. Data Protection
+3. Security Awareness
+4. Incident Response
+5. Network Security
+6. Application Security
+7. Third-Party Management
+8. Asset Management
+9. Security Governance
+10. Compliance Management
+11. IAM (Identity & Access Management)
+
+**CORRECT MAPPING RELATIONSHIP:**
+- 11 Industry Security Domains → Cross-check/map to → 12 Original SOS²A Parameters → Generate Gap Analysis → 5 Pillars Scorecard
+
+**ACTION REQUIRED:**
+Current implementation incorrectly uses only 10 parameters. Must be updated to:
+1. Include IAM (Identity & Access Management) as 11th domain
+2. Properly map all 11 domains to the 12 SOS²A parameters
+3. Update gap analysis logic to use 11 domains instead of 10
+4. Ensure accurate scoring foundation for 5 pillars framework
+
+Parameter Mapping System (CORRECTED):
+- 12 SOS²A Questionnaire Parameters → 11 Industry Security Domains → Gap Analysis → 5 Pillars
 - Automated scoring based on form completeness
 - Evidence extraction from user responses
 - Comparison against preliminary baselines
