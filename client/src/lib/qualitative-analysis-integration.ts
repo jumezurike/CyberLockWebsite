@@ -15,7 +15,7 @@ import {
 } from './five-pillar-scorecard';
 import { frameworkMappings, getAutomationPercentage } from './sos2a-framework-mappings';
 
-// Map 12 SOS2A questionnaire parameters to 10 gap analysis parameters
+// Map 12 SOS2A questionnaire parameters to 11 gap analysis parameters (Updated: Added IAM)
 export const QUESTIONNAIRE_TO_GAP_MAPPING: Record<string, GapAnalysisParameter[]> = {
   "Infrastructure Mode of Operation": ["NetworkSecurity", "AssetManagement"],
   "Security Risks & Vulnerabilities": ["SecurityGovernance", "AssetManagement"],
@@ -28,7 +28,7 @@ export const QUESTIONNAIRE_TO_GAP_MAPPING: Record<string, GapAnalysisParameter[]
   "Adversarial Insight (MITRE ATT&CK)": ["IncidentResponse", "NetworkSecurity"],
   "ISMS": ["SecurityGovernance", "DataProtection"],
   "Device Inventory Tracking": ["AssetManagement"],
-  "Identity Behavior & Hygiene": ["AccessControl", "SecurityAwareness"]
+  "Identity Behavior & Hygiene": ["AccessControl", "SecurityAwareness", "IAM"]
 };
 
 export interface QualitativeAnalysisResult {

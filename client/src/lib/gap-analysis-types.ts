@@ -1,6 +1,6 @@
 // Types for the Gap Analysis system
 
-// The 10 parameters for gap analysis
+// The 11 parameters for gap analysis (Updated: Added IAM)
 export type GapAnalysisParameter = 
   | 'AccessControl'
   | 'DataProtection'
@@ -11,7 +11,8 @@ export type GapAnalysisParameter =
   | 'ThirdPartyManagement'
   | 'AssetManagement'
   | 'SecurityGovernance'
-  | 'ComplianceManagement';
+  | 'ComplianceManagement'
+  | 'IAM';
 
 // Each gap analysis parameter can have multiple requirements
 export interface ParameterRequirement {

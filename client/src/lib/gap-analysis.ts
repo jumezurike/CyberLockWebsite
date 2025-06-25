@@ -20,7 +20,7 @@ export function performGapAnalysisWithParameterizedScoring(
   userResponses: Sos2aFormData,
   expertConfig: ExpertKnowledgeConfiguration
 ): GapAnalysisResult {
-  // Define the 10 core assessment parameters
+  // Define the 11 core assessment parameters (Updated: Added IAM)
   const assessmentParameters: GapAnalysisParameter[] = [
     "AccessControl",
     "DataProtection",
@@ -31,7 +31,8 @@ export function performGapAnalysisWithParameterizedScoring(
     "ThirdPartyManagement",
     "AssetManagement",
     "SecurityGovernance",
-    "ComplianceManagement"
+    "ComplianceManagement",
+    "IAM"
   ];
   
   // Extract key profile information
@@ -81,16 +82,16 @@ export function performGapAnalysisWithParameterizedScoring(
     const parameterImplementations = userImplementations[parameter] || [];
     
     // Calculate maximum points available for this parameter
-    // All parameters are normalized to be worth 10% of total score
-    const parameterMaxPoints = 10;
+    // All parameters are normalized to be worth ~9.09% of total score (100/11)
+    const parameterMaxPoints = 100 / assessmentParameters.length;
     
     // Calculate earned points based on match with expert requirements
     let earnedPoints = 0;
     const parameterGaps: GapItem[] = [];
     
     for (const requirement of parameterRequirements) {
-      // Each requirement contributes equally to the parameter's 10%
-      const requirementWeight = 10 / parameterRequirements.length;
+      // Each requirement contributes equally to the parameter's weight
+      const requirementWeight = parameterMaxPoints / parameterRequirements.length;
       
       // Check if requirement is implemented
       const matchingImplementation = parameterImplementations.find(
@@ -254,6 +255,18 @@ function extractUserImplementationsForParameter(
       }
       break;
       
+    case "IAM":
+      // Extract IAM implementations from user responses
+      if (userResponses.identityBehavior && userResponses.identityBehavior.length > 0) {
+        // Add mapped implementations for Identity & Access Management
+        implementations.push({
+          controlId: 'IAM-1',
+          implementationLevel: 2,
+          notes: 'User reported identity behavior tracking'
+        });
+      }
+      break;
+      
     // Add cases for other parameters
     default:
       // No specific mappings for this parameter
@@ -332,6 +345,12 @@ function generateParameterRecommendations(
     case "SecurityAwareness":
       if (sortedGaps.length > 0) {
         recommendations.push(`Implement a comprehensive security awareness training program.`);
+      }
+      break;
+      
+    case "IAM":
+      if (sortedGaps.length > 0) {
+        recommendations.push(`Strengthen Identity and Access Management controls and monitoring.`);
       }
       break;
       
