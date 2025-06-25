@@ -71,9 +71,26 @@ Advanced cybersecurity platform featuring the HOS²A (Healthcare Organizational 
 
 ## User Preferences
 - Historical data integrity is paramount - never modify authentic data
-- Follow Problem Resolution Protocol (PRP) for all changes
+- Follow Problem Resolution Protocol (PRP) 2.0 for all changes (MANDATORY BACKUP STRATEGY)
 - Require explicit user approval before implementing updates
 - Maintain exact interface preservation for production system
+
+## Problem Resolution Protocol (PRP) 2.0 - MANDATORY BACKUP STRATEGY
+**Phase 1: Pre-Work Backup (REQUIRED)**
+- Create timestamped backup of all critical files before ANY changes
+- Document current system state and working directory
+- Verify backup integrity before proceeding
+- **NO WORK WITHOUT BACKUP**
+
+**Phase 2: Milestone Backup (REQUIRED)**
+- Create incremental backups at significant development milestones
+- Document what was accomplished and what's next
+- Preserve working states for potential rollback points
+
+**Phase 3: End-of-Day Backup (REQUIRED)**
+- Comprehensive backup of all modified files
+- Complete documentation update in replit.md
+- Create restoration guide for next session
 
 ## Critical Constraints
 - This is a live production system requiring exact interface preservation

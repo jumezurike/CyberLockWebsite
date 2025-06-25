@@ -15,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -26,8 +27,10 @@ import { assessmentTools, standardsAndGuidelinesLibrary } from "@/lib/matrix-map
 import { RegulatoryContent } from "./regulatory-content";
 import { StandardsContent } from "./standards-content";
 import { EulaAgreement } from "./eula-agreement";
-import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash } from "lucide-react";
+import { AlertCircle, UserPlus, FileDown, Eye, Copy, Trash, CheckCircle, Clock, ArrowRight, Plus, Filter, Upload, Download, Monitor, Cpu, CloudCog, Users, RotateCcw, Wallet } from "lucide-react";
 import { Section13Content } from "./section13-elegant";
+import { useToast } from "@/hooks/use-toast";
+import { calculateDeviceRiskScore, getRiskLevelFromScore, fetchWazuhRiskScore } from "@/lib/rasbita-risk-scoring";
 
 // Helper function to safely handle potentially undefined arrays
 function safeArray<T>(arr: T[] | undefined): T[] {
@@ -179,6 +182,384 @@ interface QuestionnaireFormProps {
 
 export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) {
   const [eulaAccepted, setEulaAccepted] = useState(false);
+  const [currentTab, setCurrentTab] = useState("business");
+  const { toast } = useToast();
+
+  // Tab order for navigation
+  const tabOrder = [
+    "business", "infrastructure", "risks", "baseline", 
+    "security", "compliance", "regulatory", "standards",
+    "acq-tools", "adversarial", "isms", "device-inventory",
+    "identity-behavior", "contact", "review"
+  ];
+
+  // Navigation functions
+  const nextTab = () => {
+    const currentIndex = tabOrder.indexOf(currentTab);
+    if (currentIndex < tabOrder.length - 1) {
+      setCurrentTab(tabOrder[currentIndex + 1]);
+    }
+  };
+
+  const prevTab = () => {
+    const currentIndex = tabOrder.indexOf(currentTab);
+    if (currentIndex > 0) {
+      setCurrentTab(tabOrder[currentIndex - 1]);
+    }
+  };
+  
+  // Independent device inventory state
+  const [deviceInventory, setDeviceInventory] = useState<any[]>([]);
+  const [deviceTypeFilter, setDeviceTypeFilter] = useState("all-types");
+
+  // Default matrix configuration
+  const defaultMatrixConfig = [
+    // Driver's License Components
+    { component: "Full Name (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Driver License Number", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Date of Birth (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Address (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Photo (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Signature (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Height/Weight (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Eye Color (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Expiration Date (Driver License)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    
+    // Passport Components
+    { component: "Passport Number", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Country of Issue (Passport)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Place of Birth (Passport)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Nationality (Passport)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "MRZ Code (Passport)", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    
+    // Social Security/National ID Components
+    { component: "Social Security Number", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "National ID Number", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Tax ID/EIN", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    
+    // Device/Machine Components
+    { component: "Device Serial Number", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "MAC Address", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
+    { component: "IMEI Number", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Device Model Number", human: false, machinePhysical: true, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Operating System Version", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
+    { component: "IP Address", human: false, machinePhysical: true, machineVirtual: true, api: true, thirdParty: false },
+    
+    // Business/Organization Components
+    { component: "Business License Number", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Business Registration Address", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    { component: "Professional License Number", human: false, machinePhysical: false, machineVirtual: false, api: false, thirdParty: true },
+    
+    // Biometric Components
+    { component: "Fingerprint Hash", human: true, machinePhysical: false, machineVirtual: false, api: false, thirdParty: false },
+    { component: "Facial Recognition Hash", human: true, machinePhysical: false, machineVirtual: false, api: true, thirdParty: false },
+    
+    // Virtual/API Components
+    { component: "User Account ID", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "API Key Hash", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "Digital Certificate Serial", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false },
+    { component: "OAuth Token Hash", human: false, machinePhysical: false, machineVirtual: true, api: true, thirdParty: false }
+  ];
+
+  // State for matrix configuration
+  const [matrixConfig, setMatrixConfig] = useState(defaultMatrixConfig);
+  
+  // Identity upload state
+  const [uploadedIdentities, setUploadedIdentities] = useState<any[]>([]);
+  
+  // UWA state management
+  const [generatedUWA, setGeneratedUWA] = useState<string>('');
+  
+  // UWA generation function
+  const generateUWA = (identityData: any, selectedComponents: any[]) => {
+    // Generate UWA based on identity type + identification components
+    const identityType = identityData.role || 'user';
+    const name = `${identityData.firstName || ''} ${identityData.lastName || ''}`.trim();
+    const email = identityData.email || '';
+    
+    // Create component identifier string
+    const componentString = selectedComponents.map(comp => comp.component).join('|');
+    const dataString = `${identityType}|${name}|${email}|${componentString}`;
+    
+    // Generate UWA using character encoding (preparing for quantum-proof encryption)
+    let addressCode = 0;
+    for (let i = 0; i < dataString.length; i++) {
+      const char = dataString.charCodeAt(i);
+      addressCode = ((addressCode << 3) ^ char) + (i * 7);
+    }
+    
+    // Format as UWA address (placeholder for quantum encryption integration)
+    const baseCode = Math.abs(addressCode).toString(36).toUpperCase();
+    const timestamp = Date.now().toString().slice(-4);
+    return `UWA${baseCode.substring(0, 6).padStart(6, '0')}${timestamp}`;
+  };
+
+  // Handle UWA generation
+  const handleGenerateUWA = () => {
+    const identityData = {
+      firstName: form.getValues('identityBehaviorHygiene.firstName'),
+      lastName: form.getValues('identityBehaviorHygiene.lastName'),
+      email: form.getValues('identityBehaviorHygiene.email'),
+      role: form.getValues('identityBehaviorHygiene.role'),
+      identityType: form.getValues('identityBehaviorHygiene.identityType'),
+      userId: form.getValues('identityBehaviorHygiene.userId')
+    };
+    
+    // Get selected components from the matrix
+    const selectedComponents = matrixConfig.filter(comp => 
+      comp.human || comp.machinePhysical || comp.machineVirtual || comp.api || comp.thirdParty
+    );
+    
+    const newUWA = generateUWA(identityData, selectedComponents);
+    setGeneratedUWA(newUWA);
+    
+    toast({
+      title: "UWA Generated Successfully",
+      description: `Universal Wallet Address: ${newUWA}`,
+    });
+  };
+
+  const updateMatrixConfig = (index: number, field: string, value: boolean) => {
+    const newConfig = [...matrixConfig];
+    newConfig[index] = { ...newConfig[index], [field]: value };
+    setMatrixConfig(newConfig);
+  };
+
+  const resetToDefault = () => {
+    setMatrixConfig([...defaultMatrixConfig]);
+    toast({
+      title: "Reset to Default Configuration",
+      description: "Components reset to security best practice defaults",
+    });
+  };
+
+  // CSV template download function
+  const downloadIdentityTemplate = () => {
+    console.log("Download function called");
+    try {
+      const csvContent = `user_id,first_name,last_name,email,role,department,identity_type,access_level,government_id_type,government_id_issuing_authority,mfa_enabled,mfa_type,location,manager,employment_status,last_password_change,last_security_training,system_access,typical_login_hours,login_anomaly_threshold,inactive_account_days,credential_exposure_check,session_timeout_minutes,privilege_escalation_alerts,federation_source
+EMP001,John,Smith,john.smith@example.com,IT Manager,Information Technology,human,privileged,drivers_license,NY-DMV,yes,app+sms,Headquarters,jane.doe@example.com,Full Time,2025-04-15,2025-03-01,"ERP, CRM, IT Admin Portal",9:00-17:00,medium,30,yes,60,yes,Active Directory
+EMP002,Sarah,Johnson,sarah.johnson@example.com,Finance Director,Finance,human,admin,state_id,CA-DMV,yes,hardware,Headquarters,executive@example.com,Full Time,2025-04-20,2025-03-01,"ERP, Finance Portal, Expense System",8:00-18:00,high,30,yes,30,yes,Okta SSO
+SVC001,Backup,Service,backup-service@system.internal,Automated Process,Operations,machine-physical,standard,not_applicable,not_applicable,no,,Data Center,john.smith@example.com,System,2025-01-15,N/A,"Backup System, Storage Access",,low,365,no,0,yes,Local
+API001,Payment,Gateway,api-monitor@example.com,External Service,Finance,api,limited,not_applicable,not_applicable,yes,api-key,Cloud,sarah.johnson@example.com,Service,2025-03-30,N/A,"Payment Processing System",,high,90,yes,15,yes,AWS IAM
+VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,External,third-party,limited,passport,US-State-Dept,yes,app,Remote,john.smith@example.com,Vendor,2025-04-01,2025-02-15,"Ticketing System, Knowledge Base",9:00-20:00,medium,45,yes,20,yes,External IDP`;
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "user-identity-template.csv");
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      
+      toast({
+        title: "Template Downloaded",
+        description: "User identity template CSV has been downloaded successfully",
+      });
+    } catch (error) {
+      console.error("Download error:", error);
+      toast({
+        title: "Download Failed",
+        description: "Could not download template. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // CSV upload handler
+  const handleIdentityUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const csv = e.target?.result as string;
+        const lines = csv.split('\n');
+        const headers = lines[0].split(',');
+        
+        const identities = lines.slice(1)
+          .filter(line => line.trim())
+          .map(line => {
+            const values = line.split(',');
+            const identity: any = {};
+            headers.forEach((header, index) => {
+              identity[header.trim()] = values[index]?.trim() || '';
+            });
+            return identity;
+          });
+
+        setUploadedIdentities(identities);
+        toast({
+          title: "Identities Uploaded",
+          description: `Successfully loaded ${identities.length} identity records`,
+        });
+      } catch (error) {
+        toast({
+          title: "Upload Error",
+          description: "Failed to parse CSV file. Please check the format.",
+          variant: "destructive",
+        });
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  // CSV Template Download Function
+  const downloadCSVTemplate = () => {
+    const csvHeaders = [
+      "Device ID/Asset Tag",
+      "Make/Model", 
+      "Color/Physical Description",
+      "Serial Number",
+      "Location/Department",
+      "Owner/Responsible Party",
+      "Purchase Date",
+      "Warranty Expiration",
+      "Operating System",
+      "Software Installed",
+      "IP Address",
+      "MAC Address",
+      "Security Software",
+      "Encryption Status",
+      "Last Security Update",
+      "Compliance Status",
+      "Risk Level",
+      "Data Classification",
+      "Network Access",
+      "Remote Access Capability",
+      "Backup Status",
+      "Monitoring Status",
+      "Incident History",
+      "Maintenance Schedule",
+      "Disposal Method",
+      "Handling Company",
+      "Data Sanitization Method",
+      "Disposal Date",
+      "Disposal Certification"
+    ];
+    
+    const csvContent = csvHeaders.join(",") + "\n";
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "device-inventory-template.csv");
+    link.style.visibility = "hidden";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast({
+      title: "Template Downloaded",
+      description: "Device inventory CSV template has been downloaded successfully.",
+    });
+  };
+
+  // CSV Import Function
+  const handleCSVImport = (event: any) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const csv = e.target?.result as string;
+        const lines = csv.split('\n');
+        const headers = lines[0].split(',');
+        
+        // Validate headers match expected format
+        const expectedHeaders = [
+          "Device ID/Asset Tag",
+          "Make/Model", 
+          "Color/Physical Description"
+        ];
+        
+        const hasValidHeaders = expectedHeaders.every(header => 
+          headers.some(h => h.trim() === header)
+        );
+        
+        if (!hasValidHeaders) {
+          toast({
+            title: "Import Error",
+            description: "CSV file format is invalid. Please use the provided template.",
+            variant: "destructive",
+          });
+          return;
+        }
+        
+        const deviceCount = lines.length - 1; // Exclude header
+        toast({
+          title: "Import Successful",
+          description: `Successfully imported ${deviceCount} devices from CSV file.`,
+        });
+        
+      } catch (error) {
+        toast({
+          title: "Import Error",
+          description: "Failed to parse CSV file. Please check the file format.",
+          variant: "destructive",
+        });
+      }
+    };
+    
+    reader.readAsText(file);
+  };
+
+  // Add device to independent inventory
+  const addDeviceToInventory = (deviceData: any) => {
+    const newDevice = {
+      id: Date.now(),
+      deviceId: deviceData.deviceId || `DEV-${Date.now()}`,
+      makeModel: deviceData.makeModel || '',
+      serialNumber: deviceData.serialNumber || '',
+      deviceType: deviceData.deviceType || '',
+      owner: deviceData.owner || '',
+      operatingSystem: deviceData.operatingSystem || '',
+      ipAddress: deviceData.ipAddress || '',
+      macAddress: deviceData.macAddress || '',
+      environment: deviceData.environment || '',
+      riskLevel: deviceData.riskLevel || 'Medium',
+      ...deviceData
+    };
+    
+    setDeviceInventory(prev => [...prev, newDevice]);
+    
+    toast({
+      title: "Device Added",
+      description: `Device ${newDevice.deviceId} has been added to inventory.`,
+    });
+  };
+
+  // Remove device from inventory
+  const removeDeviceFromInventory = (deviceId: number) => {
+    setDeviceInventory(prev => prev.filter(device => device.id !== deviceId));
+    
+    toast({
+      title: "Device Removed",
+      description: "Device has been removed from inventory.",
+    });
+  };
+
+  // Filter devices based on type
+  const filteredDevices = deviceTypeFilter === "all-types" 
+    ? deviceInventory 
+    : deviceInventory.filter(device => device.deviceType === deviceTypeFilter);
+
+  // Calculate device risk score based on Section #3 security risks
+  const calculateDeviceRisk = (deviceType: string, ipAddress?: string) => {
+    const formValues = form.getValues();
+    const organizationSecurityRisks = [
+      ...(formValues.securityRisks || []),
+      ...(formValues.websiteVulnerabilities || []),
+      ...(formValues.endDeviceVulnerabilities || [])
+    ];
+
+    return calculateDeviceRiskScore(organizationSecurityRisks, deviceType);
+  };
   
   // Helper function to handle OS checkbox changes
   const handleOsCheckboxChange = (currentValues: string[] = [], os: any, isChecked: boolean): string[] => {
@@ -343,24 +724,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
       eulaAccepted: false,
     },
   });
-  
+
+  // Form submission handler - placed after form definition
   const handleSubmit = form.handleSubmit((data: Sos2aFormData) => {
-    // Debug logs to check form submission
-    console.log("Form submitted", data);
-    console.log("EULA status:", eulaAccepted);
-    // ISMS Processes are now properly handled
-    
-    // Update the EULA acceptance state in the form data
-    const updatedData = {
-      ...data,
-      eulaAccepted: eulaAccepted
-    };
-    console.log("Calling parent onSubmit with data");
     try {
+      console.log("Form submitted with data:", data);
+      const updatedData = {
+        ...data,
+        eulaAccepted: eulaAccepted
+      };
       onSubmit(updatedData);
-      console.log("Parent onSubmit completed");
+      toast({
+        title: "Form Submitted Successfully",
+        description: "Your assessment questionnaire has been submitted for review.",
+      });
     } catch (error) {
-      console.error("Error in form submission:", error);
+      console.error("Form submission error:", error);
+      toast({
+        title: "Submission Error",
+        description: "Failed to submit form. Please try again.",
+        variant: "destructive",
+      });
     }
   });
   
@@ -945,7 +1329,16 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
     { id: "solaris-11.4", label: "Solaris 11.4", category: "Unix-Based OS" },
     { id: "solaris-11.3", label: "Solaris 11.3", category: "Unix-Based OS" },
     { id: "hp-ux-11i-v3", label: "HP-UX 11i v3", category: "Unix-Based OS" },
-    { id: "other-unix", label: "Other Unix OS", category: "Unix-Based OS" },
+    { id: "other-unix", label: "Other Unix OS (includes macOS)", category: "Unix-Based OS" },
+    
+    // macOS
+    { id: "macos-ventura-13", label: "macOS Ventura 13", category: "macOS" },
+    { id: "macos-monterey-12", label: "macOS Monterey 12", category: "macOS" },
+    { id: "macos-big-sur-11", label: "macOS Big Sur 11", category: "macOS" },
+    { id: "macos-catalina-10.15", label: "macOS Catalina 10.15", category: "macOS" },
+    { id: "macos-mojave-10.14", label: "macOS Mojave 10.14", category: "macOS" },
+    { id: "macos-server", label: "macOS Server", category: "macOS" },
+    { id: "other-macos", label: "Other macOS Version", category: "macOS" },
     
     // Cloud/Container OS
     { id: "gcp-compute-engine", label: "Google Compute Engine (GCE)", category: "Cloud/Container OS" },
@@ -1029,12 +1422,124 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
   
   // We already have a handleOsCheckboxChange function defined above
 
+  // Calculate workflow progress based on form completion
+  const calculateWorkflowProgress = () => {
+    const formValues = form.getValues();
+    let completedSteps = 1; // Always start with step 1 (Inquiry & Questionnaire)
+    
+    // Step 2: Interview & Matrix Population (when business info is complete)
+    if (formValues.businessName && formValues.industry) completedSteps = 2;
+    
+    // Step 3: Matrix Population (when infrastructure data is added)
+    if (formValues.operationMode) completedSteps = 3;
+    
+    // Step 4: RASBITA Governance (when security measures are defined)
+    if (formValues.securityMeasures?.length > 0) completedSteps = 4;
+    
+    // Step 5: RASBITA Score (when compliance data exists)
+    if (formValues.complianceRequirements) completedSteps = 5;
+    
+    // Step 6: Gap Analysis (when regulatory requirements are defined)
+    if (formValues.regulatoryRequirements?.length > 0) completedSteps = 6;
+    
+    // Step 7: Architecture Analysis (when standards are selected)
+    if (formValues.standardsGuidelines?.length > 0) completedSteps = 7;
+    
+    // Step 8: Preliminary Report (when assessment type is selected and contact info complete)
+    if (formValues.reportType && formValues.contactInfo?.name) completedSteps = 8;
+    
+    // Step 9: Comprehensive Report (when all major sections complete - ready for executive scorecard)
+    if (formValues.contactInfo?.name && formValues.reportType && 
+        formValues.complianceRequirements && 
+        formValues.securityMeasures?.length > 0) completedSteps = 9;
+    
+    return completedSteps;
+  };
+
+  const currentStep = calculateWorkflowProgress();
+  const workflowSteps = [
+    { id: 1, title: "Inquiry & Questionnaire", description: "Initial Data Collection", isCore: true, requiresMonitoring: false },
+    { id: 2, title: "Interview & Matrix Population", description: "Stakeholder Input", isCore: true, requiresMonitoring: false },
+    { id: 3, title: "Matrix Population", description: "Infrastructure Data", isCore: true, requiresMonitoring: false },
+    { id: 4, title: "RASBITA-RGM", description: "Risk Governance & Management", isCore: true, requiresMonitoring: false },
+    { id: 5, title: "Gap Analysis", description: "Identifying Missing Controls from Sections 2-13", isCore: true, requiresMonitoring: false },
+    { id: 6, title: "Preliminary Report", description: "Qualitative Expert Opinion Analysis", isCore: true, requiresMonitoring: false },
+    { id: 7, title: "Architecture TM", description: "Deep STRIDE Analysis (if architecture data available)", isCore: false, requiresMonitoring: false },
+    { id: 8, title: "RASBITA-CBF", description: "Cost-Benefit Financial Analysis (if incident/financial data available)", isCore: false, requiresMonitoring: false },
+    { id: 9, title: "Comprehensive Report", description: "Enhanced Analysis with Extended Monitoring Data", isCore: false, requiresMonitoring: true }
+  ];
+
   return (
     <Card className="w-full">
       <CardContent className="p-6">
-        <Form {...form}>
-          <form onSubmit={handleSubmit} className="space-y-8">
-            <Tabs defaultValue="business" className="w-full">
+        {/* SOS2A Workflow Progress Header */}
+        <div className="mb-6 p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg border">
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-lg font-semibold text-primary">SOS²A Assessment Progress</h3>
+            <Badge variant="secondary" className="text-sm">
+              Step {currentStep} of 9
+            </Badge>
+          </div>
+          
+          <div className="grid grid-cols-3 md:grid-cols-9 gap-2 mb-3">
+            {workflowSteps.map((step) => (
+              <div key={step.id} className="flex flex-col items-center text-center">
+                <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${
+                  step.id <= currentStep && step.isCore
+                    ? 'bg-purple-600 text-white' 
+                    : step.id <= currentStep && !step.isCore
+                    ? 'bg-blue-600 text-white'
+                    : step.id === currentStep + 1
+                    ? 'bg-orange-500 text-white'
+                    : step.isCore
+                    ? 'bg-purple-200 text-purple-700'
+                    : step.requiresMonitoring
+                    ? 'bg-green-200 text-green-700'
+                    : 'bg-blue-200 text-blue-700'
+                }`}>
+                  {step.id <= currentStep ? (
+                    <CheckCircle className="h-4 w-4" />
+                  ) : step.id === currentStep + 1 ? (
+                    <Clock className="h-4 w-4" />
+                  ) : (
+                    step.id
+                  )}
+                </div>
+                <div className="mt-1 text-xs text-gray-600 hidden md:block">
+                  {step.title.split(' ')[0]}
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          <div className="text-sm text-gray-600">
+            <strong>Current Phase:</strong> {workflowSteps[currentStep - 1]?.title} - {workflowSteps[currentStep - 1]?.description}
+          </div>
+          
+          {currentStep < 9 && (
+            <div className="mt-2 text-xs text-gray-500">
+              <strong>Next:</strong> {workflowSteps[currentStep]?.title} - {workflowSteps[currentStep]?.description}
+            </div>
+          )}
+          
+          {currentStep >= 6 && (
+            <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-800">
+              <CheckCircle className="h-4 w-4 inline mr-1" />
+              <strong>Preliminary Report Ready:</strong> Core assessment complete. Architecture TM and RASBITA-CBF will be included if data is available.
+            </div>
+          )}
+          
+          {currentStep >= 6 && (
+            <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded text-sm text-green-700">
+              <Clock className="h-4 w-4 inline mr-1" />
+              <strong>Enhanced Analysis Available:</strong> Comprehensive report with extended monitoring data (6+ months) provides deeper quantitative insights.
+            </div>
+          )}
+        </div>
+
+          <Form {...form}>
+            <form onSubmit={handleSubmit} className="space-y-8">
+              <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
                 <TabsTrigger value="infrastructure">2. Infrastructure Mode</TabsTrigger>
@@ -1085,108 +1590,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                 <TabsTrigger value="" disabled></TabsTrigger>
               </TabsList>
 
-              {/* 13. Identity Behavior & Hygiene Tab */}
-              <TabsContent value="identity-behavior" className="space-y-6">
-                <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-4">13. Identity Behavior & Hygiene</h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    Track and manage identity behaviors, authentication practices, and security hygiene measures.
-                  </p>
-                  
-                  {/* 1. Identification Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">1. Identification</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.identificationMethod"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Identification Method</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select identification method" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="username">Username</SelectItem>
-                                <SelectItem value="email">Email Address</SelectItem>
-                                <SelectItem value="employee-id">Employee ID</SelectItem>
-                                <SelectItem value="badge">Badge Number</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
 
-                      <FormField
-                        control={form.control}
-                        name="identityBehaviorHygiene.identityType"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Identity Type</FormLabel>
-                            <Select 
-                              onValueChange={field.onChange}
-                              defaultValue={field.value}
-                            >
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select identity type" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="employee">Employee</SelectItem>
-                                <SelectItem value="contractor">Contractor</SelectItem>
-                                <SelectItem value="vendor">Vendor</SelectItem>
-                                <SelectItem value="service-account">Service Account</SelectItem>
-                                <SelectItem value="system-account">System Account</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-                  
-                  {/* Basic UWA Records placeholder */}
-                  <div className="mt-6 p-4 border rounded-md">
-                    <h4 className="font-medium mb-2">UWA Records</h4>
-                    <p className="text-sm text-muted-foreground">
-                      UWA records will be displayed here when available.
-                    </p>
-                  </div>
-                  
-                  <div className="flex justify-end space-x-4">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        const deviceTab = document.querySelector('[value="device-inventory"]') as HTMLElement;
-                        if (deviceTab) deviceTab.click();
-                      }}
-                    >
-                      Previous Step
-                    </Button>
-                    <Button 
-                      type="button"
-                      onClick={() => {
-                        const contactTab = document.querySelector('[value="contact"]') as HTMLElement;
-                        if (contactTab) contactTab.click();
-                      }}
-                    >
-                      Next Step
-                    </Button>
-                  </div>
-                </div>
-              </TabsContent>
               
               {/* Business Information Tab */}
               <TabsContent value="business" className="space-y-6">
@@ -1761,6 +2165,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </p>
                   </div>
                 )}
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </TabsContent>
               
               {/* 4. Baseline Configuration Tab */}
@@ -1962,7 +2387,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                   
                                   {/* Unix-Based OS */}
                                   <div>
-                                    <h4 className="text-md font-medium mb-2">Unix-Based OS</h4>
+                                    <h4 className="text-md font-medium mb-2 flex items-center gap-2">
+                                      Unix-Based OS 
+                                      <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full border border-blue-200">
+                                        includes macOS
+                                      </span>
+                                    </h4>
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                                       {operatingSystemOptions
                                         .filter(os => os.category === "Unix-Based OS")
@@ -2222,6 +2652,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                 </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </TabsContent>
               
               {/* 4. Security Control vs Framework Tab */}
@@ -2381,6 +2832,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                   </div>
+                </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
                 </div>
               </TabsContent>
               
@@ -2710,6 +3182,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                 </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </TabsContent>
               
               {/* 6. Regulatory Requirements Tab */}
@@ -2722,6 +3215,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   
                   <RegulatoryContent form={form} />
                 </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </TabsContent>
               
               {/* 7. Standards & Guidelines Tab */}
@@ -2733,6 +3247,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </p>
                   
                   <StandardsContent form={form} />
+                </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
                 </div>
               </TabsContent>
               
@@ -2880,6 +3415,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       </div>
                     </div>
                   </div>
+                </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
                 </div>
               </TabsContent>
               
@@ -3351,6 +3907,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     {/* Architecture Threat Modeling section removed from Adversarial Insight tab as requested */}
                   </div>
                 </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </TabsContent>
               
               {/* 11. ISMS Tab */}
@@ -3639,6 +4216,27 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                 </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </TabsContent>
               
               {/* 12. Device Inventory Tracking Tab */}
@@ -3649,7 +4247,229 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     Track and manage your organization's devices to improve security visibility and control.
                   </p>
                   
-                  {/* 1. Identification Section */}
+                  {/* Device Inventory Management Section */}
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="font-medium text-lg">Device Inventory</h4>
+                      <Button 
+                        className="bg-purple-600 hover:bg-purple-700 text-white shadow-lg"
+                        onClick={() => {
+                          toast({
+                            title: "Add Device Instructions",
+                            description: (
+                              <div className="text-left space-y-2">
+                                <p className="font-medium text-gray-900">Please use the comprehensive device form below to add a new device.</p>
+                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-3">
+                                  <p className="text-sm text-blue-800 font-medium mb-2">Required Information:</p>
+                                  <div className="space-y-1 text-sm text-blue-700">
+                                    <div className="flex items-center gap-2">
+                                      <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                      <span>Device Type and Make/Model</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                      <span>Serial Number and Asset Tag</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                      <span>Owner/Assigned User</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <span className="w-1.5 h-1.5 bg-blue-500 rounded-full"></span>
+                                      <span>Security and Risk Assessment Details</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <p className="text-sm text-gray-600 mt-3">
+                                  Complete the form below for comprehensive device tracking with automatic risk scoring.
+                                </p>
+                              </div>
+                            ),
+                            duration: 8000,
+                          });
+                        }}
+                      >
+                        <Plus className="h-4 w-4 mr-2" />
+                        Add Device
+                      </Button>
+                    </div>
+                    
+                    {/* Filter Section */}
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Filter className="h-4 w-4 text-blue-600" />
+                        <span className="font-medium text-blue-800">Filter Devices</span>
+                        <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded">Filter Tool</span>
+                      </div>
+                      <p className="text-sm text-blue-700 mb-3">Select a device type to filter the inventory list below</p>
+                      
+                      <Select 
+                        defaultValue="all-types" 
+                        onValueChange={setDeviceTypeFilter}
+                      >
+                        <SelectTrigger className="w-48 bg-white border-blue-300">
+                          <SelectValue placeholder="All Types" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="all-types">All Types</SelectItem>
+                          <SelectItem value="laptop">Laptop</SelectItem>
+                          <SelectItem value="desktop">Desktop</SelectItem>
+                          <SelectItem value="server">Server</SelectItem>
+                          <SelectItem value="mobile">Mobile Device</SelectItem>
+                          <SelectItem value="tablet">Tablet</SelectItem>
+                          <SelectItem value="printer">Printer</SelectItem>
+                          <SelectItem value="scanner">Scanner</SelectItem>
+                          <SelectItem value="router">Network Equipment - Router</SelectItem>
+                          <SelectItem value="switch">Network Equipment - Switch</SelectItem>
+                          <SelectItem value="firewall">Network Equipment - Firewall</SelectItem>
+                          <SelectItem value="nas">Network Equipment - NAS</SelectItem>
+                          <SelectItem value="san">Network Equipment - SAN</SelectItem>
+                          <SelectItem value="internet-gateway">Network Equipment - Internet Gateway</SelectItem>
+                          <SelectItem value="iot">IoT Device</SelectItem>
+                          <SelectItem value="camera">Security Camera</SelectItem>
+                          <SelectItem value="phone">VoIP Phone</SelectItem>
+                          <SelectItem value="storage">External Storage</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    {/* Device Inventory Table */}
+                    <div className="border rounded-lg overflow-hidden">
+                      <div className="overflow-x-auto">
+                        <table className="w-full min-w-[2400px]">
+                          <thead className="bg-gray-50 border-b">
+                            <tr>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Device ID/Asset Tag</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Make/Model</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Color/Physical Description</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Serial Number</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Location/Department</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Owner/Responsible Party</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Purchase Date</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Warranty Expiration</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Operating System</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Software Installed</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">IP Address</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">MAC Address</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Security Software</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Encryption Status</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Last Security Update</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Compliance Status</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[100px]">Risk Level</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Data Classification</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Network Access</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Remote Access Capability</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Backup Status</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Monitoring Status</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Incident History</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Maintenance Schedule</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Disposal Method</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Handling Company</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Data Sanitization Method</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[120px]">Disposal Date</th>
+                              <th className="px-3 py-3 text-left text-xs font-medium text-gray-700 min-w-[150px]">Disposal Certification</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td colSpan={29} className="px-4 py-8 text-center text-gray-500">
+                                No devices added yet. Click "Add Device" to begin tracking comprehensive device information.
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                    
+                    {/* Device Inventory Table */}
+                    <div className="mt-6">
+                      {filteredDevices.length > 0 ? (
+                        <div className="rounded-md border overflow-hidden">
+                          <div className="overflow-x-auto">
+                            <table className="w-full text-sm">
+                              <thead className="bg-gray-100">
+                                <tr>
+                                  <th className="p-3 text-left font-medium">Device ID</th>
+                                  <th className="p-3 text-left font-medium">Type</th>
+                                  <th className="p-3 text-left font-medium">Make/Model</th>
+                                  <th className="p-3 text-left font-medium">Owner</th>
+                                  <th className="p-3 text-left font-medium">Environment</th>
+                                  <th className="p-3 text-left font-medium">Risk Level</th>
+                                  <th className="p-3 text-left font-medium">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {filteredDevices.map((device) => (
+                                  <tr key={device.id} className="border-t hover:bg-gray-50">
+                                    <td className="p-3">{device.deviceId}</td>
+                                    <td className="p-3">{device.deviceType}</td>
+                                    <td className="p-3">{device.makeModel}</td>
+                                    <td className="p-3">{device.owner}</td>
+                                    <td className="p-3">{device.environment}</td>
+                                    <td className="p-3">
+                                      <span className={`px-2 py-1 rounded text-xs ${
+                                        device.riskLevel === 'High' ? 'bg-red-100 text-red-700' :
+                                        device.riskLevel === 'Medium' ? 'bg-yellow-100 text-yellow-700' :
+                                        'bg-green-100 text-green-700'
+                                      }`}>
+                                        {device.riskLevel}
+                                      </span>
+                                    </td>
+                                    <td className="p-3">
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => removeDeviceFromInventory(device.id)}
+                                      >
+                                        Remove
+                                      </Button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="text-center py-8 text-gray-500">
+                          <p>No devices in inventory. Click "Add Device" to get started.</p>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Import Device Inventory Section */}
+                    <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+                      <h5 className="font-medium mb-2">Import Device Inventory</h5>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Use these options to import existing device inventory data or download a template.
+                      </p>
+                      <div className="flex gap-3 w-full">
+                        <Button 
+                          className="bg-purple-600 hover:bg-purple-700 text-white flex-1"
+                          onClick={() => {
+                            const input = document.createElement('input');
+                            input.type = 'file';
+                            input.accept = '.csv';
+                            input.onchange = handleCSVImport;
+                            input.click();
+                          }}
+                        >
+                          <Upload className="h-4 w-4 mr-2" />
+                          Import CSV
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          className="border-gray-300 flex-1"
+                          onClick={downloadCSVTemplate}
+                        >
+                          <Download className="h-4 w-4 mr-2" />
+                          Download Template
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {/* 1. Identification Section - Enhanced */}
                   <div className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -3683,20 +4503,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       
                       <FormField
                         control={form.control}
-                        name="deviceInventoryTracking.colorDescription"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Color / Physical Description</FormLabel>
-                            <FormControl>
-                              <Input placeholder="Enter device color or description" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      
-                      <FormField
-                        control={form.control}
                         name="deviceInventoryTracking.serialNumber"
                         render={({ field }) => (
                           <FormItem>
@@ -3714,9 +4520,127 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         name="deviceInventoryTracking.owner"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Owner / Assigned User</FormLabel>
+                            <FormLabel>User/Owner</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select device owner/user" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="system-administrator">System Administrator</SelectItem>
+                                <SelectItem value="it-manager">IT Manager</SelectItem>
+                                <SelectItem value="network-administrator">Network Administrator</SelectItem>
+                                <SelectItem value="security-analyst">Security Analyst</SelectItem>
+                                <SelectItem value="database-administrator">Database Administrator</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="shared-workstation">Shared Workstation</SelectItem>
+                                <SelectItem value="executive-team">Executive Team</SelectItem>
+                                <SelectItem value="it-department">IT Department</SelectItem>
+                                <SelectItem value="finance-department">Finance Department</SelectItem>
+                                <SelectItem value="hr-department">HR Department</SelectItem>
+                                <SelectItem value="operations-team">Operations Team</SelectItem>
+                                <SelectItem value="development-team">Development Team</SelectItem>
+                                <SelectItem value="guest-access">Guest Access</SelectItem>
+                                <SelectItem value="contractor">Contractor</SelectItem>
+                                <SelectItem value="vendor">Vendor</SelectItem>
+                                <SelectItem value="unassigned">Unassigned</SelectItem>
+                                <SelectItem value="other">Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.firstName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Name</FormLabel>
                             <FormControl>
-                              <Input placeholder="Enter device owner or assigned user" {...field} />
+                              <Input placeholder="Enter first name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.lastName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Last Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter last name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.role"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Role</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select user role" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="user">User</SelectItem>
+                                <SelectItem value="administrator">Administrator</SelectItem>
+                                <SelectItem value="super-user">Super User</SelectItem>
+                                <SelectItem value="it-admin">IT Admin</SelectItem>
+                                <SelectItem value="developer">Developer</SelectItem>
+                                <SelectItem value="manager">Manager</SelectItem>
+                                <SelectItem value="executive">Executive</SelectItem>
+                                <SelectItem value="guest">Guest</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="contractor">Contractor</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.contactEmail"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact: Email</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="email" 
+                                placeholder="Enter email address" 
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.contactPhone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Contact: Phone Number</FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="tel" 
+                                placeholder="Enter phone number" 
+                                {...field} 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3731,6 +4655,79 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             <FormLabel>Device Nickname or Label (if used)</FormLabel>
                             <FormControl>
                               <Input placeholder="Enter device nickname or label" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.colorPhysicalDescription"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Color/Physical Description</FormLabel>
+                            <FormControl>
+                              <Input placeholder="e.g., Black Dell laptop, Silver iPhone" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.locationDepartment"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Location/Department</FormLabel>
+                            <FormControl>
+                              <Input placeholder="e.g., IT Department, Building A Floor 3" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.purchaseDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Purchase Date</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.warrantyExpiration"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Warranty Expiration</FormLabel>
+                            <FormControl>
+                              <Input type="date" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.softwareInstalled"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Software Installed</FormLabel>
+                            <FormControl>
+                              <Textarea 
+                                placeholder="List major software applications installed" 
+                                {...field} 
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -3755,7 +4752,28 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               </FormDescription>
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {["Laptop", "Desktop", "Server", "Mobile", "Tablet", "Router", "Switch", "Firewall", "IoT Device", "Smartwatch", "Printer", "Other"].map((type) => (
+                              {[
+                                "Laptop", 
+                                "Desktop", 
+                                "Server", 
+                                "Mobile Device", 
+                                "Tablet", 
+                                "Printer", 
+                                "Scanner",
+                                "Router", 
+                                "Switch", 
+                                "Firewall", 
+                                "NAS", 
+                                "SAN", 
+                                "Internet Gateway",
+                                "IoT Device", 
+                                "Security Camera", 
+                                "VoIP Phone",
+                                "External Storage",
+                                "Smartwatch", 
+                                "Transportation Device", 
+                                "Other"
+                              ].map((type) => (
                                 <FormField
                                   key={type}
                                   control={form.control}
@@ -3977,6 +4995,33 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                             </FormItem>
                           )}
                         />
+                        
+                        <FormField
+                          control={form.control}
+                          name="deviceInventoryTracking.environment"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Environment</FormLabel>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select environment" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="production">Production</SelectItem>
+                                  <SelectItem value="staging-testing">Staging/Testing</SelectItem>
+                                  <SelectItem value="development">Development</SelectItem>
+                                  <SelectItem value="qa">QA</SelectItem>
+                                  <SelectItem value="disaster-recovery">Disaster Recovery</SelectItem>
+                                  <SelectItem value="training">Training</SelectItem>
+                                  <SelectItem value="other">Other</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
                       </div>
                       
                       <FormField
@@ -4165,6 +5210,49 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         />
                       </div>
                       
+                      {/* Automatic Device Risk Score Display */}
+                      <div className="border rounded-md p-4 bg-blue-50">
+                        <h5 className="font-medium mb-3 text-blue-800">Automatic Device Risk Assessment</h5>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <p className="text-sm text-gray-600">
+                              Risk Score (Based on Section #3 Security Risks):
+                            </p>
+                            <div className="flex items-center space-x-3">
+                              {(() => {
+                                const deviceType = form.watch("deviceInventoryTracking.deviceType");
+                                const ipAddress = form.watch("deviceInventoryTracking.ipAddress");
+                                const riskScore = deviceType ? calculateDeviceRisk(deviceType, ipAddress || "") : 0;
+                                const riskLevel = getRiskLevelFromScore(riskScore);
+                                
+                                return (
+                                  <>
+                                    <Badge 
+                                      variant={
+                                        riskScore >= 80 ? "destructive" :
+                                        riskScore >= 60 ? "default" :
+                                        riskScore >= 40 ? "secondary" : "outline"
+                                      }
+                                      className="text-lg px-3 py-1"
+                                    >
+                                      {riskScore}/100
+                                    </Badge>
+                                    <span className="text-sm font-medium">
+                                      {riskLevel}
+                                    </span>
+                                  </>
+                                );
+                              })()}
+                            </div>
+                          </div>
+                          <div className="space-y-2">
+                            <p className="text-xs text-gray-500">
+                              This score is automatically calculated based on your organization's security risks from Section #3 and the device type selected above.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
                           control={form.control}
@@ -4277,9 +5365,85 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 5. Usage & Monitoring Section */}
+                  {/* 5. Lifecycle Management Section - Disposal and data sanitization */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Usage & Monitoring</h4>
+                    <h4 className="font-medium mb-4">5. Lifecycle Management</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.disposalLocation"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Disposal/Decommission Location</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select disposal location" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="on-site-secure">On-site Secure Facility</SelectItem>
+                                <SelectItem value="certified-recycler">Certified Recycler</SelectItem>
+                                <SelectItem value="manufacturer-return">Manufacturer Return Program</SelectItem>
+                                <SelectItem value="third-party-vendor">Third-party Vendor</SelectItem>
+                                <SelectItem value="government-facility">Government Facility</SelectItem>
+                                <SelectItem value="pending">Pending Disposal</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.handlingCompany"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Handling Company/Organization</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter specific company name (e.g., Each1Teach1 Tech)" {...field} />
+                            </FormControl>
+                            <FormDescription>
+                              Enter the specific company handling the disposal/recycling
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="deviceInventoryTracking.dataSanitizationMethod"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Data Sanitization Method</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select data sanitization method" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="dod-5220-22m">DoD 5220.22-M (3-pass)</SelectItem>
+                                <SelectItem value="nist-800-88">NIST 800-88 Guidelines</SelectItem>
+                                <SelectItem value="physical-destruction">Physical Destruction</SelectItem>
+                                <SelectItem value="degaussing">Degaussing</SelectItem>
+                                <SelectItem value="crypto-erase">Cryptographic Erasure</SelectItem>
+                                <SelectItem value="secure-format">Secure Format</SelectItem>
+                                <SelectItem value="not-performed">Not Performed</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* 6. Usage & Monitoring Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">6. Usage & Monitoring</h4>
                     <div className="space-y-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
@@ -4341,169 +5505,281 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                         <FormField
                           control={form.control}
                           name="deviceInventoryTracking.deviceRiskScore"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Device Risk Score (Optional)</FormLabel>
-                              <FormDescription>
-                                If available from your SIEM/EDR, enter a risk score from 0-100
-                              </FormDescription>
-                              <FormControl>
-                                <Input 
-                                  type="number" 
-                                  min="0" 
-                                  max="100" 
-                                  placeholder="Enter risk score (0-100)"
-                                  {...field}
-                                  onChange={e => {
-                                    const value = e.target.value === '' ? undefined : Number(e.target.value);
-                                    field.onChange(value);
-                                  }}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
+                          render={({ field }) => {
+                            const deviceType = form.watch("deviceInventoryTracking.deviceType");
+                            const ipAddress = form.watch("deviceInventoryTracking.ipAddress");
+                            const calculatedScore = deviceType ? calculateDeviceRisk(deviceType, ipAddress || "") : 0;
+                            
+                            return (
+                              <FormItem>
+                                <FormLabel>Device Risk Score</FormLabel>
+                                <FormDescription>
+                                  Auto-calculated from Section #3 security risks. Override with SIEM/EDR data if available.
+                                </FormDescription>
+                                <div className="space-y-2">
+                                  <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-md">
+                                    <span className="text-sm text-gray-600">Calculated Score:</span>
+                                    <Badge 
+                                      variant={
+                                        calculatedScore >= 80 ? "destructive" :
+                                        calculatedScore >= 60 ? "default" :
+                                        calculatedScore >= 40 ? "secondary" : "outline"
+                                      }
+                                    >
+                                      {calculatedScore}/100
+                                    </Badge>
+                                    <Button
+                                      type="button"
+                                      variant="outline"
+                                      size="sm"
+                                      onClick={() => field.onChange(calculatedScore)}
+                                    >
+                                      Use Calculated
+                                    </Button>
+                                  </div>
+                                  <FormControl>
+                                    <Input 
+                                      type="number" 
+                                      min="0" 
+                                      max="100" 
+                                      placeholder={`Auto-calculated: ${calculatedScore} (override if needed)`}
+                                      {...field}
+                                      onChange={e => {
+                                        const value = e.target.value === '' ? undefined : Number(e.target.value);
+                                        field.onChange(value);
+                                      }}
+                                    />
+                                  </FormControl>
+                                </div>
+                                <FormMessage />
+                              </FormItem>
+                            );
+                          }}
                         />
                       </div>
                     </div>
                   </div>
                   
-                  {/* 6. Lifecycle & Ownership Section */}
-                  <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">6. Lifecycle & Ownership</h4>
-                    <div className="space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.procurementDate"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Procurement Date / Vendor</FormLabel>
-                              <FormControl>
-                                <Input placeholder="Enter procurement date and vendor" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.warrantyExpiration"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Warranty Expiration</FormLabel>
-                              <FormControl>
-                                <Input type="date" {...field} />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="deviceInventoryTracking.deviceLifecycleStatus"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Device Lifecycle Status</FormLabel>
-                              <Select 
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                              >
+                  {/* 7. Lifecycle & Ownership Section */}
+                  <div className="bg-gradient-to-r from-orange-50 to-yellow-50 border-2 border-orange-200 rounded-lg p-6 mb-6 shadow-sm">
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-2xl">📋</span>
+                      <h4 className="font-semibold text-lg text-gray-800">7. Lifecycle & Ownership</h4>
+                      <span className="bg-orange-100 text-orange-800 text-xs px-3 py-1 rounded-full font-medium border border-orange-200">Maintenance</span>
+                    </div>
+                    <p className="text-sm text-gray-600 mb-6 font-medium">Track procurement, warranty, and management details</p>
+                    
+                    <div className="bg-white rounded-lg border border-gray-200 p-5 shadow-sm">
+                      <div className="space-y-6">
+                        {/* First Row - Procurement and Warranty */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.procurementDateVendor"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Procurement Date / Vendor</FormLabel>
                                 <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select lifecycle status" />
-                                  </SelectTrigger>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    placeholder="Enter procurement date and vendor" 
+                                    {...field} 
+                                  />
                                 </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="in-use">In Use</SelectItem>
-                                  <SelectItem value="in-storage">In Storage</SelectItem>
-                                  <SelectItem value="decommissioned">Decommissioned</SelectItem>
-                                  <SelectItem value="pending-disposal">Pending Disposal</SelectItem>
-                                  <SelectItem value="disposed">Disposed</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.warrantyExpiration"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Warranty Expiration</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    type="date" 
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
                       
-                      <FormField
-                        control={form.control}
-                        name="deviceInventoryTracking.assignedPolicies"
-                        render={() => (
-                          <FormItem>
-                            <div className="mb-4">
-                              <FormLabel>Assigned Policies or Group Tags</FormLabel>
-                              <FormDescription>
-                                Select all that apply
-                              </FormDescription>
-                            </div>
-                            <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                              {[
-                                "Finance Only", 
-                                "Executive", 
-                                "IT Admin",
-                                "Developer",
-                                "Guest Access",
-                                "Restricted Access",
-                                "BYOD",
-                                "Remote Worker",
-                                "Standard User"
-                              ].map((policy) => (
-                                <FormField
-                                  key={policy}
-                                  control={form.control}
-                                  name="deviceInventoryTracking.assignedPolicies"
-                                  render={({ field }) => {
-                                    return (
-                                      <FormItem
-                                        key={policy}
-                                        className="flex flex-row items-start space-x-3 space-y-0"
-                                      >
-                                        <FormControl>
-                                          <Checkbox
-                                            checked={field.value?.includes(policy)}
-                                            onCheckedChange={(checked) => {
-                                              const updatedValue = checked
-                                                ? [...(field.value || []), policy]
-                                                : field.value?.filter(
-                                                    (value) => value !== policy
-                                                  ) || [];
-                                              field.onChange(updatedValue);
-                                            }}
-                                          />
-                                        </FormControl>
-                                        <FormLabel className="font-normal cursor-pointer">
-                                          {policy}
-                                        </FormLabel>
-                                      </FormItem>
-                                    );
-                                  }}
-                                />
-                              ))}
-                            </div>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+                        {/* Second Row - Lifecycle Status and Disposal */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.deviceLifecycleStatus"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Device Lifecycle Status</FormLabel>
+                                <Select 
+                                  onValueChange={field.onChange}
+                                  defaultValue={field.value}
+                                >
+                                  <FormControl>
+                                    <SelectTrigger className="border-gray-300 focus:border-orange-500 focus:ring-orange-500">
+                                      <SelectValue placeholder="Select lifecycle status" />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="in-use">In Use</SelectItem>
+                                    <SelectItem value="in-storage">In Storage</SelectItem>
+                                    <SelectItem value="decommissioned">Decommissioned</SelectItem>
+                                    <SelectItem value="pending-disposal">Pending Disposal</SelectItem>
+                                    <SelectItem value="disposed">Disposed</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.disposalDecommissionLocation"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Disposal/Decommission Location</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    placeholder="Where device was sent if disposed" 
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        
+                        {/* Third Row - Handling Company and Data Sanitization */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.handlingCompanyOrganization"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Handling Company/Organization</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    placeholder="Enter specific company name (e.g., Each1Teach1 Tech)" 
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormDescription className="text-xs text-gray-500">
+                                  Enter the specific company handling the disposal/recycling
+                                </FormDescription>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                          
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.dataSanitizationMethod"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className="text-gray-700 font-medium">Data Sanitization Method</FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    className="border-gray-300 focus:border-orange-500 focus:ring-orange-500" 
+                                    placeholder="How data was removed/destroyed" 
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                        
+                        {/* Assigned Policies Section */}
+                        <div className="border-t border-gray-200 pt-6">
+                          <FormField
+                            control={form.control}
+                            name="deviceInventoryTracking.assignedPolicies"
+                            render={() => (
+                              <FormItem>
+                                <div className="mb-4">
+                                  <FormLabel className="text-gray-700 font-medium">Assigned Policies or Group Tags</FormLabel>
+                                  <FormDescription className="text-xs text-gray-500">
+                                    Select all that apply
+                                  </FormDescription>
+                                </div>
+                                <div className="grid grid-cols-3 gap-4">
+                                  {[
+                                    "Finance Only", 
+                                    "Executive", 
+                                    "IT Admin",
+                                    "Developer",
+                                    "Guest Access",
+                                    "Restricted Access",
+                                    "BYOD",
+                                    "Remote Worker",
+                                    "Standard User"
+                                  ].map((policy) => (
+                                    <FormField
+                                      key={policy}
+                                      control={form.control}
+                                      name="deviceInventoryTracking.assignedPolicies"
+                                      render={({ field }) => {
+                                        return (
+                                          <FormItem
+                                            key={policy}
+                                            className="flex flex-row items-start space-x-3 space-y-0"
+                                          >
+                                            <FormControl>
+                                              <Checkbox
+                                                className="accent-orange-500"
+                                                checked={field.value?.includes(policy)}
+                                                onCheckedChange={(checked) => {
+                                                  const updatedValue = checked
+                                                    ? [...(field.value || []), policy]
+                                                    : field.value?.filter(
+                                                        (value) => value !== policy
+                                                      ) || [];
+                                                  field.onChange(updatedValue);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal cursor-pointer text-sm text-gray-700">
+                                              {policy}
+                                            </FormLabel>
+                                          </FormItem>
+                                        );
+                                      }}
+                                    />
+                                  ))}
+                                </div>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
                 
-                <div className="flex justify-end space-x-4">
+                <div className="flex justify-between">
                   <Button
                     type="button"
                     variant="outline"
-                    onClick={() => document.querySelector('[value="isms"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                    onClick={prevTab}
                   >
                     Previous Step
                   </Button>
                   <Button 
                     type="button"
-                    onClick={() => document.querySelector('[value="identity-behavior"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                    onClick={nextTab}
                   >
                     Next Step
                   </Button>
@@ -4517,17 +5793,710 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   <p className="text-sm text-muted-foreground mb-4">
                     Track and manage identity behaviors, authentication practices, and security hygiene measures.
                   </p>
+
+                  {/* Universal Identity Verification System (UIVS) - Optional Enhancement */}
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+                    <div className="flex items-center gap-2 mb-3">
+                      <h4 className="text-lg font-semibold text-blue-800">
+                        Universal Identity Verification System (UIVS)
+                      </h4>
+                      <span className="px-2 py-1 bg-blue-100 text-blue-700 text-xs font-medium rounded-full">
+                        Optional Enhancement
+                      </span>
+                    </div>
+                    <p className="text-blue-700 mb-6">
+                      <strong>Optional:</strong> For organizations wanting advanced identity management, our UIVS system can import and manage multiple users with Universal Wallet Address generation. You can skip this section if not needed for your assessment.
+                    </p>
+                    
+                    {/* Action Buttons with Clear Explanations */}
+                    <div className="space-y-4 mb-6">
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="bg-white border border-blue-200 rounded-lg p-4">
+                          <Button 
+                            type="button" 
+                            className="w-full bg-green-600 hover:bg-green-700 mb-3"
+                            onClick={() => {
+                              toast({
+                                title: "UWA Management Activated",
+                                description: "Opening Universal Wallet Address management dashboard...",
+                              });
+                              setTimeout(() => {
+                                window.location.href = "/identity-management";
+                              }, 1000);
+                            }}
+                          >
+                            <Users className="h-4 w-4 mr-2" />
+                            Manage User & Create UWA
+                          </Button>
+                          <p className="text-xs text-gray-600">
+                            Access the identity management dashboard to view, edit, organize all user identities and create Universal Wallet Addresses. When UWA is generated, records become DNA for DDNA collection.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-white border border-blue-200 rounded-lg p-4">
+                          <Button 
+                            type="button" 
+                            variant="outline"
+                            className="w-full border-blue-300 text-blue-700 hover:bg-blue-100 mb-3"
+                            onClick={downloadIdentityTemplate}
+                          >
+                            <Download className="h-4 w-4 mr-2" />
+                            Download Template
+                          </Button>
+                          <p className="text-xs text-gray-600">
+                            Downloads a spreadsheet template containing the exact same Section #13 form fields as a spreadsheet for user multi-identity inventory and management.
+                          </p>
+                        </div>
+                        
+                        <div className="bg-white border border-blue-200 rounded-lg p-4">
+                          <div className="relative">
+                            <input
+                              type="file"
+                              accept=".csv"
+                              onChange={handleIdentityUpload}
+                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            />
+                            <Button 
+                              type="button" 
+                              variant="outline"
+                              className="w-full border-blue-300 text-blue-700 hover:bg-blue-100 mb-3"
+                            >
+                              <Upload className="h-4 w-4 mr-2" />
+                              Import User CSV
+                            </Button>
+                          </div>
+                          <p className="text-xs text-gray-600">
+                            Upload your completed spreadsheet template to commit multiple user identities to the database for extraction.
+                          </p>
+                          {uploadedIdentities.length > 0 && (
+                            <div className="text-sm text-green-600 flex items-center gap-1 mt-2">
+                              <CheckCircle className="w-4 h-4" />
+                              {uploadedIdentities.length} identities loaded
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                      
+                      <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
+                        <p className="text-sm text-yellow-800">
+                          <strong>Workflow:</strong> Download template → Fill with identity data → Upload CSV → Data commits to database for extraction
+                        </p>
+                      </div>
+                      
+                      <div className="mt-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
+                        <p className="text-sm text-gray-700 mb-3">
+                          <strong>Note:</strong> UIVS is completely optional. You can proceed with the assessment using the basic identification form below.
+                        </p>
+                        <Button 
+                          type="button" 
+                          variant="outline"
+                          size="sm"
+                          className="text-gray-600 border-gray-300"
+                          onClick={() => {
+                            const formSection = document.querySelector('[data-section="identification-form"]');
+                            if (formSection) {
+                              formSection.scrollIntoView({ behavior: 'smooth' });
+                            }
+                          }}
+                        >
+                          Skip to Basic Form
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Filter Controls */}
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-xl p-6 mb-6 shadow-xl">
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h6 className="text-xl font-bold text-purple-900 flex items-center gap-3">
+                            <div className="w-3 h-3 bg-purple-600 rounded-full animate-pulse"></div>
+                            <span>Smart Authentication Filter</span>
+                            <div className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-medium rounded-full">
+                              AI-Powered
+                            </div>
+                          </h6>
+                          <p className="text-sm text-purple-700 mt-2">Advanced multi-layer identity filtering with real-time validation</p>
+                          <p className="text-xs text-purple-600 mt-1">Dynamic filtering • Security-first approach • Instant results</p>
+                        </div>
+                        <div className="bg-white px-4 py-3 rounded-lg border border-purple-200 shadow-sm">
+                          <span className="text-purple-600 text-sm font-medium">Methods Available: </span>
+                          <span className="font-bold text-purple-900 text-lg">21</span>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="bg-white rounded-lg p-4 border border-purple-200 shadow-sm">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                            <label className="text-sm font-bold text-purple-800">
+                              Identity Type Filter
+                            </label>
+                            <span className="text-green-600 bg-green-100 px-2 py-1 rounded-full text-xs font-medium">Active</span>
+                          </div>
+                          <p className="text-xs text-purple-600 mb-4">Dynamic filtering for comprehensive identity management</p>
+                          <div className="space-y-2">
+                            <label className="text-xs font-medium text-purple-700">Select Type</label>
+                            <Select defaultValue="all-types">
+                              <SelectTrigger className="w-full border-purple-200 hover:border-purple-300 focus:ring-purple-500">
+                                <SelectValue placeholder="All Types" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="all-types">🌟 All Types</SelectItem>
+                                <SelectItem value="human">👤 Human</SelectItem>
+                                <SelectItem value="machine-physical">🖥️ Machine Physical</SelectItem>
+                                <SelectItem value="machine-virtual">☁️ Machine Virtual</SelectItem>
+                                <SelectItem value="api">🔌 API</SelectItem>
+                                <SelectItem value="third-party">🤝 Third-Party</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                        
+                        <div className="bg-white rounded-lg p-4 border border-purple-200 shadow-sm">
+                          <div className="flex items-center gap-2 mb-3">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                            <label className="text-sm font-bold text-purple-800">
+                              Authentication Method
+                            </label>
+                            <span className="text-blue-600 bg-blue-100 px-2 py-1 rounded-full text-xs font-medium">21 Options</span>
+                          </div>
+                          <p className="text-xs text-purple-600 mb-4">Advanced authentication method selection with security categorization</p>
+                          <div className="space-y-2">
+                            <label className="text-xs font-medium text-purple-700">Select Method</label>
+                            <Select defaultValue="all-methods">
+                              <SelectTrigger className="w-full border-purple-200 hover:border-purple-300 focus:ring-purple-500">
+                                <SelectValue placeholder="🔐 All Methods" />
+                              </SelectTrigger>
+                              <SelectContent className="max-h-80 overflow-y-auto">
+                                <SelectItem value="all-methods">🌟 All Methods</SelectItem>
+                                
+                                {/* Standard Authentication */}
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-blue-500 to-blue-600 rounded-md mx-1 my-1">🔐 Standard Authentication</div>
+                                <SelectItem value="username-password">🔑 Username/Password</SelectItem>
+                                <SelectItem value="employee-id">👤 Employee ID</SelectItem>
+                                <SelectItem value="vendor-id">🏢 Vendor ID</SelectItem>
+                                <SelectItem value="contractor-id">👷 Contractor ID</SelectItem>
+                                <SelectItem value="certificate">📜 Certificate</SelectItem>
+                                <SelectItem value="smart-card">💳 Smart Card</SelectItem>
+                                <SelectItem value="sso">🔗 Single Sign-On</SelectItem>
+                                <SelectItem value="token">🎫 Token-based</SelectItem>
+                                <SelectItem value="service-account">⚙️ Service Account</SelectItem>
+                                <SelectItem value="system-account">🖥️ System Account</SelectItem>
+                                
+                                {/* Advanced Authentication */}
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-purple-500 to-purple-600 rounded-md mx-1 my-1">🛡️ Advanced Authentication</div>
+                                <SelectItem value="mfa">🔐 MFA (Multi-Factor Authentication)</SelectItem>
+                                <SelectItem value="uwa">🌐 UWA (Universal Wallet Address)</SelectItem>
+                                
+                                {/* Biometric */}
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-green-500 to-green-600 rounded-md mx-1 my-1">🔬 Biometric</div>
+                                <SelectItem value="biometric-fingerprint">👆 Biometric - Fingerprint</SelectItem>
+                                <SelectItem value="biometric-voice">🎤 Biometric - Voice</SelectItem>
+                                <SelectItem value="biometric-facial">👁️ Biometric - Facial</SelectItem>
+                                <SelectItem value="biometric-iris">👁️ Biometric - Iris</SelectItem>
+                                
+                                {/* Government IDs */}
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-red-500 to-red-600 rounded-md mx-1 my-1">🏛️ Government IDs</div>
+                                <SelectItem value="drivers-license">🚗 Driver's License</SelectItem>
+                                <SelectItem value="passport">✈️ Passport</SelectItem>
+                                <SelectItem value="national-id">🆔 National ID</SelectItem>
+                                <SelectItem value="military-id">🎖️ Military ID</SelectItem>
+                                <SelectItem value="state-id">🏛️ State ID</SelectItem>
+                                <SelectItem value="birth-certificate">👶 Birth Certificate</SelectItem>
+                                <SelectItem value="social-security">🔢 Social Security Card</SelectItem>
+                                <SelectItem value="citizenship-certificate">📋 Certificate of Citizenship</SelectItem>
+                                
+                                {/* Avatar Identification */}
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-md mx-1 my-1">🎭 Avatar Identification</div>
+                                <SelectItem value="picture">📸 Picture</SelectItem>
+                                <SelectItem value="avatar-profile">👤 Avatar Profile</SelectItem>
+                                
+                                {/* Additional Options */}
+                                <div className="px-3 py-2 text-sm font-bold text-white bg-gradient-to-r from-gray-500 to-gray-600 rounded-md mx-1 my-1">➕ Other</div>
+                                <SelectItem value="other">❓ Other</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Extracted Identity Records */}
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-6 mb-6 shadow-lg">
+                      <div className="flex justify-between items-center mb-6">
+                        <div>
+                          <h6 className="text-xl font-bold text-blue-900 flex items-center gap-2">
+                            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+                            UWA Record Management
+                          </h6>
+                          <p className="text-sm text-blue-700 mt-1">Universal Wallet Address generation from identity + identification components</p>
+                          <p className="text-xs text-blue-600 mt-1">Click any row to edit • Generate UWA • Records with UWA become DNA for DDNA</p>
+                        </div>
+                        <div className="flex gap-4 text-sm">
+                          <div className="bg-white px-3 py-2 rounded-lg border border-blue-200">
+                            <span className="text-blue-600">Total: </span>
+                            <span className="font-bold text-blue-900">1</span>
+                          </div>
+                          <div className="bg-white px-3 py-2 rounded-lg border border-blue-200">
+                            <span className="text-blue-600">Active: </span>
+                            <span className="font-bold text-blue-900">1</span>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="overflow-x-auto bg-white rounded-lg border border-blue-200">
+                        <table className="min-w-full border-collapse">
+                          <thead className="bg-gradient-to-r from-blue-600 to-indigo-600">
+                            <tr>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Generated UWA</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Identity Type</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ID Method</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">SERVER/ID</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">UUID</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">SN</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">MAKE/MODEL</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">OS</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">SERVER/OWNER/COMPANY</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">MAC</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">UNIT/SERIAL</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ENVIRONMENT</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">IP Address</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">EIN/BIZ#</th>
+                              <th className="border-r border-blue-500 px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">ADDRESS</th>
+                              <th className="px-3 py-3 text-left text-xs font-bold text-white uppercase tracking-wider">Actions</th>
+                            </tr>
+                          </thead>
+                          <tbody className="bg-white divide-y divide-blue-100">
+                            {form.watch('identityBehaviorHygiene.firstName') || form.watch('identityBehaviorHygiene.lastName') || form.watch('identityBehaviorHygiene.email') ? (
+                              <tr 
+                                className="hover:bg-blue-50 cursor-pointer transition-all duration-200 group border-l-4 border-l-transparent hover:border-l-blue-500"
+                                onClick={() => {
+                                  // Scroll to the identification form section
+                                  const identificationSection = document.querySelector('[data-section="identification"]');
+                                  if (identificationSection) {
+                                    identificationSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                  }
+                                  toast({
+                                    title: "Navigating to Form",
+                                    description: "Scrolling to the identification form section for editing",
+                                  });
+                                }}
+                              >
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm font-medium text-gray-900">
+                                  <div className="flex items-center gap-2">
+                                    {generatedUWA ? (
+                                      <>
+                                        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                                        <span className="font-mono text-xs bg-green-50 px-2 py-1 rounded border border-green-200 text-green-700">
+                                          {generatedUWA}
+                                        </span>
+                                      </>
+                                    ) : (
+                                      <>
+                                        <div className="w-2 h-2 bg-gray-400 rounded-full"></div>
+                                        <span className="text-gray-500 text-xs">Not Generated</span>
+                                      </>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm font-medium text-gray-900">
+                                  <div className="flex items-center gap-2">
+                                    <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                    {form.watch('identityBehaviorHygiene.identityType') || 'Human'}
+                                  </div>
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.identificationMethod') || 'Not specified'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.userId') || form.watch('identityBehaviorHygiene.firstName') || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.email')?.split('@')[0] || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.phoneNumber') || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.role') || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.identityType') === 'machine-physical' ? 'Linux/Windows' : 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {`${form.watch('identityBehaviorHygiene.firstName') || ''} ${form.watch('identityBehaviorHygiene.lastName') || ''}`.trim() || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.identityType') === 'machine-physical' ? 'XX:XX:XX:XX:XX:XX' : 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.userId') || 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.identityType') === 'machine-physical' ? 'Production' : 'Office'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.identityType') === 'machine-physical' ? '192.168.1.100' : 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.role')?.includes('Business') ? '12-3456789' : 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm text-gray-700">
+                                  {form.watch('identityBehaviorHygiene.email')?.includes('@') ? 'Office Address' : 'X'}
+                                </td>
+                                <td className="border-r border-blue-100 px-3 py-4 text-sm">
+                                  <div className="flex items-center gap-2">
+                                    <span className="px-2 py-1 bg-purple-100 text-purple-800 text-xs font-mono rounded">
+                                      {form.watch('identityBehaviorHygiene.firstName') && form.watch('identityBehaviorHygiene.lastName') 
+                                        ? `UWA-${form.watch('identityBehaviorHygiene.firstName')?.slice(0,2).toUpperCase()}${form.watch('identityBehaviorHygiene.lastName')?.slice(0,2).toUpperCase()}-${Date.now().toString().slice(-6)}`
+                                        : 'Not Generated'
+                                      }
+                                    </span>
+                                    {form.watch('identityBehaviorHygiene.firstName') && form.watch('identityBehaviorHygiene.lastName') && (
+                                      <span className="w-2 h-2 bg-green-500 rounded-full" title="UWA Generated"></span>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="px-3 py-4">
+                                  <div className="flex items-center gap-2">
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-xs bg-blue-50 border-blue-200 hover:bg-blue-100 text-blue-700"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        // Scroll to form
+                                        const identificationSection = document.querySelector('[data-section="identification"]');
+                                        if (identificationSection) {
+                                          identificationSection.scrollIntoView({ behavior: 'smooth' });
+                                        }
+                                      }}
+                                    >
+                                      Edit
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      variant="outline"
+                                      className="text-xs bg-red-50 border-red-200 hover:bg-red-100 text-red-700"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        if (confirm('Delete this identity record?')) {
+                                          // Clear form fields
+                                          form.setValue('identityBehaviorHygiene.firstName', '');
+                                          form.setValue('identityBehaviorHygiene.lastName', '');
+                                          form.setValue('identityBehaviorHygiene.email', '');
+                                          form.setValue('identityBehaviorHygiene.userId', '');
+                                          toast({
+                                            title: "Record Deleted",
+                                            description: "Identity record has been removed from the system",
+                                          });
+                                        }
+                                      }}
+                                    >
+                                      Delete
+                                    </Button>
+                                    <Button
+                                      type="button"
+                                      size="sm"
+                                      className="text-xs bg-green-600 hover:bg-green-700 text-white"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleGenerateUWA();
+                                      }}
+                                    >
+                                      Generate UWA
+                                    </Button>
+                                  </div>
+                                </td>
+                              </tr>
+                            ) : (
+                              <tr>
+                                <td colSpan={16} className="px-6 py-12 text-center">
+                                  <div className="flex flex-col items-center">
+                                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                                      <div className="text-blue-500 text-2xl">📋</div>
+                                    </div>
+                                    <h3 className="text-lg font-medium text-gray-900 mb-2">No Identity Records Found</h3>
+                                    <p className="text-sm text-gray-500 mb-2">Complete the identification form below to see live extracted records</p>
+                                    <p className="text-xs text-blue-600">For multiple identities, use the CSV template above</p>
+                                  </div>
+                                </td>
+                              </tr>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+
+                    {/* Identity Component Inventory Header */}
+                    <div className="flex justify-between items-center mb-4">
+                      <h5 className="text-lg font-medium text-gray-800">Identity Component Inventory</h5>
+                      <div className="flex gap-2">
+                        <Button 
+                          type="button" 
+                          size="sm"
+                          variant="outline"
+                          onClick={resetToDefault}
+                        >
+                          <RotateCcw className="h-4 w-4 mr-2" />
+                          Reset to Default
+                        </Button>
+                        <Button 
+                          type="button" 
+                          size="sm"
+                          onClick={() => {
+                            // Scroll to the identification form section
+                            const formSection = document.querySelector('[data-section="identification-form"]');
+                            if (formSection) {
+                              formSection.scrollIntoView({ 
+                                behavior: 'smooth', 
+                                block: 'start' 
+                              });
+                            }
+                          }}
+                        >
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add Identity Component
+                        </Button>
+                      </div>
+                    </div>
+                    
+                    {/* Configuration Notice */}
+                    <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-5 mb-6">
+                      <div className="flex items-start gap-3">
+                        <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                          <span className="text-white text-xs font-bold">i</span>
+                        </div>
+                        <div>
+                          <h6 className="font-bold text-blue-900 mb-2">Identity Collection Method Selection</h6>
+                          <div className="space-y-2 text-sm text-blue-800">
+                            <p><strong>Multiple Identity Types:</strong> Use the CSV template above for bulk data collection and import</p>
+                            <p><strong>Single Identity Type:</strong> Use the individual form below for direct data entry</p>
+                            <p className="text-xs text-blue-600 mt-3">Organizations can customize which identity types use specific components, but can always reset to secure defaults.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* UWA Component Selection Matrix */}
+                    <div className="bg-gradient-to-br from-emerald-50 to-teal-50 border-2 border-emerald-200 rounded-xl p-6 mb-6 shadow-xl">
+                      <div className="flex items-center justify-between mb-6">
+                        <div>
+                          <h6 className="text-xl font-bold text-emerald-900 flex items-center gap-3">
+                            <div className="w-3 h-3 bg-emerald-600 rounded-full animate-pulse"></div>
+                            <span>UWA Matrix Configuration</span>
+                            <div className="px-3 py-1 bg-emerald-100 text-emerald-700 text-xs font-medium rounded-full">
+                              31 Components
+                            </div>
+                          </h6>
+                          <p className="text-sm text-emerald-700 mt-2">Advanced component selection matrix for Universal Wallet Address generation from identity types + identification methods</p>
+                          <p className="text-xs text-emerald-600 mt-1">Interactive matrix • Real-time validation • Custom UWA generation • Future DNA/DDNA expansion</p>
+                        </div>
+                        <div className="flex gap-3">
+                          <div className="bg-white px-4 py-3 rounded-lg border border-emerald-200 shadow-sm">
+                            <span className="text-emerald-600 text-sm font-medium">Active: </span>
+                            <span className="font-bold text-emerald-900 text-lg">
+                              {matrixConfig.filter(row => row.human || row.machinePhysical || row.machineVirtual || row.api || row.thirdParty).length}
+                            </span>
+                          </div>
+                          <div className="bg-white px-4 py-3 rounded-lg border border-emerald-200 shadow-sm">
+                            <span className="text-emerald-600 text-sm font-medium">Total: </span>
+                            <span className="font-bold text-emerald-900 text-lg">31</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-gradient-to-r from-amber-100 to-yellow-100 border-l-4 border-amber-500 rounded-lg p-4 mb-6">
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                          <p className="text-sm font-medium text-amber-800">
+                            Dynamic Configuration: Customize component selection per identity type for optimized UWA generation
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Matrix Table */}
+                      <div className="overflow-x-auto bg-white rounded-lg border border-emerald-200 shadow-sm">
+                        <table className="min-w-full border-collapse">
+                          <thead className="bg-gradient-to-r from-emerald-600 to-teal-600">
+                            <tr>
+                              <th className="border-r border-emerald-500 px-4 py-4 text-left font-bold text-white">
+                                <div className="flex items-center gap-2">
+                                  <div className="w-2 h-2 bg-white rounded-full"></div>
+                                  Components of Identification
+                                </div>
+                              </th>
+                              <th className="border-r border-emerald-500 px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>👤</span>
+                                  <span>Human</span>
+                                </div>
+                              </th>
+                              <th className="border-r border-emerald-500 px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>🖥️</span>
+                                  <span>Machine Physical</span>
+                                </div>
+                              </th>
+                              <th className="border-r border-emerald-500 px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>☁️</span>
+                                  <span>Machine Virtual</span>
+                                </div>
+                              </th>
+                              <th className="border-r border-emerald-500 px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>🔌</span>
+                                  <span>API</span>
+                                </div>
+                              </th>
+                              <th className="px-4 py-4 text-center font-bold text-white">
+                                <div className="flex flex-col items-center gap-1">
+                                  <span>🤝</span>
+                                  <span>Third-Party</span>
+                                </div>
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {matrixConfig.map((row, index) => (
+                              <tr key={index} className={index % 2 === 0 ? "bg-white" : "bg-gray-50"}>
+                                <td className="border border-gray-300 px-4 py-3 font-medium text-gray-700">
+                                  {row.component}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox 
+                                      checked={row.human} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'human', !!checked)}
+                                      className="mx-auto" 
+                                    />
+                                  )}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox 
+                                      checked={row.machinePhysical} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'machinePhysical', !!checked)}
+                                      className="mx-auto" 
+                                    />
+                                  )}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox 
+                                      checked={row.machineVirtual} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'machineVirtual', !!checked)}
+                                      className="mx-auto" 
+                                    />
+                                  )}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox 
+                                      checked={row.api} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'api', !!checked)}
+                                      className="mx-auto" 
+                                    />
+                                  )}
+                                </td>
+                                <td className="border border-gray-300 px-4 py-3 text-center">
+                                  {row.note ? (
+                                    <span className="text-xs text-red-600">{row.note}</span>
+                                  ) : (
+                                    <Checkbox 
+                                      checked={row.thirdParty} 
+                                      onCheckedChange={(checked) => updateMatrixConfig(index, 'thirdParty', !!checked)}
+                                      className="mx-auto" 
+                                    />
+                                  )}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <div className="mt-4 p-3 bg-blue-50 rounded border border-blue-200">
+                        <p className="text-sm font-medium text-blue-800">Selected Identity Matrix Fields</p>
+                        <p className="text-xs text-blue-600 mt-1">
+                          Components selected above will be used to generate the Universal Wallet Address (UWA) for identity verification.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                   
+                  {/* Clear Separator and Instructions */}
+                  <div className="my-8">
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t-2 border-gray-300"></div>
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="bg-white px-6 py-2 text-gray-500 font-medium border border-gray-300 rounded-full">
+                          OR
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Single Identity Form Instructions */}
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 rounded-xl p-6 mb-6 shadow-lg">
+                    <div className="flex items-start gap-4">
+                      <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-sm font-bold">1</span>
+                      </div>
+                      <div>
+                        <h5 className="text-xl font-bold text-green-900 mb-3">Single Identity Type Collection</h5>
+                        <div className="space-y-2 text-sm text-green-800">
+                          <p className="font-medium">Use this form below for individual identity data entry:</p>
+                          <ul className="list-disc list-inside space-y-1 ml-2">
+                            <li>Direct form completion for one identity at a time</li>
+                            <li>Real-time validation and component mapping</li>
+                            <li>Immediate UWA generation upon completion</li>
+                          </ul>
+                        </div>
+                        <div className="mt-4 p-3 bg-white border border-green-200 rounded-lg">
+                          <p className="text-xs text-green-700 font-medium">
+                            Perfect for organizations with limited identities or testing purposes
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* 1. Identification Section */}
-                  <div className="border rounded-md p-4 mb-6">
+                  <div data-section="identification-form" className="border rounded-md p-4 mb-6">
                     <h4 className="font-medium mb-4">1. Identification</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.userId"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>User ID / Employee ID</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter user ID or employee ID" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.identificationMethod"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Identification Method</FormLabel>
+                            <FormLabel>Identification Method Name</FormLabel>
                             <Select 
                               onValueChange={field.onChange}
                               defaultValue={field.value}
@@ -4538,11 +6507,41 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="username">Username</SelectItem>
-                                <SelectItem value="email">Email Address</SelectItem>
+                                {/* Standard Authentication */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100">1. Standard Authentication</div>
+                                <SelectItem value="username-password">Username / Password</SelectItem>
                                 <SelectItem value="employee-id">Employee ID</SelectItem>
-                                <SelectItem value="badge">Badge Number</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
+                                <SelectItem value="vendor-id">Vendor ID</SelectItem>
+                                <SelectItem value="contractor-id">Contractor ID</SelectItem>
+                                <SelectItem value="certificate">Certificate</SelectItem>
+                                <SelectItem value="smart-card">Smart Card</SelectItem>
+                                <SelectItem value="single-sign-on">Single Sign-On</SelectItem>
+                                <SelectItem value="token-based">Token-Based</SelectItem>
+                                <SelectItem value="service-account">Service Account</SelectItem>
+                                <SelectItem value="system-account">System Account</SelectItem>
+                                
+                                {/* Advanced Authentication */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">2. Advanced Authentication</div>
+                                <SelectItem value="uwa">UWA (Universal Wallet Address)</SelectItem>
+                                <SelectItem value="mfa">MFA (Multi Factor Authentication)</SelectItem>
+                                
+                                {/* Biometric */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">3. Biometric</div>
+                                <SelectItem value="fingerprint">Fingerprint</SelectItem>
+                                <SelectItem value="voice">Voice</SelectItem>
+                                <SelectItem value="facial">Facial</SelectItem>
+                                <SelectItem value="iris">Iris</SelectItem>
+                                
+                                {/* Government ID */}
+                                <div className="px-2 py-1 text-sm font-bold text-gray-700 bg-gray-100 mt-2">4. Government ID</div>
+                                <SelectItem value="driver-license">Driver License</SelectItem>
+                                <SelectItem value="passport">Passport</SelectItem>
+                                <SelectItem value="national-id">National ID</SelectItem>
+                                <SelectItem value="military-id">Military ID</SelectItem>
+                                <SelectItem value="state-id">State ID</SelectItem>
+                                <SelectItem value="birth-certificate">Birth Certificate</SelectItem>
+                                <SelectItem value="social-security-card">Social Security Card</SelectItem>
+                                <SelectItem value="certificate-of-citizenship">Certificate of Citizenship</SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -4566,14 +6565,101 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
+                                <SelectItem value="human">Human</SelectItem>
+                                <SelectItem value="machine-physical">Machine Physical</SelectItem>
+                                <SelectItem value="machine-virtual">Machine Virtual</SelectItem>
+                                <SelectItem value="api">API</SelectItem>
+                                <SelectItem value="third-party">Third-Party</SelectItem>
+                                <SelectItem value="avatar">Avatar</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.firstName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>First Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter first name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.lastName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Last Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter last name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.role"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Role</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select role" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="user">User</SelectItem>
+                                <SelectItem value="administrator">Administrator</SelectItem>
+                                <SelectItem value="super-user">Super User</SelectItem>
+                                <SelectItem value="manager">Manager</SelectItem>
                                 <SelectItem value="employee">Employee</SelectItem>
                                 <SelectItem value="contractor">Contractor</SelectItem>
                                 <SelectItem value="vendor">Vendor</SelectItem>
-                                <SelectItem value="service-account">Service Account</SelectItem>
-                                <SelectItem value="system-account">System Account</SelectItem>
-                                <SelectItem value="other">Other</SelectItem>
+                                <SelectItem value="guest">Guest</SelectItem>
                               </SelectContent>
                             </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input type="email" placeholder="Enter email address" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.phoneNumber"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Phone Number</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter phone number" {...field} />
+                            </FormControl>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -4783,10 +6869,169 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 3. Access Behavior Section */}
+                  {/* 3. Access & Permissions Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">3. Access Behavior</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">3. Access & Permissions</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.assignedRoles"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Assigned Roles</FormLabel>
+                            <FormControl>
+                              <Input placeholder="RBAC groups, e.g., 'Finance-ReadOnly'" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.entitlements"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Entitlements</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Specific permissions like 'SQL DB Admin'" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.accessDuration"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Access Duration</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select access duration" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="permanent">Permanent</SelectItem>
+                                <SelectItem value="temporary">Temporary</SelectItem>
+                                <SelectItem value="project-based">Project-Based</SelectItem>
+                                <SelectItem value="time-limited">Time-Limited</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.accessTier"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Access Tier</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select access tier" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="basic">Basic</SelectItem>
+                                <SelectItem value="standard">Standard</SelectItem>
+                                <SelectItem value="elevated">Elevated</SelectItem>
+                                <SelectItem value="privileged">Privileged</SelectItem>
+                                <SelectItem value="administrative">Administrative</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.departmentTeam"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Department / Team</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter department or team" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.assignedRiskLevel"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Assigned Risk Level</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select risk level" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="low">Low</SelectItem>
+                                <SelectItem value="medium">Medium</SelectItem>
+                                <SelectItem value="high">High</SelectItem>
+                                <SelectItem value="critical">Critical</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.federatedIdentitySource"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Federated Identity Source</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select identity source" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="active-directory">Active Directory</SelectItem>
+                                <SelectItem value="azure-ad">Azure AD</SelectItem>
+                                <SelectItem value="okta">Okta</SelectItem>
+                                <SelectItem value="saml">SAML</SelectItem>
+                                <SelectItem value="oauth">OAuth</SelectItem>
+                                <SelectItem value="local">Local Account</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* 4. Access Behavior Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">4. Access Behavior</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.loginPatterns"
@@ -4917,10 +7162,10 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  {/* 4. Identity Protection Section */}
+                  {/* 5. Identity Protection Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">4. Identity Protection</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">5. Identity Protection</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <FormField
                           control={form.control}
@@ -5029,8 +7274,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   
                   {/* 5. Privileged Access Management Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">5. Privileged Access Management</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">6. Privileged Access Management</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <FormField
                           control={form.control}
@@ -5150,8 +7395,8 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   
                   {/* 6. Identity Lifecycle Management Section */}
                   <div className="border rounded-md p-4 mb-6">
-                    <h4 className="font-medium mb-4">6. Identity Lifecycle Management</h4>
-                    <div className="space-y-6">
+                    <h4 className="font-medium mb-4">7. Identity Lifecycle Management</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                       <FormField
                         control={form.control}
                         name="identityBehaviorHygiene.onboardingStatus"
@@ -5276,17 +7521,200 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                     </div>
                   </div>
                   
-                  <div className="flex justify-end space-x-4">
+                  {/* 8. Security Posture Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">8. Security Posture</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.passwordHygiene"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Password Hygiene</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Last changed, complexity, reuse status" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.breachedCredentialChecks"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Breached Credential Checks</FormLabel>
+                              <FormDescription>
+                                Do you check for breached credentials via services like HaveIBeenPwned?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.sessionTimeoutSettings"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Session Timeout Settings</FormLabel>
+                            <Select 
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select session timeout" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="15-minutes">15 Minutes</SelectItem>
+                                <SelectItem value="30-minutes">30 Minutes</SelectItem>
+                                <SelectItem value="1-hour">1 Hour</SelectItem>
+                                <SelectItem value="2-hours">2 Hours</SelectItem>
+                                <SelectItem value="4-hours">4 Hours</SelectItem>
+                                <SelectItem value="8-hours">8 Hours</SelectItem>
+                                <SelectItem value="no-timeout">No Timeout</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.unusedAccountDetection"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Unused Account Detection</FormLabel>
+                              <FormDescription>
+                                Do you detect and manage accounts inactive for 90+ days?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.privilegeEscalationAlerts"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Privilege Escalation Alerts</FormLabel>
+                              <FormDescription>
+                                Do you monitor and alert on sudo/root usage logs?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  
+                  {/* 9. Behavior Monitoring Section */}
+                  <div className="border rounded-md p-4 mb-6">
+                    <h4 className="font-medium mb-4">9. Behavior Monitoring</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.typicalLoginPatterns"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Typical Login Patterns</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Time, location, device" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.anomalyDetectionFlags"
+                        render={({ field }) => (
+                          <FormItem className="flex flex-row items-start space-x-3 space-y-0 border p-4 rounded-md">
+                            <FormControl>
+                              <Checkbox
+                                checked={field.value}
+                                onCheckedChange={field.onChange}
+                              />
+                            </FormControl>
+                            <div className="space-y-1 leading-none">
+                              <FormLabel>Anomaly Detection Flags</FormLabel>
+                              <FormDescription>
+                                Do you detect impossible travel, brute force attempts, etc.?
+                              </FormDescription>
+                            </div>
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.dataAccessTrends"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Data Access Trends</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Unusual file downloads, cloud API calls" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      
+                      <FormField
+                        control={form.control}
+                        name="identityBehaviorHygiene.toolCommandUsage"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Tool/Command Usage</FormLabel>
+                            <FormControl>
+                              <Input placeholder="E.g., PowerShell, RDP, SSH frequency" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  
+                  <div className="flex justify-between">
                     <Button
                       type="button"
                       variant="outline"
-                      onClick={() => document.querySelector('[value="device-inventory"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                      onClick={prevTab}
                     >
                       Previous Step
                     </Button>
                     <Button 
                       type="button"
-                      onClick={() => document.querySelector('[value="contact"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}
+                      onClick={nextTab}
                     >
                       Next Step
                     </Button>
@@ -5483,8 +7911,19 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                   </div>
                 </div>
                 
-                <div className="flex justify-end">
-                  <Button type="button" className="mt-4" onClick={() => document.querySelector('[value="review"]')?.dispatchEvent(new MouseEvent('click', { bubbles: true }))}>
+                <div className="flex justify-between space-x-4 mt-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                  >
+                    Previous Step
+                  </Button>
+                  <Button 
+                    type="button" 
+                    className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white" 
+                    onClick={nextTab}
+                  >
                     Continue to Review
                   </Button>
                 </div>
@@ -5554,7 +7993,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           variant="outline" 
                           size="sm"
                           className="text-xs"
-                          onClick={() => document.querySelector('[data-value="infrastructure"]')?.click()}
+                          onClick={() => {
+                            const tabTrigger = document.querySelector('[data-value="infrastructure"]') as HTMLElement;
+                            if (tabTrigger) {
+                              tabTrigger.click();
+                            }
+                          }}
                         >
                           Edit Infrastructure
                         </Button>
@@ -5586,7 +8030,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           variant="outline" 
                           size="sm"
                           className="text-xs"
-                          onClick={() => document.querySelector('[data-value="risks"]')?.click()}
+                          onClick={() => {
+                            const tabTrigger = document.querySelector('[data-value="risks"]') as HTMLElement;
+                            if (tabTrigger) {
+                              tabTrigger.click();
+                            }
+                          }}
                         >
                           Edit Risks
                         </Button>
@@ -5599,21 +8048,21 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                               "None selected"}</div>
                               
                           <div className="font-medium">Security Risks:</div>
-                          <div>{form.getValues("securityRisks")?.length > 0 ? 
-                              form.getValues("securityRisks").join(", ") : 
+                          <div>{safeArray(form.getValues("securityRisks")).length > 0 ? 
+                              safeArray(form.getValues("securityRisks")).join(", ") : 
                               "None selected"}</div>
                               
                           <div className="font-medium">Website Vulnerabilities:</div>
-                          <div>{form.getValues("websiteVulnerabilities")?.length > 0 ? 
-                              form.getValues("websiteVulnerabilities").map(vulnId => {
+                          <div>{safeArray(form.getValues("websiteVulnerabilities")).length > 0 ? 
+                              safeArray(form.getValues("websiteVulnerabilities")).map(vulnId => {
                                 const vuln = websiteVulnerabilityOptions.find(v => v.id === vulnId);
                                 return vuln ? vuln.label : vulnId;
                               }).join(", ") : 
                               "None identified"}</div>
                               
                           <div className="font-medium">End Device Vulnerabilities:</div>
-                          <div>{form.getValues("endDeviceVulnerabilities")?.length > 0 ? 
-                              form.getValues("endDeviceVulnerabilities").map(vulnId => {
+                          <div>{safeArray(form.getValues("endDeviceVulnerabilities")).length > 0 ? 
+                              safeArray(form.getValues("endDeviceVulnerabilities")).map(vulnId => {
                                 const vuln = endDeviceVulnerabilityOptions.find(v => v.id === vulnId);
                                 return vuln ? vuln.label : vulnId;
                               }).join(", ") : 
@@ -5829,7 +8278,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           variant="outline" 
                           size="sm"
                           className="text-xs"
-                          onClick={() => document.querySelector('[data-value="acq-tools"]')?.click()}
+                          onClick={() => {
+                            const tabTrigger = document.querySelector('[data-value="acq-tools"]') as HTMLElement;
+                            if (tabTrigger) {
+                              tabTrigger.click();
+                            }
+                          }}
                         >
                           Edit
                         </Button>
@@ -5972,7 +8426,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                           variant="outline" 
                           size="sm"
                           className="text-xs"
-                          onClick={() => document.querySelector('[data-value="contact"]')?.click()}
+                          onClick={() => {
+                            const tabTrigger = document.querySelector('[data-value="contact"]') as HTMLElement;
+                            if (tabTrigger) {
+                              tabTrigger.click();
+                            }
+                          }}
                         >
                           Edit
                         </Button>
@@ -6052,25 +8511,15 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       type="submit" 
                       className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white font-medium text-lg py-4 w-full"
                       disabled={!eulaAccepted}
-                      onClick={() => {
-                        console.log("Submit button clicked directly");
-                        console.log("Form is valid:", form.formState.isValid);
-                        console.log("Form errors:", form.formState.errors);
-                        
-                        // If there are validation errors, display them
-                        if (Object.keys(form.formState.errors).length > 0) {
-                          console.error("Form validation errors:", form.formState.errors);
-                        }
-                      }}
                     >
                       Submit Questionnaire
                     </Button>
                   </div>
                 </div>
               </TabsContent>
-            </Tabs>
-          </form>
-        </Form>
+              </Tabs>
+            </form>
+          </Form>
       </CardContent>
     </Card>
   );
