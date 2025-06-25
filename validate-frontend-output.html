@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>11-Parameter Validation Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        .pass { background-color: #d4edda; border-color: #c3e6cb; }
+        .fail { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        h3 { margin-top: 0; }
+        .parameter-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; }
+        .parameter-item { padding: 8px; background: #f8f9fa; border-radius: 3px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <h1>11-Parameter System Validation</h1>
+    
+    <div class="test-section info">
+        <h3>Validation Instructions</h3>
+        <ol>
+            <li>Navigate to the SOS²A Assessment Tool</li>
+            <li>Complete a test assessment with sample data</li>
+            <li>Go to the Gap Analysis tab</li>
+            <li>Check the Parameters tab to verify all 11 parameters appear</li>
+            <li>Verify IAM parameter is included with proper scoring</li>
+        </ol>
+    </div>
+
+    <div class="test-section pass">
+        <h3>✅ Expected 11 Parameters</h3>
+        <div class="parameter-list">
+            <div class="parameter-item">1. Access Control</div>
+            <div class="parameter-item">2. Data Protection</div>
+            <div class="parameter-item">3. Security Awareness</div>
+            <div class="parameter-item">4. Incident Response</div>
+            <div class="parameter-item">5. Network Security</div>
+            <div class="parameter-item">6. Application Security</div>
+            <div class="parameter-item">7. Third Party Management</div>
+            <div class="parameter-item">8. Asset Management</div>
+            <div class="parameter-item">9. Security Governance</div>
+            <div class="parameter-item">10. Compliance Management</div>
+            <div class="parameter-item"><strong>11. IAM (NEW)</strong></div>
+        </div>
+    </div>
+
+    <div class="test-section info">
+        <h3>Scoring Validation</h3>
+        <ul>
+            <li>Each parameter should be worth ~9.09% (100% ÷ 11)</li>
+            <li>Total maximum score should equal 100%</li>
+            <li>IAM parameter should show scoring based on Identity Behavior data</li>
+            <li>Overall score calculation should include all 11 parameters</li>
+        </ul>
+    </div>
+
+    <div class="test-section info">
+        <h3>Integration Points to Check</h3>
+        <ul>
+            <li><strong>Gap Analysis Tab:</strong> Shows 11 parameters in breakdown</li>
+            <li><strong>Parameters Tab:</strong> IAM appears with specific controls (IAM-1 through IAM-5)</li>
+            <li><strong>5 Pillars Tab:</strong> Qualitative assessment includes IAM scoring</li>
+            <li><strong>Overall Score:</strong> Reflects contributions from all 11 parameters</li>
+        </ul>
+    </div>
+
+    <script>
+        // Auto-validation when loaded in the application context
+        if (typeof window !== 'undefined' && window.location.pathname.includes('sos2a')) {
+            console.log('🔍 11-Parameter Validation Context Detected');
+            
+            // Check if gap analysis is available
+            setTimeout(() => {
+                const gapAnalysisElements = document.querySelectorAll('[data-testid*="parameter"], .parameter, [class*="parameter"]');
+                console.log(`Found ${gapAnalysisElements.length} parameter-related elements`);
+                
+                // Look for IAM specifically
+                const iamElements = Array.from(document.querySelectorAll('*')).filter(el => 
+                    el.textContent && el.textContent.toLowerCase().includes('iam')
+                );
+                console.log(`Found ${iamElements.length} IAM-related elements`);
+                
+                if (iamElements.length > 0) {
+                    console.log('✅ IAM parameter detected in UI');
+                } else {
+                    console.log('❌ IAM parameter not found in UI');
+                }
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
