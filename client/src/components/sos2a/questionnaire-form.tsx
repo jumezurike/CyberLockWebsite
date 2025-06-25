@@ -6082,16 +6082,6 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                       type="submit" 
                       className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white font-medium text-lg py-4 w-full"
                       disabled={!eulaAccepted}
-                      onClick={() => {
-                        console.log("Submit button clicked directly");
-                        console.log("Form is valid:", form.formState.isValid);
-                        console.log("Form errors:", form.formState.errors);
-                        
-                        // If there are validation errors, display them
-                        if (Object.keys(form.formState.errors).length > 0) {
-                          console.error("Form validation errors:", form.formState.errors);
-                        }
-                      }}
                     >
                       Submit Questionnaire
                     </Button>
