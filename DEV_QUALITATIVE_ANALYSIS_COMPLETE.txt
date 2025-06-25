@@ -117,6 +117,25 @@ Current implementation incorrectly uses only 10 parameters. Must be updated to:
 3. Update gap analysis logic to use 11 domains instead of 10
 4. Ensure accurate scoring foundation for 5 pillars framework
 
+## QUALITATIVE REPORT PILLAR CONDITIONS - CORRECTED
+
+**Always Included in Qualitative Reports:**
+- Qualitative Assessment (20%) ✅ Always present
+- RASBITA Governance (15%) ✅ Always assessed
+
+**Never Included in Qualitative Reports:**
+- Quantitative Analysis (25%) ❌ Does NOT apply in qualitative reports
+
+**Conditionally Included in Qualitative Reports:**
+- RASBITA Cost-Benefit (25%) ⚠️ Only IF incident occurred at time of assessment OR within 12 months, **if NOT we move forward without it**
+- Architecture Threat Modeling (15%) ⚠️ Only IF organization has system diagrams available, **if NOT we move forward without it**
+
+**Qualitative Report Weight Scenarios:**
+- **Minimal:** 35% (Qualitative 20% + Governance 15%)
+- **Enhanced:** 60% (+ Cost-Benefit 25% if incident within 12 months)
+- **Complete:** 75% (+ Architecture 15% if diagrams available)
+- **Full Qualitative:** 75% maximum (never includes Quantitative 25%)
+
 Parameter Mapping System (CORRECTED):
 - 12 SOS²A Questionnaire Parameters → 11 Industry Security Domains → Gap Analysis → 5 Pillars
 - Automated scoring based on form completeness
