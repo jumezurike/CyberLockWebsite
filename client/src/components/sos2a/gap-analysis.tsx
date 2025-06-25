@@ -25,6 +25,8 @@ import {
 } from '@/lib/gap-analysis-types';
 import { performGapAnalysisWithParameterizedScoring } from '@/lib/gap-analysis';
 import { expertKnowledgeConfig } from '@/lib/expert-knowledge-config';
+import { performQualitativeAnalysis, createIntegratedFivePillarScorecard } from '@/lib/qualitative-analysis-integration';
+import FivePillarScorecardVisual from './five-pillar-scorecard-visual';
 
 interface GapAnalysisProps {
   formData: Sos2aFormData;
@@ -32,11 +34,17 @@ interface GapAnalysisProps {
 }
 
 export default function GapAnalysis({ formData, onComplete }: GapAnalysisProps) {
-  // Perform gap analysis when component mounts
-  const [gapAnalysisResult, setGapAnalysisResult] = useState<GapAnalysisResult>(() => {
-    const result = performGapAnalysisWithParameterizedScoring(formData, expertKnowledgeConfig);
-    return result;
+  // Perform comprehensive qualitative analysis
+  const [qualitativeResult, setQualitativeResult] = useState(() => {
+    return performQualitativeAnalysis(formData);
   });
+  
+  const [fivePillarScorecard, setFivePillarScorecard] = useState(() => {
+    return createIntegratedFivePillarScorecard(qualitativeResult);
+  });
+  
+  // Keep original gap analysis for backward compatibility
+  const gapAnalysisResult = qualitativeResult.gapAnalysis;
   
   // Active tab state
   const [activeTab, setActiveTab] = useState<string>('overview');
@@ -164,8 +172,9 @@ export default function GapAnalysis({ formData, onComplete }: GapAnalysisProps) 
           </Alert>
           
           <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
-            <TabsList className="grid grid-cols-4 mb-6">
+            <TabsList className="grid grid-cols-5 mb-6">
               <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="scorecard">5 Pillars</TabsTrigger>
               <TabsTrigger value="parameters">Parameter Scores</TabsTrigger>
               <TabsTrigger value="gaps">Identified Gaps</TabsTrigger>
               <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
@@ -332,6 +341,47 @@ export default function GapAnalysis({ formData, onComplete }: GapAnalysisProps) 
                       <Bar dataKey="score" fill="#8884d8" />
                     </BarChart>
                   </ResponsiveContainer>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* FIVE PILLARS SCORECARD TAB */}
+            <TabsContent value="scorecard" className="py-4">
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold mb-2">Five Pillars Security Scorecard</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Comprehensive assessment across all five pillars of cybersecurity maturity.
+                  This scorecard integrates qualitative assessment results with quantitative analysis,
+                  cost-benefit evaluation, governance maturity, and threat modeling.
+                </p>
+              </div>
+              
+              <FivePillarScorecardVisual scorecard={fivePillarScorecard} />
+              
+              <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-semibold text-blue-900 mb-2">Qualitative Assessment Details</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div>
+                    <strong>Parameters Assessed:</strong> {qualitativeResult.parameterBreakdown.length}
+                  </div>
+                  <div>
+                    <strong>Overall Score:</strong> {qualitativeResult.overallScore}%
+                  </div>
+                  <div>
+                    <strong>Evidence Supplied:</strong> {qualitativeResult.qualitativeAssessment.evidenceSupplied.length} items
+                  </div>
+                  <div>
+                    <strong>Data Quality:</strong> {qualitativeResult.comparisonResults.dataQualityScore}%
+                  </div>
+                </div>
+                
+                <div className="mt-4">
+                  <strong>Accuracy Improvement:</strong> 
+                  <span className={qualitativeResult.comparisonResults.accuracyImprovement > 0 ? 'text-green-600' : 'text-red-600'}>
+                    {qualitativeResult.comparisonResults.accuracyImprovement > 0 ? '+' : ''}
+                    {qualitativeResult.comparisonResults.accuracyImprovement}% 
+                  </span>
+                  compared to preliminary assessment
                 </div>
               </div>
             </TabsContent>
