@@ -440,6 +440,51 @@ export const expertKnowledgeConfig: ExpertKnowledgeConfiguration = {
         industry: ['Healthcare', 'Financial'],
         frameworks: ['HIPAA', 'PCI-DSS', 'GDPR']
       }
+    ],
+    
+    // 11. IDENTITY & ACCESS MANAGEMENT (IAM) (~9.09%)
+    "IAM": [
+      {
+        controlId: 'IAM-1',
+        name: 'Identity Lifecycle Management',
+        description: 'Comprehensive management of digital identities from creation to deactivation',
+        expectedLevel: 4,
+        industry: ['Healthcare', 'Financial', 'Government', 'Education', 'Manufacturing', 'Technology'],
+        frameworks: ['NIST SP 800-53', 'ISO 27001', 'CIS Controls']
+      },
+      {
+        controlId: 'IAM-2',
+        name: 'Privileged Access Management',
+        description: 'Enhanced controls for privileged and administrative accounts',
+        expectedLevel: 4,
+        industry: ['Healthcare', 'Financial', 'Government'],
+        frameworks: ['NIST SP 800-53', 'ISO 27001', 'HIPAA', 'PCI-DSS']
+      },
+      {
+        controlId: 'IAM-3',
+        name: 'Identity Behavior Analytics',
+        description: 'Monitoring and analysis of user behavior patterns for anomaly detection',
+        expectedLevel: 3,
+        industry: ['Healthcare', 'Financial', 'Government'],
+        frameworks: ['NIST SP 800-53', 'ISO 27001']
+      },
+      {
+        controlId: 'IAM-4',
+        name: 'Single Sign-On (SSO)',
+        description: 'Centralized authentication system for improved user experience and security',
+        expectedLevel: 3,
+        industry: ['Healthcare', 'Financial', 'Government', 'Education', 'Technology'],
+        frameworks: ['NIST SP 800-53', 'ISO 27001', 'CIS Controls']
+      },
+      {
+        controlId: 'IAM-5',
+        name: 'Identity Federation',
+        description: 'Secure identity sharing across organizational boundaries',
+        expectedLevel: 2,
+        industry: ['Healthcare', 'Financial', 'Government'],
+        infraComponents: ['cloud-hosted', 'hybrid'],
+        frameworks: ['NIST SP 800-53', 'ISO 27001']
+      }
     ]
   }
 };
