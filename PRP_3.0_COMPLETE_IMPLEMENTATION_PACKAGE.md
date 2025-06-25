@@ -35,6 +35,33 @@ After completing A, B, and C analysis, present findings for user evaluation.
 User may request modifications to understanding before proceeding.
 **NO IMPLEMENTATION WITHOUT USER APPROVAL**
 
+#### QUALITATIVE REPORT PILLAR CONDITIONS (MANDATORY)
+**Conditional Framework Implementation Based on Data Availability**
+
+✅ **Always Included in Qualitative Reports:**
+- Qualitative Assessment (20%) - Always present
+- RASBITA Governance (15%) - Always assessed
+
+❌ **Never Included in Qualitative Reports:**
+- Quantitative Analysis (25%) - Does NOT apply in qualitative assessments
+
+⚠️ **Conditionally Included Based on Available Data:**
+- RASBITA Cost-Benefit (25%) - Only IF incident occurred at time of assessment OR within 12 months
+- Architecture Threat Modeling (15%) - Only IF organization has system diagrams available
+
+**Report Scenarios:**
+1. **Minimal Qualitative Report (35% framework)**
+   - Qualitative Assessment + RASBITA Governance only
+   - When: No incidents, no diagrams available
+
+2. **Enhanced Qualitative Report (60% framework)**  
+   - Adds RASBITA Cost-Benefit (recent incident within 12 months)
+   - When: Recent incident, no diagrams
+
+3. **Complete Qualitative Report (75% framework)**
+   - All applicable pillars included
+   - When: Recent incident + system diagrams available
+
 ### 2. Disaster Recovery & Business Continuity (DR/BC) Framework
 
 #### A. Daily Milestone Backup System

@@ -1,0 +1,57 @@
+Problem Resolution Protocol (PRP) - Qualitative Report Pillar Clarification
+
+A) Problem Genesis:
+User clarified that qualitative reports have conditional pillar inclusion based on available data and timing, not all 5 pillars are always applicable.
+
+B) Root Cause Analysis:
+I understand the conditional pillar system for qualitative reports:
+
+QUALITATIVE REPORT PILLAR CONDITIONS:
+
+✅ Always Included:
+
+Qualitative Assessment (20%) - Always present in qualitative reports
+RASBITA Governance (15%) - Always assessed
+❌ Never Included in Qualitative:
+
+Quantitative Analysis (25%) - Does NOT apply in qualitative reports
+⚠️ Conditionally Included:
+
+RASBITA Cost-Benefit (25%) - Only IF incident occurred at time of assessment OR within 12 months of moving forward
+Architecture Threat Modeling (15%) - Only IF organization has system diagrams available, otherwise move forward without it
+C) Corrected Understanding:
+
+Qualitative Report Scenarios:
+
+Scenario 1: Minimal Qualitative Report
+
+Qualitative Assessment (20%) ✅
+RASBITA Governance (15%) ✅
+Total: 35% of full framework
+When: No incidents, no diagrams available
+Scenario 2: Enhanced Qualitative Report
+
+Qualitative Assessment (20%) ✅
+RASBITA Governance (15%) ✅
+RASBITA Cost-Benefit (25%) ✅ (incident within 12 months)
+Total: 60% of full framework
+When: Recent incident, no diagrams
+Scenario 3: Complete Qualitative Report
+
+Qualitative Assessment (20%) ✅
+RASBITA Governance (15%) ✅
+RASBITA Cost-Benefit (25%) ✅ (incident within 12 months)
+Architecture Threat Modeling (15%) ✅ (diagrams available)
+Total: 75% of full framework
+When: Recent incident + diagrams available
+D) Confirmation Required:
+
+Do you confirm this conditional pillar understanding is correct?
+
+The system should:
+
+Always include Qualitative Assessment + RASBITA Governance
+Check for incidents (current or within 12 months) → include Cost-Benefit if applicable
+Check for system diagrams → include Architecture Threat Modeling if available
+Never include Quantitative Analysis in qualitative reports
+Should I proceed to update the DEV.txt with this clarification after your approval?
