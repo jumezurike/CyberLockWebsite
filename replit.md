@@ -12,6 +12,15 @@ Advanced cybersecurity platform featuring the HOS²A (Healthcare Organizational 
 
 ## Recent Changes
 
+### June 26, 2025 - Server Selection Data Loss Bug Fix
+✅ **Critical Bug Resolution Completed**
+- Fixed server selection data loss issue in section #12 Device Inventory
+- Corrected checkbox logic error in deviceInventoryTracking.deviceType handling
+- Applied targeted fix preserving all existing functionality and interface integrity
+- Root cause: Improper array handling in onCheckedChange logic (field.value?.filter() || [] pattern)
+- Solution: Fixed to (field.value || []).filter() ensuring proper array initialization
+- User confirmed fix working correctly
+
 ### June 25, 2025 - Strategic Interface Restoration & Advanced Protocol Implementation
 ✅ **Critical System Recovery Completed**
 - Successfully restored original deployed interface from `temp_june8_production.tsx`

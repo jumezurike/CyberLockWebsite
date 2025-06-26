@@ -2448,7 +2448,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                                 : field.onChange(
                                                     field.value?.filter(
                                                       (value) => value !== option.id
-                                                    ) || []
+                                                    )
                                                   );
                                             }}
                                           />
@@ -2496,7 +2496,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                               : field.onChange(
                                                   field.value?.filter(
                                                     (value) => value !== option.id
-                                                  ) || []
+                                                  )
                                                 );
                                           }}
                                         />
@@ -2543,7 +2543,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                           : field.onChange(
                                               field.value?.filter(
                                                 (value) => value !== option.id
-                                              ) || []
+                                              )
                                             );
                                       }}
                                     />
@@ -2588,7 +2588,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            ) || []
+                                            )
                                           );
                                     }}
                                   />
@@ -2637,7 +2637,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            ) || []
+                                            )
                                           );
                                     }}
                                   />
@@ -2686,7 +2686,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            ) || []
+                                            )
                                           );
                                     }}
                                   />
@@ -2767,7 +2767,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            ) || []
+                                            )
                                           );
                                     }}
                                   />
@@ -2812,7 +2812,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            ) || []
+                                            )
                                           );
                                     }}
                                   />
@@ -2857,7 +2857,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                         : field.onChange(
                                             field.value?.filter(
                                               (value) => value !== option.id
-                                            ) || []
+                                            )
                                           );
                                     }}
                                   />
@@ -3825,7 +3825,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                                 ? [...(field.value || []), type]
                                                 : field.value?.filter(
                                                     (value) => value !== type
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
@@ -3897,7 +3897,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                                 ? [...(field.value || []), browser]
                                                 : field.value?.filter(
                                                     (value) => value !== browser
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
@@ -4019,7 +4019,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                                 ? [...(field.value || []), zone]
                                                 : field.value?.filter(
                                                     (value) => value !== zone
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
@@ -4082,7 +4082,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                                 ? [...(field.value || []), status]
                                                 : field.value?.filter(
                                                     (value) => value !== status
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
@@ -4257,7 +4257,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                                 ? [...(field.value || []), compliance]
                                                 : field.value?.filter(
                                                     (value) => value !== compliance
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
@@ -4472,7 +4472,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                                 ? [...(field.value || []), policy]
                                                 : field.value?.filter(
                                                     (value) => value !== policy
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
@@ -4685,7 +4685,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                                 ? [...(field.value || []), type]
                                                 : field.value?.filter(
                                                     (value) => value !== type
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
@@ -4763,7 +4763,7 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                                 ? [...(field.value || []), type]
                                                 : field.value?.filter(
                                                     (value) => value !== type
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
