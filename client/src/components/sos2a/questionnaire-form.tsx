@@ -3770,11 +3770,12 @@ export default function QuestionnaireForm({ onSubmit }: QuestionnaireFormProps) 
                                           <Checkbox
                                             checked={field.value?.includes(type)}
                                             onCheckedChange={(checked) => {
+                                              const currentValue = field.value || [];
                                               const updatedValue = checked
-                                                ? [...(field.value || []), type]
-                                                : field.value?.filter(
+                                                ? [...currentValue, type]
+                                                : currentValue.filter(
                                                     (value) => value !== type
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
