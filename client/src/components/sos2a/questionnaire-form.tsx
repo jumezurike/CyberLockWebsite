@@ -4788,11 +4788,12 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                                           <Checkbox
                                             checked={field.value?.includes(type)}
                                             onCheckedChange={(checked) => {
+                                              const currentValue = field.value || [];
                                               const updatedValue = checked
-                                                ? [...(field.value || []), type]
-                                                : field.value?.filter(
+                                                ? [...currentValue, type]
+                                                : currentValue.filter(
                                                     (value) => value !== type
-                                                  ) || [];
+                                                  );
                                               field.onChange(updatedValue);
                                             }}
                                           />
