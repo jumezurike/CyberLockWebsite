@@ -523,7 +523,7 @@ export default function Sos2aTool() {
                                 year: 'numeric' 
                               });
                               const duration = formatDistanceToNow(createdDate, { addSuffix: true });
-                              const statusIcon = assessment.reportType === 'preliminary' ? '●' : '●';
+                              const statusIcon = assessment.reportType === 'preliminary' ? '●' : '✓';
                               
                               // Color coding for duration based on assessment type
                               const durationBgClass = assessment.reportType === 'preliminary' 
