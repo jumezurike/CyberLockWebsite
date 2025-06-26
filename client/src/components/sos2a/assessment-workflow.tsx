@@ -44,7 +44,7 @@ export default function AssessmentWorkflow() {
     },
     {
       id: 4,
-      title: "RASBITA-RGM",
+      title: "RASBITA Governance",
       description: "Risk Governance & Management",
       icon: <Shield className="h-5 w-5" />,
       status: "pending",
@@ -76,7 +76,7 @@ export default function AssessmentWorkflow() {
     },
     {
       id: 8,
-      title: "RASBITA-CBF",
+      title: "RASBITA Score",
       description: "Cost-Benefit Financial Analysis",
       icon: <TrendingUp className="h-5 w-5" />,
       status: "pending",
