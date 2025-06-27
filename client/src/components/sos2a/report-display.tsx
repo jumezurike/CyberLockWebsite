@@ -491,14 +491,25 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           </div>
           
           <Tabs defaultValue="scorecard" className="w-full">
-            <TabsList className="grid grid-cols-2 md:grid-cols-7 w-full">
+            <TabsList className={`grid w-full ${
+              report.reportType === 'preliminary' 
+                ? 'grid-cols-2 md:grid-cols-3' 
+                : 'grid-cols-2 md:grid-cols-7'
+            }`}>
               <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
               <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
-              <TabsTrigger value="risks">Risks & Vulnerabilities</TabsTrigger>
-              <TabsTrigger value="architecture">Architecture Analysis</TabsTrigger>
-              <TabsTrigger value="compliance">Compliance Status</TabsTrigger>
-              <TabsTrigger value="frameworks">Framework Control Gaps</TabsTrigger>
-              <TabsTrigger value="isms">ISMS</TabsTrigger>
+              {report.reportType === 'comprehensive' && (
+                <>
+                  <TabsTrigger value="risks">Risks & Vulnerabilities</TabsTrigger>
+                  <TabsTrigger value="architecture">Architecture Analysis</TabsTrigger>
+                  <TabsTrigger value="compliance">Compliance Status</TabsTrigger>
+                  <TabsTrigger value="frameworks">Framework Control Gaps</TabsTrigger>
+                  <TabsTrigger value="isms">ISMS</TabsTrigger>
+                </>
+              )}
+              {report.reportType === 'preliminary' && (
+                <TabsTrigger value="guidance">Implementation Guidance</TabsTrigger>
+              )}
             </TabsList>
             
             <TabsContent value="scorecard" className="space-y-4 pt-4">
@@ -967,10 +978,98 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               )}
             </TabsContent>
             
-            <TabsContent value="isms" className="space-y-4 pt-4">
-              {report.ismsStatus ? (
-                <>
-                  <div className="bg-blue-50 p-4 rounded-md border border-blue-100 mb-4">
+            <TabsContent value="guidance" className="space-y-4 pt-4">
+              <div className="space-y-6">
+                <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
+                  <h3 className="font-medium text-blue-900 mb-3 flex items-center gap-2">
+                    <Shield className="h-5 w-5" />
+                    Next Steps for Comprehensive Security Assessment
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-blue-800">Immediate Actions (30 days)</h4>
+                      <ul className="space-y-1 text-blue-700 text-sm">
+                        <li>• Implement SOC monitoring with SIEM integration</li>
+                        <li>• Establish incident response procedures</li>
+                        <li>• Deploy vulnerability scanning tools</li>
+                        <li>• Configure automated security event logging</li>
+                      </ul>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-blue-800">Medium-term Goals (90 days)</h4>
+                      <ul className="space-y-1 text-blue-700 text-sm">
+                        <li>• Complete network flow analysis setup</li>
+                        <li>• Implement endpoint detection and response</li>
+                        <li>• Establish security awareness training program</li>
+                        <li>• Begin evidence collection for comprehensive assessment</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-green-50 p-4 rounded-md border border-green-200">
+                  <h3 className="font-medium text-green-900 mb-3 flex items-center gap-2">
+                    <CheckCircle2 className="h-5 w-5" />
+                    5-Pillar Framework Implementation Roadmap
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="border-l-4 border-green-400 pl-3">
+                      <h4 className="font-medium text-green-800">Pillar 1: Qualitative Assessment (20%)</h4>
+                      <p className="text-sm text-green-700">Already completed in this preliminary report. Continue refining based on evidence collection.</p>
+                    </div>
+                    <div className="border-l-4 border-blue-400 pl-3">
+                      <h4 className="font-medium text-blue-800">Pillar 2: Quantitative Analysis (25%)</h4>
+                      <p className="text-sm text-blue-700">Requires 6 months of evidence collection with SIEM, vulnerability scanners, and compliance tools.</p>
+                    </div>
+                    <div className="border-l-4 border-purple-400 pl-3">
+                      <h4 className="font-medium text-purple-800">Pillar 3: RASBITA Cost-Benefit (25%)</h4>
+                      <p className="text-sm text-purple-700">Available when security incidents occur within 12 months to measure ROI of security investments.</p>
+                    </div>
+                    <div className="border-l-4 border-orange-400 pl-3">
+                      <h4 className="font-medium text-orange-800">Pillar 4: RASBITA Governance (15%)</h4>
+                      <p className="text-sm text-orange-700">Already included. Focus on continuous improvement of governance maturity.</p>
+                    </div>
+                    <div className="border-l-4 border-gray-400 pl-3">
+                      <h4 className="font-medium text-gray-800">Pillar 5: Architecture Threat Modeling (15%)</h4>
+                      <p className="text-sm text-gray-700">Available when detailed system architecture diagrams are provided for STRIDE analysis.</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-amber-50 p-4 rounded-md border border-amber-200">
+                  <h3 className="font-medium text-amber-900 mb-3 flex items-center gap-2">
+                    <AlertTriangle className="h-5 w-5" />
+                    Gap Analysis Priority Areas
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <h4 className="font-medium text-amber-800 mb-2">Critical Security Domains</h4>
+                      <ul className="space-y-1 text-amber-700">
+                        <li>• Identity and Access Management (IAM)</li>
+                        <li>• Data Protection and Encryption</li>
+                        <li>• Network Security Controls</li>
+                        <li>• Incident Response Capabilities</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-amber-800 mb-2">Implementation Priorities</h4>
+                      <ul className="space-y-1 text-amber-700">
+                        <li>• Multi-factor authentication deployment</li>
+                        <li>• Security event monitoring enhancement</li>
+                        <li>• Vulnerability management automation</li>
+                        <li>• Compliance framework alignment</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+
+            {report.reportType === 'comprehensive' && (
+              <TabsContent value="isms" className="space-y-4 pt-4">
+                {report.ismsStatus ? (
+                  <>
+                    <div className="bg-blue-50 p-4 rounded-md border border-blue-100 mb-4">
                     <div className="flex items-center gap-3 mb-2">
                       <div className="bg-blue-100 p-2 rounded-full">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
@@ -1594,11 +1693,12 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   )}
                 </>
               ) : (
-                <div className="text-center py-8 text-muted-foreground">
-                  <p>Information Security Management System (ISMS) data is not available for this report.</p>
-                </div>
-              )}
-            </TabsContent>
+                  <div className="text-center py-8 text-muted-foreground">
+                    <p>Information Security Management System (ISMS) data is not available for this report.</p>
+                  </div>
+                )}
+              </TabsContent>
+            )}
           </Tabs>
         </CardContent>
       </Card>
