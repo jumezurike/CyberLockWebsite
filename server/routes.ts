@@ -66,13 +66,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Assessment not found" });
       }
       
-      // Original logic that was working at 3 AM - serve from existing assessment data
-      if (!assessment.findings || !assessment.matrixData) {
-        return res.status(400).json({ error: "Report not available for this assessment" });
+      // Handle preliminary vs comprehensive assessments differently
+      if (assessment.reportType === "preliminary") {
+        // Preliminary assessments use 5-pillar framework with conditional logic
+        // Minimum requirement: Qualitative Assessment (20%) + RASBITA Governance (15%) = 35%
+        // Additional pillars based on available data (incident history, system diagrams)
+        res.json(assessment);
+      } else {
+        // Comprehensive assessments require full matrixData and findings
+        if (!assessment.findings || !assessment.matrixData) {
+          return res.status(400).json({ error: "Report not available for this assessment" });
+        }
+        res.json(assessment);
       }
-      
-      // Return the complete assessment with all original 9-step granular process data intact
-      res.json(assessment);
     } catch (error) {
       console.error("Error fetching assessment report:", error);
       res.status(500).json({ error: "Failed to fetch assessment report" });
