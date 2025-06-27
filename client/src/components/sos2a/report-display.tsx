@@ -92,6 +92,10 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <CardTitle className="text-xl md:text-2xl font-bold">
                 Healthcare Organizational and System Security Analysis (HOS²A) {report.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'} Report
               </CardTitle>
+              <div className="mt-2 mb-1">
+                <h2 className="text-lg font-semibold text-primary">{report.businessName}</h2>
+                <p className="text-sm text-muted-foreground">{report.industry} | {report.location || 'Unknown location'}</p>
+              </div>
               <CardDescription>
                 Generated on {formatDate(report.createdAt)}
               </CardDescription>
