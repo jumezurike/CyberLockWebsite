@@ -1708,6 +1708,25 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
         </CardContent>
       </Card>
       
+      {/* CyberLockX Logo and Tagline */}
+      <div className="my-6 border-t border-b py-4">
+        <div className="flex flex-col items-center justify-center space-y-2">
+          <img 
+            src={logoImage} 
+            alt="CyberLockX Logo" 
+            className="h-12 w-auto opacity-90"
+          />
+          <div className="text-center">
+            <p className="text-base font-bold text-primary">
+              Securing every CLICK!!!
+            </p>
+            <p className="text-xs text-muted-foreground font-medium">
+              Healthcare Apps & Devices Security Hub
+            </p>
+          </div>
+        </div>
+      </div>
+      
       <div className="mt-6 flex flex-col md:flex-row justify-between gap-4">
         <Button variant="outline" onClick={onBack}>
           Back to Matrix Population
@@ -1949,24 +1968,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
         </DialogContent>
       </Dialog>
       
-      {/* CyberLockX Logo and Tagline */}
-      <div className="mt-8 border-t pt-6">
-        <div className="flex flex-col items-center justify-center space-y-2">
-          <img 
-            src={logoImage} 
-            alt="CyberLockX Logo" 
-            className="h-16 w-auto opacity-80"
-          />
-          <div className="text-center">
-            <p className="text-lg font-bold text-primary">
-              Securing every CLICK!!!
-            </p>
-            <p className="text-sm text-muted-foreground font-medium">
-              Healthcare Apps & Devices Security Hub
-            </p>
-          </div>
-        </div>
-      </div>
+
     </>
   );
 }
