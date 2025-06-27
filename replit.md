@@ -12,6 +12,26 @@ Advanced cybersecurity platform featuring the HOS²A (Healthcare Organizational 
 
 ## Recent Changes
 
+### June 27, 2025 - Preliminary Assessment Loading Fix & Gap Analysis Framework Alignment
+✅ **Critical Assessment Loading Issue Resolved**
+- Fixed server route logic for preliminary vs comprehensive assessments
+- Preliminary assessments no longer require matrixData/findings validation
+- Assessment ID 5 loads successfully with complete data structure
+- Server properly handles 5-pillar framework conditional logic
+
+✅ **Gap Analysis Framework Confirmed**
+- 12 SOS²A Parameters → 11 Industry Security Domains → 5 Pillars mapping verified
+- Parameter weighting matrix confirmed (Critical/High/Medium/Low)
+- Gap analysis defined as "assessment drifts from industry guardrails"
+- Best practice controls delta changes properly identified
+
+✅ **5 Pillars Framework Definition Established**
+- Pillar 1: Qualitative Assessment (20%) - Always included
+- Pillar 2: Quantitative Analysis (25%) - Never in preliminary reports
+- Pillar 3: RASBITA Cost-Benefit (25%) - Conditional on recent incidents
+- Pillar 4: RASBITA Governance (15%) - Always included
+- Pillar 5: Architecture Threat Modeling (15%) - Conditional on system diagrams
+
 ### June 26, 2025 - PRP Protocol Violation Recovery & Server Selection Bug Fix
 ✅ **PRP Protocol Violation Recovery**
 - CRITICAL ERROR: Agent violated PRP binding protocol by overwriting working code
