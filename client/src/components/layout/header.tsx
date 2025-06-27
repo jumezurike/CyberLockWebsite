@@ -22,6 +22,7 @@ export default function Header() {
   };
 
   const isHomePage = location === "/";
+  const isSos2aToolPage = location === "/sos2a-tool";
   
   // Helper function to navigate to a section
   const navigateToSection = (sectionId: string) => (e: React.MouseEvent) => {
@@ -83,26 +84,32 @@ export default function Header() {
                 />
               </Link>
             </div>
-            <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-              <a href={getHashLink("features")} onClick={navigateToSection("features")} className="text-white hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                Features
-              </a>
-              <a href={getHashLink("solution")} onClick={navigateToSection("solution")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                Solution
-              </a>
-              <a href={getHashLink("sos2a")} onClick={navigateToSection("sos2a")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                SOS²A
-              </a>
-              <a href={getHashLink("afaai")} onClick={navigateToSection("afaai")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                AFAAI
-              </a>
-              <a href={getHashLink("roadmap")} onClick={navigateToSection("roadmap")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                Roadmap
-              </a>
-              <a href={getHashLink("pricing")} onClick={navigateToSection("pricing")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
-                Pricing
-              </a>
-            </div>
+            {!isSos2aToolPage && (
+              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a href={getHashLink("features")} onClick={navigateToSection("features")} className="text-white hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Features
+                </a>
+                <a href={getHashLink("solution")} onClick={navigateToSection("solution")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Solution
+                </a>
+                <a href={getHashLink("sos2a")} onClick={navigateToSection("sos2a")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  SOS²A
+                </a>
+                <a href={getHashLink("afaai")} onClick={navigateToSection("afaai")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  AFAAI
+                </a>
+                <a href={getHashLink("roadmap")} onClick={navigateToSection("roadmap")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Roadmap
+                </a>
+              </div>
+            )}
+            {!isSos2aToolPage && (
+              <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
+                <a href={getHashLink("pricing")} onClick={navigateToSection("pricing")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Pricing
+                </a>
+              </div>
+            )}
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center space-x-4">
             <DropdownMenu>
@@ -165,26 +172,27 @@ export default function Header() {
       </div>
       
       {/* Mobile menu */}
-      <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} sm:hidden`}>
-        <div className="px-2 pt-2 pb-3 space-y-1">
-          <a href={getHashLink("features")} onClick={(e) => { navigateToSection("features")(e); closeMobileMenu(); }} className="text-white hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
-            Features
-          </a>
-          <a href={getHashLink("solution")} onClick={(e) => { navigateToSection("solution")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
-            Solution
-          </a>
-          <a href={getHashLink("sos2a")} onClick={(e) => { navigateToSection("sos2a")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
-            SOS²A
-          </a>
-          <a href={getHashLink("afaai")} onClick={(e) => { navigateToSection("afaai")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
-            AFAAI
-          </a>
-          <a href={getHashLink("roadmap")} onClick={(e) => { navigateToSection("roadmap")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
-            Roadmap
-          </a>
-          <a href={getHashLink("pricing")} onClick={(e) => { navigateToSection("pricing")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
-            Pricing
-          </a>
+      {!isSos2aToolPage && (
+        <div className={`${isMobileMenuOpen ? 'block' : 'hidden'} sm:hidden`}>
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            <a href={getHashLink("features")} onClick={(e) => { navigateToSection("features")(e); closeMobileMenu(); }} className="text-white hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+              Features
+            </a>
+            <a href={getHashLink("solution")} onClick={(e) => { navigateToSection("solution")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+              Solution
+            </a>
+            <a href={getHashLink("sos2a")} onClick={(e) => { navigateToSection("sos2a")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+              SOS²A
+            </a>
+            <a href={getHashLink("afaai")} onClick={(e) => { navigateToSection("afaai")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+              AFAAI
+            </a>
+            <a href={getHashLink("roadmap")} onClick={(e) => { navigateToSection("roadmap")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+              Roadmap
+            </a>
+            <a href={getHashLink("pricing")} onClick={(e) => { navigateToSection("pricing")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+              Pricing
+            </a>
           
           <div className="mt-3 mb-1 px-3 text-xs uppercase text-neutral-400 font-semibold">
             About Us
@@ -210,11 +218,12 @@ export default function Header() {
             </svg>
             RASBITA Crisis Tool
           </Link>
-          <Link href="/sos2a-tool" onClick={closeMobileMenu} className="bg-secondary hover:bg-green-600 text-white block text-center mt-3 px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out">
-            Get Started
-          </Link>
+            <Link href="/sos2a-tool" onClick={closeMobileMenu} className="bg-secondary hover:bg-green-600 text-white block text-center mt-3 px-3 py-2 rounded-md text-base font-medium transition duration-150 ease-in-out">
+              Get Started
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </nav>
   );
 }
