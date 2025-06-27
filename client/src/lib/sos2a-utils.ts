@@ -4,17 +4,8 @@ export function identifySecurityRisks(data: MatrixItem[]): SecurityRisk[] {
   const risks: SecurityRisk[] = [];
   
   data.forEach(item => {
-    // Check for missing administrative controls
-    if (!item.administrativeControls.implemented) {
-      risks.push({
-        severity: 'High',
-        title: `Administrative Controls Missing for ${item.infraType}`,
-        description: `Administrative controls are not implemented for ${item.infraType} infrastructure, creating security gaps.`
-      });
-    }
-    
     // Check for missing management controls
-    if (item.managementControls.applicable && !item.managementControls.implemented) {
+    if (item.managementControls?.applicable && !item.managementControls?.implemented) {
       risks.push({
         severity: 'Medium',
         title: `Management Controls Gap in ${item.infraType}`,
@@ -23,11 +14,20 @@ export function identifySecurityRisks(data: MatrixItem[]): SecurityRisk[] {
     }
     
     // Check for missing technology controls
-    if (item.technologyControls.applicable && !item.technologyControls.implemented) {
+    if (item.technologyControls?.applicable && !item.technologyControls?.implemented) {
       risks.push({
         severity: 'High',
         title: `Technology Controls Missing for ${item.infraType}`,
         description: `Critical technology controls are not implemented for ${item.infraType} infrastructure.`
+      });
+    }
+    
+    // Check for missing operation controls
+    if (item.operationControls?.applicable && !item.operationControls?.implemented) {
+      risks.push({
+        severity: 'High',
+        title: `Operation Controls Missing for ${item.infraType}`,
+        description: `Operation controls are not implemented for ${item.infraType} infrastructure, creating security gaps.`
       });
     }
   });
@@ -37,19 +37,23 @@ export function identifySecurityRisks(data: MatrixItem[]): SecurityRisk[] {
 
 export function categorizeLVulnerabilities(data: MatrixItem[]) {
   const vulnerabilities = {
-    critical: [],
-    high: [],
-    medium: [],
-    low: []
+    critical: [] as string[],
+    high: [] as string[],
+    medium: [] as string[],
+    low: [] as string[]
   };
   
   data.forEach(item => {
-    if (!item.administrativeControls.implemented) {
-      vulnerabilities.high.push(`Administrative control gaps in ${item.infraType}`);
+    if (item.operationControls?.applicable && !item.operationControls?.implemented) {
+      vulnerabilities.high.push(`Operation control gaps in ${item.infraType}`);
     }
     
-    if (item.technologyControls.applicable && !item.technologyControls.implemented) {
+    if (item.technologyControls?.applicable && !item.technologyControls?.implemented) {
       vulnerabilities.critical.push(`Technology control failures in ${item.infraType}`);
+    }
+    
+    if (item.managementControls?.applicable && !item.managementControls?.implemented) {
+      vulnerabilities.medium.push(`Management control gaps in ${item.infraType}`);
     }
   });
   
@@ -60,12 +64,16 @@ export function identifyFrameworkGaps(data: MatrixItem[]) {
   const gaps: string[] = [];
   
   data.forEach(item => {
-    if (item.administrativeControls.frameworks.length === 0) {
-      gaps.push(`No administrative frameworks defined for ${item.infraType}`);
+    if (item.operationControls?.frameworks?.length === 0) {
+      gaps.push(`No operation frameworks defined for ${item.infraType}`);
     }
     
-    if (item.managementControls.frameworks.length === 0) {
+    if (item.managementControls?.frameworks?.length === 0) {
       gaps.push(`No management frameworks defined for ${item.infraType}`);
+    }
+    
+    if (item.technologyControls?.frameworks?.length === 0) {
+      gaps.push(`No technology frameworks defined for ${item.infraType}`);
     }
   });
   
@@ -75,9 +83,9 @@ export function identifyFrameworkGaps(data: MatrixItem[]) {
 export function evaluateComplianceStatus(data: MatrixItem[]) {
   const total = data.length;
   const compliant = data.filter(item => 
-    item.administrativeControls.implemented && 
-    item.managementControls.implemented &&
-    item.technologyControls.implemented
+    item.operationControls?.implemented && 
+    item.managementControls?.implemented &&
+    item.technologyControls?.implemented
   ).length;
   
   return {
@@ -100,7 +108,7 @@ export function generateScorecardData(data: MatrixItem[], reportType: string) {
 }
 
 function calculateAdminScore(data: MatrixItem[]): number {
-  const implemented = data.filter(item => item.administrativeControls.implemented).length;
+  const implemented = data.filter(item => item.operationControls?.implemented).length;
   return Math.round((implemented / data.length) * 100);
 }
 
@@ -118,9 +126,9 @@ function calculateTechScore(data: MatrixItem[]): number {
 
 function calculateFrameworkScore(data: MatrixItem[]): number {
   const totalFrameworks = data.reduce((sum, item) => 
-    sum + item.administrativeControls.frameworks.length + 
-    item.managementControls.frameworks.length + 
-    item.technologyControls.frameworks.length, 0);
+    sum + (item.operationControls?.frameworks?.length || 0) + 
+    (item.managementControls?.frameworks?.length || 0) + 
+    (item.technologyControls?.frameworks?.length || 0), 0);
   
   return totalFrameworks > 0 ? Math.min(100, Math.round(totalFrameworks * 10)) : 0;
 }
