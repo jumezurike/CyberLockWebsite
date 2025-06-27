@@ -45,6 +45,10 @@ function Router() {
     console.log("Current route:", location);
   }, [location]);
   
+  // Check if current page should hide footer
+  const hideFooterPages = ['/sos2a-tool'];
+  const shouldHideFooter = hideFooterPages.includes(location);
+
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -84,7 +88,7 @@ function Router() {
         {/* Add lightbulb capture interface */}
         <LightbulbCapture />
       </main>
-      <Footer />
+      {!shouldHideFooter && <Footer />}
     </div>
   );
 }

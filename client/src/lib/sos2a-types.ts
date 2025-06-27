@@ -945,6 +945,7 @@ export interface RasbitaReport {
 export interface AssessmentReport {
   id: string;
   businessId: string;
+  businessName: string; // Added for organization identification
   reportType: 'preliminary' | 'comprehensive';
   preliminaryReportId?: string; // Reference to preliminary report ID (required for comprehensive reports)
   createdAt: string;
@@ -956,6 +957,7 @@ export interface AssessmentReport {
     country: string;
     zipCode?: string;
   };
+  location?: string; // Added for simplified location display
   remediationStrategies?: Array<{issue: string; strategy: string}>; // Remediation strategies from preliminary report
   industry: string;
   businessServices: string;
