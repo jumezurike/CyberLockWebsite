@@ -1948,6 +1948,25 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      
+      {/* CyberLockX Logo and Tagline */}
+      <div className="mt-8 border-t pt-6">
+        <div className="flex flex-col items-center justify-center space-y-2">
+          <img 
+            src={logoImage} 
+            alt="CyberLockX Logo" 
+            className="h-16 w-auto opacity-80"
+          />
+          <div className="text-center">
+            <p className="text-lg font-bold text-primary">
+              Securing every CLICK!!!
+            </p>
+            <p className="text-sm text-muted-foreground font-medium">
+              Healthcare Apps & Devices Security Hub
+            </p>
+          </div>
+        </div>
+      </div>
     </>
   );
 }
