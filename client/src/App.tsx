@@ -45,13 +45,15 @@ function Router() {
     console.log("Current route:", location);
   }, [location]);
   
-  // Check if current page should hide footer
+  // Check if current page should hide footer and header
   const hideFooterPages = ['/sos2a-tool'];
+  const hideHeaderPages = ['/sos2a-tool'];
   const shouldHideFooter = hideFooterPages.includes(location);
+  const shouldHideHeader = hideHeaderPages.includes(location);
 
   return (
     <div className="flex flex-col min-h-screen">
-      <Header />
+      {!shouldHideHeader && <Header />}
       <main className="flex-grow">
         <Switch>
           <Route path="/" component={Home} />

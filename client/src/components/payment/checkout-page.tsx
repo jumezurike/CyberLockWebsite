@@ -8,11 +8,8 @@ import { Button } from "@/components/ui/button";
 import { apiRequest } from "@/lib/queryClient";
 
 // Load Stripe outside of component render to avoid recreating instance on each render
-if (!import.meta.env.VITE_STRIPE_PUBLIC_KEY) {
-  throw new Error("Missing VITE_STRIPE_PUBLIC_KEY in environment variables");
-}
-
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+const stripePublicKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+const stripePromise = stripePublicKey ? loadStripe(stripePublicKey) : null;
 
 interface CheckoutPageProps {
   planId: string;
@@ -28,6 +25,13 @@ export default function CheckoutPage({ planId, planName, amount, addons = [] }: 
   const [, setLocation] = useLocation();
 
   useEffect(() => {
+    // Check if Stripe is available before creating payment intent
+    if (!stripePromise) {
+      setError("Payment processing is not available. Please contact support.");
+      setIsLoading(false);
+      return;
+    }
+
     // Create PaymentIntent as soon as the page loads
     const createPaymentIntent = async () => {
       try {
@@ -87,7 +91,7 @@ export default function CheckoutPage({ planId, planName, amount, addons = [] }: 
 
   return (
     <div className="max-w-4xl mx-auto p-6">
-      {clientSecret && (
+      {clientSecret && stripePromise && (
         <Elements 
           stripe={stripePromise} 
           options={{ 
