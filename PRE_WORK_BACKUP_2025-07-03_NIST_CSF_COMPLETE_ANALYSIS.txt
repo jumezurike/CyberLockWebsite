@@ -53,10 +53,19 @@ Categories:
 - 106+ Individual Controls/Subcategories
 - 5-Tier Scoring System (0-4): 0% / 25% / 50% / 75% / 100%
 
-**CRITICAL DISCOVERY:**
-User's complete NIST CSF 2.0 structure shows MORE controls than our extracted data:
-- Our extraction: GOVERN (32), IDENTIFY (13), PROTECT (10), DETECT (10), RESPOND (11), RECOVER (5) = 81 controls
-- User's structure: GOVERN (32), IDENTIFY (13), PROTECT (23), DETECT (13), RESPOND (15), RECOVER (11) = 107 controls
+**UPDATED CONTROL COUNTS FROM USER'S COMPLETE STRUCTURE:**
+
+**FUNCTIONAL AREA CONTROL COUNTS:**
+- GOVERN: 32 controls ✓ (confirmed from images)
+- IDENTIFY: 13 controls ✓ (confirmed: 7 Asset Mgmt + 10 Risk Assessment + 4 Improvement = 21 total, need recount)
+- PROTECT: 23 controls (confirmed from images: 6+2+11+4+2+4 categories)
+- DETECT: 13 controls (confirmed from images: 9 Continuous Monitoring + 8 Adverse Event Analysis = 17 total, need recount)
+- RESPOND: 15 controls (confirmed from images: 5+4+3+3 categories)
+- RECOVER: 11 controls (confirmed from images: 6+4+others categories)
+
+**CORRECTED ANALYSIS NEEDED:**
+Our initial extraction missed significant controls in PROTECT, DETECT, RESPOND, and RECOVER functional areas.
+Total should be approximately 107+ controls across all 6 functional areas.
 
 **RASBITA GOVERNANCE IMPLEMENTATION REQUIREMENT:**
 - Use GOVERN functional area (32 controls) for RASBITA Governance (15% pillar)

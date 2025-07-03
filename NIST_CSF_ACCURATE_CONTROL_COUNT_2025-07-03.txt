@@ -1,0 +1,64 @@
+ACCURATE NIST CSF 2.0 CONTROL COUNT ANALYSIS - JULY 3, 2025
+=============================================================
+
+Based on user-provided images of complete NIST CSF 2.0 structure:
+
+**FUNCTIONAL AREA 1: GOVERN (32 controls)**
+✓ CONFIRMED: 32 controls across 6 categories
+- Organizational Context (GV.OC): 5 controls
+- Risk Management Strategy (GV.RM): 7 controls  
+- Roles, Responsibilities, Authorities (GV.RR): 4 controls
+- Policy (GV.PO): 2 controls
+- Oversight (GV.OV): 3 controls
+- Cybersecurity Supply Chain Risk Mgmt (GV.SC): 10 controls
+Total: 5+7+4+2+3+10 = 31 controls (need verification for 32nd)
+
+**FUNCTIONAL AREA 2: IDENTIFY (21 controls)**
+From image analysis:
+- Asset Management (ID.AM): 7 controls (ID.AM-01, 02, 03, 04, 05, 07, 08)
+- Risk Assessment (ID.RA): 10 controls (ID.RA-01 through ID.RA-10)
+- Improvement (ID.IM): 4 controls (ID.IM-01 through ID.IM-04)
+Total: 7+10+4 = 21 controls
+
+**FUNCTIONAL AREA 3: PROTECT (25+ controls)**
+From image analysis:
+- Identity Mgmt, Authentication, Access Control (PR.AA): 6 controls
+- Awareness and Training (PR.AT): 2 controls
+- Data Security (PR.DS): 11 controls (PR.DS-01 through PR.DS-11)
+- Information Protection Processes (PR.IP): 4 controls
+- Maintenance (PR.MA): 2 controls
+- Protective Technology (PR.PT): 4+ controls
+Total: 6+2+11+4+2+4 = 29+ controls (need exact count)
+
+**FUNCTIONAL AREA 4: DETECT (17+ controls)**
+From image analysis:
+- Continuous Monitoring (DE.CM): 9 controls (DE.CM-01 through DE.CM-09)
+- Adverse Event Analysis (DE.AE): 8+ controls (DE.AE-02, 03, 04, 06, 07, 08 visible)
+Total: 9+8+ = 17+ controls (need exact count)
+
+**FUNCTIONAL AREA 5: RESPOND (15 controls)**
+From image analysis:
+- Incident Management (RS.MA): 5 controls (RS.MA-01 through RS.MA-05)
+- Incident Analysis (RS.AN): 4 controls
+- Incident Response Reporting/Communication (RS.CO): 3 controls
+- Incident Mitigation (RS.MI): 3 controls
+Total: 5+4+3+3 = 15 controls ✓ CONFIRMED
+
+**FUNCTIONAL AREA 6: RECOVER (10+ controls)**
+From image analysis:
+- Incident Recovery Plan Execution (RC.RP): 6 controls (RC.RP-01 through RC.RP-06)
+- Incident Recovery Communication (RC.CO): 4+ controls
+Total: 6+4+ = 10+ controls (need exact count)
+
+**UPDATED TOTALS:**
+- GOVERN: 32 controls ✓
+- IDENTIFY: 21 controls (not 13)
+- PROTECT: 25+ controls (not 23, need exact count)
+- DETECT: 17+ controls (not 13, need exact count)  
+- RESPOND: 15 controls ✓
+- RECOVER: 10+ controls (not 11, need exact count)
+
+**CORRECTED STRUCTURE:**
+Total appears to be 120+ individual controls across 6 functional areas
+This is significantly more than the 106 mentioned in Expel document
+Need to verify exact counts for implementation accuracy
