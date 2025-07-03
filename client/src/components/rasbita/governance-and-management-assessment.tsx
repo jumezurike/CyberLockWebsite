@@ -352,12 +352,12 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">6-month target tier (optional)</Label>
-                      <Select value={sixMonthTarget?.toString() || ""} onValueChange={(value) => setSixMonthTarget(value ? parseInt(value) : null)}>
+                      <Select value={sixMonthTarget?.toString() || "none"} onValueChange={(value) => setSixMonthTarget(value === "none" ? null : parseInt(value))}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select target tier" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">No target set</SelectItem>
+                          <SelectItem value="none">No target set</SelectItem>
                           <SelectItem value="1">Tier 1 (25%)</SelectItem>
                           <SelectItem value="2">Tier 2 (50%)</SelectItem>
                           <SelectItem value="3">Tier 3 (75%)</SelectItem>
@@ -368,12 +368,12 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                     
                     <div className="space-y-2">
                       <Label className="text-sm font-medium">12-month goal tier (optional)</Label>
-                      <Select value={twelveMonthTarget?.toString() || ""} onValueChange={(value) => setTwelveMonthTarget(value ? parseInt(value) : null)}>
+                      <Select value={twelveMonthTarget?.toString() || "none"} onValueChange={(value) => setTwelveMonthTarget(value === "none" ? null : parseInt(value))}>
                         <SelectTrigger>
                           <SelectValue placeholder="Select goal tier" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="">No goal set</SelectItem>
+                          <SelectItem value="none">No goal set</SelectItem>
                           <SelectItem value="1">Tier 1 (25%)</SelectItem>
                           <SelectItem value="2">Tier 2 (50%)</SelectItem>
                           <SelectItem value="3">Tier 3 (75%)</SelectItem>
