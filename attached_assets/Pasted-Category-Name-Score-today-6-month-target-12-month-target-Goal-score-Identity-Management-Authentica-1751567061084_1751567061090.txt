@@ -1,0 +1,36 @@
+Category	Name	Score today	6-month target	12-month target	Goal score
+Identity Management, Authentication, and Access Control (PR.AA)	Identity Mgt	2	2.5	3	4
+Awareness and Training (PR.AT)	Awareness and Training	2	2.5	3	4
+Data Security (PR.DS)	Data Security	2	2.5	3	4
+Platform Security (PR.PS)	Platform Security	2	2.5	3	4
+Technology Infrastructure Resilience (PR.IR)	Tech Infra Res	2	2.5	3	4
+					
+					
+Protect: Self-scoring worksheet (note: enter a score from 0 to 4, in column D, E, F, and G for all of the cells that are shaded light green)					
+Identity Management, Authentication, and Access Control		Score today	6-month target	12-month target	Goal score
+PR.AA-01: Identities and credentials for authorized users, services, and hardware are managed by the organization 	PR.AA-01	2	2.5	3	4
+PR.AA-02: Identities are proofed and bound to credentials based on the context of interactions	PR.AA-02	2	2.5	3	4
+PR.AA-03: Users, services, and hardware are authenticated	PR.AA-03	2	2.5	3	4
+PR.AA-04: Identity assertions are protected, conveyed, and verified	PR.AA-04	2	2.5	3	4
+PR.AA-05: Access permissions, entitlements, and authorizations are defined in a policy, managed, enforced, and reviewed, and incorporate the principles of least privilege and separation of duties	PR.AA-05	2	2.5	3	4
+PR.AA-06: Physical access to assets is managed, monitored, and enforced commensurate with risk	PR.AA-06	2	2.5	3	4
+Awareness and Training		Score today	6-month target	12-month target	Goal score
+PR.AT-01: Personnel are provided awareness and training so thay they possess the knowledge and skills to perform general tasks with cybersecurity risks in mind	PR.AT-01	2	2.5	3	4
+PR.AT-02: Individuals in specialized roles are provided with awareness and training so that they possess the knowledge and skills to perform relevant tasks with cybersecurity risks in mind	PR.AT-02	2	2.5	3	4
+Data Security		Score today	6-month target	12-month target	Goal score
+PR.DS-01: The confidentiality, integrity, and availability of data-at-rest are protected	PR-DS.01	2	2.5	3	4
+PR.DS-02: The confidentiality, integrity, and availability of data-in-transit are protected 	PR-DS.02	2	2.5	3	4
+PR.DS-10: The confidentiality, integrity, and availability of data-in-use are protected	PR-DS.10	2	2.5	3	4
+PR.DS-11: Backups of data are created, protected, maintained, and tested	PR-DS.11	2	2.5	3	4
+Platform Security		Score today	6-month target	12-month target	Goal score
+PR.PS-01: Configuration management practices are established and applied	PR.PS-01	2	2.5	3	4
+PR.PS-02: Software is maintained, replaced, and removed commensurate with risk	PR.PS-02	2	2.5	3	4
+PR.PS-03: Hardware is maintained, replaced, and removed commensurate with risk	PR.PS-03	2	2.5	3	4
+PR.PS-04: Log records are generated and made available for continuous monitoring	PR.PS-04	2	2.5	3	4
+PR.PS-05: Installation and execution of unauthorized software are prevented	PR.PS-05	2	2.5	3	4
+PR.PS-06: Secure software development practices are integrated, and their performance is monitored throughout the software development life cycle 	PR.PS-06	2	2.5	3	4
+Technology Infrastructure Resilience		Score today	6-month target	12-month target	Goal score
+PR.IR-01: Networks and environments are protected from unauthorized logical access and usage	PR.IR-01	2	2.5	3	4
+PR.IR-02: The organization’s technology assets are protected from environmental threats	PR.IR-02	2	2.5	3	4
+PR.IR-03: Mechanisms are implemented to achieve resilience requirements in normal and adverse situations	PR.IR-03	2	2.5	3	4
+PR.IR-04: Adequate resource capacity to ensure availability is maintained	PR.IR-04	2	2.5	3	4
