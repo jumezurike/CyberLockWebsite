@@ -1,0 +1,117 @@
+NIST CSF 2.0 DISCREPANCY CORRECTION PLAN - JULY 3, 2025
+=========================================================
+
+Following PRP 3.0 protocols - AWAITING USER APPROVAL before implementation
+
+**CURRENT STATUS:**
+✅ GOVERN (32 controls) - Perfect match with official NIST
+✅ IDENTIFY (21 controls) - Perfect match with official NIST
+⚠️ PROTECT, DETECT, RESPOND, RECOVER - Discrepancies found
+
+**DISCREPANCY DETAILS & PROPOSED CORRECTIONS:**
+
+**1. PROTECT FUNCTIONAL AREA DISCREPANCY**
+-------------------------------------------
+**Current User Structure (5 categories):**
+- PR.AA: Identity Management, Authentication, and Access Control ✓
+- PR.AT: Awareness and Training ✓  
+- PR.DS: Data Security ✓
+- PR.PS: Platform Security ✓
+- PR.IR: Technology Infrastructure Resilience ✓
+
+**Official NIST CSF 2.0 Structure (6 categories):**
+- PR.AA: Identity Management, Authentication, and Access Control ✓
+- PR.AT: Awareness and Training ✓
+- PR.DS: Data Security ✓
+- PR.PS: Platform Security ✓ (User has this)
+- PR.MA: Maintenance ❌ MISSING
+- PR.PT: Protective Technology ❌ MISSING (User has PR.IR instead)
+
+**PROPOSED CORRECTION:**
+Replace: PR.IR (Technology Infrastructure Resilience)
+Add: PR.MA (Maintenance) + PR.PT (Protective Technology)
+
+**2. DETECT FUNCTIONAL AREA DISCREPANCY**
+-----------------------------------------
+**Current User Structure (2 categories):**
+- DE.CM: Continuous Monitoring ✓
+- DE.AE: Adverse Event Analysis ✓
+
+**Official NIST CSF 2.0 Structure (3 categories):**
+- DE.AE: Anomalies and Events ✓ (slight name difference)
+- DE.CM: Continuous Monitoring ✓
+- DE.DP: Detection Processes ❌ MISSING
+
+**PROPOSED CORRECTION:**
+Add: DE.DP (Detection Processes)
+Rename: "Adverse Event Analysis" → "Anomalies and Events"
+
+**3. RESPOND FUNCTIONAL AREA DISCREPANCY**
+------------------------------------------
+**Current User Structure (4 categories):**
+- RS.MA: Incident Management ✓ (name difference)
+- RS.AN: Incident Analysis ✓ (name difference)
+- RS.CO: Incident Response Reporting and Communication ❌ Wrong code
+- RS.MI: Incident Mitigation ✓ (name difference)
+
+**Official NIST CSF 2.0 Structure (4 categories):**
+- RS.MA: Management ✓
+- RS.AN: Analysis ✓
+- RS.MI: Mitigation ✓
+- RS.RP: Reporting ❌ User uses RS.CO instead
+
+**PROPOSED CORRECTION:**
+Change: RS.CO → RS.RP (Reporting)
+Simplify names to match official NIST
+
+**4. RECOVER FUNCTIONAL AREA DISCREPANCY**
+------------------------------------------
+**Current User Structure (2 categories):**
+- RC.RP: Incident Recovery Plan Execution ✓ (name difference)
+- RC.CO: Incident Recovery Communication ✓ (name difference)
+
+**Official NIST CSF 2.0 Structure (3 categories):**
+- RC.RP: Recovery Planning ✓
+- RC.IM: Improvements ❌ MISSING
+- RC.CO: Communications ✓
+
+**PROPOSED CORRECTION:**
+Add: RC.IM (Improvements)
+Simplify names to match official NIST
+
+**IMPLEMENTATION PLAN (AWAITING APPROVAL):**
+============================================
+
+**Phase 1: Update Category Structure**
+- Add missing categories: PR.MA, PR.PT, DE.DP, RC.IM
+- Remove non-standard: PR.IR
+- Rename categories to match official NIST naming
+
+**Phase 2: Add Missing Subcategories**
+- Research and add all subcategories for new categories
+- Ensure complete control mapping for comprehensive scoring
+
+**Phase 3: Update System Integration**
+- Modify gap analysis to handle updated structure
+- Update scoring calculations for new category counts
+- Preserve GOVERN structure (perfect for RASBITA Governance)
+
+**Phase 4: Questionnaire Mapping**
+- Map existing questionnaire responses to new structure
+- Ensure backward compatibility where possible
+
+**CONTROL COUNT IMPACT:**
+Current: ~108 controls
+After correction: ~120+ controls (closer to official NIST)
+
+**CRITICAL QUESTIONS FOR USER APPROVAL:**
+
+1. Should we update to match official NIST CSF 2.0 exactly?
+2. Should we preserve existing Expel-based naming for compatibility?
+3. Should we implement all missing categories or only specific ones?
+4. Should we maintain backward compatibility with current assessments?
+
+**RECOMMENDATION:**
+Update structure to match official NIST CSF 2.0 for authenticity and compliance, while preserving GOVERN structure for RASBITA Governance implementation.
+
+**AWAITING USER DECISION BEFORE PROCEEDING**
