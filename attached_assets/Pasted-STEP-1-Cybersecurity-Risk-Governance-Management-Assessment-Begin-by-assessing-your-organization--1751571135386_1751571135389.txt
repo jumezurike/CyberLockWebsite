@@ -1,0 +1,35 @@
+STEP 1: Cybersecurity Risk Governance & Management Assessment
+Begin by assessing your organization's maturity in governing and managing cybersecurity risks
+Required Assessment
+The Governance & Management assessment is a necessary first step in the RASBITA process. Your assessment results will be included in both SOS²A preliminary and comprehensive reports.
+
+Cybersecurity Risk Governance & Management Assessment
+Evaluate your organization's cybersecurity risk governance and management tiers based on NIST CSF 2.0 framework
+Cybersecurity Risk Governance
+Cybersecurity Risk Management
+Additional Questions
+Question 1: What cybersecurity risk governance tier is your organization?
+Evaluate your organization's approach to cybersecurity risk governance. Select the tier that best describes your current maturity level.
+
+Important: When you select a tier for Governance, the Management tier will automatically be set to the exact same tier. The two tiers must always match in your organization's assessment.
+
+
+Tier 0 (0-0): 0% None
+The organization is completely uninformed about cybersecurity risk governance. There is no awareness, understanding, or formal approach to managing cybersecurity risks at any level of the organization.
+
+
+Tier 1 (0-1): 25% Partial
+Application of cybersecurity risk governance is ad hoc and prioritization is not explicitly considered.
+
+
+Tier 2 (1-2): 50% Risk Informed
+Risk management practices are approved by management but may not be established as organization-wide policy. The prioritization of cybersecurity activities and protection needs is directly informed by organizational risk objectives, the threat environment, or business/mission requirements.
+
+
+Tier 3 (2-3): 75% Repeatable
+The organization's risk management practices are formally approved and expressed as policy. Risk-informed policies, processes, and procedures are defined, implemented as intended, and reviewed. Organizational cybersecurity practices are regularly updated based on the application of risk management processes to changes in business/mission requirements, threats, and technological landscape.
+
+
+Tier 4 (3-4): 100% Adaptive
+There is an organization-wide approach to managing cybersecurity risks that uses risk-informed policies, processes, and procedures to address potential cybersecurity events. The relationship between cybersecurity risks and organizational objectives is clearly understood and considered when making decisions. Executives monitor cybersecurity risks in the same context as financial and other organizational risks. The organizational budget is based on an understanding of the current and predicted risk environment.
+
