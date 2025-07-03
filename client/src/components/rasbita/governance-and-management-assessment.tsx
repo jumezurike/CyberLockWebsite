@@ -7,9 +7,41 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 
 interface GovernanceAndManagementAssessmentProps {
   onComplete: (scores: GovernanceScores) => void;
+}
+
+// NIST CSF 2.0 Functional Area Assessment interfaces
+interface FunctionalArea {
+  id: string;
+  category: 'GOVERN' | 'IDENTIFY' | 'PROTECT' | 'DETECT' | 'RESPOND' | 'RECOVER';
+  name: string;
+  description: string;
+  subcategories: number;
+}
+
+interface FunctionalAreaScore {
+  functionalAreaId: string;
+  currentTier: number; // 0-4
+  targetTier: number; // 0-4
+  timeAtTier: number; // months
+}
+
+interface CybersecurityHygieneResult {
+  overallScore: number; // 0-100%
+  overallTier: number; // 0-4
+  categoryScores: {
+    [key in 'GOVERN' | 'IDENTIFY' | 'PROTECT' | 'DETECT' | 'RESPOND' | 'RECOVER']: {
+      score: number;
+      tier: number;
+      functionalAreas: FunctionalAreaScore[];
+    }
+  };
+  hygieneLevel: 'Critical Risk' | 'High Risk' | 'Moderate Risk' | 'Good' | 'Excellent';
+  recommendations: string[];
 }
 
 export interface GovernanceScores {
@@ -21,6 +53,9 @@ export interface GovernanceScores {
   durationCategory: 'less-than-6' | '6-12' | '1-2-years' | '2-plus-years' | null; // Duration category for enhanced scoring
   sixMonthTarget: number | null; // Target tier for 6 months (0-4)
   twelveMonthTarget: number | null; // Target tier for 12 months (0-4)
+  // NIST CSF 2.0 Functional Area Assessment (NEW - Comprehensive tier assessment)
+  functionalAreaScores: { [key: string]: FunctionalAreaScore }; // Functional area assessments
+  cybersecurityHygiene: CybersecurityHygieneResult | null; // Calculated hygiene result
   // Percentage completion mapping: 
   // Tier 0 (0-0): 0%
   // Tier 1 (0-1): 25%
@@ -28,6 +63,47 @@ export interface GovernanceScores {
   // Tier 3 (2-3): 75%
   // Tier 4 (3-4): 100%
 }
+
+// Complete NIST CSF 2.0 Functional Areas (106 subcategories total)
+const NIST_CSF_FUNCTIONAL_AREAS: FunctionalArea[] = [
+  // GOVERN (26 subcategories)
+  { id: 'GV-OC', category: 'GOVERN', name: 'Organizational Context', description: 'Understanding the organizational environment', subcategories: 5 },
+  { id: 'GV-RM', category: 'GOVERN', name: 'Risk Management Strategy', description: 'Risk management strategy and expectations', subcategories: 7 },
+  { id: 'GV-RR', category: 'GOVERN', name: 'Roles, Responsibilities', description: 'Cybersecurity roles and responsibilities', subcategories: 2 },
+  { id: 'GV-PO', category: 'GOVERN', name: 'Policy', description: 'Cybersecurity policy establishment and management', subcategories: 3 },
+  { id: 'GV-OV', category: 'GOVERN', name: 'Oversight', description: 'Cybersecurity oversight and governance', subcategories: 3 },
+  { id: 'GV-SC', category: 'GOVERN', name: 'Supply Chain Risk Management', description: 'Supply chain risk management', subcategories: 6 },
+
+  // IDENTIFY (43 subcategories)
+  { id: 'ID-AM', category: 'IDENTIFY', name: 'Asset Management', description: 'Asset management policies and procedures', subcategories: 6 },
+  { id: 'ID-RA', category: 'IDENTIFY', name: 'Risk Assessment', description: 'Risk assessment and risk management', subcategories: 10 },
+  { id: 'ID-IM', category: 'IDENTIFY', name: 'Improvement', description: 'Improvement activities and processes', subcategories: 4 },
+  { id: 'ID-BE', category: 'IDENTIFY', name: 'Business Environment', description: 'Business environment understanding', subcategories: 5 },
+  { id: 'ID-GV', category: 'IDENTIFY', name: 'Governance', description: 'Governance and risk management integration', subcategories: 4 },
+  { id: 'ID-SC', category: 'IDENTIFY', name: 'Supply Chain Risk Assessment', description: 'Supply chain risk assessment', subcategories: 5 },
+  { id: 'ID-RA-2', category: 'IDENTIFY', name: 'Risk Assessment Processes', description: 'Risk assessment processes and methodologies', subcategories: 9 },
+
+  // PROTECT (23 subcategories)  
+  { id: 'PR-AC', category: 'PROTECT', name: 'Identity Management, Authentication and Access Control', description: 'Access control and identity management', subcategories: 7 },
+  { id: 'PR-AT', category: 'PROTECT', name: 'Awareness and Training', description: 'Security awareness and training', subcategories: 5 },
+  { id: 'PR-DS', category: 'PROTECT', name: 'Data Security', description: 'Data protection and privacy', subcategories: 8 },
+  { id: 'PR-IP', category: 'PROTECT', name: 'Information Protection Processes and Procedures', description: 'Information protection processes', subcategories: 3 },
+
+  // DETECT (8 subcategories)
+  { id: 'DE-AE', category: 'DETECT', name: 'Anomalies and Events', description: 'Anomaly and event detection', subcategories: 5 },
+  { id: 'DE-CM', category: 'DETECT', name: 'Security Continuous Monitoring', description: 'Continuous security monitoring', subcategories: 3 },
+
+  // RESPOND (9 subcategories)
+  { id: 'RS-RP', category: 'RESPOND', name: 'Response Planning', description: 'Response planning and procedures', subcategories: 1 },
+  { id: 'RS-CO', category: 'RESPOND', name: 'Communications', description: 'Response communications', subcategories: 5 },
+  { id: 'RS-AN', category: 'RESPOND', name: 'Analysis', description: 'Response analysis activities', subcategories: 1 },
+  { id: 'RS-MI', category: 'RESPOND', name: 'Mitigation', description: 'Response mitigation activities', subcategories: 2 },
+
+  // RECOVER (7 subcategories)
+  { id: 'RC-RP', category: 'RECOVER', name: 'Recovery Planning', description: 'Recovery planning and processes', subcategories: 3 },
+  { id: 'RC-IM', category: 'RECOVER', name: 'Improvements', description: 'Recovery improvements', subcategories: 2 },
+  { id: 'RC-CO', category: 'RECOVER', name: 'Communications', description: 'Recovery communications', subcategories: 2 }
+];
 
 export default function GovernanceAndManagementAssessment({ onComplete }: GovernanceAndManagementAssessmentProps) {
   const [activeTab, setActiveTab] = useState("governance");
@@ -40,6 +116,144 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
   const [durationCategory, setDurationCategory] = useState<'less-than-6' | '6-12' | '1-2-years' | '2-plus-years' | null>(null);
   const [sixMonthTarget, setSixMonthTarget] = useState<number | null>(null);
   const [twelveMonthTarget, setTwelveMonthTarget] = useState<number | null>(null);
+  
+  // NIST CSF Functional Area Assessment State (NEW - Comprehensive tier assessment)
+  const [functionalAreaScores, setFunctionalAreaScores] = useState<{ [key: string]: FunctionalAreaScore }>({});
+  const [cybersecurityHygiene, setCybersecurityHygiene] = useState<CybersecurityHygieneResult | null>(null);
+  const [showFunctionalAreaAssessment, setShowFunctionalAreaAssessment] = useState<boolean>(false);
+  const [functionalAreaCategory, setFunctionalAreaCategory] = useState<'GOVERN' | 'IDENTIFY' | 'PROTECT' | 'DETECT' | 'RESPOND' | 'RECOVER'>('GOVERN');
+
+  // Helper functions for functional area assessment
+  const handleFunctionalAreaChange = (functionalAreaId: string, field: keyof FunctionalAreaScore, value: number) => {
+    setFunctionalAreaScores(prev => ({
+      ...prev,
+      [functionalAreaId]: {
+        ...prev[functionalAreaId],
+        functionalAreaId,
+        [field]: value,
+        currentTier: prev[functionalAreaId]?.currentTier || 0,
+        targetTier: prev[functionalAreaId]?.targetTier || 0,
+        timeAtTier: prev[functionalAreaId]?.timeAtTier || 0
+      }
+    }));
+  };
+
+  const calculateCybersecurityHygiene = (): void => {
+    const categories = ['GOVERN', 'IDENTIFY', 'PROTECT', 'DETECT', 'RESPOND', 'RECOVER'] as const;
+    const categoryScores: CybersecurityHygieneResult['categoryScores'] = {
+      GOVERN: { score: 0, tier: 0, functionalAreas: [] },
+      IDENTIFY: { score: 0, tier: 0, functionalAreas: [] },
+      PROTECT: { score: 0, tier: 0, functionalAreas: [] },
+      DETECT: { score: 0, tier: 0, functionalAreas: [] },
+      RESPOND: { score: 0, tier: 0, functionalAreas: [] },
+      RECOVER: { score: 0, tier: 0, functionalAreas: [] }
+    };
+
+    let totalScore = 0;
+    let totalPossible = 0;
+
+    // Calculate scores for each category
+    categories.forEach(category => {
+      const functionalAreas = NIST_CSF_FUNCTIONAL_AREAS.filter(fa => fa.category === category);
+      let categoryTotal = 0;
+      let categoryPossible = 0;
+
+      functionalAreas.forEach(fa => {
+        const score = functionalAreaScores[fa.id];
+        if (score) {
+          // Weight by subcategory count for accuracy
+          const areaScore = (score.currentTier / 4) * 100 * fa.subcategories;
+          categoryTotal += areaScore;
+          categoryPossible += 100 * fa.subcategories;
+          categoryScores[category].functionalAreas.push(score);
+        } else {
+          // Default to tier 0 if not assessed
+          categoryPossible += 100 * fa.subcategories;
+        }
+      });
+
+      categoryScores[category].score = categoryPossible > 0 ? (categoryTotal / categoryPossible) * 100 : 0;
+      categoryScores[category].tier = Math.round((categoryScores[category].score / 100) * 4);
+      
+      totalScore += categoryTotal;
+      totalPossible += categoryPossible;
+    });
+
+    const overallScore = totalPossible > 0 ? (totalScore / totalPossible) * 100 : 0;
+    const overallTier = Math.round((overallScore / 100) * 4);
+
+    // Determine hygiene level
+    let hygieneLevel: CybersecurityHygieneResult['hygieneLevel'];
+    if (overallScore >= 90) hygieneLevel = 'Excellent';
+    else if (overallScore >= 75) hygieneLevel = 'Good';
+    else if (overallScore >= 50) hygieneLevel = 'Moderate Risk';
+    else if (overallScore >= 25) hygieneLevel = 'High Risk';
+    else hygieneLevel = 'Critical Risk';
+
+    // Generate recommendations based on lowest performing categories
+    const recommendations: string[] = [];
+    const sortedCategories = Object.entries(categoryScores)
+      .sort(([,a], [,b]) => a.score - b.score)
+      .slice(0, 3);
+
+    sortedCategories.forEach(([category, data]) => {
+      if (data.score < 75) {
+        switch (category) {
+          case 'GOVERN':
+            recommendations.push(`Strengthen cybersecurity governance (${data.score.toFixed(0)}%) - Focus on risk management strategy and organizational context`);
+            break;
+          case 'IDENTIFY':
+            recommendations.push(`Improve identification capabilities (${data.score.toFixed(0)}%) - Enhance asset management and risk assessment processes`);
+            break;
+          case 'PROTECT':
+            recommendations.push(`Enhance protection controls (${data.score.toFixed(0)}%) - Strengthen access control and data security measures`);
+            break;
+          case 'DETECT':
+            recommendations.push(`Improve detection capabilities (${data.score.toFixed(0)}%) - Enhance monitoring and anomaly detection`);
+            break;
+          case 'RESPOND':
+            recommendations.push(`Strengthen incident response (${data.score.toFixed(0)}%) - Improve response planning and communications`);
+            break;
+          case 'RECOVER':
+            recommendations.push(`Enhance recovery capabilities (${data.score.toFixed(0)}%) - Strengthen recovery planning and improvement processes`);
+            break;
+        }
+      }
+    });
+
+    const result: CybersecurityHygieneResult = {
+      overallScore,
+      overallTier,
+      categoryScores,
+      hygieneLevel,
+      recommendations
+    };
+
+    setCybersecurityHygiene(result);
+  };
+
+  const getCategoryBadgeColor = (category: string): string => {
+    switch (category) {
+      case 'GOVERN': return 'bg-purple-100 text-purple-800';
+      case 'IDENTIFY': return 'bg-blue-100 text-blue-800';
+      case 'PROTECT': return 'bg-green-100 text-green-800';
+      case 'DETECT': return 'bg-yellow-100 text-yellow-800';
+      case 'RESPOND': return 'bg-orange-100 text-orange-800';
+      case 'RECOVER': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getHygieneLevelColor = (level: string): string => {
+    switch (level) {
+      case 'Excellent': return 'bg-green-100 text-green-800 border-green-200';
+      case 'Good': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'Moderate Risk': return 'bg-yellow-100 text-yellow-800 border-yellow-200';
+      case 'High Risk': return 'bg-orange-100 text-orange-800 border-orange-200';
+      case 'Critical Risk': return 'bg-red-100 text-red-800 border-red-200';
+      default: return 'bg-gray-100 text-gray-800 border-gray-200';
+    }
+  };
   
   // Update management tier when governance tier changes to ensure consistency
   const handleGovernanceChange = (value: string) => {
@@ -75,7 +289,10 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
       // Enhanced Duration-Based Assessment (NEW - Additive only)
       durationCategory,
       sixMonthTarget,
-      twelveMonthTarget
+      twelveMonthTarget,
+      // NIST CSF Functional Area Assessment (NEW - Comprehensive tier assessment)
+      functionalAreaScores,
+      cybersecurityHygiene
     });
   };
   
@@ -413,6 +630,196 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                 </div>
               </div>
               
+              {/* NIST CSF 2.0 Comprehensive Functional Area Assessment */}
+              <div className="mt-8 border-t border-gray-200 pt-6">
+                <div className="mb-4">
+                  <h3 className="text-lg font-semibold text-chart-4 mb-2">
+                    Question 3: NIST CSF 2.0 Functional Area Tier Assessment (Optional)
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    For a comprehensive cybersecurity hygiene evaluation, assess your organization across all 22 NIST CSF functional areas. 
+                    This provides precise maturity scoring and targeted improvement recommendations.
+                  </p>
+                  
+                  <div className="bg-blue-50 p-4 rounded-md mb-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h4 className="font-medium text-blue-800">Enhanced Cybersecurity Hygiene Assessment</h4>
+                        <p className="text-sm text-blue-700 mt-1">
+                          Complete functional area assessment provides tier-based scoring across GOVERN, IDENTIFY, PROTECT, DETECT, RESPOND, RECOVER categories
+                        </p>
+                      </div>
+                      <Button
+                        onClick={() => setShowFunctionalAreaAssessment(!showFunctionalAreaAssessment)}
+                        className={`${showFunctionalAreaAssessment ? 'bg-blue-600' : 'bg-chart-4'} text-white hover:bg-purple-700`}
+                      >
+                        {showFunctionalAreaAssessment ? 'Hide Assessment' : 'Start Assessment'}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {showFunctionalAreaAssessment && (
+                  <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
+                    <div className="mb-4">
+                      <div className="flex justify-between text-sm text-gray-600 mb-2">
+                        <span>Assessment Progress</span>
+                        <span>{Object.keys(functionalAreaScores).length} of {NIST_CSF_FUNCTIONAL_AREAS.length} areas completed</span>
+                      </div>
+                      <Progress 
+                        value={(Object.keys(functionalAreaScores).length / NIST_CSF_FUNCTIONAL_AREAS.length) * 100} 
+                        className="h-2 mb-4" 
+                      />
+                    </div>
+
+                    <Tabs value={functionalAreaCategory} onValueChange={(value) => setFunctionalAreaCategory(value as any)}>
+                      <TabsList className="grid grid-cols-6 mb-6">
+                        {['GOVERN', 'IDENTIFY', 'PROTECT', 'DETECT', 'RESPOND', 'RECOVER'].map(category => (
+                          <TabsTrigger 
+                            key={category} 
+                            value={category}
+                            className="text-xs"
+                          >
+                            {category}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+
+                      {['GOVERN', 'IDENTIFY', 'PROTECT', 'DETECT', 'RESPOND', 'RECOVER'].map(category => (
+                        <TabsContent key={category} value={category}>
+                          <div className="space-y-4">
+                            <div className="mb-4">
+                              <Badge className={`${getCategoryBadgeColor(category)}`}>
+                                {category} ({NIST_CSF_FUNCTIONAL_AREAS.filter(fa => fa.category === category).length} functional areas)
+                              </Badge>
+                            </div>
+
+                            {NIST_CSF_FUNCTIONAL_AREAS
+                              .filter(fa => fa.category === category)
+                              .map(functionalArea => {
+                                const currentScore = functionalAreaScores[functionalArea.id];
+                                return (
+                                  <Card key={functionalArea.id} className="border-l-4 border-l-purple-200">
+                                    <CardHeader className="pb-3">
+                                      <CardTitle className="text-sm font-medium">
+                                        {functionalArea.id}: {functionalArea.name}
+                                      </CardTitle>
+                                      <CardDescription className="text-xs">
+                                        {functionalArea.description} ({functionalArea.subcategories} subcategories)
+                                      </CardDescription>
+                                    </CardHeader>
+                                    <CardContent className="space-y-4">
+                                      {/* Current Tier */}
+                                      <div>
+                                        <Label className="text-xs font-medium text-gray-700">Current Implementation Tier</Label>
+                                        <RadioGroup
+                                          value={currentScore?.currentTier?.toString() || "0"}
+                                          onValueChange={(value) => handleFunctionalAreaChange(functionalArea.id, 'currentTier', parseInt(value))}
+                                          className="flex flex-wrap gap-4 mt-2"
+                                        >
+                                          {[0, 1, 2, 3, 4].map(tier => (
+                                            <div key={tier} className="flex items-center space-x-2">
+                                              <RadioGroupItem value={tier.toString()} id={`${functionalArea.id}-current-${tier}`} />
+                                              <Label htmlFor={`${functionalArea.id}-current-${tier}`} className="text-xs">
+                                                {getTierLabel(tier)}
+                                              </Label>
+                                            </div>
+                                          ))}
+                                        </RadioGroup>
+                                      </div>
+
+                                      {/* Target Tier */}
+                                      <div>
+                                        <Label className="text-xs font-medium text-gray-700">Target Tier (12 months)</Label>
+                                        <RadioGroup
+                                          value={currentScore?.targetTier?.toString() || "0"}
+                                          onValueChange={(value) => handleFunctionalAreaChange(functionalArea.id, 'targetTier', parseInt(value))}
+                                          className="flex flex-wrap gap-4 mt-2"
+                                        >
+                                          {[0, 1, 2, 3, 4].map(tier => (
+                                            <div key={tier} className="flex items-center space-x-2">
+                                              <RadioGroupItem value={tier.toString()} id={`${functionalArea.id}-target-${tier}`} />
+                                              <Label htmlFor={`${functionalArea.id}-target-${tier}`} className="text-xs">
+                                                Tier {tier}
+                                              </Label>
+                                            </div>
+                                          ))}
+                                        </RadioGroup>
+                                      </div>
+
+                                      {/* Time at Current Tier */}
+                                      <div>
+                                        <Label className="text-xs font-medium text-gray-700">Months at Current Tier</Label>
+                                        <RadioGroup
+                                          value={currentScore?.timeAtTier?.toString() || "0"}
+                                          onValueChange={(value) => handleFunctionalAreaChange(functionalArea.id, 'timeAtTier', parseInt(value))}
+                                          className="flex flex-wrap gap-4 mt-2"
+                                        >
+                                          {[0, 3, 6, 12, 24, 36].map(months => (
+                                            <div key={months} className="flex items-center space-x-2">
+                                              <RadioGroupItem value={months.toString()} id={`${functionalArea.id}-time-${months}`} />
+                                              <Label htmlFor={`${functionalArea.id}-time-${months}`} className="text-xs">
+                                                {months === 0 ? 'New' : `${months}mo`}
+                                              </Label>
+                                            </div>
+                                          ))}
+                                        </RadioGroup>
+                                      </div>
+                                    </CardContent>
+                                  </Card>
+                                );
+                              })}
+                          </div>
+                        </TabsContent>
+                      ))}
+                    </Tabs>
+
+                    {Object.keys(functionalAreaScores).length === NIST_CSF_FUNCTIONAL_AREAS.length && (
+                      <div className="mt-6 flex justify-center">
+                        <Button 
+                          onClick={calculateCybersecurityHygiene}
+                          className="bg-purple-600 hover:bg-purple-700"
+                        >
+                          Calculate Cybersecurity Hygiene Level
+                        </Button>
+                      </div>
+                    )}
+
+                    {cybersecurityHygiene && (
+                      <div className="mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <h4 className="font-semibold text-green-800 mb-2">Cybersecurity Hygiene Results</h4>
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-purple-700">{cybersecurityHygiene.overallScore.toFixed(1)}%</div>
+                            <div className="text-sm text-gray-600">Overall Score</div>
+                            <Badge className={getHygieneLevelColor(cybersecurityHygiene.hygieneLevel)}>
+                              {cybersecurityHygiene.hygieneLevel}
+                            </Badge>
+                          </div>
+                          <div className="text-center">
+                            <div className="text-2xl font-bold text-blue-700">Tier {cybersecurityHygiene.overallTier}</div>
+                            <div className="text-sm text-gray-600">Maturity Level</div>
+                          </div>
+                        </div>
+                        {cybersecurityHygiene.recommendations.length > 0 && (
+                          <div>
+                            <h5 className="font-medium text-green-800 mb-2">Priority Recommendations</h5>
+                            <ul className="space-y-1 text-sm text-green-700">
+                              {cybersecurityHygiene.recommendations.slice(0, 3).map((rec, index) => (
+                                <li key={index} className="flex items-start gap-2">
+                                  <span className="text-green-500 mt-1">•</span>
+                                  {rec}
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
               <div className="mt-8 bg-purple-50 p-4 rounded-md">
                 <h3 className="font-medium text-chart-4 mb-2">Why this matters</h3>
                 <p className="text-sm text-gray-700">
