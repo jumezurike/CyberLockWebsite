@@ -20,7 +20,12 @@ interface FunctionalArea {
   category: 'GOVERN' | 'IDENTIFY' | 'PROTECT' | 'DETECT' | 'RESPOND' | 'RECOVER';
   name: string;
   description: string;
-  subcategories: number;
+  subcategories: SubCategory[];
+}
+
+interface SubCategory {
+  id: string;
+  description: string;
 }
 
 interface FunctionalAreaScore {
@@ -66,39 +71,215 @@ export interface GovernanceScores {
 
 // Complete NIST CSF 2.0 Functional Areas (108 controls total - OFFICIALLY CORRECTED)
 const NIST_CSF_FUNCTIONAL_AREAS: FunctionalArea[] = [
-  // GOVERN (32 controls)
-  { id: 'GV-OC', category: 'GOVERN', name: 'Organizational Context', description: 'Understanding the organizational environment', subcategories: 5 },
-  { id: 'GV-RM', category: 'GOVERN', name: 'Risk Management Strategy', description: 'Risk management strategy and expectations', subcategories: 7 },
-  { id: 'GV-RR', category: 'GOVERN', name: 'Roles, Responsibilities, Authorities', description: 'Cybersecurity roles and responsibilities', subcategories: 4 },
-  { id: 'GV-PO', category: 'GOVERN', name: 'Policy', description: 'Cybersecurity policy establishment and management', subcategories: 2 },
-  { id: 'GV-OV', category: 'GOVERN', name: 'Oversight', description: 'Cybersecurity oversight and governance', subcategories: 3 },
-  { id: 'GV-SC', category: 'GOVERN', name: 'Cybersecurity Supply Chain Risk Management', description: 'Supply chain risk management', subcategories: 10 },
+  // GOVERN (32 controls) - Placeholder structure for now
+  { id: 'GV-OC', category: 'GOVERN', name: 'Organizational Context', description: 'Understanding the organizational environment', subcategories: [
+    { id: 'GV.OC-01', description: 'The organizational mission is understood and informs cybersecurity risk management' },
+    { id: 'GV.OC-02', description: 'Internal and external stakeholders are understood' },
+    { id: 'GV.OC-03', description: 'Legal, regulatory, and contractual requirements are understood' },
+    { id: 'GV.OC-04', description: 'Critical objectives, capabilities, and services are understood' },
+    { id: 'GV.OC-05', description: 'Outcomes, capabilities, and services that the enterprise depends on are understood' }
+  ]},
+  { id: 'GV-RM', category: 'GOVERN', name: 'Risk Management Strategy', description: 'Risk management strategy and expectations', subcategories: [
+    { id: 'GV.RM-01', description: 'Risk management objectives are established and agreed to by organizational stakeholders' },
+    { id: 'GV.RM-02', description: 'Risk appetite and risk tolerance statements are established' },
+    { id: 'GV.RM-03', description: 'Determinations of risk tolerance are informed by the potential impact of loss' },
+    { id: 'GV.RM-04', description: 'Strategic direction that describes appropriate risk response is established' },
+    { id: 'GV.RM-05', description: 'Lines of communication across the organization are established for cybersecurity risks' },
+    { id: 'GV.RM-06', description: 'A standardized method for calculating, documenting, categorizing, and prioritizing cybersecurity risks is established' },
+    { id: 'GV.RM-07', description: 'Strategic opportunities (i.e., positive risks) are characterized and included in organizational cybersecurity risk discussions' }
+  ]},
+  { id: 'GV-RR', category: 'GOVERN', name: 'Roles, Responsibilities, Authorities', description: 'Cybersecurity roles and responsibilities', subcategories: [
+    { id: 'GV.RR-01', description: 'Organizational leadership is responsible and accountable for cybersecurity risk' },
+    { id: 'GV.RR-02', description: 'Roles, responsibilities, and authorities related to cybersecurity risk management are established' },
+    { id: 'GV.RR-03', description: 'Adequate resources are allocated to cybersecurity' },
+    { id: 'GV.RR-04', description: 'Cybersecurity is included in human resources practices' }
+  ]},
+  { id: 'GV-PO', category: 'GOVERN', name: 'Policy', description: 'Cybersecurity policy establishment and management', subcategories: [
+    { id: 'GV.PO-01', description: 'Policy for managing cybersecurity risks is established and communicated' },
+    { id: 'GV.PO-02', description: 'Policy for managing cybersecurity risks is reviewed and updated' }
+  ]},
+  { id: 'GV-OV', category: 'GOVERN', name: 'Oversight', description: 'Cybersecurity oversight and governance', subcategories: [
+    { id: 'GV.OV-01', description: 'Cybersecurity risk management strategy outcomes are reviewed' },
+    { id: 'GV.OV-02', description: 'The cybersecurity risk management strategy is reviewed and adjusted' },
+    { id: 'GV.OV-03', description: 'Organizational cybersecurity risk appetite and risk tolerance statements are reviewed and adjusted' }
+  ]},
+  { id: 'GV-SC', category: 'GOVERN', name: 'Cybersecurity Supply Chain Risk Management', description: 'Supply chain risk management', subcategories: [
+    { id: 'GV.SC-01', description: 'A cybersecurity supply chain risk management strategy is established' },
+    { id: 'GV.SC-02', description: 'Cybersecurity risk management controls are established for suppliers and third-party partners' },
+    { id: 'GV.SC-03', description: 'Contracts with suppliers and third-party partners are used to implement appropriate cybersecurity measures' },
+    { id: 'GV.SC-04', description: 'Suppliers and third-party partners are routinely assessed using audits, test results, or other forms of evaluations' },
+    { id: 'GV.SC-05', description: 'Response and recovery planning and testing are conducted with suppliers and third-party partners' },
+    { id: 'GV.SC-06', description: 'Planning and due diligence are performed to reduce risks before entering into formal supplier relationships' },
+    { id: 'GV.SC-07', description: 'The risks posed by a supplier, their products, or their services are understood' },
+    { id: 'GV.SC-08', description: 'Relevant supply chain cybersecurity practices are identified and gaps are assessed' },
+    { id: 'GV.SC-09', description: 'Supply chain cybersecurity is addressed in incident response and recovery planning activities' },
+    { id: 'GV.SC-10', description: 'Cybersecurity supply chain risk management plans include provisions for activities that occur after the conclusion of a partnership or service agreement' }
+  ]},
 
   // IDENTIFY (21 controls)
-  { id: 'ID-AM', category: 'IDENTIFY', name: 'Asset Management', description: 'Asset management policies and procedures', subcategories: 7 },
-  { id: 'ID-RA', category: 'IDENTIFY', name: 'Risk Assessment', description: 'Risk assessment and risk management', subcategories: 10 },
-  { id: 'ID-IM', category: 'IDENTIFY', name: 'Improvement', description: 'Improvement activities and processes', subcategories: 4 },
+  { id: 'ID-AM', category: 'IDENTIFY', name: 'Asset Management', description: 'Asset management policies and procedures', subcategories: [
+    { id: 'ID.AM-01', description: 'Physical devices and systems within the organization are inventoried' },
+    { id: 'ID.AM-02', description: 'Software platforms and applications within the organization are inventoried' },
+    { id: 'ID.AM-03', description: 'Organizational communication and data flows are mapped' },
+    { id: 'ID.AM-04', description: 'External information systems are catalogued' },
+    { id: 'ID.AM-05', description: 'Resources (e.g., hardware, devices, data, time, personnel, and software) are prioritized based on their classification, criticality, and business value' },
+    { id: 'ID.AM-07', description: 'The role of data in achieving business objectives is identified' },
+    { id: 'ID.AM-08', description: 'Systems, hardware, software, services, and applications are managed throughout their life cycles' }
+  ]},
+  { id: 'ID-RA', category: 'IDENTIFY', name: 'Risk Assessment', description: 'Risk assessment and risk management', subcategories: [
+    { id: 'ID.RA-01', description: 'Asset vulnerabilities are identified and documented' },
+    { id: 'ID.RA-02', description: 'Cyber threat intelligence is received from information sharing forums and sources' },
+    { id: 'ID.RA-03', description: 'Threats, both internal and external, are identified and documented' },
+    { id: 'ID.RA-04', description: 'Potential business impacts and likelihoods are identified' },
+    { id: 'ID.RA-05', description: 'Threats, vulnerabilities, likelihoods, and impacts are used to determine risk' },
+    { id: 'ID.RA-06', description: 'Risk responses are identified and prioritized' },
+    { id: 'ID.RA-07', description: 'Changes to the environment are identified and assessed for risk' },
+    { id: 'ID.RA-08', description: 'Processes for receiving, analyzing, and responding to vulnerability disclosures are established' },
+    { id: 'ID.RA-09', description: 'The authenticity and integrity of hardware and software are assessed prior to acquisition and use' },
+    { id: 'ID.RA-10', description: 'Critical suppliers are assessed prior to acquisition and during the relationship' }
+  ]},
+  { id: 'ID-IM', category: 'IDENTIFY', name: 'Improvement', description: 'Improvement activities and processes', subcategories: [
+    { id: 'ID.IM-01', description: 'A baseline configuration of information technology/industrial control systems is created and maintained' },
+    { id: 'ID.IM-02', description: 'A system development life cycle to manage systems is implemented' },
+    { id: 'ID.IM-03', description: 'Configuration change control processes are in place' },
+    { id: 'ID.IM-04', description: 'A vulnerability management strategy is implemented and maintained' }
+  ]},
 
   // PROTECT (23 controls)  
-  { id: 'PR-AA', category: 'PROTECT', name: 'Identity Management, Authentication and Access Control', description: 'Access control and identity management', subcategories: 6 },
-  { id: 'PR-AT', category: 'PROTECT', name: 'Awareness and Training', description: 'Security awareness and training', subcategories: 2 },
-  { id: 'PR-DS', category: 'PROTECT', name: 'Data Security', description: 'Data protection and privacy', subcategories: 4 },
-  { id: 'PR-PS', category: 'PROTECT', name: 'Platform Security', description: 'Platform security controls', subcategories: 6 },
-  { id: 'PR-IR', category: 'PROTECT', name: 'Technology Infrastructure Resilience', description: 'Infrastructure resilience and protection', subcategories: 4 },
+  { id: 'PR-AA', category: 'PROTECT', name: 'Identity Management, Authentication and Access Control', description: 'Access control and identity management', subcategories: [
+    { id: 'PR.AA-01', description: 'Identities and credentials are issued, managed, verified, revoked, and audited for authorized devices, users and processes' },
+    { id: 'PR.AA-02', description: 'Identity and credential management systems are protected' },
+    { id: 'PR.AA-03', description: 'Users, devices, and other assets are authenticated' },
+    { id: 'PR.AA-04', description: 'Identity assertions are protected, conveyed, and verified' },
+    { id: 'PR.AA-05', description: 'Access permissions and authorizations are managed, incorporating the principles of least privilege and separation of duties' },
+    { id: 'PR.AA-06', description: 'Physical access to assets is managed and protected' }
+  ]},
+  { id: 'PR-AT', category: 'PROTECT', name: 'Awareness and Training', description: 'Security awareness and training', subcategories: [
+    { id: 'PR.AT-01', description: 'All users are informed and trained' },
+    { id: 'PR.AT-02', description: 'Privileged users understand their roles and responsibilities' }
+  ]},
+  { id: 'PR-DS', category: 'PROTECT', name: 'Data Security', description: 'Data protection and privacy', subcategories: [
+    { id: 'PR.DS-01', description: 'Data-at-rest is protected' },
+    { id: 'PR.DS-02', description: 'Data-in-transit is protected' },
+    { id: 'PR.DS-10', description: 'The confidentiality of data-at-rest is protected' },
+    { id: 'PR.DS-11', description: 'The integrity of data-in-transit is protected' }
+  ]},
+  { id: 'PR-PS', category: 'PROTECT', name: 'Platform Security', description: 'Platform security controls', subcategories: [
+    { id: 'PR.PS-01', description: 'Configuration management practices are established' },
+    { id: 'PR.PS-02', description: 'The integrity of the platform is verified' },
+    { id: 'PR.PS-03', description: 'Hardware is secured' },
+    { id: 'PR.PS-04', description: 'Log records are generated' },
+    { id: 'PR.PS-05', description: 'Installation and execution of unauthorized software are prevented' },
+    { id: 'PR.PS-06', description: 'Secure software development practices are integrated' }
+  ]},
+  { id: 'PR-IR', category: 'PROTECT', name: 'Technology Infrastructure Resilience', description: 'Infrastructure resilience and protection', subcategories: [
+    { id: 'PR.IR-01', description: 'Networks and environments are protected from unauthorized logical access and usage' },
+    { id: 'PR.IR-02', description: 'The organization\'s technology assets are protected from environmental threats' },
+    { id: 'PR.IR-03', description: 'Mechanisms are implemented to achieve resilience requirements in normal and adverse situations' },
+    { id: 'PR.IR-04', description: 'Adequate resource capacity to ensure availability is maintained' }
+  ]},
 
   // DETECT (11 controls)
-  { id: 'DE-CM', category: 'DETECT', name: 'Security Continuous Monitoring', description: 'Continuous security monitoring', subcategories: 5 },
-  { id: 'DE-AE', category: 'DETECT', name: 'Adverse Event Analysis', description: 'Anomaly and event detection', subcategories: 6 },
+  { 
+    id: 'DE-CM', 
+    category: 'DETECT', 
+    name: 'Continuous Monitoring', 
+    description: 'Networks, personnel, and technology are monitored to find potentially adverse events', 
+    subcategories: [
+      { id: 'DE.CM-01', description: 'Networks and network services are monitored to find potentially adverse events' },
+      { id: 'DE.CM-02', description: 'The physical environment is monitored to find potentially adverse events' },
+      { id: 'DE.CM-03', description: 'Personnel activity and technology usage are monitored to find potentially adverse events' },
+      { id: 'DE.CM-06', description: 'External service provider activities and services are monitored to find potentially adverse events' },
+      { id: 'DE.CM-09', description: 'Computing hardware and software, runtime environments, and their data are monitored to find potentially adverse events' }
+    ]
+  },
+  { 
+    id: 'DE-AE', 
+    category: 'DETECT', 
+    name: 'Adverse Event Analysis', 
+    description: 'Anomalies, indicators of compromise, and other potentially adverse events are analyzed to characterize the events and detect cybersecurity incidents', 
+    subcategories: [
+      { id: 'DE.AE-02', description: 'Potentially adverse events are analyzed to better understand associated activities' },
+      { id: 'DE.AE-03', description: 'Information is correlated from multiple sources' },
+      { id: 'DE.AE-04', description: 'The estimated impact and scope of adverse events are understood' },
+      { id: 'DE.AE-06', description: 'Information on adverse events is provided to authorized staff and tools' },
+      { id: 'DE.AE-07', description: 'Cyber threat intelligence and other contextual information are integrated into the analysis' },
+      { id: 'DE.AE-08', description: 'Incidents are declared when adverse events meet the defined incident criteria' }
+    ]
+  },
 
   // RESPOND (13 controls)
-  { id: 'RS-MA', category: 'RESPOND', name: 'Incident Management', description: 'Incident management procedures', subcategories: 5 },
-  { id: 'RS-AN', category: 'RESPOND', name: 'Incident Analysis', description: 'Response analysis activities', subcategories: 4 },
-  { id: 'RS-CO', category: 'RESPOND', name: 'Incident Response Reporting/Communication', description: 'Response communications', subcategories: 2 },
-  { id: 'RS-MI', category: 'RESPOND', name: 'Incident Mitigation', description: 'Response mitigation activities', subcategories: 2 },
+  { 
+    id: 'RS-MA', 
+    category: 'RESPOND', 
+    name: 'Incident Management', 
+    description: 'Response activities are coordinated with internal and external stakeholders', 
+    subcategories: [
+      { id: 'RS.MA-01', description: 'The incident response plan is executed during or after an incident' },
+      { id: 'RS.MA-02', description: 'Incident reports are triaged and validated' },
+      { id: 'RS.MA-03', description: 'Incidents are categorized and prioritized' },
+      { id: 'RS.MA-04', description: 'Incidents are escalated or elevated as needed' },
+      { id: 'RS.MA-05', description: 'The criteria for initiating incident response activities are applied' }
+    ]
+  },
+  { 
+    id: 'RS-AN', 
+    category: 'RESPOND', 
+    name: 'Incident Analysis', 
+    description: 'Analysis is conducted to ensure effective response and support recovery activities', 
+    subcategories: [
+      { id: 'RS.AN-01', description: 'Notifications from detection systems are investigated' },
+      { id: 'RS.AN-02', description: 'The impact of the incident is understood' },
+      { id: 'RS.AN-03', description: 'Forensics are performed' },
+      { id: 'RS.AN-04', description: 'Incidents are categorized and classified' }
+    ]
+  },
+  { 
+    id: 'RS-CO', 
+    category: 'RESPOND', 
+    name: 'Incident Response Reporting/Communication', 
+    description: 'Response activities are coordinated with internal and external stakeholders', 
+    subcategories: [
+      { id: 'RS.CO-01', description: 'Personnel know their roles and order of operations when a response is needed' },
+      { id: 'RS.CO-02', description: 'Incidents are reported consistent with established criteria' }
+    ]
+  },
+  { 
+    id: 'RS-MI', 
+    category: 'RESPOND', 
+    name: 'Incident Mitigation', 
+    description: 'Activities are performed to prevent expansion of an event and mitigate its effects', 
+    subcategories: [
+      { id: 'RS.MI-01', description: 'Incidents are contained' },
+      { id: 'RS.MI-02', description: 'Incidents are eradicated' }
+    ]
+  },
 
   // RECOVER (8 controls)
-  { id: 'RC-RP', category: 'RECOVER', name: 'Incident Recovery Plan Execution', description: 'Recovery planning and processes', subcategories: 6 },
-  { id: 'RC-CO', category: 'RECOVER', name: 'Incident Recovery Communication', description: 'Recovery communications', subcategories: 2 }
+  { 
+    id: 'RC-RP', 
+    category: 'RECOVER', 
+    name: 'Incident Recovery Plan Execution', 
+    description: 'Restore capabilities or services that were impaired due to a cybersecurity incident', 
+    subcategories: [
+      { id: 'RC.RP-01', description: 'The recovery portion of the incident response plan is executed once the threat is neutralized or contained' },
+      { id: 'RC.RP-02', description: 'Recovery actions are selected, scoped, prioritized, and performed' },
+      { id: 'RC.RP-03', description: 'The integrity of backups and other restoration assets is verified before using them for restoration' },
+      { id: 'RC.RP-04', description: 'Critical mission functions and cybersecurity risk management are considered to establish post-incident operational norms' },
+      { id: 'RC.RP-05', description: 'The integrity of restored assets is verified, systems and services are restored, and normal operating status is confirmed' },
+      { id: 'RC.RP-06', description: 'The end of incident recovery operations and operational status are communicated to designated stakeholders' }
+    ]
+  },
+  { 
+    id: 'RC-CO', 
+    category: 'RECOVER', 
+    name: 'Incident Recovery Communication', 
+    description: 'Restoration activities are coordinated with internal and external parties', 
+    subcategories: [
+      { id: 'RC.CO-01', description: 'Public relations are managed' },
+      { id: 'RC.CO-02', description: 'Reputation is repaired after an incident' }
+    ]
+  }
 ];
 
 export default function GovernanceAndManagementAssessment({ onComplete }: GovernanceAndManagementAssessmentProps) {
@@ -158,13 +339,15 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
         const score = functionalAreaScores[fa.id];
         if (score) {
           // Weight by subcategory count for accuracy
-          const areaScore = (score.currentTier / 4) * 100 * fa.subcategories;
+          const subcategoryCount = fa.subcategories.length;
+          const areaScore = (score.currentTier / 4) * 100 * subcategoryCount;
           categoryTotal += areaScore;
-          categoryPossible += 100 * fa.subcategories;
+          categoryPossible += 100 * subcategoryCount;
           categoryScores[category].functionalAreas.push(score);
         } else {
           // Default to tier 0 if not assessed
-          categoryPossible += 100 * fa.subcategories;
+          const subcategoryCount = fa.subcategories.length;
+          categoryPossible += 100 * subcategoryCount;
         }
       });
 
@@ -701,7 +884,7 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                                         {functionalArea.id}: {functionalArea.name}
                                       </CardTitle>
                                       <CardDescription className="text-xs">
-                                        {functionalArea.description} ({functionalArea.subcategories} subcategories)
+                                        {functionalArea.description} ({functionalArea.subcategories.length} subcategories)
                                       </CardDescription>
                                     </CardHeader>
                                     <CardContent className="space-y-4">
@@ -760,6 +943,43 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                                             </div>
                                           ))}
                                         </RadioGroup>
+                                      </div>
+
+                                      {/* Individual Subcategory Controls */}
+                                      <div className="mt-6 pt-4 border-t border-gray-200">
+                                        <h5 className="text-sm font-medium text-gray-800 mb-3">
+                                          Individual Control Assessment
+                                        </h5>
+                                        <div className="space-y-3">
+                                          {functionalArea.subcategories.map((subcat) => (
+                                            <div key={subcat.id} className="bg-gray-50 p-3 rounded-md">
+                                              <div className="flex justify-between items-start mb-2">
+                                                <div className="flex-1">
+                                                  <p className="text-xs font-medium text-gray-700">{subcat.id}</p>
+                                                  <p className="text-xs text-gray-600 mt-1">{subcat.description}</p>
+                                                </div>
+                                              </div>
+                                              <div className="grid grid-cols-4 gap-2 text-xs">
+                                                <div>
+                                                  <Label className="text-xs text-gray-600">Score today</Label>
+                                                  <div className="text-sm font-medium">2</div>
+                                                </div>
+                                                <div>
+                                                  <Label className="text-xs text-gray-600">6-month target</Label>
+                                                  <div className="text-sm font-medium">2.5</div>
+                                                </div>
+                                                <div>
+                                                  <Label className="text-xs text-gray-600">12-month target</Label>
+                                                  <div className="text-sm font-medium">3</div>
+                                                </div>
+                                                <div>
+                                                  <Label className="text-xs text-gray-600">Goal score</Label>
+                                                  <div className="text-sm font-medium">4</div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          ))}
+                                        </div>
                                       </div>
                                     </CardContent>
                                   </Card>
