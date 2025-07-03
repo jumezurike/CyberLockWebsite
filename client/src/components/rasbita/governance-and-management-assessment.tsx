@@ -64,47 +64,41 @@ export interface GovernanceScores {
   // Tier 4 (3-4): 100%
 }
 
-// Complete NIST CSF 2.0 Functional Areas (122 subcategories total - CORRECTED)
+// Complete NIST CSF 2.0 Functional Areas (108 controls total - OFFICIALLY CORRECTED)
 const NIST_CSF_FUNCTIONAL_AREAS: FunctionalArea[] = [
-  // GOVERN (26 subcategories)
+  // GOVERN (32 controls)
   { id: 'GV-OC', category: 'GOVERN', name: 'Organizational Context', description: 'Understanding the organizational environment', subcategories: 5 },
   { id: 'GV-RM', category: 'GOVERN', name: 'Risk Management Strategy', description: 'Risk management strategy and expectations', subcategories: 7 },
-  { id: 'GV-RR', category: 'GOVERN', name: 'Roles, Responsibilities', description: 'Cybersecurity roles and responsibilities', subcategories: 2 },
-  { id: 'GV-PO', category: 'GOVERN', name: 'Policy', description: 'Cybersecurity policy establishment and management', subcategories: 3 },
+  { id: 'GV-RR', category: 'GOVERN', name: 'Roles, Responsibilities, Authorities', description: 'Cybersecurity roles and responsibilities', subcategories: 4 },
+  { id: 'GV-PO', category: 'GOVERN', name: 'Policy', description: 'Cybersecurity policy establishment and management', subcategories: 2 },
   { id: 'GV-OV', category: 'GOVERN', name: 'Oversight', description: 'Cybersecurity oversight and governance', subcategories: 3 },
-  { id: 'GV-SC', category: 'GOVERN', name: 'Supply Chain Risk Management', description: 'Supply chain risk management', subcategories: 6 },
+  { id: 'GV-SC', category: 'GOVERN', name: 'Cybersecurity Supply Chain Risk Management', description: 'Supply chain risk management', subcategories: 10 },
 
-  // IDENTIFY (59 subcategories - CORRECTED)
-  { id: 'ID-AM', category: 'IDENTIFY', name: 'Asset Management', description: 'Asset management policies and procedures', subcategories: 6 },
+  // IDENTIFY (21 controls)
+  { id: 'ID-AM', category: 'IDENTIFY', name: 'Asset Management', description: 'Asset management policies and procedures', subcategories: 7 },
   { id: 'ID-RA', category: 'IDENTIFY', name: 'Risk Assessment', description: 'Risk assessment and risk management', subcategories: 10 },
   { id: 'ID-IM', category: 'IDENTIFY', name: 'Improvement', description: 'Improvement activities and processes', subcategories: 4 },
-  { id: 'ID-BE', category: 'IDENTIFY', name: 'Business Environment', description: 'Business environment understanding', subcategories: 5 },
-  { id: 'ID-GV', category: 'IDENTIFY', name: 'Governance', description: 'Governance and risk management integration', subcategories: 4 },
-  { id: 'ID-SC', category: 'IDENTIFY', name: 'Supply Chain Risk Assessment', description: 'Supply chain risk assessment', subcategories: 5 },
-  { id: 'ID-RA-2', category: 'IDENTIFY', name: 'Risk Assessment Processes', description: 'Risk assessment processes and methodologies', subcategories: 9 },
-  { id: 'ID-DE', category: 'IDENTIFY', name: 'Data Environment', description: 'Data classification and handling', subcategories: 8 },
-  { id: 'ID-GV-2', category: 'IDENTIFY', name: 'Governance Framework', description: 'Extended governance and compliance framework', subcategories: 8 },
 
-  // PROTECT (23 subcategories)  
-  { id: 'PR-AC', category: 'PROTECT', name: 'Identity Management, Authentication and Access Control', description: 'Access control and identity management', subcategories: 7 },
-  { id: 'PR-AT', category: 'PROTECT', name: 'Awareness and Training', description: 'Security awareness and training', subcategories: 5 },
-  { id: 'PR-DS', category: 'PROTECT', name: 'Data Security', description: 'Data protection and privacy', subcategories: 8 },
-  { id: 'PR-IP', category: 'PROTECT', name: 'Information Protection Processes and Procedures', description: 'Information protection processes', subcategories: 3 },
+  // PROTECT (23 controls)  
+  { id: 'PR-AA', category: 'PROTECT', name: 'Identity Management, Authentication and Access Control', description: 'Access control and identity management', subcategories: 6 },
+  { id: 'PR-AT', category: 'PROTECT', name: 'Awareness and Training', description: 'Security awareness and training', subcategories: 2 },
+  { id: 'PR-DS', category: 'PROTECT', name: 'Data Security', description: 'Data protection and privacy', subcategories: 4 },
+  { id: 'PR-PS', category: 'PROTECT', name: 'Platform Security', description: 'Platform security controls', subcategories: 6 },
+  { id: 'PR-IR', category: 'PROTECT', name: 'Technology Infrastructure Resilience', description: 'Infrastructure resilience and protection', subcategories: 4 },
 
-  // DETECT (8 subcategories)
-  { id: 'DE-AE', category: 'DETECT', name: 'Anomalies and Events', description: 'Anomaly and event detection', subcategories: 5 },
-  { id: 'DE-CM', category: 'DETECT', name: 'Security Continuous Monitoring', description: 'Continuous security monitoring', subcategories: 3 },
+  // DETECT (11 controls)
+  { id: 'DE-CM', category: 'DETECT', name: 'Security Continuous Monitoring', description: 'Continuous security monitoring', subcategories: 5 },
+  { id: 'DE-AE', category: 'DETECT', name: 'Adverse Event Analysis', description: 'Anomaly and event detection', subcategories: 6 },
 
-  // RESPOND (9 subcategories)
-  { id: 'RS-RP', category: 'RESPOND', name: 'Response Planning', description: 'Response planning and procedures', subcategories: 1 },
-  { id: 'RS-CO', category: 'RESPOND', name: 'Communications', description: 'Response communications', subcategories: 5 },
-  { id: 'RS-AN', category: 'RESPOND', name: 'Analysis', description: 'Response analysis activities', subcategories: 1 },
-  { id: 'RS-MI', category: 'RESPOND', name: 'Mitigation', description: 'Response mitigation activities', subcategories: 2 },
+  // RESPOND (13 controls)
+  { id: 'RS-MA', category: 'RESPOND', name: 'Incident Management', description: 'Incident management procedures', subcategories: 5 },
+  { id: 'RS-AN', category: 'RESPOND', name: 'Incident Analysis', description: 'Response analysis activities', subcategories: 4 },
+  { id: 'RS-CO', category: 'RESPOND', name: 'Incident Response Reporting/Communication', description: 'Response communications', subcategories: 2 },
+  { id: 'RS-MI', category: 'RESPOND', name: 'Incident Mitigation', description: 'Response mitigation activities', subcategories: 2 },
 
-  // RECOVER (7 subcategories)
-  { id: 'RC-RP', category: 'RECOVER', name: 'Recovery Planning', description: 'Recovery planning and processes', subcategories: 3 },
-  { id: 'RC-IM', category: 'RECOVER', name: 'Improvements', description: 'Recovery improvements', subcategories: 2 },
-  { id: 'RC-CO', category: 'RECOVER', name: 'Communications', description: 'Recovery communications', subcategories: 2 }
+  // RECOVER (8 controls)
+  { id: 'RC-RP', category: 'RECOVER', name: 'Incident Recovery Plan Execution', description: 'Recovery planning and processes', subcategories: 6 },
+  { id: 'RC-CO', category: 'RECOVER', name: 'Incident Recovery Communication', description: 'Recovery communications', subcategories: 2 }
 ];
 
 export default function GovernanceAndManagementAssessment({ onComplete }: GovernanceAndManagementAssessmentProps) {
