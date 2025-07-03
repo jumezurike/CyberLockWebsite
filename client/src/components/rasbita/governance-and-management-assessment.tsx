@@ -962,19 +962,63 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                                               <div className="grid grid-cols-4 gap-2 text-xs">
                                                 <div>
                                                   <Label className="text-xs text-gray-600">Score today</Label>
-                                                  <div className="text-sm font-medium">2</div>
+                                                  <Select defaultValue="0">
+                                                    <SelectTrigger className="h-7 text-xs">
+                                                      <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                      {[0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4].map(score => (
+                                                        <SelectItem key={score} value={score.toString()}>
+                                                          {score}
+                                                        </SelectItem>
+                                                      ))}
+                                                    </SelectContent>
+                                                  </Select>
                                                 </div>
                                                 <div>
                                                   <Label className="text-xs text-gray-600">6-month target</Label>
-                                                  <div className="text-sm font-medium">2.5</div>
+                                                  <Select defaultValue="0">
+                                                    <SelectTrigger className="h-7 text-xs">
+                                                      <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                      {[0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4].map(score => (
+                                                        <SelectItem key={score} value={score.toString()}>
+                                                          {score}
+                                                        </SelectItem>
+                                                      ))}
+                                                    </SelectContent>
+                                                  </Select>
                                                 </div>
                                                 <div>
                                                   <Label className="text-xs text-gray-600">12-month target</Label>
-                                                  <div className="text-sm font-medium">3</div>
+                                                  <Select defaultValue="0">
+                                                    <SelectTrigger className="h-7 text-xs">
+                                                      <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                      {[0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4].map(score => (
+                                                        <SelectItem key={score} value={score.toString()}>
+                                                          {score}
+                                                        </SelectItem>
+                                                      ))}
+                                                    </SelectContent>
+                                                  </Select>
                                                 </div>
                                                 <div>
                                                   <Label className="text-xs text-gray-600">Goal score</Label>
-                                                  <div className="text-sm font-medium">4</div>
+                                                  <Select defaultValue="4">
+                                                    <SelectTrigger className="h-7 text-xs">
+                                                      <SelectValue />
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                      {[0, 0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4].map(score => (
+                                                        <SelectItem key={score} value={score.toString()}>
+                                                          {score}
+                                                        </SelectItem>
+                                                      ))}
+                                                    </SelectContent>
+                                                  </Select>
                                                 </div>
                                               </div>
                                             </div>
