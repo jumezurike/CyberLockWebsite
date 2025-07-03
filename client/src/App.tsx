@@ -36,7 +36,6 @@ import DirectNavigation from "@/components/direct-navigation";
 import DeviceInventoryPage from "@/pages/device-inventory";
 import AccessibilityDemo from "@/pages/accessibility-demo";
 import AssessmentWorkflowPage from "@/pages/assessment-workflow";
-import CybersecurityHygiene from "@/pages/cybersecurity-hygiene";
 
 function Router() {
   const [location] = useLocation();
@@ -84,7 +83,6 @@ function Router() {
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/payment-error" component={PaymentError} />
           <Route path="/accessibility-demo" component={AccessibilityDemo} />
-          <Route path="/cybersecurity-hygiene" component={CybersecurityHygiene} />
           <Route component={NotFound} />
         </Switch>
         {/* Add direct navigation for testing */}
