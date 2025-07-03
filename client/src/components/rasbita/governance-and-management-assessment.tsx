@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface GovernanceAndManagementAssessmentProps {
   onComplete: (scores: GovernanceScores) => void;
@@ -16,6 +17,10 @@ export interface GovernanceScores {
   managementScore: number; // 0-4 (represents Tiers 0, 0-1, 1-2, 2-3, 3-4)
   monthsAtTier: number; // Number of months at current tier
   desireToImprove: boolean; // Whether they want to improve
+  // Enhanced Duration-Based Assessment (NEW - Additive only)
+  durationCategory: 'less-than-6' | '6-12' | '1-2-years' | '2-plus-years' | null; // Duration category for enhanced scoring
+  sixMonthTarget: number | null; // Target tier for 6 months (0-4)
+  twelveMonthTarget: number | null; // Target tier for 12 months (0-4)
   // Percentage completion mapping: 
   // Tier 0 (0-0): 0%
   // Tier 1 (0-1): 25%
@@ -30,6 +35,11 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
   const [managementScore, setManagementScore] = useState<number>(0); // Default to Tier 0
   const [monthsAtTier, setMonthsAtTier] = useState<number>(0);
   const [desireToImprove, setDesireToImprove] = useState<boolean>(false);
+  
+  // Enhanced Duration-Based Assessment State (NEW - Additive only)
+  const [durationCategory, setDurationCategory] = useState<'less-than-6' | '6-12' | '1-2-years' | '2-plus-years' | null>(null);
+  const [sixMonthTarget, setSixMonthTarget] = useState<number | null>(null);
+  const [twelveMonthTarget, setTwelveMonthTarget] = useState<number | null>(null);
   
   // Update management tier when governance tier changes to ensure consistency
   const handleGovernanceChange = (value: string) => {
@@ -61,7 +71,11 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
       governanceScore,
       managementScore,
       monthsAtTier,
-      desireToImprove
+      desireToImprove,
+      // Enhanced Duration-Based Assessment (NEW - Additive only)
+      durationCategory,
+      sixMonthTarget,
+      twelveMonthTarget
     });
   };
   
@@ -302,6 +316,81 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
                   />
                 </div>
                 
+                {/* Enhanced Duration-Based Assessment (NEW - Additive only) */}
+                <div className="space-y-4 pt-4 border-t border-gray-200">
+                  <div className="space-y-2">
+                    <Label className="text-md font-medium text-purple-700">
+                      Duration & Timeline Assessment (Enhanced Scoring)
+                    </Label>
+                    <p className="text-sm text-gray-600">
+                      How long has your organization maintained this governance tier?
+                    </p>
+                    <RadioGroup 
+                      value={durationCategory || ""} 
+                      onValueChange={(value) => setDurationCategory(value as 'less-than-6' | '6-12' | '1-2-years' | '2-plus-years')}
+                      className="grid grid-cols-2 gap-3"
+                    >
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="less-than-6" id="duration-1" />
+                        <Label htmlFor="duration-1" className="text-sm">Less than 6 months</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="6-12" id="duration-2" />
+                        <Label htmlFor="duration-2" className="text-sm">6-12 months</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="1-2-years" id="duration-3" />
+                        <Label htmlFor="duration-3" className="text-sm">1-2 years</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem value="2-plus-years" id="duration-4" />
+                        <Label htmlFor="duration-4" className="text-sm">2+ years</Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+                  
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">6-month target tier (optional)</Label>
+                      <Select value={sixMonthTarget?.toString() || ""} onValueChange={(value) => setSixMonthTarget(value ? parseInt(value) : null)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select target tier" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">No target set</SelectItem>
+                          <SelectItem value="1">Tier 1 (25%)</SelectItem>
+                          <SelectItem value="2">Tier 2 (50%)</SelectItem>
+                          <SelectItem value="3">Tier 3 (75%)</SelectItem>
+                          <SelectItem value="4">Tier 4 (100%)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">12-month goal tier (optional)</Label>
+                      <Select value={twelveMonthTarget?.toString() || ""} onValueChange={(value) => setTwelveMonthTarget(value ? parseInt(value) : null)}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select goal tier" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="">No goal set</SelectItem>
+                          <SelectItem value="1">Tier 1 (25%)</SelectItem>
+                          <SelectItem value="2">Tier 2 (50%)</SelectItem>
+                          <SelectItem value="3">Tier 3 (75%)</SelectItem>
+                          <SelectItem value="4">Tier 4 (100%)</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  
+                  <div className="bg-blue-50 p-3 rounded-md">
+                    <p className="text-xs text-blue-700">
+                      <strong>Enhanced Scoring:</strong> Organizations maintaining higher tiers for longer periods receive enhanced maturity scores. 
+                      Setting improvement targets demonstrates strategic planning capability.
+                    </p>
+                  </div>
+                </div>
+                
                 <div className="flex items-start space-x-2 pt-4">
                   <Checkbox 
                     id="improvement" 
@@ -369,6 +458,15 @@ export default function GovernanceAndManagementAssessment({ onComplete }: Govern
               <li>• Management Tier: {getTierLabel(managementScore)}</li>
               <li>• Time at current tier: {monthsAtTier} months</li>
               <li>• Improvement desired: {desireToImprove ? 'Yes' : 'No'}</li>
+              {durationCategory && (
+                <li>• Duration category: {getDurationLabel(durationCategory)}</li>
+              )}
+              {sixMonthTarget && (
+                <li>• 6-month target: {getTierLabel(sixMonthTarget)}</li>
+              )}
+              {twelveMonthTarget && (
+                <li>• 12-month goal: {getTierLabel(twelveMonthTarget)}</li>
+              )}
             </ul>
             <p className="mt-2 text-sm text-green-600">
               Click "Complete Self-Scoring" to incorporate these results into your RASBITA report.
@@ -390,6 +488,16 @@ function getTierLabel(score: number | null): string {
     case 2: return "Tier 2 (1-2): 50% Risk Informed";
     case 3: return "Tier 3 (2-3): 75% Repeatable";
     case 4: return "Tier 4 (3-4): 100% Adaptive";
+    default: return "Unknown";
+  }
+}
+
+function getDurationLabel(category: 'less-than-6' | '6-12' | '1-2-years' | '2-plus-years'): string {
+  switch (category) {
+    case 'less-than-6': return "Less than 6 months";
+    case '6-12': return "6-12 months";
+    case '1-2-years': return "1-2 years";
+    case '2-plus-years': return "2+ years";
     default: return "Unknown";
   }
 }

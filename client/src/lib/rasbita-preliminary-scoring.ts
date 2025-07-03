@@ -2,6 +2,7 @@
 // Authentic qualitative analysis for preliminary reports only
 
 import { type Sos2aFormData } from "@/lib/sos2a-types";
+import { type GovernanceScores } from "@/components/rasbita/governance-and-management-assessment";
 
 export interface QualitativeScores {
   overallScore: number;
@@ -125,6 +126,65 @@ export function checkArchitecturalData(data: Sos2aFormData): boolean {
     data.dataFlowDiagram ||
     data.systemTopology
   );
+}
+
+// Enhanced Duration-Based RASBITA Governance Scoring (NEW - Additive only)
+export function calculateEnhancedGovernanceScore(governanceData: GovernanceScores): {
+  baseScore: number;
+  durationMultiplier: number;
+  planningBonus: number;
+  enhancedScore: number;
+  maturityLevel: string;
+} {
+  // Base score from tier level (0-4 maps to 0-100%)
+  const baseScore = (governanceData.governanceScore / 4) * 100;
+  
+  // Duration multiplier based on how long organization maintained current tier
+  let durationMultiplier = 1.0;
+  if (governanceData.durationCategory) {
+    switch (governanceData.durationCategory) {
+      case 'less-than-6':
+        durationMultiplier = 0.8; // New implementation, reduced confidence
+        break;
+      case '6-12':
+        durationMultiplier = 1.0; // Developing stability
+        break;
+      case '1-2-years':
+        durationMultiplier = 1.2; // Established practices
+        break;
+      case '2-plus-years':
+        durationMultiplier = 1.5; // Mature, stable implementation
+        break;
+    }
+  }
+  
+  // Planning bonus for setting improvement targets
+  let planningBonus = 0;
+  if (governanceData.sixMonthTarget && governanceData.sixMonthTarget > governanceData.governanceScore) {
+    planningBonus += 5; // Strategic planning capability
+  }
+  if (governanceData.twelveMonthTarget && governanceData.twelveMonthTarget > governanceData.governanceScore) {
+    planningBonus += 5; // Long-term vision
+  }
+  
+  // Calculate enhanced score
+  const enhancedScore = Math.min((baseScore * durationMultiplier) + planningBonus, 100);
+  
+  // Determine maturity level based on enhanced score
+  let maturityLevel = 'Developing';
+  if (enhancedScore >= 90) maturityLevel = 'Optimized';
+  else if (enhancedScore >= 75) maturityLevel = 'Advanced';
+  else if (enhancedScore >= 50) maturityLevel = 'Intermediate';
+  else if (enhancedScore >= 25) maturityLevel = 'Basic';
+  else maturityLevel = 'Initial';
+  
+  return {
+    baseScore,
+    durationMultiplier,
+    planningBonus,
+    enhancedScore,
+    maturityLevel
+  };
 }
 
 // Individual scoring functions for 12 security parameters
