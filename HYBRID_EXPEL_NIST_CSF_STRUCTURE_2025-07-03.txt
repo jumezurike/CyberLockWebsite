@@ -1,0 +1,108 @@
+HYBRID EXPEL + NIST CSF 2.0 STRUCTURE - JULY 3, 2025
+=====================================================
+
+Following PRP 3.0 protocols - HYBRID APPROACH IMPLEMENTATION
+
+**APPROACH: Expel Format + Complete NIST CSF 2.0 Coverage**
+
+**FUNCTIONAL AREA 1: GOVERN (GV) - 32 Controls**
+✅ KEEP EXPEL FORMAT (Perfect match with NIST)
+- GV.OC: Organizational Context (5 controls)
+- GV.RM: Risk Management Strategy (7 controls)
+- GV.RR: Roles, Responsibilities, and Authorities (4 controls)
+- GV.PO: Policy (2 controls)
+- GV.OV: Oversight (3 controls)
+- GV.SC: Cybersecurity Supply Chain Risk Management (10 controls)
+
+**FUNCTIONAL AREA 2: IDENTIFY (ID) - 21 Controls**
+✅ KEEP EXPEL FORMAT (Perfect match with NIST)
+- ID.AM: Asset Management (7 controls)
+- ID.RA: Risk Assessment (10 controls)
+- ID.IM: Improvement (4 controls)
+
+**FUNCTIONAL AREA 3: PROTECT (PR) - HYBRID APPROACH**
+🔄 ENHANCED EXPEL FORMAT + NIST ADDITIONS
+
+**Current Expel Categories (Keep):**
+- PR.AA: Identity Management, Authentication, and Access Control (6 controls)
+- PR.AT: Awareness and Training (2 controls)
+- PR.DS: Data Security (4 controls: 01, 02, 10, 11)
+- PR.PS: Platform Security (6 controls)
+- PR.IR: Technology Infrastructure Resilience (4 controls)
+
+**NIST Additions to Complete Coverage:**
+- PR.MA: Maintenance (3 controls) - NEW
+- PR.PT: Protective Technology (5 controls) - NEW
+- PR.DS: Data Security EXPANDED (add missing 7 controls: 03, 04, 05, 06, 07, 08, 09)
+
+**Result: 8 categories, ~30 controls total**
+
+**FUNCTIONAL AREA 4: DETECT (DE) - HYBRID APPROACH**
+🔄 ENHANCED EXPEL FORMAT + NIST ADDITIONS
+
+**Current Expel Categories (Keep):**
+- DE.CM: Continuous Monitoring (8 controls)
+- DE.AE: Adverse Event Analysis (rename to "Anomalies and Events") (5 controls)
+
+**NIST Addition:**
+- DE.DP: Detection Processes (3 controls) - NEW
+
+**Result: 3 categories, ~16 controls total**
+
+**FUNCTIONAL AREA 5: RESPOND (RS) - HYBRID APPROACH**
+🔄 ENHANCED EXPEL FORMAT + NIST ALIGNMENT
+
+**Current Expel Categories (Rename for NIST compliance):**
+- RS.MA: Management (was "Incident Management") (2 controls)
+- RS.AN: Analysis (was "Incident Analysis") (5 controls)
+- RS.MI: Mitigation (was "Incident Mitigation") (3 controls)
+- RS.RP: Reporting (was "RS.CO: Incident Response Reporting") (3 controls)
+
+**Result: 4 categories, ~13 controls total**
+
+**FUNCTIONAL AREA 6: RECOVER (RC) - HYBRID APPROACH**
+🔄 ENHANCED EXPEL FORMAT + NIST ADDITIONS
+
+**Current Expel Categories (Keep):**
+- RC.RP: Recovery Planning (was "Incident Recovery Plan Execution") (5 controls)
+- RC.CO: Communications (was "Incident Recovery Communication") (3 controls)
+
+**NIST Addition:**
+- RC.IM: Improvements (2 controls) - NEW
+
+**Result: 3 categories, ~10 controls total**
+
+**HYBRID STRUCTURE SUMMARY:**
+===============================
+
+**Total Framework:**
+- GOVERN: 32 controls (unchanged)
+- IDENTIFY: 21 controls (unchanged)
+- PROTECT: ~30 controls (enhanced from 23)
+- DETECT: ~16 controls (enhanced from 13)
+- RESPOND: ~13 controls (renamed for compliance)
+- RECOVER: ~10 controls (enhanced from 8)
+
+**TOTAL: ~122 controls (vs your current ~108)**
+
+**BENEFITS OF HYBRID APPROACH:**
+1. ✅ Preserves your working Expel format
+2. ✅ Achieves complete NIST CSF 2.0 coverage
+3. ✅ Maintains current questionnaire compatibility
+4. ✅ Adds missing controls for comprehensive assessment
+5. ✅ Perfect for RASBITA Governance implementation
+
+**IMPLEMENTATION IMPACT:**
+- Your current assessments remain valid
+- Enhanced coverage for future assessments
+- RASBITA Governance ready with authentic GOVERN structure
+- Improved compliance with official NIST standards
+
+**NEXT STEPS:**
+1. Review this hybrid structure
+2. Approve implementation plan
+3. Begin RASBITA Governance development
+4. Gradually enhance other functional areas
+
+**QUESTION FOR APPROVAL:**
+Does this hybrid approach (Expel foundation + NIST completeness) meet your requirements?
