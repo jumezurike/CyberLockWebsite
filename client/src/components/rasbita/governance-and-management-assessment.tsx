@@ -64,7 +64,7 @@ export interface GovernanceScores {
   // Tier 4 (3-4): 100%
 }
 
-// Complete NIST CSF 2.0 Functional Areas (106 subcategories total)
+// Complete NIST CSF 2.0 Functional Areas (122 subcategories total - CORRECTED)
 const NIST_CSF_FUNCTIONAL_AREAS: FunctionalArea[] = [
   // GOVERN (26 subcategories)
   { id: 'GV-OC', category: 'GOVERN', name: 'Organizational Context', description: 'Understanding the organizational environment', subcategories: 5 },
@@ -74,7 +74,7 @@ const NIST_CSF_FUNCTIONAL_AREAS: FunctionalArea[] = [
   { id: 'GV-OV', category: 'GOVERN', name: 'Oversight', description: 'Cybersecurity oversight and governance', subcategories: 3 },
   { id: 'GV-SC', category: 'GOVERN', name: 'Supply Chain Risk Management', description: 'Supply chain risk management', subcategories: 6 },
 
-  // IDENTIFY (43 subcategories)
+  // IDENTIFY (59 subcategories - CORRECTED)
   { id: 'ID-AM', category: 'IDENTIFY', name: 'Asset Management', description: 'Asset management policies and procedures', subcategories: 6 },
   { id: 'ID-RA', category: 'IDENTIFY', name: 'Risk Assessment', description: 'Risk assessment and risk management', subcategories: 10 },
   { id: 'ID-IM', category: 'IDENTIFY', name: 'Improvement', description: 'Improvement activities and processes', subcategories: 4 },
@@ -82,6 +82,8 @@ const NIST_CSF_FUNCTIONAL_AREAS: FunctionalArea[] = [
   { id: 'ID-GV', category: 'IDENTIFY', name: 'Governance', description: 'Governance and risk management integration', subcategories: 4 },
   { id: 'ID-SC', category: 'IDENTIFY', name: 'Supply Chain Risk Assessment', description: 'Supply chain risk assessment', subcategories: 5 },
   { id: 'ID-RA-2', category: 'IDENTIFY', name: 'Risk Assessment Processes', description: 'Risk assessment processes and methodologies', subcategories: 9 },
+  { id: 'ID-DE', category: 'IDENTIFY', name: 'Data Environment', description: 'Data classification and handling', subcategories: 8 },
+  { id: 'ID-GV-2', category: 'IDENTIFY', name: 'Governance Framework', description: 'Extended governance and compliance framework', subcategories: 8 },
 
   // PROTECT (23 subcategories)  
   { id: 'PR-AC', category: 'PROTECT', name: 'Identity Management, Authentication and Access Control', description: 'Access control and identity management', subcategories: 7 },
