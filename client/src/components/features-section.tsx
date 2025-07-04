@@ -48,7 +48,7 @@ export default function FeaturesSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold font-heading text-primary mb-4">Core Features</h2>
-          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">Our integrated secure browser ensures data security and privacy while simplifying your cybersecurity needs.</p>
+          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">Our integrated secure browser ensures data security and privacy while simplifying your cybersecurity needs with patented quantum-safe encryption.</p>
         </div>
         
         {/* Features Grid */}
