@@ -18,6 +18,7 @@ import mikePhoto from '@/assets/team/mike-ikonomou-final.png';
 import josiahPhoto from '@/assets/team/josiah-umezurike.png';
 import solomonPhoto from '@/assets/team/solomon-sogunro.jpg';
 import christopherPhoto from '@/assets/team/christopher-amato.jpg';
+import georgeOseiPhoto from '@assets/GeorgeOsei_1751650545585.png';
 
 const AboutUs = () => {
   return (
@@ -373,6 +374,55 @@ const AboutUs = () => {
                 </a>
               </CardContent>
             </Card>
+          </div>
+        </div>
+
+        {/* Clinical Advisors Section */}
+        <div className="mb-16">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center mb-3">
+              <Shield className="h-7 w-7 text-primary mr-2" />
+              <h2 className="text-3xl font-bold text-gray-900">Clinical Advisors</h2>
+            </div>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Healthcare professionals guiding our security solutions for real-world clinical environments
+            </p>
+          </div>
+
+          <div className="flex justify-center">
+            <div className="max-w-md">
+              {/* Dr. George E. Osei */}
+              <Card className="border-primary/10 shadow-md overflow-hidden">
+                <div className="h-56 bg-white relative flex items-center justify-center">
+                  <div className="w-40 h-40 relative mx-auto">
+                    <div className="absolute inset-0 rounded-full overflow-hidden">
+                      <img 
+                        src={georgeOseiPhoto} 
+                        alt="Dr. George E. Osei" 
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <CardHeader className="pb-2">
+                  <CardTitle className="text-2xl">Dr. George E. Osei, MD</CardTitle>
+                  <CardDescription className="text-secondary font-medium">
+                    Clinical Advisor, Healthcare Security & Compliance
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-gray-700">
+                    Dr. George E. Osei is a board-certified family medicine physician based in Sumter, South Carolina, with affiliations at Prisma Health Tuomey Hospital and MUSC Health Kershaw Medical Center. He earned his medical degree from West Virginia University School of Medicine and brings over five years of frontline clinical experience treating chronic conditions such as coronary artery disease, hypertension, and diabetes.
+                  </p>
+                  <p className="text-gray-700">
+                    As a trusted provider in community-based health systems, Dr. Osei understands firsthand the operational, technological, and compliance challenges faced by small and mid-sized medical practices. His insights into clinical workflows, patient data handling, and EHR use make him an invaluable advisor as CyberLockX builds solutions tailored to real-world clinical environments.
+                  </p>
+                  <p className="text-gray-700">
+                    With a commitment to improving both patient care and provider protection, Dr. Osei helps guide CyberLockX in aligning its security and compliance technologies with the realities of everyday practice in the U.S. healthcare system.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
           </div>
         </div>
 
