@@ -35,25 +35,12 @@ export default function EarlyAccessDashboard() {
   const [emailAlertSent, setEmailAlertSent] = useState(false);
   const { adminUser, isLoading: authLoading, isAuthenticated, logout } = useAdminAuth();
 
-  // Always call useQuery at the top level, regardless of auth state
+  // Always call all hooks at the top level, regardless of auth state
   const { data: submissions = [], isLoading } = useQuery({
     queryKey: ["/api/early-access/submissions"],
     refetchInterval: 30000, // Refresh every 30 seconds
     enabled: isAuthenticated, // Only run query when authenticated
   });
-
-  // Show login form if not authenticated
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <AdminLogin onLoginSuccess={() => window.location.reload()} />;
-  }
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: number; status: string }) => {
@@ -114,6 +101,20 @@ export default function EarlyAccessDashboard() {
       }
     }
   }, [submissions, emailAlertSent, toast]);
+
+  // Show loading state during authentication check
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  // Show login form if not authenticated
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={() => window.location.reload()} />;
+  }
 
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
