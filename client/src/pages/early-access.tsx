@@ -87,7 +87,7 @@ export default function EarlyAccess() {
   };
   
   const products = [
-    { id: "sos2a", name: "SOS²A Organizational and System Security Assessment" },
+    { id: "sos2a", name: "S/HOS²A Organizational and System Security Assessment" },
     { id: "secure-cloud", name: "Secure Cloud (Google Docs/Sheets)" },
     { id: "secure-business-cloud", name: "Secure Business Cloud (Azure/AWS/GCP)" },
     { id: "secure-meet", name: "Secure Meet" },
