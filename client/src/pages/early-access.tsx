@@ -201,7 +201,7 @@ export default function EarlyAccess() {
                   </div>
                   <div className="text-right">
                     <div className="text-yellow-300 font-bold text-lg">Applications close:</div>
-                    <div className="text-xl font-bold">January 31, 2025</div>
+                    <div className="text-xl font-bold">December 31, 2025</div>
                   </div>
                 </div>
               </div>
