@@ -42,12 +42,14 @@ Advanced cybersecurity platform featuring the HOS²A (Healthcare Organizational 
 - Successfully tested with jumezurike@each1teach1.us and ecolbert@gmail.com
 - Status 200 responses with proper "Queued. Thank you." confirmations
 
-✅ **Team Enhancement - Clinical Advisor Added**
+✅ **Team Enhancement - Clinical Advisors Expanded**
 - Added Dr. George E. Osei, MD as Clinical Advisor, Healthcare Security & Compliance
-- New "Clinical Advisors" section on About Us page
-- Professional headshot and comprehensive medical credentials
-- Highlighted healthcare expertise: Family medicine, EHR systems, clinical workflows
-- Positioned for real-world healthcare security guidance
+- Added Marco Benjamin as Clinical Advisor, JHN Health Collaborative Director of Social Determination of Health
+- Enhanced "Clinical Advisors" section with 2-column responsive grid layout
+- Professional headshots and comprehensive medical/advocacy credentials
+- Highlighted healthcare expertise: Family medicine, EHR systems, clinical workflows, patient advocacy
+- Marco's background: HIV/AIDS advocate, POZ Magazine "Top 100 Unsung Hero" (2013), nationwide health initiatives
+- Positioned for real-world healthcare security guidance and patient advocacy perspective
 
 ✅ **Email System Verification & Configuration**
 - Confirmed email delivery working to info@cyberlockx.xyz

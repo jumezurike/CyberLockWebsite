@@ -19,6 +19,7 @@ import josiahPhoto from '@/assets/team/josiah-umezurike.png';
 import solomonPhoto from '@/assets/team/solomon-sogunro.jpg';
 import christopherPhoto from '@/assets/team/christopher-amato.jpg';
 import georgeOseiPhoto from '@assets/GeorgeOsei_1751650545585.png';
+import marcoBenjaminPhoto from '@assets/Remove-BGR-photoaidcom-cropped_1752784297774.png';
 
 const AboutUs = () => {
   return (
@@ -389,40 +390,70 @@ const AboutUs = () => {
             </p>
           </div>
 
-          <div className="flex justify-center">
-            <div className="max-w-md">
-              {/* Dr. George E. Osei */}
-              <Card className="border-primary/10 shadow-md overflow-hidden">
-                <div className="h-56 bg-white relative flex items-center justify-center">
-                  <div className="w-40 h-40 relative mx-auto">
-                    <div className="absolute inset-0 rounded-full overflow-hidden">
-                      <img 
-                        src={georgeOseiPhoto} 
-                        alt="Dr. George E. Osei" 
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Dr. George E. Osei */}
+            <Card className="border-primary/10 shadow-md overflow-hidden">
+              <div className="h-56 bg-white relative flex items-center justify-center">
+                <div className="w-40 h-40 relative mx-auto">
+                  <div className="absolute inset-0 rounded-full overflow-hidden">
+                    <img 
+                      src={georgeOseiPhoto} 
+                      alt="Dr. George E. Osei" 
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-2xl">Dr. George E. Osei, MD</CardTitle>
-                  <CardDescription className="text-secondary font-medium">
-                    Clinical Advisor, Healthcare Security & Compliance
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-gray-700">
-                    Dr. George E. Osei is a board-certified family medicine physician based in Sumter, South Carolina, with affiliations at Prisma Health Tuomey Hospital and MUSC Health Kershaw Medical Center. He earned his medical degree from West Virginia University School of Medicine and brings over five years of frontline clinical experience treating chronic conditions such as coronary artery disease, hypertension, and diabetes.
-                  </p>
-                  <p className="text-gray-700">
-                    As a trusted provider in community-based health systems, Dr. Osei understands firsthand the operational, technological, and compliance challenges faced by small and mid-sized medical practices. His insights into clinical workflows, patient data handling, and EHR use make him an invaluable advisor as CyberLockX builds solutions tailored to real-world clinical environments.
-                  </p>
-                  <p className="text-gray-700">
-                    With a commitment to improving both patient care and provider protection, Dr. Osei helps guide CyberLockX in aligning its security and compliance technologies with the realities of everyday practice in the U.S. healthcare system.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
+              </div>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-2xl">Dr. George E. Osei, MD</CardTitle>
+                <CardDescription className="text-secondary font-medium">
+                  Clinical Advisor, Healthcare Security & Compliance
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-700">
+                  Dr. George E. Osei is a board-certified family medicine physician based in Sumter, South Carolina, with affiliations at Prisma Health Tuomey Hospital and MUSC Health Kershaw Medical Center. He earned his medical degree from West Virginia University School of Medicine and brings over five years of frontline clinical experience treating chronic conditions such as coronary artery disease, hypertension, and diabetes.
+                </p>
+                <p className="text-gray-700">
+                  As a trusted provider in community-based health systems, Dr. Osei understands firsthand the operational, technological, and compliance challenges faced by small and mid-sized medical practices. His insights into clinical workflows, patient data handling, and EHR use make him an invaluable advisor as CyberLockX builds solutions tailored to real-world clinical environments.
+                </p>
+                <p className="text-gray-700">
+                  With a commitment to improving both patient care and provider protection, Dr. Osei helps guide CyberLockX in aligning its security and compliance technologies with the realities of everyday practice in the U.S. healthcare system.
+                </p>
+              </CardContent>
+            </Card>
+
+            {/* Marco Benjamin */}
+            <Card className="border-primary/10 shadow-md overflow-hidden">
+              <div className="h-56 bg-white relative flex items-center justify-center">
+                <div className="w-40 h-40 relative mx-auto">
+                  <div className="absolute inset-0 rounded-full overflow-hidden">
+                    <img 
+                      src={marcoBenjaminPhoto} 
+                      alt="Marco Benjamin" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-2xl">Marco Benjamin</CardTitle>
+                <CardDescription className="text-secondary font-medium">
+                  Clinical Advisor, JHN Health Collaborative Director of Social Determination of Health
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-700">
+                  Marco, a proud New York City native, became a passionate activist and consumer advocate for HIV/AIDS in 2007 following his own diagnosis. He began his journey in grassroots advocacy, focusing on critical issues such as pharmaceutical drug pricing, HIV stigma, and condom access—particularly within the adult film industry.
+                </p>
+                <p className="text-gray-700">
+                  In 2013, Marco served as Program Manager for a nationwide Condom Tour, traveling to 214 cities across 38 states. His efforts raised awareness around sexual health and helped distribute nearly 15 million condoms to communities in need. The following year, Marco transitioned into a role as a Pharmacy Resource Sales Representative, where he supported patients in navigating the complex barriers to care and treatment for Hepatitis C and antiretroviral medications across the Northeast U.S.
+                </p>
+                <p className="text-gray-700">
+                  Marco's unwavering commitment to patient advocacy earned him recognition from POZ Magazine in 2013, naming him a "Top 100 Unsung Hero" for his dedication to ending the HIV epidemic. Today, Marco continues to lead with purpose with a focus on education, awareness, testing, improving access to care, and optimizing treatment—always bringing heart and humanity to the forefront of his work.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
