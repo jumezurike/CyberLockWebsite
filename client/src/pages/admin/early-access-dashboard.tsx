@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle } from "lucide-react";
+import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2 } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
 interface EarlyAccessSubmission {
@@ -52,6 +52,26 @@ export default function EarlyAccessDashboard() {
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to update status",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const deleteSubmissionMutation = useMutation({
+    mutationFn: async (id: number) => {
+      await apiRequest("DELETE", `/api/early-access/submissions/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/early-access/submissions"] });
+      toast({
+        title: "Submission Deleted",
+        description: "Rejected application has been permanently removed.",
+      });
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to delete submission",
         variant: "destructive",
       });
     },
@@ -315,20 +335,37 @@ export default function EarlyAccessDashboard() {
                         </DialogContent>
                       </Dialog>
 
-                      <Select
-                        value={submission.status}
-                        onValueChange={(status) => updateStatusMutation.mutate({ id: submission.id, status })}
-                      >
-                        <SelectTrigger className="w-32">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="pending">Pending</SelectItem>
-                          <SelectItem value="reviewed">Reviewed</SelectItem>
-                          <SelectItem value="approved">Approved</SelectItem>
-                          <SelectItem value="rejected">Rejected</SelectItem>
-                        </SelectContent>
-                      </Select>
+                      <div className="flex items-center gap-2">
+                        <Select
+                          value={submission.status}
+                          onValueChange={(status) => updateStatusMutation.mutate({ id: submission.id, status })}
+                        >
+                          <SelectTrigger className="w-32">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="pending">Pending</SelectItem>
+                            <SelectItem value="reviewed">Reviewed</SelectItem>
+                            <SelectItem value="approved">Approved</SelectItem>
+                            <SelectItem value="rejected">Rejected</SelectItem>
+                          </SelectContent>
+                        </Select>
+
+                        {submission.status === 'rejected' && (
+                          <Button
+                            variant="destructive"
+                            size="sm"
+                            onClick={() => {
+                              if (confirm(`Are you sure you want to permanently delete the rejected application from ${submission.fullName} (${submission.company})?`)) {
+                                deleteSubmissionMutation.mutate(submission.id);
+                              }
+                            }}
+                            disabled={deleteSubmissionMutation.isPending}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

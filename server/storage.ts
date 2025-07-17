@@ -45,6 +45,7 @@ export interface IStorage {
   getEarlyAccessSubmission(id: number): Promise<EarlyAccessSubmission | undefined>;
   createEarlyAccessSubmission(submission: InsertEarlyAccessSubmission): Promise<EarlyAccessSubmission>;
   updateEarlyAccessSubmissionStatus(id: number, status: string): Promise<EarlyAccessSubmission | undefined>;
+  deleteEarlyAccessSubmission(id: number): Promise<boolean>;
   
   // RASBITA operations
   getAllRasbitaReports(): Promise<RasbitaReport[]>;
@@ -292,6 +293,14 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     return submission;
+  }
+
+  async deleteEarlyAccessSubmission(id: number): Promise<boolean> {
+    const result = await db
+      .delete(earlyAccessSubmissions)
+      .where(eq(earlyAccessSubmissions.id, id));
+    
+    return result.rowCount !== null && result.rowCount > 0;
   }
 
   // RASBITA operations

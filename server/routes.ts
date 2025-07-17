@@ -297,6 +297,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.delete("/api/early-access/submissions/:id", async (req, res) => {
+    try {
+      const submissionId = parseInt(req.params.id);
+      
+      // First check if submission exists and is rejected
+      const submission = await storage.getEarlyAccessSubmission(submissionId);
+      if (!submission) {
+        return res.status(404).json({ error: "Submission not found" });
+      }
+      
+      if (submission.status !== 'rejected') {
+        return res.status(400).json({ error: "Only rejected submissions can be deleted" });
+      }
+      
+      const deleted = await storage.deleteEarlyAccessSubmission(submissionId);
+      if (!deleted) {
+        return res.status(404).json({ error: "Submission not found" });
+      }
+      
+      res.json({ success: true, message: "Rejected submission deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting early access submission:", error);
+      res.status(500).json({ error: "Failed to delete early access submission" });
+    }
+  });
+
   // RASBITA Report API
   // -------------------------------------------------------------------------
   
