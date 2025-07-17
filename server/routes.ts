@@ -290,13 +290,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Submission not found" });
       }
       
-      console.log(`Submission updated: ID=${submission.id}, Status=${submission.status}, Email=${submission.email}`);
-      
       // Send approval email if status is "approved"
       if (status === "approved") {
-        console.log(`Status is approved for ${submission.fullName} (${submission.email}), attempting to send email...`);
         try {
-          const emailResult = await sendApprovalNotification({
+          await sendApprovalNotification({
             fullName: submission.fullName,
             email: submission.email,
             company: submission.company,
@@ -307,13 +304,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
             investmentLevel: submission.investmentLevel,
             additionalInfo: submission.additionalInfo,
           });
-          console.log(`Approval email result: ${emailResult ? 'SUCCESS' : 'FAILED'} for ${submission.email}`);
         } catch (emailError) {
           console.error("Error sending approval email:", emailError);
           // Don't fail the status update if email fails
         }
-      } else {
-        console.log(`Status changed to: ${status} (no email sent)`);
       }
       
       res.json(submission);
