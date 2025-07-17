@@ -493,6 +493,18 @@ export default function EarlyAccess() {
                       </div>
                     </div>
                   </div>
+
+                        <div className="mt-3 p-3 bg-green-50 rounded border-l-4 border-green-600">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <p className="text-sm font-bold text-green-800">🛡️ 100% Breach-Free Healthcare Guarantee</p>
+                              <p className="text-xs text-gray-600">Pay only if we stop a threat • 30-day trial • $0 risk</p>
+                            </div>
+                            <div className="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">
+                              Zero Breach Pilot
+                            </div>
+                          </div>
+                        </div>
                   
                   <FormField
                     control={form.control}
