@@ -158,9 +158,55 @@ export default function EarlyAccess() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-primary mb-4">Join the CyberLockX Founder's and Partner's Circle</h1>
-          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
+          <p className="text-lg text-neutral-600 max-w-3xl mx-auto mb-6">
             Be among the first to access our revolutionary security products and shape the future of business cybersecurity.
           </p>
+          
+          {/* Limited 2025 Pilot Slots Section */}
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-gradient-to-r from-red-600 to-red-700 text-white rounded-xl p-6 shadow-lg border-2 border-red-500">
+              <div className="flex items-center justify-center gap-4 mb-4">
+                <div className="bg-yellow-400 text-red-800 px-3 py-1 rounded-full text-sm font-bold animate-pulse">
+                  LIMITED TIME
+                </div>
+                <div className="bg-white text-red-700 px-4 py-2 rounded-lg font-bold text-lg">
+                  🔥 2025 PILOT SLOTS
+                </div>
+                <div className="bg-yellow-400 text-red-800 px-3 py-1 rounded-full text-sm font-bold animate-pulse">
+                  EXCLUSIVE
+                </div>
+              </div>
+              
+              <h2 className="text-2xl font-bold mb-3">Only 25 Pilot Partner Slots Available</h2>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div className="bg-white/10 rounded-lg p-3">
+                  <div className="font-bold text-yellow-300">Healthcare Focus</div>
+                  <div>10 slots for medical practices</div>
+                </div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <div className="font-bold text-yellow-300">Enterprise Security</div>
+                  <div>10 slots for business enterprises</div>
+                </div>
+                <div className="bg-white/10 rounded-lg p-3">
+                  <div className="font-bold text-yellow-300">Strategic Investors</div>
+                  <div>5 slots for funding partners</div>
+                </div>
+              </div>
+              
+              <div className="mt-4 p-4 bg-white/10 rounded-lg">
+                <div className="flex items-center justify-between">
+                  <div className="text-left">
+                    <div className="font-bold text-lg">Pilot Benefits:</div>
+                    <div className="text-sm">✓ 90% discount on all services ✓ Direct founder access ✓ Custom feature development</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-yellow-300 font-bold text-lg">Applications close:</div>
+                    <div className="text-xl font-bold">January 31, 2025</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
