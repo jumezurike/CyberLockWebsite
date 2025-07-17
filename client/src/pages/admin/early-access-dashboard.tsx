@@ -8,7 +8,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2 } from "lucide-react";
+import { useAdminAuth } from "@/hooks/useAdminAuth";
+import AdminLogin from "./login";
+import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2, LogOut, Settings, Shield } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
 
 interface EarlyAccessSubmission {
@@ -31,6 +33,20 @@ export default function EarlyAccessDashboard() {
   const queryClient = useQueryClient();
   const [selectedSubmission, setSelectedSubmission] = useState<EarlyAccessSubmission | null>(null);
   const [emailAlertSent, setEmailAlertSent] = useState(false);
+  const { adminUser, isLoading: authLoading, isAuthenticated, logout } = useAdminAuth();
+
+  // Show login form if not authenticated
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <AdminLogin onLoginSuccess={() => window.location.reload()} />;
+  }
 
   const { data: submissions = [], isLoading } = useQuery({
     queryKey: ["/api/early-access/submissions"],
@@ -156,12 +172,32 @@ export default function EarlyAccessDashboard() {
     <div className="min-h-screen bg-gray-50 p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
+        <div className="mb-8 flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">Early Access Dashboard</h1>
+            <p className="text-gray-600">Manage partnership applications and early access requests</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Shield className="w-4 h-4" />
+              <span>Welcome, {adminUser?.fullName || adminUser?.username}</span>
+              <Badge variant="secondary">{adminUser?.role}</Badge>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => logout()}
+              className="flex items-center gap-2"
+            >
+              <LogOut className="w-4 h-4" />
+              Logout
+            </Button>
+          </div>
+        </div>
+        
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Early Access Dashboard</h1>
-          <p className="text-gray-600">Manage partnership applications and early access requests</p>
-          
           {/* Email Alert Notice */}
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <div className="flex items-center">
               <Mail className="h-5 w-5 text-blue-600 mr-2" />
               <div>

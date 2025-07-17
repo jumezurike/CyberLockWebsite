@@ -9,7 +9,7 @@ export const users = pgTable("users", {
   fullName: text("full_name"),
   email: text("email"),
   companyName: text("company_name"),
-  role: text("role").default("user"),
+  role: text("role").default("user"), // user, admin, super_admin, viewer
   createdAt: timestamp("created_at").defaultNow(),
 });
 
@@ -76,6 +76,35 @@ export const insertUserSchema = createInsertSchema(users).pick({
   companyName: true,
   role: true,
 });
+
+// Admin user schemas
+export const insertAdminUserSchema = z.object({
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  email: z.string().email("Invalid email format"),
+  role: z.enum(["admin", "super_admin", "viewer"], {
+    required_error: "Admin role is required"
+  }),
+});
+
+export const adminLoginSchema = z.object({
+  username: z.string().min(1, "Username is required"),
+  password: z.string().min(1, "Password is required"),
+});
+
+export const changePasswordSchema = z.object({
+  currentPassword: z.string().min(1, "Current password is required"),
+  newPassword: z.string().min(6, "New password must be at least 6 characters"),
+  confirmPassword: z.string().min(1, "Please confirm your password"),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
+export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
+export type AdminLogin = z.infer<typeof adminLoginSchema>;
+export type ChangePassword = z.infer<typeof changePasswordSchema>;
 
 export const insertAssessmentSchema = z.object({
   userId: z.number().optional(),

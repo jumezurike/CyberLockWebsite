@@ -32,6 +32,12 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   
+  // Admin user operations
+  getAllAdminUsers(): Promise<User[]>;
+  createAdminUser(user: InsertUser): Promise<User>;
+  updateUserPassword(id: number, hashedPassword: string): Promise<boolean>;
+  deleteAdminUser(id: number): Promise<boolean>;
+  
   // Assessment operations
   getAllAssessments(): Promise<Assessment[]>;
   searchAssessments(params: AssessmentSearchParams): Promise<Assessment[]>;
@@ -91,6 +97,36 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return user;
+  }
+
+  // Admin user operations
+  async getAllAdminUsers(): Promise<User[]> {
+    return await db.select().from(users).where(sql`role IN ('admin', 'super_admin', 'viewer')`);
+  }
+
+  async createAdminUser(user: InsertUser): Promise<User> {
+    const [newUser] = await db.insert(users).values({
+      username: user.username,
+      password: user.password,
+      fullName: user.fullName || null,
+      email: user.email || null,
+      companyName: user.companyName || null,
+      role: user.role || "admin",
+      createdAt: new Date(),
+    }).returning();
+    return newUser;
+  }
+
+  async updateUserPassword(id: number, hashedPassword: string): Promise<boolean> {
+    const result = await db.update(users)
+      .set({ password: hashedPassword })
+      .where(eq(users.id, id));
+    return result.rowCount > 0;
+  }
+
+  async deleteAdminUser(id: number): Promise<boolean> {
+    const result = await db.delete(users).where(eq(users.id, id));
+    return result.rowCount > 0;
   }
 
   // Assessment operations

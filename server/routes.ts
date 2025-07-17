@@ -1,7 +1,17 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
+import session from "express-session";
+import bcrypt from "bcryptjs";
 import { storage } from "./storage";
-import { insertAssessmentSchema, insertEarlyAccessSubmissionSchema, insertRasbitaReportSchema, insertUwaSchema } from "@shared/schema";
+import { 
+  insertAssessmentSchema, 
+  insertEarlyAccessSubmissionSchema, 
+  insertRasbitaReportSchema, 
+  insertUwaSchema,
+  adminLoginSchema,
+  insertAdminUserSchema,
+  changePasswordSchema
+} from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
 import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification } from "./email-service";
@@ -13,9 +23,201 @@ if (!process.env.STRIPE_SECRET_KEY) {
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
+// Session configuration
+declare module 'express-session' {
+  interface SessionData {
+    adminUser?: {
+      id: number;
+      username: string;
+      role: string;
+      fullName?: string;
+    };
+  }
+}
+
+// Authentication middleware
+const requireAdminAuth = (req: any, res: any, next: any) => {
+  if (!req.session.adminUser) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
+  next();
+};
+
+const requireSuperAdmin = (req: any, res: any, next: any) => {
+  if (!req.session.adminUser || req.session.adminUser.role !== 'super_admin') {
+    return res.status(403).json({ error: "Super admin access required" });
+  }
+  next();
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Configure session middleware
+  app.use(session({
+    secret: process.env.SESSION_SECRET || 'cyberlockx-admin-secret-key',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // Set to true in production with HTTPS
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+  }));
+
   // Initialize Mailgun (optional, will warn but not fail if keys not available)
   initMailgun();
+  
+  // Admin Authentication Routes
+  app.post("/api/admin/login", async (req, res) => {
+    try {
+      const { username, password } = adminLoginSchema.parse(req.body);
+      
+      const user = await storage.getUserByUsername(username);
+      if (!user || !['admin', 'super_admin', 'viewer'].includes(user.role || '')) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      
+      req.session.adminUser = {
+        id: user.id,
+        username: user.username,
+        role: user.role || 'viewer',
+        fullName: user.fullName || undefined
+      };
+      
+      res.json({ 
+        success: true, 
+        user: { 
+          id: user.id, 
+          username: user.username, 
+          role: user.role, 
+          fullName: user.fullName 
+        } 
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(400).json({ error: "Invalid login data" });
+    }
+  });
+
+  app.post("/api/admin/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ error: "Failed to logout" });
+      }
+      res.json({ success: true });
+    });
+  });
+
+  app.get("/api/admin/me", requireAdminAuth, (req, res) => {
+    res.json(req.session.adminUser);
+  });
+
+  // Admin user management routes
+  app.get("/api/admin/users", requireSuperAdmin, async (req, res) => {
+    try {
+      const users = await storage.getAllAdminUsers();
+      const safeUsers = users.map(user => ({
+        id: user.id,
+        username: user.username,
+        fullName: user.fullName,
+        email: user.email,
+        role: user.role,
+        createdAt: user.createdAt
+      }));
+      res.json(safeUsers);
+    } catch (error) {
+      console.error("Error fetching admin users:", error);
+      res.status(500).json({ error: "Failed to fetch admin users" });
+    }
+  });
+
+  app.post("/api/admin/users", requireSuperAdmin, async (req, res) => {
+    try {
+      const userData = insertAdminUserSchema.parse(req.body);
+      const hashedPassword = await bcrypt.hash(userData.password, 12);
+      
+      const newUser = await storage.createAdminUser({
+        username: userData.username,
+        password: hashedPassword,
+        fullName: userData.fullName,
+        email: userData.email,
+        role: userData.role
+      });
+      
+      const safeUser = {
+        id: newUser.id,
+        username: newUser.username,
+        fullName: newUser.fullName,
+        email: newUser.email,
+        role: newUser.role,
+        createdAt: newUser.createdAt
+      };
+      
+      res.json(safeUser);
+    } catch (error) {
+      console.error("Error creating admin user:", error);
+      res.status(400).json({ error: "Failed to create admin user" });
+    }
+  });
+
+  app.patch("/api/admin/users/:id/password", requireAdminAuth, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      const { currentPassword, newPassword } = changePasswordSchema.parse(req.body);
+      
+      // Users can only change their own password, unless they're super admin
+      if (req.session.adminUser?.id !== userId && req.session.adminUser?.role !== 'super_admin') {
+        return res.status(403).json({ error: "Access denied" });
+      }
+      
+      const user = await storage.getUser(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      const isValidPassword = await bcrypt.compare(currentPassword, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ error: "Current password is incorrect" });
+      }
+      
+      const hashedNewPassword = await bcrypt.hash(newPassword, 12);
+      const updated = await storage.updateUserPassword(userId, hashedNewPassword);
+      
+      if (!updated) {
+        return res.status(500).json({ error: "Failed to update password" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error changing password:", error);
+      res.status(400).json({ error: "Failed to change password" });
+    }
+  });
+
+  app.delete("/api/admin/users/:id", requireSuperAdmin, async (req, res) => {
+    try {
+      const userId = parseInt(req.params.id);
+      
+      // Prevent deleting yourself
+      if (req.session.adminUser?.id === userId) {
+        return res.status(400).json({ error: "Cannot delete your own account" });
+      }
+      
+      const deleted = await storage.deleteAdminUser(userId);
+      if (!deleted) {
+        return res.status(404).json({ error: "User not found" });
+      }
+      
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting admin user:", error);
+      res.status(500).json({ error: "Failed to delete admin user" });
+    }
+  });
   
   // API routes
   
@@ -255,7 +457,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.get("/api/early-access/submissions", async (req, res) => {
+  app.get("/api/early-access/submissions", requireAdminAuth, async (req, res) => {
     try {
       const submissions = await storage.getAllEarlyAccessSubmissions();
       res.json(submissions);
@@ -265,7 +467,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.get("/api/early-access/submissions/:id", async (req, res) => {
+  app.get("/api/early-access/submissions/:id", requireAdminAuth, async (req, res) => {
     try {
       const submission = await storage.getEarlyAccessSubmission(parseInt(req.params.id));
       if (!submission) {
@@ -278,7 +480,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
   
-  app.patch("/api/early-access/submissions/:id/status", async (req, res) => {
+  app.patch("/api/early-access/submissions/:id/status", requireAdminAuth, async (req, res) => {
     try {
       const { status } = req.body;
       if (!status) {
@@ -317,7 +519,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/early-access/submissions/:id", async (req, res) => {
+  app.delete("/api/early-access/submissions/:id", requireAdminAuth, async (req, res) => {
     try {
       const submissionId = parseInt(req.params.id);
       
