@@ -36,6 +36,93 @@ interface SubmissionEmailData {
   additionalInfo?: string;
 }
 
+export async function sendApprovalNotification(submission: SubmissionEmailData): Promise<boolean> {
+  try {
+    if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+      console.warn('Mailgun not configured. Email functionality will not work.');
+      return false;
+    }
+    
+    // Make sure Mailgun client is initialized
+    if (!mg) {
+      const initialized = initMailgun();
+      if (!initialized) {
+        return false;
+      }
+    }
+
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">🎉 Partnership Approved!</h1>
+          <p style="color: #f0f0f0; margin: 10px 0 0 0; font-size: 16px;">Welcome to CyberLockX Early Access</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border: 1px solid #e0e0e0;">
+          <p style="font-size: 18px; color: #333; margin-bottom: 25px;">
+            <strong>Congratulations ${submission.fullName}!</strong>
+          </p>
+          
+          <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 20px;">
+            We're excited to inform you that your partnership application for <strong>${submission.company}</strong> has been approved for CyberLockX Early Access.
+          </p>
+          
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 25px 0;">
+            <h3 style="color: #10b981; margin: 0 0 15px 0; font-size: 18px;">Next Steps:</h3>
+            <ul style="color: #555; line-height: 1.8; margin: 0; padding-left: 20px;">
+              <li>Our team will contact you within 24-48 hours to discuss your specific needs</li>
+              <li>We'll schedule a personalized demo of our healthcare security platform</li>
+              <li>You'll receive exclusive access to our RASBITA assessment tools</li>
+              <li>Investment and partnership opportunities will be discussed during our call</li>
+            </ul>
+          </div>
+          
+          <div style="background: #e7f3ff; padding: 20px; border-radius: 8px; margin: 25px 0;">
+            <h3 style="color: #0066cc; margin: 0 0 15px 0; font-size: 18px;">Your Application Details:</h3>
+            <p style="margin: 5px 0; color: #555;"><strong>Company:</strong> ${submission.company}</p>
+            <p style="margin: 5px 0; color: #555;"><strong>Industry:</strong> ${submission.industry || 'Not specified'}</p>
+            <p style="margin: 5px 0; color: #555;"><strong>Company Size:</strong> ${submission.companySize || 'Not specified'}</p>
+            <p style="margin: 5px 0; color: #555;"><strong>Investment Level:</strong> ${submission.investmentLevel || 'Not specified'}</p>
+            <p style="margin: 5px 0; color: #555;"><strong>Interested In:</strong> ${submission.interestedIn.join(', ')}</p>
+          </div>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="https://cyberlockx.xyz" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; display: inline-block;">
+              Visit CyberLockX Platform
+            </a>
+          </div>
+          
+          <p style="font-size: 14px; color: #777; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            Questions? Reply to this email or contact us at <a href="mailto:info@cyberlockx.xyz">info@cyberlockx.xyz</a><br>
+            Phone: ${submission.phone || 'Available upon request'}
+          </p>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+          <p style="margin: 0; color: #666; font-size: 14px;">
+            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub<br>
+            Securing every CLICK!!!
+          </p>
+        </div>
+      </div>
+    `;
+
+    const messageData = {
+      from: `CyberLockX Partnership Team <noreply@${process.env.MAILGUN_DOMAIN}>`,
+      to: submission.email,
+      subject: `🎉 Partnership Approved - Welcome to CyberLockX Early Access!`,
+      html: emailContent,
+    };
+
+    const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, messageData);
+    console.log('Approval email sent successfully:', response);
+    return true;
+  } catch (error) {
+    console.error('Error sending approval email:', error);
+    return false;
+  }
+}
+
 export async function sendEarlyAccessNotification(submission: SubmissionEmailData): Promise<boolean> {
   try {
     if (!process.env.MAILGUN_API_KEY) {

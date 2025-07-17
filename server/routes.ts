@@ -4,7 +4,7 @@ import { storage } from "./storage";
 import { insertAssessmentSchema, insertEarlyAccessSubmissionSchema, insertRasbitaReportSchema, insertUwaSchema } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
-import { initMailgun, sendEarlyAccessNotification } from "./email-service";
+import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification } from "./email-service";
 
 // Initialize Stripe with API key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -288,6 +288,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const submission = await storage.updateEarlyAccessSubmissionStatus(parseInt(req.params.id), status);
       if (!submission) {
         return res.status(404).json({ error: "Submission not found" });
+      }
+      
+      // Send approval email if status is "approved"
+      if (status === "approved") {
+        try {
+          await sendApprovalNotification({
+            fullName: submission.fullName,
+            email: submission.email,
+            company: submission.company,
+            phone: submission.phone,
+            companySize: submission.companySize,
+            industry: submission.industry,
+            interestedIn: submission.interestedIn,
+            investmentLevel: submission.investmentLevel,
+            additionalInfo: submission.additionalInfo,
+          });
+          console.log(`Approval email sent to ${submission.email} for ${submission.company}`);
+        } catch (emailError) {
+          console.error("Error sending approval email:", emailError);
+          // Don't fail the status update if email fails
+        }
       }
       
       res.json(submission);
