@@ -70,7 +70,7 @@ export default function EarlyAccessDashboard() {
       queryClient.invalidateQueries({ queryKey: ["/api/early-access/submissions"] });
       toast({
         title: "Submission Deleted",
-        description: "Rejected application has been permanently removed.",
+        description: "Partnership application has been permanently removed.",
       });
     },
     onError: (error) => {
@@ -390,12 +390,12 @@ export default function EarlyAccessDashboard() {
                           </SelectContent>
                         </Select>
 
-                        {submission.status === 'rejected' && (
+                        {(submission.status === 'approved' || submission.status === 'rejected') && (
                           <Button
                             variant="destructive"
                             size="sm"
                             onClick={() => {
-                              if (confirm(`Are you sure you want to permanently delete the rejected application from ${submission.fullName} (${submission.company})?`)) {
+                              if (confirm(`Are you sure you want to permanently delete the ${submission.status} application from ${submission.fullName} (${submission.company})?`)) {
                                 deleteSubmissionMutation.mutate(submission.id);
                               }
                             }}

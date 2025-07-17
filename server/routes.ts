@@ -523,14 +523,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const submissionId = parseInt(req.params.id);
       
-      // First check if submission exists and is rejected
+      // First check if submission exists and is approved or rejected
       const submission = await storage.getEarlyAccessSubmission(submissionId);
       if (!submission) {
         return res.status(404).json({ error: "Submission not found" });
       }
       
-      if (submission.status !== 'rejected') {
-        return res.status(400).json({ error: "Only rejected submissions can be deleted" });
+      if (submission.status === 'pending' || submission.status === 'reviewed') {
+        return res.status(400).json({ error: "Cannot delete pending or under review submissions" });
       }
       
       const deleted = await storage.deleteEarlyAccessSubmission(submissionId);
@@ -538,7 +538,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Submission not found" });
       }
       
-      res.json({ success: true, message: "Rejected submission deleted successfully" });
+      res.json({ success: true, message: "Submission deleted successfully" });
     } catch (error) {
       console.error("Error deleting early access submission:", error);
       res.status(500).json({ error: "Failed to delete early access submission" });
