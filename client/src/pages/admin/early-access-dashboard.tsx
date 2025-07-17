@@ -35,6 +35,13 @@ export default function EarlyAccessDashboard() {
   const [emailAlertSent, setEmailAlertSent] = useState(false);
   const { adminUser, isLoading: authLoading, isAuthenticated, logout } = useAdminAuth();
 
+  // Always call useQuery at the top level, regardless of auth state
+  const { data: submissions = [], isLoading } = useQuery({
+    queryKey: ["/api/early-access/submissions"],
+    refetchInterval: 30000, // Refresh every 30 seconds
+    enabled: isAuthenticated, // Only run query when authenticated
+  });
+
   // Show login form if not authenticated
   if (authLoading) {
     return (
@@ -47,11 +54,6 @@ export default function EarlyAccessDashboard() {
   if (!isAuthenticated) {
     return <AdminLogin onLoginSuccess={() => window.location.reload()} />;
   }
-
-  const { data: submissions = [], isLoading } = useQuery({
-    queryKey: ["/api/early-access/submissions"],
-    refetchInterval: 30000, // Refresh every 30 seconds
-  });
 
   const updateStatusMutation = useMutation({
     mutationFn: async ({ id, status }: { id: number; status: string }) => {
