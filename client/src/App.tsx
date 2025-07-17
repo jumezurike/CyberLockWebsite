@@ -36,6 +36,7 @@ import DirectNavigation from "@/components/direct-navigation";
 import DeviceInventoryPage from "@/pages/device-inventory";
 import AccessibilityDemo from "@/pages/accessibility-demo";
 import AssessmentWorkflowPage from "@/pages/assessment-workflow";
+import EarlyAccessDashboard from "@/pages/admin/early-access-dashboard";
 
 function Router() {
   const [location] = useLocation();
@@ -61,6 +62,7 @@ function Router() {
           <Route path="/assessment-workflow" component={AssessmentWorkflowPage} />
           <Route path="/color-demo" component={ColorDemo} />
           <Route path="/early-access" component={EarlyAccess} />
+          <Route path="/admin/early-access" component={EarlyAccessDashboard} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/about-us" component={AboutUs} />
           <Route path="/rasbita" component={RasbitaReport} />
