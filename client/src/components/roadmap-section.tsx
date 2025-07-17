@@ -266,7 +266,7 @@ export default function RoadmapSection() {
             priority access, and the opportunity to influence our product development.
           </p>
           <Link href="/early-access" className="inline-block bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg font-medium">
-            Join the Founder's Circle
+            Join the Founder's and Partner's Circle
           </Link>
         </div>
       </div>
