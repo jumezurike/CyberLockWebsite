@@ -37,18 +37,28 @@ interface SubmissionEmailData {
 }
 
 export async function sendApprovalNotification(submission: SubmissionEmailData): Promise<boolean> {
+  console.log('=== APPROVAL EMAIL FUNCTION CALLED ===');
+  console.log('Submission data:', { fullName: submission.fullName, email: submission.email, company: submission.company });
+  
   try {
     if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
-      console.warn('Mailgun not configured. Email functionality will not work.');
+      console.error('Mailgun not configured. API Key or Domain missing.');
       return false;
     }
     
+    console.log('Mailgun configured. API Key length:', process.env.MAILGUN_API_KEY.length, 'Domain:', process.env.MAILGUN_DOMAIN);
+    
     // Make sure Mailgun client is initialized
     if (!mg) {
+      console.log('Mailgun client not initialized, initializing now...');
       const initialized = initMailgun();
       if (!initialized) {
+        console.error('Failed to initialize Mailgun client');
         return false;
       }
+      console.log('Mailgun client initialized successfully');
+    } else {
+      console.log('Mailgun client already initialized');
     }
 
     const emailContent = `
@@ -114,11 +124,15 @@ export async function sendApprovalNotification(submission: SubmissionEmailData):
       html: emailContent,
     };
 
+    console.log('Sending email with Mailgun...');
+    console.log('Message data:', { from: messageData.from, to: messageData.to, subject: messageData.subject });
+    
     const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, messageData);
     console.log('Approval email sent successfully:', response);
     return true;
   } catch (error) {
     console.error('Error sending approval email:', error);
+    console.error('Error details:', error.message);
     return false;
   }
 }
