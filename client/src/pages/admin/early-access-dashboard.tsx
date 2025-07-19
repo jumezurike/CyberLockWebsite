@@ -10,7 +10,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import AdminLogin from "./login";
-import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2, LogOut, Settings, Shield } from "lucide-react";
+import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2, LogOut, Settings, Shield, BarChart3 } from "lucide-react";
+import { Link } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 
 interface EarlyAccessSubmission {
@@ -186,6 +187,16 @@ export default function EarlyAccessDashboard() {
               <span>Welcome, {adminUser?.fullName || adminUser?.username}</span>
               <Badge variant="secondary">{adminUser?.role}</Badge>
             </div>
+            <Link href="/admin/analytics">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <BarChart3 className="w-4 h-4" />
+                Analytics
+              </Button>
+            </Link>
             <Button
               variant="outline"
               size="sm"

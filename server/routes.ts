@@ -937,6 +937,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     }
   });
+
+  // Analytics API Routes
+  // -------------------------------------------------------------------------
+  
+  // Get analytics dashboard metrics (admin only)
+  app.get("/api/analytics/metrics", requireAdminAuth, async (req, res) => {
+    try {
+      const metrics = await storage.getAnalyticsMetrics();
+      res.json(metrics);
+    } catch (error) {
+      console.error("Error fetching analytics metrics:", error);
+      res.status(500).json({ error: "Failed to fetch analytics metrics" });
+    }
+  });
+
+  // Get monthly growth data (admin only)
+  app.get("/api/analytics/growth", requireAdminAuth, async (req, res) => {
+    try {
+      const growthData = await storage.getMonthlyGrowthData();
+      res.json(growthData);
+    } catch (error) {
+      console.error("Error fetching growth data:", error);
+      res.status(500).json({ error: "Failed to fetch growth data" });
+    }
+  });
+
+  // Track payment completion (called from Stripe webhook or payment success)
+  app.post("/api/analytics/track-payment", async (req, res) => {
+    try {
+      const { userId, amount, paymentId, productType } = req.body;
+      
+      if (!userId || !amount || !paymentId) {
+        return res.status(400).json({ error: "Missing required payment tracking data" });
+      }
+      
+      await storage.trackPayment(userId, amount, paymentId, productType || 'assessment');
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error tracking payment:", error);
+      res.status(500).json({ error: "Failed to track payment" });
+    }
+  });
   
   const httpServer = createServer(app);
   return httpServer;

@@ -26,6 +26,26 @@ export interface AssessmentSearchParams {
   toDate?: Date;
 }
 
+export interface AnalyticsMetrics {
+  totalUsers: number;
+  newUsersThisMonth: number;
+  activeUsers30Days: number;
+  paidUsers: number;
+  totalRevenue: number;
+  assessmentsCompleted: number;
+  earlyAccessSubmissions: number;
+  monthOverMonthGrowth: number;
+  completedAssessmentsThisMonth: number;
+  earlyAccessSubmissionsThisMonth: number;
+}
+
+export interface MonthlyGrowthData {
+  month: string;
+  users: number;
+  revenue: number;
+  assessments: number;
+}
+
 export interface IStorage {
   // User operations
   getUser(id: number): Promise<User | undefined>;
@@ -69,6 +89,11 @@ export interface IStorage {
   createUwa(uwa: InsertUwa): Promise<Uwa>;
   updateUwa(id: number, uwa: InsertUwa): Promise<Uwa | undefined>;
   deleteUwa(id: number): Promise<boolean>;
+  
+  // Analytics operations
+  getAnalyticsMetrics(): Promise<AnalyticsMetrics>;
+  getMonthlyGrowthData(): Promise<MonthlyGrowthData[]>;
+  trackPayment(userId: number, amount: number, paymentId: string, productType: string): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -490,6 +515,152 @@ export class DatabaseStorage implements IStorage {
     // Check if the UWA still exists
     const uwa = await this.getUwaById(id);
     return !uwa;
+  }
+
+  // Analytics operations
+  async getAnalyticsMetrics(): Promise<AnalyticsMetrics> {
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
+    const firstOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const firstOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+
+    // Get total users count
+    const [totalUsersResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(users);
+    const totalUsers = totalUsersResult?.count || 0;
+
+    // Get new users this month
+    const [newUsersResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(users)
+      .where(sql`${users.createdAt} >= ${firstOfThisMonth}`);
+    const newUsersThisMonth = newUsersResult?.count || 0;
+
+    // Get active users (users who created assessments or submissions in last 30 days)
+    const [activeUsersResult] = await db
+      .select({ count: sql<number>`count(DISTINCT ${users.id})` })
+      .from(users)
+      .leftJoin(assessments, eq(users.id, assessments.userId))
+      .leftJoin(earlyAccessSubmissions, eq(users.email, earlyAccessSubmissions.email))
+      .where(sql`(${assessments.createdAt} >= ${thirtyDaysAgo} OR ${earlyAccessSubmissions.createdAt} >= ${thirtyDaysAgo})`);
+    const activeUsers30Days = activeUsersResult?.count || 0;
+
+    // Calculate paid users from Stripe payments (placeholder - will be implemented when payment tracking is added)
+    const paidUsers = 0;
+    const totalRevenue = 0;
+
+    // Get completed assessments count
+    const [assessmentsResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(assessments)
+      .where(sql`${assessments.status} = 'completed'`);
+    const assessmentsCompleted = assessmentsResult?.count || 0;
+
+    // Get completed assessments this month
+    const [assessmentsThisMonthResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(assessments)
+      .where(sql`${assessments.status} = 'completed' AND ${assessments.createdAt} >= ${firstOfThisMonth}`);
+    const completedAssessmentsThisMonth = assessmentsThisMonthResult?.count || 0;
+
+    // Get early access submissions count
+    const [earlyAccessResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(earlyAccessSubmissions);
+    const earlyAccessSubmissions = earlyAccessResult?.count || 0;
+
+    // Get early access submissions this month
+    const [earlyAccessThisMonthResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(earlyAccessSubmissions)
+      .where(sql`${earlyAccessSubmissions.createdAt} >= ${firstOfThisMonth}`);
+    const earlyAccessSubmissionsThisMonth = earlyAccessThisMonthResult?.count || 0;
+
+    // Calculate month-over-month growth for users
+    const [lastMonthUsersResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(users)
+      .where(sql`${users.createdAt} >= ${firstOfLastMonth} AND ${users.createdAt} < ${firstOfThisMonth}`);
+    const lastMonthUsers = lastMonthUsersResult?.count || 1; // Avoid division by zero
+    
+    const monthOverMonthGrowth = lastMonthUsers > 0 
+      ? Math.round(((newUsersThisMonth - lastMonthUsers) / lastMonthUsers) * 100)
+      : 0;
+
+    return {
+      totalUsers,
+      newUsersThisMonth,
+      activeUsers30Days,
+      paidUsers,
+      totalRevenue,
+      assessmentsCompleted,
+      earlyAccessSubmissions,
+      monthOverMonthGrowth,
+      completedAssessmentsThisMonth,
+      earlyAccessSubmissionsThisMonth
+    };
+  }
+
+  async getMonthlyGrowthData(): Promise<MonthlyGrowthData[]> {
+    const now = new Date();
+    const sixMonthsAgo = new Date(now.getFullYear(), now.getMonth() - 6, 1);
+
+    // Get monthly user registration data
+    const monthlyData = await db
+      .select({
+        month: sql<string>`TO_CHAR(${users.createdAt}, 'YYYY-MM')`,
+        users: sql<number>`count(*)`
+      })
+      .from(users)
+      .where(sql`${users.createdAt} >= ${sixMonthsAgo}`)
+      .groupBy(sql`TO_CHAR(${users.createdAt}, 'YYYY-MM')`)
+      .orderBy(sql`TO_CHAR(${users.createdAt}, 'YYYY-MM')`);
+
+    // Get monthly assessment completion data
+    const monthlyAssessments = await db
+      .select({
+        month: sql<string>`TO_CHAR(${assessments.createdAt}, 'YYYY-MM')`,
+        assessments: sql<number>`count(*)`
+      })
+      .from(assessments)
+      .where(sql`${assessments.createdAt} >= ${sixMonthsAgo} AND ${assessments.status} = 'completed'`)
+      .groupBy(sql`TO_CHAR(${assessments.createdAt}, 'YYYY-MM')`)
+      .orderBy(sql`TO_CHAR(${assessments.createdAt}, 'YYYY-MM')`);
+
+    // Combine data by month
+    const monthlyMap = new Map<string, MonthlyGrowthData>();
+
+    monthlyData.forEach(data => {
+      monthlyMap.set(data.month, {
+        month: data.month,
+        users: data.users,
+        revenue: 0, // Will be populated when payment tracking is implemented
+        assessments: 0
+      });
+    });
+
+    monthlyAssessments.forEach(data => {
+      const existing = monthlyMap.get(data.month);
+      if (existing) {
+        existing.assessments = data.assessments;
+      } else {
+        monthlyMap.set(data.month, {
+          month: data.month,
+          users: 0,
+          revenue: 0,
+          assessments: data.assessments
+        });
+      }
+    });
+
+    return Array.from(monthlyMap.values()).sort((a, b) => a.month.localeCompare(b.month));
+  }
+
+  async trackPayment(userId: number, amount: number, paymentId: string, productType: string): Promise<void> {
+    // This method will be implemented when payment tracking tables are created
+    // For now, this is a placeholder for future Stripe integration
+    console.log(`Payment tracked: User ${userId}, Amount: $${amount/100}, Payment ID: ${paymentId}, Type: ${productType}`);
   }
 }
 
