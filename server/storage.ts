@@ -537,13 +537,11 @@ export class DatabaseStorage implements IStorage {
       .where(sql`${users.createdAt} >= ${firstOfThisMonth}`);
     const newUsersThisMonth = newUsersResult?.count || 0;
 
-    // Get active users (users who created assessments or submissions in last 30 days)
+    // Get active users (simplified approach - users with recent assessments)
     const [activeUsersResult] = await db
-      .select({ count: sql<number>`count(DISTINCT ${users.id})` })
-      .from(users)
-      .leftJoin(assessments, eq(users.id, assessments.userId))
-      .leftJoin(earlyAccessSubmissions, eq(users.email, earlyAccessSubmissions.email))
-      .where(sql`(${assessments.createdAt} >= ${thirtyDaysAgo} OR ${earlyAccessSubmissions.createdAt} >= ${thirtyDaysAgo})`);
+      .select({ count: sql<number>`count(DISTINCT ${assessments.userId})` })
+      .from(assessments)
+      .where(sql`${assessments.createdAt} >= ${thirtyDaysAgo}`);
     const activeUsers30Days = activeUsersResult?.count || 0;
 
     // Calculate paid users from Stripe payments (placeholder - will be implemented when payment tracking is added)
@@ -568,7 +566,7 @@ export class DatabaseStorage implements IStorage {
     const [earlyAccessResult] = await db
       .select({ count: sql<number>`count(*)` })
       .from(earlyAccessSubmissions);
-    const earlyAccessSubmissions = earlyAccessResult?.count || 0;
+    const earlyAccessSubmissionsCount = earlyAccessResult?.count || 0;
 
     // Get early access submissions this month
     const [earlyAccessThisMonthResult] = await db
@@ -595,7 +593,7 @@ export class DatabaseStorage implements IStorage {
       paidUsers,
       totalRevenue,
       assessmentsCompleted,
-      earlyAccessSubmissions,
+      earlyAccessSubmissions: earlyAccessSubmissionsCount,
       monthOverMonthGrowth,
       completedAssessmentsThisMonth,
       earlyAccessSubmissionsThisMonth
