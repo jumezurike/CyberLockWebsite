@@ -68,6 +68,71 @@ export const rasbitaReports = pgTable("rasbita_reports", {
   dashboard: jsonb("dashboard").notNull(),
 });
 
+// Analytics tracking tables
+export const userSessions = pgTable("user_sessions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  sessionId: text("session_id").notNull(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  page: text("page"),
+  action: text("action"), // page_view, assessment_start, assessment_complete, early_access_submit, etc.
+  metadata: jsonb("metadata"), // Additional data like assessment_id, duration, etc.
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const userActivity = pgTable("user_activity", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  date: date("date").notNull(),
+  activityType: text("activity_type").notNull(), // daily_active, monthly_active, assessment, payment
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const payments = pgTable("payments", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  amount: integer("amount").notNull(), // Amount in cents
+  currency: text("currency").default("usd"),
+  status: text("status").notNull(), // pending, completed, failed, refunded
+  paymentProvider: text("payment_provider").default("stripe"),
+  paymentId: text("payment_id"), // External payment ID
+  productType: text("product_type"), // assessment, subscription, early_access
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const webTraffic = pgTable("web_traffic", {
+  id: serial("id").primaryKey(),
+  date: date("date").notNull(),
+  source: text("source").notNull(), // organic, direct, social, referral, paid
+  page: text("page").notNull(),
+  visitors: integer("visitors").default(0),
+  pageViews: integer("page_views").default(0),
+  bounceRate: integer("bounce_rate").default(0), // Percentage
+  avgSessionDuration: integer("avg_session_duration").default(0), // Seconds
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const monthlyMetrics = pgTable("monthly_metrics", {
+  id: serial("id").primaryKey(),
+  year: integer("year").notNull(),
+  month: integer("month").notNull(),
+  totalUsers: integer("total_users").default(0),
+  newUsers: integer("new_users").default(0),
+  activeUsers: integer("active_users").default(0),
+  paidUsers: integer("paid_users").default(0),
+  revenue: integer("revenue").default(0), // In cents
+  assessmentsCompleted: integer("assessments_completed").default(0),
+  earlyAccessSubmissions: integer("early_access_submissions").default(0),
+  growthRate: integer("growth_rate").default(0), // Percentage * 100
+  organicTrafficPercent: integer("organic_traffic_percent").default(0), // Percentage * 100
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
