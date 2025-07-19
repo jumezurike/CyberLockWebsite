@@ -40,6 +40,17 @@ interface MonthlyGrowthData {
   assessments: number;
 }
 
+interface VisitorAnalytics {
+  totalVisitors: number;
+  uniqueVisitorsToday: number;
+  uniqueVisitorsThisMonth: number;
+  totalPageViews: number;
+  pageViewsToday: number;
+  averageSessionDuration: number;
+  topPages: Array<{ page: string; views: number }>;
+  trafficSources: Array<{ source: string; visitors: number }>;
+}
+
 export default function AnalyticsDashboard() {
   const [autoRefresh, setAutoRefresh] = useState(false);
 
@@ -55,9 +66,16 @@ export default function AnalyticsDashboard() {
     refetchInterval: autoRefresh ? 60000 : false, // Auto-refresh every minute if enabled
   });
 
+  // Fetch visitor analytics
+  const { data: visitorData, isLoading: visitorLoading, error: visitorError, refetch: refetchVisitors } = useQuery<VisitorAnalytics>({
+    queryKey: ["/api/analytics/visitors"],
+    refetchInterval: autoRefresh ? 30000 : false, // Auto-refresh every 30 seconds if enabled
+  });
+
   const handleRefresh = () => {
     refetchMetrics();
     refetchGrowth();
+    refetchVisitors();
   };
 
   const formatCurrency = (cents: number) => {
@@ -186,6 +204,123 @@ export default function AnalyticsDashboard() {
                 <div className="text-xs text-gray-600 mt-1">User growth</div>
               </CardContent>
             </Card>
+          </div>
+        )}
+
+        {/* Visitor Analytics Cards */}
+        {visitorData && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-semibold text-gray-900">Visitor Analytics</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Total Visitors */}
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Total Visitors</CardTitle>
+                  <Users className="h-4 w-4 text-indigo-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{visitorData.totalVisitors.toLocaleString()}</div>
+                  <div className="flex items-center text-xs text-gray-600 mt-1">
+                    <span>+{visitorData.uniqueVisitorsThisMonth} this month</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Daily Visitors */}
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Today's Visitors</CardTitle>
+                  <Clock className="h-4 w-4 text-emerald-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{visitorData.uniqueVisitorsToday.toLocaleString()}</div>
+                  <div className="flex items-center text-xs text-gray-600 mt-1">
+                    <span>{visitorData.pageViewsToday} page views</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Page Views */}
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Total Page Views</CardTitle>
+                  <BarChart3 className="h-4 w-4 text-orange-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{visitorData.totalPageViews.toLocaleString()}</div>
+                  <div className="flex items-center text-xs text-gray-600 mt-1">
+                    <span>All time</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Session Duration */}
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium text-gray-600">Avg Session</CardTitle>
+                  <Clock className="h-4 w-4 text-purple-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">{Math.round(visitorData.averageSessionDuration / 60)}m</div>
+                  <div className="flex items-center text-xs text-gray-600 mt-1">
+                    <span>{visitorData.averageSessionDuration}s duration</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* Top Pages and Traffic Sources */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Top Pages */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <BarChart3 className="h-5 w-5 mr-2 text-orange-600" />
+                    Top Pages
+                  </CardTitle>
+                  <CardDescription>Most visited pages on your website</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {visitorData.topPages && visitorData.topPages.length > 0 ? (
+                    <div className="space-y-3">
+                      {visitorData.topPages.slice(0, 5).map((page, index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-gray-700 truncate">{page.page || '/'}</span>
+                          <Badge variant="secondary">{page.views} views</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">No page data available yet</p>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Traffic Sources */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center">
+                    <TrendingUp className="h-5 w-5 mr-2 text-blue-600" />
+                    Traffic Sources
+                  </CardTitle>
+                  <CardDescription>Where your visitors are coming from</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {visitorData.trafficSources && visitorData.trafficSources.length > 0 ? (
+                    <div className="space-y-3">
+                      {visitorData.trafficSources.map((source, index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="text-sm font-medium text-gray-700 capitalize">{source.source}</span>
+                          <Badge variant="outline">{source.visitors} visitors</Badge>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-500">No traffic source data available yet</p>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
           </div>
         )}
 

@@ -13,7 +13,13 @@ import {
   type RasbitaReport,
   uwas,
   type InsertUwa,
-  type Uwa
+  type Uwa,
+  visitorSessions,
+  visitorPageViews,
+  type InsertVisitorSession,
+  type VisitorSession,
+  type InsertVisitorPageView,
+  type VisitorPageView
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc } from "drizzle-orm";
@@ -44,6 +50,17 @@ export interface MonthlyGrowthData {
   users: number;
   revenue: number;
   assessments: number;
+}
+
+export interface VisitorAnalytics {
+  totalVisitors: number;
+  uniqueVisitorsToday: number;
+  uniqueVisitorsThisMonth: number;
+  totalPageViews: number;
+  pageViewsToday: number;
+  averageSessionDuration: number;
+  topPages: Array<{ page: string; views: number }>;
+  trafficSources: Array<{ source: string; visitors: number }>;
 }
 
 export interface IStorage {
@@ -94,6 +111,13 @@ export interface IStorage {
   getAnalyticsMetrics(): Promise<AnalyticsMetrics>;
   getMonthlyGrowthData(): Promise<MonthlyGrowthData[]>;
   trackPayment(userId: number, amount: number, paymentId: string, productType: string): Promise<void>;
+  
+  // Visitor tracking operations
+  createVisitorSession(session: InsertVisitorSession): Promise<VisitorSession>;
+  updateVisitorSession(sessionId: string, data: { sessionEnd?: Date; sessionDuration?: number; totalPageViews?: number }): Promise<void>;
+  createVisitorPageView(pageView: InsertVisitorPageView): Promise<VisitorPageView>;
+  getVisitorAnalytics(): Promise<VisitorAnalytics>;
+  getVisitorSession(sessionId: string): Promise<VisitorSession | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -659,6 +683,176 @@ export class DatabaseStorage implements IStorage {
     // This method will be implemented when payment tracking tables are created
     // For now, this is a placeholder for future Stripe integration
     console.log(`Payment tracked: User ${userId}, Amount: $${amount/100}, Payment ID: ${paymentId}, Type: ${productType}`);
+  }
+
+  // Visitor tracking operations
+  async createVisitorSession(session: InsertVisitorSession): Promise<VisitorSession> {
+    const [newSession] = await db
+      .insert(visitorSessions)
+      .values({
+        sessionId: session.sessionId,
+        ipAddress: session.ipAddress || null,
+        userAgent: session.userAgent || null,
+        referrerUrl: session.referrerUrl || null,
+        landingPage: session.landingPage,
+        country: session.country || null,
+        region: session.region || null,
+        isBot: session.isBot || false,
+        sessionStart: new Date(),
+        lastActivity: new Date(),
+        totalPageViews: 1,
+        sessionDuration: 0
+      })
+      .returning();
+    return newSession;
+  }
+
+  async updateVisitorSession(sessionId: string, data: { sessionEnd?: Date; sessionDuration?: number; totalPageViews?: number }): Promise<void> {
+    const updateData: any = { lastActivity: new Date() };
+    
+    if (data.sessionEnd) {
+      updateData.sessionEnd = data.sessionEnd;
+    }
+    if (data.sessionDuration !== undefined) {
+      updateData.sessionDuration = data.sessionDuration;
+    }
+    if (data.totalPageViews !== undefined) {
+      updateData.totalPageViews = data.totalPageViews;
+    }
+
+    await db
+      .update(visitorSessions)
+      .set(updateData)
+      .where(eq(visitorSessions.sessionId, sessionId));
+  }
+
+  async createVisitorPageView(pageView: InsertVisitorPageView): Promise<VisitorPageView> {
+    const [newPageView] = await db
+      .insert(visitorPageViews)
+      .values({
+        sessionId: pageView.sessionId,
+        page: pageView.page,
+        title: pageView.title || null,
+        timeOnPage: pageView.timeOnPage || 0,
+        timestamp: new Date()
+      })
+      .returning();
+    return newPageView;
+  }
+
+  async getVisitorSession(sessionId: string): Promise<VisitorSession | undefined> {
+    const [session] = await db
+      .select()
+      .from(visitorSessions)
+      .where(eq(visitorSessions.sessionId, sessionId));
+    return session;
+  }
+
+  async getVisitorAnalytics(): Promise<VisitorAnalytics> {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const firstOfThisMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+
+    // Get total unique visitors
+    const [totalVisitorsResult] = await db
+      .select({ count: sql<number>`count(DISTINCT ${visitorSessions.sessionId})` })
+      .from(visitorSessions);
+    const totalVisitors = totalVisitorsResult?.count || 0;
+
+    // Get unique visitors today
+    const [visitorsToday] = await db
+      .select({ count: sql<number>`count(DISTINCT ${visitorSessions.sessionId})` })
+      .from(visitorSessions)
+      .where(sql`${visitorSessions.sessionStart} >= ${today}`);
+    const uniqueVisitorsToday = visitorsToday?.count || 0;
+
+    // Get unique visitors this month
+    const [visitorsThisMonth] = await db
+      .select({ count: sql<number>`count(DISTINCT ${visitorSessions.sessionId})` })
+      .from(visitorSessions)
+      .where(sql`${visitorSessions.sessionStart} >= ${firstOfThisMonth}`);
+    const uniqueVisitorsThisMonth = visitorsThisMonth?.count || 0;
+
+    // Get total page views
+    const [totalPageViewsResult] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(visitorPageViews);
+    const totalPageViews = totalPageViewsResult?.count || 0;
+
+    // Get page views today
+    const [pageViewsToday] = await db
+      .select({ count: sql<number>`count(*)` })
+      .from(visitorPageViews)
+      .where(sql`${visitorPageViews.timestamp} >= ${today}`);
+    const pageViewsTodayCount = pageViewsToday?.count || 0;
+
+    // Get average session duration
+    const [avgDurationResult] = await db
+      .select({ avg: sql<number>`avg(${visitorSessions.sessionDuration})` })
+      .from(visitorSessions)
+      .where(sql`${visitorSessions.sessionDuration} > 0`);
+    const averageSessionDuration = Math.round(avgDurationResult?.avg || 0);
+
+    // Get top pages
+    const topPagesResult = await db
+      .select({
+        page: visitorPageViews.page,
+        views: sql<number>`count(*)`
+      })
+      .from(visitorPageViews)
+      .groupBy(visitorPageViews.page)
+      .orderBy(sql`count(*) desc`)
+      .limit(10);
+
+    const topPages = topPagesResult.map(row => ({
+      page: row.page,
+      views: row.views
+    }));
+
+    // Get traffic sources (simplified - using referrer URL)
+    const trafficSourcesResult = await db
+      .select({
+        source: sql<string>`
+          CASE 
+            WHEN ${visitorSessions.referrerUrl} IS NULL OR ${visitorSessions.referrerUrl} = '' THEN 'direct'
+            WHEN ${visitorSessions.referrerUrl} LIKE '%google%' THEN 'google'
+            WHEN ${visitorSessions.referrerUrl} LIKE '%facebook%' THEN 'facebook'
+            WHEN ${visitorSessions.referrerUrl} LIKE '%twitter%' OR ${visitorSessions.referrerUrl} LIKE '%x.com%' THEN 'twitter'
+            WHEN ${visitorSessions.referrerUrl} LIKE '%linkedin%' THEN 'linkedin'
+            ELSE 'other'
+          END
+        `,
+        visitors: sql<number>`count(DISTINCT ${visitorSessions.sessionId})`
+      })
+      .from(visitorSessions)
+      .groupBy(sql`
+        CASE 
+          WHEN ${visitorSessions.referrerUrl} IS NULL OR ${visitorSessions.referrerUrl} = '' THEN 'direct'
+          WHEN ${visitorSessions.referrerUrl} LIKE '%google%' THEN 'google'
+          WHEN ${visitorSessions.referrerUrl} LIKE '%facebook%' THEN 'facebook'
+          WHEN ${visitorSessions.referrerUrl} LIKE '%twitter%' OR ${visitorSessions.referrerUrl} LIKE '%x.com%' THEN 'twitter'
+          WHEN ${visitorSessions.referrerUrl} LIKE '%linkedin%' THEN 'linkedin'
+          ELSE 'other'
+        END
+      `)
+      .orderBy(sql`count(DISTINCT ${visitorSessions.sessionId}) desc`)
+      .limit(5);
+
+    const trafficSources = trafficSourcesResult.map(row => ({
+      source: row.source,
+      visitors: row.visitors
+    }));
+
+    return {
+      totalVisitors,
+      uniqueVisitorsToday,
+      uniqueVisitorsThisMonth,
+      totalPageViews,
+      pageViewsToday: pageViewsTodayCount,
+      averageSessionDuration,
+      topPages,
+      trafficSources
+    };
   }
 }
 

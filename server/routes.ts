@@ -2,6 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import session from "express-session";
 import bcrypt from "bcryptjs";
+import cookieParser from "cookie-parser";
 import { storage } from "./storage";
 import { 
   insertAssessmentSchema, 
@@ -10,7 +11,9 @@ import {
   insertUwaSchema,
   adminLoginSchema,
   insertAdminUserSchema,
-  changePasswordSchema
+  changePasswordSchema,
+  insertVisitorSessionSchema,
+  insertVisitorPageViewSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
@@ -50,7 +53,64 @@ const requireSuperAdmin = (req: any, res: any, next: any) => {
   next();
 };
 
+// Visitor tracking middleware
+const visitorTrackingMiddleware = async (req: any, res: any, next: any) => {
+  // Skip tracking for API routes and admin routes
+  if (req.path.startsWith('/api/') || req.path.startsWith('/admin/')) {
+    return next();
+  }
+
+  try {
+    // Generate or retrieve session ID from cookie
+    let sessionId = req.cookies?.visitor_session;
+    if (!sessionId) {
+      sessionId = `visitor_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      res.cookie('visitor_session', sessionId, { maxAge: 30 * 60 * 1000, httpOnly: true }); // 30 minutes
+    }
+
+    // Check if session exists in database
+    let session = await storage.getVisitorSession(sessionId);
+    
+    if (!session) {
+      // Create new visitor session
+      const newSession = {
+        sessionId,
+        ipAddress: req.ip || req.connection.remoteAddress,
+        userAgent: req.get('User-Agent') || '',
+        referrerUrl: req.get('Referer') || '',
+        landingPage: req.path,
+        country: req.get('CF-IPCountry') || '', // Cloudflare country header
+        region: req.get('CF-IPState') || '', // Cloudflare state header
+        isBot: /bot|crawler|spider|crawling/i.test(req.get('User-Agent') || '')
+      };
+      
+      session = await storage.createVisitorSession(newSession);
+    }
+
+    // Log page view
+    await storage.createVisitorPageView({
+      sessionId,
+      page: req.path,
+      title: req.get('X-Page-Title') || req.path
+    });
+
+    // Update session activity
+    await storage.updateVisitorSession(sessionId, {
+      totalPageViews: (session.totalPageViews || 0) + 1
+    });
+
+  } catch (error) {
+    console.error('Visitor tracking error:', error);
+    // Don't fail the request if tracking fails
+  }
+  
+  next();
+};
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Configure cookie parser and visitor tracking middleware
+  app.use(cookieParser());
+  
   // Configure session middleware
   app.use(session({
     secret: process.env.SESSION_SECRET || 'cyberlockx-admin-secret-key',
@@ -62,6 +122,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       maxAge: 24 * 60 * 60 * 1000 // 24 hours
     }
   }));
+
+  // Apply visitor tracking middleware
+  app.use(visitorTrackingMiddleware);
 
   // Initialize Mailgun (optional, will warn but not fail if keys not available)
   initMailgun();
@@ -977,6 +1040,17 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error tracking payment:", error);
       res.status(500).json({ error: "Failed to track payment" });
+    }
+  });
+
+  // Get visitor analytics (admin only)
+  app.get("/api/analytics/visitors", requireAdminAuth, async (req, res) => {
+    try {
+      const visitorAnalytics = await storage.getVisitorAnalytics();
+      res.json(visitorAnalytics);
+    } catch (error) {
+      console.error("Error fetching visitor analytics:", error);
+      res.status(500).json({ error: "Failed to fetch visitor analytics" });
     }
   });
   

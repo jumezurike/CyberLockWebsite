@@ -133,6 +133,33 @@ export const monthlyMetrics = pgTable("monthly_metrics", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// Visitor tracking for anonymous users
+export const visitorSessions = pgTable("visitor_sessions", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull().unique(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  referrerUrl: text("referrer_url"),
+  landingPage: text("landing_page"),
+  country: text("country"),
+  region: text("region"),
+  isBot: boolean("is_bot").default(false),
+  sessionStart: timestamp("session_start").defaultNow(),
+  sessionEnd: timestamp("session_end"),
+  lastActivity: timestamp("last_activity").defaultNow(),
+  totalPageViews: integer("total_page_views").default(1),
+  sessionDuration: integer("session_duration").default(0), // seconds
+});
+
+export const visitorPageViews = pgTable("visitor_page_views", {
+  id: serial("id").primaryKey(),
+  sessionId: text("session_id").notNull().references(() => visitorSessions.sessionId),
+  page: text("page").notNull(),
+  title: text("title"),
+  timeOnPage: integer("time_on_page").default(0), // seconds
+  timestamp: timestamp("timestamp").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -259,3 +286,28 @@ export const insertUwaSchema = z.object({
 
 export type InsertUwa = z.infer<typeof insertUwaSchema>;
 export type Uwa = typeof uwas.$inferSelect;
+
+// Visitor tracking schemas
+export const insertVisitorSessionSchema = z.object({
+  sessionId: z.string(),
+  ipAddress: z.string().optional(),
+  userAgent: z.string().optional(),
+  referrerUrl: z.string().optional(),
+  landingPage: z.string(),
+  country: z.string().optional(),
+  region: z.string().optional(),
+  isBot: z.boolean().optional(),
+});
+
+export const insertVisitorPageViewSchema = z.object({
+  sessionId: z.string(),
+  page: z.string(),
+  title: z.string().optional(),
+  timeOnPage: z.number().optional(),
+});
+
+export type InsertVisitorSession = z.infer<typeof insertVisitorSessionSchema>;
+export type VisitorSession = typeof visitorSessions.$inferSelect;
+
+export type InsertVisitorPageView = z.infer<typeof insertVisitorPageViewSchema>;
+export type VisitorPageView = typeof visitorPageViews.$inferSelect;
