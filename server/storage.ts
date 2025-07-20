@@ -793,19 +793,28 @@ export class DatabaseStorage implements IStorage {
       .where(sql`${visitorSessions.sessionDuration} > 0`);
     const averageSessionDuration = Math.round(avgDurationResult?.avg || 0);
 
-    // Get top pages
+    // Get top pages (exclude asset files)
     const topPagesResult = await db
       .select({
         page: visitorPageViews.page,
         views: sql<number>`count(*)`
       })
       .from(visitorPageViews)
+      .where(sql`
+        ${visitorPageViews.page} NOT LIKE '%.ico' AND
+        ${visitorPageViews.page} NOT LIKE '%.png' AND 
+        ${visitorPageViews.page} NOT LIKE '%.jpg' AND
+        ${visitorPageViews.page} NOT LIKE '%.css' AND
+        ${visitorPageViews.page} NOT LIKE '%.js' AND
+        ${visitorPageViews.page} NOT LIKE '%/src/%' AND
+        ${visitorPageViews.page} NOT LIKE '%/assets/%'
+      `)
       .groupBy(visitorPageViews.page)
       .orderBy(sql`count(*) desc`)
       .limit(10);
 
     const topPages = topPagesResult.map(row => ({
-      page: row.page,
+      page: row.page === '/' ? 'Home Page' : row.page,
       views: row.views
     }));
 
