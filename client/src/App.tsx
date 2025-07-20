@@ -38,6 +38,7 @@ import AccessibilityDemo from "@/pages/accessibility-demo";
 import AssessmentWorkflowPage from "@/pages/assessment-workflow";
 import EarlyAccessDashboard from "@/pages/admin/early-access-dashboard";
 import AnalyticsDashboard from "@/pages/admin/analytics-dashboard";
+import AcceptInvitation from "@/pages/accept-invitation";
 
 function Router() {
   const [location] = useLocation();
@@ -65,6 +66,7 @@ function Router() {
           <Route path="/early-access" component={EarlyAccess} />
           <Route path="/admin/early-access" component={EarlyAccessDashboard} />
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
+          <Route path="/accept-invitation" component={AcceptInvitation} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/about-us" component={AboutUs} />
           <Route path="/rasbita" component={RasbitaReport} />

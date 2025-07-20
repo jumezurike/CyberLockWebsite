@@ -10,7 +10,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { useToast } from "@/hooks/use-toast";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import AdminLogin from "./login";
-import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2, LogOut, Settings, Shield, BarChart3 } from "lucide-react";
+import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2, LogOut, Settings, Shield, BarChart3, UserPlus, Send } from "lucide-react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { Link } from "wouter";
 import { apiRequest } from "@/lib/queryClient";
 
@@ -269,6 +272,21 @@ export default function EarlyAccessDashboard() {
           </Card>
         </div>
 
+        {/* User Invitation Management - Only for Super Admins */}
+        {adminUser?.role === 'super_admin' && (
+          <Card className="mb-8">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <UserPlus className="h-5 w-5" />
+                User Invitation Management
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <InvitationManagement />
+            </CardContent>
+          </Card>
+        )}
+
         {/* Submissions Table */}
         <Card>
           <CardHeader>
@@ -431,6 +449,250 @@ export default function EarlyAccessDashboard() {
             )}
           </CardContent>
         </Card>
+      </div>
+    </div>
+  );
+}
+
+// Invitation Management Component
+function InvitationManagement() {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+  const [showInviteForm, setShowInviteForm] = useState(false);
+
+  const createInvitationSchema = z.object({
+    email: z.string().email("Please enter a valid email address"),
+    role: z.enum(["viewer", "admin"], {
+      required_error: "Please select a role",
+    }),
+  });
+
+
+  
+  const form = useForm({
+    resolver: zodResolver(createInvitationSchema),
+    defaultValues: {
+      email: "",
+      role: "viewer" as const,
+    },
+  });
+
+  // Fetch invitations
+  const { data: invitations = [], isLoading: invitationsLoading } = useQuery({
+    queryKey: ["/api/admin/invitations"],
+    refetchInterval: 30000,
+  });
+
+  // Create invitation mutation
+  const createInvitationMutation = useMutation({
+    mutationFn: async (data: any) => {
+      return await apiRequest("POST", "/api/admin/invitations", data);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/invitations"] });
+      form.reset();
+      setShowInviteForm(false);
+      toast({
+        title: "Invitation Sent",
+        description: "The invitation has been sent successfully.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Failed to Send Invitation",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  // Delete invitation mutation
+  const deleteInvitationMutation = useMutation({
+    mutationFn: async (id: number) => {
+      return await apiRequest("DELETE", `/api/admin/invitations/${id}`);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/invitations"] });
+      toast({
+        title: "Invitation Deleted",
+        description: "The invitation has been removed.",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Failed to Delete Invitation",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const onSubmit = (data: any) => {
+    createInvitationMutation.mutate(data);
+  };
+
+  const getStatusBadge = (status: string) => {
+    switch (status) {
+      case 'pending':
+        return <Badge className="bg-yellow-100 text-yellow-800">Pending</Badge>;
+      case 'accepted':
+        return <Badge className="bg-green-100 text-green-800">Accepted</Badge>;
+      case 'expired':
+        return <Badge className="bg-red-100 text-red-800">Expired</Badge>;
+      default:
+        return <Badge className="bg-gray-100 text-gray-800">{status}</Badge>;
+    }
+  };
+
+  const getRoleBadge = (role: string) => {
+    return (
+      <Badge variant="outline" className={role === 'admin' ? 'border-blue-200 text-blue-700' : 'border-gray-200 text-gray-700'}>
+        {role}
+      </Badge>
+    );
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Header with Create Button */}
+      <div className="flex justify-between items-center">
+        <div>
+          <h3 className="text-lg font-semibold">Team Access Invitations</h3>
+          <p className="text-sm text-gray-600">Invite users to join the admin dashboard with specific roles</p>
+        </div>
+        <Button
+          onClick={() => setShowInviteForm(!showInviteForm)}
+          className="flex items-center gap-2"
+        >
+          <Send className="h-4 w-4" />
+          Send Invitation
+        </Button>
+      </div>
+
+      {/* Invitation Form */}
+      {showInviteForm && (
+        <Card className="border-blue-200 bg-blue-50">
+          <CardHeader>
+            <CardTitle className="text-lg">Send New Invitation</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium">Email Address</label>
+                  <Input
+                    {...form.register("email")}
+                    placeholder="user@example.com"
+                    type="email"
+                  />
+                  {form.formState.errors.email && (
+                    <p className="text-sm text-red-600 mt-1">{form.formState.errors.email.message}</p>
+                  )}
+                </div>
+                <div>
+                  <label className="text-sm font-medium">Role</label>
+                  <Select onValueChange={(value) => form.setValue("role", value as "viewer" | "admin")}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="viewer">Viewer</SelectItem>
+                      <SelectItem value="admin">Admin</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  {form.formState.errors.role && (
+                    <p className="text-sm text-red-600 mt-1">{form.formState.errors.role.message}</p>
+                  )}
+                </div>
+              </div>
+              <div className="flex gap-2">
+                <Button
+                  type="submit"
+                  disabled={createInvitationMutation.isPending}
+                  className="flex items-center gap-2"
+                >
+                  {createInvitationMutation.isPending ? (
+                    <>
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-4 w-4" />
+                      Send Invitation
+                    </>
+                  )}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowInviteForm(false)}
+                >
+                  Cancel
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Invitations List */}
+      <div className="space-y-3">
+        {invitationsLoading ? (
+          <div className="text-center py-4">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+            <p className="text-sm text-gray-600 mt-2">Loading invitations...</p>
+          </div>
+        ) : invitations.length === 0 ? (
+          <div className="text-center py-8 text-gray-500">
+            <UserPlus className="h-8 w-8 mx-auto mb-2 opacity-50" />
+            <p>No invitations sent yet</p>
+            <p className="text-sm">Click "Send Invitation" to get started</p>
+          </div>
+        ) : (
+          invitations.map((invitation: any) => (
+            <div key={invitation.id} className="border rounded-lg p-4 bg-white">
+              <div className="flex items-center justify-between">
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-1">
+                    <span className="font-medium">{invitation.email}</span>
+                    {getRoleBadge(invitation.role)}
+                    {getStatusBadge(invitation.status)}
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    <span>Sent: {new Date(invitation.createdAt).toLocaleDateString()}</span>
+                    {invitation.expiresAt && (
+                      <span className="ml-4">
+                        Expires: {new Date(invitation.expiresAt).toLocaleDateString()}
+                      </span>
+                    )}
+                    {invitation.acceptedAt && (
+                      <span className="ml-4">
+                        Accepted: {new Date(invitation.acceptedAt).toLocaleDateString()}
+                      </span>
+                    )}
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  {invitation.status === 'pending' && (
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => {
+                        if (confirm(`Are you sure you want to cancel the invitation for ${invitation.email}?`)) {
+                          deleteInvitationMutation.mutate(invitation.id);
+                        }
+                      }}
+                      disabled={deleteInvitationMutation.isPending}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

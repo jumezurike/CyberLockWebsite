@@ -160,6 +160,20 @@ export const visitorPageViews = pgTable("visitor_page_views", {
   timestamp: timestamp("timestamp").defaultNow(),
 });
 
+// Viewer invitation system
+export const viewerInvitations = pgTable("viewer_invitations", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull(),
+  invitationToken: text("invitation_token").notNull().unique(),
+  invitedBy: integer("invited_by").references(() => users.id),
+  status: text("status").default("pending"), // pending, accepted, expired, revoked
+  role: text("role").default("viewer"), // viewer, admin (future expansion)
+  expiresAt: timestamp("expires_at").notNull(),
+  acceptedAt: timestamp("accepted_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
@@ -194,9 +208,32 @@ export const changePasswordSchema = z.object({
   path: ["confirmPassword"],
 });
 
+// Viewer invitation schemas
+export const createInvitationSchema = z.object({
+  email: z.string().email("Invalid email format"),
+  role: z.enum(["viewer", "admin"], {
+    required_error: "Role is required"
+  }).default("viewer"),
+});
+
+export const acceptInvitationSchema = z.object({
+  token: z.string().min(1, "Invitation token is required"),
+  username: z.string().min(3, "Username must be at least 3 characters"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+  confirmPassword: z.string().min(1, "Please confirm your password"),
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
 export type InsertAdminUser = z.infer<typeof insertAdminUserSchema>;
 export type AdminLogin = z.infer<typeof adminLoginSchema>;
 export type ChangePassword = z.infer<typeof changePasswordSchema>;
+export type CreateInvitation = z.infer<typeof createInvitationSchema>;
+export type AcceptInvitation = z.infer<typeof acceptInvitationSchema>;
+export type ViewerInvitation = typeof viewerInvitations.$inferSelect;
+export type InsertViewerInvitation = typeof viewerInvitations.$inferInsert;
 
 export const insertAssessmentSchema = z.object({
   userId: z.number().optional(),

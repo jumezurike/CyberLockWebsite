@@ -13,7 +13,9 @@ import {
   insertAdminUserSchema,
   changePasswordSchema,
   insertVisitorSessionSchema,
-  insertVisitorPageViewSchema
+  insertVisitorPageViewSchema,
+  createInvitationSchema,
+  acceptInvitationSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
@@ -279,6 +281,188 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting admin user:", error);
       res.status(500).json({ error: "Failed to delete admin user" });
+    }
+  });
+
+  // Viewer Invitation System Routes
+  app.post("/api/admin/invitations", requireSuperAdmin, async (req, res) => {
+    try {
+      const { email, role } = createInvitationSchema.parse(req.body);
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(email);
+      if (existingUser) {
+        return res.status(400).json({ error: "User with this email already exists" });
+      }
+      
+      // Check if there's already a pending invitation
+      const existingInvitation = await storage.getViewerInvitationByEmail(email);
+      if (existingInvitation && existingInvitation.status === 'pending') {
+        return res.status(400).json({ error: "Pending invitation already exists for this email" });
+      }
+      
+      // Generate unique invitation token
+      const invitationToken = `inv_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      
+      // Set expiration to 7 days from now
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + 7);
+      
+      const invitation = await storage.createViewerInvitation({
+        email,
+        invitationToken,
+        invitedBy: req.session.adminUser?.id || null,
+        role,
+        expiresAt,
+        status: "pending"
+      });
+      
+      // Send invitation email
+      try {
+        const invitationUrl = `${req.protocol}://${req.get('host')}/accept-invitation?token=${invitationToken}`;
+        // Send invitation email (placeholder - implement email service)
+        console.log(`Invitation email would be sent to ${email} with URL: ${invitationUrl}`);
+      } catch (emailError) {
+        console.error("Failed to send invitation email:", emailError);
+        // Don't fail the request if email fails
+      }
+      
+      res.json({ 
+        success: true, 
+        invitation: {
+          id: invitation.id,
+          email: invitation.email,
+          role: invitation.role,
+          expiresAt: invitation.expiresAt,
+          status: invitation.status
+        }
+      });
+    } catch (error) {
+      console.error("Error creating invitation:", error);
+      res.status(400).json({ error: "Failed to create invitation" });
+    }
+  });
+
+  app.get("/api/admin/invitations", requireSuperAdmin, async (req, res) => {
+    try {
+      const invitations = await storage.getAllViewerInvitations();
+      const safeInvitations = invitations.map(inv => ({
+        id: inv.id,
+        email: inv.email,
+        role: inv.role,
+        status: inv.status,
+        expiresAt: inv.expiresAt,
+        acceptedAt: inv.acceptedAt,
+        createdAt: inv.createdAt
+      }));
+      res.json(safeInvitations);
+    } catch (error) {
+      console.error("Error fetching invitations:", error);
+      res.status(500).json({ error: "Failed to fetch invitations" });
+    }
+  });
+
+  app.delete("/api/admin/invitations/:id", requireSuperAdmin, async (req, res) => {
+    try {
+      const invitationId = parseInt(req.params.id);
+      const deleted = await storage.deleteViewerInvitation(invitationId);
+      if (!deleted) {
+        return res.status(404).json({ error: "Invitation not found" });
+      }
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting invitation:", error);
+      res.status(500).json({ error: "Failed to delete invitation" });
+    }
+  });
+
+  // Public invitation acceptance routes
+  app.get("/api/invitations/:token", async (req, res) => {
+    try {
+      const { token } = req.params;
+      const invitation = await storage.getViewerInvitationByToken(token);
+      
+      if (!invitation) {
+        return res.status(404).json({ error: "Invitation not found" });
+      }
+      
+      if (invitation.status !== 'pending') {
+        return res.status(400).json({ error: "Invitation is no longer valid" });
+      }
+      
+      if (new Date() > invitation.expiresAt) {
+        await storage.updateViewerInvitationStatus(token, 'expired');
+        return res.status(400).json({ error: "Invitation has expired" });
+      }
+      
+      res.json({
+        email: invitation.email,
+        role: invitation.role,
+        expiresAt: invitation.expiresAt
+      });
+    } catch (error) {
+      console.error("Error validating invitation:", error);
+      res.status(500).json({ error: "Failed to validate invitation" });
+    }
+  });
+
+  app.post("/api/invitations/accept", async (req, res) => {
+    try {
+      const { token, username, password, fullName } = acceptInvitationSchema.parse(req.body);
+      
+      const invitation = await storage.getViewerInvitationByToken(token);
+      if (!invitation) {
+        return res.status(404).json({ error: "Invitation not found" });
+      }
+      
+      if (invitation.status !== 'pending') {
+        return res.status(400).json({ error: "Invitation is no longer valid" });
+      }
+      
+      if (new Date() > invitation.expiresAt) {
+        await storage.updateViewerInvitationStatus(token, 'expired');
+        return res.status(400).json({ error: "Invitation has expired" });
+      }
+      
+      // Check if username is taken
+      const existingUser = await storage.getUserByUsername(username);
+      if (existingUser) {
+        return res.status(400).json({ error: "Username is already taken" });
+      }
+      
+      // Hash password and create user
+      const hashedPassword = await bcrypt.hash(password, 12);
+      const newUser = await storage.createAdminUser({
+        username,
+        password: hashedPassword,
+        fullName,
+        email: invitation.email,
+        role: invitation.role
+      });
+      
+      // Mark invitation as accepted
+      await storage.updateViewerInvitationStatus(token, 'accepted', new Date());
+      
+      // Automatically log in the new user
+      req.session.adminUser = {
+        id: newUser.id,
+        username: newUser.username,
+        role: newUser.role || 'viewer',
+        fullName: newUser.fullName || undefined
+      };
+      
+      res.json({ 
+        success: true, 
+        user: { 
+          id: newUser.id, 
+          username: newUser.username, 
+          role: newUser.role, 
+          fullName: newUser.fullName 
+        } 
+      });
+    } catch (error) {
+      console.error("Error accepting invitation:", error);
+      res.status(400).json({ error: "Failed to accept invitation" });
     }
   });
   

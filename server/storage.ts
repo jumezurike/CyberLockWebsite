@@ -19,7 +19,10 @@ import {
   type InsertVisitorSession,
   type VisitorSession,
   type InsertVisitorPageView,
-  type VisitorPageView
+  type VisitorPageView,
+  viewerInvitations,
+  type ViewerInvitation,
+  type InsertViewerInvitation
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc } from "drizzle-orm";
@@ -129,6 +132,11 @@ export class DatabaseStorage implements IStorage {
 
   async getUserByUsername(username: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
     return user;
   }
 
@@ -862,6 +870,69 @@ export class DatabaseStorage implements IStorage {
       topPages,
       trafficSources
     };
+  }
+
+  // Viewer invitation operations
+  async createViewerInvitation(invitation: InsertViewerInvitation): Promise<ViewerInvitation> {
+    const [newInvitation] = await db
+      .insert(viewerInvitations)
+      .values({
+        email: invitation.email,
+        invitationToken: invitation.invitationToken,
+        invitedBy: invitation.invitedBy,
+        status: invitation.status || "pending",
+        role: invitation.role || "viewer",
+        expiresAt: invitation.expiresAt,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .returning();
+    
+    return newInvitation;
+  }
+
+  async getViewerInvitationByToken(token: string): Promise<ViewerInvitation | undefined> {
+    const [invitation] = await db
+      .select()
+      .from(viewerInvitations)
+      .where(eq(viewerInvitations.invitationToken, token));
+    return invitation;
+  }
+
+  async getViewerInvitationByEmail(email: string): Promise<ViewerInvitation | undefined> {
+    const [invitation] = await db
+      .select()
+      .from(viewerInvitations)
+      .where(eq(viewerInvitations.email, email))
+      .orderBy(desc(viewerInvitations.createdAt));
+    return invitation;
+  }
+
+  async getAllViewerInvitations(): Promise<ViewerInvitation[]> {
+    return await db
+      .select()
+      .from(viewerInvitations)
+      .orderBy(desc(viewerInvitations.createdAt));
+  }
+
+  async updateViewerInvitationStatus(token: string, status: string, acceptedAt?: Date): Promise<ViewerInvitation | undefined> {
+    const [invitation] = await db
+      .update(viewerInvitations)
+      .set({ 
+        status, 
+        acceptedAt: acceptedAt || null,
+        updatedAt: new Date()
+      })
+      .where(eq(viewerInvitations.invitationToken, token))
+      .returning();
+    return invitation;
+  }
+
+  async deleteViewerInvitation(id: number): Promise<boolean> {
+    const result = await db
+      .delete(viewerInvitations)
+      .where(eq(viewerInvitations.id, id));
+    return result.rowCount !== null && result.rowCount > 0;
   }
 }
 
