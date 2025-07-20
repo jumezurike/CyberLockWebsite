@@ -19,7 +19,7 @@ import {
 } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
-import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification } from "./email-service";
+import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail } from "./email-service";
 
 // Initialize Stripe with API key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -320,11 +320,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Send invitation email
       try {
         const invitationUrl = `${req.protocol}://${req.get('host')}/accept-invitation?token=${invitationToken}`;
-        // Send invitation email (placeholder - implement email service)
-        console.log(`Invitation email would be sent to ${email} with URL: ${invitationUrl}`);
+        const inviterName = req.session.adminUser?.fullName || req.session.adminUser?.username || "CyberLockX Admin";
+        const emailSent = await sendInvitationEmail(email, role, invitationToken, inviterName);
+        if (!emailSent) {
+          console.warn(`Failed to send invitation email to ${email}, but invitation was created successfully`);
+        } else {
+          console.log(`Invitation email sent successfully to ${email} with ${role} role`);
+        }
       } catch (emailError) {
         console.error("Failed to send invitation email:", emailError);
-        // Don't fail the request if email fails
+        // Don't fail the request if email fails - invitation is still valid
       }
       
       res.json({ 

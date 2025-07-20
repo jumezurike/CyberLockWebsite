@@ -36,6 +36,103 @@ interface SubmissionEmailData {
   additionalInfo?: string;
 }
 
+export async function sendInvitationEmail(email: string, role: string, token: string, inviterName: string = "CyberLockX Team"): Promise<boolean> {
+  try {
+    if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+      console.error('Mailgun not configured. API Key or Domain missing.');
+      return false;
+    }
+    
+    // Make sure Mailgun client is initialized
+    if (!mg) {
+      const initialized = initMailgun();
+      if (!initialized) {
+        console.error('Failed to initialize Mailgun client');
+        return false;
+      }
+    }
+
+    // Get current domain from environment or construct it
+    const domain = process.env.REPLIT_DOMAINS?.split(',')[0] || 'localhost:5000';
+    const protocol = domain.includes('localhost') ? 'http' : 'https';
+    const invitationUrl = `${protocol}://${domain}/accept-invitation?token=${token}`;
+
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">🔐 You're Invited to CyberLockX</h1>
+          <p style="color: #f0f0f0; margin: 10px 0 0 0; font-size: 16px;">Healthcare Apps & Devices Security Hub</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border: 1px solid #e0e0e0;">
+          <p style="font-size: 18px; color: #333; margin-bottom: 25px;">
+            <strong>Welcome to CyberLockX!</strong>
+          </p>
+          
+          <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 20px;">
+            You've been invited by ${inviterName} to join the CyberLockX admin dashboard with <strong>${role}</strong> access.
+          </p>
+          
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 25px 0;">
+            <h3 style="color: #667eea; margin: 0 0 15px 0; font-size: 18px;">Your Role: ${role.charAt(0).toUpperCase() + role.slice(1)}</h3>
+            <ul style="color: #555; line-height: 1.8; margin: 0; padding-left: 20px;">
+              ${role === 'admin' ? `
+                <li>Full admin dashboard access</li>
+                <li>Partnership application management</li>
+                <li>User invitation capabilities</li>
+                <li>System analytics and reporting</li>
+              ` : `
+                <li>View partnership applications</li>
+                <li>Access to analytics dashboard</li>
+                <li>Real-time system monitoring</li>
+                <li>Read-only administrative interface</li>
+              `}
+            </ul>
+          </div>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${invitationUrl}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px; display: inline-block;">
+              Accept Invitation & Create Account
+            </a>
+          </div>
+          
+          <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 25px 0; border: 1px solid #ffeaa7;">
+            <p style="margin: 0; color: #856404; font-size: 14px;">
+              <strong>⏰ This invitation expires in 7 days.</strong> Please accept it soon to maintain access.
+            </p>
+          </div>
+          
+          <p style="font-size: 14px; color: #777; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            Questions? Reply to this email or contact us at <a href="mailto:info@cyberlockx.xyz">info@cyberlockx.xyz</a><br>
+            If you didn't expect this invitation, please ignore this email.
+          </p>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+          <p style="margin: 0; color: #666; font-size: 14px;">
+            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub<br>
+            Securing every CLICK!!!
+          </p>
+        </div>
+      </div>
+    `;
+
+    const messageData = {
+      from: `CyberLockX Admin Team <noreply@${process.env.MAILGUN_DOMAIN}>`,
+      to: email,
+      subject: `🔐 You're invited to join CyberLockX Admin Dashboard`,
+      html: emailContent,
+    };
+
+    const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, messageData);
+    console.log(`Invitation email sent successfully to ${email} with ${role} role`);
+    return true;
+  } catch (error) {
+    console.error('Error sending invitation email:', error);
+    return false;
+  }
+}
+
 export async function sendApprovalNotification(submission: SubmissionEmailData): Promise<boolean> {
   try {
     if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
