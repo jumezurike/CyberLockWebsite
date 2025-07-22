@@ -431,13 +431,10 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
       {/* Original Report Tabs with Visual Elements */}
       <div className="border-t pt-8 mt-8">
         <Tabs defaultValue="summary" className="w-full">
-          <TabsList className="grid w-full grid-cols-6">
-            <TabsTrigger value="summary">Summary Findings</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="summary">Overview</TabsTrigger>
             <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
             <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
-            <TabsTrigger value="implementation">Implementation</TabsTrigger>
-            <TabsTrigger value="enhanced-executive">Enhanced Executive</TabsTrigger>
-            <TabsTrigger value="enhanced-analysis">Enhanced Analysis</TabsTrigger>
           </TabsList>
 
           {/* Original Summary Findings Tab */}
@@ -573,65 +570,102 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               </CardContent>
             </Card>
           </TabsContent>
+        </Tabs>
+      </div>
 
-          {/* Original Implementation Guidance Tab */}
-          <TabsContent value="implementation" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Implementation Guidance</CardTitle>
-                <CardDescription>
-                  Step-by-step roadmap for security improvements
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-semibold mb-3 flex items-center">
-                      <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">1</span>
-                      Immediate Actions (0-30 days)
-                    </h3>
-                    <ul className="text-sm space-y-1 ml-8 list-disc">
-                      <li>Enable MFA for all administrative accounts</li>
-                      <li>Update and patch all critical systems</li>
-                      <li>Conduct security awareness training for all staff</li>
-                      <li>Review and update access controls</li>
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h3 className="font-semibold mb-3 flex items-center">
-                      <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">2</span>
-                      Short-term Goals (30-90 days)
-                    </h3>
-                    <ul className="text-sm space-y-1 ml-8 list-disc">
-                      <li>Deploy endpoint security solutions</li>
-                      <li>Implement network monitoring tools</li>
-                      <li>Establish incident response procedures</li>
-                      <li>Conduct security risk assessment</li>
-                    </ul>
-                  </div>
-                  
-                  <div>
-                    <h3 className="font-semibold mb-3 flex items-center">
-                      <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">3</span>
-                      Long-term Objectives (90-365 days)
-                    </h3>
-                    <ul className="text-sm space-y-1 ml-8 list-disc">
-                      <li>Achieve compliance certification</li>
-                      <li>Implement advanced threat detection</li>
-                      <li>Establish security metrics and KPIs</li>
-                      <li>Regular security testing and validation</li>
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-          
-          {/* Enhanced Executive Summary Tab with Business Information and Summary Findings */}
-          <TabsContent value="enhanced-executive" className="space-y-4">
-            {/* Business Information */}
-            <Card>
+      {/* CyberLockX Logo */}
+      <div className="flex justify-center items-center border-t pt-8 mt-8">
+        <div className="text-center">
+          <img src={logoImage} alt="CyberLockX Logo" className="h-12 mx-auto mb-2" />
+          <p className="text-sm text-muted-foreground">Securing every CLICK!!!</p>
+          <p className="text-xs text-muted-foreground">Healthcare Apps & Devices Security Hub</p>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-center border-t pt-8 mt-8">
+        <Button onClick={() => setEvidenceDialog(true)} variant="outline" className="flex items-center">
+          <FileText className="h-4 w-4 mr-2" />
+          View Evidence
+        </Button>
+        <Button onClick={() => setLifecycleDialog(true)} variant="outline" className="flex items-center">
+          <Calendar className="h-4 w-4 mr-2" />
+          Assessment Lifecycle
+        </Button>
+        <Button onClick={onBack} variant="outline">
+          Return to Matrix
+        </Button>
+      </div>
+
+      {/* Evidence Dialog */}
+      <Dialog open={evidenceDialog} onOpenChange={setEvidenceDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Assessment Evidence</DialogTitle>
+            <DialogDescription>
+              Evidence and artifacts collected during the security assessment
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="text-sm text-muted-foreground">
+              This assessment was conducted based on the information provided in your security questionnaire
+              and includes evidence from:
+            </div>
+            <ul className="text-sm space-y-2 ml-4 list-disc">
+              <li>Security control implementation verification</li>
+              <li>Network architecture and configuration analysis</li>
+              <li>Identity and access management review</li>
+              <li>Compliance framework assessment</li>
+              <li>Risk and vulnerability analysis</li>
+            </ul>
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setEvidenceDialog(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Lifecycle Dialog */}
+      <Dialog open={lifecycleDialog} onOpenChange={setLifecycleDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Assessment Lifecycle Information</DialogTitle>
+            <DialogDescription>
+              Understanding your assessment status and next steps
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="text-sm text-muted-foreground">
+              <strong>Report Type:</strong> {report.reportType === 'preliminary' ? 'Preliminary Assessment' : 'Comprehensive Assessment'}
+            </div>
+            <div className="space-y-2">
+              <div className="text-sm font-medium">Assessment Age: {formatAssessmentAge()}</div>
+              <div className="flex items-center text-sm">
+                <span className={`${getAgeStatusInfo().color} mr-2`}>
+                  {getAgeStatusInfo().icon}
+                </span>
+                <span>{getAgeStatusInfo().label}</span>
+              </div>
+            </div>
+            {report.reportType === 'preliminary' && (
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Preliminary Assessment</AlertTitle>
+                <AlertDescription>
+                  This is a preliminary report. For a comprehensive analysis with quantitative metrics
+                  and detailed remediation guidance, consider upgrading to a full assessment.
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setLifecycleDialog(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+}
               <CardHeader>
                 <CardTitle className="text-lg">Business Information</CardTitle>
               </CardHeader>
