@@ -465,22 +465,24 @@ export default function EnhancedReportDisplay({ report, onBack }: EnhancedReport
               </p>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-3 justify-center mt-4">
+            <div className="flex flex-col sm:flex-row gap-3 justify-between mt-4">
               <Button 
                 onClick={onBack}
                 variant="outline"
               >
                 Back to Matrix Population
               </Button>
-              <Button variant="default">
-                <Download className="h-4 w-4 mr-2" />
-                Download Report
-              </Button>
-              {!isComprehensive && (
-                <Button variant="default" className="bg-green-600 hover:bg-green-700">
-                  Schedule Comprehensive Assessment
+              <div className="flex gap-3">
+                <Button variant="default">
+                  <Download className="h-4 w-4 mr-2" />
+                  Download Report
                 </Button>
-              )}
+                {!isComprehensive && (
+                  <Button variant="default" className="bg-green-600 hover:bg-green-700">
+                    Schedule Comprehensive Assessment
+                  </Button>
+                )}
+              </div>
             </div>
           </div>
         </CardContent>
