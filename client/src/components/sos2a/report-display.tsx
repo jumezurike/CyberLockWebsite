@@ -18,6 +18,25 @@ interface EnhancedReportDisplayProps {
 export default function EnhancedReportDisplay({ report, onBack }: EnhancedReportDisplayProps) {
   const [evidenceDialog, setEvidenceDialog] = useState(false);
   const [lifecycleDialog, setLifecycleDialog] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  
+  // Handle download functionality
+  const handleDownloadReport = () => {
+    setIsDownloading(true);
+    
+    // Simulate download delay
+    setTimeout(() => {
+      setIsDownloading(false);
+      // Here you would typically trigger the actual download
+      window.print(); // Simple solution - opens print dialog for PDF save
+    }, 1000);
+  };
+
+  // Handle schedule comprehensive assessment
+  const handleScheduleAssessment = () => {
+    // Open evidence requirements dialog
+    setEvidenceDialog(true);
+  };
   
   // Format date
   const formatDate = (dateString: string) => {
@@ -473,12 +492,20 @@ export default function EnhancedReportDisplay({ report, onBack }: EnhancedReport
                 Back to Matrix Population
               </Button>
               <div className="flex gap-3">
-                <Button variant="default">
+                <Button 
+                  variant="default" 
+                  onClick={handleDownloadReport}
+                  disabled={isDownloading}
+                >
                   <Download className="h-4 w-4 mr-2" />
-                  Download Report
+                  {isDownloading ? "Downloading..." : "Download Report"}
                 </Button>
                 {!isComprehensive && (
-                  <Button variant="default" className="bg-green-600 hover:bg-green-700">
+                  <Button 
+                    variant="default" 
+                    className="bg-green-600 hover:bg-green-700"
+                    onClick={handleScheduleAssessment}
+                  >
                     Schedule Comprehensive Assessment
                   </Button>
                 )}
