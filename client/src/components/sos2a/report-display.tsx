@@ -198,7 +198,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <div className="space-y-2">
               <h3 className="text-sm font-medium text-muted-foreground">Business Information</h3>
               <p className="font-medium">{report.businessId}</p>
-              <p>{report.industry} | {report.businessLocation?.state}, {report.businessLocation?.country}</p>
+              <p>{report.industry} | {report.businessLocation.state}, {report.businessLocation.country}</p>
               <p className="text-sm text-muted-foreground">{report.businessServices}</p>
             </div>
             
@@ -207,15 +207,15 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div className="grid grid-cols-3 gap-2 text-center">
                 <div className="bg-primary/5 rounded p-2">
                   <p className="text-xs text-muted-foreground">Risk</p>
-                  <p className="font-bold">{report.rasbitaScore?.categories?.risk || 'N/A'}</p>
+                  <p className="font-bold">{report.rasbitaScore.categories.risk}</p>
                 </div>
                 <div className="bg-primary/5 rounded p-2">
                   <p className="text-xs text-muted-foreground">Security</p>
-                  <p className="font-bold">{report.rasbitaScore?.categories?.securityControls || 'N/A'}</p>
+                  <p className="font-bold">{report.rasbitaScore.categories.securityControls}</p>
                 </div>
                 <div className="bg-primary/5 rounded p-2">
                   <p className="text-xs text-muted-foreground">Architecture</p>
-                  <p className="font-bold">{report.rasbitaScore?.categories?.architecture || 'N/A'}</p>
+                  <p className="font-bold">{report.rasbitaScore.categories.architecture}</p>
                 </div>
               </div>
             </div>
@@ -225,19 +225,19 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <h2 className="text-lg font-semibold mb-3">Summary Findings</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-red-500">{(report.findings || []).filter(f => f.severity === 'High').length}</div>
+                <div className="text-lg font-bold text-red-500">{report.findings.filter(f => f.severity === 'High').length}</div>
                 <div className="text-sm">High Risks</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-orange-500">{(report.findings || []).filter(f => f.severity === 'Medium').length}</div>
+                <div className="text-lg font-bold text-orange-500">{report.findings.filter(f => f.severity === 'Medium').length}</div>
                 <div className="text-sm">Medium Risks</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-amber-500">{(report.vulnerabilities?.critical || []).length}</div>
+                <div className="text-lg font-bold text-amber-500">{report.vulnerabilities.critical.length}</div>
                 <div className="text-sm">Critical Vulnerabilities</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-blue-500">{(report.recommendations?.immediate || []).length}</div>
+                <div className="text-lg font-bold text-blue-500">{report.recommendations.immediate.length}</div>
                 <div className="text-sm">Immediate Actions</div>
               </div>
             </div>
@@ -255,7 +255,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <TabsContent value="scorecard" className="space-y-4 pt-4">
               {/* Only display scorecard if the report has it */}
               {report.scorecard ? (
-                <Scorecard scorecard={report.scorecard} reportType={report.reportType} report={report} />
+                <Scorecard scorecard={report.scorecard} reportType={report.reportType} />
               ) : (
                 <div className="p-4 text-center">
                   <p className="text-muted-foreground">Scorecard data is not available for this report.</p>
@@ -267,7 +267,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Immediate Actions</h3>
                 <ul className="space-y-2 list-disc pl-5">
-                  {(report.recommendations?.immediate || []).map((rec, index) => (
+                  {report.recommendations.immediate.map((rec, index) => (
                     <li key={index}>{rec}</li>
                   ))}
                 </ul>
@@ -276,7 +276,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Short Term (30-90 days)</h3>
                 <ul className="space-y-2 list-disc pl-5">
-                  {(report.recommendations?.shortTerm || []).map((rec, index) => (
+                  {report.recommendations.shortTerm.map((rec, index) => (
                     <li key={index}>{rec}</li>
                   ))}
                 </ul>
@@ -285,7 +285,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Long Term (90+ days)</h3>
                 <ul className="space-y-2 list-disc pl-5">
-                  {(report.recommendations?.longTerm || []).map((rec, index) => (
+                  {report.recommendations.longTerm.map((rec, index) => (
                     <li key={index}>{rec}</li>
                   ))}
                 </ul>
@@ -296,7 +296,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Security Risks</h3>
                 <div className="space-y-3">
-                  {(report.findings || []).map((finding, index) => (
+                  {report.findings.map((finding, index) => (
                     <div key={index} className="border rounded-md p-3">
                       <div className="flex justify-between items-center mb-1">
                         <h4 className="font-medium">{finding.title}</h4>
@@ -316,17 +316,17 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <h3 className="font-medium mb-2">Vulnerabilities</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="border rounded-md p-3">
-                    <h4 className="text-red-600 font-medium mb-2">Critical ({(report.vulnerabilities?.critical || []).length})</h4>
+                    <h4 className="text-red-600 font-medium mb-2">Critical ({report.vulnerabilities.critical.length})</h4>
                     <ul className="list-disc pl-5 text-sm">
-                      {(report.vulnerabilities?.critical || []).map((vuln, index) => (
+                      {report.vulnerabilities.critical.map((vuln, index) => (
                         <li key={index}>{vuln}</li>
                       ))}
                     </ul>
                   </div>
                   <div className="border rounded-md p-3">
-                    <h4 className="text-orange-600 font-medium mb-2">High ({(report.vulnerabilities?.high || []).length})</h4>
+                    <h4 className="text-orange-600 font-medium mb-2">High ({report.vulnerabilities.high.length})</h4>
                     <ul className="list-disc pl-5 text-sm">
-                      {(report.vulnerabilities?.high || []).map((vuln, index) => (
+                      {report.vulnerabilities.high.map((vuln, index) => (
                         <li key={index}>{vuln}</li>
                       ))}
                     </ul>
@@ -339,7 +339,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Compliance Standards</h3>
                 <div className="space-y-3">
-                  {(report.complianceStatus?.standards || []).map((standard, index) => (
+                  {report.complianceStatus.standards.map((standard, index) => (
                     <div key={index} className="flex justify-between items-center border-b pb-2">
                       <span>{standard.standard}</span>
                       <span className={`text-xs px-2 py-1 rounded ${
@@ -356,7 +356,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Regulatory Requirements</h3>
                 <div className="space-y-3">
-                  {(report.complianceStatus?.regulations || []).map((regulation, index) => (
+                  {report.complianceStatus.regulations.map((regulation, index) => (
                     <div key={index} className="flex justify-between items-center border-b pb-2">
                       <span>{regulation.standard}</span>
                       <span className={`text-xs px-2 py-1 rounded ${
@@ -375,8 +375,8 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Operation Control Gaps</h3>
                 <ul className="list-disc pl-5">
-                  {(report.frameworkGaps?.operations || []).length > 0 ? (
-                    (report.frameworkGaps?.operations || []).map((gap, index) => (
+                  {report.frameworkGaps.operations.length > 0 ? (
+                    report.frameworkGaps.operations.map((gap, index) => (
                       <li key={index}>{gap}</li>
                     ))
                   ) : (
@@ -387,8 +387,8 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Management Control Gaps</h3>
                 <ul className="list-disc pl-5">
-                  {(report.frameworkGaps?.management || []).length > 0 ? (
-                    (report.frameworkGaps?.management || []).map((gap, index) => (
+                  {report.frameworkGaps.management.length > 0 ? (
+                    report.frameworkGaps.management.map((gap, index) => (
                       <li key={index}>{gap}</li>
                     ))
                   ) : (
@@ -399,8 +399,8 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Technology Control Gaps</h3>
                 <ul className="list-disc pl-5">
-                  {(report.frameworkGaps?.technology || []).length > 0 ? (
-                    (report.frameworkGaps?.technology || []).map((gap, index) => (
+                  {report.frameworkGaps.technology.length > 0 ? (
+                    report.frameworkGaps.technology.map((gap, index) => (
                       <li key={index}>{gap}</li>
                     ))
                   ) : (
