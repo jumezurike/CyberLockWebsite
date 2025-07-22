@@ -501,18 +501,94 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             </TabsList>
             
             <TabsContent value="scorecard" className="space-y-4 pt-4">
-              {/* Only display scorecard if the report has it */}
-              {report.scorecard ? (
-                <Scorecard 
-                  scorecard={report.scorecard} 
-                  reportType={report.reportType} 
-                  report={report}
-                />
-              ) : (
-                <div className="p-4 text-center">
-                  <p className="text-muted-foreground">Scorecard data is not available for this report.</p>
-                </div>
-              )}
+              {(() => {
+                // Generate scorecard from available report data if not present
+                const generateScorecardFromReport = () => {
+                  const scorecard = [];
+                  
+                  if (report.rasbitaScore?.categories) {
+                    const categories = report.rasbitaScore.categories;
+                    scorecard.push(
+                      { parameter: 'Risk Management', score: categories.risk || 0, weight: 20 },
+                      { parameter: 'Security Controls', score: categories.securityControls || 0, weight: 25 },
+                      { parameter: 'Architecture Security', score: categories.architecture || 0, weight: 15 },
+                      { parameter: 'Governance (GV)', score: categories.govern || 0, weight: 15 },
+                      { parameter: 'Identity (ID)', score: categories.identify || 0, weight: 10 },
+                      { parameter: 'Protect (PR)', score: categories.protect || 0, weight: 10 },
+                      { parameter: 'Detect (DE)', score: categories.detect || 0, weight: 5 },
+                      { parameter: 'Respond (RS)', score: categories.respond || 0, weight: 5 },
+                      { parameter: 'Recover (RC)', score: categories.recover || 0, weight: 5 }
+                    );
+                  } else {
+                    // Fallback scorecard based on available data
+                    const baseScore = report.securityScore || 0;
+                    const isPreliminary = report.reportType === 'preliminary';
+                    
+                    if (isPreliminary) {
+                      // For preliminary reports - show only available pillars
+                      const hasIncidentData = report.summary?.recentIncidentWithin12Months || false;
+                      const hasArchitectureDiagrams = report.architectureDiagramsProvided || false;
+                      
+                      scorecard.push(
+                        { parameter: 'Qualitative Assessment', score: Math.max(0, baseScore), weight: 20 },
+                        { parameter: 'RASBITA Governance', score: Math.max(0, baseScore - 5), weight: 15 }
+                      );
+                      
+                      if (hasIncidentData) {
+                        scorecard.push({ parameter: 'RASBITA Cost-Benefit', score: Math.max(0, baseScore - 10), weight: 25 });
+                      }
+                      
+                      if (hasArchitectureDiagrams) {
+                        scorecard.push({ parameter: 'Architecture Threat Modeling', score: Math.max(0, baseScore - 8), weight: 15 });
+                      }
+                    } else {
+                      // Comprehensive report fallback
+                      scorecard.push(
+                        { parameter: 'Overall Security Posture', score: baseScore, weight: 35 },
+                        { parameter: 'Governance & Management', score: Math.max(0, baseScore - 10), weight: 15 },
+                        { parameter: 'Risk Assessment', score: Math.max(0, baseScore - 5), weight: 20 },
+                        { parameter: 'Technical Controls', score: Math.max(0, baseScore - 15), weight: 15 },
+                        { parameter: 'Compliance Readiness', score: Math.max(0, baseScore - 20), weight: 15 }
+                      );
+                    }
+                  }
+                  
+                  return scorecard;
+                };
+
+                const availableScorecard = report.scorecard && Array.isArray(report.scorecard) && report.scorecard.length > 0 
+                  ? report.scorecard 
+                  : generateScorecardFromReport();
+
+                return availableScorecard.length > 0 ? (
+                  <Scorecard 
+                    scorecard={availableScorecard} 
+                    reportType={report.reportType} 
+                    report={report}
+                  />
+                ) : (
+                  <div className="p-4 text-center space-y-4">
+                    <p className="text-muted-foreground">Scorecard data is currently being processed.</p>
+                    <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
+                      <h3 className="font-medium text-blue-900 mb-2">Available Security Metrics</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div>
+                          <strong>Overall Security Score:</strong> {report.securityScore || 'Processing...'}%
+                        </div>
+                        <div>
+                          <strong>Report Type:</strong> {report.reportType === 'preliminary' ? 'Preliminary Assessment' : 'Comprehensive Analysis'}
+                        </div>
+                        <div>
+                          <strong>Industry Focus:</strong> {report.industry || 'General'}
+                        </div>
+                        <div>
+                          <strong>Assessment Date:</strong> {new Date().toLocaleDateString()}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
             </TabsContent>
             
             <TabsContent value="recommendations" className="space-y-4 pt-4">
@@ -2078,6 +2154,118 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <li>Train employees on cybersecurity best practices, focusing on phishing awareness and secure data handling</li>
                   <li>Implement MFA across critical systems to reduce unauthorized access</li>
                 </ol>
+              </CardContent>
+            </Card>
+
+            {/* Implementation Guidance from Original System */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Implementation Guidance</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-blue-50 p-4 rounded-md border border-blue-200">
+                  <h3 className="font-medium text-blue-900 mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-blue-600">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10" />
+                    </svg>
+                    Next Steps for Comprehensive Security Assessment
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-blue-800">Immediate Actions (30 days)</h4>
+                      <ul className="space-y-1 text-blue-700 text-sm">
+                        <li>• Implement SOC monitoring with SIEM integration</li>
+                        <li>• Establish incident response procedures</li>
+                        <li>• Deploy vulnerability scanning tools</li>
+                        <li>• Configure automated security event logging</li>
+                      </ul>
+                    </div>
+                    <div className="space-y-2">
+                      <h4 className="font-medium text-blue-800">Medium-term Goals (90 days)</h4>
+                      <ul className="space-y-1 text-blue-700 text-sm">
+                        <li>• Complete network flow analysis setup</li>
+                        <li>• Implement endpoint detection and response</li>
+                        <li>• Establish security awareness training program</li>
+                        <li>• Begin evidence collection for comprehensive assessment</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-amber-50 p-4 rounded-md border border-amber-200">
+                  <h3 className="font-medium text-amber-900 mb-3 flex items-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-amber-600">
+                      <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z" />
+                      <path d="M12 9v4" />
+                      <path d="m12 17 .01 0" />
+                    </svg>
+                    Gap Analysis Priority Areas
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <h4 className="font-medium text-amber-800 mb-2">Critical Security Domains</h4>
+                      <ul className="space-y-1 text-amber-700">
+                        <li>• Identity and Access Management (IAM)</li>
+                        <li>• Data Protection and Encryption</li>
+                        <li>• Network Security Controls</li>
+                        <li>• Incident Response Capabilities</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-amber-800 mb-2">Implementation Priorities</h4>
+                      <ul className="space-y-1 text-amber-700">
+                        <li>• Multi-factor authentication deployment</li>
+                        <li>• Security event monitoring enhancement</li>
+                        <li>• Vulnerability management automation</li>
+                        <li>• Compliance framework alignment</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Industry-Specific Guidance */}
+                {report.industry?.toLowerCase().includes('health') && (
+                  <div className="bg-green-50 p-4 rounded-md border border-green-200">
+                    <h3 className="font-medium text-green-900 mb-3 flex items-center gap-2">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-green-600">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
+                      </svg>
+                      Healthcare Industry Specific Guidance
+                    </h3>
+                    <div className="text-sm text-green-700 space-y-2">
+                      <p>For healthcare organizations, ensure implementation meets:</p>
+                      <ul className="space-y-1 ml-4 list-disc">
+                        <li><strong>HIPAA Requirements:</strong> PHI protection and access controls</li>
+                        <li><strong>HITECH Act:</strong> Breach notification and security standards</li>
+                        <li><strong>FDA Guidance:</strong> Medical device cybersecurity requirements</li>
+                        <li><strong>Joint Commission:</strong> Information management standards</li>
+                      </ul>
+                    </div>
+                  </div>
+                )}
+
+                {/* Parameter-Specific Recommendations */}
+                <div className="bg-purple-50 p-4 rounded-md border border-purple-200">
+                  <h3 className="font-medium text-purple-900 mb-3">Parameter-Specific Action Items</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                    <div>
+                      <h4 className="font-medium text-purple-800 mb-2">High-Priority Parameters</h4>
+                      <ul className="space-y-1 text-purple-700">
+                        <li>• <strong>Asset Management:</strong> Complete device inventory with classification</li>
+                        <li>• <strong>Risk Assessment:</strong> Implement continuous risk monitoring</li>
+                        <li>• <strong>Identity Management:</strong> Deploy comprehensive IAM solution</li>
+                      </ul>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-purple-800 mb-2">Medium-Priority Parameters</h4>
+                      <ul className="space-y-1 text-purple-700">
+                        <li>• <strong>Data Security:</strong> Enhance encryption and backup procedures</li>
+                        <li>• <strong>Network Security:</strong> Implement network segmentation</li>
+                        <li>• <strong>Incident Response:</strong> Develop and test IR procedures</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </TabsContent>
