@@ -942,6 +942,23 @@ export interface RasbitaReport {
   residualCost?: number;
 }
 
+export interface GapAnalysisResult {
+  overallGapPercentage: number;
+  parameterGaps: Array<{
+    parameter: string;
+    currentScore: number;
+    industryBenchmark: number;
+    gap: number;
+    priority: 'low' | 'medium' | 'high' | 'critical';
+  }>;
+  recommendations: Array<{
+    area: string;
+    recommendation: string;
+    impact: string;
+    effort: string;
+  }>;
+}
+
 export interface AssessmentReport {
   id: string;
   businessId: string;
@@ -963,6 +980,34 @@ export interface AssessmentReport {
   businessServices: string;
   operationModes: string[];
   internetPresence: string[];
+  architectureDiagramsProvided?: boolean;
+  
+  // Summary data
+  summary?: {
+    criticalVulnerabilities: number;
+    highRisks: number;
+    mediumRisks: number;
+    lowRisks: number;
+  };
+  
+  // RASBITA scoring
+  rasbitaScore?: {
+    overall: number;
+    categories: {
+      govern: number;
+      identify: number;
+      protect: number;
+      detect: number;
+      respond: number;
+      recover: number;
+      risk?: number;
+      securityControls?: number;
+      architecture?: number;
+      [key: string]: number | undefined;
+    };
+  };
+  
+  riskLevel?: 'low' | 'medium' | 'high' | 'critical';
   findings: SecurityRisk[];
   vulnerabilities: {
     critical: string[];

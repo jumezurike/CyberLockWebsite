@@ -15,6 +15,7 @@ import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
 import MatrixForm from "@/components/sos2a/matrix-form";
 import GapAnalysis from "@/components/sos2a/gap-analysis";
 import ReportDisplay from "@/components/sos2a/report-display";
+import EnhancedReportDisplay from "@/components/sos2a/enhanced-report-display";
 
 // Import types and utilities
 import { 
@@ -647,7 +648,7 @@ export default function Sos2aTool() {
       {/* Step 4: Report Display */}
       {step === 'report' && report && (
         <div className="report-container">
-          <ReportDisplay report={report} onBack={handleBack} />
+          <EnhancedReportDisplay report={report} onBack={handleBack} />
         </div>
       )}
     </div>
