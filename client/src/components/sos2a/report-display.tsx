@@ -1001,26 +1001,65 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                     5-Pillar Framework Implementation Roadmap
                   </h3>
                   <div className="space-y-3">
-                    <div className="border-l-4 border-green-400 pl-3">
-                      <h4 className="font-medium text-green-800">Pillar 1: Qualitative Assessment (20%)</h4>
-                      <p className="text-sm text-green-700">Already completed in this preliminary report. Continue refining based on evidence collection.</p>
-                    </div>
-                    <div className="border-l-4 border-blue-400 pl-3">
-                      <h4 className="font-medium text-blue-800">Pillar 2: Quantitative Analysis (25%)</h4>
-                      <p className="text-sm text-blue-700">Requires 6 months of evidence collection with SIEM, vulnerability scanners, and compliance tools.</p>
-                    </div>
-                    <div className="border-l-4 border-purple-400 pl-3">
-                      <h4 className="font-medium text-purple-800">Pillar 3: RASBITA Cost-Benefit (25%)</h4>
-                      <p className="text-sm text-purple-700">Available when security incidents occur within 12 months to measure ROI of security investments.</p>
-                    </div>
-                    <div className="border-l-4 border-orange-400 pl-3">
-                      <h4 className="font-medium text-orange-800">Pillar 4: RASBITA Governance (15%)</h4>
-                      <p className="text-sm text-orange-700">Already included. Focus on continuous improvement of governance maturity.</p>
-                    </div>
-                    <div className="border-l-4 border-gray-400 pl-3">
-                      <h4 className="font-medium text-gray-800">Pillar 5: Architecture Threat Modeling (15%)</h4>
-                      <p className="text-sm text-gray-700">Available when detailed system architecture diagrams are provided for STRIDE analysis.</p>
-                    </div>
+                    {(() => {
+                      const isPreliminary = report.reportType === 'preliminary';
+                      const hasIncidentData = report.summary?.recentIncidentWithin12Months || false;
+                      const hasArchitectureDiagrams = report.architectureDiagramsProvided || false;
+                      
+                      const currentFramework = isPreliminary ? 
+                        (hasIncidentData && hasArchitectureDiagrams ? '75%' : 
+                         hasIncidentData || hasArchitectureDiagrams ? '60%' : '35%') : '100%';
+                      
+                      return (
+                        <>
+                          <div className="mb-2 text-sm text-green-600 font-medium">
+                            Current Framework Coverage: {currentFramework} {isPreliminary ? '(Preliminary)' : '(Comprehensive)'}
+                          </div>
+                          
+                          <div className="border-l-4 border-green-400 pl-3">
+                            <h4 className="font-medium text-green-800">Pillar 1: Qualitative Assessment (20%)</h4>
+                            <p className="text-sm text-green-700">✓ Already completed in this {isPreliminary ? 'preliminary' : 'comprehensive'} report. Continue refining based on evidence collection.</p>
+                          </div>
+                          
+                          {!isPreliminary && (
+                            <div className="border-l-4 border-blue-400 pl-3">
+                              <h4 className="font-medium text-blue-800">Pillar 2: Quantitative Analysis (25%)</h4>
+                              <p className="text-sm text-blue-700">✓ Included in comprehensive reports. Requires 6 months of evidence collection with SIEM, vulnerability scanners, and compliance tools.</p>
+                            </div>
+                          )}
+                          
+                          {isPreliminary && (
+                            <div className="border-l-4 border-gray-300 pl-3">
+                              <h4 className="font-medium text-gray-600">Pillar 2: Quantitative Analysis (25%)</h4>
+                              <p className="text-sm text-gray-500">⚬ Not included in preliminary reports. Requires 6 months of evidence collection with SIEM, vulnerability scanners, and compliance tools.</p>
+                            </div>
+                          )}
+                          
+                          <div className={`border-l-4 ${hasIncidentData ? 'border-purple-400' : 'border-gray-300'} pl-3`}>
+                            <h4 className={`font-medium ${hasIncidentData ? 'text-purple-800' : 'text-gray-600'}`}>
+                              Pillar 3: RASBITA Cost-Benefit (25%)
+                            </h4>
+                            <p className={`text-sm ${hasIncidentData ? 'text-purple-700' : 'text-gray-500'}`}>
+                              {hasIncidentData ? '✓ Included - Security incident within 12 months enables ROI analysis.' : '⚬ Not available - Requires security incident within 12 months to measure ROI of security investments.'}
+                            </p>
+                          </div>
+                          
+                          <div className="border-l-4 border-orange-400 pl-3">
+                            <h4 className="font-medium text-orange-800">Pillar 4: RASBITA Governance (15%)</h4>
+                            <p className="text-sm text-orange-700">✓ Already included. Focus on continuous improvement of governance maturity.</p>
+                          </div>
+                          
+                          <div className={`border-l-4 ${hasArchitectureDiagrams ? 'border-gray-400' : 'border-gray-300'} pl-3`}>
+                            <h4 className={`font-medium ${hasArchitectureDiagrams ? 'text-gray-800' : 'text-gray-600'}`}>
+                              Pillar 5: Architecture Threat Modeling (15%)
+                            </h4>
+                            <p className={`text-sm ${hasArchitectureDiagrams ? 'text-gray-700' : 'text-gray-500'}`}>
+                              {hasArchitectureDiagrams ? '✓ Included - System architecture diagrams provided for STRIDE analysis.' : '⚬ Not available - Requires detailed system architecture diagrams for STRIDE threat modeling analysis.'}
+                            </p>
+                          </div>
+                        </>
+                      );
+                    })()}
                   </div>
                 </div>
 
@@ -1869,13 +1908,36 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
 
             {/* Visual Scorecard */}
             <Scorecard 
-              scorecard={[
-                { parameter: 'Qualitative Assessment', score: report.rasbitaScore?.categories?.risk || 42, weight: 20 },
-                { parameter: 'Quantitative Analysis', score: report.rasbitaScore?.categories?.securityControls || 0, weight: 25 },
-                { parameter: 'RASBITA Cost-Benefit Analysis', score: report.rasbitaScore?.categories?.architecture || 0, weight: 25 },
-                { parameter: 'RASBITA Governance & Management', score: ((report.rasbitaScore?.categories?.govern || 0) + (report.rasbitaScore?.categories?.identify || 0) + (report.rasbitaScore?.categories?.protect || 0)) / 3, weight: 15 },
-                { parameter: 'Architecture Threat Modeling', score: ((report.rasbitaScore?.categories?.detect || 0) + (report.rasbitaScore?.categories?.respond || 0) + (report.rasbitaScore?.categories?.recover || 0)) / 3, weight: 15 }
-              ]}
+              scorecard={(() => {
+                const isPreliminary = report.reportType === 'preliminary';
+                const hasIncidentData = report.summary?.recentIncidentWithin12Months || false;
+                const hasArchitectureDiagrams = report.architectureDiagramsProvided || false;
+                
+                // Base pillars always included in preliminary (35%)
+                const basePillars = [
+                  { parameter: 'Qualitative Assessment', score: report.rasbitaScore?.categories?.risk || 42, weight: 20 },
+                  { parameter: 'RASBITA Governance & Management', score: ((report.rasbitaScore?.categories?.govern || 0) + (report.rasbitaScore?.categories?.identify || 0) + (report.rasbitaScore?.categories?.protect || 0)) / 3, weight: 15 }
+                ];
+                
+                const conditionalPillars = [];
+                
+                // Never include Quantitative Analysis in preliminary reports
+                if (!isPreliminary) {
+                  conditionalPillars.push({ parameter: 'Quantitative Analysis', score: report.rasbitaScore?.categories?.securityControls || 0, weight: 25 });
+                }
+                
+                // Only include Cost-Benefit if incident within 12 months
+                if (hasIncidentData) {
+                  conditionalPillars.push({ parameter: 'RASBITA Cost-Benefit Analysis', score: report.rasbitaScore?.categories?.architecture || 0, weight: 25 });
+                }
+                
+                // Only include Architecture Threat Modeling if diagrams available
+                if (hasArchitectureDiagrams) {
+                  conditionalPillars.push({ parameter: 'Architecture Threat Modeling', score: ((report.rasbitaScore?.categories?.detect || 0) + (report.rasbitaScore?.categories?.respond || 0) + (report.rasbitaScore?.categories?.recover || 0)) / 3, weight: 15 });
+                }
+                
+                return [...basePillars, ...conditionalPillars];
+              })()}
               reportType={report.reportType}
               report={report}
             />
