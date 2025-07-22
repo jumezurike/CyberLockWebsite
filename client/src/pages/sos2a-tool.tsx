@@ -8,7 +8,8 @@ import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { differenceInDays, parseISO, formatDistanceToNow } from "date-fns";
-import { ExternalLink, Edit, Trash2 } from "lucide-react";
+import { ExternalLink, Edit, Trash2, Home } from "lucide-react";
+import logoImage from "@/assets/cyberlockx-logo-resized.png";
 
 // Import components
 import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
@@ -337,7 +338,36 @@ export default function Sos2aTool() {
 
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+      {/* Assessment Tool Navigation Bar */}
+      <nav className="bg-primary shadow-md border-b border-primary/20">
+        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
+              <img 
+                src={logoImage} 
+                alt="CyberLockX Logo" 
+                className="h-8 w-auto"
+              />
+              <span className="text-white font-semibold text-sm hidden sm:block">CyberLockX</span>
+            </a>
+            <div className="text-white/80 text-sm hidden md:block">
+              Healthcare Organizational and System Security Analysis (HOS²A)
+            </div>
+          </div>
+          <div className="flex items-center space-x-2">
+            <a 
+              href="/"
+              className="flex items-center space-x-1 text-white/90 hover:text-white text-sm bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-md transition-colors"
+            >
+              <Home className="w-4 h-4" />
+              <span className="hidden sm:inline">Home</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <div className="container mx-auto py-8">
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -663,6 +693,7 @@ export default function Sos2aTool() {
           <ReportDisplay report={report} onBack={handleBack} />
         </div>
       )}
+      </div>
     </div>
   );
 }
