@@ -8,8 +8,6 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { AlertCircle, FileText, Download, Calendar, Clock, AlertTriangle, Shield, CheckCircle2 } from "lucide-react";
 import { formatDistanceToNow, differenceInDays, parseISO } from "date-fns";
 import Scorecard from "./scorecard";
-import FivePillarScorecardVisual from "./five-pillar-scorecard-visual";
-import { FivePillarScorecard } from "@/lib/five-pillar-scorecard";
 import logoImage from "@/assets/cyberlockx-logo-resized.png";
 
 interface ReportDisplayProps {
@@ -356,37 +354,23 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
 
           {/* Scorecard Tab with Visual Elements */}
           <TabsContent value="scorecard" className="space-y-4">
-            {/* Five Pillar Visual Scorecard */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">5-Pillar RASBITA Framework Analysis</CardTitle>
-                <CardDescription>
-                  Comprehensive visual analysis of your security posture across five critical pillars
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <FivePillarScorecardVisual 
-                  scorecard={FivePillarScorecard.fromAssessmentReport(report)}
-                />
-              </CardContent>
-            </Card>
-            
-            {/* Traditional Scorecard */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Detailed Parameter Analysis</CardTitle>
-                <CardDescription>
-                  Individual parameter scores and breakdown
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Scorecard 
-                  scorecard={report.scorecard || []}
-                  reportType={report.reportType}
-                  report={report}
-                />
-              </CardContent>
-            </Card>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">RASBITA Framework Score</CardTitle>
+                  <CardDescription>
+                    Comprehensive security posture analysis
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Scorecard 
+                    scorecard={report.scorecard || []}
+                    reportType={report.reportType}
+                    report={report}
+                  />
+                </CardContent>
+              </Card>
+            </div>
           </TabsContent>
 
           {/* Recommendations Tab */}
