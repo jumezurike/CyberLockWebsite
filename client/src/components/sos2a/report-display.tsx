@@ -94,6 +94,120 @@ export default function EnhancedReportDisplay({ report, onBack }: EnhancedReport
         styles: { fontSize: 9 }
       });
 
+      // Get final Y position after the table
+      yPosition = (doc as any).lastAutoTable.finalY + 15;
+
+      // Five Pillars Assessment Details
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Five Pillars Assessment Framework", 14, yPosition);
+      
+      yPosition += 10;
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+
+      // Pillar 1: Qualitative Assessment (Always included)
+      doc.setFont("helvetica", "bold");
+      doc.text("Pillar 1: Qualitative Assessment (20%)", 14, yPosition);
+      yPosition += 6;
+      doc.setFont("helvetica", "normal");
+      doc.text(`Score: ${report.rasbitaScore?.categories?.risk || 0}%`, 14, yPosition);
+      yPosition += 4;
+      doc.text("Status: Always included in all assessments", 14, yPosition);
+      yPosition += 4;
+      doc.text("Assessment covers initial risk evaluation, basic security posture,", 14, yPosition);
+      yPosition += 4;
+      doc.text("and preliminary vulnerability identification.", 14, yPosition);
+      yPosition += 10;
+
+      // Pillar 2: Quantitative Analysis (Never in preliminary)
+      doc.setFont("helvetica", "bold");
+      doc.text("Pillar 2: Quantitative Analysis (25%)", 14, yPosition);
+      yPosition += 6;
+      doc.setFont("helvetica", "normal");
+      if (report.reportType === 'comprehensive') {
+        doc.text(`Score: ${report.rasbitaScore?.categories?.securityControls || 0}%`, 14, yPosition);
+        yPosition += 4;
+        doc.text("Status: Included in comprehensive assessment", 14, yPosition);
+        yPosition += 4;
+        doc.text("Detailed metrics analysis, quantified risk measurements,", 14, yPosition);
+        yPosition += 4;
+        doc.text("and statistical security control effectiveness evaluation.", 14, yPosition);
+      } else {
+        doc.text("Score: Not applicable for preliminary assessments", 14, yPosition);
+        yPosition += 4;
+        doc.text("Status: Not included - requires comprehensive assessment", 14, yPosition);
+        yPosition += 4;
+        doc.text("Quantitative analysis requires 6+ months of documented", 14, yPosition);
+        yPosition += 4;
+        doc.text("evidence and implemented security controls.", 14, yPosition);
+      }
+      yPosition += 10;
+
+      // Pillar 3: RASBITA Cost-Benefit Analysis (Conditional)
+      doc.setFont("helvetica", "bold");
+      doc.text("Pillar 3: RASBITA Cost-Benefit Analysis (25%)", 14, yPosition);
+      yPosition += 6;
+      doc.setFont("helvetica", "normal");
+      doc.text(`Score: ${report.rasbitaScore?.categories?.architecture || 0}%`, 14, yPosition);
+      yPosition += 4;
+      doc.text("Status: Conditional inclusion based on recent incidents", 14, yPosition);
+      yPosition += 4;
+      doc.text("Cost-benefit analysis of security investments and ROI", 14, yPosition);
+      yPosition += 4;
+      doc.text("calculations for cybersecurity improvements.", 14, yPosition);
+      yPosition += 10;
+
+      // Pillar 4: RASBITA Governance (Always included)
+      doc.setFont("helvetica", "bold");
+      doc.text("Pillar 4: RASBITA Governance & Management (15%)", 14, yPosition);
+      yPosition += 6;
+      doc.setFont("helvetica", "normal");
+      const governanceScore = ((report.rasbitaScore?.categories?.govern || 0) + 
+                              (report.rasbitaScore?.categories?.identify || 0) + 
+                              (report.rasbitaScore?.categories?.protect || 0)) / 3;
+      doc.text(`Score: ${governanceScore.toFixed(1)}%`, 14, yPosition);
+      yPosition += 4;
+      doc.text("Status: Always included in all assessments", 14, yPosition);
+      yPosition += 4;
+      doc.text("Governance frameworks, policy compliance, and management", 14, yPosition);
+      yPosition += 4;
+      doc.text("oversight of cybersecurity programs and procedures.", 14, yPosition);
+      yPosition += 10;
+
+      // Pillar 5: Architecture Threat Modeling (Conditional)
+      doc.setFont("helvetica", "bold");
+      doc.text("Pillar 5: Architecture Threat Modeling (15%)", 14, yPosition);
+      yPosition += 6;
+      doc.setFont("helvetica", "normal");
+      const architectureScore = ((report.rasbitaScore?.categories?.detect || 0) + 
+                                (report.rasbitaScore?.categories?.respond || 0) + 
+                                (report.rasbitaScore?.categories?.recover || 0)) / 3;
+      doc.text(`Score: ${architectureScore.toFixed(1)}%`, 14, yPosition);
+      yPosition += 4;
+      doc.text("Status: Conditional inclusion based on system diagrams", 14, yPosition);
+      yPosition += 4;
+      doc.text("STRIDE methodology threat modeling and architecture", 14, yPosition);
+      yPosition += 4;
+      doc.text("security analysis for system design vulnerabilities.", 14, yPosition);
+      yPosition += 10;
+
+      // Business Information Section
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.text("Business Information", 14, yPosition);
+      yPosition += 10;
+
+      doc.setFontSize(10);
+      doc.setFont("helvetica", "normal");
+      doc.text(`Industry: ${report.industry || 'Not specified'}`, 14, yPosition);
+      yPosition += 6;
+      doc.text(`Organization Size: ${report.organizationSize || 'Not specified'}`, 14, yPosition);
+      yPosition += 6;
+      doc.text(`Primary Operations: ${report.primaryOperations || 'Not specified'}`, 14, yPosition);
+      yPosition += 6;
+      doc.text(`Regulatory Requirements: ${report.regulatoryRequirements || 'Not specified'}`, 14, yPosition);
+
       // Add footer
       const pageHeight = doc.internal.pageSize.height;
       doc.setFontSize(8);
