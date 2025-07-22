@@ -1713,7 +1713,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
         <div className="mb-6">
           <h2 className="text-xl font-bold text-center text-primary mb-2">Enhanced Professional Analysis</h2>
           <p className="text-sm text-center text-muted-foreground">
-            Comprehensive cybersecurity assessment with detailed risk analysis and professional recommendations
+            Professional cybersecurity analysis with detailed risk assessment and business recommendations
           </p>
         </div>
 
