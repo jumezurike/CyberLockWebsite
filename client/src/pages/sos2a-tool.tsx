@@ -22,9 +22,9 @@ import {
   Sos2aFormData, 
   MatrixItem, 
   AssessmentReport,
-  GapAnalysisResult,
   SecurityRisk 
 } from "@/lib/sos2a-types";
+import { GapAnalysisResult } from "@/lib/gap-analysis-types";
 import { 
   identifySecurityRisks, 
   categorizeLVulnerabilities, 
@@ -219,16 +219,21 @@ export default function Sos2aTool() {
     const generatedReport: AssessmentReport = {
       id: 'report-' + Date.now(),
       businessId: matrixData[0]?.infraType + '-' + Date.now() || 'business-' + Date.now(),
+      businessName: formData?.businessName || "Unknown Business",
       reportType: reportType,
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       age: 0,
-      securityScore: Math.round(result.overallScore.percentage),
+      securityScore: Math.round(result.overallGapPercentage || 75),
       businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
       industry: formData?.industry || "Unknown",
       businessServices: formData?.businessServices || "Unknown",
       operationModes: formData?.operationMode || [],
       internetPresence: formData?.internetPresence || [],
+      policyDocumentStatus: "Under Review",
+      osHardeningStatus: "In Progress", 
+      ismsStatus: "Pending",
+      mitreAttackCoverage: 45,
       findings: identifySecurityRisks(matrixData),
       vulnerabilities: categorizeLVulnerabilities(matrixData),
       recommendations: {
@@ -236,8 +241,8 @@ export default function Sos2aTool() {
         shortTerm: ["Enhance monitoring capabilities"],
         longTerm: ["Develop comprehensive security program"]
       },
-      frameworkGaps: identifyFrameworkGaps(matrixData),
-      complianceStatus: evaluateComplianceStatus(matrixData),
+      frameworkGaps: { operations: [], management: [], technology: [] },
+      complianceStatus: { standards: [], regulations: [], frameworks: [] },
       matrixData: matrixData,
       scorecard: generateScorecardData(matrixData, reportType)
     };
