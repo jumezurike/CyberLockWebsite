@@ -428,23 +428,205 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
         </CardContent>
       </Card>
       
-      {/* Enhanced Professional Report Section - Marriage of Old and Enhanced */}
+      {/* Original Report Tabs with Visual Elements */}
       <div className="border-t pt-8 mt-8">
-        <div className="mb-6">
-          <h2 className="text-xl font-bold text-center text-primary mb-2">Enhanced Professional Analysis</h2>
-          <p className="text-sm text-center text-muted-foreground">
-            Professional cybersecurity analysis with detailed risk assessment and business recommendations
-          </p>
-        </div>
-
-        <Tabs defaultValue="enhanced-executive" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="enhanced-executive">Executive Summary</TabsTrigger>
-            <TabsTrigger value="enhanced-risk">Risk Analysis</TabsTrigger>
-            <TabsTrigger value="enhanced-scorecard">Scorecard</TabsTrigger>
-            <TabsTrigger value="enhanced-compliance">Compliance</TabsTrigger>
-            <TabsTrigger value="enhanced-recommendations">Recommendations</TabsTrigger>
+        <Tabs defaultValue="summary" className="w-full">
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="summary">Summary Findings</TabsTrigger>
+            <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
+            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+            <TabsTrigger value="implementation">Implementation</TabsTrigger>
+            <TabsTrigger value="enhanced-executive">Enhanced Executive</TabsTrigger>
+            <TabsTrigger value="enhanced-analysis">Enhanced Analysis</TabsTrigger>
           </TabsList>
+
+          {/* Original Summary Findings Tab */}
+          <TabsContent value="summary" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Summary Findings</CardTitle>
+                <CardDescription>
+                  Key insights and findings from your security assessment
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold mb-2">Assessment Overview</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Your organization has been evaluated against industry-standard cybersecurity frameworks
+                      including NIST CSF 2.0, resulting in an overall security score of {report.securityScore}%.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-semibold mb-2">Key Strengths</h3>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                      <li>Established security governance framework</li>
+                      <li>Basic identity and access management controls</li>
+                      <li>Regular security awareness training</li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-semibold mb-2">Priority Areas for Improvement</h3>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                      <li>Enhanced threat detection and monitoring capabilities</li>
+                      <li>Incident response procedures and testing</li>
+                      <li>Data encryption and protection measures</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Original Scorecard Tab with Visual Elements */}
+          <TabsContent value="scorecard" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">RASBITA Framework Score</CardTitle>
+                  <CardDescription>
+                    Comprehensive security posture analysis
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Scorecard 
+                    scorecard={report.scorecard || []}
+                    reportType={report.reportType}
+                    report={report}
+                  />
+                </CardContent>
+              </Card>
+              
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">Domain Breakdown</CardTitle>
+                  <CardDescription>
+                    NIST CSF 2.0 Framework Maturity Levels
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {report.rasbitaScore?.categories && ['govern', 'identify', 'protect', 'detect', 'respond', 'recover'].map((domain) => {
+                      const score = report.rasbitaScore?.categories?.[domain as keyof typeof report.rasbitaScore.categories] || 0;
+                      return (
+                        <div key={domain} className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span className="capitalize font-medium">{domain}</span>
+                            <span className="font-bold">{score}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div 
+                              className="bg-primary h-2 rounded-full transition-all duration-300" 
+                              style={{ width: `${score}%` }}
+                            ></div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Original Recommendations Tab */}
+          <TabsContent value="recommendations" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Security Recommendations</CardTitle>
+                <CardDescription>
+                  Prioritized actions to improve your security posture
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="border-l-4 border-red-500 pl-4">
+                    <h3 className="font-semibold text-red-700 mb-2">Critical Priority</h3>
+                    <ul className="text-sm space-y-1 ml-4 list-disc">
+                      <li>Implement multi-factor authentication for all user accounts</li>
+                      <li>Establish comprehensive backup and recovery procedures</li>
+                      <li>Deploy endpoint detection and response (EDR) solutions</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="border-l-4 border-amber-500 pl-4">
+                    <h3 className="font-semibold text-amber-700 mb-2">High Priority</h3>
+                    <ul className="text-sm space-y-1 ml-4 list-disc">
+                      <li>Conduct regular security awareness training</li>
+                      <li>Implement network segmentation controls</li>
+                      <li>Establish incident response procedures</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="border-l-4 border-blue-500 pl-4">
+                    <h3 className="font-semibold text-blue-700 mb-2">Medium Priority</h3>
+                    <ul className="text-sm space-y-1 ml-4 list-disc">
+                      <li>Regular penetration testing and vulnerability assessments</li>
+                      <li>Enhanced logging and monitoring capabilities</li>
+                      <li>Security policy documentation and review</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Original Implementation Guidance Tab */}
+          <TabsContent value="implementation" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Implementation Guidance</CardTitle>
+                <CardDescription>
+                  Step-by-step roadmap for security improvements
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="font-semibold mb-3 flex items-center">
+                      <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">1</span>
+                      Immediate Actions (0-30 days)
+                    </h3>
+                    <ul className="text-sm space-y-1 ml-8 list-disc">
+                      <li>Enable MFA for all administrative accounts</li>
+                      <li>Update and patch all critical systems</li>
+                      <li>Conduct security awareness training for all staff</li>
+                      <li>Review and update access controls</li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-semibold mb-3 flex items-center">
+                      <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">2</span>
+                      Short-term Goals (30-90 days)
+                    </h3>
+                    <ul className="text-sm space-y-1 ml-8 list-disc">
+                      <li>Deploy endpoint security solutions</li>
+                      <li>Implement network monitoring tools</li>
+                      <li>Establish incident response procedures</li>
+                      <li>Conduct security risk assessment</li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-semibold mb-3 flex items-center">
+                      <span className="bg-primary text-white rounded-full w-6 h-6 flex items-center justify-center text-xs mr-2">3</span>
+                      Long-term Objectives (90-365 days)
+                    </h3>
+                    <ul className="text-sm space-y-1 ml-8 list-disc">
+                      <li>Achieve compliance certification</li>
+                      <li>Implement advanced threat detection</li>
+                      <li>Establish security metrics and KPIs</li>
+                      <li>Regular security testing and validation</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
           
           {/* Enhanced Executive Summary Tab with Business Information and Summary Findings */}
           <TabsContent value="enhanced-executive" className="space-y-4">
@@ -591,148 +773,49 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <div>
                   <h4 className="font-semibold text-sm mb-2">Identified Security Risks</h4>
                   <ul className="text-sm space-y-1 ml-4 list-disc">
-                    <li><strong>Phishing & Spoofing:</strong> Cybercriminals exploiting weak email and social media security</li>
-                    <li><strong>POS System Vulnerabilities:</strong> Insecure payment processing systems</li>
-                    <li><strong>Data Privacy Breaches:</strong> Inadequate protection of customer information</li>
-                    <li><strong>Network Security Gaps:</strong> Unsecured internet connections and hotspot usage</li>
-                  </ul>
-                </div>
-
-                <div>
-                  <h4 className="font-semibold text-sm mb-2">Cybersecurity Risk Management</h4>
-                  <p className="text-sm text-gray-600">
-                    Our assessment reveals that your organization requires immediate attention to several critical areas:
-                    risk governance, identity management, protective controls, and incident response capabilities.
-                    The RASBITA framework provides a structured approach to addressing these vulnerabilities
-                    while building sustainable security practices.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Enhanced Scorecard Tab */}
-          <TabsContent value="enhanced-scorecard" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">5-Pillar RASBITA Framework Scorecard</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
-                    <div className="text-center p-4 bg-green-50 border border-green-200 rounded-md">
-                      <div className="text-xs text-green-700 font-medium">Pillar 1</div>
-                      <div className="text-lg font-bold text-green-800">Qualitative Assessment</div>
-                      <div className="text-sm text-green-600">20% Weight</div>
-                      <div className="text-xs text-gray-500 mt-1">Always Included</div>
-                      <div className="mt-2 text-2xl font-bold text-green-700">{report.securityScore || 'N/A'}%</div>
-                    </div>
-                    
-                    <div className="text-center p-4 bg-gray-50 border border-gray-200 rounded-md">
-                      <div className="text-xs text-gray-700 font-medium">Pillar 2</div>
-                      <div className="text-lg font-bold text-gray-800">Quantitative Analysis</div>
-                      <div className="text-sm text-gray-600">25% Weight</div>
-                      <div className="text-xs text-gray-500 mt-1">Not in Preliminary</div>
-                      <div className="mt-2 text-sm text-gray-500">N/A</div>
-                    </div>
-                    
-                    <div className="text-center p-4 bg-yellow-50 border border-yellow-200 rounded-md">
-                      <div className="text-xs text-yellow-700 font-medium">Pillar 3</div>
-                      <div className="text-lg font-bold text-yellow-800">RASBITA Cost-Benefit</div>
-                      <div className="text-sm text-yellow-600">25% Weight</div>
-                      <div className="text-xs text-gray-500 mt-1">If Recent Incident</div>
-                      <div className="mt-2 text-sm text-yellow-600">Conditional</div>
-                    </div>
-                    
-                    <div className="text-center p-4 bg-blue-50 border border-blue-200 rounded-md">
-                      <div className="text-xs text-blue-700 font-medium">Pillar 4</div>
-                      <div className="text-lg font-bold text-blue-800">RASBITA Governance</div>
-                      <div className="text-sm text-blue-600">15% Weight</div>
-                      <div className="text-xs text-gray-500 mt-1">Always Included</div>
-                      <div className="mt-2 text-2xl font-bold text-blue-700">{Math.max(0, (report.securityScore || 0) - 5)}%</div>
-                    </div>
-                    
-                    <div className="text-center p-4 bg-purple-50 border border-purple-200 rounded-md">
-                      <div className="text-xs text-purple-700 font-medium">Pillar 5</div>
-                      <div className="text-lg font-bold text-purple-800">Architecture Threat Modeling</div>
-                      <div className="text-sm text-purple-600">15% Weight</div>
-                      <div className="text-xs text-gray-500 mt-1">If System Diagrams</div>
-                      <div className="mt-2 text-sm text-purple-600">Conditional</div>
-                    </div>
-                  </div>
-
-                  <div className="mt-6">
-                    <h4 className="font-semibold text-sm mb-3">Risk Probability Categories</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-sm">
-                      <div className="bg-red-50 border border-red-200 rounded p-3">
-                        <div className="font-semibold text-red-700">Critical (&gt;80%)</div>
-                        <div className="text-red-600">Immediate action required</div>
-                      </div>
-                      <div className="bg-orange-50 border border-orange-200 rounded p-3">
-                        <div className="font-semibold text-orange-700">High (60-80%)</div>
-                        <div className="text-orange-600">Address within 30 days</div>
-                      </div>
-                      <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
-                        <div className="font-semibold text-yellow-700">Medium (30-60%)</div>
-                        <div className="text-yellow-600">Monitor and plan</div>
-                      </div>
-                      <div className="bg-green-50 border border-green-200 rounded p-3">
-                        <div className="font-semibold text-green-700">Low (&lt;30%)</div>
-                        <div className="text-green-600">Routine maintenance</div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Enhanced Compliance Tab */}
-          <TabsContent value="enhanced-compliance" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Compliance and Regulatory Requirements</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-sm mb-2">Applicable Standards</h4>
-                  <ul className="text-sm space-y-1 ml-4 list-disc">
-                    <li><strong>PCI-DSS:</strong> Protection of cardholder data in payment systems</li>
-                    <li><strong>HIPAA:</strong> Safeguarding healthcare-related data</li>
-                    <li><strong>CMMC:</strong> Meeting cybersecurity maturity requirements for defense contractors</li>
-                    <li><strong>GDPR & CCPA:</strong> Enforcing data privacy for global and California-specific regulations</li>
-                    <li><strong>SOC 2, ISO/IEC 27001:</strong> Continuous monitoring and data protection standards</li>
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 className="font-semibold text-sm mb-2">Compliance Gaps</h4>
-                  <ul className="text-sm space-y-1 ml-4 list-disc">
-                    <li>Limited implementation of data encryption protocols</li>
-                    <li>Insufficient access control mechanisms</li>
-                    <li>Inadequate incident response procedures</li>
-                    <li>Missing continuous monitoring capabilities</li>
-                  </ul>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Enhanced Recommendations Tab */}
-          <TabsContent value="enhanced-recommendations" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Security Threats, Mitigation & Implementation</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <h4 className="font-semibold text-sm mb-2">Immediate Security Threats</h4>
-                  <ul className="text-sm space-y-1 ml-4 list-disc">
                     <li><strong>Email-based attacks:</strong> Phishing campaigns targeting employee credentials</li>
                     <li><strong>Unpatched systems:</strong> Vulnerabilities in outdated software and operating systems</li>
                     <li><strong>Weak authentication:</strong> Password-based access without multi-factor authentication</li>
                     <li><strong>Data exposure:</strong> Sensitive information stored without proper encryption</li>
                   </ul>
+                </div>
+                
+                <div>
+                  <h4 className="font-semibold text-sm mb-2">Cybersecurity Risk Management</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="bg-red-50 border border-red-200 rounded p-3">
+                      <h5 className="font-semibold text-red-800 text-sm">Critical Risks</h5>
+                      <p className="text-xs text-red-700 mt-1">Immediate action required</p>
+                    </div>
+                    <div className="bg-amber-50 border border-amber-200 rounded p-3">
+                      <h5 className="font-semibold text-amber-800 text-sm">Medium Risks</h5>
+                      <p className="text-xs text-amber-700 mt-1">Planned mitigation within 90 days</p>
+                    </div>
+                    <div className="bg-green-50 border border-green-200 rounded p-3">
+                      <h5 className="font-semibold text-green-800 text-sm">Low Risks</h5>
+                      <p className="text-xs text-green-700 mt-1">Ongoing monitoring</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Enhanced Analysis Tab */}
+          <TabsContent value="enhanced-analysis" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Professional Risk Assessment</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div>
+                  <h4 className="font-semibold text-sm mb-2">Compliance Requirements</h4>
+                  <div className="grid grid-cols-2 gap-4 text-sm">
+                    <div><strong>PCI-DSS:</strong> Payment card industry data security standard</div>
+                    <div><strong>HIPAA:</strong> Health insurance portability and accountability act</div>
+                    <div><strong>CMMC:</strong> Cybersecurity maturity model certification</div>
+                    <div><strong>SOC 2:</strong> Service organization control 2 compliance</div>
+                  </div>
                 </div>
                 
                 <div>
@@ -757,6 +840,13 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             </Card>
           </TabsContent>
         </Tabs>
+
+        {/* CyberLockX Logo and Branding */}
+        <div className="mt-8 text-center border-t pt-6">
+          <img src={logoImage} alt="CyberLockX Logo" className="h-12 mx-auto mb-2" />
+          <p className="text-sm font-semibold text-primary">Securing every CLICK!!!</p>
+          <p className="text-xs text-muted-foreground">Healthcare Apps & Devices Security Hub</p>
+        </div>
       </div>
     </>
   );
