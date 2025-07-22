@@ -202,7 +202,14 @@ export default function Sos2aTool() {
     } else if (step === 'gap-analysis') {
       setStep('matrix');
     } else if (step === 'report') {
-      setStep('gap-analysis');
+      // Return to main assessment interface with complete functionality
+      setStep('questionnaire');
+      setReport(null);
+      setGapAnalysisResult(null);
+      setMatrixData(null);
+      setSelectedTab(null);
+      // Reload assessments to show fresh data
+      loadSavedAssessments();
     }
   };
 

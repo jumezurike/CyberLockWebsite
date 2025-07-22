@@ -365,7 +365,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-medium text-muted-foreground">RASBITA Score Components</h3>
                 <div className="bg-purple-100 text-purple-900 font-bold px-3 py-1 rounded-full flex items-center">
-                  <span>Overall: {report.rasbitaScore?.total || "N/A"}%</span>
+                  <span>Overall: {report.rasbitaScore?.overall || "N/A"}%</span>
                   <span className="ml-1 text-xs px-2 py-0.5 bg-purple-800 text-white rounded-full">RASBITA™</span>
                 </div>
               </div>
@@ -402,42 +402,25 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                     </div>
                   </div>
                   
-                  {/* GPA-style Information Security Management System (ISMS) Maturity Scoring */}
-                  {report.rasbitaScore.gpaScores && (
-                    <div className="mt-3 border-t pt-2">
-                      <div className="flex items-center justify-between mb-1">
-                        <h3 className="text-xs font-medium text-muted-foreground">Information Security Management System (ISMS) Maturity</h3>
-                        <div className="bg-blue-100 text-blue-900 text-xs px-2 py-0.5 rounded-full">
-                          GPA-style Rating: {report.rasbitaScore.gpaScores.total || "N/A"}/4.0
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-6 gap-1 text-center">
-                        {['govern', 'identify', 'protect', 'detect', 'respond', 'recover'].map((domain) => (
-                          <div key={domain} className="bg-blue-50 rounded p-1">
-                            <p className="text-[10px] capitalize">{domain}</p>
-                            <p className="text-xs font-bold text-blue-700">
-                              {report.rasbitaScore.gpaScores?.[domain as keyof typeof report.rasbitaScore.gpaScores] || "N/A"}
-                            </p>
-                          </div>
-                        ))}
+                  {/* NIST CSF 2.0 Framework Compliance */}
+                  <div className="mt-3 border-t pt-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="text-xs font-medium text-muted-foreground">NIST CSF 2.0 Framework Maturity</h3>
+                      <div className="bg-blue-100 text-blue-900 text-xs px-2 py-0.5 rounded-full">
+                        Overall Rating: {report.rasbitaScore?.overall || "N/A"}%
                       </div>
                     </div>
-                  )}
-                  
-                  {/* Healthcare-specific HIPAA Compliance Score */}
-                  {report.rasbitaScore.hipaaCompliance && report.industry?.toLowerCase().includes('health') && (
-                    <div className="mt-2 bg-green-50 rounded-md p-2 border border-green-200">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-xs font-medium text-green-800">Healthcare HIPAA Compliance Score</h3>
-                        <div className="bg-green-200 text-green-900 text-xs px-2 py-0.5 rounded-full">
-                          {report.rasbitaScore.hipaaCompliance}%
+                    <div className="grid grid-cols-6 gap-1 text-center">
+                      {['govern', 'identify', 'protect', 'detect', 'respond', 'recover'].map((domain) => (
+                        <div key={domain} className="bg-blue-50 rounded p-1">
+                          <p className="text-[10px] capitalize">{domain}</p>
+                          <p className="text-xs font-bold text-blue-700">
+                            {report.rasbitaScore?.categories?.[domain as keyof typeof report.rasbitaScore.categories] || "N/A"}%
+                          </p>
                         </div>
-                      </div>
-                      <p className="text-[10px] text-green-700 mt-1">
-                        This score indicates the estimated level of alignment with HIPAA Security Rule, Privacy Rule, and Breach Notification requirements.
-                      </p>
+                      ))}
                     </div>
-                  )}
+                  </div>
                 </>
               )}
             </div>
@@ -1873,7 +1856,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <CardTitle className="text-lg flex items-center justify-between">
                   <span>RASBITA Score Components</span>
                   <span className="text-2xl font-bold text-primary">
-                    {report.rasbitaScore?.overall || report.rasbitaScore?.total || report.securityScore || 'N/A'}% RASBITA™
+                    {report.rasbitaScore?.overall || report.securityScore || 'N/A'}% RASBITA™
                   </span>
                 </CardTitle>
               </CardHeader>
