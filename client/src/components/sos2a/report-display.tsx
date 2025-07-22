@@ -197,51 +197,49 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="space-y-2">
               <h3 className="text-sm font-medium text-muted-foreground">Business Information</h3>
-              <p className="font-medium">{report.businessId}</p>
-              <p>{report.industry} | {report.businessLocation.state}, {report.businessLocation.country}</p>
-              <p className="text-sm text-muted-foreground">{report.businessServices}</p>
+              <p className="font-medium">{report.businessName}</p>
+              <p>{report.industry}</p>
+              <p className="text-sm text-muted-foreground">Employee Count: {report.employeeCount}</p>
             </div>
             
             <div className="space-y-2">
-              <h3 className="text-sm font-medium text-muted-foreground">RASBITA Score Components</h3>
-              <div className="grid grid-cols-3 gap-2 text-center">
-                <div className="bg-primary/5 rounded p-2">
-                  <p className="text-xs text-muted-foreground">Risk</p>
-                  <p className="font-bold">{report.rasbitaScore.categories.risk}</p>
+              <h3 className="text-sm font-medium text-muted-foreground">Assessment Details</h3>
+              <div className="space-y-2">
+                <div>
+                  <p className="text-xs text-muted-foreground">Security Score</p>
+                  <p className="font-bold">{report.securityScore}%</p>
                 </div>
-                <div className="bg-primary/5 rounded p-2">
-                  <p className="text-xs text-muted-foreground">Security</p>
-                  <p className="font-bold">{report.rasbitaScore.categories.securityControls}</p>
-                </div>
-                <div className="bg-primary/5 rounded p-2">
-                  <p className="text-xs text-muted-foreground">Architecture</p>
-                  <p className="font-bold">{report.rasbitaScore.categories.architecture}</p>
+                <div>
+                  <p className="text-xs text-muted-foreground">Report Type</p>
+                  <p className="font-bold capitalize">{report.reportType}</p>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="border-t pt-4">
-            <h2 className="text-lg font-semibold mb-3">Summary Findings</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-              <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-red-500">{report.findings.filter(f => f.severity === 'High').length}</div>
-                <div className="text-sm">High Risks</div>
-              </div>
-              <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-orange-500">{report.findings.filter(f => f.severity === 'Medium').length}</div>
-                <div className="text-sm">Medium Risks</div>
-              </div>
-              <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-amber-500">{report.vulnerabilities.critical.length}</div>
-                <div className="text-sm">Critical Vulnerabilities</div>
-              </div>
-              <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-blue-500">{report.recommendations.immediate.length}</div>
-                <div className="text-sm">Immediate Actions</div>
+          {report.reportType === 'comprehensive' && (
+            <div className="border-t pt-4">
+              <h2 className="text-lg font-semibold mb-3">Summary Findings</h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="border rounded-md p-3 text-center">
+                  <div className="text-lg font-bold text-red-500">{report.findings?.items?.filter(f => f.severity === 'High').length || 0}</div>
+                  <div className="text-sm">High Risks</div>
+                </div>
+                <div className="border rounded-md p-3 text-center">
+                  <div className="text-lg font-bold text-orange-500">{report.findings?.items?.filter(f => f.severity === 'Medium').length || 0}</div>
+                  <div className="text-sm">Medium Risks</div>
+                </div>
+                <div className="border rounded-md p-3 text-center">
+                  <div className="text-lg font-bold text-amber-500">0</div>
+                  <div className="text-sm">Critical Vulnerabilities</div>
+                </div>
+                <div className="border rounded-md p-3 text-center">
+                  <div className="text-lg font-bold text-blue-500">{report.recommendations?.items?.length || 0}</div>
+                  <div className="text-sm">Immediate Actions</div>
+                </div>
               </div>
             </div>
-          </div>
+          )}
           
           <Tabs defaultValue="scorecard" className="w-full">
             <TabsList className="grid grid-cols-2 md:grid-cols-5 w-full">
@@ -255,7 +253,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <TabsContent value="scorecard" className="space-y-4 pt-4">
               {/* Only display scorecard if the report has it */}
               {report.scorecard ? (
-                <Scorecard scorecard={report.scorecard} reportType={report.reportType} />
+                <Scorecard scorecard={report.scorecard} reportType={report.reportType} report={report} />
               ) : (
                 <div className="p-4 text-center">
                   <p className="text-muted-foreground">Scorecard data is not available for this report.</p>
