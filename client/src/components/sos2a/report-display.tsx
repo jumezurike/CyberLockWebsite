@@ -225,19 +225,19 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             <h2 className="text-lg font-semibold mb-3">Summary Findings</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-red-500">{report.findings.filter(f => f.severity === 'High').length}</div>
+                <div className="text-lg font-bold text-red-500">{(report.findings || []).filter(f => f.severity === 'High').length}</div>
                 <div className="text-sm">High Risks</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-orange-500">{report.findings.filter(f => f.severity === 'Medium').length}</div>
+                <div className="text-lg font-bold text-orange-500">{(report.findings || []).filter(f => f.severity === 'Medium').length}</div>
                 <div className="text-sm">Medium Risks</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-amber-500">{report.vulnerabilities.critical.length}</div>
+                <div className="text-lg font-bold text-amber-500">{(report.vulnerabilities?.critical || []).length}</div>
                 <div className="text-sm">Critical Vulnerabilities</div>
               </div>
               <div className="border rounded-md p-3 text-center">
-                <div className="text-lg font-bold text-blue-500">{report.recommendations.immediate.length}</div>
+                <div className="text-lg font-bold text-blue-500">{(report.recommendations?.immediate || []).length}</div>
                 <div className="text-sm">Immediate Actions</div>
               </div>
             </div>
