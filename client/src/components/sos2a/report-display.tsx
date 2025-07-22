@@ -375,8 +375,8 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Operation Control Gaps</h3>
                 <ul className="list-disc pl-5">
-                  {report.frameworkGaps.operations.length > 0 ? (
-                    report.frameworkGaps.operations.map((gap, index) => (
+                  {(report.frameworkGaps?.operations || []).length > 0 ? (
+                    (report.frameworkGaps?.operations || []).map((gap, index) => (
                       <li key={index}>{gap}</li>
                     ))
                   ) : (
@@ -387,8 +387,8 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Management Control Gaps</h3>
                 <ul className="list-disc pl-5">
-                  {report.frameworkGaps.management.length > 0 ? (
-                    report.frameworkGaps.management.map((gap, index) => (
+                  {(report.frameworkGaps?.management || []).length > 0 ? (
+                    (report.frameworkGaps?.management || []).map((gap, index) => (
                       <li key={index}>{gap}</li>
                     ))
                   ) : (
@@ -399,8 +399,8 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Technology Control Gaps</h3>
                 <ul className="list-disc pl-5">
-                  {report.frameworkGaps.technology.length > 0 ? (
-                    report.frameworkGaps.technology.map((gap, index) => (
+                  {(report.frameworkGaps?.technology || []).length > 0 ? (
+                    (report.frameworkGaps?.technology || []).map((gap, index) => (
                       <li key={index}>{gap}</li>
                     ))
                   ) : (
