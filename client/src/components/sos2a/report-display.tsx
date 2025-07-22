@@ -267,7 +267,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Immediate Actions</h3>
                 <ul className="space-y-2 list-disc pl-5">
-                  {report.recommendations.immediate.map((rec, index) => (
+                  {(report.recommendations?.immediate || []).map((rec, index) => (
                     <li key={index}>{rec}</li>
                   ))}
                 </ul>
@@ -276,7 +276,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Short Term (30-90 days)</h3>
                 <ul className="space-y-2 list-disc pl-5">
-                  {report.recommendations.shortTerm.map((rec, index) => (
+                  {(report.recommendations?.shortTerm || []).map((rec, index) => (
                     <li key={index}>{rec}</li>
                   ))}
                 </ul>
@@ -285,7 +285,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Long Term (90+ days)</h3>
                 <ul className="space-y-2 list-disc pl-5">
-                  {report.recommendations.longTerm.map((rec, index) => (
+                  {(report.recommendations?.longTerm || []).map((rec, index) => (
                     <li key={index}>{rec}</li>
                   ))}
                 </ul>
@@ -296,7 +296,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Security Risks</h3>
                 <div className="space-y-3">
-                  {report.findings.map((finding, index) => (
+                  {(report.findings || []).map((finding, index) => (
                     <div key={index} className="border rounded-md p-3">
                       <div className="flex justify-between items-center mb-1">
                         <h4 className="font-medium">{finding.title}</h4>
@@ -316,17 +316,17 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <h3 className="font-medium mb-2">Vulnerabilities</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   <div className="border rounded-md p-3">
-                    <h4 className="text-red-600 font-medium mb-2">Critical ({report.vulnerabilities.critical.length})</h4>
+                    <h4 className="text-red-600 font-medium mb-2">Critical ({(report.vulnerabilities?.critical || []).length})</h4>
                     <ul className="list-disc pl-5 text-sm">
-                      {report.vulnerabilities.critical.map((vuln, index) => (
+                      {(report.vulnerabilities?.critical || []).map((vuln, index) => (
                         <li key={index}>{vuln}</li>
                       ))}
                     </ul>
                   </div>
                   <div className="border rounded-md p-3">
-                    <h4 className="text-orange-600 font-medium mb-2">High ({report.vulnerabilities.high.length})</h4>
+                    <h4 className="text-orange-600 font-medium mb-2">High ({(report.vulnerabilities?.high || []).length})</h4>
                     <ul className="list-disc pl-5 text-sm">
-                      {report.vulnerabilities.high.map((vuln, index) => (
+                      {(report.vulnerabilities?.high || []).map((vuln, index) => (
                         <li key={index}>{vuln}</li>
                       ))}
                     </ul>
@@ -339,7 +339,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Compliance Standards</h3>
                 <div className="space-y-3">
-                  {report.complianceStatus.standards.map((standard, index) => (
+                  {(report.complianceStatus?.standards || []).map((standard, index) => (
                     <div key={index} className="flex justify-between items-center border-b pb-2">
                       <span>{standard.standard}</span>
                       <span className={`text-xs px-2 py-1 rounded ${
@@ -356,7 +356,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
               <div>
                 <h3 className="font-medium mb-2">Regulatory Requirements</h3>
                 <div className="space-y-3">
-                  {report.complianceStatus.regulations.map((regulation, index) => (
+                  {(report.complianceStatus?.regulations || []).map((regulation, index) => (
                     <div key={index} className="flex justify-between items-center border-b pb-2">
                       <span>{regulation.standard}</span>
                       <span className={`text-xs px-2 py-1 rounded ${
