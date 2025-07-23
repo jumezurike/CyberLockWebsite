@@ -1,0 +1,15 @@
+CyberLockX File Protection System
+Backup Created: Wed Jul 23 10:19:26 PM UTC 2025
+Backup ID: 20250723_221925
+
+Protected Files:
+client/src/components/sos2a/report-display.tsx | Size: 26420 bytes | SHA256: 5999f8232af1d0844786b637f95757c2b32ed6809a6aef908c8df8c5b2624f53
+client/src/components/sos2a/questionnaire-form.tsx | Size: 454137 bytes | SHA256: fbfde4f3af3700f34bb7e09c97d99e3f12ffff8dd008c7cb26cce6eb08988a8f
+client/src/components/sos2a/assessment-workflow.tsx | Size: 8132 bytes | SHA256: e7652a341ba939a2fc27e727d82e22b1362a9c7758f01ae5691565523a80037b
+client/src/pages/sos2a-tool.tsx | Size: 27860 bytes | SHA256: 1728c6576d7ecc83590ac5f13273956a60a844efd0a884c29866da8a8f2db64c
+client/src/lib/sos2a-types.ts | Size: 31737 bytes | SHA256: b32916a6afd5f975ded35d5ff7549a0a6e600d043430d18bbf20780762dfb1c5
+client/src/lib/sos2a-utils.ts | Size: 4981 bytes | SHA256: 950c3827a90a94495b9a84addc6701c3da87d814200d9a7388b92ae59a0a495f
+client/src/lib/gap-analysis.ts | Size: 15289 bytes | SHA256: aa7f48b2c2abebdb53ca6d4efb513b6550011577c2f8ef2f1233424f0b904532
+shared/schema.ts | Size: 14386 bytes | SHA256: 496ce84577f810812249933439c0bd8c28f82a605b7e3f2ce8300c1e707b60bb
+server/routes.ts | Size: 43803 bytes | SHA256: 454ffe486089767fc9db40d4544beba8ae3f4b1a4d04b5f04ca8b52ac2a3b373
+replit.md | Size: 27278 bytes | SHA256: 22b9f9e9424ef8cb23344527414b55abe387e6d01613f65f57caf645f4b833c9

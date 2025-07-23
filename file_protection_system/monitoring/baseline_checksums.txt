@@ -1,0 +1,8 @@
+client/src/components/sos2a/report-display.tsx:5999f8232af1d0844786b637f95757c2b32ed6809a6aef908c8df8c5b2624f53
+client/src/components/sos2a/questionnaire-form.tsx:fbfde4f3af3700f34bb7e09c97d99e3f12ffff8dd008c7cb26cce6eb08988a8f
+client/src/components/sos2a/assessment-workflow.tsx:e7652a341ba939a2fc27e727d82e22b1362a9c7758f01ae5691565523a80037b
+client/src/pages/sos2a-tool.tsx:1728c6576d7ecc83590ac5f13273956a60a844efd0a884c29866da8a8f2db64c
+client/src/lib/sos2a-types.ts:b32916a6afd5f975ded35d5ff7549a0a6e600d043430d18bbf20780762dfb1c5
+client/src/lib/gap-analysis.ts:aa7f48b2c2abebdb53ca6d4efb513b6550011577c2f8ef2f1233424f0b904532
+replit.md:22b9f9e9424ef8cb23344527414b55abe387e6d01613f65f57caf645f4b833c9
+🔒 BASELINE CREATED: Wed Jul 23 10:19:09 PM UTC 2025
