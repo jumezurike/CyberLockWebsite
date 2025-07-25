@@ -23,10 +23,9 @@ import {
   Sos2aFormData, 
   MatrixItem, 
   AssessmentReport,
-  GapAnalysisResult,
   SecurityRisk 
 } from "@/lib/sos2a-types";
-
+import { GapAnalysisResult } from "@/lib/gap-analysis-types";
 import { 
   identifySecurityRisks, 
   categorizeLVulnerabilities, 

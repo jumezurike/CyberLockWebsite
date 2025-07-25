@@ -1,291 +1,25 @@
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React, { useState } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
-import { useToast } from "@/hooks/use-toast";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { differenceInDays, parseISO, formatDistanceToNow } from "date-fns";
-import { ExternalLink, Edit, Trash2, Home } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AssessmentReport } from "@/lib/sos2a-types";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle, FileText, Download, Calendar, Clock, AlertTriangle, Shield, CheckCircle2 } from "lucide-react";
+import { formatDistanceToNow, differenceInDays, parseISO } from "date-fns";
+import Scorecard from "./scorecard";
 import logoImage from "@/assets/cyberlockx-logo-resized.png";
 
-// Import components
-import QuestionnaireForm from "@/components/sos2a/questionnaire-form";
-import MatrixForm from "@/components/sos2a/matrix-form";
-import GapAnalysis from "@/components/sos2a/gap-analysis";
-import ReportDisplay from "@/components/sos2a/report-display";
+interface ReportDisplayProps {
+  report: AssessmentReport;
+  onBack: () => void;
+}
 
-
-// Import types and utilities
-import { 
-  Sos2aFormData, 
-  MatrixItem, 
-  AssessmentReport,
-  SecurityRisk 
-} from "@/lib/sos2a-types";
-import { GapAnalysisResult } from "@/lib/gap-analysis-types";
-import { 
-  identifySecurityRisks, 
-  categorizeLVulnerabilities, 
-  identifyFrameworkGaps,
-  evaluateComplianceStatus,
-  generateScorecardData
-} from "@/lib/sos2a-utils";
-
-export default function Sos2aTool() {
-  // State for multi-step form
-  const [step, setStep] = useState<'questionnaire' | 'matrix' | 'gap-analysis' | 'report'>('questionnaire');
-  const [formData, setFormData] = useState<Sos2aFormData | null>(null);
-  const [matrixData, setMatrixData] = useState<MatrixItem[] | null>(null);
-  const [gapAnalysisResult, setGapAnalysisResult] = useState<GapAnalysisResult | null>(null);
-  const [report, setReport] = useState<AssessmentReport | null>(null);
-  const [savedAssessments, setSavedAssessments] = useState<any[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [selectedAssessmentId, setSelectedAssessmentId] = useState<string>("");
-  const [selectedTab, setSelectedTab] = useState<string | null>(null);
+export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
+  const [evidenceDialog, setEvidenceDialog] = useState(false);
+  const [lifecycleDialog, setLifecycleDialog] = useState(false);
   
-  // Search state
-  const [searchCompanyName, setSearchCompanyName] = useState<string>("");
-  const [searchFromDate, setSearchFromDate] = useState<string>("");
-  const [searchToDate, setSearchToDate] = useState<string>("");
-  const [isSearching, setIsSearching] = useState(false);
-  
-  // State for form persistence
-  const [hasSavedData, setHasSavedData] = useState<boolean>(false);
-  const [showReviewModal, setShowReviewModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [assessmentToDelete, setAssessmentToDelete] = useState<string | null>(null);
-  
-  const { toast } = useToast();
-
-  // Calculate progress percentage based on current step
-  const progressPercentage = step === 'questionnaire' ? 25 : 
-                            step === 'matrix' ? 50 : 
-                            step === 'gap-analysis' ? 75 : 100;
-
-  // Check if comprehensive report is selected
-  const isComprehensive = formData?.reportType === 'comprehensive';
-
-  // Load saved assessments on component mount
-  useEffect(() => {
-    loadSavedAssessments();
-  }, []);
-
-  // Function to load saved assessments
-  const loadSavedAssessments = async () => {
-    try {
-      const response = await apiRequest("GET", "/api/assessments");
-      const data = await response.json();
-      console.log("Loaded assessments:", data);
-      setSavedAssessments(data);
-    } catch (error) {
-      console.error("Error loading saved assessments:", error);
-    }
-  };
-
-  // Function to load a specific assessment report
-  const loadAssessmentReport = async (assessmentId: string) => {
-    try {
-      setIsLoading(true);
-      const response = await apiRequest("GET", `/api/assessments/${assessmentId}/report`);
-      const data = await response.json();
-      
-      if (data) {
-        setReport(data);
-        setStep('report');
-        
-        toast({
-          title: "Report Loaded",
-          description: "Assessment report has been loaded successfully.",
-        });
-      }
-    } catch (error) {
-      console.error("Error loading assessment report:", error);
-      toast({
-        title: "Load Failed",
-        description: "Could not load the assessment report.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Function to continue an existing assessment
-  const continueAssessment = async (assessmentId: string) => {
-    try {
-      setIsLoading(true);
-      const response = await apiRequest("GET", `/api/assessments/${assessmentId}`);
-      const data = await response.json();
-      
-      if (data) {
-        setFormData(data);
-        setStep('matrix');
-        
-        toast({
-          title: "Assessment Loaded",
-          description: "Continuing with existing assessment.",
-        });
-      }
-    } catch (error) {
-      console.error("Error loading assessment:", error);
-      toast({
-        title: "Load Failed",
-        description: "Could not load the assessment.",
-        variant: "destructive",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // Filter assessments based on search criteria
-  const filteredAssessments = (savedAssessments || []).filter(assessment => {
-    const matchesName = !searchCompanyName || 
-      assessment.businessName?.toLowerCase().includes(searchCompanyName.toLowerCase());
-    
-    // Handle date filtering more robustly
-    let matchesDate = true;
-    if (searchFromDate || searchToDate) {
-      if (assessment.createdAt) {
-        const assessmentDate = new Date(assessment.createdAt);
-        const fromDate = searchFromDate ? new Date(searchFromDate) : null;
-        const toDate = searchToDate ? new Date(searchToDate) : null;
-        
-        matchesDate = (!fromDate || assessmentDate >= fromDate) && 
-                     (!toDate || assessmentDate <= toDate);
-      } else {
-        // If no createdAt date and date filters are applied, exclude from results
-        matchesDate = false;
-      }
-    }
-    
-    return matchesName && matchesDate;
-  });
-
-  // Handle questionnaire submission
-  const handleQuestionnaireSubmit = (data: Sos2aFormData) => {
-    setFormData(data);
-    setShowReviewModal(true);
-  };
-
-  // Handle final submission after review
-  const handleFinalSubmit = () => {
-    setShowReviewModal(false);
-    setStep('matrix');
-    saveFormData(formData);
-    
-    toast({
-      title: "Assessment Submitted",
-      description: "Your questionnaire has been submitted. Proceeding to matrix population.",
-    });
-  };
-
-  // Handle matrix submission
-  const handleMatrixSubmit = (data: MatrixItem[]) => {
-    setMatrixData(data);
-    setStep('gap-analysis');
-    saveMatrixData(data);
-  };
-
-  // Handle gap analysis completion
-  const handleGapAnalysisComplete = (result: GapAnalysisResult) => {
-    setGapAnalysisResult(result);
-    generateReport(result);
-  };
-
-  // Handle back navigation
-  const handleBack = () => {
-    if (step === 'matrix') {
-      setStep('questionnaire');
-    } else if (step === 'gap-analysis') {
-      setStep('matrix');
-    } else if (step === 'report') {
-      // Return to main assessment interface with complete functionality
-      setStep('questionnaire');
-      setReport(null);
-      setGapAnalysisResult(null);
-      setMatrixData(null);
-      setSelectedTab(null);
-      // Reload assessments to show fresh data
-      loadSavedAssessments();
-    }
-  };
-
-  // Generate the final report
-  const generateReport = async (result: GapAnalysisResult) => {
-    if (!formData || !matrixData) {
-      console.error("Missing required data for report generation");
-      return;
-    }
-    
-    const reportType = formData?.reportType || 'preliminary';
-    
-    // Generate the report with gap analysis data
-    const generatedReport: AssessmentReport = {
-      id: 'report-' + Date.now(),
-      businessId: matrixData[0]?.infraType + '-' + Date.now() || 'business-' + Date.now(),
-      businessName: formData?.businessName || "Unknown Business",
-      reportType: reportType,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      age: 0,
-      securityScore: Math.round(result.overallGapPercentage || 75),
-      businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
-      industry: formData?.industry || "Unknown",
-      businessServices: formData?.businessServices || "Unknown",
-      operationModes: formData?.operationMode || [],
-      internetPresence: formData?.internetPresence || [],
-      policyDocumentStatus: "Under Review",
-      osHardeningStatus: "In Progress", 
-      ismsStatus: "Pending",
-      mitreAttackCoverage: 45,
-      findings: identifySecurityRisks(matrixData),
-      vulnerabilities: categorizeLVulnerabilities(matrixData),
-      recommendations: {
-        immediate: ["Implement critical security controls"],
-        shortTerm: ["Enhance monitoring capabilities"],
-        longTerm: ["Develop comprehensive security program"]
-      },
-      frameworkGaps: { operations: [], management: [], technology: [] },
-      complianceStatus: { standards: [], regulations: [], frameworks: [] },
-      matrixData: matrixData,
-      scorecard: generateScorecardData(matrixData, reportType)
-    };
-    
-    setReport(generatedReport);
-    setStep('report');
-    
-    toast({
-      title: "Report Generated",
-      description: "Your assessment report has been generated successfully.",
-    });
-  };
-
-  // Save form data to localStorage
-  const saveFormData = (data: Sos2aFormData | null) => {
-    if (data) {
-      localStorage.setItem('sos2a_form_data', JSON.stringify(data));
-    }
-  };
-
-  // Save matrix data to localStorage
-  const saveMatrixData = (data: MatrixItem[] | null) => {
-    if (data) {
-      localStorage.setItem('sos2a_matrix_data', JSON.stringify(data));
-    }
-  };
-
-  // Clear saved data
-  const clearSavedData = () => {
-    localStorage.removeItem('sos2a_form_data');
-    localStorage.removeItem('sos2a_matrix_data');
-    setHasSavedData(false);
-  };
-
-  // Format date for display
+  // Format date
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -296,404 +30,483 @@ export default function Sos2aTool() {
       minute: '2-digit'
     });
   };
-
-  // Calculate assessment age
-  const calculateAssessmentAge = (createdAt: string): number => {
-    return differenceInDays(new Date(), parseISO(createdAt));
-  };
-
-  // Format assessment age
-  const formatAssessmentAge = (createdAt: string): string => {
-    return formatDistanceToNow(parseISO(createdAt), { addSuffix: true });
-  };
-
-  // Delete assessment with confirmation
-  const handleDeleteClick = (assessmentId: string) => {
-    setAssessmentToDelete(assessmentId);
-    setShowDeleteModal(true);
-  };
-
-  const confirmDelete = async () => {
-    if (!assessmentToDelete) return;
-    
-    try {
-      await apiRequest("DELETE", `/api/assessments/${assessmentToDelete}`);
-      queryClient.invalidateQueries({ queryKey: ["/api/assessments"] });
-      setSelectedAssessmentId("");
-      setShowDeleteModal(false);
-      setAssessmentToDelete(null);
-      toast({
-        title: "Assessment Deleted",
-        description: "The assessment has been permanently deleted.",
-      });
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Failed to delete assessment. Please try again.",
-        variant: "destructive",
-      });
+  
+  // Calculate and format assessment age
+  const getAssessmentAge = (): number => {
+    // Use the age property if available, otherwise calculate it
+    if (report.age !== undefined) {
+      return report.age;
     }
+    
+    return differenceInDays(new Date(), parseISO(report.createdAt));
+  };
+  
+  // Format age for display
+  const formatAssessmentAge = (): string => {
+    return formatDistanceToNow(parseISO(report.createdAt), { addSuffix: true });
+  };
+  
+  // Get appropriate icon and color based on assessment age
+  const getAgeStatusInfo = (): { icon: React.ReactNode, color: string, label: string } => {
+    const age = getAssessmentAge();
+    
+    if (age <= 30) {
+      return { 
+        icon: <CheckCircle2 className="h-5 w-5" />, 
+        color: "text-green-600",
+        label: "Current"
+      };
+    }
+    
+    if (age <= 90) {
+      return { 
+        icon: <Shield className="h-5 w-5" />, 
+        color: "text-blue-600",
+        label: "Recent"
+      };
+    }
+    
+    if (age <= 180) {
+      return { 
+        icon: <AlertCircle className="h-5 w-5" />, 
+        color: "text-amber-600",
+        label: "Aging"
+      };
+    }
+    
+    return { 
+      icon: <AlertTriangle className="h-5 w-5" />, 
+      color: "text-red-600",
+      label: "Outdated"
+    };
   };
 
-
+  const isComprehensiveReport = report.reportType === 'comprehensive';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      {/* Assessment Tool Navigation Bar */}
-      <nav className="bg-primary shadow-md border-b border-primary/20">
-        <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-          <div className="flex items-center space-x-4">
-            <a href="/" className="flex items-center space-x-2 hover:opacity-80 transition-opacity">
-              <img 
-                src={logoImage} 
-                alt="CyberLockX Logo" 
-                className="h-8 w-auto"
-              />
-              <span className="text-white font-semibold text-sm hidden sm:block">CyberLockX</span>
-            </a>
-            <div className="text-white/80 text-sm hidden md:block">
-              Healthcare Organizational and System Security Analysis (HOS²A)
+    <div className="max-w-6xl mx-auto p-6 space-y-6">
+      {/* Assessment Header Card */}
+      <Card className="border-2">
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <div className={`p-2 rounded-lg ${isComprehensiveReport ? 'bg-purple-100' : 'bg-blue-100'}`}>
+                <FileText className={`h-6 w-6 ${isComprehensiveReport ? 'text-purple-600' : 'text-blue-600'}`} />
+              </div>
+              <div>
+                <CardTitle className="text-xl">
+                  {isComprehensiveReport ? 'Comprehensive' : 'Preliminary'} Assessment Report
+                </CardTitle>
+                <CardDescription className="text-sm">
+                  Generated on {formatDate(report.createdAt)} • Assessment ID: {report.id}
+                </CardDescription>
+              </div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <div className={`flex items-center ${getAgeStatusInfo().color} text-sm font-medium`}>
+                {getAgeStatusInfo().icon}
+                <span className="ml-1">{getAgeStatusInfo().label}</span>
+              </div>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <a 
-              href="/"
-              className="flex items-center space-x-1 text-white/90 hover:text-white text-sm bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-md transition-colors"
-            >
-              <Home className="w-4 h-4" />
-              <span className="hidden sm:inline">Home</span>
-            </a>
-          </div>
-        </div>
-      </nav>
+        </CardHeader>
 
-      <div className="container mx-auto py-8">
-      {/* Delete Confirmation Modal */}
-      {showDeleteModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-full max-w-md p-6 shadow-xl">
-            <h2 className="text-xl font-bold mb-4 text-red-600">Confirm Deletion</h2>
-            <p className="text-gray-700 mb-6">
-              Are you sure you want to permanently delete this assessment? This action cannot be undone.
-            </p>
-            <div className="flex justify-end gap-4">
-              <Button 
-                variant="outline" 
-                onClick={() => {
-                  setShowDeleteModal(false);
-                  setAssessmentToDelete(null);
-                }}
-              >
-                Cancel
-              </Button>
-              <Button 
-                variant="destructive"
-                onClick={confirmDelete}
-              >
-                Delete Permanently
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Assessment Submission Confirmation Modal */}
-      {showReviewModal && formData && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg w-full max-w-2xl p-6 shadow-xl">
-            <h2 className="text-2xl font-bold mb-4 text-[#7936b0]">Assessment Submission Confirmation</h2>
-            
-            <div className="border rounded-md p-4 mb-4 bg-gray-50">
-              <h3 className="font-medium mb-2">Assessment Details</h3>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="font-medium">Business Name:</span> {formData.businessName}
+        <CardContent>
+          {isComprehensiveReport && (
+            <div className="bg-purple-50 border border-purple-200 rounded-lg p-4 mb-4">
+              <div className="text-sm text-purple-700 mb-3">
+                <strong>Comprehensive Report - Assessment Progress Tracking</strong>
+              </div>
+              <div className="grid grid-cols-2 gap-4 text-xs">
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="space-y-1">
+                    <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                    <p className="font-medium text-green-700">1. Qualitative Report</p>
+                    <p className="text-xs text-green-600">Risk Assessment Complete</p>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                    <p className="font-medium text-green-700">2. Quantitative Analysis</p>
+                    <p className="text-xs text-green-600">Evidence Collection</p>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                    <p className="font-medium text-green-700">3. Adversarial Insight</p>
+                    <p className="text-xs text-green-600">Threat Vector Analysis</p>
+                  </div>
                 </div>
-                <div>
-                  <span className="font-medium">Industry:</span> {formData.industry}
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="space-y-1">
+                    <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                    <p className="font-medium text-green-700">4. RASBITA Governance</p>
+                    <p className="text-xs text-green-600">Cybersecurity Governance Maturity</p>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                    <p className="font-medium text-green-700">5. RASBITA Score</p>
+                    <p className="text-xs text-green-600">Cost-Benefit Analysis</p>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                    <p className="font-medium text-green-700">6. Gap Analysis</p>
+                    <p className="text-xs text-green-600">Security Parameters</p>
+                  </div>
                 </div>
-                <div>
-                  <span className="font-medium">Report Type:</span> {formData.reportType === 'preliminary' ? 'Preliminary' : 'Comprehensive'}
-                </div>
-                <div>
-                  <span className="font-medium">Contact:</span> {formData.contactInfo.name}
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div className="space-y-1">
+                    <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                    <p className="font-medium text-green-700">7. Architecture Analysis</p>
+                    <p className="text-xs text-green-600">Threat Modeling Complete</p>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="w-6 h-6 rounded-full bg-green-500 text-white flex items-center justify-center mx-auto">✓</div>
+                    <p className="font-medium text-green-700">8. Preliminary Report</p>
+                    <p className="text-xs text-green-600">Qualitative Assessment</p>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="w-6 h-6 rounded-full bg-purple-600 text-white flex items-center justify-center mx-auto">✓</div>
+                    <p className="font-medium text-purple-700">9. Comprehensive Report</p>
+                    <p className="text-xs text-purple-600">Quantitative Analysis</p>
+                  </div>
                 </div>
               </div>
             </div>
-            
-            <div className="flex justify-end gap-4">
-              <Button 
-                variant="outline" 
-                onClick={() => setShowReviewModal(false)}
-              >
-                Cancel
-              </Button>
-              <Button 
-                className="bg-[#7936b0] hover:bg-[#6b2aa2] text-white" 
-                onClick={handleFinalSubmit}
-              >
-                Proceed to Matrix Analysis
-              </Button>
+          )}
+          
+          {report.reportType === 'preliminary' && (
+            <div className="border-b pb-4 mb-4">
+              <h2 className="text-lg font-semibold mb-2">Executive Summary</h2>
+              <p className="text-sm text-muted-foreground">
+                This preliminary report highlights the current cybersecurity state of your organization, with an 
+                emphasis on assessing its organizational and system security posture. While this is an initial overview, 
+                it is part of a larger effort to align security controls with industry compliance standards, regulations, 
+                and best practices. The purpose of this report is to illustrate the need for comprehensive monitoring, 
+                threat detection, and an effective incident response system.
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                As part of this assessment, we've conducted an architectural review using our STRIDE threat modeling methodology, 
+                which evaluates your systems for Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, 
+                and Elevation of Privilege threats. This analysis has identified architectural vulnerabilities and recommended 
+                mitigation controls that are incorporated into our overall risk assessment.
+              </p>
             </div>
-          </div>
-        </div>
-      )}
+          )}
+          
+          {report.reportType === 'comprehensive' && (
+            <div className="border-b pb-4 mb-4">
+              <h2 className="text-lg font-semibold mb-2">Executive Summary</h2>
+              <p className="text-sm text-muted-foreground">
+                This comprehensive report provides a detailed quantitative analysis of your organization's security posture
+                based on 6 months of evidence collection following the implementation of recommended mitigation strategies.
+                The assessment verifies compliance with industry standards and regulations, identifies remaining security
+                gaps, and provides a roadmap for continuous security improvement. The RASBITA scoring methodology offers
+                measurable metrics across risk, adversarial insight, security controls, business impact, information assurance,
+                threat intelligence, and architecture domains.
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Our assessment includes a comprehensive architectural risk analysis using the STRIDE threat modeling methodology.
+                This thorough evaluation has documented security controls implemented since the preliminary assessment and verified
+                their effectiveness through penetration testing and security validation. The threat modeling results show significant 
+                improvement in architectural security controls, with all critical architectural vulnerabilities successfully mitigated
+                as evidenced in the Approval Recommendation report.
+              </p>
+            </div>
+          )}
 
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center">
-            Healthcare Organizational and System Security Analysis (HOS²A)
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          {/* Assessment Search and History - Hide when displaying report */}
-          {step !== 'report' && (
-            <>
-              {/* Assessment Search */}
-              <div className="mb-6 border rounded-lg shadow-sm overflow-hidden">
-                <div className="bg-blue-50 p-3 border-b flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-blue-600">
-                    <circle cx="11" cy="11" r="8"></circle>
-                    <path d="m21 21-4.3-4.3"></path>
-                  </svg>
-                  <h2 className="text-lg font-medium text-blue-700">Search Assessments</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <h3 className="text-sm font-medium text-muted-foreground">Business Information</h3>
+              <p className="font-medium">{report.businessId}</p>
+              <p>{report.industry} | {
+                report.businessLocation && typeof report.businessLocation === 'object' 
+                  ? `${report.businessLocation.state || 'Unknown'}, ${report.businessLocation.country || 'Unknown'}` 
+                  : 'Unknown location'
+              }</p>
+              <p className="text-sm text-muted-foreground">{report.businessServices}</p>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center justify-between mb-2">
+                <h3 className="text-sm font-medium text-muted-foreground">RASBITA Score Components</h3>
+                <div className="bg-purple-100 text-purple-900 font-bold px-3 py-1 rounded-full flex items-center">
+                  <span>Overall: {report.rasbitaScore?.overall || "N/A"}%</span>
+                  <span className="ml-1 text-xs px-2 py-0.5 bg-purple-800 text-white rounded-full">RASBITA™</span>
                 </div>
-                
-                <div className="p-4">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                    <div>
-                      <Label className="text-sm font-medium mb-1 block">Company Name</Label>
-                      <Input 
-                        type="text" 
-                        value={searchCompanyName}
-                        onChange={(e) => setSearchCompanyName(e.target.value)}
-                        placeholder="Enter company name"
-                        className="w-full"
-                      />
+              </div>
+              {report.rasbitaScore && (
+                <>
+                  <div className="grid grid-cols-3 gap-2 text-center">
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-red-500">
+                      <p className="text-xs font-bold text-red-700">R</p>
+                      <p className="text-[10px] text-muted-foreground">Risk</p>
+                      <p className="text-xs font-bold">{report.rasbitaScore.risk || "N/A"}%</p>
                     </div>
-                    
-                    <div>
-                      <Label className="text-sm font-medium mb-1 block">From Date</Label>
-                      <Input 
-                        type="date" 
-                        value={searchFromDate}
-                        onChange={(e) => setSearchFromDate(e.target.value)}
-                        className="w-full"
-                        placeholder="mm/dd/yyyy"
-                      />
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-orange-500">
+                      <p className="text-xs font-bold text-orange-700">A</p>
+                      <p className="text-[10px] text-muted-foreground">Adversarial</p>
+                      <p className="text-xs font-bold">{report.rasbitaScore.adversarial || "N/A"}%</p>
                     </div>
-                    
-                    <div>
-                      <Label className="text-sm font-medium mb-1 block">To Date</Label>
-                      <Input 
-                        type="date" 
-                        value={searchToDate}
-                        onChange={(e) => setSearchToDate(e.target.value)}
-                        className="w-full"
-                        placeholder="mm/dd/yyyy"
-                      />
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-amber-500">
+                      <p className="text-xs font-bold text-amber-700">S</p>
+                      <p className="text-[10px] text-muted-foreground">Security</p>
+                      <p className="text-xs font-bold">{report.rasbitaScore.security || "N/A"}%</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-4 gap-1 text-center mt-2">
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-blue-500">
+                      <p className="text-xs font-bold text-blue-700">B</p>
+                      <p className="text-[10px] text-muted-foreground">Business</p>
+                      <p className="text-xs font-bold">{report.rasbitaScore.business || "N/A"}%</p>
+                    </div>
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-indigo-500">
+                      <p className="text-xs font-bold text-indigo-700">I</p>
+                      <p className="text-[10px] text-muted-foreground">Information</p>
+                      <p className="text-xs font-bold">{report.rasbitaScore.information || "N/A"}%</p>
+                    </div>
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-purple-500">
+                      <p className="text-xs font-bold text-purple-700">T</p>
+                      <p className="text-[10px] text-muted-foreground">Threat</p>
+                      <p className="text-xs font-bold">{report.rasbitaScore.threat || "N/A"}%</p>
+                    </div>
+                    <div className="bg-primary/5 rounded-md p-2 border-l-4 border-pink-500">
+                      <p className="text-xs font-bold text-pink-700">A</p>
+                      <p className="text-[10px] text-muted-foreground">Architecture</p>
+                      <p className="text-xs font-bold">{report.rasbitaScore.architecture || "N/A"}%</p>
+                      <p className="text-[10px] text-muted-foreground">Positive value = spend makes sense</p>
                     </div>
                   </div>
                   
-                  <div className="flex justify-end gap-2">
-                    <Button 
-                      variant="outline"
-                      onClick={() => {
-                        setSearchCompanyName("");
-                        setSearchFromDate("");
-                        setSearchToDate("");
-                      }}
-                      className="text-sm"
-                    >
-                      Clear
-                    </Button>
-                    <Button 
-                      onClick={() => {
-                        loadSavedAssessments();
-                        toast({
-                          title: "Search Results",
-                          description: `Found ${filteredAssessments.length} assessment(s) matching your criteria.`,
-                        });
-                      }}
-                      className="bg-purple-600 hover:bg-purple-700 text-white text-sm"
-                    >
-                      Search
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Assessment History Section */}
-              <div className="mb-6 border rounded-lg shadow-sm">
-                <div className="bg-primary/10 p-3 border-b flex items-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 text-primary">
-                    <path d="M12 8v4l3 3"></path>
-                    <circle cx="12" cy="12" r="10"></circle>
-                  </svg>
-                  <h2 className="text-lg font-medium">Assessment History</h2>
-                  {filteredAssessments.length > 0 && (
-                    <span className="ml-2 px-2 py-0.5 bg-primary/20 text-primary text-xs rounded-full">
-                      {filteredAssessments.length} {filteredAssessments.length === 1 ? 'report' : 'reports'}
-                    </span>
-                  )}
-                </div>
-                
-                <div className="p-4">
-                  <div className="flex items-center justify-between gap-4 flex-col md:flex-row">
-                    <div className="w-full md:flex-1">
-                      <label className="text-sm font-medium mb-1 block">
-                        Select a saved assessment to view
-                      </label>
-                      <Select 
-                        value={selectedAssessmentId} 
-                        onValueChange={(value) => setSelectedAssessmentId(value)}
-                        disabled={isLoading}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder={filteredAssessments.length > 0 ? "Load a saved assessment" : "No saved assessments found"} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {filteredAssessments.length === 0 ? (
-                            <div className="p-2 text-center text-muted-foreground text-sm">
-                              No saved assessments found
-                            </div>
-                          ) : (
-                            filteredAssessments.map((assessment) => {
-                              const createdDate = new Date(assessment.createdAt);
-                              const formattedDate = createdDate.toLocaleDateString('en-US', { 
-                                month: 'short', 
-                                day: 'numeric', 
-                                year: 'numeric' 
-                              });
-                              const duration = formatDistanceToNow(createdDate, { addSuffix: true });
-                              const statusIcon = assessment.reportType === 'preliminary' ? '●' : '✓';
-                              
-                              // Color coding for duration based on assessment type
-                              const durationBgClass = assessment.reportType === 'preliminary' 
-                                ? 'bg-green-100 text-green-700' 
-                                : 'bg-blue-100 text-blue-700';
-                              
-                              return (
-                                <SelectItem key={assessment.id} value={assessment.id.toString()}>
-                                  <div className="flex justify-between items-center w-full">
-                                    <span>
-                                      {formattedDate} - {assessment.businessName} ({assessment.reportType === 'preliminary' ? 'preliminary' : 'comprehensive'}) {statusIcon}
-                                    </span>
-                                    <span className={`text-xs px-2 py-1 rounded-md ml-2 ${durationBgClass}`}>{duration}</span>
-                                  </div>
-                                </SelectItem>
-                              );
-                            })
-                          )}
-                        </SelectContent>
-                      </Select>
+                  {/* NIST CSF 2.0 Framework Compliance */}
+                  <div className="mt-3 border-t pt-2">
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="text-xs font-medium text-muted-foreground">NIST CSF 2.0 Framework Maturity</h3>
+                      <div className="bg-blue-100 text-blue-900 text-xs px-2 py-0.5 rounded-full">
+                        Overall Rating: {report.rasbitaScore?.overall || "N/A"}%
+                      </div>
                     </div>
-                    
-                    <div className="flex gap-2 w-full md:w-auto">
-                      <Button 
-                        onClick={() => selectedAssessmentId && loadAssessmentReport(selectedAssessmentId)}
-                        disabled={!selectedAssessmentId || isLoading}
-                        variant="outline"
-                        className="flex-1 md:flex-none hover:bg-green-50 hover:border-green-300 hover:text-green-700 transition-colors"
-                      >
-                        <ExternalLink className="w-4 h-4 mr-2" />
-                        {isLoading ? "Loading..." : "Load Report"}
-                      </Button>
-                      <Button 
-                        onClick={() => selectedAssessmentId && handleDeleteClick(selectedAssessmentId)}
-                        disabled={!selectedAssessmentId}
-                        variant="destructive"
-                        className="flex-1 md:flex-none"
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        Delete
-                      </Button>
-                      <Button 
-                        onClick={() => {
-                          setStep('questionnaire');
-                          setFormData(null);
-                          setSelectedAssessmentId("");
-                          toast({
-                            title: "Starting Over",
-                            description: "All saved data has been cleared. You can now begin a new assessment.",
-                          });
-                        }}
-                        className="bg-green-600 hover:bg-green-700 text-white flex-1 md:flex-none"
-                      >
-                        <Edit className="w-4 h-4 mr-2" />
-                        Start New
-                      </Button>
+                    <div className="grid grid-cols-6 gap-1 text-center">
+                      {['govern', 'identify', 'protect', 'detect', 'respond', 'recover'].map((domain) => (
+                        <div key={domain} className="bg-blue-50 rounded p-1">
+                          <p className="text-[10px] capitalize">{domain}</p>
+                          <p className="text-xs font-bold text-blue-700">
+                            {report.rasbitaScore?.categories?.[domain as keyof typeof report.rasbitaScore.categories] || "N/A"}%
+                          </p>
+                        </div>
+                      ))}
                     </div>
                   </div>
-                </div>
-              </div>
-            </>
-          )}
-
-          <div className="space-y-4">
-            <h2 className="text-lg font-medium">Assessment Progress</h2>
-            <Progress value={progressPercentage} className="h-2" />
-            
-            <div className="flex justify-between text-sm">
-              <div className={`${step === 'questionnaire' ? 'text-primary font-medium' : ''}`}>
-                1. Inquiry & Questionnaire
-              </div>
-              <div className={`${step === 'matrix' ? 'text-primary font-medium' : ''}`}>
-                2. Interview & Matrix Population
-              </div>
-              <div className={`${step === 'gap-analysis' ? 'text-primary font-medium' : ''}`}>
-                3. Gap Analysis
-              </div>
-              <div className={`${step === 'report' ? 'text-primary font-medium' : ''}`}>
-                4. {isComprehensive ? 'Preliminary Report → Comprehensive Report' : 'Preliminary Report'}
-              </div>
+                </>
+              )}
             </div>
           </div>
         </CardContent>
       </Card>
       
-      {/* Step 1: Inquiry & Questionnaire */}
-      {step === 'questionnaire' && (
-        <div className="questionnaire-container">
-          <QuestionnaireForm onSubmit={handleQuestionnaireSubmit} />
-        </div>
-      )}
-      
-      {/* Step 2: Matrix Population */}
-      {step === 'matrix' && formData && (
-        <div className="matrix-container">
-          <MatrixForm 
-            operationModes={formData.operationMode}
-            internetPresence={formData.internetPresence}
-            ismsProcesses={formData.ismsProcesses}
-            onSubmit={handleMatrixSubmit}
-            onBack={handleBack}
-          />
-        </div>
-      )}
-      
-      {/* Step 3: Gap Analysis */}
-      {step === 'gap-analysis' && formData && (
-        <div className="gap-analysis-container">
-          <GapAnalysis 
-            formData={formData} 
-            onComplete={handleGapAnalysisComplete} 
-          />
-          <div className="flex justify-between mt-6">
-            <Button onClick={handleBack} variant="outline">
-              Back to Matrix
-            </Button>
-          </div>
-        </div>
-      )}
-      
-      {/* Step 4: Report Display */}
-      {step === 'report' && report && (
-        <div className="report-container">
-          <ReportDisplay report={report} onBack={handleBack} />
-        </div>
-      )}
+      {/* Report Tabs */}
+      <div className="border-t pt-8 mt-8">
+        <Tabs defaultValue="summary" className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="summary">Overview</TabsTrigger>
+            <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
+            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+          </TabsList>
+
+          {/* Summary Findings Tab */}
+          <TabsContent value="summary" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Summary Findings</CardTitle>
+                <CardDescription>
+                  Key insights and findings from your security assessment
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold mb-2">Assessment Overview</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Your organization has been evaluated against industry-standard cybersecurity frameworks
+                      including NIST CSF 2.0, resulting in an overall security score of {report.securityScore}%.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-semibold mb-2">Key Strengths</h3>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                      <li>Established security governance framework</li>
+                      <li>Basic identity and access management controls</li>
+                      <li>Regular security awareness training</li>
+                    </ul>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-semibold mb-2">Priority Areas for Improvement</h3>
+                    <ul className="text-sm text-muted-foreground space-y-1 ml-4 list-disc">
+                      <li>Enhanced threat detection and monitoring capabilities</li>
+                      <li>Incident response procedures and testing</li>
+                      <li>Data encryption and protection measures</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Scorecard Tab with Visual Elements */}
+          <TabsContent value="scorecard" className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-lg">RASBITA Framework Score</CardTitle>
+                  <CardDescription>
+                    Comprehensive security posture analysis
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Scorecard 
+                    scorecard={report.scorecard || []}
+                    reportType={report.reportType}
+                    report={report}
+                  />
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          {/* Recommendations Tab */}
+          <TabsContent value="recommendations" className="space-y-4">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Security Recommendations</CardTitle>
+                <CardDescription>
+                  Prioritized action items to improve your security posture
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-6">
+                  <div className="border-l-4 border-red-500 pl-4">
+                    <h3 className="font-semibold text-red-700 mb-2">Critical Priority</h3>
+                    <ul className="text-sm space-y-1 ml-4 list-disc">
+                      <li>Implement multi-factor authentication for all user accounts</li>
+                      <li>Establish comprehensive backup and recovery procedures</li>
+                      <li>Deploy endpoint detection and response (EDR) solutions</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="border-l-4 border-amber-500 pl-4">
+                    <h3 className="font-semibold text-amber-700 mb-2">High Priority</h3>
+                    <ul className="text-sm space-y-1 ml-4 list-disc">
+                      <li>Conduct regular security awareness training</li>
+                      <li>Implement network segmentation controls</li>
+                      <li>Establish incident response procedures</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="border-l-4 border-blue-500 pl-4">
+                    <h3 className="font-semibold text-blue-700 mb-2">Medium Priority</h3>
+                    <ul className="text-sm space-y-1 ml-4 list-disc">
+                      <li>Regular penetration testing and vulnerability assessments</li>
+                      <li>Enhanced logging and monitoring capabilities</li>
+                      <li>Security policy documentation and review</li>
+                    </ul>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
+
+      {/* CyberLockX Logo */}
+      <div className="flex justify-center items-center border-t pt-8 mt-8">
+        <div className="text-center">
+          <img src={logoImage} alt="CyberLockX Logo" className="h-12 mx-auto mb-2" />
+          <p className="text-sm text-muted-foreground">Securing every CLICK!!!</p>
+          <p className="text-xs text-muted-foreground">Healthcare Apps & Devices Security Hub</p>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex flex-col sm:flex-row gap-4 justify-center border-t pt-8 mt-8">
+        <Button onClick={() => setEvidenceDialog(true)} variant="outline" className="flex items-center">
+          <FileText className="h-4 w-4 mr-2" />
+          View Evidence
+        </Button>
+        <Button onClick={() => setLifecycleDialog(true)} variant="outline" className="flex items-center">
+          <Calendar className="h-4 w-4 mr-2" />
+          Assessment Lifecycle
+        </Button>
+        <Button onClick={onBack} variant="outline">
+          Return to Matrix
+        </Button>
+      </div>
+
+      {/* Evidence Dialog */}
+      <Dialog open={evidenceDialog} onOpenChange={setEvidenceDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Assessment Evidence</DialogTitle>
+            <DialogDescription>
+              Evidence and artifacts collected during the security assessment
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="text-sm text-muted-foreground">
+              This assessment was conducted based on the information provided in your security questionnaire
+              and includes evidence from:
+            </div>
+            <ul className="text-sm space-y-2 ml-4 list-disc">
+              <li>Security control implementation verification</li>
+              <li>Network architecture and configuration analysis</li>
+              <li>Identity and access management review</li>
+              <li>Compliance framework assessment</li>
+              <li>Risk and vulnerability analysis</li>
+            </ul>
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setEvidenceDialog(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Lifecycle Dialog */}
+      <Dialog open={lifecycleDialog} onOpenChange={setLifecycleDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Assessment Lifecycle Information</DialogTitle>
+            <DialogDescription>
+              Understanding your assessment status and next steps
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4">
+            <div className="text-sm text-muted-foreground">
+              <strong>Report Type:</strong> {report.reportType === 'preliminary' ? 'Preliminary Assessment' : 'Comprehensive Assessment'}
+            </div>
+            <div className="space-y-2">
+              <div className="text-sm font-medium">Assessment Age: {formatAssessmentAge()}</div>
+              <div className="flex items-center text-sm">
+                <span className={`${getAgeStatusInfo().color} mr-2`}>
+                  {getAgeStatusInfo().icon}
+                </span>
+                <span>{getAgeStatusInfo().label}</span>
+              </div>
+            </div>
+            {report.reportType === 'preliminary' && (
+              <Alert>
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Preliminary Assessment</AlertTitle>
+                <AlertDescription>
+                  This is a preliminary report. For a comprehensive analysis with quantitative metrics
+                  and detailed remediation guidance, consider upgrading to a full assessment.
+                </AlertDescription>
+              </Alert>
+            )}
+          </div>
+          <DialogFooter>
+            <Button onClick={() => setLifecycleDialog(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

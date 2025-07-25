@@ -998,6 +998,7 @@ export interface AssessmentReport {
   // RASBITA scoring
   rasbitaScore?: {
     overall: number;
+    total?: number;
     categories: {
       govern: number;
       identify: number;
@@ -1008,8 +1009,17 @@ export interface AssessmentReport {
       risk?: number;
       securityControls?: number;
       architecture?: number;
+      adversarial?: number;
+      security?: number;
+      business?: number;
+      information?: number;
+      threat?: number;
       [key: string]: number | undefined;
     };
+    gpaScores?: {
+      [key: string]: number;
+    };
+    hipaaCompliance?: number;
   };
   
   riskLevel?: 'low' | 'medium' | 'high' | 'critical';
