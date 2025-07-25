@@ -23,10 +23,9 @@ import {
   Sos2aFormData, 
   MatrixItem, 
   AssessmentReport,
-  GapAnalysisResult,
   SecurityRisk 
 } from "@/lib/sos2a-types";
-
+import { GapAnalysisResult } from "@/lib/gap-analysis-types";
 import { 
   identifySecurityRisks, 
   categorizeLVulnerabilities, 
@@ -233,42 +232,16 @@ export default function Sos2aTool() {
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
       age: 0,
-      securityScore: Math.round(result.overallScore.percentage),
+      securityScore: Math.round(result.overallGapPercentage || 75),
       businessLocation: formData?.businessLocation || { state: "Unknown", country: "Unknown", zipCode: "" },
       industry: formData?.industry || "Unknown",
       businessServices: formData?.businessServices || "Unknown",
       operationModes: formData?.operationMode || [],
       internetPresence: formData?.internetPresence || [],
-      policyDocumentStatus: {
-        existing: ["Security Policy", "Incident Response Plan"],
-        missing: ["Data Classification", "Risk Management"],
-        recommendations: ["Develop comprehensive policy framework"]
-      },
-      osHardeningStatus: {
-        stig: { compliant: false, gaps: ["CIS Controls missing"] },
-        scap: { compliant: true, gaps: [] }
-      }, 
-      ismsStatus: {
-        implementation: "In Progress",
-        policies: { implemented: ["Security Policy"], missing: ["Privacy Policy"] },
-        plans: { implemented: ["BCP"], missing: ["DRP"] },
-        procedures: { implemented: ["Incident Response"], missing: ["Change Management"] },
-        processes: { implemented: ["Access Control"], missing: ["Risk Assessment"] },
-        guides: { implemented: ["User Guide"], missing: ["Admin Guide"] },
-        governanceLeadership: { ismsScope: true, rolesResponsibilities: false, managementReview: false, statementOfApplicability: true },
-        riskManagement: { riskAssessmentMethodology: false, riskRegister: true, riskTreatmentPlan: false },
-        assetManagement: { assetInventory: true, assetClassification: false, dataFlowDiagrams: false },
-        complianceLegal: { regulatoryComplianceRegister: false, contractualSecurityClauses: true, auditReports: false },
-        operationalControls: { secureConfigurationBaselines: true, changeManagementLogs: false, backupTestingRecords: true },
-        performanceEvaluation: { keyPerformanceIndicators: false, securityMetricsDashboard: false, internalAuditReports: true },
-        continuousImprovement: { correctiveActionPlans: true, lessonsLearnedRepository: false, ismsImprovementRoadmap: false },
-        recommendedNext: ["Complete risk assessment", "Implement missing procedures"]
-      },
-      mitreAttackCoverage: {
-        covered: ["Initial Access", "Execution"],
-        vulnerable: ["Persistence", "Privilege Escalation", "Defense Evasion"],
-        recommendations: ["Implement EDR solution", "Enhance monitoring"]
-      },
+      policyDocumentStatus: "Under Review",
+      osHardeningStatus: "In Progress", 
+      ismsStatus: "Pending",
+      mitreAttackCoverage: 45,
       findings: identifySecurityRisks(matrixData),
       vulnerabilities: categorizeLVulnerabilities(matrixData),
       recommendations: {

@@ -943,6 +943,11 @@ export interface RasbitaReport {
 }
 
 export interface GapAnalysisResult {
+  // Overall results
+  overallScore: {
+    percentage: number;
+    grade: string;
+  };
   overallGapPercentage: number;
   parameterGaps: Array<{
     parameter: string;
