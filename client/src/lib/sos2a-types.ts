@@ -1134,32 +1134,6 @@ export interface AssessmentReport {
   };
   matrixData: MatrixItem[];
   scorecard: ScorecardItem[]; // New scorecard items with specific parameters
-  rasbitaScore: {
-    total: number;
-    categories: {
-      govern: number;
-      identify: number;
-      protect: number;
-      detect: number;
-      respond: number;
-      recover: number;
-      // Legacy fields for compatibility
-      risk?: number;
-      securityControls?: number;
-      architecture?: number;
-    };
-    gpaScores?: {
-      total: number;
-      govern: number;
-      identify: number;
-      protect: number;
-      detect: number;
-      respond: number;
-      recover: number;
-    };
-    hipaaCompliance?: number | null;
-    industryType?: string;
-  };
   // Explicit categories for compatibility with RasbitaReport format
   rasbitaCategories?: {
     govern: number;

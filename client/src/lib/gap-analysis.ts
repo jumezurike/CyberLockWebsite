@@ -231,45 +231,220 @@ function extractUserImplementationsForParameter(
   
   switch (parameter) {
     case "AccessControl":
-      // Extract access control implementations from user responses
+      // Extract access control implementations from user responses (Tab 4: Security Control Framework)
       if (userResponses.securityMeasures && userResponses.securityMeasures.includes('access-control')) {
-        // Add mapped implementations based on responses
-        // This is a placeholder and needs real mapping logic
         implementations.push({
           controlId: 'AC-1',
-          implementationLevel: 3, // This would be derived from the responses
-          notes: 'User reported basic access controls'
+          implementationLevel: 3,
+          notes: 'User reported access control security measures'
+        });
+      }
+      // Check RBAC/ABAC implementation from Identity Behavior & Hygiene (Tab 12)
+      if (userResponses.identityBehaviorHygiene?.accessControlModel) {
+        const accessModel = userResponses.identityBehaviorHygiene.accessControlModel;
+        const level = accessModel === 'ABAC' ? 4 : accessModel === 'RBAC' ? 3 : 2;
+        implementations.push({
+          controlId: 'AC-2',
+          implementationLevel: level,
+          notes: `User reported ${accessModel} access control model`
         });
       }
       break;
       
     case "DataProtection":
-      // Extract data protection implementations from user responses
+      // Extract data protection implementations from security measures (Tab 4)
       if (userResponses.securityMeasures && userResponses.securityMeasures.includes('encryption')) {
-        // Add mapped implementations
         implementations.push({
           controlId: 'DP-1',
-          implementationLevel: 2,
-          notes: 'User reported basic encryption'
+          implementationLevel: 3,
+          notes: 'User reported encryption security measures'
+        });
+      }
+      // Check device-level encryption from Device Inventory (Tab 11)
+      if (userResponses.deviceInventoryTracking?.encryptionStatus) {
+        const encryptionLevel = userResponses.deviceInventoryTracking.encryptionStatus.includes('Full-Disk-Encryption') ? 4 : 2;
+        implementations.push({
+          controlId: 'DP-2',
+          implementationLevel: encryptionLevel,
+          notes: `Device encryption status: ${userResponses.deviceInventoryTracking.encryptionStatus}`
+        });
+      }
+      // Check compliance requirements for data protection (Tab 5)
+      if (userResponses.complianceRequirements?.healthcare?.includes('HIPAA')) {
+        implementations.push({
+          controlId: 'DP-3',
+          implementationLevel: 4,
+          notes: 'HIPAA compliance indicates strong data protection requirements'
         });
       }
       break;
       
     case "IAM":
-      // Extract IAM implementations from user responses
-      if (userResponses.identityBehavior && userResponses.identityBehavior.length > 0) {
-        // Add mapped implementations for Identity & Access Management
+      // Extract IAM implementations from Identity Behavior & Hygiene (Tab 12)
+      if (userResponses.identityBehaviorHygiene?.mfaStatus) {
+        const mfaLevel = userResponses.identityBehaviorHygiene.mfaStatus ? 4 : 1;
         implementations.push({
           controlId: 'IAM-1',
-          implementationLevel: 2,
-          notes: 'User reported identity behavior tracking'
+          implementationLevel: mfaLevel,
+          notes: `Multi-factor authentication status: ${userResponses.identityBehaviorHygiene.mfaStatus ? 'Enabled' : 'Disabled'}`
+        });
+      }
+      // Check privileged account management 
+      if (userResponses.identityBehaviorHygiene?.privilegedAccountInventory) {
+        implementations.push({
+          controlId: 'IAM-2',
+          implementationLevel: 3,
+          notes: 'User reported privileged account inventory management'
+        });
+      }
+      // Check access review frequency
+      if (userResponses.identityBehaviorHygiene?.accessReviewFrequency) {
+        const reviewLevel = userResponses.identityBehaviorHygiene.accessReviewFrequency === 'Quarterly' ? 4 : 3;
+        implementations.push({
+          controlId: 'IAM-3',
+          implementationLevel: reviewLevel,
+          notes: `Access review frequency: ${userResponses.identityBehaviorHygiene.accessReviewFrequency}`
         });
       }
       break;
       
-    // Add cases for other parameters
+    case "SecurityAwareness":
+      // Extract from security measures and ISMS processes
+      if (userResponses.securityMeasures && userResponses.securityMeasures.includes('employee-training')) {
+        implementations.push({
+          controlId: 'SA-1',
+          implementationLevel: 3,
+          notes: 'User reported employee security training programs'
+        });
+      }
+      break;
+      
+    case "IncidentResponse":
+      // Extract from ISMS processes (Tab 10) and security measures
+      if (userResponses.ismsProcesses && userResponses.ismsProcesses.includes('Incident-Management')) {
+        implementations.push({
+          controlId: 'IR-1',
+          implementationLevel: 3,
+          notes: 'User reported incident management processes in ISMS'
+        });
+      }
+      // Check for incident response plans in policy documents (Tab 7)
+      if (userResponses.policyDocuments?.procedures?.includes('Incident-Response')) {
+        implementations.push({
+          controlId: 'IR-2',
+          implementationLevel: 4,
+          notes: 'User has documented incident response procedures'
+        });
+      }
+      break;
+      
+    case "NetworkSecurity":
+      // Extract from infrastructure mode and device security (Tab 2, 11)
+      if (userResponses.deviceInventoryTracking?.firewallActive) {
+        implementations.push({
+          controlId: 'NS-1',
+          implementationLevel: 3,
+          notes: 'User reported active firewall protection on devices'
+        });
+      }
+      break;
+      
+    case "AssetManagement":
+      // Extract from device inventory tracking (Tab 11)
+      if (userResponses.deviceInventoryTracking?.deviceType) {
+        implementations.push({
+          controlId: 'AM-1',
+          implementationLevel: 3,
+          notes: 'User reported device inventory tracking capabilities'
+        });
+      }
+      break;
+      
+    case "ComplianceManagement":
+      // Extract from compliance requirements (Tab 5) and regulatory requirements (Tab 6)
+      if (userResponses.complianceRequirements?.frameworks && userResponses.complianceRequirements.frameworks.length > 0) {
+        const frameworkCount = userResponses.complianceRequirements.frameworks.length;
+        const level = frameworkCount >= 3 ? 4 : frameworkCount >= 2 ? 3 : 2;
+        implementations.push({
+          controlId: 'CM-1',
+          implementationLevel: level,
+          notes: `User reported ${frameworkCount} compliance frameworks: ${userResponses.complianceRequirements.frameworks.join(', ')}`
+        });
+      }
+      break;
+      
+    case "ApplicationSecurity":
+      // Extract from security measures and vulnerabilities (Tab 3, 4)
+      if (userResponses.websiteVulnerabilities && userResponses.websiteVulnerabilities.length > 0) {
+        const vulnLevel = userResponses.websiteVulnerabilities.includes('weak-authentication') ? 2 : 3;
+        implementations.push({
+          controlId: 'AS-1',
+          implementationLevel: vulnLevel,
+          notes: `Website vulnerabilities identified: ${userResponses.websiteVulnerabilities.join(', ')}`
+        });
+      }
+      // Check if secure development practices mentioned in security measures
+      if (userResponses.securityMeasures && userResponses.securityMeasures.includes('secure-coding')) {
+        implementations.push({
+          controlId: 'AS-2',
+          implementationLevel: 3,
+          notes: 'User reported secure coding practices'
+        });
+      }
+      break;
+      
+    case "ThirdPartyManagement":
+      // Extract from relevant ACQ tools (Tab 8) and security measures (Tab 4)
+      if (userResponses.relevantACQTools?.assessments && userResponses.relevantACQTools.assessments.includes('Third-Party-Risk-Assessment')) {
+        implementations.push({
+          controlId: 'TPM-1',
+          implementationLevel: 4,
+          notes: 'User reported third-party risk assessment capabilities'
+        });
+      }
+      // Check for vendor management in security measures
+      if (userResponses.securityMeasures && userResponses.securityMeasures.includes('vendor-management')) {
+        implementations.push({
+          controlId: 'TPM-2',
+          implementationLevel: 3,
+          notes: 'User reported vendor management practices'
+        });
+      }
+      break;
+      
+    case "SecurityGovernance":
+      // Extract from policy documents (Tab 7) and ISMS processes (Tab 10)
+      if (userResponses.policyDocuments?.policies && userResponses.policyDocuments.policies.length > 0) {
+        const policyCount = userResponses.policyDocuments.policies.length;
+        const level = policyCount >= 5 ? 4 : policyCount >= 3 ? 3 : 2;
+        implementations.push({
+          controlId: 'SG-1',
+          implementationLevel: level,
+          notes: `User has ${policyCount} security policies: ${userResponses.policyDocuments.policies.join(', ')}`
+        });
+      }
+      // Check for risk management in ISMS processes
+      if (userResponses.ismsProcesses && userResponses.ismsProcesses.includes('Risk-Assessment')) {
+        implementations.push({
+          controlId: 'SG-2',
+          implementationLevel: 4,
+          notes: 'User reported risk assessment processes in ISMS'
+        });
+      }
+      // Check for leadership support in ISMS
+      if (userResponses.ismsLeadership?.executiveSupport) {
+        implementations.push({
+          controlId: 'SG-3',
+          implementationLevel: 4,
+          notes: 'User reported executive support for security governance'
+        });
+      }
+      break;
+      
+    // Default case for unmapped parameters
     default:
-      // No specific mappings for this parameter
+      // Log warning for development purposes
+      console.warn(`No expert mapping implemented for parameter: ${parameter}`);
       break;
   }
   
