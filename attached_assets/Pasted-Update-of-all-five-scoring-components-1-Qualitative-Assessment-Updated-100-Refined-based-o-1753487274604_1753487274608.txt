@@ -1,0 +1,37 @@
+Update of all five scoring components:
+
+*1. Qualitative Assessment (Updated 100%)
+Refined based on actual evidence
+More accurate scoring of each 12 parameters
+Comparison what was supplied by the organization to preliminary assessment.
+
+2. Quantitative Analysis (Industry tools Deep Scan 100%)
+Professional scanning tool, Monitoring and incident results
+Detailed analysis of all  12 parameters
+Trend analysis showing changes over time (a minimum of 6 months)
+Performance metrics with statistical significance.
+
+*3. Risk Assessment Score by Impact and Threat analysis.- RASBITA Cost-Benefit Analysis (Detailed 100%)
+Comprehensive financial impact modeling
+Actual incident costs (if any occurred)
+Detailed resource allocation analysis
+Return on security investment calculations
+
+*4. RASBITA Governance & Management (Maturity 100%)
+Detailed NIST CSF 2.0 radar analysis
+Maturity progression over time
+Governance structure effectiveness evaluation
+Management control efficacy assessment
+
+*5. Architecture Threat Modeling & App Sec (Complete 100%)
+Thorough data flow diagram analysis
+Comprehensive STRIDE threat modeling
+Validated mitigation strategies
+Architectural security validation
+SAST/DAST
+
+I also noticed that the steps changed and we did not reflect that in the design thus the report is skewed as you can see in the screenshot. Step 1 Inquiry & Questionnaire (data collection) Step 2. Interview & Questionnaire 3. Matrix Population 4.  RASBITA Governance & Management 5. RASBITA Score & Cost-Benefit Analysis 6. Gap Analysis 7. Architecture Threat modeling. 8. Preliminary Report (qualitative assessment) ..... Final  Step should be 9. Comprehensive report: Quantitative Analysis (Deep Scan 100%)
+Professional scanning tool: Detailed sanning of all the 11 deep san parameter and analysis to prove 12 default parameters.
+Monitoring, detection and incident response to determine organizational and system security postoure and Trends. 
+These analysis will show changes over time (a minimum of 6 months)
+Performance metrics with statistical significance will be covered going back to improving the original scores. 
