@@ -19,8 +19,17 @@
  * 5. Architecture Threat Modeling & App Sec (Complete 100%) - STRIDE + SAST/DAST
  * 
  * SCANNING CAPABILITY CLASSIFICATION:
- * ✔️ Directly Detectable: 12 parameters with full deep scanning capability
- * ⚠️ Limited/Indirect: 5 parameters requiring complementary tools
+ * ✔️ Directly Detectable (12 parameters): Full deep scanning capability with standard industry tools
+ * ⚠️ Partial Detection (2 parameters): Limited scanning with specific functional constraints
+ * ⚠️ Indirect/Limited (3 parameters): Require complementary tools beyond standard scanners
+ * 
+ * TECHNICAL LIMITATIONS & REQUIREMENTS:
+ * - IAM: Partial detection - overprivileged roles, unused accounts (requires IAM-specific tools)
+ * - Email Security: Partial detection - scanning headers, links, sandboxing (requires email security platforms)
+ * - Zero Trust: Needs architecture + policy enforcement tools, not just scanners
+ * - Data Security & Leakage: Needs DLP (Data Loss Prevention) + endpoint visibility
+ * - Browser & Web Security: Needs secure browser tech or proxy inspection tools
+ * - Security Awareness & Insider threat: Indirect via behavioral analytics and DLP triggers
  */
 
 export interface DeepScanMapping {
@@ -226,6 +235,37 @@ export function getScanningCapabilitySummary() {
     partial: partialCount,
     indirect: indirectCount,
     dataIntegrityRequirement: "AUTHENTIC DATA POINTS ONLY - NO sampling, estimation, or synthetic data permitted",
+    
+    scanningCapabilityBreakdown: {
+      directDetection: {
+        count: directCount,
+        parameters: ["Vulnerability", "Patch Mgmt", "Misconfigurations", "Malware", "Endpoint Security", 
+                    "Credential Exposure", "Cloud Security Posture", "Network Exposure", "Dark Web Exposure", 
+                    "Compliance & Frameworks", "Threat Intelligence"],
+        description: "Full deep scanning capability with standard industry tools"
+      },
+      partialDetection: {
+        count: partialCount,
+        parameters: ["IAM", "Email Security (Phishing)"],
+        limitations: {
+          "IAM": "Partial - overprivileged roles, unused accounts detection only",
+          "Email Security (Phishing)": "Partial - scanning headers, links, sandboxing capabilities"
+        },
+        description: "Limited scanning with specific functional constraints"
+      },
+      indirectLimited: {
+        count: indirectCount,
+        parameters: ["Zero Trust", "Data Security & Leakage", "Browser & Web Security", "Security Awareness & Insider threat"],
+        limitations: {
+          "Zero Trust": "Needs architecture + policy enforcement tools, not just scanners",
+          "Data Security & Leakage": "Needs DLP (Data Loss Prevention) + endpoint visibility",
+          "Browser & Web Security": "Needs secure browser tech or proxy inspection tools",
+          "Security Awareness & Insider threat": "Indirect - via behavioral analytics and DLP triggers"
+        },
+        description: "Require complementary tools beyond standard scanners"
+      }
+    },
+    
     recommendedToolCombination: [
       "Direct vulnerability scanner data (Tenable, Qualys, Wazuh) - measured CVE counts",
       "Actual EDR/XDR metrics (CrowdStrike, SentinelOne, Microsoft Defender XDR) - real endpoint statistics",
@@ -235,6 +275,16 @@ export function getScanningCapabilitySummary() {
       "Direct DLP + IAM system data - measured policy violations and access metrics",
       "Actual security awareness metrics (KnowBe4) - measured training completion and test results"
     ],
+    
+    technicalRequirementsForLimitedParameters: {
+      "IAM Analysis": ["SailPoint", "Okta", "CyberArk", "Azure AD - for overprivileged role detection"],
+      "Email Security": ["Proofpoint", "Mimecast", "Microsoft Defender for Office 365", "Barracuda - for phishing analysis"],
+      "Zero Trust Architecture": ["Zscaler", "Palo Alto Prisma", "Microsoft Zero Trust", "Okta - for policy enforcement"],
+      "Data Loss Prevention": ["Symantec DLP", "Forcepoint", "Microsoft Purview", "Varonis - for data leakage detection"],
+      "Browser Security": ["Burp Suite", "OWASP ZAP", "Acunetix", "Veracode - for web security analysis"],
+      "Security Awareness": ["KnowBe4", "Proofpoint", "Microsoft Viva", "Forcepoint UEBA - for behavioral analytics"]
+    },
+    
     fivePillarsWeight: {
       "Qualitative Assessment": "Updated 100% - Refined based on actual evidence, accurate scoring of 12 parameters",
       "Quantitative Analysis": "Industry tools Deep Scan 100% - Professional scanning tools, 17 parameters with trend analysis (6+ months)",

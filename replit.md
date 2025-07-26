@@ -27,9 +27,20 @@ Advanced cybersecurity platform featuring the HOS²A (Healthcare Organizational 
 - All validation methods updated to specify "Direct data extraction" and "measured metrics"
 
 ✅ **17 Authentic Deep Scan Parameters with Scanning Capabilities:**
-**✔️ Direct Detection (12 parameters):** Vulnerability, Patch Mgmt, Misconfigurations, Malware, Endpoint Security, Credential Exposure, Cloud Security Posture, Network Exposure, Dark Web Exposure, Compliance & Frameworks, Threat Intelligence
-**⚠️ Partial Detection (2 parameters):** IAM (overprivileged roles, unused accounts), Email Security/Phishing (headers, links, sandboxing)
-**⚠️ Indirect/Limited (4 parameters):** Zero Trust (needs architecture + policy tools), Data Security & Leakage (needs DLP + endpoint visibility), Browser & Web Security (needs secure browser tech), Security Awareness & Insider threat (behavioral analytics + DLP triggers)
+
+**✔️ Direct Detection (12 parameters):** Full deep scanning capability with standard industry tools
+- Vulnerability, Patch Mgmt, Misconfigurations, Malware, Endpoint Security, Credential Exposure
+- Cloud Security Posture, Network Exposure, Dark Web Exposure, Compliance & Frameworks, Threat Intelligence
+
+**⚠️ Partial Detection (2 parameters):** Limited scanning with specific functional constraints
+- **IAM:** Partial - overprivileged roles, unused accounts detection only (requires SailPoint, Okta, CyberArk, Azure AD)
+- **Email Security (Phishing):** Partial - scanning headers, links, sandboxing capabilities (requires Proofpoint, Mimecast, Microsoft Defender for Office 365, Barracuda)
+
+**⚠️ Indirect/Limited (3 parameters):** Require complementary tools beyond standard scanners
+- **Zero Trust:** Needs architecture + policy enforcement tools, not just scanners (requires Zscaler, Palo Alto Prisma, Microsoft Zero Trust, Okta)
+- **Data Security & Leakage:** Needs DLP (Data Loss Prevention) + endpoint visibility (requires Symantec DLP, Forcepoint, Microsoft Purview, Varonis)
+- **Browser & Web Security:** Needs secure browser tech or proxy inspection tools (requires Burp Suite, OWASP ZAP, Acunetix, Veracode)
+- **Security Awareness & Insider threat:** Indirect via behavioral analytics and DLP triggers (requires KnowBe4, Proofpoint, Microsoft Viva, Forcepoint UEBA)
 
 ✅ **Five Pillars Implementation Structure (Each 100% when Complete):**
 - **Qualitative Assessment (Updated 100%):** Refined based on actual evidence, accurate scoring of 12 parameters, comparison to preliminary assessment
