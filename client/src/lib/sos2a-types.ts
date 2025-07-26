@@ -974,6 +974,14 @@ export interface AssessmentReport {
   updatedAt?: string; // Last modification date
   age?: number; // Age of the assessment in days
   securityScore: number;
+  
+  // 5-Pillar RASBITA Framework Scores
+  qualitativeScore?: number;
+  quantitativeScore?: number;
+  cbfScore?: number; // Cost-Benefit Analysis score
+  rgmScore?: number; // Governance score
+  architectureScore?: number; // Architecture Threat Modeling score
+  
   businessLocation: {
     state: string;
     country: string;
