@@ -495,25 +495,26 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             </div>
           </div>
           
-          <Tabs defaultValue="scorecard" className="w-full">
+          <Tabs defaultValue="visual-scorecard" className="w-full">
             <TabsList className={`grid w-full ${
               report.reportType === 'preliminary' 
-                ? 'grid-cols-2 md:grid-cols-3' 
-                : 'grid-cols-2 md:grid-cols-7'
+                ? 'grid-cols-3 md:grid-cols-6' 
+                : 'grid-cols-3 md:grid-cols-9'
             }`}>
+              <TabsTrigger value="visual-scorecard">Visual Scorecard</TabsTrigger>
+              <TabsTrigger value="compliance">Compliance</TabsTrigger>
+              <TabsTrigger value="risk-analysis">Risk Analysis</TabsTrigger>
               <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
               <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+              <TabsTrigger value="guidance">Implementation Guidance</TabsTrigger>
               {report.reportType === 'comprehensive' && (
                 <>
                   <TabsTrigger value="risks">Risks & Vulnerabilities</TabsTrigger>
                   <TabsTrigger value="architecture">Architecture Analysis</TabsTrigger>
-                  <TabsTrigger value="compliance">Compliance Status</TabsTrigger>
-                  <TabsTrigger value="frameworks">Framework Control Gaps</TabsTrigger>
+
+
                   <TabsTrigger value="isms">ISMS</TabsTrigger>
                 </>
-              )}
-              {report.reportType === 'preliminary' && (
-                <TabsTrigger value="guidance">Implementation Guidance</TabsTrigger>
               )}
             </TabsList>
             
