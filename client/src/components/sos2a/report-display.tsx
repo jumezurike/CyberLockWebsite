@@ -5,9 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AssessmentReport } from "@/lib/sos2a-types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, FileText, Download, Calendar, Clock, AlertTriangle, Shield, CheckCircle2 } from "lucide-react";
+import { AlertCircle, FileText, Download, Calendar, Clock, AlertTriangle, Shield, CheckCircle2, Building2, BarChart3, Target, CheckCircle } from "lucide-react";
 import { formatDistanceToNow, differenceInDays, parseISO } from "date-fns";
 import Scorecard from "./scorecard";
+import EnhancedProfessionalAnalysis from "./enhanced-professional-analysis";
 import logoImage from "@/assets/cyberlockx-logo-resized.png";
 
 interface ReportDisplayProps {
@@ -518,257 +519,18 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             </TabsList>
             
             <TabsContent value="scorecard" className="space-y-4 pt-4">
-              {/* Enhanced 5-Pillar RASBITA Framework Scorecard */}
-              <div className="space-y-8">
-                {/* Header */}
-                <div className="text-center">
-                  <h2 className="text-2xl font-bold mb-2">5-Pillar RASBITA Framework Scorecard</h2>
-                  <p className="text-muted-foreground">Mathematical Framework: 500% Total Capacity (5 Pillars × 100% Each) = 500%/5 = 100%</p>
-                  <div className="mt-2 p-3 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-blue-800">
-                      <strong>Data Integrity Policy:</strong> Scores only display when authentic data is available. 
-                      Quantitative Analysis requires actual deep scanning with professional cybersecurity tools 
-                      (Nessus, Qualys, Rapid7, OpenVAS, etc.). No placeholder or estimated values are shown.
-                    </p>
-                  </div>
+              {/* Only display scorecard if the report has it */}
+              {report.scorecard ? (
+                <Scorecard 
+                  scorecard={report.scorecard} 
+                  reportType={report.reportType} 
+                  report={report}
+                />
+              ) : (
+                <div className="p-4 text-center">
+                  <p className="text-muted-foreground">Scorecard data is not available for this report.</p>
                 </div>
-
-                {/* Overall Score Pie Chart and Summary */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  {/* Pie Chart Section */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">Overall Security Score</CardTitle>
-                      <CardDescription>Comprehensive RASBITA assessment result</CardDescription>
-                    </CardHeader>
-                    <CardContent className="flex justify-center">
-                      <div className="relative">
-                        {/* CSS-based pie chart representation */}
-                        <div className="w-48 h-48 rounded-full border-8 border-gray-200 relative overflow-hidden">
-                          {(() => {
-                            // Calculate active pillars and their scores
-                            const activePillars = [];
-                            let totalScore = 0;
-                            let pillarCount = 0;
-                            
-                            if (report.qualitativeScore) {
-                              activePillars.push({ score: report.qualitativeScore, color: '#3b82f6' });
-                              totalScore += report.qualitativeScore;
-                              pillarCount++;
-                            }
-                            if (report.quantitativeScore) {
-                              activePillars.push({ score: report.quantitativeScore, color: '#10b981' });
-                              totalScore += report.quantitativeScore;
-                              pillarCount++;
-                            }
-                            if (report.cbfScore) {
-                              activePillars.push({ score: report.cbfScore, color: '#f59e0b' });
-                              totalScore += report.cbfScore;
-                              pillarCount++;
-                            }
-                            if (report.rgmScore) {
-                              activePillars.push({ score: report.rgmScore, color: '#8b5cf6' });
-                              totalScore += report.rgmScore;
-                              pillarCount++;
-                            }
-                            if (report.architectureScore) {
-                              activePillars.push({ score: report.architectureScore, color: '#ef4444' });
-                              totalScore += report.architectureScore;
-                              pillarCount++;
-                            }
-                            
-                            const averageScore = pillarCount > 0 ? Math.round(totalScore / pillarCount) : 0;
-                            const scorePercentage = (averageScore / 100) * 360;
-                            
-                            return (
-                              <div 
-                                className="absolute inset-0 rounded-full"
-                                style={{
-                                  background: pillarCount > 0 
-                                    ? `conic-gradient(
-                                        #3b82f6 0deg ${scorePercentage}deg,
-                                        #e5e7eb ${scorePercentage}deg 360deg
-                                      )`
-                                    : '#e5e7eb'
-                                }}
-                              />
-                            );
-                          })()}
-                          <div className="absolute inset-4 bg-white rounded-full flex items-center justify-center">
-                            <div className="text-center">
-                              {(() => {
-                                const activePillars = [
-                                  report.qualitativeScore,
-                                  report.quantitativeScore,
-                                  report.cbfScore,
-                                  report.rgmScore,
-                                  report.architectureScore
-                                ].filter(score => score !== undefined);
-                                
-                                if (activePillars.length === 0) {
-                                  return (
-                                    <>
-                                      <div className="text-2xl font-bold text-gray-400">--</div>
-                                      <div className="text-xs text-gray-500">No Data</div>
-                                    </>
-                                  );
-                                }
-                                
-                                const averageScore = Math.round(
-                                  activePillars.reduce((sum, score) => sum + score, 0) / activePillars.length
-                                );
-                                
-                                return (
-                                  <>
-                                    <div className="text-3xl font-bold text-gray-900">{averageScore}%</div>
-                                    <div className="text-sm text-gray-600">Overall</div>
-                                    <div className="text-xs text-gray-500">{activePillars.length}/5 Pillars</div>
-                                  </>
-                                );
-                              })()}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-
-                  {/* Five Pillars Summary */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">5-Pillar Breakdown</CardTitle>
-                      <CardDescription>Individual pillar performance analysis</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                            <span className="text-sm font-medium">Qualitative Assessment</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-20 bg-gray-200 rounded-full h-2">
-                              <div className="bg-blue-500 h-2 rounded-full" style={{ width: `${report.qualitativeScore || 85}%` }}></div>
-                            </div>
-                            <span className="text-sm font-bold w-10">{report.qualitativeScore || 85}%</span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 bg-emerald-500 rounded"></div>
-                            <span className="text-sm font-medium">Quantitative Analysis</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {report.quantitativeScore ? (
-                              <>
-                                <div className="w-20 bg-gray-200 rounded-full h-2">
-                                  <div className="bg-emerald-500 h-2 rounded-full" style={{ width: `${report.quantitativeScore}%` }}></div>
-                                </div>
-                                <span className="text-sm font-bold w-10">{report.quantitativeScore}%</span>
-                              </>
-                            ) : (
-                              <>
-                                <div className="w-20 bg-gray-200 rounded-full h-2">
-                                  <div className="bg-gray-400 h-2 rounded-full w-0"></div>
-                                </div>
-                                <span className="text-xs text-gray-500 w-20">Deep Scan Required</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 bg-amber-500 rounded"></div>
-                            <span className="text-sm font-medium">CBF (Cost-Benefit)</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {report.cbfScore ? (
-                              <>
-                                <div className="w-20 bg-gray-200 rounded-full h-2">
-                                  <div className="bg-amber-500 h-2 rounded-full" style={{ width: `${report.cbfScore}%` }}></div>
-                                </div>
-                                <span className="text-sm font-bold w-10">{report.cbfScore}%</span>
-                              </>
-                            ) : (
-                              <>
-                                <div className="w-20 bg-gray-200 rounded-full h-2">
-                                  <div className="bg-gray-400 h-2 rounded-full w-0"></div>
-                                </div>
-                                <span className="text-xs text-gray-500 w-20">Incident Data Required</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 bg-purple-500 rounded"></div>
-                            <span className="text-sm font-medium">RGM (Governance)</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-20 bg-gray-200 rounded-full h-2">
-                              <div className="bg-purple-500 h-2 rounded-full" style={{ width: `${report.rgmScore || 79}%` }}></div>
-                            </div>
-                            <span className="text-sm font-bold w-10">{report.rgmScore || 79}%</span>
-                          </div>
-                        </div>
-                        
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-3">
-                            <div className="w-4 h-4 bg-red-500 rounded"></div>
-                            <span className="text-sm font-medium">Architecture TModel</span>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {report.architectureScore ? (
-                              <>
-                                <div className="w-20 bg-gray-200 rounded-full h-2">
-                                  <div className="bg-red-500 h-2 rounded-full" style={{ width: `${report.architectureScore}%` }}></div>
-                                </div>
-                                <span className="text-sm font-bold w-10">{report.architectureScore}%</span>
-                              </>
-                            ) : (
-                              <>
-                                <div className="w-20 bg-gray-200 rounded-full h-2">
-                                  <div className="bg-gray-400 h-2 rounded-full w-0"></div>
-                                </div>
-                                <span className="text-xs text-gray-500 w-20">Diagrams Required</span>
-                              </>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </div>
-
-                {/* Legacy Scorecard Component (preserved) */}
-                {report.scorecard && (
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="text-lg">Detailed Assessment Scorecard</CardTitle>
-                      <CardDescription>Parameter-level analysis and scoring details</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Scorecard 
-                        scorecard={report.scorecard} 
-                        reportType={report.reportType} 
-                        report={report}
-                      />
-                    </CardContent>
-                  </Card>
-                )}
-
-                {/* Message when no legacy scorecard data */}
-                {!report.scorecard && (
-                  <Card>
-                    <CardContent className="p-6 text-center">
-                      <p className="text-muted-foreground">Enhanced visual scorecard displayed above. Detailed parameter scorecard will be available after comprehensive assessment.</p>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
+              )}
             </TabsContent>
             
             <TabsContent value="recommendations" className="space-y-4 pt-4">
@@ -1966,6 +1728,9 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
         </div>
       </div>
       
+
+      {/* Enhanced Professional Analysis Section - Marriage of Old and Enhanced */}
+      <EnhancedProfessionalAnalysis report={report} />
       <div className="mt-6 flex flex-col md:flex-row justify-between gap-4">
         <Button variant="outline" onClick={onBack}>
           Back to Matrix Population
