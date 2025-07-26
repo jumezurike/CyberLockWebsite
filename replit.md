@@ -20,11 +20,17 @@ Advanced cybersecurity platform featuring the HOS²A (Healthcare Organizational 
 - Preserved complete industry tool mappings and validation methods for each parameter
 - Maintained proper parameter-to-qualitative area mapping structure
 
-✅ **17 Authentic Deep Scan Parameters Confirmed:**
-1. Vulnerability, 2. Patch Mgmt, 3. Misconfigurations, 4. Malware, 5. Endpoint Security
-6. Credential Exposure, 7. IAM, 8. Email Security (Phishing), 9. Cloud Security Posture
-10. Network Exposure, 11. Zero Trust, 12. Data Security & Leakage, 13. Browser & Web Security
-14. Dark Web Exposure, 15. Compliance & Frameworks, 16. Threat Intelligence, 17. Security Awareness & Insider threat
+✅ **17 Authentic Deep Scan Parameters with Scanning Capabilities:**
+**✔️ Direct Detection (12 parameters):** Vulnerability, Patch Mgmt, Misconfigurations, Malware, Endpoint Security, Credential Exposure, Cloud Security Posture, Network Exposure, Dark Web Exposure, Compliance & Frameworks, Threat Intelligence
+**⚠️ Partial Detection (2 parameters):** IAM (overprivileged roles, unused accounts), Email Security/Phishing (headers, links, sandboxing)
+**⚠️ Indirect/Limited (4 parameters):** Zero Trust (needs architecture + policy tools), Data Security & Leakage (needs DLP + endpoint visibility), Browser & Web Security (needs secure browser tech), Security Awareness & Insider threat (behavioral analytics + DLP triggers)
+
+✅ **Five Pillars Weight Distribution (500% Total Framework):**
+- Qualitative Assessment: 20% (always included)
+- Quantitative Analysis: 25% (17 parameters × 1.47% each)
+- RASBITA Cost-Benefit: 25% (conditional on incidents)
+- RASBITA Governance: 15% (always included)
+- Architecture Threat Modeling: 15% (conditional on system diagrams)
 
 ### July 25, 2025 - Gap Analysis Expert System Implementation (75% Complete) ✅ IN PROGRESS
 **MAJOR MILESTONE: Expert Knowledge System Implementation**
