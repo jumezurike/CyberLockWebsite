@@ -1,0 +1,57 @@
+July 25 2025 
+
+I do know that the implementation is some what like this.  
+Qualitative Analysis covers:
+- Qualitative assessment of the original 12 parameters: This is weighted at 8.33% giving a total of 100% -Default for Qualitative analysis
+- RASBITA-RGM This uses NIST CSF 2.0 has 22 categories and 106 subcategories, organized within six core functions.Govern, Identify, Protect, Detect, Respond, and Recover
+All the subcategories are evaluated over four tiers of growth in cybersecurity risk governance and management. Let me know if you need a sample of NIST CSF 2.O. The 106 sub categories are weighted at 0.94 giving the total of 100%. -Default for Qualitative analysis. This cannot stop the process if not available but we must show that is was not included. 
+
+- RASBITA-CBF: This has its own separate mathematical calculation that is equal to 100%. However it is used if there is a momentary breach or one happened within 12 months of the assessment. 
+- Architecture Threat Modeling: This requires an actual threat modeling of the architecture, infrastructure, an application in question. This cannot stop the process if it is not available. We only need to indicate that it was not included. 
+
+When each of the pillars are utilized they must be indicated both in the nine phases and the scorecards. 
+
+All these constitute the preliminary report without the quantitative analysis. Some might use any part of the assessment but the questionnaire must be completed. The report will be based on the part of the pillar completed with indications of what is left.  
+
+Quantitative Analysis:
+This where we do the deep scan assessment with industry tools.
+We cover scanning for:
+Vulnerability 
+Patch Mgmt
+Misconfigurations
+Malware 
+Endpoint Security
+Credential Exposure 
+IAM
+Email Security (Phishing)
+Cloud Security Posture
+Network Exposure 
+Zero Trust
+Data Security & Leakage
+Browser & Web Security
+Dark Web Exposure
+Compliance & Frameworks
+Threat Intelligence
+Security Awareness & Insider threat
+
+This helps us to narrow down what the customer is saying with what we discovered. 
+Together with GAP analysis we can articulate the next step for the customer.
+
+Scorecard , Recommendations: Remediation / Mitigation strategy, Implementation guideline and etc,.
+
+qualitative report and the quantitative report gives you the comprehensive report. By adding more details (scanning before bring the devices in for continuous monitoring as a part of remediation strategy) to the qualitative report you will get the comprehensive report.
+
+   
+
+There was an emphasis on this Scorecard             Recommendations        Implementation guidance
+
+I  will provide you the development screenshot which is the same as production now. -If you need one.
+
+However enhanced reporting should be more refined, result driven, and practical with factual values at a total of 500% / 5 if all the pillars are involved.. 
+
+We should put the Visual Scorecard Tab - 5-pillar RASBITA framework with pie charts in the Scorecard above.
+Compliance Tab - PCI-DSS, HIPAA, CMMC, GDPR requirements will be another Tab in the row containing: the original layout of
+Scorecard             Recommendations        Implementation guidance
+Risk Analysis Tab - Mode of operation & security risks this will be another tab with Scorecard Recommendations        Implementation guidance
+
+Recommendations Tab - Security threats & mitigation strategies will move its content to Recommendations to avoid redundancy. Let me know if you understand my plan. 
