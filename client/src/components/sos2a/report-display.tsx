@@ -524,6 +524,13 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                 <div className="text-center">
                   <h2 className="text-2xl font-bold mb-2">5-Pillar RASBITA Framework Scorecard</h2>
                   <p className="text-muted-foreground">Mathematical Framework: 500% Total Capacity (5 Pillars × 100% Each) = 500%/5 = 100%</p>
+                  <div className="mt-2 p-3 bg-blue-50 rounded-lg">
+                    <p className="text-sm text-blue-800">
+                      <strong>Data Integrity Policy:</strong> Scores only display when authentic data is available. 
+                      Quantitative Analysis requires actual deep scanning with professional cybersecurity tools 
+                      (Nessus, Qualys, Rapid7, OpenVAS, etc.). No placeholder or estimated values are shown.
+                    </p>
+                  </div>
                 </div>
 
                 {/* Overall Score Pie Chart and Summary */}
@@ -538,23 +545,87 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                       <div className="relative">
                         {/* CSS-based pie chart representation */}
                         <div className="w-48 h-48 rounded-full border-8 border-gray-200 relative overflow-hidden">
-                          <div 
-                            className="absolute inset-0 rounded-full"
-                            style={{
-                              background: `conic-gradient(
-                                #3b82f6 0deg 61.2deg,
-                                #10b981 61.2deg 112.32deg,
-                                #f59e0b 112.32deg 153.36deg,
-                                #8b5cf6 153.36deg 209.88deg,
-                                #ef4444 209.88deg 270deg,
-                                #e5e7eb 270deg 360deg
-                              )`
-                            }}
-                          />
+                          {(() => {
+                            // Calculate active pillars and their scores
+                            const activePillars = [];
+                            let totalScore = 0;
+                            let pillarCount = 0;
+                            
+                            if (report.qualitativeScore) {
+                              activePillars.push({ score: report.qualitativeScore, color: '#3b82f6' });
+                              totalScore += report.qualitativeScore;
+                              pillarCount++;
+                            }
+                            if (report.quantitativeScore) {
+                              activePillars.push({ score: report.quantitativeScore, color: '#10b981' });
+                              totalScore += report.quantitativeScore;
+                              pillarCount++;
+                            }
+                            if (report.cbfScore) {
+                              activePillars.push({ score: report.cbfScore, color: '#f59e0b' });
+                              totalScore += report.cbfScore;
+                              pillarCount++;
+                            }
+                            if (report.rgmScore) {
+                              activePillars.push({ score: report.rgmScore, color: '#8b5cf6' });
+                              totalScore += report.rgmScore;
+                              pillarCount++;
+                            }
+                            if (report.architectureScore) {
+                              activePillars.push({ score: report.architectureScore, color: '#ef4444' });
+                              totalScore += report.architectureScore;
+                              pillarCount++;
+                            }
+                            
+                            const averageScore = pillarCount > 0 ? Math.round(totalScore / pillarCount) : 0;
+                            const scorePercentage = (averageScore / 100) * 360;
+                            
+                            return (
+                              <div 
+                                className="absolute inset-0 rounded-full"
+                                style={{
+                                  background: pillarCount > 0 
+                                    ? `conic-gradient(
+                                        #3b82f6 0deg ${scorePercentage}deg,
+                                        #e5e7eb ${scorePercentage}deg 360deg
+                                      )`
+                                    : '#e5e7eb'
+                                }}
+                              />
+                            );
+                          })()}
                           <div className="absolute inset-4 bg-white rounded-full flex items-center justify-center">
                             <div className="text-center">
-                              <div className="text-3xl font-bold text-gray-900">{report.securityScore || 77}%</div>
-                              <div className="text-sm text-gray-600">Overall</div>
+                              {(() => {
+                                const activePillars = [
+                                  report.qualitativeScore,
+                                  report.quantitativeScore,
+                                  report.cbfScore,
+                                  report.rgmScore,
+                                  report.architectureScore
+                                ].filter(score => score !== undefined);
+                                
+                                if (activePillars.length === 0) {
+                                  return (
+                                    <>
+                                      <div className="text-2xl font-bold text-gray-400">--</div>
+                                      <div className="text-xs text-gray-500">No Data</div>
+                                    </>
+                                  );
+                                }
+                                
+                                const averageScore = Math.round(
+                                  activePillars.reduce((sum, score) => sum + score, 0) / activePillars.length
+                                );
+                                
+                                return (
+                                  <>
+                                    <div className="text-3xl font-bold text-gray-900">{averageScore}%</div>
+                                    <div className="text-sm text-gray-600">Overall</div>
+                                    <div className="text-xs text-gray-500">{activePillars.length}/5 Pillars</div>
+                                  </>
+                                );
+                              })()}
                             </div>
                           </div>
                         </div>
@@ -589,10 +660,21 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                             <span className="text-sm font-medium">Quantitative Analysis</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <div className="w-20 bg-gray-200 rounded-full h-2">
-                              <div className="bg-emerald-500 h-2 rounded-full" style={{ width: `${report.quantitativeScore || 72}%` }}></div>
-                            </div>
-                            <span className="text-sm font-bold w-10">{report.quantitativeScore || 72}%</span>
+                            {report.quantitativeScore ? (
+                              <>
+                                <div className="w-20 bg-gray-200 rounded-full h-2">
+                                  <div className="bg-emerald-500 h-2 rounded-full" style={{ width: `${report.quantitativeScore}%` }}></div>
+                                </div>
+                                <span className="text-sm font-bold w-10">{report.quantitativeScore}%</span>
+                              </>
+                            ) : (
+                              <>
+                                <div className="w-20 bg-gray-200 rounded-full h-2">
+                                  <div className="bg-gray-400 h-2 rounded-full w-0"></div>
+                                </div>
+                                <span className="text-xs text-gray-500 w-20">Deep Scan Required</span>
+                              </>
+                            )}
                           </div>
                         </div>
                         
@@ -602,10 +684,21 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                             <span className="text-sm font-medium">CBF (Cost-Benefit)</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <div className="w-20 bg-gray-200 rounded-full h-2">
-                              <div className="bg-amber-500 h-2 rounded-full" style={{ width: `${report.cbfScore || 68}%` }}></div>
-                            </div>
-                            <span className="text-sm font-bold w-10">{report.cbfScore || 68}%</span>
+                            {report.cbfScore ? (
+                              <>
+                                <div className="w-20 bg-gray-200 rounded-full h-2">
+                                  <div className="bg-amber-500 h-2 rounded-full" style={{ width: `${report.cbfScore}%` }}></div>
+                                </div>
+                                <span className="text-sm font-bold w-10">{report.cbfScore}%</span>
+                              </>
+                            ) : (
+                              <>
+                                <div className="w-20 bg-gray-200 rounded-full h-2">
+                                  <div className="bg-gray-400 h-2 rounded-full w-0"></div>
+                                </div>
+                                <span className="text-xs text-gray-500 w-20">Incident Data Required</span>
+                              </>
+                            )}
                           </div>
                         </div>
                         
@@ -628,10 +721,21 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                             <span className="text-sm font-medium">Architecture TModel</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <div className="w-20 bg-gray-200 rounded-full h-2">
-                              <div className="bg-red-500 h-2 rounded-full" style={{ width: `${report.architectureScore || 83}%` }}></div>
-                            </div>
-                            <span className="text-sm font-bold w-10">{report.architectureScore || 83}%</span>
+                            {report.architectureScore ? (
+                              <>
+                                <div className="w-20 bg-gray-200 rounded-full h-2">
+                                  <div className="bg-red-500 h-2 rounded-full" style={{ width: `${report.architectureScore}%` }}></div>
+                                </div>
+                                <span className="text-sm font-bold w-10">{report.architectureScore}%</span>
+                              </>
+                            ) : (
+                              <>
+                                <div className="w-20 bg-gray-200 rounded-full h-2">
+                                  <div className="bg-gray-400 h-2 rounded-full w-0"></div>
+                                </div>
+                                <span className="text-xs text-gray-500 w-20">Diagrams Required</span>
+                              </>
+                            )}
                           </div>
                         </div>
                       </div>
