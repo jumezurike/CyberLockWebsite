@@ -1,6 +1,7 @@
 /**
  * Deep Scan Parameters to Qualitative Analysis Proof Mapping
- * 17 Extended Deep Scan Parameters for Quantitative Analysis (25% weight = 17 × 5.88% each)
+ * 17 Extended Deep Scan Parameters for Quantitative Analysis (25% of total framework)
+ * Each parameter represents 5.88% of the Quantitative Analysis pillar (100% ÷ 17 = 5.88%)
  * CRITICAL: These scans CANNOT be performed during qualitative assessment/analysis
  * Industry professional tools required for authentic quantitative results
  * Evolution from original 12 combined parameters to 17 individual parameters
@@ -12,7 +13,7 @@
 
 export interface DeepScanMapping {
   parameter: string;
-  weight: number; // 5.88% each (authentic weight calculation)
+  weight: number; // 5.88% each (100% ÷ 17 parameters within Quantitative Analysis pillar)
   scanningCapability: "direct" | "partial" | "indirect"; // Deep scanning detection level
   qualitativeAreas: string[];
   validationMethod: string;
@@ -222,11 +223,11 @@ export function getScanningCapabilitySummary() {
       "Security awareness platforms (e.g., KnowBe4)"
     ],
     fivePillarsWeight: {
-      "Qualitative Assessment": "20%",
-      "Quantitative Analysis": "25% (17 parameters × 5.88% each = 99.96%)",
-      "RASBITA Cost-Benefit": "25%",
-      "RASBITA Governance": "15%", 
-      "Architecture Threat Modeling": "15%"
+      "Qualitative Assessment": "20% of total framework",
+      "Quantitative Analysis": "25% of total framework (17 parameters = 100% within this pillar, 5.88% each)",
+      "RASBITA Cost-Benefit": "25% of total framework",
+      "RASBITA Governance": "15% of total framework", 
+      "Architecture Threat Modeling": "15% of total framework"
     }
   };
 }

@@ -26,11 +26,11 @@ Advanced cybersecurity platform featuring the HOS²A (Healthcare Organizational 
 **⚠️ Indirect/Limited (4 parameters):** Zero Trust (needs architecture + policy tools), Data Security & Leakage (needs DLP + endpoint visibility), Browser & Web Security (needs secure browser tech), Security Awareness & Insider threat (behavioral analytics + DLP triggers)
 
 ✅ **Five Pillars Weight Distribution (500% Total Framework):**
-- Qualitative Assessment: 20% (always included)
-- Quantitative Analysis: 25% (17 parameters × 5.88% each = 99.96%)
-- RASBITA Cost-Benefit: 25% (conditional on incidents)
-- RASBITA Governance: 15% (always included)
-- Architecture Threat Modeling: 15% (conditional on system diagrams)
+- Qualitative Assessment: 20% of total framework (always included)
+- Quantitative Analysis: 25% of total framework (17 parameters = 100% within this pillar, 5.88% each)
+- RASBITA Cost-Benefit: 25% of total framework (conditional on incidents)
+- RASBITA Governance: 15% of total framework (always included)
+- Architecture Threat Modeling: 15% of total framework (conditional on system diagrams)
 
 ### July 25, 2025 - Gap Analysis Expert System Implementation (75% Complete) ✅ IN PROGRESS
 **MAJOR MILESTONE: Expert Knowledge System Implementation**
