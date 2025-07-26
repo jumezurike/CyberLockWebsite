@@ -1,6 +1,6 @@
 /**
  * Deep Scan Parameters to Qualitative Analysis Proof Mapping
- * 17 Extended Deep Scan Parameters for Quantitative Analysis (25% weight = 17 × ~1.47% each)
+ * 17 Extended Deep Scan Parameters for Quantitative Analysis (25% weight = 17 × 5.88% each)
  * CRITICAL: These scans CANNOT be performed during qualitative assessment/analysis
  * Industry professional tools required for authentic quantitative results
  * Evolution from original 12 combined parameters to 17 individual parameters
@@ -12,7 +12,7 @@
 
 export interface DeepScanMapping {
   parameter: string;
-  weight: number; // ~1.47% each (25% ÷ 17 parameters)
+  weight: number; // 5.88% each (authentic weight calculation)
   scanningCapability: "direct" | "partial" | "indirect"; // Deep scanning detection level
   qualitativeAreas: string[];
   validationMethod: string;
@@ -23,7 +23,7 @@ export interface DeepScanMapping {
 export const deepScanMappings: DeepScanMapping[] = [
   {
     parameter: "Vulnerability",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Security Risks & Vulnerabilities", "Baseline Configuration"],
     validationMethod: "CVE scanning, OS/app weaknesses detection with quantitative CVSS scores and vulnerability age analysis.",
@@ -31,7 +31,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Patch Mgmt", 
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Baseline Configuration", "Standards & Guidelines"],
     validationMethod: "Agent-based scans or integrations providing patch compliance percentages and missing patch counts.",
@@ -39,7 +39,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Misconfigurations",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Baseline Configuration", "Standards & Guidelines", "Regulatory Requirements"],
     validationMethod: "OS, AD, cloud, firewall configuration audits with CIS benchmark compliance scores.",
@@ -47,7 +47,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Malware",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Security Risks & Vulnerabilities", "Relevant ACQ Tools"],
     validationMethod: "Signature-based & behavioral scans providing malware detection rates and infection statistics.",
@@ -55,7 +55,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Endpoint Security",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Device Inventory Tracking", "Relevant ACQ Tools", "Security Risks & Vulnerabilities"],
     validationMethod: "EDR/XDR integrations providing endpoint compliance scores and agent deployment statistics.",
@@ -63,7 +63,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Credential Exposure",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Identity Behavior & Hygiene", "Compliance Requirements"],
     validationMethod: "Checks for reused, leaked, or weak passwords with dark web monitoring alerts.",
@@ -71,7 +71,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "IAM",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "partial",
     qualitativeAreas: ["Identity Behavior & Hygiene", "Standards & Guidelines", "Compliance Requirements"],
     validationMethod: "Overprivileged roles and unused accounts detection with access review compliance metrics.",
@@ -80,7 +80,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Email Security (Phishing)",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "partial",
     qualitativeAreas: ["Security Risks & Vulnerabilities", "Security Control vs Framework"],
     validationMethod: "Scanning headers, links, sandboxing with phishing detection rates and click-through statistics.",
@@ -89,7 +89,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Cloud Security Posture",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Baseline Configuration", "Standards & Guidelines", "Compliance Requirements"],
     validationMethod: "CSPM (Cloud Security Posture Management) tools providing compliance scores and misconfiguration counts.",
@@ -97,7 +97,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Network Exposure",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Security Control vs Framework", "Adversarial Insight (MITRE ATT&CK)", "Baseline Configuration"],
     validationMethod: "Port scans, firewall gaps, lateral movement mapping with attack surface measurements.",
@@ -105,7 +105,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Zero Trust",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "indirect",
     qualitativeAreas: ["Security Control vs Framework", "Baseline Configuration", "Standards & Guidelines"],
     validationMethod: "Architecture + policy enforcement assessment requiring complementary tools beyond scanners.",
@@ -114,7 +114,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Data Security & Leakage",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "indirect",
     qualitativeAreas: ["Compliance Requirements", "Regulatory Requirements", "Information Security Management System (ISMS)"],
     validationMethod: "DLP (Data Loss Prevention) + endpoint visibility requiring specialized tools.",
@@ -123,7 +123,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Browser & Web Security",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "indirect",
     qualitativeAreas: ["Security Risks & Vulnerabilities", "Standards & Guidelines", "Relevant ACQ Tools"],
     validationMethod: "Secure browser tech or proxy inspection tools for comprehensive web security analysis.",
@@ -132,7 +132,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Dark Web Exposure",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Security Risks & Vulnerabilities", "Identity Behavior & Hygiene", "Adversarial Insight (MITRE ATT&CK)"],
     validationMethod: "Integrated threat intel feeds providing exposed asset discovery and credential compromise detection.",
@@ -140,7 +140,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Compliance & Frameworks",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Compliance Requirements", "Regulatory Requirements", "Standards & Guidelines"],
     validationMethod: "NIST, HIPAA, CIS, PCI-DSS reports generated through automated compliance scanning.",
@@ -148,7 +148,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Threat Intelligence",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "direct",
     qualitativeAreas: ["Adversarial Insight (MITRE ATT&CK)", "Security Risks & Vulnerabilities", "Relevant ACQ Tools"],
     validationMethod: "Feeds for IOCs, malware, TTPs providing quantitative threat validation and MITRE ATT&CK alignment.",
@@ -156,7 +156,7 @@ export const deepScanMappings: DeepScanMapping[] = [
   },
   {
     parameter: "Security Awareness & Insider threat",
-    weight: 1.47,
+    weight: 5.88,
     scanningCapability: "indirect",
     qualitativeAreas: ["Identity Behavior & Hygiene", "Information Security Management System (ISMS)", "Compliance Requirements"],
     validationMethod: "Behavioral analytics and DLP triggers requiring UEBA and training LMS platforms.",
@@ -223,7 +223,7 @@ export function getScanningCapabilitySummary() {
     ],
     fivePillarsWeight: {
       "Qualitative Assessment": "20%",
-      "Quantitative Analysis": "25% (17 parameters × 1.47% each)",
+      "Quantitative Analysis": "25% (17 parameters × 5.88% each = 99.96%)",
       "RASBITA Cost-Benefit": "25%",
       "RASBITA Governance": "15%", 
       "Architecture Threat Modeling": "15%"

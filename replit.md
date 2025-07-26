@@ -27,7 +27,7 @@ Advanced cybersecurity platform featuring the HOS²A (Healthcare Organizational 
 
 ✅ **Five Pillars Weight Distribution (500% Total Framework):**
 - Qualitative Assessment: 20% (always included)
-- Quantitative Analysis: 25% (17 parameters × 1.47% each)
+- Quantitative Analysis: 25% (17 parameters × 5.88% each = 99.96%)
 - RASBITA Cost-Benefit: 25% (conditional on incidents)
 - RASBITA Governance: 15% (always included)
 - Architecture Threat Modeling: 15% (conditional on system diagrams)
