@@ -1,123 +1,123 @@
 /**
  * Deep Scan Parameters to Qualitative Analysis Proof Mapping
- * This file contains the mapping between deep scan parameters (quantitative) 
- * and their corresponding qualitative assessment areas, along with how 
- * deep scanning provides proof and validation.
+ * 15 Deep Scan Parameters for Quantitative Analysis (25% weight = 15 × 6.66% each)
+ * CRITICAL: These scans CANNOT be performed during qualitative assessment/analysis
+ * Industry professional tools required for authentic quantitative results
  */
 
 export interface DeepScanMapping {
   parameter: string;
+  weight: number; // 6.66% each
   qualitativeAreas: string[];
   validationMethod: string;
+  industryTools: string[];
 }
 
 export const deepScanMappings: DeepScanMapping[] = [
   {
-    parameter: "Vulnerability & Patch Mgmt",
-    qualitativeAreas: [
-      "Security Risks & Vulnerabilities",
-      "Baseline Configuration"
-    ],
-    validationMethod: "Provides quantitative CVE & vulnerability counts, patch levels, asset exposure, directly validating risks, vulnerabilities, and configuration baselines."
+    parameter: "Vulnerability",
+    weight: 6.66,
+    qualitativeAreas: ["Security Risks & Vulnerabilities", "Baseline Configuration"],
+    validationMethod: "Quantitative CVE counts, CVSS scores, vulnerability age analysis providing measurable security posture metrics.",
+    industryTools: ["Nessus", "Qualys", "Rapid7", "OpenVAS"]
+  },
+  {
+    parameter: "Patch Management", 
+    weight: 6.66,
+    qualitativeAreas: ["Baseline Configuration", "Standards & Guidelines"],
+    validationMethod: "Patch compliance percentages, missing patch counts, update deployment metrics with timeline analysis.",
+    industryTools: ["WSUS", "SCCM", "Tanium", "Red Hat Satellite"]
   },
   {
     parameter: "Misconfigurations",
-    qualitativeAreas: [
-      "Baseline Configuration",
-      "Standards & Guidelines",
-      "Regulatory Requirements"
-    ],
-    validationMethod: "Quantitative proof via configuration audits, compliance percentages against CIS or NIST baselines, demonstrating adherence to standards & regulatory requirements."
+    weight: 6.66,
+    qualitativeAreas: ["Baseline Configuration", "Standards & Guidelines", "Regulatory Requirements"],
+    validationMethod: "Configuration audit results, CIS benchmark compliance scores, security hardening metrics.",
+    industryTools: ["Nessus", "Chef InSpec", "AWS Config", "Azure Security Center"]
   },
   {
-    parameter: "Malware & Endpoint Security",
-    qualitativeAreas: [
-      "Security Risks & Vulnerabilities",
-      "Relevant ACQ Tools",
-      "Device Inventory Tracking"
-    ],
-    validationMethod: "Endpoint security logs validate malware presence, device integrity, EDR effectiveness. Confirms inventory accuracy through endpoint detection."
+    parameter: "Malware",
+    weight: 6.66,
+    qualitativeAreas: ["Security Risks & Vulnerabilities", "Relevant ACQ Tools"],
+    validationMethod: "Malware detection rates, infection statistics, threat signature matching, behavioral analysis results.",
+    industryTools: ["CrowdStrike", "Carbon Black", "Symantec", "Trend Micro"]
   },
   {
-    parameter: "Credential Exposure & IAM",
-    qualitativeAreas: [
-      "Identity Behavior & Hygiene",
-      "Compliance Requirements",
-      "Standards & Guidelines"
-    ],
-    validationMethod: "IAM audit logs quantitatively validate adherence to credential management standards, demonstrate identity hygiene, compliance with regulatory identity requirements."
+    parameter: "Endpoint Security",
+    weight: 6.66,
+    qualitativeAreas: ["Device Inventory Tracking", "Relevant ACQ Tools", "Security Risks & Vulnerabilities"],
+    validationMethod: "EDR metrics, endpoint compliance scores, device security posture measurements, agent deployment statistics.",
+    industryTools: ["Microsoft Defender", "SentinelOne", "CrowdStrike Falcon", "Carbon Black"]
   },
   {
-    parameter: "Phishing & Email Security",
-    qualitativeAreas: [
-      "Security Risks & Vulnerabilities",
-      "Security Control vs Framework",
-      "Regulatory Requirements"
-    ],
-    validationMethod: "Phishing detection statistics quantify security control effectiveness, validate compliance with regulatory email security mandates."
+    parameter: "Credential Exposure",
+    weight: 6.66,
+    qualitativeAreas: ["Identity Behavior & Hygiene", "Compliance Requirements"],
+    validationMethod: "Exposed credential counts, dark web monitoring alerts, password policy compliance metrics.",
+    industryTools: ["Have I Been Pwned", "Digital Shadows", "Recorded Future", "SpyCloud"]
+  },
+  {
+    parameter: "IAM",
+    weight: 6.66,
+    qualitativeAreas: ["Identity Behavior & Hygiene", "Standards & Guidelines", "Compliance Requirements"],
+    validationMethod: "IAM audit logs, access review compliance, privilege escalation detection, authentication success/failure rates.",
+    industryTools: ["SailPoint", "Okta", "CyberArk", "Azure AD"]
+  },
+  {
+    parameter: "Email Security (Phishing screening)",
+    weight: 6.66,
+    qualitativeAreas: ["Security Risks & Vulnerabilities", "Security Control vs Framework"],
+    validationMethod: "Phishing detection rates, click-through statistics, user behavior analysis, email threat intelligence.",
+    industryTools: ["Proofpoint", "Mimecast", "Microsoft Defender for Office 365", "Barracuda"]
+  },
+  {
+    parameter: "Email Security (Spoofing)",
+    weight: 6.66,
+    qualitativeAreas: ["Security Control vs Framework", "Regulatory Requirements"],
+    validationMethod: "DMARC/SPF/DKIM compliance scores, spoofing attempt detection, email authentication metrics.",
+    industryTools: ["Proofpoint", "Mimecast", "Agari", "Valimail"]
   },
   {
     parameter: "Cloud Security Posture",
-    qualitativeAreas: [
-      "Baseline Configuration",
-      "Standards & Guidelines",
-      "Compliance & Regulatory Requirements"
-    ],
-    validationMethod: "Cloud Security Posture Management (CSPM) tools quantitatively validate adherence to cloud baselines, regulatory compliance, and alignment with industry standards."
+    weight: 6.66,
+    qualitativeAreas: ["Baseline Configuration", "Standards & Guidelines", "Compliance Requirements"],
+    validationMethod: "CSPM compliance scores, cloud resource misconfiguration counts, security policy adherence metrics.",
+    industryTools: ["Prisma Cloud", "AWS Security Hub", "Azure Security Center", "Google Cloud Security Command Center"]
   },
   {
-    parameter: "Network Exposure & Zero Trust",
-    qualitativeAreas: [
-      "Security Control vs Framework",
-      "Adversarial Insight (MITRE ATT&CK)",
-      "Baseline Configuration"
-    ],
-    validationMethod: "Quantitative proof via network exposure scans, segmentation compliance, validating Zero Trust architecture effectiveness and mapping to adversarial attack vectors (MITRE ATT&CK)."
+    parameter: "Network Exposure",
+    weight: 6.66,
+    qualitativeAreas: ["Security Control vs Framework", "Adversarial Insight (MITRE ATT&CK)", "Baseline Configuration"],
+    validationMethod: "Network vulnerability scans, open port analysis, attack surface measurements, network segmentation validation.",
+    industryTools: ["Nmap", "Shodan", "Censys", "RiskIQ"]
+  },
+  {
+    parameter: "Zero Trust",
+    weight: 6.66,
+    qualitativeAreas: ["Security Control vs Framework", "Baseline Configuration", "Standards & Guidelines"],
+    validationMethod: "Zero Trust maturity scoring, microsegmentation effectiveness, least privilege compliance metrics.",
+    industryTools: ["Zscaler", "Palo Alto Prisma", "Microsoft Zero Trust", "Okta"]
   },
   {
     parameter: "Data Security & Leakage",
-    qualitativeAreas: [
-      "Compliance Requirements",
-      "Regulatory Requirements",
-      "Information Security Management System (ISMS)"
-    ],
-    validationMethod: "Data leakage scans & DLP logs provide quantifiable proof of adherence to data security policies, validating regulatory and compliance requirements within ISMS frameworks."
+    weight: 6.66,
+    qualitativeAreas: ["Compliance Requirements", "Regulatory Requirements", "Information Security Management System (ISMS)"],
+    validationMethod: "DLP policy violations, data classification compliance, sensitive data exposure metrics, encryption coverage analysis.",
+    industryTools: ["Symantec DLP", "Forcepoint", "Microsoft Purview", "Varonis"]
   },
   {
     parameter: "Browser & Web Security",
-    qualitativeAreas: [
-      "Security Risks & Vulnerabilities",
-      "Standards & Guidelines",
-      "Relevant ACQ Tools"
-    ],
-    validationMethod: "Web vulnerability reports quantitatively prove adherence to secure browser standards, validate relevant tools' effectiveness, and identify web-based risks."
+    weight: 6.66,
+    qualitativeAreas: ["Security Risks & Vulnerabilities", "Standards & Guidelines", "Relevant ACQ Tools"],
+    validationMethod: "Web application vulnerability scans, browser security policy compliance, web traffic analysis metrics.",
+    industryTools: ["Burp Suite", "OWASP ZAP", "Acunetix", "Veracode"]
   },
   {
-    parameter: "Compliance & Frameworks",
-    qualitativeAreas: [
-      "Compliance Requirements",
-      "Regulatory Requirements",
-      "Standards & Guidelines"
-    ],
-    validationMethod: "Automated GRC platform dashboards provide numerical evidence of adherence to compliance, regulatory frameworks (ISO, SOC2, HIPAA), and validate documented standards."
-  },
-  {
-    parameter: "Threat Intelligence",
-    qualitativeAreas: [
-      "Adversarial Insight (MITRE ATT&CK)",
-      "Security Risks & Vulnerabilities",
-      "Relevant ACQ Tools"
-    ],
-    validationMethod: "Threat intelligence reports quantitatively validate adversarial threats, effectiveness of threat mitigation tools, and alignment to known adversarial patterns via MITRE ATT&CK."
-  },
-  {
-    parameter: "Security Awareness & Insider Risk",
-    qualitativeAreas: [
-      "Identity Behavior & Hygiene",
-      "Information Security Management System (ISMS)",
-      "Compliance Requirements"
-    ],
-    validationMethod: "Insider risk analytics quantitatively verify effectiveness of security awareness programs, adherence to ISMS controls, validate behavior monitoring and insider threat policies."
+    parameter: "Dark Web Exposure",
+    weight: 6.66,
+    qualitativeAreas: ["Security Risks & Vulnerabilities", "Identity Behavior & Hygiene", "Adversarial Insight (MITRE ATT&CK)"],
+    validationMethod: "Dark web monitoring alerts, exposed asset discovery, threat intelligence correlation, credential compromise detection.",
+    industryTools: ["Digital Shadows", "Recorded Future", "IntSights", "Flashpoint"]
   }
 ];
 
