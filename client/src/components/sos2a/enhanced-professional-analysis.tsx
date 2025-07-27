@@ -1,9 +1,9 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { SOS2AReport } from "@shared/schema";
+import type { AssessmentReport } from "@/lib/sos2a-types";
 
 interface EnhancedProfessionalAnalysisProps {
-  report: SOS2AReport;
+  report: AssessmentReport;
 }
 
 export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAnalysisProps) {
@@ -41,9 +41,9 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
               <div className="border rounded-lg p-4">
                 <h5 className="font-medium mb-2">Key Findings</h5>
                 <ul className="text-sm space-y-1">
-                  <li>• Overall security score: {Math.round((report.gapAnalysis?.overallScore || 0) * 100)}%</li>
-                  <li>• Critical vulnerabilities identified: {report.findings?.filter(f => f.severity === 'Critical').length || 0}</li>
-                  <li>• Compliance gaps requiring attention: {report.findings?.filter(f => f.severity === 'High').length || 0}</li>
+                  <li>• Overall security score: {Math.round((report.overallScore || 0) * 100)}%</li>
+                  <li>• Critical vulnerabilities identified: {report.findings?.filter(f => f.priority === 'High').length || 0}</li>
+                  <li>• Compliance gaps requiring attention: {report.findings?.filter(f => f.priority === 'Medium').length || 0}</li>
                 </ul>
               </div>
               <div className="border rounded-lg p-4">
@@ -62,21 +62,21 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
             <div className="grid md:grid-cols-4 gap-4 mb-6">
               <div className="border rounded-md p-3 text-center">
                 <div className="text-lg font-bold text-red-600">
-                  {report.findings?.filter(f => f.severity === 'Critical').length || 0}
+                  {report.findings?.filter(f => f.priority === 'High').length || 0}
                 </div>
                 <div className="text-sm">Critical Risks</div>
                 <div className="text-xs text-muted-foreground">Above 80% probability</div>
               </div>
               <div className="border rounded-md p-3 text-center">
                 <div className="text-lg font-bold text-orange-600">
-                  {report.findings?.filter(f => f.severity === 'High').length || 0}
+                  {report.findings?.filter(f => f.priority === 'Medium').length || 0}
                 </div>
                 <div className="text-sm">High Risks</div>
                 <div className="text-xs text-muted-foreground">Between 60%-80% probability</div>
               </div>
               <div className="border rounded-md p-3 text-center">
                 <div className="text-lg font-bold text-amber-600">
-                  {report.findings?.filter(f => f.severity === 'Medium').length || 0}
+                  {report.findings?.filter(f => f.priority === 'Low').length || 0}
                 </div>
                 <div className="text-sm">Medium Risks</div>
                 <div className="text-xs text-muted-foreground">Between 30%-60% probability</div>
@@ -239,7 +239,7 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
               <div className="border rounded-lg p-4">
                 <h5 className="font-medium mb-2">Success Metrics</h5>
                 <ul className="text-sm space-y-1">
-                  <li>• Security score improvement: +{Math.round((1 - (report.gapAnalysis?.overallScore || 0)) * 100)}%</li>
+                  <li>• Security score improvement: +{Math.round((1 - (report.overallScore || 0)) * 100)}%</li>
                   <li>• Compliance achievement: 95%+</li>
                   <li>• Incident reduction: 80%+</li>
                   <li>• Mean time to detection: &lt;2 hours</li>

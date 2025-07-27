@@ -417,7 +417,7 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                           <div key={domain} className="bg-blue-50 rounded p-1">
                             <p className="text-[10px] capitalize">{domain}</p>
                             <p className="text-xs font-bold text-blue-700">
-                              {report.rasbitaScore.gpaScores?.[domain as keyof typeof report.rasbitaScore.gpaScores] || "N/A"}
+                              {report.rasbitaScore?.gpaScores?.[domain as keyof typeof report.rasbitaScore.gpaScores] || "N/A"}
                             </p>
                           </div>
                         ))}
