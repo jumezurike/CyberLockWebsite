@@ -1,0 +1,151 @@
+Phase 1: Inquiry & Questionnaire
+Initial data collection about organization's security posture
+Gathering business information, industry details, compliance requirements
+Documentation of current security practices and policies
+Phase 2: Interview & Questionnaire
+In-depth discussions with key stakeholders
+Detailed questioning to fill knowledge gaps
+Expert-led interviews to understand security culture and practices
+Clarification of critical security aspects not covered in questionnaire
+Phase 3: Matrix Population
+Creation of the multi-dimensional analysis matrix
+Mapping the 12 default parameters across organizational context
+Integration of industry-specific standards and requirements
+Framework alignment based on organization's regulatory environment
+Phase 4: RASBITA Governance & Management
+Assessment of cybersecurity governance structures
+Evaluation of management processes and policies
+Maturity scoring using the GPA-style system (0-4.0 scale)
+Analysis of organization's current posture and trend over time
+Identification of governance strengths and improvement areas
+Phase 5: RASBITA Score & Cost-Benefit Analysis
+Financial impact modeling of security investments
+Asset valuation and risk quantification
+Analysis of safeguard costs versus security benefits
+Calculation of Net Risk Reduction Benefit (NRRB)
+Business-focused security justification
+Phase 6: Gap Analysis
+Identification of security domains  and controls:  Mapping to the 12 parameters respecting questionnaire responses.
+Using agents and human expert knowledge to determine a drift from the industry requirements. 
+Identification of security gaps against applicable standards will include
+Mapping to relevant compliance frameworks
+Prioritization of remediation activities
+Documentation of security control deficiencies
+Phase 7: Architecture Threat Modeling (Optional)
+Data flow diagram analysis
+STRIDE threat modeling
+Application security assessment
+Validation of security architecture
+Note: Can be skipped if organization prefers, with clear documentation that this does not affect overall score since the value wasn't included, though important for security strength
+Phase 8: Preliminary Report (Qualitative Assessment)
+Initial report based on all previous phases
+Qualitative evaluation of security posture
+Preliminary recommendations for improvement
+Sets the baseline for comprehensive assessment
+Documentation of where the organization currently stands
+Phase 9: Comprehensive Report: Quantitative Analysis
+Professional scanning tools implementation
+Detailed scanning of all 18 deep scan parameters
+Evidence-based validation of the 12 default parameters
+Monitoring, detection, and incident response evaluation
+6-month minimum trend analysis to measure improvement
+Performance metrics with statistical significance
+Re-evaluation of original scores based on empirical data
+Comprehensive view of organization's security posture and trends over time
+This process provides organizations with a thorough understanding of their current security posture, measurable improvement metrics, and a roadmap for enhancing their security maturity. The flexibility to skip Architecture Threat Modeling acknowledges different organizational needs while still emphasizing its importance for comprehensive security.
+
+
+The 5 Pillars of the CyberLockX Scorecard
+
+Qualitative Assessment (Pillar 1)
+Based on expert opinions and observational analysis
+Covers all 12 default parameters (Infrastructure, Security Risks, Baseline Configuration, etc.)
+Forms the foundation of the assessment process
+In preliminary assessments, this relies primarily on questionnaire responses
+
+Quantitative Analysis (Pillar 2)
+Uses professional scanning tools to gather measurable data
+Involves the 18 deep scan parameters (Vulnerability Management, Phishing & Email Security, etc.)
+Provides evidence-based validation of the qualitative assessment
+Requires 6 months of evidence collection for the comprehensive report
+
+RASBITA Cost-Benefit Analysis (Pillar 3)
+Financial modeling of security risks and investments
+Includes metrics like:
+Total Asset Value
+Total Annualized Loss Expectancy (ALE)
+Total Cost of Safeguards
+Net Risk Reduction Benefit (NRRB)
+Requires architecture diagrams to be fully assessed
+
+RASBITA Governance & Management (Pillar 4)
+Assesses maturity in governing and managing cybersecurity risks
+Uses GPA-style scoring system (0-4.0 scale)
+Focuses on the "Govern," "Identify," and "Protect" domains from NIST CSF 2.0
+Evaluates how well security is managed at an organizational level
+
+Architecture Threat Modeling & App Sec (Pillar 5)
+Thorough data flow diagram analysis
+Comprehensive STRIDE threat modeling
+Validated mitigation strategies
+Architectural security validation
+Static Application Security Testing (SAST) and Dynamic Application Security Testing (DAST)
+Provides complete application security assessment integrated with architecture analysis
+Maps security controls to specific threats and application vulnerabilities
+
+
+12 Default Parameters (Qualitative Framework)
+These form the foundation of the qualitative assessment and cover the entire security matrix:
+
+Infrastructure Mode of Operation
+Security Risks & Vulnerabilities
+Baseline Configuration
+Security Control vs Framework
+Compliance Requirements
+Regulatory Requirements
+Standards & Guidelines
+Relevant ACQ Tools
+Adversarial Insight (MITRE ATT&CK)
+Information Security Management System (ISMS)
+Device Inventory Tracking
+Identity Behavior & Hygiene
+
+18 Scanning Parameters (Quantitative Validation)
+These parameters are used in the deep scanning process during the comprehensive assessment to validate the qualitative findings:
+
+Vulnerability 
+Patch Mgmt
+Misconfigurations
+Malware 
+Endpoint Security
+Credential Exposure 
+IAM
+Email Security (Phishing)
+Cloud Security Posture
+Network Exposure 
+Zero Trust
+Data Security & Leakage
+Browser & Web Security
+Dark Web Exposure
+External Footprints
+Compliance & Frameworks
+Threat Intelligence
+Security Awareness & Insider threat
+
+
+The key relationship is that the 18 scanning parameters provide quantitative evidence to validate the qualitative assessments from the 12 default parameters. The comprehensive report process uses this validation through 6 months of evidence collection to transform the initial qualitative assessment into a verified quantitative assessment.
+
+For the 6-month comprehensive assessment, we would need to enhance device inventory tracking to:
+
+Better track changes over time
+Show device security posture improvement
+Document applied patches and controls
+Track when devices are brought into SOC monitoring
+Record final deep scan results at the end of the monitoring period
+This would involve creating additional components or enhancing existing ones to display:
+
+Before/after security posture metrics for each device
+Trend analysis showing improvement over the 6-month period
+Patch history and compliance status
+Integration with the SOC monitoring data
+
