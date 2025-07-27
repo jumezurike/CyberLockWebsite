@@ -5,11 +5,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AssessmentReport } from "@/lib/sos2a-types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle, FileText, Download, Calendar, Clock, AlertTriangle, Shield, CheckCircle2, Building2, BarChart3, Target, CheckCircle } from "lucide-react";
+import { AlertCircle, FileText, Download, Calendar, Clock, AlertTriangle, Shield, CheckCircle2 } from "lucide-react";
 import { formatDistanceToNow, differenceInDays, parseISO } from "date-fns";
 import Scorecard from "./scorecard";
-import EnhancedProfessionalAnalysis from "./enhanced-professional-analysis";
-import FivePillarGraphs from "./five-pillar-graphs";
+import { EnhancedProfessionalAnalysis } from "./enhanced-professional-analysis";
 import logoImage from "@/assets/cyberlockx-logo-resized.png";
 
 interface ReportDisplayProps {
@@ -497,26 +496,26 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
             </div>
           </div>
           
-          <Tabs defaultValue="scorecard" className="w-full">
+          <Tabs defaultValue="visual-scorecard" className="w-full">
             <TabsList className={`grid w-full ${
               report.reportType === 'preliminary' 
-                ? 'grid-cols-2 md:grid-cols-4' 
-                : 'grid-cols-2 md:grid-cols-8'
+                ? 'grid-cols-3 md:grid-cols-6' 
+                : 'grid-cols-3 md:grid-cols-9'
             }`}>
+              <TabsTrigger value="visual-scorecard">Visual Scorecard</TabsTrigger>
+              <TabsTrigger value="compliance">Compliance</TabsTrigger>
+              <TabsTrigger value="risk-analysis">Risk Analysis</TabsTrigger>
               <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
-              <TabsTrigger value="pillargraphs">5 Pillar Graphs</TabsTrigger>
               <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
+              <TabsTrigger value="guidance">Implementation Guidance</TabsTrigger>
               {report.reportType === 'comprehensive' && (
                 <>
                   <TabsTrigger value="risks">Risks & Vulnerabilities</TabsTrigger>
                   <TabsTrigger value="architecture">Architecture Analysis</TabsTrigger>
-                  <TabsTrigger value="compliance">Compliance Status</TabsTrigger>
-                  <TabsTrigger value="frameworks">Framework Control Gaps</TabsTrigger>
+
+
                   <TabsTrigger value="isms">ISMS</TabsTrigger>
                 </>
-              )}
-              {report.reportType === 'preliminary' && (
-                <TabsTrigger value="guidance">Implementation Guidance</TabsTrigger>
               )}
             </TabsList>
             
@@ -533,10 +532,6 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <p className="text-muted-foreground">Scorecard data is not available for this report.</p>
                 </div>
               )}
-
-            <TabsContent value="pillargraphs" className="space-y-4 pt-4">
-              <FivePillarGraphs report={report} />
-            </TabsContent>
             </TabsContent>
             
             <TabsContent value="recommendations" className="space-y-4 pt-4">
@@ -1733,10 +1728,10 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           </div>
         </div>
       </div>
-      
 
-      {/* Enhanced Professional Analysis Section - Marriage of Old and Enhanced */}
+      {/* Enhanced Professional Analysis Section */}
       <EnhancedProfessionalAnalysis report={report} />
+      
       <div className="mt-6 flex flex-col md:flex-row justify-between gap-4">
         <Button variant="outline" onClick={onBack}>
           Back to Matrix Population
