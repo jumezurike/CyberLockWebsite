@@ -334,28 +334,8 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
           </TabsContent>
           
           <TabsContent value="5-pillar-graphs" className="space-y-4 pt-4">
-            <h3 className="text-lg font-semibold mb-3">5 Pillar Framework Analysis</h3>
-            <div className="text-center py-8 bg-amber-50 border border-amber-200 rounded-lg">
-              <p className="text-amber-700 font-medium mb-2">
-                5-Pillar Graphs Implementation Ready
-              </p>
-              <p className="text-sm text-amber-600 mb-4">
-                This section will display comprehensive graphs showing all 5 pillars with 500%/5=100% framework capacity
-              </p>
-              <div className="bg-white rounded-md p-4 mx-4 border border-amber-300">
-                <h4 className="font-medium mb-2">Framework Structure:</h4>
-                <ul className="text-sm space-y-1 text-left">
-                  <li>• <strong>Pillar 1:</strong> Qualitative Assessment (100%)</li>
-                  <li>• <strong>Pillar 2:</strong> Quantitative Analysis (100%)</li>
-                  <li>• <strong>Pillar 3:</strong> RASBITA Cost-Benefit Analysis (100%)</li>
-                  <li>• <strong>Pillar 4:</strong> RASBITA Governance & Management (100%)</li>
-                  <li>• <strong>Pillar 5:</strong> Architecture Threat Modeling & App Sec (100%)</li>
-                </ul>
-                <p className="text-xs text-amber-600 mt-2">
-                  Total Framework Capacity: 500% (5 pillars × 100% each)
-                </p>
-              </div>
-            </div>
+            <h3 className="text-lg font-semibold mb-3">5 Pillar Graphs</h3>
+            {/* Empty - Ready for user's 5-pillar implementation */}
           </TabsContent>
           
           <TabsContent value="implementation" className="space-y-4 pt-4">
