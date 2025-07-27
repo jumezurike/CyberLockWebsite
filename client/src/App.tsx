@@ -39,6 +39,7 @@ import AssessmentWorkflowPage from "@/pages/assessment-workflow";
 import EarlyAccessDashboard from "@/pages/admin/early-access-dashboard";
 import AnalyticsDashboard from "@/pages/admin/analytics-dashboard";
 import AcceptInvitation from "@/pages/accept-invitation";
+import TestStandalone from "@/pages/test-standalone";
 
 function Router() {
   const [location] = useLocation();
@@ -89,6 +90,7 @@ function Router() {
           <Route path="/payment-success" component={PaymentSuccess} />
           <Route path="/payment-error" component={PaymentError} />
           <Route path="/accessibility-demo" component={AccessibilityDemo} />
+          <Route path="/test-standalone" component={TestStandalone} />
           <Route component={NotFound} />
         </Switch>
         {/* Add direct navigation for testing */}
