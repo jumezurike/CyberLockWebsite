@@ -109,16 +109,21 @@
 - Requires 6 months of evidence collection for the comprehensive report
 - **Comprehensive Reports Only** - Long-term data collection required
 
-### Pillar 3: RASBITA Cost-Benefit Analysis
+### Pillar 3: RASBITA Cost-Benefit Analysis (RASBITA-CBF)
 **Financial modeling and business case pillar**
-- Financial modeling of security risks and investments
+- Financial modeling of security risks and investments using NRRB calculations
+- **Core Formula:** NRRB = (Risk Reduction Value) - (Total Cost of Safeguards)
+- **Asset Purchasing Decision Framework:** Positive NRRB justifies purchase, negative requires additional justification
 - Includes metrics like:
-  - Total Asset Value
-  - Total Annualized Loss Expectancy (ALE)  
-  - Total Cost of Safeguards
-  - Net Risk Reduction Benefit (NRRB)
-- Requires architecture diagrams to be fully assessed
-- **Business-Focused** - ROI and financial justification
+  - Total Asset Value (actual purchase cost or current market value)
+  - Total Annualized Loss Expectancy (ALE) using ALE = SLE × ARO
+  - Total Cost of Safeguards (purchase + implementation + maintenance + operational)
+  - Net Risk Reduction Benefit (NRRB) - core justification metric
+- **Architecture Diagram Dependency:** Required for accurate data flow and asset relationship analysis
+  - **Flexibility:** If unavailable, process continues with annotation that architectural diagram dependency was exempted
+- **SMB Reality:** Most organizations lack breach/incident record keeping at time of assessment
+- **Incident-Based Calculation:** If incident discovered within 12 months during inquiry, immediate breach scenario applies using ALE formula
+- **Business-Focused** - ROI and financial justification for security asset purchases
 
 ### Pillar 4: RASBITA Governance & Management
 **Organizational maturity pillar**
@@ -180,6 +185,67 @@
 16. **Compliance & Frameworks** - Compliance framework assessment
 17. **Threat Intelligence** - Threat intelligence integration
 18. **Security Awareness & Insider threat** - Human factor security
+
+---
+
+## RASBITA-CBF FINANCIAL MODELING METHODOLOGY
+
+### Core ALE Calculation Framework
+**Formula:** `ALE = SLE × ARO`
+
+Where:
+- **ALE (Annualized Loss Expectancy)** - Expected annual financial loss from a risk
+- **SLE (Single Loss Expectancy)** - Estimated cost of a single occurrence of a specific risk  
+- **ARO (Annualized Rate of Occurrence)** - Estimated frequency of that risk occurring within a year
+
+### Asset Valuation Methods
+**Total Asset Value Options:**
+- Actual purchase cost (when asset was acquired)
+- Current market value (present-day replacement cost)
+- **Business Decision:** Organization selects method based on business justification approach
+
+### SMB Assessment Reality
+**Record Keeping Challenge:**
+- Most SMB organizations lack formal breach/incident documentation
+- Historical data typically unavailable at time of assessment
+- Creates dependency on immediate/recent incident discovery
+
+**Incident-Based Calculation Trigger:**
+- If incident discovered within 12 months during Phase 1-2 inquiry
+- Immediate breach scenario classification applies
+- ALE calculation becomes mandatory using discovered incident data
+- Transforms theoretical risk into actual loss experience
+
+### NRRB Asset Purchasing Decision Matrix
+**Positive NRRB (> 0):**
+- Security asset reduces more risk cost than implementation cost
+- Clear financial justification for purchase
+- Immediate business case approval
+
+**Negative NRRB (< 0):**
+- Asset costs exceed risk reduction value
+- Requires additional business justification:
+  - Compliance requirements
+  - Regulatory mandates
+  - Strategic security posture improvements
+  - Brand/reputation protection
+
+**Zero NRRB (= 0):**
+- Break-even scenario
+- Decision based on strategic factors
+- Risk tolerance considerations
+
+### Architecture Diagram Integration
+**Required for Accurate Assessment:**
+- Data flow analysis for asset interdependencies
+- Risk propagation calculations
+- Attack path vulnerability assessment
+
+**Exemption Process:**
+- Clear documentation when diagrams unavailable
+- Annotation in assessment report
+- Process continuation with noted limitations
+- No impact on overall assessment validity
 
 ---
 
