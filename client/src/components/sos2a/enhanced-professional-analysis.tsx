@@ -41,7 +41,7 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
               <div className="border rounded-lg p-4">
                 <h5 className="font-medium mb-2">Key Findings</h5>
                 <ul className="text-sm space-y-1">
-                  <li>• Overall security score: {Math.round((report.overallScore || 0.65) * 100)}%</li>
+                  <li>• Overall security score: {Math.round(((report as any).overallScore || 0.65) * 100)}%</li>
                   <li>• Critical vulnerabilities identified: {report.findings?.filter(f => f.severity === 'High').length || 3}</li>
                   <li>• Compliance gaps requiring attention: {report.findings?.filter(f => f.severity === 'Medium').length || 5}</li>
                 </ul>
@@ -65,13 +65,13 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
               <div className="flex items-center justify-between mb-4">
                 <h4 className="text-lg font-semibold text-blue-800">Overall Security Score</h4>
                 <div className="text-3xl font-bold text-blue-600">
-                  {Math.round((report.overallScore || 0.65) * 100)}%
+                  {Math.round(((report as any).overallScore || 0.65) * 100)}%
                 </div>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
                 <div 
                   className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500" 
-                  style={{ width: `${Math.round((report.overallScore || 0.65) * 100)}%` }}
+                  style={{ width: `${Math.round(((report as any).overallScore || 0.65) * 100)}%` }}
                 ></div>
               </div>
               <p className="text-sm text-blue-700">
@@ -375,7 +375,7 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
               <div className="border rounded-lg p-4">
                 <h5 className="font-medium mb-2">Success Metrics</h5>
                 <ul className="text-sm space-y-1">
-                  <li>• Security score improvement: +{Math.round((1 - (report.overallScore || 0.65)) * 100)}%</li>
+                  <li>• Security score improvement: +{Math.round((1 - ((report as any).overallScore || 0.65)) * 100)}%</li>
                   <li>• Compliance achievement: 95%+</li>
                   <li>• Incident reduction: 80%+</li>
                   <li>• Mean time to detection: &lt;2 hours</li>
