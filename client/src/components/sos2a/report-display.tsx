@@ -9,6 +9,7 @@ import { AlertCircle, FileText, Download, Calendar, Clock, AlertTriangle, Shield
 import { formatDistanceToNow, differenceInDays, parseISO } from "date-fns";
 import Scorecard from "./scorecard";
 import EnhancedProfessionalAnalysis from "./enhanced-professional-analysis";
+import FivePillarGraphs from "./five-pillar-graphs";
 import logoImage from "@/assets/cyberlockx-logo-resized.png";
 
 interface ReportDisplayProps {
@@ -499,10 +500,11 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           <Tabs defaultValue="scorecard" className="w-full">
             <TabsList className={`grid w-full ${
               report.reportType === 'preliminary' 
-                ? 'grid-cols-2 md:grid-cols-3' 
-                : 'grid-cols-2 md:grid-cols-7'
+                ? 'grid-cols-2 md:grid-cols-4' 
+                : 'grid-cols-2 md:grid-cols-8'
             }`}>
               <TabsTrigger value="scorecard">Scorecard</TabsTrigger>
+              <TabsTrigger value="pillargraphs">5 Pillar Graphs</TabsTrigger>
               <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
               {report.reportType === 'comprehensive' && (
                 <>
@@ -531,6 +533,10 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
                   <p className="text-muted-foreground">Scorecard data is not available for this report.</p>
                 </div>
               )}
+
+            <TabsContent value="pillargraphs" className="space-y-4 pt-4">
+              <FivePillarGraphs report={report} />
+            </TabsContent>
             </TabsContent>
             
             <TabsContent value="recommendations" className="space-y-4 pt-4">
