@@ -450,6 +450,7 @@ Advanced cybersecurity platform featuring the HOS²A (Healthcare Organizational 
 ## User Preferences
 - Historical data integrity is paramount - never modify authentic data
 - Follow Problem Resolution Protocol (PRP) 3.0 for all changes (MANDATORY BACKUP STRATEGY)
+- **CRITICAL: Do not implement anything without explicit user approval** - dialogue-first approach mandatory
 - Require explicit user approval before implementing updates
 - Maintain exact interface preservation for production system
 - Admin dashboard monitoring required for partnership applications
