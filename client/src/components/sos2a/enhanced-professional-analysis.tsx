@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { AssessmentReport } from "@/lib/sos2a-types";
 import { Shield, Building2, BarChart3, AlertTriangle, CheckCircle, Target } from "lucide-react";
+import FivePillarGraphs from "./five-pillar-graphs";
 
 interface EnhancedProfessionalAnalysisProps {
   report: AssessmentReport;
@@ -22,9 +23,10 @@ export default function EnhancedProfessionalAnalysis({ report }: EnhancedProfess
       </div>
 
       <Tabs defaultValue="scorecard" className="w-full">
-        <TabsList className="grid w-full grid-cols-4 mb-6">
+        <TabsList className="grid w-full grid-cols-5 mb-6">
           <TabsTrigger value="executive" className="text-sm">Executive Summary</TabsTrigger>
           <TabsTrigger value="scorecard" className="text-sm">Visual Scorecard</TabsTrigger>
+          <TabsTrigger value="pillargraphs" className="text-sm">5 Pillar Graphs</TabsTrigger>
           <TabsTrigger value="compliance" className="text-sm">Compliance</TabsTrigger>
           <TabsTrigger value="recommendations" className="text-sm">Recommendations</TabsTrigger>
         </TabsList>
@@ -51,8 +53,8 @@ export default function EnhancedProfessionalAnalysis({ report }: EnhancedProfess
                       <span className="font-medium">{report.industry}</span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-gray-600">Employee Count:</span>
-                      <span className="font-medium">{report.employeeCount}</span>
+                      <span className="text-gray-600">Business Services:</span>
+                      <span className="font-medium">{report.businessServices}</span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-gray-600">Assessment Type:</span>
@@ -159,6 +161,10 @@ export default function EnhancedProfessionalAnalysis({ report }: EnhancedProfess
               </div>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="pillargraphs" className="space-y-6">
+          <FivePillarGraphs report={report} />
         </TabsContent>
 
         <TabsContent value="compliance" className="space-y-6">
