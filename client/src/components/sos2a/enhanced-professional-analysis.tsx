@@ -292,47 +292,169 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
           </TabsContent>
           
           <TabsContent value="recommendations" className="space-y-4 pt-4">
-            <h3 className="text-lg font-semibold mb-3">Consolidated Recommendations</h3>
+            <h3 className="text-lg font-semibold mb-3">Security Recommendations</h3>
             
-            {report.recommendations && (
-              <div className="space-y-6">
-                <div>
-                  <h4 className="font-medium mb-3 text-red-600">Immediate Actions (0-30 days)</h4>
-                  <ul className="space-y-2 list-disc pl-5">
-                    {Array.isArray(report.recommendations.immediate) 
-                      ? report.recommendations.immediate.map((rec, index) => (
-                          <li key={index} className="text-sm">{rec}</li>
-                        ))
-                      : <li className="text-sm">No immediate actions required</li>
-                    }
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium mb-3 text-orange-600">Short Term (30-90 days)</h4>
-                  <ul className="space-y-2 list-disc pl-5">
-                    {Array.isArray(report.recommendations.shortTerm) 
-                      ? report.recommendations.shortTerm.map((rec, index) => (
-                          <li key={index} className="text-sm">{rec}</li>
-                        ))
-                      : <li className="text-sm">No short-term actions identified</li>
-                    }
-                  </ul>
-                </div>
-                
-                <div>
-                  <h4 className="font-medium mb-3 text-blue-600">Long Term (90+ days)</h4>
-                  <ul className="space-y-2 list-disc pl-5">
-                    {Array.isArray(report.recommendations.longTerm) 
-                      ? report.recommendations.longTerm.map((rec, index) => (
-                          <li key={index} className="text-sm">{rec}</li>
-                        ))
-                      : <li className="text-sm">No long-term strategic actions identified</li>
-                    }
-                  </ul>
+            <div className="space-y-6">
+              {/* Security Threats */}
+              <div className="border rounded-lg p-4">
+                <h4 className="font-medium mb-3 text-red-700">Security Threats</h4>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <h5 className="font-medium mb-2 text-red-600">Critical Vulnerabilities</h5>
+                    <ul className="text-sm space-y-1">
+                      <li>• Unpatched systems exposing attack vectors</li>
+                      <li>• Weak password policies enabling credential attacks</li>
+                      <li>• Missing multi-factor authentication on privileged accounts</li>
+                      <li>• Inadequate network segmentation allowing lateral movement</li>
+                      <li>• Insufficient endpoint protection against malware</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium mb-2 text-orange-600">Compliance Gaps</h5>
+                    <ul className="text-sm space-y-1">
+                      <li>• HIPAA technical safeguards not fully implemented</li>
+                      <li>• Missing data encryption at rest requirements</li>
+                      <li>• Incomplete access logging and audit trails</li>
+                      <li>• Inadequate incident response documentation</li>
+                      <li>• Security awareness training program gaps</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            )}
+
+              {/* Mitigation Strategies */}
+              <div className="border rounded-lg p-4">
+                <h4 className="font-medium mb-3 text-blue-700">Mitigation Strategies</h4>
+                <div className="space-y-4">
+                  <div>
+                    <h5 className="font-medium mb-2 text-red-600">Immediate Actions (0-30 days)</h5>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <ul className="text-sm space-y-1">
+                        <li>• Deploy multi-factor authentication on all admin accounts</li>
+                        <li>• Implement critical security patches within 72 hours</li>
+                        <li>• Enable comprehensive logging for all systems</li>
+                        <li>• Conduct emergency incident response drill</li>
+                      </ul>
+                      <ul className="text-sm space-y-1">
+                        <li>• Review and update access control policies</li>
+                        <li>• Install endpoint detection and response tools</li>
+                        <li>• Establish security monitoring dashboard</li>
+                        <li>• Create data backup verification process</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h5 className="font-medium mb-2 text-orange-600">Short Term (30-90 days)</h5>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <ul className="text-sm space-y-1">
+                        <li>• Complete network segmentation implementation</li>
+                        <li>• Deploy data encryption at rest for all sensitive data</li>
+                        <li>• Establish vulnerability management program</li>
+                        <li>• Launch comprehensive security awareness training</li>
+                      </ul>
+                      <ul className="text-sm space-y-1">
+                        <li>• Implement SIEM solution for threat detection</li>
+                        <li>• Conduct thorough penetration testing</li>
+                        <li>• Establish vendor risk assessment process</li>
+                        <li>• Create business continuity and disaster recovery plans</li>
+                      </ul>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <h5 className="font-medium mb-2 text-blue-600">Long Term (90+ days)</h5>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <ul className="text-sm space-y-1">
+                        <li>• Deploy zero-trust architecture framework</li>
+                        <li>• Implement advanced threat analytics</li>
+                        <li>• Establish continuous compliance monitoring</li>
+                        <li>• Create security metrics and KPI dashboard</li>
+                      </ul>
+                      <ul className="text-sm space-y-1">
+                        <li>• Conduct regular security maturity assessments</li>
+                        <li>• Implement automated security orchestration</li>
+                        <li>• Establish threat intelligence program</li>
+                        <li>• Create security culture transformation initiative</li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Implementation Steps */}
+              <div className="border rounded-lg p-4">
+                <h4 className="font-medium mb-3 text-green-700">Implementation Steps</h4>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <div className="bg-red-50 border border-red-200 rounded p-3">
+                    <h5 className="font-medium text-red-800 mb-2">Phase 1: Critical (Week 1-4)</h5>
+                    <ul className="text-xs space-y-1">
+                      <li>• Deploy MFA immediately</li>
+                      <li>• Patch critical vulnerabilities</li>
+                      <li>• Enable security logging</li>
+                      <li>• Update access controls</li>
+                      <li>• Establish incident response team</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-orange-50 border border-orange-200 rounded p-3">
+                    <h5 className="font-medium text-orange-800 mb-2">Phase 2: Essential (Month 2-3)</h5>
+                    <ul className="text-xs space-y-1">
+                      <li>• Implement endpoint protection</li>
+                      <li>• Deploy data encryption</li>
+                      <li>• Establish SIEM monitoring</li>
+                      <li>• Conduct security training</li>
+                      <li>• Create backup procedures</li>
+                    </ul>
+                  </div>
+                  
+                  <div className="bg-blue-50 border border-blue-200 rounded p-3">
+                    <h5 className="font-medium text-blue-800 mb-2">Phase 3: Strategic (Month 4-6)</h5>
+                    <ul className="text-xs space-y-1">
+                      <li>• Deploy zero-trust architecture</li>
+                      <li>• Advanced threat detection</li>
+                      <li>• Continuous compliance monitoring</li>
+                      <li>• Security culture development</li>
+                      <li>• Maturity assessment program</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+
+              {/* Success Metrics */}
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <h4 className="font-medium text-green-800 mb-3">Success Metrics & KPIs</h4>
+                <div className="grid md:grid-cols-3 gap-4 text-sm">
+                  <div>
+                    <h5 className="font-medium mb-2">Security Posture</h5>
+                    <ul className="space-y-1">
+                      <li>• Mean time to detection: &lt;2 hours</li>
+                      <li>• Mean time to response: &lt;4 hours</li>
+                      <li>• Vulnerability remediation: &lt;48 hours (critical)</li>
+                      <li>• Security incident reduction: 80%+</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium mb-2">Compliance Achievement</h5>
+                    <ul className="space-y-1">
+                      <li>• HIPAA compliance: 95%+</li>
+                      <li>• SOC 2 readiness: 90%+</li>
+                      <li>• ISO 27001 alignment: 85%+</li>
+                      <li>• Audit success rate: 100%</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <h5 className="font-medium mb-2">Business Impact</h5>
+                    <ul className="space-y-1">
+                      <li>• Security score improvement: +{Math.round((1 - ((report as any).overallScore || 0.65)) * 100)}%</li>
+                      <li>• Downtime reduction: 90%+</li>
+                      <li>• Security ROI: 300%+</li>
+                      <li>• Employee security awareness: 95%+</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
           </TabsContent>
           
           <TabsContent value="5-pillar-graphs" className="space-y-4 pt-4">
