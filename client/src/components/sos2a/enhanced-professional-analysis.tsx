@@ -58,115 +58,154 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
           </TabsContent>
           
           <TabsContent value="visual-scorecard" className="space-y-4 pt-4">
-            <h3 className="text-lg font-semibold mb-3">Visual Scorecard & Risk Analysis</h3>
+            <h3 className="text-lg font-semibold mb-3">5-Pillar Framework Visual Scorecard</h3>
             
-            {/* Security Score Overview */}
+            {/* Overall Framework Score */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-lg p-6 mb-6">
               <div className="flex items-center justify-between mb-4">
-                <h4 className="text-lg font-semibold text-blue-800">Overall Security Score</h4>
+                <h4 className="text-lg font-semibold text-blue-800">Overall Framework Score</h4>
                 <div className="text-3xl font-bold text-blue-600">
-                  {Math.round(((report as any).overallScore || 0.65) * 100)}%
+                  {Math.round(((report.rasbitaScore?.categories?.risk || 0) + 
+                              (report.rasbitaScore?.categories?.securityControls || 0) + 
+                              (report.rasbitaScore?.categories?.architecture || 0) + 
+                              ((report.rasbitaScore?.categories?.govern || 0) + 
+                               (report.rasbitaScore?.categories?.identify || 0) + 
+                               (report.rasbitaScore?.categories?.protect || 0)) / 3 +
+                              ((report.rasbitaScore?.categories?.detect || 0) + 
+                               (report.rasbitaScore?.categories?.respond || 0) + 
+                               (report.rasbitaScore?.categories?.recover || 0)) / 3) / 5)}%
                 </div>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
-                <div 
-                  className="bg-gradient-to-r from-blue-500 to-purple-600 h-3 rounded-full transition-all duration-500" 
-                  style={{ width: `${Math.round(((report as any).overallScore || 0.65) * 100)}%` }}
-                ></div>
-              </div>
               <p className="text-sm text-blue-700">
-                Based on comprehensive analysis of {report.findings?.length || 12} security parameters
+                Total Framework Capacity: 500% (5 pillars × 100% each)
               </p>
             </div>
 
-            {/* Risk Categories Dashboard */}
-            <div className="grid md:grid-cols-4 gap-4 mb-6">
-              <div className="border-2 border-red-200 bg-red-50 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold text-red-600 mb-1">
-                  {report.findings?.filter(f => f.severity === 'High').length || 3}
+            {/* 5 Pillars Individual Scores */}
+            <div className="grid md:grid-cols-5 gap-4 mb-6">
+              {/* Pillar 1: Qualitative Assessment - Always Active */}
+              <div className="border-2 border-blue-200 bg-blue-50 rounded-lg p-4 text-center">
+                <div className="text-sm font-bold text-blue-800 mb-2">Qualitative Assessment</div>
+                <div className="text-2xl font-bold text-blue-600 mb-1">
+                  {Math.round(report.rasbitaScore?.categories?.risk || 75)}%
                 </div>
-                <div className="text-sm font-medium text-red-800">Critical Risks</div>
-                <div className="text-xs text-red-600 mt-1">Above 80% probability</div>
-                <div className="mt-2 text-xs text-red-700">Immediate attention required</div>
+                <div className="text-xs text-blue-600">Always Included</div>
+                <div className="mt-2 text-xs text-blue-700">Expert Analysis</div>
               </div>
-              <div className="border-2 border-orange-200 bg-orange-50 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold text-orange-600 mb-1">
-                  {report.findings?.filter(f => f.severity === 'Medium').length || 5}
-                </div>
-                <div className="text-sm font-medium text-orange-800">High Risks</div>
-                <div className="text-xs text-orange-600 mt-1">60%-80% probability</div>
-                <div className="mt-2 text-xs text-orange-700">Address within 30 days</div>
-              </div>
-              <div className="border-2 border-yellow-200 bg-yellow-50 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold text-yellow-600 mb-1">
-                  {report.findings?.filter(f => f.severity === 'Low').length || 4}
-                </div>
-                <div className="text-sm font-medium text-yellow-800">Medium Risks</div>
-                <div className="text-xs text-yellow-600 mt-1">30%-60% probability</div>
-                <div className="mt-2 text-xs text-yellow-700">Monitor and plan</div>
-              </div>
+
+              {/* Pillar 2: RASBITA-RGM - Always Active */}
               <div className="border-2 border-green-200 bg-green-50 rounded-lg p-4 text-center">
+                <div className="text-sm font-bold text-green-800 mb-2">RASBITA-RGM</div>
                 <div className="text-2xl font-bold text-green-600 mb-1">
-                  {Math.max(0, (report.findings?.length || 12) - (report.findings?.filter(f => ['High', 'Medium', 'Low'].includes(f.severity)).length || 12)) || 2}
+                  {Math.round(((report.rasbitaScore?.categories?.govern || 0) + 
+                              (report.rasbitaScore?.categories?.identify || 0) + 
+                              (report.rasbitaScore?.categories?.protect || 0)) / 3 || 80)}%
                 </div>
-                <div className="text-sm font-medium text-green-800">Low Risks</div>
-                <div className="text-xs text-green-600 mt-1">Below 30% probability</div>
-                <div className="mt-2 text-xs text-green-700">Continue monitoring</div>
+                <div className="text-xs text-green-600">Always Included</div>
+                <div className="mt-2 text-xs text-green-700">Governance & Mgmt</div>
+              </div>
+
+              {/* Pillar 3: RASBITA-CBF - Conditional on Incidents */}
+              <div className={`border-2 rounded-lg p-4 text-center ${
+                report.recentIncidents ? 
+                'border-purple-200 bg-purple-50' : 
+                'border-gray-200 bg-gray-50 opacity-50'
+              }`}>
+                <div className={`text-sm font-bold mb-2 ${
+                  report.recentIncidents ? 'text-purple-800' : 'text-gray-500'
+                }`}>RASBITA-CBF</div>
+                <div className={`text-2xl font-bold mb-1 ${
+                  report.recentIncidents ? 'text-purple-600' : 'text-gray-400'
+                }`}>
+                  {report.recentIncidents ? 
+                    Math.round(report.rasbitaScore?.categories?.architecture || 82) : 
+                    'N/A'}%
+                </div>
+                <div className={`text-xs ${
+                  report.recentIncidents ? 'text-purple-600' : 'text-gray-400'
+                }`}>
+                  {report.recentIncidents ? 'Included' : 'Not Applicable'}
+                </div>
+                <div className={`mt-2 text-xs ${
+                  report.recentIncidents ? 'text-purple-700' : 'text-gray-500'
+                }`}>Cost-Benefit Analysis</div>
+              </div>
+
+              {/* Pillar 4: Architecture TM & App Sec - Conditional on Diagrams */}
+              <div className={`border-2 rounded-lg p-4 text-center ${
+                report.architectureDiagramsProvided ? 
+                'border-orange-200 bg-orange-50' : 
+                'border-gray-200 bg-gray-50 opacity-50'
+              }`}>
+                <div className={`text-sm font-bold mb-2 ${
+                  report.architectureDiagramsProvided ? 'text-orange-800' : 'text-gray-500'
+                }`}>Architecture TM & App Sec</div>
+                <div className={`text-2xl font-bold mb-1 ${
+                  report.architectureDiagramsProvided ? 'text-orange-600' : 'text-gray-400'
+                }`}>
+                  {report.architectureDiagramsProvided ? 
+                    Math.round(((report.rasbitaScore?.categories?.detect || 0) + 
+                               (report.rasbitaScore?.categories?.respond || 0) + 
+                               (report.rasbitaScore?.categories?.recover || 0)) / 3 || 77) : 
+                    'N/A'}%
+                </div>
+                <div className={`text-xs ${
+                  report.architectureDiagramsProvided ? 'text-orange-600' : 'text-gray-400'
+                }`}>
+                  {report.architectureDiagramsProvided ? 'Included' : 'Not Applicable'}
+                </div>
+                <div className={`mt-2 text-xs ${
+                  report.architectureDiagramsProvided ? 'text-orange-700' : 'text-gray-500'
+                }`}>Threat Modeling</div>
+              </div>
+
+              {/* Pillar 5: Quantitative Analysis - Never in Preliminary */}
+              <div className={`border-2 rounded-lg p-4 text-center ${
+                report.reportType === 'comprehensive' ? 
+                'border-red-200 bg-red-50' : 
+                'border-gray-200 bg-gray-50 opacity-50'
+              }`}>
+                <div className={`text-sm font-bold mb-2 ${
+                  report.reportType === 'comprehensive' ? 'text-red-800' : 'text-gray-500'
+                }`}>Quantitative Analysis</div>
+                <div className={`text-2xl font-bold mb-1 ${
+                  report.reportType === 'comprehensive' ? 'text-red-600' : 'text-gray-400'
+                }`}>
+                  {report.reportType === 'comprehensive' ? 
+                    Math.round(report.rasbitaScore?.categories?.securityControls || 88) : 
+                    'N/A'}%
+                </div>
+                <div className={`text-xs ${
+                  report.reportType === 'comprehensive' ? 'text-red-600' : 'text-gray-400'
+                }`}>
+                  {report.reportType === 'comprehensive' ? 'Deep Scan Active' : 'Preliminary Only'}
+                </div>
+                <div className={`mt-2 text-xs ${
+                  report.reportType === 'comprehensive' ? 'text-red-700' : 'text-gray-500'
+                }`}>Deep Scan Analysis</div>
               </div>
             </div>
 
-            {/* Risk Heat Map */}
-            <div className="bg-white border rounded-lg p-6 mb-4">
-              <h4 className="font-semibold mb-4">Security Domain Risk Heat Map</h4>
-              <div className="grid grid-cols-3 md:grid-cols-6 gap-2">
-                <div className="bg-red-100 border-2 border-red-300 p-3 rounded text-center">
-                  <div className="text-xs font-medium text-red-800">Access Control</div>
-                  <div className="text-lg font-bold text-red-600">8.2</div>
-                </div>
-                <div className="bg-orange-100 border-2 border-orange-300 p-3 rounded text-center">
-                  <div className="text-xs font-medium text-orange-800">Data Protection</div>
-                  <div className="text-lg font-bold text-orange-600">7.1</div>
-                </div>
-                <div className="bg-yellow-100 border-2 border-yellow-300 p-3 rounded text-center">
-                  <div className="text-xs font-medium text-yellow-800">Network Security</div>
-                  <div className="text-lg font-bold text-yellow-600">6.5</div>
-                </div>
-                <div className="bg-yellow-100 border-2 border-yellow-300 p-3 rounded text-center">
-                  <div className="text-xs font-medium text-yellow-800">Endpoint Security</div>
-                  <div className="text-lg font-bold text-yellow-600">5.8</div>
-                </div>
-                <div className="bg-green-100 border-2 border-green-300 p-3 rounded text-center">
-                  <div className="text-xs font-medium text-green-800">Incident Response</div>
-                  <div className="text-lg font-bold text-green-600">4.2</div>
-                </div>
-                <div className="bg-green-100 border-2 border-green-300 p-3 rounded text-center">
-                  <div className="text-xs font-medium text-green-800">Security Awareness</div>
-                  <div className="text-lg font-bold text-green-600">3.1</div>
-                </div>
-              </div>
-              <div className="mt-3 text-xs text-gray-600">
-                Risk scores range from 1 (low) to 10 (critical). Colors indicate risk levels: Red (8-10), Orange (6-8), Yellow (4-6), Green (1-4).
-              </div>
-            </div>
-            
+            {/* Framework Capacity Explanation */}
             <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h5 className="font-medium text-blue-800 mb-2">Risk Assessment Methodology</h5>
+              <h5 className="font-medium text-blue-800 mb-2">5-Pillar Framework Methodology</h5>
               <p className="text-sm text-blue-700 mb-2">
-                Our risk probability calculations are based on industry threat intelligence, organizational security maturity, and current threat landscape analysis.
+                Each pillar represents 100% capacity when fully assessed. Framework capacity: 500% total (5 × 100%).
               </p>
               <div className="grid md:grid-cols-2 gap-4 text-sm text-blue-700">
                 <div>
-                  <h6 className="font-medium mb-1">Risk Categories:</h6>
+                  <h6 className="font-medium mb-1">Always Active Pillars:</h6>
                   <ul className="space-y-1">
-                    <li><span className="font-semibold text-red-600">Critical (&gt;80%):</span> Immediate threats requiring urgent action</li>
-                    <li><span className="font-semibold text-orange-600">High (60-80%):</span> Significant vulnerabilities needing prompt attention</li>
+                    <li><span className="font-semibold text-blue-600">Qualitative Assessment:</span> Expert analysis of 12 parameters</li>
+                    <li><span className="font-semibold text-green-600">RASBITA-RGM:</span> Governance & management maturity</li>
                   </ul>
                 </div>
                 <div>
-                  <h6 className="font-medium mb-1">Assessment Factors:</h6>
+                  <h6 className="font-medium mb-1">Conditional Pillars:</h6>
                   <ul className="space-y-1">
-                    <li><span className="font-semibold text-yellow-600">Medium (30-60%):</span> Important security gaps to address systematically</li>
-                    <li><span className="font-semibold text-green-600">Low (under 30%):</span> Areas for continuous monitoring and improvement</li>
+                    <li><span className="font-semibold text-purple-600">RASBITA-CBF:</span> Only if recent incidents (12 months)</li>
+                    <li><span className="font-semibold text-orange-600">Architecture TM:</span> Only if system diagrams provided</li>
+                    <li><span className="font-semibold text-red-600">Quantitative:</span> Comprehensive assessments only (6+ months evidence)</li>
                   </ul>
                 </div>
               </div>
