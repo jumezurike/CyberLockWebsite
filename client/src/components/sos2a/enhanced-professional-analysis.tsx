@@ -341,47 +341,82 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
           </TabsContent>
           
           <TabsContent value="implementation" className="space-y-4 pt-4">
-            <h3 className="text-lg font-semibold mb-3">Implementation Guidance</h3>
+            <h3 className="text-lg font-semibold mb-3">Next Steps for Comprehensive Security Assessment</h3>
             
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-4 mb-6">
               <div className="border rounded-lg p-4">
-                <h5 className="font-medium mb-2">Phase 1: Foundation (Months 1-3)</h5>
-                <ul className="text-sm space-y-1">
-                  <li>• Establish baseline security controls</li>
-                  <li>• Implement critical vulnerability remediation</li>
-                  <li>• Deploy multi-factor authentication</li>
-                  <li>• Create incident response procedures</li>
+                <h5 className="font-medium mb-3 text-blue-800">Immediate Actions (30 days)</h5>
+                <ul className="text-sm space-y-2">
+                  <li>• Implement SOC monitoring with SIEM integration</li>
+                  <li>• Establish incident response procedures</li>
+                  <li>• Deploy vulnerability scanning tools</li>
+                  <li>• Configure automated security event logging</li>
                 </ul>
               </div>
-              
               <div className="border rounded-lg p-4">
-                <h5 className="font-medium mb-2">Phase 2: Enhancement (Months 4-6)</h5>
-                <ul className="text-sm space-y-1">
-                  <li>• Advanced threat detection deployment</li>
-                  <li>• Compliance framework alignment</li>
-                  <li>• Security awareness training program</li>
-                  <li>• Regular security assessments</li>
+                <h5 className="font-medium mb-3 text-green-800">Medium-term Goals (90 days)</h5>
+                <ul className="text-sm space-y-2">
+                  <li>• Complete network flow analysis setup</li>
+                  <li>• Implement endpoint detection and response</li>
+                  <li>• Establish security awareness training program</li>
+                  <li>• Begin evidence collection for comprehensive assessment</li>
                 </ul>
               </div>
+            </div>
+
+            <div className="border rounded-lg p-4 mb-6">
+              <h4 className="text-lg font-semibold mb-4 text-purple-800">5-Pillar Framework Implementation Roadmap</h4>
               
-              <div className="border rounded-lg p-4">
-                <h5 className="font-medium mb-2">Phase 3: Optimization (Months 7-12)</h5>
-                <ul className="text-sm space-y-1">
-                  <li>• Zero-trust architecture implementation</li>
-                  <li>• Advanced analytics and monitoring</li>
-                  <li>• Continuous compliance monitoring</li>
-                  <li>• Strategic security investments</li>
-                </ul>
+              <div className="space-y-4">
+                <div className="border-l-4 border-blue-500 pl-4">
+                  <h5 className="font-medium text-blue-800">Pillar 1: Qualitative Assessment (20%)</h5>
+                  <p className="text-sm text-gray-700">Already completed in this preliminary report. Continue refining based on evidence collection.</p>
+                </div>
+                
+                <div className="border-l-4 border-red-500 pl-4">
+                  <h5 className="font-medium text-red-800">Pillar 2: Quantitative Analysis (25%)</h5>
+                  <p className="text-sm text-gray-700">Requires 6 months of evidence collection with SIEM, vulnerability scanners, and compliance tools.</p>
+                </div>
+                
+                <div className="border-l-4 border-purple-500 pl-4">
+                  <h5 className="font-medium text-purple-800">Pillar 3: RASBITA Cost-Benefit (25%)</h5>
+                  <p className="text-sm text-gray-700">Available when security incidents occur within 12 months to measure ROI of security investments.</p>
+                </div>
+                
+                <div className="border-l-4 border-green-500 pl-4">
+                  <h5 className="font-medium text-green-800">Pillar 4: RASBITA Governance (15%)</h5>
+                  <p className="text-sm text-gray-700">Already included. Focus on continuous improvement of governance maturity.</p>
+                </div>
+                
+                <div className="border-l-4 border-orange-500 pl-4">
+                  <h5 className="font-medium text-orange-800">Pillar 5: Architecture Threat Modeling (15%)</h5>
+                  <p className="text-sm text-gray-700">Available when detailed system architecture diagrams are provided for STRIDE analysis.</p>
+                </div>
               </div>
+            </div>
+
+            <div className="border rounded-lg p-4">
+              <h4 className="text-lg font-semibold mb-4 text-amber-800">Gap Analysis Priority Areas</h4>
               
-              <div className="border rounded-lg p-4">
-                <h5 className="font-medium mb-2">Success Metrics</h5>
-                <ul className="text-sm space-y-1">
-                  <li>• Security score improvement: +{Math.round((1 - ((report as any).overallScore || 0.65)) * 100)}%</li>
-                  <li>• Compliance achievement: 95%+</li>
-                  <li>• Incident reduction: 80%+</li>
-                  <li>• Mean time to detection: &lt;2 hours</li>
-                </ul>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <h5 className="font-medium mb-3 text-red-700">Critical Security Domains</h5>
+                  <ul className="text-sm space-y-1">
+                    <li>• Identity and Access Management (IAM)</li>
+                    <li>• Data Protection and Encryption</li>
+                    <li>• Network Security Controls</li>
+                    <li>• Incident Response Capabilities</li>
+                  </ul>
+                </div>
+                <div>
+                  <h5 className="font-medium mb-3 text-blue-700">Implementation Priorities</h5>
+                  <ul className="text-sm space-y-1">
+                    <li>• Multi-factor authentication deployment</li>
+                    <li>• Security event monitoring enhancement</li>
+                    <li>• Vulnerability management automation</li>
+                    <li>• Compliance framework alignment</li>
+                  </ul>
+                </div>
               </div>
             </div>
           </TabsContent>
