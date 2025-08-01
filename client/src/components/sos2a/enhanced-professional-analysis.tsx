@@ -806,6 +806,35 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                       const textX = 200 + textRadius * Math.cos(textAngle);
                       const textY = 200 + textRadius * Math.sin(textAngle);
                       
+                      // Calculate actual parameter score based on findings
+                      const getParameterScore = (paramName: string): number => {
+                        if (!report.findings) return Math.round(85 * 0.0588); // Default baseline
+                        
+                        let findings: any[] = [];
+                        try {
+                          if (typeof report.findings === 'string') {
+                            findings = JSON.parse(report.findings);
+                          } else if (Array.isArray(report.findings)) {
+                            findings = report.findings;
+                          } else if (typeof report.findings === 'object' && report.findings !== null) {
+                            findings = (report.findings as any).items || [];
+                          }
+                        } catch {
+                          return Math.round(85 * 0.0588); // Default if parsing fails
+                        }
+                        
+                        const parameterFindings = findings.filter((f: any) => 
+                          f.category?.toLowerCase().includes(paramName.toLowerCase()) ||
+                          f.description?.toLowerCase().includes(paramName.toLowerCase())
+                        );
+                        
+                        // Higher findings = lower score (indirect detection has more uncertainty)
+                        const baseScore = Math.max(0, 85 - (parameterFindings.length * 15));
+                        return Math.round(baseScore * 0.0588);
+                      };
+                      
+                      const paramScore = getParameterScore(item.name);
+                      
                       return (
                         <g key={`outer-${index}`}>
                           <path
@@ -819,7 +848,7 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                             {item.icon}
                           </text>
                           <text x={textX} y={textY+8} textAnchor="middle" className="text-xs font-medium fill-white">
-                            5.88%
+                            {paramScore}%
                           </text>
                         </g>
                       );
@@ -852,6 +881,35 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                       const textX = 200 + textRadius * Math.cos(textAngle);
                       const textY = 200 + textRadius * Math.sin(textAngle);
                       
+                      // Calculate actual parameter score for middle ring
+                      const getMiddleParameterScore = (paramName: string): number => {
+                        if (!report.findings) return Math.round(90 * 0.0588); // Default baseline
+                        
+                        let findings: any[] = [];
+                        try {
+                          if (typeof report.findings === 'string') {
+                            findings = JSON.parse(report.findings);
+                          } else if (Array.isArray(report.findings)) {
+                            findings = report.findings;
+                          } else if (typeof report.findings === 'object' && report.findings !== null) {
+                            findings = (report.findings as any).items || [];
+                          }
+                        } catch {
+                          return Math.round(90 * 0.0588);
+                        }
+                        
+                        const parameterFindings = findings.filter((f: any) => 
+                          f.category?.toLowerCase().includes(paramName.toLowerCase()) ||
+                          f.description?.toLowerCase().includes(paramName.toLowerCase())
+                        );
+                        
+                        // Middle ring has partial detection capabilities
+                        const baseScore = Math.max(0, 90 - (parameterFindings.length * 12));
+                        return Math.round(baseScore * 0.0588);
+                      };
+                      
+                      const middleScore = getMiddleParameterScore(item.name);
+                      
                       return (
                         <g key={`middle-${index}`}>
                           <path
@@ -865,7 +923,7 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                             {item.icon}
                           </text>
                           <text x={textX} y={textY+8} textAnchor="middle" className="text-xs font-medium fill-white">
-                            5.88%
+                            {middleScore}%
                           </text>
                         </g>
                       );
@@ -907,6 +965,45 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                       const textX = 200 + textRadius * Math.cos(textAngle);
                       const textY = 200 + textRadius * Math.sin(textAngle);
                       
+                      // Calculate actual parameter score for inner ring (direct detection)
+                      const getInnerParameterScore = (paramName: string): number => {
+                        if (!report.findings) return Math.round(95 * 0.0588); // Default baseline
+                        
+                        let findings: any[] = [];
+                        try {
+                          if (typeof report.findings === 'string') {
+                            findings = JSON.parse(report.findings);
+                          } else if (Array.isArray(report.findings)) {
+                            findings = report.findings;
+                          } else if (typeof report.findings === 'object' && report.findings !== null) {
+                            findings = (report.findings as any).items || [];
+                          }
+                        } catch {
+                          return Math.round(95 * 0.0588);
+                        }
+                        
+                        const parameterFindings = findings.filter((f: any) => 
+                          f.category?.toLowerCase().includes(paramName.toLowerCase()) ||
+                          f.description?.toLowerCase().includes(paramName.toLowerCase()) ||
+                          f.title?.toLowerCase().includes(paramName.toLowerCase())
+                        );
+                        
+                        // Inner ring has direct detection capabilities - more accurate scoring
+                        const severity = parameterFindings.reduce((total: number, f: any) => {
+                          switch(f.severity?.toLowerCase()) {
+                            case 'high': return total + 20;
+                            case 'medium': return total + 10;
+                            case 'low': return total + 5;
+                            default: return total + 8;
+                          }
+                        }, 0);
+                        
+                        const baseScore = Math.max(0, 95 - severity);
+                        return Math.round(baseScore * 0.0588);
+                      };
+                      
+                      const innerScore = getInnerParameterScore(item.name);
+                      
                       return (
                         <g key={`inner-${index}`}>
                           <path
@@ -920,16 +1017,19 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                             {item.icon}
                           </text>
                           <text x={textX} y={textY+8} textAnchor="middle" className="text-xs font-medium fill-white">
-                            5.88%
+                            {innerScore}%
                           </text>
                         </g>
                       );
                     })}
                     
-                    {/* Center circle with overall stats */}
+                    {/* Center circle with actual quantitative score */}
                     <circle cx="200" cy="200" r="25" fill="white" stroke="#374151" strokeWidth="2"/>
-                    <text x="200" y="195" textAnchor="middle" className="text-sm font-bold fill-gray-800">17</text>
-                    <text x="200" y="210" textAnchor="middle" className="text-xs fill-gray-600">Total</text>
+                    <text x="200" y="190" textAnchor="middle" className="text-lg font-bold fill-gray-800">
+                      {report.securityScore || 0}%
+                    </text>
+                    <text x="200" y="205" textAnchor="middle" className="text-xs fill-gray-600">Quantitative</text>
+                    <text x="200" y="218" textAnchor="middle" className="text-xs fill-gray-600">Score</text>
                   </svg>
                 </div>
               </div>
@@ -1041,11 +1141,16 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
               <div className="mt-6 text-center">
                 <div className="text-sm font-medium text-gray-700 mb-2">Quantitative Coverage Distribution</div>
                 <div className="flex justify-center gap-8 text-xs">
-                  <div><span className="font-medium text-green-600">64.7%</span> Direct (11/17)</div>
-                  <div><span className="font-medium text-orange-600">11.8%</span> Partial (2/17)</div>
-                  <div><span className="font-medium text-red-600">23.5%</span> Indirect (4/17)</div>
+                  <div><span className="font-medium text-green-600">64.7%</span> Direct Detection (11/17)</div>
+                  <div><span className="font-medium text-orange-600">11.8%</span> Partial Detection (2/17)</div>
+                  <div><span className="font-medium text-red-600">23.5%</span> Indirect/Limited (4/17)</div>
                 </div>
-                <div className="text-xs text-gray-500 mt-2">Each parameter represents 5.88% of complete quantitative analysis</div>
+                <div className="text-xs text-gray-500 mt-2">
+                  Actual scoring based on {report.businessName} findings • Overall Score: {report.securityScore || 0}%
+                </div>
+                <div className="text-xs text-blue-600 mt-1">
+                  Different assessments show varying scores reflecting discovered vulnerabilities and security posture
+                </div>
               </div>
             </div>
 
