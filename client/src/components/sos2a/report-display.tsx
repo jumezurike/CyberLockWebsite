@@ -445,70 +445,120 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           </div>
           
           
-          {/* Assessment Overview Section */}
-          <div className="border-t pt-4">
-            <h2 className="text-lg font-semibold mb-3 text-blue-600">Assessment Overview</h2>
-            <p className="text-sm text-gray-700 mb-4">
-              This preliminary assessment provides a comprehensive analysis of your organization's cybersecurity posture using the CyberLockX SOS²A methodology.
-            </p>
+          {/* Assessment Overview Section - Enhanced Visual Design */}
+          <div className="border-t pt-6">
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 mb-6 text-white shadow-lg">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="bg-white/20 rounded-full p-3">
+                  <Shield className="h-6 w-6 text-white" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-bold">Assessment Overview</h2>
+                  <div className="flex items-center gap-2 mt-1">
+                    <CheckCircle2 className="h-4 w-4 text-green-300" />
+                    <span className="text-sm text-blue-100">CyberLockX SOS²A Methodology</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm border border-white/20">
+                <p className="text-base leading-relaxed">
+                  This comprehensive preliminary assessment provides an <strong className="text-yellow-200">in-depth analysis</strong> of your organization's cybersecurity posture using our proprietary <strong className="text-yellow-200">CyberLockX SOS²A methodology</strong>. 
+                </p>
+                <p className="text-sm text-blue-100 mt-2 flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
+                  Critical insights and actionable recommendations included below
+                </p>
+              </div>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-              {/* Key Findings */}
-              <div className="bg-blue-50 rounded-lg p-4 border border-blue-200">
-                <h3 className="text-sm font-semibold mb-3 text-blue-800">Key Findings</h3>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                    <span>Overall security score: <strong className="text-blue-800">{report.securityScore}%</strong></span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                    <span>Critical vulnerabilities identified: <strong className="text-red-600">
+              {/* Key Findings - Enhanced */}
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border-2 border-blue-200 shadow-md hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-blue-600 rounded-full p-2">
+                    <FileText className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-blue-800">Key Findings</h3>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-medium">Overall security score:</span>
+                    </div>
+                    <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      {report.securityScore}%
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-medium">Critical vulnerabilities:</span>
+                    </div>
+                    <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                       {report.vulnerabilities && Array.isArray(report.vulnerabilities.critical) 
                         ? report.vulnerabilities.critical.length 
                         : 0}
-                    </strong></span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-blue-600 rounded-full"></span>
-                    <span>Compliance gaps requiring attention: <strong className="text-amber-600">
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-amber-500 rounded-full animate-pulse"></div>
+                      <span className="text-sm font-medium">Compliance gaps:</span>
+                    </div>
+                    <div className="bg-amber-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                       {report.findings && Array.isArray(report.findings) 
                         ? report.findings.filter(f => f.severity === 'Medium' || f.severity === 'High').length 
                         : 5}
-                    </strong></span>
-                  </li>
-                </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
               
-              {/* Recommended Actions */}
-              <div className="bg-green-50 rounded-lg p-4 border border-green-200">
-                <h3 className="text-sm font-semibold mb-3 text-green-800">Recommended Actions</h3>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-600 rounded-full"></span>
-                    <span>Immediate: <strong className="text-green-800">
+              {/* Recommended Actions - Enhanced */}
+              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border-2 border-green-200 shadow-md hover:shadow-lg transition-shadow">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-green-600 rounded-full p-2">
+                    <CheckCircle2 className="h-5 w-5 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-green-800">Recommended Actions</h3>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Immediate:</span>
+                    </div>
+                    <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                       {report.recommendations && Array.isArray(report.recommendations.immediate) 
                         ? report.recommendations.immediate.length 
                         : 0} actions
-                    </strong></span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-600 rounded-full"></span>
-                    <span>Short-term: <strong className="text-green-800">
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Short-term:</span>
+                    </div>
+                    <div className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                       {report.recommendations && Array.isArray(report.recommendations.shortTerm) 
                         ? report.recommendations.shortTerm.length 
                         : 0} initiatives
-                    </strong></span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-2 h-2 bg-green-600 rounded-full"></span>
-                    <span>Long-term: <strong className="text-green-800">
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                      <span className="text-sm font-medium">Long-term:</span>
+                    </div>
+                    <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                       {report.recommendations && Array.isArray(report.recommendations.longTerm) 
                         ? report.recommendations.longTerm.length 
                         : 0} strategic goals
-                    </strong></span>
-                  </li>
-                </ul>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
