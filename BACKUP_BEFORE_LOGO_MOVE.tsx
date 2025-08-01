@@ -507,9 +507,6 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
         </CardContent>
       </Card>
       
-      {/* Enhanced Professional Analysis Section */}
-      <EnhancedProfessionalAnalysis report={report} />
-
       {/* CyberLockX Logo and Tagline */}
       <div className="my-6 border-t border-b py-4">
         <div className="flex flex-col items-center justify-center space-y-2">
@@ -528,6 +525,9 @@ export default function ReportDisplay({ report, onBack }: ReportDisplayProps) {
           </div>
         </div>
       </div>
+
+      {/* Enhanced Professional Analysis Section */}
+      <EnhancedProfessionalAnalysis report={report} />
       
       <div className="mt-6 flex flex-col md:flex-row justify-between gap-4">
         <Button variant="outline" onClick={onBack}>
