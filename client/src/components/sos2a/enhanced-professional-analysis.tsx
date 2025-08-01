@@ -542,6 +542,11 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                     <div className="text-sm text-gray-600">Threat Modeling</div>
                     <div className="text-xs text-gray-500">STRIDE Analysis & App Security</div>
                   </div>
+                  <div className="border-l-4 border-emerald-500 pl-4">
+                    <div className="font-medium text-emerald-700">RASBITA-RGM</div>
+                    <div className="text-sm text-gray-600">NIST CSF 2.0 for Cybersecurity Risk Governance & Management</div>
+                    <div className="text-xs text-gray-500">108 Controls with 0-4 Scoring</div>
+                  </div>
                 </div>
               </div>
             </div>
