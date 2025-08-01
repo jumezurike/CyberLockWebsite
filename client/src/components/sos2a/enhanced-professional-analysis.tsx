@@ -759,6 +759,113 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
               </div>
             </div>
 
+            {/* Quantitative Analysis Score */}
+            <div className="bg-white border rounded-lg p-6 shadow-sm">
+              <h4 className="text-lg font-semibold mb-4 text-center">Quantitative Analysis Score</h4>
+              <div className="flex items-center justify-center mb-6">
+                <div className="relative w-80 h-80">
+                  <svg viewBox="0 0 300 300" className="w-full h-full">
+                    {/* Outer ring segments for 17 parameters */}
+                    {[
+                      // Directly Detectable (Green) - 11 parameters
+                      { name: "Vulnerability", angle: 0, color: "#10B981", capability: "direct" },
+                      { name: "Patch Mgmt", angle: 21.2, color: "#10B981", capability: "direct" },
+                      { name: "Misconfigurations", angle: 42.4, color: "#10B981", capability: "direct" },
+                      { name: "Malware", angle: 63.6, color: "#10B981", capability: "direct" },
+                      { name: "Endpoint Security", angle: 84.8, color: "#10B981", capability: "direct" },
+                      { name: "Credential Exposure", angle: 106, color: "#10B981", capability: "direct" },
+                      { name: "Cloud Security", angle: 127.2, color: "#10B981", capability: "direct" },
+                      { name: "Network Exposure", angle: 148.4, color: "#10B981", capability: "direct" },
+                      { name: "Dark Web", angle: 169.6, color: "#10B981", capability: "direct" },
+                      { name: "Compliance", angle: 190.8, color: "#10B981", capability: "direct" },
+                      { name: "Threat Intel", angle: 212, color: "#10B981", capability: "direct" },
+                      
+                      // Partial Detection (Orange) - 2 parameters
+                      { name: "IAM", angle: 233.2, color: "#F59E0B", capability: "partial" },
+                      { name: "Email Security", angle: 254.4, color: "#F59E0B", capability: "partial" },
+                      
+                      // Indirect Detection (Red) - 4 parameters
+                      { name: "Zero Trust", angle: 275.6, color: "#EF4444", capability: "indirect" },
+                      { name: "Data Security", angle: 296.8, color: "#EF4444", capability: "indirect" },
+                      { name: "Browser Security", angle: 318, color: "#EF4444", capability: "indirect" },
+                      { name: "Security Awareness", angle: 339.2, color: "#EF4444", capability: "indirect" }
+                    ].map((item, index) => {
+                      const startAngle = item.angle;
+                      const endAngle = startAngle + 21.2; // 360/17 = 21.18
+                      const startRad = (startAngle * Math.PI) / 180;
+                      const endRad = (endAngle * Math.PI) / 180;
+                      
+                      const outerRadius = 120;
+                      const innerRadius = 90;
+                      
+                      const x1 = 150 + outerRadius * Math.cos(startRad);
+                      const y1 = 150 + outerRadius * Math.sin(startRad);
+                      const x2 = 150 + outerRadius * Math.cos(endRad);
+                      const y2 = 150 + outerRadius * Math.sin(endRad);
+                      const x3 = 150 + innerRadius * Math.cos(endRad);
+                      const y3 = 150 + innerRadius * Math.sin(endRad);
+                      const x4 = 150 + innerRadius * Math.cos(startRad);
+                      const y4 = 150 + innerRadius * Math.sin(startRad);
+                      
+                      const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+                      
+                      return (
+                        <path
+                          key={index}
+                          d={`M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x4} ${y4} Z`}
+                          fill={item.color}
+                          stroke="white"
+                          strokeWidth="1"
+                        />
+                      );
+                    })}
+                    
+                    {/* Inner circle */}
+                    <circle cx="150" cy="150" r="80" fill="white" stroke="#E5E7EB" strokeWidth="2"/>
+                    
+                    {/* Center text */}
+                    <text x="150" y="140" textAnchor="middle" className="text-2xl font-bold fill-gray-800">5.88%</text>
+                    <text x="150" y="160" textAnchor="middle" className="text-sm fill-gray-600">Directly</text>
+                    <text x="150" y="175" textAnchor="middle" className="text-sm fill-gray-600">Detectable</text>
+                  </svg>
+                </div>
+              </div>
+              
+              {/* Legend */}
+              <div className="grid md:grid-cols-3 gap-4 text-sm">
+                <div className="space-y-2">
+                  <h5 className="font-medium text-green-700">✔️ Directly Detectable (11)</h5>
+                  <div className="text-xs space-y-1">
+                    <div>• Vulnerability, Patch Mgmt</div>
+                    <div>• Misconfigurations, Malware</div>
+                    <div>• Endpoint Security, Credentials</div>
+                    <div>• Cloud Security, Network</div>
+                    <div>• Dark Web, Compliance, Threat Intel</div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h5 className="font-medium text-orange-600">⚠️ Partial Detection (2)</h5>
+                  <div className="text-xs space-y-1">
+                    <div>• IAM (overprivileged roles)</div>
+                    <div>• Email Security (phishing)</div>
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <h5 className="font-medium text-red-600">⚠️ Indirect/Limited (4)</h5>
+                  <div className="text-xs space-y-1">
+                    <div>• Zero Trust Architecture</div>
+                    <div>• Data Security & Leakage</div>
+                    <div>• Browser & Web Security</div>
+                    <div>• Security Awareness</div>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-4 text-center text-xs text-gray-600">
+                Each parameter represents 5.88% of the complete Quantitative Analysis pillar (100% ÷ 17 = 5.88%)
+              </div>
+            </div>
+
             {/* Risk & Mitigation Plan Table */}
             <div className="bg-white border rounded-lg p-6 shadow-sm">
               <h4 className="text-lg font-semibold mb-4">Top 5 Risks and Mitigation Plan</h4>
