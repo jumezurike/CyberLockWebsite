@@ -18,44 +18,15 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="executive-summary" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 md:grid-cols-6">
-            <TabsTrigger value="executive-summary">Executive Summary</TabsTrigger>
+        <Tabs defaultValue="visual-scorecard" className="w-full">
+          <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
             <TabsTrigger value="visual-scorecard">Visual Scorecard</TabsTrigger>
             <TabsTrigger value="compliance">Compliance</TabsTrigger>
             <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
             <TabsTrigger value="5-pillar-graphs">5 Pillar Graphs</TabsTrigger>
             <TabsTrigger value="implementation">Implementation</TabsTrigger>
           </TabsList>
-          
-          <TabsContent value="executive-summary" className="space-y-4 pt-4">
-            <h3 className="text-lg font-semibold mb-3">Executive Summary</h3>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
-              <h4 className="font-medium text-blue-800 mb-2">Assessment Overview</h4>
-              <p className="text-sm text-blue-700">
-                This {report.reportType} assessment provides a comprehensive analysis of your organization's 
-                cybersecurity posture using the CyberLockX SOS²A methodology.
-              </p>
-            </div>
-            <div className="grid md:grid-cols-2 gap-4">
-              <div className="border rounded-lg p-4">
-                <h5 className="font-medium mb-2">Key Findings</h5>
-                <ul className="text-sm space-y-1">
-                  <li>• Overall security score: {Math.round(((report as any).overallScore || 0.65) * 100)}%</li>
-                  <li>• Critical vulnerabilities identified: {report.findings?.filter(f => f.severity === 'High').length || 3}</li>
-                  <li>• Compliance gaps requiring attention: {report.findings?.filter(f => f.severity === 'Medium').length || 5}</li>
-                </ul>
-              </div>
-              <div className="border rounded-lg p-4">
-                <h5 className="font-medium mb-2">Recommended Actions</h5>
-                <ul className="text-sm space-y-1">
-                  <li>• Immediate: {report.recommendations?.immediate?.length || 0} actions</li>
-                  <li>• Short-term: {report.recommendations?.shortTerm?.length || 0} initiatives</li>
-                  <li>• Long-term: {report.recommendations?.longTerm?.length || 0} strategic goals</li>
-                </ul>
-              </div>
-            </div>
-          </TabsContent>
+
           
           <TabsContent value="visual-scorecard" className="space-y-4 pt-4">
             <h3 className="text-lg font-semibold mb-3">5-Pillar Framework Visual Scorecard</h3>
