@@ -18,15 +18,361 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="visual-scorecard" className="w-full">
+        <Tabs defaultValue="executive-summary" className="w-full">
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-5">
+            <TabsTrigger value="executive-summary">Executive Summary</TabsTrigger>
             <TabsTrigger value="visual-scorecard">Visual Scorecard</TabsTrigger>
             <TabsTrigger value="compliance">Compliance</TabsTrigger>
             <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
             <TabsTrigger value="5-pillar-graphs">5 Pillar Graphs</TabsTrigger>
-            <TabsTrigger value="implementation">Implementation</TabsTrigger>
           </TabsList>
 
+          <TabsContent value="executive-summary" className="space-y-6 pt-4">
+            {/* Executive Summary Content */}
+            <div className="space-y-6">
+              {/* Executive Summary Text */}
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-6 text-white shadow-lg">
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="bg-white/20 rounded-full p-3">
+                    <svg className="h-6 w-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h2 className="text-2xl font-bold">Assessment Overview</h2>
+                    <div className="flex items-center gap-2 mt-1">
+                      <svg className="h-4 w-4 text-green-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <span className="text-sm text-blue-100">CyberLockX SOS²A Methodology</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white/10 rounded-lg p-4 backdrop-blur-sm border border-white/20">
+                  <p className="text-base leading-relaxed">
+                    {report.reportType === 'preliminary' ? (
+                      <>
+                        This preliminary report highlights the current cybersecurity state of <strong className="text-yellow-200">{report.businessName}</strong>, with an 
+                        emphasis on assessing its organizational and system security posture. While this is an initial overview, 
+                        it is part of a larger effort to align security controls with industry compliance standards, regulations, 
+                        and best practices. The purpose of this report is to illustrate the need for comprehensive monitoring, 
+                        threat detection, and an effective incident response system.
+                      </>
+                    ) : (
+                      <>
+                        This comprehensive report provides a detailed quantitative analysis of <strong className="text-yellow-200">{report.businessName}</strong>'s security posture
+                        based on 6 months of evidence collection following the implementation of recommended mitigation strategies.
+                        The assessment verifies compliance with industry standards and regulations, identifies remaining security
+                        gaps, and provides a roadmap for continuous security improvement.
+                      </>
+                    )}
+                  </p>
+                  <p className="text-sm text-blue-100 mt-3 flex items-center gap-2">
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {report.reportType === 'preliminary' 
+                      ? "STRIDE threat modeling methodology applied to architectural vulnerabilities"
+                      : "Comprehensive STRIDE analysis with validated mitigation controls and penetration testing results"
+                    }
+                  </p>
+                </div>
+              </div>
+
+              {/* Business Information & RASBITA Scores */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white border rounded-lg p-5 shadow-sm">
+                  <h3 className="text-lg font-semibold mb-4 text-gray-800">Business Information</h3>
+                  <div className="space-y-3">
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Organization:</span>
+                      <p className="font-semibold text-gray-900">{report.businessName}</p>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Industry:</span>
+                      <p className="text-gray-900">{report.industry}</p>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Location:</span>
+                      <p className="text-gray-900">
+                        {report.businessLocation && typeof report.businessLocation === 'object' 
+                          ? `${report.businessLocation.state || 'Unknown'}, ${report.businessLocation.country || 'Unknown'}` 
+                          : 'Unknown location'}
+                      </p>
+                    </div>
+                    <div>
+                      <span className="text-sm font-medium text-gray-600">Services:</span>
+                      <p className="text-gray-900 text-sm">{report.businessServices || 'Not specified'}</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-white border rounded-lg p-5 shadow-sm">
+                  <div className="flex items-center justify-between mb-4">
+                    <h3 className="text-lg font-semibold text-gray-800">RASBITA Score Components</h3>
+                    <div className="bg-purple-100 text-purple-900 font-bold px-3 py-1 rounded-full flex items-center">
+                      <span>Overall: {report.rasbitaScore?.total || "N/A"}%</span>
+                      <span className="ml-1 text-xs px-2 py-0.5 bg-purple-800 text-white rounded-full">RASBITA™</span>
+                    </div>
+                  </div>
+                  {report.rasbitaScore && (
+                    <div className="grid grid-cols-1 gap-3">
+                      <div className="bg-red-50 rounded-md p-3 border-l-4 border-red-500">
+                        <p className="text-xs text-gray-600 mb-1">Cybersecurity Incident Risk Score</p>
+                        <p className="font-bold text-red-600 text-lg">
+                          {report.rasbitaScore.categories?.govern || 
+                           report.rasbitaScore.categories?.risk || 
+                           "N/A"}%
+                        </p>
+                      </div>
+                      <div className="bg-purple-50 rounded-md p-3 border-l-4 border-purple-500">
+                        <p className="text-xs text-gray-600 mb-1">Cybersecurity Gov & Mgmt Maturity</p>
+                        <p className="font-bold text-purple-600 text-lg">
+                          {report.rasbitaScore.categories?.protect || 
+                           report.rasbitaScore.categories?.securityControls || 
+                           "N/A"}%
+                        </p>
+                      </div>
+                      <div className="bg-green-50 rounded-md p-3 border-l-4 border-green-500">
+                        <p className="text-xs text-gray-600 mb-1">NRRB (Net Risk-Reduction Benefit)</p>
+                        <p className="font-bold text-green-600 text-lg">
+                          {report.rasbitaScore.categories?.respond || 
+                           report.rasbitaScore.categories?.architecture || 
+                           "N/A"}%
+                        </p>
+                        <p className="text-[10px] text-gray-500 mt-1">Positive value = investment makes financial sense</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Key Findings & Recommended Actions */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-xl p-5 border-2 border-blue-200 shadow-md">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-blue-600 rounded-full p-2">
+                      <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold text-blue-800">Key Findings</h3>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-blue-600 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium">Overall security score:</span>
+                      </div>
+                      <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        {report.securityScore}%
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium">High/Critical findings:</span>
+                      </div>
+                      <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        {(() => {
+                          if (!report.findings) return 0;
+                          let findings: any[] = [];
+                          try {
+                            if (typeof report.findings === 'string') {
+                              findings = JSON.parse(report.findings);
+                            } else if (Array.isArray(report.findings)) {
+                              findings = report.findings;
+                            } else if (typeof report.findings === 'object' && report.findings !== null) {
+                              findings = (report.findings as any).items || [];
+                            }
+                          } catch {
+                            return 0;
+                          }
+                          return findings.filter(f => f.severity === 'High' || f.severity === 'Critical').length;
+                        })()}
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-amber-500 rounded-full animate-pulse"></div>
+                        <span className="text-sm font-medium">Compliance gaps:</span>
+                      </div>
+                      <div className="bg-amber-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        {(() => {
+                          if (!report.findings) return 'N/A';
+                          let findings: any[] = [];
+                          try {
+                            if (typeof report.findings === 'string') {
+                              findings = JSON.parse(report.findings);
+                            } else if (Array.isArray(report.findings)) {
+                              findings = report.findings;
+                            } else if (typeof report.findings === 'object' && report.findings !== null) {
+                              findings = (report.findings as any).items || [];
+                            }
+                          } catch {
+                            return 'N/A';
+                          }
+                          return findings.filter(f => f.severity === 'Medium').length;
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-xl p-5 border-2 border-green-200 shadow-md">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-green-600 rounded-full p-2">
+                      <svg className="h-5 w-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    </div>
+                    <h3 className="text-lg font-bold text-green-800">Recommended Actions</h3>
+                  </div>
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-red-500 rounded-full"></div>
+                        <span className="text-sm font-medium">Immediate:</span>
+                      </div>
+                      <div className="bg-red-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        {report.recommendations && Array.isArray(report.recommendations.immediate) 
+                          ? report.recommendations.immediate.length 
+                          : 'TBD'} actions
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                        <span className="text-sm font-medium">Short-term:</span>
+                      </div>
+                      <div className="bg-yellow-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        {report.recommendations && Array.isArray(report.recommendations.shortTerm) 
+                          ? report.recommendations.shortTerm.length 
+                          : 'TBD'} initiatives
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between bg-white rounded-lg p-3 shadow-sm">
+                      <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                        <span className="text-sm font-medium">Long-term:</span>
+                      </div>
+                      <div className="bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+                        {report.recommendations && Array.isArray(report.recommendations.longTerm) 
+                          ? report.recommendations.longTerm.length 
+                          : 'TBD'} strategic goals
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Summary Findings */}
+              <div className="bg-white border rounded-lg p-6 shadow-sm">
+                <h3 className="text-lg font-semibold mb-4 text-gray-800">Summary Findings</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                  <div className="border rounded-md p-4 text-center bg-red-50 border-red-200">
+                    <div className="text-2xl font-bold text-red-600">
+                      {(() => {
+                        if (!report.findings) return 0;
+                        let findings: any[] = [];
+                        try {
+                          if (typeof report.findings === 'string') {
+                            findings = JSON.parse(report.findings);
+                          } else if (Array.isArray(report.findings)) {
+                            findings = report.findings;
+                          } else if (typeof report.findings === 'object' && report.findings !== null) {
+                            findings = (report.findings as any).items || [];
+                          }
+                        } catch {
+                          return 0;
+                        }
+                        return findings.filter(f => f.severity === 'Critical').length;
+                      })()}
+                    </div>
+                    <div className="text-sm font-medium text-red-800">Critical Vulnerabilities</div>
+                    <div className="text-xs text-red-600 mt-1">Greater than 80% probability</div>
+                  </div>
+                  <div className="border rounded-md p-4 text-center bg-orange-50 border-orange-200">
+                    <div className="text-2xl font-bold text-orange-600">
+                      {(() => {
+                        if (!report.findings) return 0;
+                        let findings: any[] = [];
+                        try {
+                          if (typeof report.findings === 'string') {
+                            findings = JSON.parse(report.findings);
+                          } else if (Array.isArray(report.findings)) {
+                            findings = report.findings;
+                          } else if (typeof report.findings === 'object' && report.findings !== null) {
+                            findings = (report.findings as any).items || [];
+                          }
+                        } catch {
+                          return 0;
+                        }
+                        return findings.filter(f => f.severity === 'High').length;
+                      })()}
+                    </div>
+                    <div className="text-sm font-medium text-orange-800">High Risks</div>
+                    <div className="text-xs text-orange-600 mt-1">Between 60%-80% probability</div>
+                  </div>
+                  <div className="border rounded-md p-4 text-center bg-amber-50 border-amber-200">
+                    <div className="text-2xl font-bold text-amber-600">
+                      {(() => {
+                        if (!report.findings) return 0;
+                        let findings: any[] = [];
+                        try {
+                          if (typeof report.findings === 'string') {
+                            findings = JSON.parse(report.findings);
+                          } else if (Array.isArray(report.findings)) {
+                            findings = report.findings;
+                          } else if (typeof report.findings === 'object' && report.findings !== null) {
+                            findings = (report.findings as any).items || [];
+                          }
+                        } catch {
+                          return 0;
+                        }
+                        return findings.filter(f => f.severity === 'Medium').length;
+                      })()}
+                    </div>
+                    <div className="text-sm font-medium text-amber-800">Medium Risks</div>
+                    <div className="text-xs text-amber-600 mt-1">Between 30%-60% probability</div>
+                  </div>
+                  <div className="border rounded-md p-4 text-center bg-green-50 border-green-200">
+                    <div className="text-2xl font-bold text-green-600">
+                      {(() => {
+                        if (!report.findings) return 0;
+                        let findings: any[] = [];
+                        try {
+                          if (typeof report.findings === 'string') {
+                            findings = JSON.parse(report.findings);
+                          } else if (Array.isArray(report.findings)) {
+                            findings = report.findings;
+                          } else if (typeof report.findings === 'object' && report.findings !== null) {
+                            findings = (report.findings as any).items || [];
+                          }
+                        } catch {
+                          return 0;
+                        }
+                        return findings.filter(f => f.severity === 'Low').length;
+                      })()}
+                    </div>
+                    <div className="text-sm font-medium text-green-800">Low Risks</div>
+                    <div className="text-xs text-green-600 mt-1">Below 30% probability</div>
+                  </div>
+                </div>
+                
+                <div className="mt-4 p-4 bg-gray-50 rounded-md">
+                  <p className="font-medium mb-2 text-sm text-gray-700">Risk Probability Categories:</p>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+                    <div><span className="font-semibold text-red-600">Critical</span> – Greater than 80% probability</div>
+                    <div><span className="font-semibold text-orange-600">High</span> – Between 60% and 80% probability</div>
+                    <div><span className="font-semibold text-amber-600">Medium</span> – Between 30% and 60% probability</div>
+                    <div><span className="font-semibold text-green-600">Low</span> – Below 30% probability</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
           
           <TabsContent value="visual-scorecard" className="space-y-4 pt-4">
             <h3 className="text-lg font-semibold mb-3">5-Pillar Framework Visual Scorecard</h3>
