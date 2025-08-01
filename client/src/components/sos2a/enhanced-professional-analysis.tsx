@@ -428,9 +428,404 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
             </div>
           </TabsContent>
           
-          <TabsContent value="5-pillar-graphs" className="space-y-4 pt-4">
-            <h3 className="text-lg font-semibold mb-3">5 Pillar Graphs</h3>
-            {/* Empty - Ready for user's 5-pillar implementation */}
+          <TabsContent value="5-pillar-graphs" className="space-y-6 pt-4">
+            <h3 className="text-xl font-bold mb-6 text-center">5-Pillar Framework Analysis</h3>
+            
+            {/* Qualitative Analysis Score */}
+            <div className="bg-white border rounded-lg p-6 shadow-sm">
+              <h4 className="text-lg font-semibold mb-4 text-blue-700">Qualitative Analysis Score</h4>
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm font-medium">Actual Scores for Each Qualitative Parameter</span>
+              </div>
+              
+              <div className="space-y-3">
+                {[
+                  { name: "Policies & Procedures", score: 85 },
+                  { name: "Security Controls", score: 78 },
+                  { name: "Data Management", score: 82 },
+                  { name: "Access Controls", score: 75 },
+                  { name: "Incident Response", score: 70 },
+                  { name: "Business Continuity", score: 68 },
+                  { name: "Vendor Management", score: 73 },
+                  { name: "Training & Awareness", score: 80 },
+                  { name: "Network Security", score: 77 },
+                  { name: "Physical Security", score: 85 },
+                  { name: "Risk Assessment", score: 72 },
+                  { name: "Compliance Management", score: 79 }
+                ].map((item, index) => (
+                  <div key={index} className="flex items-center gap-3">
+                    <div className="w-32 text-xs font-medium text-gray-700">{item.name}</div>
+                    <div className="flex-1 bg-gray-200 rounded-full h-4 relative">
+                      <div 
+                        className="bg-blue-500 h-4 rounded-full" 
+                        style={{ width: `${item.score}%` }}
+                      ></div>
+                      <span className="absolute right-2 top-0 text-xs font-medium text-white leading-4">
+                        {item.score}%
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* 5-Pillars Overall Score */}
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="bg-white border rounded-lg p-6 shadow-sm">
+                <h4 className="text-lg font-semibold mb-4 text-center">5-Pillars Overall Score</h4>
+                <div className="relative w-64 h-64 mx-auto">
+                  {/* Pie Chart Representation */}
+                  <svg viewBox="0 0 200 200" className="w-full h-full">
+                    {/* Qualitative Analysis - Blue */}
+                    <path d="M 100 100 L 100 20 A 80 80 0 0 1 180 100 Z" fill="#3B82F6" />
+                    {/* RASBITA-RGM - Green */}
+                    <path d="M 100 100 L 180 100 A 80 80 0 0 1 141.4 158.6 Z" fill="#10B981" />
+                    {/* RASBITA-CBF - Yellow */}
+                    <path d="M 100 100 L 141.4 158.6 A 80 80 0 0 1 58.6 158.6 Z" fill="#F59E0B" />
+                    {/* Architecture TM & App Sec - Red */}
+                    <path d="M 100 100 L 58.6 158.6 A 80 80 0 0 1 20 100 Z" fill="#EF4444" />
+                    {/* Quantitative Analysis - Purple */}
+                    <path d="M 100 100 L 20 100 A 80 80 0 0 1 100 20 Z" fill="#8B5CF6" />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="text-2xl font-bold">{report.securityScore}%</div>
+                      <div className="text-xs text-gray-600">Overall</div>
+                    </div>
+                  </div>
+                </div>
+                <div className="mt-4 space-y-2 text-xs">
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-blue-500 rounded"></div>
+                    <span>Qualitative Analysis</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-green-500 rounded"></div>
+                    <span>RASBITA-RGM</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-yellow-500 rounded"></div>
+                    <span>RASBITA-CBF</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-red-500 rounded"></div>
+                    <span>Architecture TM & App Sec</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-3 h-3 bg-purple-500 rounded"></div>
+                    <span>Quantitative Analysis</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* SOS2A Algorithm Breakdown */}
+              <div className="bg-white border rounded-lg p-6 shadow-sm">
+                <h4 className="text-lg font-semibold mb-4">SOS²A Algorithm Analysis Breakdown</h4>
+                <div className="space-y-4">
+                  <div className="border-l-4 border-blue-500 pl-4">
+                    <div className="font-medium text-blue-700">Quantitative Analysis</div>
+                    <div className="text-sm text-gray-600">Measured Data Input</div>
+                    <div className="text-xs text-gray-500">18 Deep Scan Parameters</div>
+                  </div>
+                  <div className="border-l-4 border-green-500 pl-4">
+                    <div className="font-medium text-green-700">Qualitative Analysis Expert Input</div>
+                    <div className="text-sm text-gray-600">Expert Assessment</div>
+                    <div className="text-xs text-gray-500">12 Default Parameters</div>
+                  </div>
+                  <div className="border-l-4 border-yellow-500 pl-4">
+                    <div className="font-medium text-yellow-700">RASBITA-CBF</div>
+                    <div className="text-sm text-gray-600">Cost-Benefit Analysis</div>
+                    <div className="text-xs text-gray-500">Financial Impact Assessment</div>
+                  </div>
+                  <div className="border-l-4 border-red-500 pl-4">
+                    <div className="font-medium text-red-700">Architecture TM & App Sec</div>
+                    <div className="text-sm text-gray-600">Threat Modeling</div>
+                    <div className="text-xs text-gray-500">STRIDE Analysis & App Security</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* RASBITA-RGM Radar Chart */}
+            <div className="bg-white border rounded-lg p-6 shadow-sm">
+              <h4 className="text-lg font-semibold mb-4 text-center">RASBITA-RGM Radar Chart (Governance Vs Management)</h4>
+              
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Progression Timeline */}
+                <div>
+                  <h5 className="font-medium mb-3">RASBITA-RGM Progression Timeline (Governance and Management)</h5>
+                  <div className="relative">
+                    <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-orange-300"></div>
+                    {[
+                      { month: "Month 0", score: 45 },
+                      { month: "Month 3", score: 55 },
+                      { month: "Month 6", score: 65 },
+                      { month: "Month 9", score: 75 },
+                      { month: "Month 12", score: 85 }
+                    ].map((item, index) => (
+                      <div key={index} className="flex items-center gap-4 mb-4">
+                        <div className="w-4 h-4 bg-orange-500 rounded-full z-10"></div>
+                        <div className="text-sm">{item.month}: {item.score}%</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Radar Chart Representation */}
+                <div className="flex items-center justify-center">
+                  <div className="relative w-48 h-48">
+                    <svg viewBox="0 0 200 200" className="w-full h-full">
+                      {/* Radar Grid */}
+                      <circle cx="100" cy="100" r="80" fill="none" stroke="#E5E7EB" strokeWidth="1"/>
+                      <circle cx="100" cy="100" r="60" fill="none" stroke="#E5E7EB" strokeWidth="1"/>
+                      <circle cx="100" cy="100" r="40" fill="none" stroke="#E5E7EB" strokeWidth="1"/>
+                      <circle cx="100" cy="100" r="20" fill="none" stroke="#E5E7EB" strokeWidth="1"/>
+                      
+                      {/* Radar Lines */}
+                      <line x1="100" y1="20" x2="100" y2="180" stroke="#E5E7EB" strokeWidth="1"/>
+                      <line x1="20" y1="100" x2="180" y2="100" stroke="#E5E7EB" strokeWidth="1"/>
+                      <line x1="43" y1="43" x2="157" y2="157" stroke="#E5E7EB" strokeWidth="1"/>
+                      <line x1="157" y1="43" x2="43" y2="157" stroke="#E5E7EB" strokeWidth="1"/>
+                      
+                      {/* Data Shape */}
+                      <polygon points="100,40 140,60 160,120 120,140 80,130 60,80" 
+                               fill="rgba(249, 115, 22, 0.3)" 
+                               stroke="#F97316" 
+                               strokeWidth="2"/>
+                    </svg>
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="text-lg font-bold">RGM</div>
+                        <div className="text-xs text-gray-600">Analysis</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* RASBITA-CBF Section */}
+            <div className="bg-white border rounded-lg p-6 shadow-sm">
+              <h4 className="text-lg font-semibold mb-4 text-center text-red-700">RASBITA-CBF (Cost-Benefit and Financial Analysis)</h4>
+              
+              <div className="grid md:grid-cols-2 gap-6 mb-6">
+                {/* Likelihood Matrix */}
+                <div>
+                  <h5 className="font-medium mb-3">RASBITA-CBF Impact vs Likelihood Matrix</h5>
+                  <div className="grid grid-cols-5 gap-1 text-xs">
+                    <div className="bg-gray-100 p-2 text-center font-medium">Impact</div>
+                    <div className="bg-gray-100 p-2 text-center font-medium">Very Low</div>
+                    <div className="bg-gray-100 p-2 text-center font-medium">Low</div>
+                    <div className="bg-gray-100 p-2 text-center font-medium">Medium</div>
+                    <div className="bg-gray-100 p-2 text-center font-medium">High</div>
+                    
+                    <div className="bg-gray-100 p-2 font-medium">Critical</div>
+                    <div className="bg-yellow-200 p-2 text-center">Low</div>
+                    <div className="bg-orange-300 p-2 text-center">Medium</div>
+                    <div className="bg-red-400 p-2 text-center">High</div>
+                    <div className="bg-red-600 p-2 text-center text-white">Critical</div>
+                    
+                    <div className="bg-gray-100 p-2 font-medium">High</div>
+                    <div className="bg-green-200 p-2 text-center">Very Low</div>
+                    <div className="bg-yellow-200 p-2 text-center">Low</div>
+                    <div className="bg-orange-300 p-2 text-center">Medium</div>
+                    <div className="bg-red-400 p-2 text-center">High</div>
+                    
+                    <div className="bg-gray-100 p-2 font-medium">Medium</div>
+                    <div className="bg-green-200 p-2 text-center">Very Low</div>
+                    <div className="bg-green-200 p-2 text-center">Very Low</div>
+                    <div className="bg-yellow-200 p-2 text-center">Low</div>
+                    <div className="bg-orange-300 p-2 text-center">Medium</div>
+                    
+                    <div className="bg-gray-100 p-2 font-medium">Low</div>
+                    <div className="bg-green-200 p-2 text-center">Very Low</div>
+                    <div className="bg-green-200 p-2 text-center">Very Low</div>
+                    <div className="bg-green-200 p-2 text-center">Very Low</div>
+                    <div className="bg-yellow-200 p-2 text-center">Low</div>
+                  </div>
+                </div>
+
+                {/* Cost-Benefit Analysis Chart */}
+                <div>
+                  <h5 className="font-medium mb-3">Cost-Benefit Analysis</h5>
+                  <div className="grid grid-cols-4 gap-2 text-xs">
+                    {[
+                      { label: "Investment Cost", value: "$125K", color: "bg-red-500" },
+                      { label: "Risk Reduction", value: "$340K", color: "bg-green-500" },
+                      { label: "Compliance Savings", value: "$85K", color: "bg-blue-500" },
+                      { label: "Efficiency Gains", value: "$95K", color: "bg-purple-500" }
+                    ].map((item, index) => (
+                      <div key={index} className="text-center">
+                        <div className={`${item.color} text-white p-4 rounded mb-1 font-bold`}>
+                          {item.value}
+                        </div>
+                        <div className="text-xs">{item.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Security Incidents and Risk Analysis */}
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h5 className="font-medium mb-3">Top 10 Security Incidents by RASBITA Risk Score</h5>
+                  <div className="space-y-2 text-sm">
+                    {[
+                      { incident: "Malware/Ransomware Attack", score: "95%" },
+                      { incident: "Data Breach/Phishing", score: "87%" },
+                      { incident: "Insider Threats", score: "82%" },
+                      { incident: "DDoS Attacks", score: "78%" },
+                      { incident: "Privilege Escalation", score: "75%" },
+                      { incident: "Zero-day Exploits", score: "73%" },
+                      { incident: "Supply Chain Attacks", score: "68%" },
+                      { incident: "Cloud Configuration Error", score: "65%" },
+                      { incident: "Social Engineering Attacks", score: "62%" },
+                      { incident: "Third-party Vulnerabilities", score: "58%" }
+                    ].map((item, index) => (
+                      <div key={index} className="flex justify-between items-center bg-blue-50 p-2 rounded">
+                        <span className="text-xs">{item.incident}</span>
+                        <span className="font-medium text-blue-700">{item.score}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  {/* Additional Top Classifications */}
+                  <div>
+                    <h5 className="font-medium mb-3">Additional Top Classifications of Incidents</h5>
+                    <div className="relative w-32 h-32 mx-auto">
+                      <svg viewBox="0 0 120 120" className="w-full h-full">
+                        <path d="M 60 60 L 60 10 A 50 50 0 0 1 110 60 Z" fill="#EF4444" />
+                        <path d="M 60 60 L 110 60 A 50 50 0 0 1 95 95 Z" fill="#F59E0B" />
+                        <path d="M 60 60 L 95 95 A 50 50 0 0 1 25 95 Z" fill="#10B981" />
+                        <path d="M 60 60 L 25 95 A 50 50 0 0 1 10 60 Z" fill="#3B82F6" />
+                        <path d="M 60 60 L 10 60 A 50 50 0 0 1 60 10 Z" fill="#8B5CF6" />
+                      </svg>
+                    </div>
+                    <div className="text-xs space-y-1 mt-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-red-500 rounded"></div>
+                        <span>High Risk</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-yellow-500 rounded"></div>
+                        <span>Medium Risk</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded"></div>
+                        <span>Low Risk</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Risk Treatment Strategy Distribution */}
+                  <div>
+                    <h5 className="font-medium mb-3">Risk Treatment Strategy Distribution</h5>
+                    <div className="relative w-32 h-32 mx-auto">
+                      <svg viewBox="0 0 120 120" className="w-full h-full">
+                        <path d="M 60 60 L 60 10 A 50 50 0 1 1 25 95 Z" fill="#10B981" />
+                        <path d="M 60 60 L 25 95 A 50 50 0 0 1 95 95 Z" fill="#EF4444" />
+                        <path d="M 60 60 L 95 95 A 50 50 0 0 1 110 60 Z" fill="#F59E0B" />
+                        <path d="M 60 60 L 110 60 A 50 50 0 0 1 60 10 Z" fill="#8B5CF6" />
+                      </svg>
+                    </div>
+                    <div className="text-xs space-y-1 mt-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-green-500 rounded"></div>
+                        <span>Mitigate</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-red-500 rounded"></div>
+                        <span>Accept</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-yellow-500 rounded"></div>
+                        <span>Transfer</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 bg-purple-500 rounded"></div>
+                        <span>Avoid</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Risk & Mitigation Plan Table */}
+            <div className="bg-white border rounded-lg p-6 shadow-sm">
+              <h4 className="text-lg font-semibold mb-4">Top 5 Risks and Mitigation Plan</h4>
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs border-collapse">
+                  <thead>
+                    <tr className="bg-gray-100">
+                      <th className="border p-2 text-left">Risk ID</th>
+                      <th className="border p-2 text-left">Risk Description</th>
+                      <th className="border p-2 text-left">Probability</th>
+                      <th className="border p-2 text-left">Impact</th>
+                      <th className="border p-2 text-left">Risk Score</th>
+                      <th className="border p-2 text-left">Mitigation Strategy</th>
+                      <th className="border p-2 text-left">Owner</th>
+                      <th className="border p-2 text-left">Timeline</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="border p-2">R001</td>
+                      <td className="border p-2">Malware/Ransomware Attack</td>
+                      <td className="border p-2">High</td>
+                      <td className="border p-2">Critical</td>
+                      <td className="border p-2 bg-red-100">95</td>
+                      <td className="border p-2">Implement EDR, backup strategy, user training</td>
+                      <td className="border p-2">CISO</td>
+                      <td className="border p-2">30 days</td>
+                    </tr>
+                    <tr>
+                      <td className="border p-2">R002</td>
+                      <td className="border p-2">Data Breach via Phishing</td>
+                      <td className="border p-2">High</td>
+                      <td className="border p-2">High</td>
+                      <td className="border p-2 bg-orange-100">87</td>
+                      <td className="border p-2">Email security, MFA, security awareness</td>
+                      <td className="border p-2">IT Manager</td>
+                      <td className="border p-2">45 days</td>
+                    </tr>
+                    <tr>
+                      <td className="border p-2">R003</td>
+                      <td className="border p-2">Insider Threats</td>
+                      <td className="border p-2">Medium</td>
+                      <td className="border p-2">High</td>
+                      <td className="border p-2 bg-orange-100">82</td>
+                      <td className="border p-2">Access controls, monitoring, background checks</td>
+                      <td className="border p-2">HR/Security</td>
+                      <td className="border p-2">60 days</td>
+                    </tr>
+                    <tr>
+                      <td className="border p-2">R004</td>
+                      <td className="border p-2">DDoS Attacks</td>
+                      <td className="border p-2">Medium</td>
+                      <td className="border p-2">High</td>
+                      <td className="border p-2 bg-yellow-100">78</td>
+                      <td className="border p-2">DDoS protection, traffic monitoring</td>
+                      <td className="border p-2">Network Admin</td>
+                      <td className="border p-2">30 days</td>
+                    </tr>
+                    <tr>
+                      <td className="border p-2">R005</td>
+                      <td className="border p-2">Privilege Escalation</td>
+                      <td className="border p-2">Medium</td>
+                      <td className="border p-2">High</td>
+                      <td className="border p-2 bg-yellow-100">75</td>
+                      <td className="border p-2">PAM solution, least privilege, monitoring</td>
+                      <td className="border p-2">Security Team</td>
+                      <td className="border p-2">90 days</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </TabsContent>
           
           <TabsContent value="implementation" className="space-y-4 pt-4">
