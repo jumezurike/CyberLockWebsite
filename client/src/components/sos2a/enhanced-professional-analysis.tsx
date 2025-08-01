@@ -934,36 +934,106 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                 </div>
               </div>
               
-              {/* 3-Ring Legend */}
-              <div className="grid md:grid-cols-3 gap-6 text-sm">
-                <div className="text-center space-y-2">
-                  <div className="flex items-center justify-center gap-2">
+              {/* Detailed Scanning Coverage */}
+              <div className="space-y-6">
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="w-4 h-4 bg-green-500 rounded-full"></div>
-                    <h5 className="font-medium text-green-700">Inner Ring: Direct Detection</h5>
+                    <h5 className="font-medium text-green-700">Inner Ring: Direct Detection (11 Parameters)</h5>
                   </div>
-                  <div className="text-xs bg-green-50 p-3 rounded">
-                    <div className="font-medium mb-1">11 Parameters • Full Scanning</div>
-                    <div>Standard industry tools provide complete visibility and measurement</div>
+                  <div className="grid md:grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <div className="font-medium mb-1">🔍 Vulnerability Scanning</div>
+                      <div className="text-gray-600">• CVE database matching • CVSS scoring • Patch status • Exposure assessment</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">🔄 Patch Management</div>
+                      <div className="text-gray-600">• Missing patches • Update compliance • Security bulletin tracking • Rollback analysis</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">⚙️ Configuration Assessment</div>
+                      <div className="text-gray-600">• Security misconfigurations • Hardening benchmarks • Default credentials • Access controls</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">🦠 Malware Detection</div>
+                      <div className="text-gray-600">• Signature-based scanning • Behavioral analysis • Quarantine status • Threat classification</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">💻 Endpoint Security</div>
+                      <div className="text-gray-600">• EDR capabilities • Process monitoring • Memory protection • USB controls</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">🔐 Credential Exposure</div>
+                      <div className="text-gray-600">• Leaked passwords • Dark web monitoring • Breach databases • Hash cracking</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">☁️ Cloud Security</div>
+                      <div className="text-gray-600">• IAM policies • Storage permissions • Network security groups • Compliance posture</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">🌐 Network Exposure</div>
+                      <div className="text-gray-600">• Open ports • Service enumeration • SSL/TLS configuration • Firewall rules</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">🕸️ Dark Web Intelligence</div>
+                      <div className="text-gray-600">• Corporate data leaks • Executive monitoring • Threat actor chatter • Credential markets</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">📋 Compliance Scanning</div>
+                      <div className="text-gray-600">• Regulatory frameworks • Policy adherence • Audit readiness • Control effectiveness</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">🎯 Threat Intelligence</div>
+                      <div className="text-gray-600">• IOC matching • Campaign tracking • Attribution analysis • TTP correlation</div>
+                    </div>
                   </div>
                 </div>
-                <div className="text-center space-y-2">
-                  <div className="flex items-center justify-center gap-2">
+
+                <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="w-4 h-4 bg-orange-500 rounded-full"></div>
-                    <h5 className="font-medium text-orange-600">Middle Ring: Partial Detection</h5>
+                    <h5 className="font-medium text-orange-600">Middle Ring: Partial Detection (2 Parameters)</h5>
                   </div>
-                  <div className="text-xs bg-orange-50 p-3 rounded">
-                    <div className="font-medium mb-1">2 Parameters • Limited Scope</div>
-                    <div>Specialized tools required for specific functional constraints</div>
+                  <div className="grid md:grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <div className="font-medium mb-1">🔑 Identity & Access Management</div>
+                      <div className="text-gray-600">• Overprivileged accounts • Dormant users • Role assignments • Access reviews</div>
+                      <div className="text-orange-600 mt-1">Limited to role-based analysis, requires specialized IAM tools</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">📧 Email Security</div>
+                      <div className="text-gray-600">• Phishing detection • SPF/DKIM/DMARC • Email flow analysis • Attachment scanning</div>
+                      <div className="text-orange-600 mt-1">Partial visibility into email gateway configurations only</div>
+                    </div>
                   </div>
                 </div>
-                <div className="text-center space-y-2">
-                  <div className="flex items-center justify-center gap-2">
+
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="flex items-center gap-2 mb-3">
                     <div className="w-4 h-4 bg-red-500 rounded-full"></div>
-                    <h5 className="font-medium text-red-600">Outer Ring: Indirect Detection</h5>
+                    <h5 className="font-medium text-red-600">Outer Ring: Indirect Detection (4 Parameters)</h5>
                   </div>
-                  <div className="text-xs bg-red-50 p-3 rounded">
-                    <div className="font-medium mb-1">4 Parameters • Complex Analysis</div>
-                    <div>Architecture and behavioral analytics tools beyond standard scanners</div>
+                  <div className="grid md:grid-cols-2 gap-3 text-xs">
+                    <div>
+                      <div className="font-medium mb-1">🛡️ Zero Trust Architecture</div>
+                      <div className="text-gray-600">• Micro-segmentation • Continuous verification • Policy engines • Trust scoring</div>
+                      <div className="text-red-600 mt-1">Requires architecture review and behavioral analytics</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">🔒 Data Security & DLP</div>
+                      <div className="text-gray-600">• Data classification • Exfiltration prevention • Encryption status • Access patterns</div>
+                      <div className="text-red-600 mt-1">Complex data flow analysis beyond standard scanning</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">🌐 Browser & Web Security</div>
+                      <div className="text-gray-600">• Web filtering • Download restrictions • JavaScript analysis • Certificate validation</div>
+                      <div className="text-red-600 mt-1">Requires specialized web security testing tools</div>
+                    </div>
+                    <div>
+                      <div className="font-medium mb-1">👥 Security Awareness</div>
+                      <div className="text-gray-600">• Training completion • Phishing simulation • Behavioral metrics • Culture assessment</div>
+                      <div className="text-red-600 mt-1">Human factors analysis, not directly scannable</div>
+                    </div>
                   </div>
                 </div>
               </div>
