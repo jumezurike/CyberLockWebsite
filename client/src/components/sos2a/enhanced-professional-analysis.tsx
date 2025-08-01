@@ -525,7 +525,7 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                   <div className="border-l-4 border-blue-500 pl-4">
                     <div className="font-medium text-blue-700">Quantitative Analysis</div>
                     <div className="text-sm text-gray-600">Measured Data Input</div>
-                    <div className="text-xs text-gray-500">18 Deep Scan Parameters</div>
+                    <div className="text-xs text-gray-500">17 Deep Scan Parameters</div>
                   </div>
                   <div className="border-l-4 border-green-500 pl-4">
                     <div className="font-medium text-green-700">Qualitative Analysis Expert Input</div>
