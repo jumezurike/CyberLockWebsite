@@ -759,110 +759,223 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
               </div>
             </div>
 
-            {/* Quantitative Analysis Score */}
+            {/* Quantitative Analysis Score - 3-Ring Circular Radar Wheel */}
             <div className="bg-white border rounded-lg p-6 shadow-sm">
               <h4 className="text-lg font-semibold mb-4 text-center">Quantitative Analysis Score</h4>
               <div className="flex items-center justify-center mb-6">
-                <div className="relative w-80 h-80">
-                  <svg viewBox="0 0 300 300" className="w-full h-full">
-                    {/* Outer ring segments for 17 parameters */}
+                <div className="relative w-96 h-96">
+                  <svg viewBox="0 0 400 400" className="w-full h-full">
+                    {/* Grid lines for radar effect */}
+                    <defs>
+                      <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E5E7EB" strokeWidth="0.5" opacity="0.3"/>
+                      </pattern>
+                    </defs>
+                    
+                    {/* Background circles for 3-ring structure */}
+                    <circle cx="200" cy="200" r="150" fill="none" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="5,5"/>
+                    <circle cx="200" cy="200" r="110" fill="none" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="5,5"/>
+                    <circle cx="200" cy="200" r="70" fill="none" stroke="#E5E7EB" strokeWidth="1" strokeDasharray="5,5"/>
+                    
+                    {/* Outer Ring - Indirect/Limited (4 parameters) */}
                     {[
-                      // Directly Detectable (Green) - 11 parameters
-                      { name: "Vulnerability", angle: 0, color: "#10B981", capability: "direct" },
-                      { name: "Patch Mgmt", angle: 21.2, color: "#10B981", capability: "direct" },
-                      { name: "Misconfigurations", angle: 42.4, color: "#10B981", capability: "direct" },
-                      { name: "Malware", angle: 63.6, color: "#10B981", capability: "direct" },
-                      { name: "Endpoint Security", angle: 84.8, color: "#10B981", capability: "direct" },
-                      { name: "Credential Exposure", angle: 106, color: "#10B981", capability: "direct" },
-                      { name: "Cloud Security", angle: 127.2, color: "#10B981", capability: "direct" },
-                      { name: "Network Exposure", angle: 148.4, color: "#10B981", capability: "direct" },
-                      { name: "Dark Web", angle: 169.6, color: "#10B981", capability: "direct" },
-                      { name: "Compliance", angle: 190.8, color: "#10B981", capability: "direct" },
-                      { name: "Threat Intel", angle: 212, color: "#10B981", capability: "direct" },
-                      
-                      // Partial Detection (Orange) - 2 parameters
-                      { name: "IAM", angle: 233.2, color: "#F59E0B", capability: "partial" },
-                      { name: "Email Security", angle: 254.4, color: "#F59E0B", capability: "partial" },
-                      
-                      // Indirect Detection (Red) - 4 parameters
-                      { name: "Zero Trust", angle: 275.6, color: "#EF4444", capability: "indirect" },
-                      { name: "Data Security", angle: 296.8, color: "#EF4444", capability: "indirect" },
-                      { name: "Browser Security", angle: 318, color: "#EF4444", capability: "indirect" },
-                      { name: "Security Awareness", angle: 339.2, color: "#EF4444", capability: "indirect" }
+                      { name: "Zero Trust", icon: "🛡️", tool: "Zscaler", angle: 0, color: "#EF4444" },
+                      { name: "Data Security", icon: "🔒", tool: "Symantec DLP", angle: 90, color: "#EF4444" },
+                      { name: "Browser Security", icon: "🌐", tool: "Burp Suite", angle: 180, color: "#EF4444" },
+                      { name: "Security Awareness", icon: "👥", tool: "KnowBe4", angle: 270, color: "#EF4444" }
                     ].map((item, index) => {
-                      const startAngle = item.angle;
-                      const endAngle = startAngle + 21.2; // 360/17 = 21.18
+                      const startAngle = item.angle - 45;
+                      const endAngle = item.angle + 45;
                       const startRad = (startAngle * Math.PI) / 180;
                       const endRad = (endAngle * Math.PI) / 180;
                       
-                      const outerRadius = 120;
-                      const innerRadius = 90;
+                      const outerRadius = 150;
+                      const innerRadius = 110;
                       
-                      const x1 = 150 + outerRadius * Math.cos(startRad);
-                      const y1 = 150 + outerRadius * Math.sin(startRad);
-                      const x2 = 150 + outerRadius * Math.cos(endRad);
-                      const y2 = 150 + outerRadius * Math.sin(endRad);
-                      const x3 = 150 + innerRadius * Math.cos(endRad);
-                      const y3 = 150 + innerRadius * Math.sin(endRad);
-                      const x4 = 150 + innerRadius * Math.cos(startRad);
-                      const y4 = 150 + innerRadius * Math.sin(startRad);
+                      const x1 = 200 + outerRadius * Math.cos(startRad);
+                      const y1 = 200 + outerRadius * Math.sin(startRad);
+                      const x2 = 200 + outerRadius * Math.cos(endRad);
+                      const y2 = 200 + outerRadius * Math.sin(endRad);
+                      const x3 = 200 + innerRadius * Math.cos(endRad);
+                      const y3 = 200 + innerRadius * Math.sin(endRad);
+                      const x4 = 200 + innerRadius * Math.cos(startRad);
+                      const y4 = 200 + innerRadius * Math.sin(startRad);
                       
-                      const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+                      const textAngle = item.angle * Math.PI / 180;
+                      const textRadius = 130;
+                      const textX = 200 + textRadius * Math.cos(textAngle);
+                      const textY = 200 + textRadius * Math.sin(textAngle);
                       
                       return (
-                        <path
-                          key={index}
-                          d={`M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x4} ${y4} Z`}
-                          fill={item.color}
-                          stroke="white"
-                          strokeWidth="1"
-                        />
+                        <g key={`outer-${index}`}>
+                          <path
+                            d={`M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 0 0 ${x4} ${y4} Z`}
+                            fill={item.color}
+                            stroke="white"
+                            strokeWidth="2"
+                            opacity="0.8"
+                          />
+                          <text x={textX} y={textY-8} textAnchor="middle" className="text-xs font-medium fill-white">
+                            {item.icon}
+                          </text>
+                          <text x={textX} y={textY+8} textAnchor="middle" className="text-xs font-medium fill-white">
+                            5.88%
+                          </text>
+                        </g>
                       );
                     })}
                     
-                    {/* Inner circle */}
-                    <circle cx="150" cy="150" r="80" fill="white" stroke="#E5E7EB" strokeWidth="2"/>
+                    {/* Middle Ring - Partial Detection (2 parameters) */}
+                    {[
+                      { name: "IAM", icon: "🔑", tool: "SailPoint", angle: 45, color: "#F59E0B" },
+                      { name: "Email Security", icon: "📧", tool: "Proofpoint", angle: 225, color: "#F59E0B" }
+                    ].map((item, index) => {
+                      const startAngle = item.angle - 90;
+                      const endAngle = item.angle + 90;
+                      const startRad = (startAngle * Math.PI) / 180;
+                      const endRad = (endAngle * Math.PI) / 180;
+                      
+                      const outerRadius = 110;
+                      const innerRadius = 70;
+                      
+                      const x1 = 200 + outerRadius * Math.cos(startRad);
+                      const y1 = 200 + outerRadius * Math.sin(startRad);
+                      const x2 = 200 + outerRadius * Math.cos(endRad);
+                      const y2 = 200 + outerRadius * Math.sin(endRad);
+                      const x3 = 200 + innerRadius * Math.cos(endRad);
+                      const y3 = 200 + innerRadius * Math.sin(endRad);
+                      const x4 = 200 + innerRadius * Math.cos(startRad);
+                      const y4 = 200 + innerRadius * Math.sin(startRad);
+                      
+                      const textAngle = item.angle * Math.PI / 180;
+                      const textRadius = 90;
+                      const textX = 200 + textRadius * Math.cos(textAngle);
+                      const textY = 200 + textRadius * Math.sin(textAngle);
+                      
+                      return (
+                        <g key={`middle-${index}`}>
+                          <path
+                            d={`M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 0 0 ${x4} ${y4} Z`}
+                            fill={item.color}
+                            stroke="white"
+                            strokeWidth="2"
+                            opacity="0.9"
+                          />
+                          <text x={textX} y={textY-8} textAnchor="middle" className="text-xs font-medium fill-white">
+                            {item.icon}
+                          </text>
+                          <text x={textX} y={textY+8} textAnchor="middle" className="text-xs font-medium fill-white">
+                            5.88%
+                          </text>
+                        </g>
+                      );
+                    })}
                     
-                    {/* Center text */}
-                    <text x="150" y="140" textAnchor="middle" className="text-2xl font-bold fill-gray-800">5.88%</text>
-                    <text x="150" y="160" textAnchor="middle" className="text-sm fill-gray-600">Directly</text>
-                    <text x="150" y="175" textAnchor="middle" className="text-sm fill-gray-600">Detectable</text>
+                    {/* Inner Ring - Directly Detectable (11 parameters) */}
+                    {[
+                      { name: "Vulnerability", icon: "🔍", tool: "Tenable", angle: 0 },
+                      { name: "Patch Mgmt", icon: "🔄", tool: "WSUS", angle: 32.7 },
+                      { name: "Misconfig", icon: "⚙️", tool: "Nessus", angle: 65.4 },
+                      { name: "Malware", icon: "🦠", tool: "CrowdStrike", angle: 98.1 },
+                      { name: "Endpoint", icon: "💻", tool: "SentinelOne", angle: 130.8 },
+                      { name: "Credentials", icon: "🔐", tool: "HIBP", angle: 163.5 },
+                      { name: "Cloud", icon: "☁️", tool: "Prisma", angle: 196.2 },
+                      { name: "Network", icon: "🌐", tool: "Nmap", angle: 228.9 },
+                      { name: "Dark Web", icon: "🕸️", tool: "Digital Shadows", angle: 261.6 },
+                      { name: "Compliance", icon: "📋", tool: "ServiceNow", angle: 294.3 },
+                      { name: "Threat Intel", icon: "🎯", tool: "Recorded Future", angle: 327 }
+                    ].map((item, index) => {
+                      const startAngle = item.angle - 16.35; // 360/11 = 32.7, half = 16.35
+                      const endAngle = item.angle + 16.35;
+                      const startRad = (startAngle * Math.PI) / 180;
+                      const endRad = (endAngle * Math.PI) / 180;
+                      
+                      const outerRadius = 70;
+                      const innerRadius = 30;
+                      
+                      const x1 = 200 + outerRadius * Math.cos(startRad);
+                      const y1 = 200 + outerRadius * Math.sin(startRad);
+                      const x2 = 200 + outerRadius * Math.cos(endRad);
+                      const y2 = 200 + outerRadius * Math.sin(endRad);
+                      const x3 = 200 + innerRadius * Math.cos(endRad);
+                      const y3 = 200 + innerRadius * Math.sin(endRad);
+                      const x4 = 200 + innerRadius * Math.cos(startRad);
+                      const y4 = 200 + innerRadius * Math.sin(startRad);
+                      
+                      const textAngle = item.angle * Math.PI / 180;
+                      const textRadius = 50;
+                      const textX = 200 + textRadius * Math.cos(textAngle);
+                      const textY = 200 + textRadius * Math.sin(textAngle);
+                      
+                      return (
+                        <g key={`inner-${index}`}>
+                          <path
+                            d={`M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 0 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 0 0 ${x4} ${y4} Z`}
+                            fill="#10B981"
+                            stroke="white"
+                            strokeWidth="1"
+                            opacity="0.9"
+                          />
+                          <text x={textX} y={textY-4} textAnchor="middle" className="text-xs font-medium fill-white">
+                            {item.icon}
+                          </text>
+                          <text x={textX} y={textY+8} textAnchor="middle" className="text-xs font-medium fill-white">
+                            5.88%
+                          </text>
+                        </g>
+                      );
+                    })}
+                    
+                    {/* Center circle with overall stats */}
+                    <circle cx="200" cy="200" r="25" fill="white" stroke="#374151" strokeWidth="2"/>
+                    <text x="200" y="195" textAnchor="middle" className="text-sm font-bold fill-gray-800">17</text>
+                    <text x="200" y="210" textAnchor="middle" className="text-xs fill-gray-600">Total</text>
                   </svg>
                 </div>
               </div>
               
-              {/* Legend */}
-              <div className="grid md:grid-cols-3 gap-4 text-sm">
-                <div className="space-y-2">
-                  <h5 className="font-medium text-green-700">✔️ Directly Detectable (11)</h5>
-                  <div className="text-xs space-y-1">
-                    <div>• Vulnerability, Patch Mgmt</div>
-                    <div>• Misconfigurations, Malware</div>
-                    <div>• Endpoint Security, Credentials</div>
-                    <div>• Cloud Security, Network</div>
-                    <div>• Dark Web, Compliance, Threat Intel</div>
+              {/* 3-Ring Legend */}
+              <div className="grid md:grid-cols-3 gap-6 text-sm">
+                <div className="text-center space-y-2">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+                    <h5 className="font-medium text-green-700">Inner Ring: Direct Detection</h5>
+                  </div>
+                  <div className="text-xs bg-green-50 p-3 rounded">
+                    <div className="font-medium mb-1">11 Parameters • Full Scanning</div>
+                    <div>Standard industry tools provide complete visibility and measurement</div>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <h5 className="font-medium text-orange-600">⚠️ Partial Detection (2)</h5>
-                  <div className="text-xs space-y-1">
-                    <div>• IAM (overprivileged roles)</div>
-                    <div>• Email Security (phishing)</div>
+                <div className="text-center space-y-2">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 bg-orange-500 rounded-full"></div>
+                    <h5 className="font-medium text-orange-600">Middle Ring: Partial Detection</h5>
+                  </div>
+                  <div className="text-xs bg-orange-50 p-3 rounded">
+                    <div className="font-medium mb-1">2 Parameters • Limited Scope</div>
+                    <div>Specialized tools required for specific functional constraints</div>
                   </div>
                 </div>
-                <div className="space-y-2">
-                  <h5 className="font-medium text-red-600">⚠️ Indirect/Limited (4)</h5>
-                  <div className="text-xs space-y-1">
-                    <div>• Zero Trust Architecture</div>
-                    <div>• Data Security & Leakage</div>
-                    <div>• Browser & Web Security</div>
-                    <div>• Security Awareness</div>
+                <div className="text-center space-y-2">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                    <h5 className="font-medium text-red-600">Outer Ring: Indirect Detection</h5>
+                  </div>
+                  <div className="text-xs bg-red-50 p-3 rounded">
+                    <div className="font-medium mb-1">4 Parameters • Complex Analysis</div>
+                    <div>Architecture and behavioral analytics tools beyond standard scanners</div>
                   </div>
                 </div>
               </div>
               
-              <div className="mt-4 text-center text-xs text-gray-600">
-                Each parameter represents 5.88% of the complete Quantitative Analysis pillar (100% ÷ 17 = 5.88%)
+              <div className="mt-6 text-center">
+                <div className="text-sm font-medium text-gray-700 mb-2">Quantitative Coverage Distribution</div>
+                <div className="flex justify-center gap-8 text-xs">
+                  <div><span className="font-medium text-green-600">64.7%</span> Direct (11/17)</div>
+                  <div><span className="font-medium text-orange-600">11.8%</span> Partial (2/17)</div>
+                  <div><span className="font-medium text-red-600">23.5%</span> Indirect (4/17)</div>
+                </div>
+                <div className="text-xs text-gray-500 mt-2">Each parameter represents 5.88% of complete quantitative analysis</div>
               </div>
             </div>
 
