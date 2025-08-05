@@ -1057,36 +1057,83 @@ export function EnhancedProfessionalAnalysis({ report }: EnhancedProfessionalAna
                 {/* Likelihood Matrix */}
                 <div>
                   <h5 className="font-medium mb-3">RASBITA-CBF Impact vs Likelihood Matrix</h5>
-                  <div className="grid grid-cols-5 gap-1 text-xs">
-                    <div className="bg-gray-100 p-2 text-center font-medium">Impact</div>
-                    <div className="bg-gray-100 p-2 text-center font-medium">Very Low</div>
-                    <div className="bg-gray-100 p-2 text-center font-medium">Low</div>
-                    <div className="bg-gray-100 p-2 text-center font-medium">Medium</div>
-                    <div className="bg-gray-100 p-2 text-center font-medium">High</div>
-                    
-                    <div className="bg-gray-100 p-2 font-medium">Critical</div>
-                    <div className="bg-yellow-200 p-2 text-center">Low</div>
-                    <div className="bg-orange-300 p-2 text-center">Medium</div>
-                    <div className="bg-red-400 p-2 text-center">High</div>
-                    <div className="bg-red-600 p-2 text-center text-white">Critical</div>
-                    
-                    <div className="bg-gray-100 p-2 font-medium">High</div>
-                    <div className="bg-green-200 p-2 text-center">Very Low</div>
-                    <div className="bg-yellow-200 p-2 text-center">Low</div>
-                    <div className="bg-orange-300 p-2 text-center">Medium</div>
-                    <div className="bg-red-400 p-2 text-center">High</div>
-                    
-                    <div className="bg-gray-100 p-2 font-medium">Medium</div>
-                    <div className="bg-green-200 p-2 text-center">Very Low</div>
-                    <div className="bg-green-200 p-2 text-center">Very Low</div>
-                    <div className="bg-yellow-200 p-2 text-center">Low</div>
-                    <div className="bg-orange-300 p-2 text-center">Medium</div>
-                    
-                    <div className="bg-gray-100 p-2 font-medium">Low</div>
-                    <div className="bg-green-200 p-2 text-center">Very Low</div>
-                    <div className="bg-green-200 p-2 text-center">Very Low</div>
-                    <div className="bg-green-200 p-2 text-center">Very Low</div>
-                    <div className="bg-yellow-200 p-2 text-center">Low</div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-xs border-collapse">
+                      <thead>
+                        <tr>
+                          <th className="border p-2 bg-gray-100 font-medium">Impact ↓ / Likelihood →</th>
+                          <th className="border p-2 bg-gray-100 font-medium">1 Rare</th>
+                          <th className="border p-2 bg-gray-100 font-medium">2 Unlikely</th>
+                          <th className="border p-2 bg-gray-100 font-medium">3 Likely</th>
+                          <th className="border p-2 bg-gray-100 font-medium">4 Very Likely</th>
+                          <th className="border p-2 bg-gray-100 font-medium">5 Most Certain</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="border p-2 bg-gray-100 font-medium">5 Extreme</td>
+                          <td className="border p-2 bg-lime-200 text-center font-medium">Low</td>
+                          <td className="border p-2 bg-yellow-200 text-center font-medium">Moderate</td>
+                          <td className="border p-2 bg-orange-200 text-center font-medium">High</td>
+                          <td className="border p-2 bg-red-300 text-center font-medium">Critical</td>
+                          <td className="border p-2 bg-red-400 text-center font-medium">Critical</td>
+                        </tr>
+                        <tr>
+                          <td className="border p-2 bg-gray-100 font-medium">4 Major</td>
+                          <td className="border p-2 bg-lime-200 text-center font-medium">Low</td>
+                          <td className="border p-2 bg-yellow-200 text-center font-medium">Moderate</td>
+                          <td className="border p-2 bg-orange-200 text-center font-medium">High</td>
+                          <td className="border p-2 bg-red-300 text-center font-medium">Critical</td>
+                          <td className="border p-2 bg-red-400 text-center font-medium">Critical</td>
+                        </tr>
+                        <tr>
+                          <td className="border p-2 bg-gray-100 font-medium">3 Moderate</td>
+                          <td className="border p-2 bg-lime-200 text-center font-medium">Low</td>
+                          <td className="border p-2 bg-yellow-200 text-center font-medium">Moderate</td>
+                          <td className="border p-2 bg-yellow-200 text-center font-medium">Moderate</td>
+                          <td className="border p-2 bg-orange-200 text-center font-medium">High</td>
+                          <td className="border p-2 bg-orange-200 text-center font-medium">High</td>
+                        </tr>
+                        <tr>
+                          <td className="border p-2 bg-gray-100 font-medium">2 Minor</td>
+                          <td className="border p-2 bg-lime-200 text-center font-medium">Low</td>
+                          <td className="border p-2 bg-lime-200 text-center font-medium">Low</td>
+                          <td className="border p-2 bg-yellow-200 text-center font-medium">Moderate</td>
+                          <td className="border p-2 bg-yellow-200 text-center font-medium">Moderate</td>
+                          <td className="border p-2 bg-yellow-200 text-center font-medium">Moderate</td>
+                        </tr>
+                        <tr>
+                          <td className="border p-2 bg-gray-100 font-medium">1 Trivial</td>
+                          <td className="border p-2 bg-green-200 text-center font-medium">Very Low</td>
+                          <td className="border p-2 bg-green-200 text-center font-medium">Very Low</td>
+                          <td className="border p-2 bg-lime-200 text-center font-medium">Low</td>
+                          <td className="border p-2 bg-lime-200 text-center font-medium">Low</td>
+                          <td className="border p-2 bg-lime-200 text-center font-medium">Low</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div className="mt-2 grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-red-400 rounded"></div>
+                      <span className="font-semibold text-red-600">Critical</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-orange-200 rounded"></div>
+                      <span className="font-semibold text-orange-600">High</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-yellow-200 rounded"></div>
+                      <span className="font-semibold text-yellow-600">Moderate</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-lime-200 rounded"></div>
+                      <span className="font-semibold text-lime-600">Low</span>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <div className="w-3 h-3 bg-green-200 rounded"></div>
+                      <span className="font-semibold text-green-600">Very Low</span>
+                    </div>
                   </div>
                 </div>
 
