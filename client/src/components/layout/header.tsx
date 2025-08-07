@@ -108,6 +108,9 @@ export default function Header() {
                 <a href={getHashLink("pricing")} onClick={navigateToSection("pricing")} className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                   Pricing
                 </a>
+                <Link href="/services" className="text-neutral-100 hover:text-secondary border-transparent inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
+                  Services
+                </Link>
               </div>
             )}
           </div>
@@ -193,6 +196,9 @@ export default function Header() {
             <a href={getHashLink("pricing")} onClick={(e) => { navigateToSection("pricing")(e); closeMobileMenu(); }} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
               Pricing
             </a>
+            <Link href="/services" onClick={closeMobileMenu} className="text-neutral-100 hover:text-secondary block px-3 py-2 rounded-md text-base font-medium">
+              Services
+            </Link>
           
           <div className="mt-3 mb-1 px-3 text-xs uppercase text-neutral-400 font-semibold">
             About Us
