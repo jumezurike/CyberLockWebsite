@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { ArrowRight, Mail, Phone, Smartphone } from "lucide-react";
@@ -31,6 +32,139 @@ const organizationSchema = z.object({
 });
 
 type OrganizationData = z.infer<typeof organizationSchema>;
+
+// Comprehensive list of professional titles
+const PROFESSIONAL_TITLES = [
+  // C-Level Executives
+  "CEO - Chief Executive Officer",
+  "COO - Chief Operating Officer", 
+  "CTO - Chief Technology Officer",
+  "CIO - Chief Information Officer",
+  "CISO - Chief Information Security Officer",
+  "CFO - Chief Financial Officer",
+  "CMO - Chief Marketing Officer",
+  "CPO - Chief Product Officer",
+  "CHO - Chief Human Resources Officer",
+  "CDO - Chief Data Officer",
+  "CCO - Chief Compliance Officer",
+  
+  // Senior Leadership
+  "President",
+  "Vice President",
+  "Senior Vice President",
+  "Executive Vice President",
+  "Managing Director",
+  "General Manager",
+  "Regional Manager",
+  "Branch Manager",
+  
+  // IT & Technology Leadership
+  "IT Director",
+  "IT Manager", 
+  "Systems Administrator",
+  "Network Administrator",
+  "Database Administrator",
+  "Security Administrator",
+  "DevOps Manager",
+  "Software Development Manager",
+  "Infrastructure Manager",
+  "Cybersecurity Manager",
+  "Help Desk Manager",
+  "Technical Support Manager",
+  
+  // Operations & Management
+  "Operations Manager",
+  "Operations Director",
+  "Project Manager",
+  "Program Manager",
+  "Product Manager",
+  "Business Analyst",
+  "Process Manager",
+  "Quality Manager",
+  "Facilities Manager",
+  "Office Manager",
+  
+  // Healthcare Specific
+  "Chief Medical Officer",
+  "Medical Director",
+  "Hospital Administrator",
+  "Healthcare IT Manager",
+  "HIPAA Compliance Officer",
+  "Practice Manager",
+  "Clinical Director",
+  "Nursing Director",
+  "Healthcare Quality Manager",
+  
+  // Legal & Compliance
+  "General Counsel",
+  "Legal Director",
+  "Compliance Manager",
+  "Risk Manager",
+  "Privacy Officer",
+  "Data Protection Officer",
+  "Legal Operations Manager",
+  "Contract Manager",
+  
+  // Finance & Accounting
+  "Controller",
+  "Finance Director",
+  "Accounting Manager",
+  "Finance Manager",
+  "Budget Manager",
+  "Financial Analyst",
+  "Treasurer",
+  "Audit Manager",
+  
+  // Human Resources
+  "HR Director",
+  "HR Manager",
+  "HR Business Partner",
+  "Talent Acquisition Manager",
+  "Training Manager",
+  "Employee Relations Manager",
+  "Benefits Manager",
+  
+  // Education Specific
+  "Superintendent",
+  "Principal",
+  "Vice Principal",
+  "IT Coordinator",
+  "Technology Director",
+  "Academic Dean",
+  "Registrar",
+  "Student Services Director",
+  
+  // Sales & Marketing
+  "Sales Director",
+  "Sales Manager",
+  "Marketing Director",
+  "Marketing Manager",
+  "Business Development Manager",
+  "Account Manager",
+  "Customer Success Manager",
+  
+  // Technical Roles
+  "Senior Systems Engineer",
+  "Network Engineer",
+  "Security Engineer",
+  "Software Engineer",
+  "DevOps Engineer",
+  "Cloud Engineer",
+  "Data Engineer",
+  "Solutions Architect",
+  "Technical Architect",
+  
+  // Specialized Roles
+  "Procurement Manager",
+  "Vendor Manager",
+  "Contract Administrator",
+  "Business Owner",
+  "Partner",
+  "Consultant",
+  "Advisor",
+  "Board Member",
+  "Other"
+];
 
 interface OrganizationInfoStepProps {
   data: any;
@@ -110,9 +244,20 @@ export default function OrganizationInfoStep({ data, onUpdate, onNext }: Organiz
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Contact Person Title *</FormLabel>
-                    <FormControl>
-                      <Input placeholder="IT Director" {...field} />
-                    </FormControl>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select your title/role" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent className="max-h-60">
+                        {PROFESSIONAL_TITLES.map((title) => (
+                          <SelectItem key={title} value={title}>
+                            {title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}
