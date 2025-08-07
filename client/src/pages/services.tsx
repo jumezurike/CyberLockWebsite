@@ -122,7 +122,7 @@ export default function ServicesPortal() {
                 <Shield className="h-8 w-8 text-blue-100" />
                 <h1 className="text-3xl font-bold">CyberLockX Professional Services</h1>
               </div>
-              <p className="text-blue-100">Serving most states nationwide • $75/hr mandatory site visit fee applies to on-site services</p>
+              <p className="text-blue-100">Serving most states nationwide • $75 non-refundable site visit fee applies to on-site services</p>
             </div>
             <div className="mt-4 md:mt-0 flex flex-col gap-2">
               <Badge variant="secondary" className="bg-white text-blue-600 font-medium">

@@ -17,23 +17,23 @@ const SERVICE_CATALOG = {
   ],
   "IT Services": [
     { name: "Workstation Deployment", basePrice: 20000, priceType: "per_device", description: "Imaging, data migration, peripheral setup per device ($150-300)" },
-    { name: "VoIP Phone System Setup", basePrice: 10000, priceType: "hourly", description: "Physical phones, softphones, call routing ($85-120/hr + $75 site visit)" },
-    { name: "Basic Network Maintenance", basePrice: 12000, priceType: "hourly", description: "Switch/router updates, cable runs, Wi-Fi optimization ($90-150/hr + $75 site visit)" },
+    { name: "VoIP Phone System Setup", basePrice: 10000, priceType: "hourly", description: "Physical phones, softphones, call routing ($85-120/hr + $75 non-refundable site visit fee)" },
+    { name: "Basic Network Maintenance", basePrice: 12000, priceType: "hourly", description: "Switch/router updates, cable runs, Wi-Fi optimization ($90-150/hr + $75 non-refundable site visit fee)" },
     { name: "Cloud Migration (Microsoft 365/Google)", basePrice: 150000, priceType: "fixed", description: "Complete cloud migration project ($1,500+)" },
     { name: "Hardware Sales & Setup", basePrice: 2000, priceType: "markup", description: "PCs, monitors, docks with 15-30% markup + setup fee" },
     { name: "Security Audit & Report", basePrice: 75000, priceType: "fixed", description: "Vulnerability scans with comprehensive report ($500-2,000)" },
   ],
   "Industry-Specific Services": [
-    { name: "Healthcare EHR/EMR Support", basePrice: 12500, priceType: "hourly", description: "Epic, Cerner support - HIPAA compliant ($100-150/hr + $75 site visit)" },
+    { name: "Healthcare EHR/EMR Support", basePrice: 12500, priceType: "hourly", description: "Epic, Cerner support - HIPAA compliant ($100-150/hr + $75 non-refundable site visit fee)" },
     { name: "HIPAA Security Training", basePrice: 50000, priceType: "per_session", description: "Healthcare compliance training session" },
-    { name: "Medical Device Networking", basePrice: 15000, priceType: "hourly", description: "IoT setup for imaging machines and medical devices + $75 site visit" },
-    { name: "Legal Document Management", basePrice: 12000, priceType: "hourly", description: "iManage, NetDocuments setup and support ($120+/hr + $75 site visit)" },
+    { name: "Medical Device Networking", basePrice: 15000, priceType: "hourly", description: "IoT setup for imaging machines and medical devices + $75 non-refundable site visit fee" },
+    { name: "Legal Document Management", basePrice: 12000, priceType: "hourly", description: "iManage, NetDocuments setup and support ($120+/hr + $75 non-refundable site visit fee)" },
     { name: "eDiscovery Support", basePrice: 15000, priceType: "hourly", description: "Data retrieval and archiving for legal firms" },
     { name: "Education Chromebook Management", basePrice: 7500, priceType: "per_device", description: "Google Admin Console setup per device" },
-    { name: "Learning Management System", basePrice: 9000, priceType: "hourly", description: "Canvas, Blackboard troubleshooting and support + $75 site visit" },
+    { name: "Learning Management System", basePrice: 9000, priceType: "hourly", description: "Canvas, Blackboard troubleshooting and support + $75 non-refundable site visit fee" },
   ],
   "Emergency Services": [
-    { name: "After-Hours Support", basePrice: 18000, priceType: "hourly", description: "Emergency support at 2x normal rate ($180/hr + $75 emergency fee)" },
+    { name: "After-Hours Support", basePrice: 18000, priceType: "hourly", description: "Emergency support at 2x normal rate ($180/hr + $75 non-refundable emergency site visit fee)" },
     { name: "Data Recovery Services", basePrice: 50000, priceType: "fixed", description: "Professional data recovery ($300-1,000+ depending on severity)" },
     { name: "Ransomware Response", basePrice: 500000, priceType: "fixed", description: "Critical incident response engagement ($5,000+ emergency response)" },
   ],
@@ -97,7 +97,7 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
   const getPriceTypeLabel = (priceType: string, unit?: string) => {
     switch (priceType) {
       case "fixed": return "Fixed Price";
-      case "hourly": return "Per Hour + $75 Site Visit";
+      case "hourly": return "Per Hour + $75 Non-Refundable Site Visit";
       case "per_unit": return unit ? `Per ${unit}` : "Per Unit";
       case "per_incident": return "Per Incident";
       case "per_device": return "Per Device";

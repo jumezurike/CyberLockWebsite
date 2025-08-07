@@ -23,15 +23,20 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
     data.selectedServices?.forEach((service: any) => {
       let serviceTotal = service.basePrice * service.quantity;
       
-      // Add mandatory $75 site visit fee for on-site services
+      // Add one-time $75 non-refundable site visit fee for any on-site services
       if (service.priceType === "hourly") {
-        siteVisitFee += 7500; // $75 per service requiring site visit
         hourlyEstimate += service.quantity;
       }
       
       subtotal += serviceTotal;
       breakdown[service.serviceName] = serviceTotal;
     });
+
+    // Add one-time site visit fee if any hourly services are selected
+    const hasOnSiteServices = data.selectedServices?.some((service: any) => service.priceType === "hourly");
+    if (hasOnSiteServices) {
+      siteVisitFee = 7500; // One-time $75 non-refundable fee
+    }
 
     // Apply urgency multiplier
     let urgencyMultiplier = 1;
@@ -154,7 +159,7 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
               <div className="flex items-center gap-2">
                 <span className="font-medium">Site Visit Fee</span>
                 <Badge variant="outline" className="text-xs">
-                  Mandatory for on-site services
+                  $75 Non-Refundable per site visit
                 </Badge>
               </div>
               <span className="font-semibold text-blue-600">
