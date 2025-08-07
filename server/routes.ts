@@ -15,11 +15,12 @@ import {
   insertVisitorSessionSchema,
   insertVisitorPageViewSchema,
   createInvitationSchema,
-  acceptInvitationSchema
+  acceptInvitationSchema,
+  insertServiceRequestSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
-import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail } from "./email-service";
+import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail, sendServiceRequestNotification } from "./email-service";
 
 // Initialize Stripe with API key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -1240,6 +1241,85 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching visitor analytics:", error);
       res.status(500).json({ error: "Failed to fetch visitor analytics" });
+    }
+  });
+
+  // Service Request routes
+  app.get("/api/service-requests", requireAdminAuth, async (req, res) => {
+    try {
+      const requests = await storage.getAllServiceRequests();
+      res.json(requests);
+    } catch (error) {
+      console.error("Error getting service requests:", error);
+      res.status(500).json({ error: "Failed to get service requests" });
+    }
+  });
+
+  app.get("/api/service-requests/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const request = await storage.getServiceRequestById(id);
+      if (!request) {
+        return res.status(404).json({ error: "Service request not found" });
+      }
+      res.json(request);
+    } catch (error) {
+      console.error("Error getting service request:", error);
+      res.status(500).json({ error: "Failed to get service request" });
+    }
+  });
+
+  app.post("/api/service-requests", async (req, res) => {
+    try {
+      const validatedData = insertServiceRequestSchema.parse(req.body);
+      const request = await storage.createServiceRequest(validatedData);
+      
+      // Send notification email
+      try {
+        const mailgun = initMailgun();
+        if (mailgun) {
+          await sendServiceRequestNotification(mailgun, request);
+        }
+      } catch (emailError) {
+        console.error("Failed to send service request notification:", emailError);
+        // Don't fail the entire request if email fails
+      }
+      
+      res.status(201).json(request);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Error creating service request:", error);
+      res.status(500).json({ error: "Failed to create service request" });
+    }
+  });
+
+  app.put("/api/service-requests/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const request = await storage.updateServiceRequest(id, req.body);
+      if (!request) {
+        return res.status(404).json({ error: "Service request not found" });
+      }
+      res.json(request);
+    } catch (error) {
+      console.error("Error updating service request:", error);
+      res.status(500).json({ error: "Failed to update service request" });
+    }
+  });
+
+  app.delete("/api/service-requests/:id", requireSuperAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const success = await storage.deleteServiceRequest(id);
+      if (!success) {
+        return res.status(404).json({ error: "Service request not found" });
+      }
+      res.json({ message: "Service request deleted" });
+    } catch (error) {
+      console.error("Error deleting service request:", error);
+      res.status(500).json({ error: "Failed to delete service request" });
     }
   });
   

@@ -1,0 +1,83 @@
+1. Most Requested & Profitable Services (Tier 1-2 Help Desk)
+Top 5 High-Demand Support Requests
+Password Resets & Account Unlocks (Quick, billable at $25–$50 per incident)
+
+Email Troubleshooting (Outlook/Google Workspace configuration, sync issues)
+
+Printer/Scanner Fixes (Driver installs, network printing, queue management)
+
+Wi-Fi/Network Connectivity (Dead zones, DHCP errors, VPN setup)
+
+Software Installations (Licensed apps, updates, compatibility fixes)
+
+Best for Retainer Contracts
+Monthly Help Desk Packages (E.g., $50/user for unlimited Tier 1-2 support)
+
+Remote Monitoring & Management (RMM) (Proactive patching, $200+/month)
+
+2. IT Generalist Services (On-Site & Project Work)
+Highest ROI Services
+Workstation Deployment ($150–$300/setup per device)
+
+Imaging, data migration, peripheral setup.
+
+VoIP Phone System Setup ($85–$120/hour or $500+/system)
+
+Physical phones, softphones, call routing.
+
+Basic Network Maintenance ($90–$150/hour)
+
+Switch/router updates, cable runs, Wi-Fi optimization.
+
+Cloud Migrations (Microsoft 365, Google Workspace – $1,500+ per project)
+
+Add-On Upsells
+Hardware Sales Markup (15–30% on PCs, monitors, docks)
+
+Security Audits ($500–$2,000 for vulnerability scans + report)
+
+3. Industry-Specific Priorities
+Healthcare (HIPAA-Compliant Support)
+EHR/EMR Support (Epic, Cerner – $100–$150/hour)
+
+HIPAA Security Training ($500/session or included in packages)
+
+Medical Device Networking (IoT setup for imaging machines, etc.)
+
+Legal Firms
+Document Management Systems (iManage, NetDocuments – $120+/hour)
+
+eDiscovery Support (Data retrieval, archiving)
+
+Education/Schools
+Chromebook Management (Google Admin Console – $75/device setup)
+
+LMS Troubleshooting (Canvas, Blackboard – $90/hour)
+
+4. Emergency & "Break-Fix" Services (Premium Pricing)
+After-Hours Support (2x normal rate, e.g., $180/hour)
+
+Data Recovery ($300–$1,000+ depending on severity)
+
+Ransomware Response (Critical – $5,000+ engagements)
+
+5. Low-Effort, High-Margin Add-Ons
+Automated Backups ($50–$100/month per server)
+
+Phishing Simulation Tests ($200/month for automated campaigns)
+
+VoIP System Monitoring ($30/phone/month)
+
+Recommended Service Packaging
+Tier	Price	Includes
+Basic	$500/month	5 hours remote support + monitoring
+Professional	$2,000/month	Unlimited Tier 1-2, 10 on-site hours, patches
+Enterprise	$6,000+/month	Full IT outsourcing (your team as their IT dept.)
+Actionable Next Steps
+Start with high-demand, low-complexity services (password resets, email, printers).
+
+Upsell managed services (backups, security) to break-fix clients.
+
+Target industry-specific pain points (e.g., HIPAA for clinics).
+
+Would you like a sample pricing calculator or service catalog template to implement this?

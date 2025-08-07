@@ -40,6 +40,7 @@ import EarlyAccessDashboard from "@/pages/admin/early-access-dashboard";
 import AnalyticsDashboard from "@/pages/admin/analytics-dashboard";
 import AcceptInvitation from "@/pages/accept-invitation";
 import TestStandalone from "@/pages/test-standalone";
+import ServicesPortal from "@/pages/services";
 
 function Router() {
   const [location] = useLocation();
@@ -68,6 +69,7 @@ function Router() {
           <Route path="/admin/early-access" component={EarlyAccessDashboard} />
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/accept-invitation" component={AcceptInvitation} />
+          <Route path="/services" component={ServicesPortal} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/about-us" component={AboutUs} />
           <Route path="/rasbita" component={RasbitaReport} />

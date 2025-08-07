@@ -336,3 +336,144 @@ export async function sendEarlyAccessNotification(submission: SubmissionEmailDat
     return false;
   }
 }
+
+export async function sendServiceRequestNotification(mg: any, serviceRequest: any): Promise<boolean> {
+  try {
+    if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+      console.error('Mailgun not configured for service request notification');
+      return false;
+    }
+
+    // Make sure Mailgun client is initialized
+    if (!mg) {
+      const initialized = initMailgun();
+      if (!initialized) {
+        console.error('Failed to initialize Mailgun client');
+        return false;
+      }
+    }
+
+    const formatPrice = (price: number) => {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      }).format(price / 100);
+    };
+
+    const selectedServices = Array.isArray(serviceRequest.selectedServices) 
+      ? serviceRequest.selectedServices 
+      : JSON.parse(serviceRequest.selectedServices || '[]');
+
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">🚀 New Service Request</h1>
+          <p style="color: #f0f0f0; margin: 10px 0 0 0; font-size: 16px;">CyberLockX Service Portal</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border: 1px solid #e0e0e0;">
+          <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h2 style="color: #495057; margin-top: 0; font-size: 18px;">🏢 Organization Details</h2>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="padding: 5px 0;"><strong>Company:</strong> ${serviceRequest.companyName}</li>
+              <li style="padding: 5px 0;"><strong>Contact Person:</strong> ${serviceRequest.contactPersonName}</li>
+              ${serviceRequest.contactPersonTitle ? `<li style="padding: 5px 0;"><strong>Title:</strong> ${serviceRequest.contactPersonTitle}</li>` : ''}
+              <li style="padding: 5px 0;"><strong>Email:</strong> ${serviceRequest.primaryEmail}</li>
+              ${serviceRequest.officePhone ? `<li style="padding: 5px 0;"><strong>Phone:</strong> ${serviceRequest.officePhone}</li>` : ''}
+            </ul>
+          </div>
+          
+          <div style="background: #e7f3ff; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h2 style="color: #495057; margin-top: 0; font-size: 18px;">🎯 Service Request Details</h2>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="padding: 5px 0;"><strong>Service Category:</strong> ${serviceRequest.serviceCategory}</li>
+              <li style="padding: 5px 0;"><strong>Priority Level:</strong> 
+                <span style="background: #667eea; color: white; padding: 2px 8px; border-radius: 3px; font-size: 12px;">
+                  ${serviceRequest.urgencyLevel}
+                </span>
+              </li>
+              <li style="padding: 5px 0;"><strong>Contact Method:</strong> ${serviceRequest.preferredContactMethod}</li>
+              ${serviceRequest.projectDescription ? `<li style="padding: 10px 0;"><strong>Project Description:</strong><br/><div style="background: #f8f9fa; padding: 10px; margin-top: 5px; border-radius: 3px;">${serviceRequest.projectDescription}</div></li>` : ''}
+            </ul>
+          </div>
+
+          ${selectedServices.length > 0 ? `
+          <div style="background: #fff5e6; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h2 style="color: #495057; margin-top: 0; font-size: 18px;">📋 Selected Services</h2>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              ${selectedServices.map((service: any) => `
+                <li style="padding: 8px 0; border-bottom: 1px solid #eee; display: flex; justify-content: between;">
+                  <span><strong>${service.serviceName}</strong> (${service.quantity}x)</span>
+                  <span style="float: right;">${formatPrice(service.basePrice * service.quantity)}</span>
+                </li>
+              `).join('')}
+            </ul>
+            ${serviceRequest.calculatedTotal ? `
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #667eea;">
+              <div style="text-align: right; font-size: 18px; font-weight: bold; color: #667eea;">
+                Total Estimate: ${formatPrice(serviceRequest.calculatedTotal)}
+              </div>
+            </div>
+            ` : ''}
+          </div>
+          ` : ''}
+
+          ${serviceRequest.desiredStartDate ? `
+          <div style="background: #f0f8ff; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h2 style="color: #495057; margin-top: 0; font-size: 18px;">📅 Timeline</h2>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="padding: 5px 0;"><strong>Start Date:</strong> ${new Date(serviceRequest.desiredStartDate).toLocaleDateString()}</li>
+              <li style="padding: 5px 0;"><strong>End Date:</strong> ${new Date(serviceRequest.desiredEndDate).toLocaleDateString()}</li>
+              ${serviceRequest.flexibleDates ? '<li style="padding: 5px 0;"><span style="background: #28a745; color: white; padding: 2px 6px; border-radius: 3px; font-size: 12px;">Flexible Dates</span></li>' : ''}
+            </ul>
+          </div>
+          ` : ''}
+
+          ${serviceRequest.additionalNotes ? `
+          <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+            <h2 style="color: #495057; margin-top: 0; font-size: 18px;">📝 Additional Notes</h2>
+            <p style="margin: 0; line-height: 1.6;">${serviceRequest.additionalNotes}</p>
+          </div>
+          ` : ''}
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="https://cyberlockx.xyz/admin/services" 
+               style="background: #667eea; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+              📊 View Service Dashboard
+            </a>
+          </div>
+          
+          <div style="background: #e7f3ff; padding: 15px; border-radius: 5px; border-left: 4px solid #667eea;">
+            <p style="margin: 0; color: #495057; font-size: 14px;">
+              <strong>💡 Next Steps:</strong> Review the request details, contact the client within 24 hours, and prepare a detailed proposal.
+            </p>
+          </div>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 15px; text-align: center; border-top: 1px solid #e0e0e0;">
+          <p style="margin: 0; color: #6c757d; font-size: 12px;">
+            CyberLockX Service Portal | Request submitted on ${new Date().toLocaleDateString()}
+          </p>
+        </div>
+      </div>
+    `;
+
+    const data = {
+      from: `CyberLockX Service Portal <services@${process.env.MAILGUN_DOMAIN}>`,
+      to: process.env.NOTIFICATION_EMAIL,
+      subject: `New Service Request: ${serviceRequest.serviceCategory} - ${serviceRequest.companyName}`,
+      html: emailContent
+    };
+
+    console.log('Sending service request notification email');
+    console.log('To:', process.env.NOTIFICATION_EMAIL);
+    console.log('Subject:', data.subject);
+    
+    const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, data);
+    console.log('Service request notification sent:', result.id);
+    return true;
+  } catch (error) {
+    console.error('Error sending service request notification:', error);
+    return false;
+  }
+}

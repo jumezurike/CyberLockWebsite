@@ -68,6 +68,86 @@ export const rasbitaReports = pgTable("rasbita_reports", {
   dashboard: jsonb("dashboard").notNull(),
 });
 
+// Service Requests table
+export const serviceRequests = pgTable("service_requests", {
+  id: serial("id").primaryKey(),
+  // Organization Information
+  companyName: text("company_name").notNull(),
+  contactPersonName: text("contact_person_name").notNull(),
+  contactPersonTitle: text("contact_person_title").notNull(),
+  address: jsonb("address").notNull(), // {street, city, state, zipCode, country}
+  primaryEmail: text("primary_email").notNull(),
+  secondaryEmail: text("secondary_email"),
+  officePhone: text("office_phone"),
+  mobilePhone: text("mobile_phone"),
+  preferredContactMethod: text("preferred_contact_method").notNull(), // email, phone, mobile
+  
+  // Service Selection
+  serviceCategory: text("service_category").notNull(), // IT Services, AI Solutions, Cybersecurity, Combined Services
+  selectedServices: jsonb("selected_services").notNull(), // Array of selected services with quantities
+  
+  // Project Details
+  organizationDescription: text("organization_description"),
+  projectDescription: text("project_description"),
+  uploadedFiles: jsonb("uploaded_files"), // Array of file paths/URLs
+  relevantLinks: text("relevant_links").array(),
+  urgencyLevel: text("urgency_level").notNull(), // Critical, High, Medium, Low
+  
+  // Scheduling
+  desiredStartDate: date("desired_start_date"),
+  desiredEndDate: date("desired_end_date"),
+  flexibleDates: boolean("flexible_dates").default(false),
+  selectedTimeSlots: jsonb("selected_time_slots"), // Available time slots selected
+  
+  // Pricing
+  calculatedTotal: integer("calculated_total"), // Total cost in cents
+  pricingBreakdown: jsonb("pricing_breakdown"), // Detailed pricing calculation
+  hourlyRateEstimate: integer("hourly_rate_estimate"), // Estimated hours * rate
+  
+  // Approval Workflow
+  quoteGenerated: boolean("quote_generated").default(false),
+  quoteData: jsonb("quote_data"), // Generated quote details
+  clientApproved: boolean("client_approved").default(false),
+  digitalSignature: text("digital_signature"),
+  approvedAt: timestamp("approved_at"),
+  revisionCount: integer("revision_count").default(0),
+  revisionHistory: jsonb("revision_history"), // Array of revision changes
+  
+  // Status tracking
+  status: text("status").default("pending"), // pending, quoted, approved, in_progress, completed, cancelled
+  assignedTo: integer("assigned_to").references(() => users.id),
+  internalNotes: text("internal_notes"),
+  
+  // Timestamps
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Service Catalog table for pricing management
+export const serviceCatalog = pgTable("service_catalog", {
+  id: serial("id").primaryKey(),
+  category: text("category").notNull(), // IT Services, AI Solutions, Cybersecurity
+  serviceName: text("service_name").notNull(),
+  basePrice: integer("base_price"), // Base price in cents
+  priceType: text("price_type").notNull(), // fixed, hourly, per_unit
+  unit: text("unit"), // For per_unit pricing (e.g., "drop" for cable drops)
+  description: text("description"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Team Availability table for scheduling
+export const teamAvailability = pgTable("team_availability", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  availableDate: date("available_date").notNull(),
+  timeSlots: jsonb("time_slots").notNull(), // Array of available time slots
+  isBlocked: boolean("is_blocked").default(false),
+  notes: text("notes"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 // Analytics tracking tables
 export const userSessions = pgTable("user_sessions", {
   id: serial("id").primaryKey(),
@@ -323,6 +403,41 @@ export const insertUwaSchema = z.object({
 
 export type InsertUwa = z.infer<typeof insertUwaSchema>;
 export type Uwa = typeof uwas.$inferSelect;
+
+// Service Request Schemas
+export const insertServiceRequestSchema = createInsertSchema(serviceRequests, {
+  companyName: z.string().min(2, "Company name is required"),
+  contactPersonName: z.string().min(2, "Contact person name is required"),
+  contactPersonTitle: z.string().min(2, "Contact person title is required"),
+  primaryEmail: z.string().email("Valid email is required"),
+  secondaryEmail: z.string().email("Valid email format").optional().or(z.literal("")),
+  officePhone: z.string().optional().or(z.literal("")),
+  mobilePhone: z.string().optional().or(z.literal("")),
+  preferredContactMethod: z.enum(["email", "phone", "mobile"], {
+    required_error: "Preferred contact method is required"
+  }),
+  serviceCategory: z.enum(["IT Services", "AI Solutions", "Cybersecurity", "Combined Services"], {
+    required_error: "Service category is required"
+  }),
+  urgencyLevel: z.enum(["Critical", "High", "Medium", "Low"], {
+    required_error: "Urgency level is required"
+  }),
+}).omit({
+  id: true,
+  status: true,
+  assignedTo: true,
+  internalNotes: true,
+  quoteGenerated: true,
+  clientApproved: true,
+  approvedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertServiceRequest = z.infer<typeof insertServiceRequestSchema>;
+export type ServiceRequest = typeof serviceRequests.$inferSelect;
+export type ServiceCatalog = typeof serviceCatalog.$inferSelect;
+export type TeamAvailability = typeof teamAvailability.$inferSelect;
 
 // Visitor tracking schemas
 export const insertVisitorSessionSchema = z.object({

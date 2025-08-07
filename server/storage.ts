@@ -22,7 +22,14 @@ import {
   type VisitorPageView,
   viewerInvitations,
   type ViewerInvitation,
-  type InsertViewerInvitation
+  type InsertViewerInvitation,
+  serviceRequests,
+  serviceCatalog,
+  teamAvailability,
+  type ServiceRequest,
+  type InsertServiceRequest,
+  type ServiceCatalog,
+  type TeamAvailability
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc } from "drizzle-orm";
@@ -121,6 +128,13 @@ export interface IStorage {
   createVisitorPageView(pageView: InsertVisitorPageView): Promise<VisitorPageView>;
   getVisitorAnalytics(): Promise<VisitorAnalytics>;
   getVisitorSession(sessionId: string): Promise<VisitorSession | undefined>;
+
+  // Service Request operations
+  getAllServiceRequests(): Promise<ServiceRequest[]>;
+  getServiceRequestById(id: number): Promise<ServiceRequest | undefined>;
+  createServiceRequest(request: InsertServiceRequest): Promise<ServiceRequest>;
+  updateServiceRequest(id: number, request: Partial<ServiceRequest>): Promise<ServiceRequest | undefined>;
+  deleteServiceRequest(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -932,6 +946,54 @@ export class DatabaseStorage implements IStorage {
     const result = await db
       .delete(viewerInvitations)
       .where(eq(viewerInvitations.id, id));
+    return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  // Service Request operations
+  async getAllServiceRequests(): Promise<ServiceRequest[]> {
+    return await db
+      .select()
+      .from(serviceRequests)
+      .orderBy(desc(serviceRequests.createdAt));
+  }
+
+  async getServiceRequestById(id: number): Promise<ServiceRequest | undefined> {
+    const [request] = await db
+      .select()
+      .from(serviceRequests)
+      .where(eq(serviceRequests.id, id));
+    return request;
+  }
+
+  async createServiceRequest(request: InsertServiceRequest): Promise<ServiceRequest> {
+    const [newRequest] = await db
+      .insert(serviceRequests)
+      .values({
+        ...request,
+        status: "pending",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+    return newRequest;
+  }
+
+  async updateServiceRequest(id: number, request: Partial<ServiceRequest>): Promise<ServiceRequest | undefined> {
+    const [updatedRequest] = await db
+      .update(serviceRequests)
+      .set({
+        ...request,
+        updatedAt: new Date(),
+      })
+      .where(eq(serviceRequests.id, id))
+      .returning();
+    return updatedRequest;
+  }
+
+  async deleteServiceRequest(id: number): Promise<boolean> {
+    const result = await db
+      .delete(serviceRequests)
+      .where(eq(serviceRequests.id, id));
     return result.rowCount !== null && result.rowCount > 0;
   }
 }
