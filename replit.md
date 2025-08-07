@@ -20,6 +20,13 @@ CyberLockX is an advanced cybersecurity platform providing comprehensive digital
 - Tailwind CSS for responsive design
 - Drizzle ORM for database interactions
 
+### Services Portal (Updated: August 7, 2025)
+- **Complete 6-Step Workflow**: Organization Info → Service Selection → Project Details → Scheduling → Pricing → Approval
+- **Professional Title Dropdown**: 100+ categorized professional titles with search functionality
+- **Form Validation**: Comprehensive Zod schemas with proper controlled components
+- **Integration**: Leverages existing admin infrastructure (PostgreSQL, Mailgun, RBAC)
+- **Business Features**: $75 site visit fee integration, comprehensive pricing structure, nationwide service coverage
+
 ### Identity Management System
 - **Universal Identity Verification System (UIVS)**: Supports various identity types including Human, Machine Physical, Machine Virtual, Avatar, API, and Third-Party.
 - **Digital Data Nucleic Authority (DDNA) framework**: Used for security risk mapping.
