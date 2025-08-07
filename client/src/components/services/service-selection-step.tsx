@@ -71,7 +71,13 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
 
   const handleServiceToggle = (service: any, checked: boolean) => {
     if (checked) {
-      setSelectedServices(prev => [...prev, { ...service, quantity: 1 }]);
+      setSelectedServices(prev => [...prev, { 
+        serviceName: service.name,
+        quantity: 1,
+        basePrice: service.basePrice,
+        priceType: service.priceType,
+        unit: (service as any).unit
+      }]);
     } else {
       setSelectedServices(prev => prev.filter(s => s.serviceName !== service.name));
     }
@@ -187,6 +193,9 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
             {SERVICE_CATALOG[selectedCategory as keyof typeof SERVICE_CATALOG].map((service) => {
               const isSelected = selectedServices.some(s => s.serviceName === service.name);
               const selectedService = selectedServices.find(s => s.serviceName === service.name);
+              
+              // Debug: Log the checkbox state
+              console.log(`Service: ${service.name}, isSelected: ${isSelected}, selectedServices count: ${selectedServices.length}`);
 
               return (
                 <Card key={service.name} className={isSelected ? "ring-2 ring-blue-500" : ""}>
@@ -203,7 +212,7 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
                           <p className="text-sm text-gray-600 mb-2">{service.description}</p>
                           <div className="flex items-center gap-2">
                             <Badge variant="outline">
-                              {formatPrice(service.basePrice)} {getPriceTypeLabel(service.priceType, service.unit)}
+                              {formatPrice(service.basePrice)} {getPriceTypeLabel(service.priceType, (service as any).unit)}
                             </Badge>
                           </div>
                         </div>
