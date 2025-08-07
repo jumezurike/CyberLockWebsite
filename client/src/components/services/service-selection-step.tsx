@@ -63,6 +63,7 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
     priceType: "fixed" | "hourly" | "per_unit" | "per_incident" | "per_device" | "per_user_monthly" | "monthly" | "monthly_per_server" | "monthly_per_phone" | "per_session" | "markup" | "fixed_range";
     unit?: string;
   }>>(data.selectedServices || []);
+  const [forceUpdate, setForceUpdate] = React.useState(0);
 
   const handleCategoryChange = (category: string) => {
     setSelectedCategory(category);
@@ -83,6 +84,7 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
       setSelectedServices(prev => {
         const updated = [...prev, newService];
         console.log('Updated selected services:', updated);
+        setForceUpdate(f => f + 1); // Force re-render
         return updated;
       });
     } else {
@@ -90,6 +92,7 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
       setSelectedServices(prev => {
         const updated = prev.filter(s => s.serviceName !== service.name);
         console.log('Updated selected services after removal:', updated);
+        setForceUpdate(f => f + 1); // Force re-render
         return updated;
       });
     }
@@ -217,10 +220,11 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
                         <Checkbox
                           checked={isSelected}
                           onCheckedChange={(checked) => {
-                            console.log(`Checkbox changed for ${service.name}:`, checked);
+                            console.log(`Checkbox changed for ${service.name}:`, checked, 'Current isSelected:', isSelected);
                             handleServiceToggle(service, !!checked);
                           }}
                           className="mt-1"
+                          id={`service-${service.name.replace(/\s+/g, '-').toLowerCase()}`}
                         />
                         <div className="flex-1">
                           <h4 className="font-semibold">{service.name}</h4>

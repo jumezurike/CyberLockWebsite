@@ -41,8 +41,13 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
   const onSubmit = async (values: ApprovalData) => {
     setIsSubmitting(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Validate that we have services selected
+      if (!data.selectedServices || data.selectedServices.length === 0) {
+        throw new Error("No services selected");
+      }
+
+      // Simulate successful submission
+      await new Promise(resolve => setTimeout(resolve, 1500));
       
       onUpdate(values);
       
@@ -55,9 +60,10 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
       console.log("Final form data:", { ...data, ...values });
       
     } catch (error) {
+      console.error("Submission error:", error);
       toast({
         title: "Submission Failed",
-        description: "Please try again or contact support.",
+        description: error instanceof Error ? error.message : "Please try again or contact support.",
         variant: "destructive",
       });
     } finally {
