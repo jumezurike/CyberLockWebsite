@@ -134,6 +134,12 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
   };
 
   const handleContinue = () => {
+    if (selectedServices.length === 0) {
+      alert("Please select at least one service before continuing.");
+      return;
+    }
+    
+    console.log("Continuing with selected services:", selectedServices);
     onUpdate({
       serviceCategory: selectedCategory,
       selectedServices: selectedServices,
@@ -217,15 +223,25 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
                   <CardContent className="p-4">
                     <div className="flex items-start justify-between">
                       <div className="flex items-start gap-3 flex-1">
-                        <Checkbox
-                          checked={isSelected}
-                          onCheckedChange={(checked) => {
-                            console.log(`Checkbox changed for ${service.name}:`, checked, 'Current isSelected:', isSelected);
-                            handleServiceToggle(service, !!checked);
-                          }}
-                          className="mt-1"
-                          id={`service-${service.name.replace(/\s+/g, '-').toLowerCase()}`}
-                        />
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={(e) => {
+                              console.log(`Checkbox changed for ${service.name}:`, e.target.checked, 'Current isSelected:', isSelected);
+                              handleServiceToggle(service, e.target.checked);
+                            }}
+                            className="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 accent-primary cursor-pointer mt-1"
+                            id={`service-${service.name.replace(/\s+/g, '-').toLowerCase()}`}
+                          />
+                          {isSelected && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                              <svg className="h-3 w-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            </div>
+                          )}
+                        </div>
                         <div className="flex-1">
                           <h4 className="font-semibold">{service.name}</h4>
                           <p className="text-sm text-gray-600 mb-2">{service.description}</p>

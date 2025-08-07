@@ -43,10 +43,25 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
     try {
       // Validate that we have services selected
       if (!data.selectedServices || data.selectedServices.length === 0) {
-        throw new Error("No services selected");
+        toast({
+          title: "No Services Selected",
+          description: "Please go back and select at least one service before submitting.",
+          variant: "destructive",
+        });
+        return;
       }
 
-      // Simulate successful submission
+      // Validate form data completeness
+      if (!data.companyName || !data.contactPersonName || !data.primaryEmail) {
+        toast({
+          title: "Incomplete Information",
+          description: "Please ensure all required fields are completed.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Simulate successful submission - no throwing errors
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       onUpdate(values);
