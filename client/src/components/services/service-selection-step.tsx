@@ -70,16 +70,28 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
   };
 
   const handleServiceToggle = (service: any, checked: boolean) => {
+    console.log(`Toggle service: ${service.name}, checked: ${checked}`);
     if (checked) {
-      setSelectedServices(prev => [...prev, { 
+      const newService = { 
         serviceName: service.name,
         quantity: 1,
         basePrice: service.basePrice,
         priceType: service.priceType,
         unit: (service as any).unit
-      }]);
+      };
+      console.log('Adding service:', newService);
+      setSelectedServices(prev => {
+        const updated = [...prev, newService];
+        console.log('Updated selected services:', updated);
+        return updated;
+      });
     } else {
-      setSelectedServices(prev => prev.filter(s => s.serviceName !== service.name));
+      console.log(`Removing service: ${service.name}`);
+      setSelectedServices(prev => {
+        const updated = prev.filter(s => s.serviceName !== service.name);
+        console.log('Updated selected services after removal:', updated);
+        return updated;
+      });
     }
   };
 
@@ -204,7 +216,10 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
                       <div className="flex items-start gap-3 flex-1">
                         <Checkbox
                           checked={isSelected}
-                          onCheckedChange={(checked) => handleServiceToggle(service, !!checked)}
+                          onCheckedChange={(checked) => {
+                            console.log(`Checkbox changed for ${service.name}:`, checked);
+                            handleServiceToggle(service, !!checked);
+                          }}
                           className="mt-1"
                         />
                         <div className="flex-1">
