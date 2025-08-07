@@ -42,12 +42,12 @@ export default function ServicesPortal() {
     preferredContactMethod: "email" as "email" | "phone" | "mobile",
     
     // Service Selection
-    serviceCategory: "" as "IT Services" | "AI Solutions" | "Cybersecurity" | "Combined Services" | "",
+    serviceCategory: "" as "Help Desk & Support" | "IT Services" | "Industry-Specific Services" | "Emergency Services" | "Managed Services" | "",
     selectedServices: [] as Array<{
       serviceName: string;
       quantity: number;
       basePrice: number;
-      priceType: "fixed" | "hourly" | "per_unit";
+      priceType: "fixed" | "hourly" | "per_unit" | "per_incident" | "per_device" | "per_user_monthly" | "monthly" | "monthly_per_server" | "monthly_per_phone" | "per_session" | "markup" | "fixed_range";
       unit?: string;
     }>,
     
@@ -113,17 +113,30 @@ export default function ServicesPortal() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="container mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <Shield className="h-10 w-10 text-blue-600" />
-            <h1 className="text-4xl font-bold text-gray-900">CyberLockX Services</h1>
+      {/* Service Area Banner */}
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-6 mb-8">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-col md:flex-row justify-between items-center">
+            <div className="text-center md:text-left">
+              <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
+                <Shield className="h-8 w-8 text-blue-100" />
+                <h1 className="text-3xl font-bold">CyberLockX Professional Services</h1>
+              </div>
+              <p className="text-blue-100">Serving most states nationwide • $75/hr mandatory site visit fee applies to on-site services</p>
+            </div>
+            <div className="mt-4 md:mt-0 flex flex-col gap-2">
+              <Badge variant="secondary" className="bg-white text-blue-600 font-medium">
+                Available in Most US States
+              </Badge>
+              <Badge variant="outline" className="bg-blue-500 text-white border-white">
+                Professional Support
+              </Badge>
+            </div>
           </div>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Professional IT services, AI solutions, and cybersecurity expertise tailored to your organization's needs
-          </p>
         </div>
+      </div>
+      
+      <div className="container mx-auto px-4 py-8">
 
         {/* Progress Indicator */}
         <Card className="mb-8">

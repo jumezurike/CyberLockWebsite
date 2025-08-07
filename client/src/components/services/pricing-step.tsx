@@ -17,17 +17,20 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
   const calculatePricing = React.useMemo(() => {
     let subtotal = 0;
     let hourlyEstimate = 0;
+    let siteVisitFee = 0;
     const breakdown: Record<string, number> = {};
 
     data.selectedServices?.forEach((service: any) => {
-      const serviceTotal = service.basePrice * service.quantity;
-      subtotal += serviceTotal;
-      breakdown[service.serviceName] = serviceTotal;
-
-      // Estimate hours for hourly services
+      let serviceTotal = service.basePrice * service.quantity;
+      
+      // Add mandatory $75 site visit fee for on-site services
       if (service.priceType === "hourly") {
+        siteVisitFee += 7500; // $75 per service requiring site visit
         hourlyEstimate += service.quantity;
       }
+      
+      subtotal += serviceTotal;
+      breakdown[service.serviceName] = serviceTotal;
     });
 
     // Apply urgency multiplier
@@ -62,12 +65,14 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
       complexityMultiplier *= 1.1;
     }
 
-    const total = Math.round(subtotal * urgencyMultiplier * complexityMultiplier);
+    const baseTotal = subtotal + siteVisitFee;
+    const total = Math.round(baseTotal * urgencyMultiplier * complexityMultiplier);
 
     return {
       subtotal,
+      siteVisitFee,
       urgencyFee,
-      complexityFee: Math.round(subtotal * (complexityMultiplier - 1)),
+      complexityFee: Math.round(baseTotal * (complexityMultiplier - 1)),
       total,
       breakdown,
       hourlyEstimate,
@@ -142,6 +147,21 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
             <span className="font-medium">Services Subtotal</span>
             <span className="font-semibold">{formatPrice(calculatePricing.subtotal)}</span>
           </div>
+
+          {/* Site Visit Fee */}
+          {calculatePricing.siteVisitFee > 0 && (
+            <div className="flex justify-between items-center">
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Site Visit Fee</span>
+                <Badge variant="outline" className="text-xs">
+                  Mandatory for on-site services
+                </Badge>
+              </div>
+              <span className="font-semibold text-blue-600">
+                +{formatPrice(calculatePricing.siteVisitFee)}
+              </span>
+            </div>
+          )}
 
           {/* Urgency Adjustment */}
           {calculatePricing.urgencyFee !== 0 && (

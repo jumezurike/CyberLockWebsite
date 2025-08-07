@@ -6,35 +6,44 @@ import { Badge } from "@/components/ui/badge";
 import { ArrowRight, ArrowLeft, Wrench, Brain, Shield, Users, Plus, Minus } from "lucide-react";
 
 const SERVICE_CATALOG = {
+  "Help Desk & Support": [
+    { name: "Password Resets & Account Unlocks", basePrice: 2500, priceType: "per_incident", description: "Quick password and account recovery services ($25-50 per incident)" },
+    { name: "Email Troubleshooting", basePrice: 3500, priceType: "per_incident", description: "Outlook/Google Workspace configuration and sync fixes" },
+    { name: "Printer/Scanner Support", basePrice: 4000, priceType: "per_incident", description: "Driver installs, network printing, queue management" },
+    { name: "Wi-Fi/Network Connectivity", basePrice: 4500, priceType: "per_incident", description: "Dead zones, DHCP errors, VPN setup" },
+    { name: "Software Installation & Updates", basePrice: 5000, priceType: "per_incident", description: "Licensed apps, updates, compatibility fixes" },
+    { name: "Monthly Help Desk Package", basePrice: 5000, priceType: "per_user_monthly", description: "Unlimited Tier 1-2 support per user" },
+    { name: "Remote Monitoring & Management", basePrice: 20000, priceType: "monthly", description: "Proactive patching and system monitoring" },
+  ],
   "IT Services": [
-    { name: "Network Setup & Configuration", basePrice: 150000, priceType: "fixed", description: "Complete network infrastructure setup" },
-    { name: "Server Installation & Maintenance", basePrice: 12500, priceType: "hourly", description: "Professional server deployment and ongoing maintenance" },
-    { name: "Desktop/Laptop Support", basePrice: 8500, priceType: "hourly", description: "End-user device support and troubleshooting" },
-    { name: "Cloud Migration Services", basePrice: 200000, priceType: "fixed", description: "Migrate your infrastructure to cloud platforms" },
-    { name: "Data Backup Solutions", basePrice: 10000, priceType: "hourly", description: "Implement comprehensive backup strategies" },
-    { name: "Cable Drop Installation", basePrice: 15000, priceType: "per_unit", unit: "drop", description: "Professional cable drop installation" },
+    { name: "Workstation Deployment", basePrice: 20000, priceType: "per_device", description: "Imaging, data migration, peripheral setup per device ($150-300)" },
+    { name: "VoIP Phone System Setup", basePrice: 10000, priceType: "hourly", description: "Physical phones, softphones, call routing ($85-120/hr + $75 site visit)" },
+    { name: "Basic Network Maintenance", basePrice: 12000, priceType: "hourly", description: "Switch/router updates, cable runs, Wi-Fi optimization ($90-150/hr + $75 site visit)" },
+    { name: "Cloud Migration (Microsoft 365/Google)", basePrice: 150000, priceType: "fixed", description: "Complete cloud migration project ($1,500+)" },
+    { name: "Hardware Sales & Setup", basePrice: 2000, priceType: "markup", description: "PCs, monitors, docks with 15-30% markup + setup fee" },
+    { name: "Security Audit & Report", basePrice: 75000, priceType: "fixed", description: "Vulnerability scans with comprehensive report ($500-2,000)" },
   ],
-  "AI Solutions": [
-    { name: "AI Strategy Consulting", basePrice: 15000, priceType: "hourly", description: "Strategic AI implementation planning" },
-    { name: "Machine Learning Model Development", basePrice: 250000, priceType: "fixed", description: "Custom ML model development and training" },
-    { name: "Process Automation", basePrice: 175000, priceType: "fixed", description: "Automate repetitive business processes" },
-    { name: "Chatbot Development", basePrice: 125000, priceType: "fixed", description: "Custom conversational AI solutions" },
-    { name: "Data Analytics Solutions", basePrice: 18000, priceType: "hourly", description: "Advanced data analysis and visualization" },
-    { name: "AI Integration Services", basePrice: 13500, priceType: "hourly", description: "Integrate AI capabilities into existing systems" },
+  "Industry-Specific Services": [
+    { name: "Healthcare EHR/EMR Support", basePrice: 12500, priceType: "hourly", description: "Epic, Cerner support - HIPAA compliant ($100-150/hr + $75 site visit)" },
+    { name: "HIPAA Security Training", basePrice: 50000, priceType: "per_session", description: "Healthcare compliance training session" },
+    { name: "Medical Device Networking", basePrice: 15000, priceType: "hourly", description: "IoT setup for imaging machines and medical devices + $75 site visit" },
+    { name: "Legal Document Management", basePrice: 12000, priceType: "hourly", description: "iManage, NetDocuments setup and support ($120+/hr + $75 site visit)" },
+    { name: "eDiscovery Support", basePrice: 15000, priceType: "hourly", description: "Data retrieval and archiving for legal firms" },
+    { name: "Education Chromebook Management", basePrice: 7500, priceType: "per_device", description: "Google Admin Console setup per device" },
+    { name: "Learning Management System", basePrice: 9000, priceType: "hourly", description: "Canvas, Blackboard troubleshooting and support + $75 site visit" },
   ],
-  "Cybersecurity": [
-    { name: "Security Assessment (HOS²A)", basePrice: 75000, priceType: "fixed", description: "Comprehensive security posture analysis" },
-    { name: "Penetration Testing", basePrice: 125000, priceType: "fixed", description: "Ethical hacking and vulnerability assessment" },
-    { name: "Security Training", basePrice: 12000, priceType: "hourly", description: "Employee cybersecurity awareness training" },
-    { name: "Incident Response", basePrice: 20000, priceType: "hourly", description: "24/7 security incident response services" },
-    { name: "Compliance Consulting", basePrice: 16500, priceType: "hourly", description: "GDPR, HIPAA, SOX compliance guidance" },
-    { name: "Security Monitoring", basePrice: 85000, priceType: "fixed", description: "Continuous security monitoring and alerting" },
+  "Emergency Services": [
+    { name: "After-Hours Support", basePrice: 18000, priceType: "hourly", description: "Emergency support at 2x normal rate ($180/hr + $75 emergency fee)" },
+    { name: "Data Recovery Services", basePrice: 50000, priceType: "fixed", description: "Professional data recovery ($300-1,000+ depending on severity)" },
+    { name: "Ransomware Response", basePrice: 500000, priceType: "fixed", description: "Critical incident response engagement ($5,000+ emergency response)" },
   ],
-  "Combined Services": [
-    { name: "Digital Transformation Package", basePrice: 500000, priceType: "fixed", description: "Complete digital transformation initiative" },
-    { name: "Smart Office Setup", basePrice: 350000, priceType: "fixed", description: "AI-powered smart office infrastructure" },
-    { name: "Secure Cloud Migration", basePrice: 300000, priceType: "fixed", description: "Security-focused cloud migration with AI optimization" },
-    { name: "Enterprise Security Suite", basePrice: 400000, priceType: "fixed", description: "Complete security solution with AI threat detection" },
+  "Managed Services": [
+    { name: "Automated Backup Solutions", basePrice: 7500, priceType: "monthly_per_server", description: "Automated backups per server ($50-100/month)" },
+    { name: "Phishing Simulation Testing", basePrice: 20000, priceType: "monthly", description: "Automated phishing campaigns ($200/month)" },
+    { name: "VoIP System Monitoring", basePrice: 3000, priceType: "monthly_per_phone", description: "Phone system monitoring per phone ($30/month)" },
+    { name: "Basic Managed Services", basePrice: 50000, priceType: "monthly", description: "5 hours remote support + monitoring ($500/month)" },
+    { name: "Professional Managed Services", basePrice: 200000, priceType: "monthly", description: "Unlimited Tier 1-2, 10 on-site hours, patches ($2,000/month)" },
+    { name: "Enterprise IT Outsourcing", basePrice: 600000, priceType: "monthly", description: "Full IT department replacement ($6,000+/month)" },
   ],
 };
 
@@ -51,7 +60,7 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
     serviceName: string;
     quantity: number;
     basePrice: number;
-    priceType: "fixed" | "hourly" | "per_unit";
+    priceType: "fixed" | "hourly" | "per_unit" | "per_incident" | "per_device" | "per_user_monthly" | "monthly" | "monthly_per_server" | "monthly_per_phone" | "per_session" | "markup" | "fixed_range";
     unit?: string;
   }>>(data.selectedServices || []);
 
@@ -88,8 +97,17 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
   const getPriceTypeLabel = (priceType: string, unit?: string) => {
     switch (priceType) {
       case "fixed": return "Fixed Price";
-      case "hourly": return "Per Hour";
+      case "hourly": return "Per Hour + $75 Site Visit";
       case "per_unit": return unit ? `Per ${unit}` : "Per Unit";
+      case "per_incident": return "Per Incident";
+      case "per_device": return "Per Device";
+      case "per_user_monthly": return "Per User/Month";
+      case "monthly": return "Monthly";
+      case "monthly_per_server": return "Monthly Per Server";
+      case "monthly_per_phone": return "Monthly Per Phone";
+      case "per_session": return "Per Session";
+      case "markup": return "Markup + Setup";
+      case "fixed_range": return "Range Pricing";
       default: return "";
     }
   };
@@ -104,20 +122,22 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
+      case "Help Desk & Support": return Users;
       case "IT Services": return Wrench;
-      case "AI Solutions": return Brain;
-      case "Cybersecurity": return Shield;
-      case "Combined Services": return Users;
+      case "Industry-Specific Services": return Brain;
+      case "Emergency Services": return Shield;
+      case "Managed Services": return Users;
       default: return Wrench;
     }
   };
 
   const getCategoryColor = (category: string) => {
     switch (category) {
+      case "Help Desk & Support": return "green";
       case "IT Services": return "blue";
-      case "AI Solutions": return "purple";
-      case "Cybersecurity": return "red";
-      case "Combined Services": return "green";
+      case "Industry-Specific Services": return "purple";
+      case "Emergency Services": return "red";
+      case "Managed Services": return "orange";
       default: return "blue";
     }
   };
