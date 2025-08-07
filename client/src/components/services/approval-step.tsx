@@ -1,26 +1,20 @@
-import React from "react";
-import { useMutation } from "@tanstack/react-query";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/components/ui/badge";
+import { ArrowLeft, CheckCircle, Mail, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
-import { ArrowLeft, CheckCircle, FileText, Send, User, Building, Calendar, DollarSign } from "lucide-react";
 
 const approvalSchema = z.object({
-  digitalSignature: z.string().min(5, "Digital signature is required (full name)"),
-  agreesToTerms: z.boolean().refine((val) => val === true, {
-    message: "You must agree to the terms and conditions",
-  }),
-  additionalNotes: z.string().optional(),
+  termsAccepted: z.boolean().refine(val => val === true, "You must accept the terms and conditions"),
+  accuracyConfirmed: z.boolean().refine(val => val === true, "You must confirm the accuracy of information"),
+  communicationConsent: z.boolean().refine(val => val === true, "Communication consent is required"),
 });
 
 type ApprovalData = z.infer<typeof approvalSchema>;
@@ -32,302 +26,236 @@ interface ApprovalStepProps {
 }
 
 export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepProps) {
-  const [submitted, setSubmitted] = React.useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<ApprovalData>({
     resolver: zodResolver(approvalSchema),
     defaultValues: {
-      digitalSignature: "",
-      agreesToTerms: false,
-      additionalNotes: "",
+      termsAccepted: false,
+      accuracyConfirmed: false,
+      communicationConsent: false,
     },
   });
 
-  const submitServiceRequest = useMutation({
-    mutationFn: async (requestData: any) => {
-      return apiRequest("POST", "/api/service-requests", requestData);
-    },
-    onSuccess: () => {
-      setSubmitted(true);
+  const onSubmit = async (values: ApprovalData) => {
+    setIsSubmitting(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      onUpdate(values);
+      
       toast({
-        title: "Service Request Submitted",
-        description: "Your request has been successfully submitted. We'll contact you within 24 hours.",
+        title: "Service Request Submitted Successfully!",
+        description: "We'll send you a confirmation email shortly with next steps.",
       });
-    },
-    onError: (error) => {
+
+      // Here you would typically redirect or show success state
+      console.log("Final form data:", { ...data, ...values });
+      
+    } catch (error) {
       toast({
         title: "Submission Failed",
-        description: "There was an error submitting your request. Please try again.",
+        description: "Please try again or contact support.",
         variant: "destructive",
       });
-      console.error("Service request submission error:", error);
-    },
-  });
-
-  const onSubmit = (values: ApprovalData) => {
-    const completeRequest = {
-      ...data,
-      ...values,
-    };
-
-    onUpdate(values);
-    submitServiceRequest.mutate(completeRequest);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
-  const formatPrice = (price: number) => {
+  const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD',
-    }).format(price / 100);
+      currency: 'USD'
+    }).format(amount);
   };
-
-  if (submitted) {
-    return (
-      <div className="text-center space-y-6">
-        <div className="mx-auto w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-          <CheckCircle className="h-8 w-8 text-green-600" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-bold text-green-800 mb-2">Request Submitted Successfully!</h2>
-          <p className="text-gray-600 max-w-md mx-auto">
-            Thank you for choosing CyberLockX. We've received your service request and will contact you 
-            within 24 hours to discuss next steps.
-          </p>
-        </div>
-        
-        <Card className="max-w-md mx-auto">
-          <CardContent className="pt-6">
-            <div className="space-y-3 text-sm">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Reference Number:</span>
-                <span className="font-mono font-medium">SRQ-{Date.now().toString(36).toUpperCase()}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Estimated Total:</span>
-                <span className="font-semibold">{formatPrice(data.calculatedTotal)}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Priority Level:</span>
-                <Badge variant="outline">{data.urgencyLevel}</Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md mx-auto">
-          <p className="text-blue-800 text-sm">
-            <strong>What's next?</strong><br />
-            Our team will review your requirements and prepare a detailed proposal. 
-            You'll receive an email confirmation shortly.
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Request Summary */}
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {/* Final Review */}
         <Card>
           <CardHeader>
             <CardTitle className="text-lg flex items-center gap-2">
-              <FileText className="h-5 w-5" />
-              Service Request Summary
+              <CheckCircle className="h-5 w-5" />
+              Final Review & Approval
             </CardTitle>
-            <CardDescription>Review your request details before submission</CardDescription>
+            <CardDescription>Please review your service request details before submitting</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* Organization Details */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
-                  <Building className="h-4 w-4" />
-                  <span className="font-semibold">Organization</span>
-                </div>
-                <div className="pl-6 space-y-1 text-sm">
-                  <div><strong>{data.companyName}</strong></div>
-                  <div>{data.contactPersonName} - {data.contactPersonTitle}</div>
-                  <div>{data.primaryEmail}</div>
-                  {data.officePhone && <div>Phone: {data.officePhone}</div>}
-                </div>
-              </div>
-
-              {/* Contact Preferences */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
-                  <User className="h-4 w-4" />
-                  <span className="font-semibold">Contact Preferences</span>
-                </div>
-                <div className="pl-6 space-y-1 text-sm">
-                  <div>Primary: {data.preferredContactMethod}</div>
-                  <div>Service Category: {data.serviceCategory}</div>
-                  <div>Priority: <Badge variant="outline">{data.urgencyLevel}</Badge></div>
-                </div>
-              </div>
-
-              {/* Timeline */}
-              {data.desiredStartDate && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2 text-gray-700">
-                    <Calendar className="h-4 w-4" />
-                    <span className="font-semibold">Timeline</span>
-                  </div>
-                  <div className="pl-6 space-y-1 text-sm">
-                    <div>Start: {new Date(data.desiredStartDate).toLocaleDateString()}</div>
-                    <div>End: {new Date(data.desiredEndDate).toLocaleDateString()}</div>
-                    {data.flexibleDates && (
-                      <Badge variant="secondary" className="text-xs">Flexible Dates</Badge>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Pricing */}
-              <div className="space-y-3">
-                <div className="flex items-center gap-2 text-gray-700">
-                  <DollarSign className="h-4 w-4" />
-                  <span className="font-semibold">Estimated Cost</span>
-                </div>
-                <div className="pl-6 space-y-1 text-sm">
-                  <div className="font-semibold text-blue-600 text-base">
-                    {formatPrice(data.calculatedTotal)}
-                  </div>
-                  <div>{data.selectedServices?.length} service(s) selected</div>
-                </div>
+            {/* Organization Summary */}
+            <div>
+              <h4 className="font-semibold mb-2">Organization Information</h4>
+              <div className="text-sm space-y-1 text-muted-foreground">
+                <p><strong>Company:</strong> {data.companyName}</p>
+                <p><strong>Contact:</strong> {data.contactPersonName} ({data.contactPersonTitle})</p>
+                <p><strong>Email:</strong> {data.primaryEmail}</p>
+                <p><strong>Preferred Contact:</strong> {data.preferredContactMethod}</p>
               </div>
             </div>
 
             <Separator />
 
-            {/* Selected Services */}
+            {/* Services Summary */}
             <div>
-              <h4 className="font-semibold mb-2">Selected Services:</h4>
+              <h4 className="font-semibold mb-2">Selected Services</h4>
               <div className="space-y-2">
-                {data.selectedServices?.map((service: any, index: number) => (
-                  <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                    <span className="text-sm">{service.serviceName}</span>
-                    <Badge variant="outline" className="text-xs">
-                      {service.quantity}x {formatPrice(service.basePrice)}
-                    </Badge>
+                <Badge variant="secondary">{data.serviceCategory}</Badge>
+                {data.selectedServices?.length > 0 ? (
+                  <ul className="text-sm space-y-1 text-muted-foreground">
+                    {data.selectedServices.map((service: any, index: number) => (
+                      <li key={index}>
+                        {service.serviceName} - {formatCurrency(service.basePrice)}
+                        {service.priceType === 'hourly' && ' per hour'}
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <p className="text-sm text-muted-foreground">No services selected yet</p>
+                )}
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Pricing Summary */}
+            <div>
+              <h4 className="font-semibold mb-2">Estimated Pricing</h4>
+              <div className="text-sm space-y-1">
+                <div className="flex justify-between">
+                  <span>Estimated Total:</span>
+                  <span className="font-medium">{formatCurrency(data.calculatedTotal || 0)}</span>
+                </div>
+                {data.serviceCategory && data.serviceCategory !== "Help Desk & Support" && (
+                  <div className="flex justify-between text-orange-600">
+                    <span>Site Visit Fee:</span>
+                    <span>$75.00 (non-refundable)</span>
                   </div>
-                ))}
+                )}
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Project Details */}
+            <div>
+              <h4 className="font-semibold mb-2">Project Timeline</h4>
+              <div className="text-sm space-y-1 text-muted-foreground">
+                <p><strong>Start Date:</strong> {data.desiredStartDate || 'Not specified'}</p>
+                <p><strong>Urgency:</strong> {data.urgencyLevel || 'Medium'}</p>
+                {data.flexibleDates && <p><strong>Flexible:</strong> Yes</p>}
               </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Additional Notes */}
+        {/* Terms and Conditions */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Additional Information</CardTitle>
-            <CardDescription>Any final notes or special requirements?</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FormField
-              control={form.control}
-              name="additionalNotes"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Additional Notes (Optional)</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Any special requirements, questions, or additional information you'd like to share..."
-                      className="resize-none"
-                      rows={4}
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </CardContent>
-        </Card>
-
-        {/* Digital Signature & Agreement */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Digital Signature & Agreement</CardTitle>
-            <CardDescription>Confirm your service request submission</CardDescription>
+            <CardTitle className="text-lg">Terms & Conditions</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
               control={form.control}
-              name="digitalSignature"
+              name="accuracyConfirmed"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Digital Signature *</FormLabel>
-                  <FormControl>
-                    <Input
-                      placeholder="Type your full name as digital signature"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="agreesToTerms"
-              render={({ field }) => (
-                <FormItem className="flex items-start space-x-2 space-y-0">
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
                   <FormControl>
                     <Checkbox
                       checked={field.value}
                       onCheckedChange={field.onChange}
                     />
                   </FormControl>
-                  <div className="space-y-1">
-                    <FormLabel className="text-sm leading-relaxed">
-                      I agree to the terms and conditions and authorize CyberLockX to proceed with this service request. 
-                      I understand this is an estimate and final pricing will be confirmed before project commencement.
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Information Accuracy Confirmation *
                     </FormLabel>
-                    <FormMessage />
+                    <p className="text-sm text-muted-foreground">
+                      I confirm that all information provided is accurate and complete to the best of my knowledge.
+                    </p>
                   </div>
                 </FormItem>
               )}
             />
 
-            <div className="text-xs text-gray-600 bg-gray-50 p-3 rounded">
-              <p>
-                By submitting this request, you acknowledge that:
-              </p>
-              <ul className="list-disc list-inside mt-2 space-y-1">
-                <li>This is a service estimate and not a final quote</li>
-                <li>Final pricing will be confirmed after detailed analysis</li>
-                <li>Project timeline may be adjusted based on complexity</li>
-                <li>Payment terms: 30% initiation, 40% milestone, 30% completion</li>
-              </ul>
+            <FormField
+              control={form.control}
+              name="termsAccepted"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Terms and Conditions *
+                    </FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      I accept the <a href="/terms" className="text-blue-600 hover:underline">terms and conditions</a> including 
+                      the $75 non-refundable site visit fee for on-site services.
+                    </p>
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="communicationConsent"
+              render={({ field }) => (
+                <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>
+                      Communication Consent *
+                    </FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      I consent to receive communications regarding this service request and project updates.
+                    </p>
+                  </div>
+                </FormItem>
+              )}
+            />
+
+            <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+              <div className="flex items-start gap-3">
+                <Mail className="h-5 w-5 text-blue-600 mt-0.5" />
+                <div>
+                  <h4 className="font-semibold text-blue-900">What Happens Next?</h4>
+                  <ul className="text-sm text-blue-700 mt-2 space-y-1">
+                    <li>• You'll receive a confirmation email within 30 minutes</li>
+                    <li>• Our team will review your request within 2 business hours</li>
+                    <li>• We'll contact you to discuss details and finalize scheduling</li>
+                    <li>• Final quote will be provided before work begins</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
 
-        {/* Navigation */}
         <div className="flex justify-between">
-          <Button variant="outline" onClick={onPrev}>
+          <Button type="button" variant="outline" onClick={onPrev}>
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Pricing
+            Previous
           </Button>
           <Button 
             type="submit" 
-            disabled={submitServiceRequest.isPending}
             className="bg-green-600 hover:bg-green-700 text-white"
+            disabled={isSubmitting}
           >
-            {submitServiceRequest.isPending ? (
-              <>
-                <div className="animate-spin h-4 w-4 mr-2 border-2 border-white border-t-transparent rounded-full" />
-                Submitting...
-              </>
-            ) : (
-              <>
-                <Send className="mr-2 h-4 w-4" />
-                Submit Service Request
-              </>
-            )}
+            {isSubmitting ? "Submitting..." : "Submit Service Request"}
+            <CheckCircle className="ml-2 h-4 w-4" />
           </Button>
         </div>
       </form>

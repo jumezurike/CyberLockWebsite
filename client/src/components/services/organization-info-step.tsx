@@ -421,26 +421,26 @@ export default function OrganizationInfoStep({ data, onUpdate, onNext }: Organiz
                   <FormControl>
                     <RadioGroup
                       onValueChange={field.onChange}
-                      defaultValue={field.value}
+                      value={field.value}
                       className="flex flex-col space-y-2"
                     >
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="email" id="email" />
-                        <Label htmlFor="email" className="flex items-center gap-2">
+                        <Label htmlFor="email" className="flex items-center gap-2 cursor-pointer">
                           <Mail className="h-4 w-4" />
                           Email
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="phone" id="phone" />
-                        <Label htmlFor="phone" className="flex items-center gap-2">
+                        <Label htmlFor="phone" className="flex items-center gap-2 cursor-pointer">
                           <Phone className="h-4 w-4" />
                           Office Phone
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem value="mobile" id="mobile" />
-                        <Label htmlFor="mobile" className="flex items-center gap-2">
+                        <Label htmlFor="mobile" className="flex items-center gap-2 cursor-pointer">
                           <Smartphone className="h-4 w-4" />
                           Mobile Phone
                         </Label>
