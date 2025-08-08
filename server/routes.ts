@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import session from "express-session";
 import bcrypt from "bcryptjs";
 import cookieParser from "cookie-parser";
+import crypto from "crypto";
 import { storage } from "./storage";
 import { 
   insertAssessmentSchema, 
@@ -20,7 +21,8 @@ import {
   serviceRequests,
   insertFieldWorkOrderSchema,
   updateFieldWorkOrderSchema,
-  insertTechnicianFeedbackSchema
+  insertTechnicianFeedbackSchema,
+  insertCystServiceReportSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
@@ -1286,9 +1288,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Send notification email
       try {
-        const mailgun = initMailgun();
-        if (mailgun) {
-          await sendServiceRequestNotification(mailgun, request);
+        const mailgunInitialized = initMailgun();
+        if (mailgunInitialized) {
+          await sendServiceRequestNotification(request);
         }
       } catch (emailError) {
         console.error("Failed to send service request notification:", emailError);
@@ -1396,11 +1398,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Calculate total hours worked if both arrived and departed times are provided
       const updates = { ...validatedData };
-      if (updates.arrivedAt && updates.departedAt) {
-        const arrivedTime = new Date(updates.arrivedAt).getTime();
-        const departedTime = new Date(updates.departedAt).getTime();
-        updates.totalHoursWorked = Math.round((departedTime - arrivedTime) / (1000 * 60)); // in minutes
-      }
+      // Note: totalHoursWorked field will be calculated in the database or handled elsewhere
       
       const updatedWorkOrder = await storage.updateFieldWorkOrder(workOrderId, updates);
       res.json(updatedWorkOrder);
@@ -1620,9 +1618,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         email,
         phone,
         companyName,
-        role: 'client',
-        isEmailVerified: false,
-        mfaEnabled: false
+        role: 'client'
       });
 
       // Generate email verification token
@@ -1947,7 +1943,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Helper function to send verification email
   async function sendClientVerificationEmail(email: string, token: string, name: string) {
-    const mg = mailgun.client({
+    const Mailgun = require('mailgun.js');
+    const formData = require('form-data');
+    const mailgunClient = new Mailgun(formData);
+    const mg = mailgunClient.client({
       username: 'api',
       key: process.env.MAILGUN_API_KEY!,
     });
@@ -1977,7 +1976,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Helper function to send MFA code
   async function sendMfaCode(email: string, code: string, name: string) {
-    const mg = mailgun.client({
+    const Mailgun = require('mailgun.js');
+    const formData = require('form-data');
+    const mailgunClient = new Mailgun(formData);
+    const mg = mailgunClient.client({
       username: 'api',
       key: process.env.MAILGUN_API_KEY!,
     });

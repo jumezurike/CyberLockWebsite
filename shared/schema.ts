@@ -440,6 +440,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   fullName: true,
   email: true,
   companyName: true,
+  phone: true,
   role: true,
 });
 

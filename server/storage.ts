@@ -23,10 +23,12 @@ import {
   viewerInvitations,
   type ViewerInvitation,
   type InsertViewerInvitation,
+  clientAccounts,
   serviceRequests,
   serviceCatalog,
   teamAvailability,
   fieldWorkOrders,
+  technicianProfiles,
   technicianFeedback,
   cystServiceReports,
   type ServiceRequest,
@@ -139,9 +141,17 @@ export interface IStorage {
   getVisitorAnalytics(): Promise<VisitorAnalytics>;
   getVisitorSession(sessionId: string): Promise<VisitorSession | undefined>;
 
+  // Client account operations
+  createClientAccount(account: any): Promise<any>;
+  getClientAccountByUserId(userId: number): Promise<any>;
+  getClientAccountByVerificationToken(token: string): Promise<any>;
+  updateClientAccount(id: number, updates: any): Promise<any>;
+  updateUser(id: number, updates: any): Promise<any>;
+
   // Service Request operations
   getAllServiceRequests(): Promise<ServiceRequest[]>;
   getServiceRequestById(id: number): Promise<ServiceRequest | undefined>;
+  getServiceRequest(id: number): Promise<ServiceRequest | undefined>;
   createServiceRequest(request: InsertServiceRequest): Promise<ServiceRequest>;
   updateServiceRequest(id: number, request: Partial<ServiceRequest>): Promise<ServiceRequest | undefined>;
   deleteServiceRequest(id: number): Promise<boolean>;
@@ -151,6 +161,7 @@ export interface IStorage {
   getFieldWorkOrderById(id: number): Promise<FieldWorkOrder | undefined>;
   getFieldWorkOrdersByTechnician(technicianId: number): Promise<FieldWorkOrder[]>;
   getFieldWorkOrdersByServiceRequest(serviceRequestId: number): Promise<FieldWorkOrder[]>;
+  getWorkOrdersByServiceRequestId(serviceRequestId: number): Promise<FieldWorkOrder[]>;
   createFieldWorkOrder(workOrder: InsertFieldWorkOrder): Promise<FieldWorkOrder>;
   updateFieldWorkOrder(id: number, updates: UpdateFieldWorkOrder): Promise<FieldWorkOrder | undefined>;
   
@@ -1068,10 +1079,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateFieldWorkOrder(id: number, updates: UpdateFieldWorkOrder): Promise<FieldWorkOrder | undefined> {
+    // Convert string dates to Date objects
+    const processedUpdates = { ...updates };
+    if (processedUpdates.arrivedAt && typeof processedUpdates.arrivedAt === 'string') {
+      processedUpdates.arrivedAt = new Date(processedUpdates.arrivedAt);
+    }
+    if (processedUpdates.departedAt && typeof processedUpdates.departedAt === 'string') {
+      processedUpdates.departedAt = new Date(processedUpdates.departedAt);
+    }
+    
     const [updatedWorkOrder] = await db
       .update(fieldWorkOrders)
       .set({
-        ...updates,
+        ...processedUpdates,
         updatedAt: new Date(),
       })
       .where(eq(fieldWorkOrders.id, id))
@@ -1160,6 +1180,68 @@ export class DatabaseStorage implements IStorage {
       .where(eq(cystServiceReports.id, id))
       .returning();
     return updatedReport;
+  }
+
+  // Client account operations implementations
+  async createClientAccount(account: any): Promise<any> {
+    const [newAccount] = await db
+      .insert(clientAccounts)
+      .values({
+        userId: account.userId,
+        serviceRequestId: account.serviceRequestId,
+        emailVerificationToken: account.emailVerificationToken,
+        emailVerificationExpiry: account.emailVerificationExpiry,
+        accountCreatedFromPayment: account.accountCreatedFromPayment || true,
+        paymentConfirmed: account.paymentConfirmed || false,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      })
+      .returning();
+    return newAccount;
+  }
+
+  async getClientAccountByUserId(userId: number): Promise<any> {
+    const [account] = await db.select().from(clientAccounts).where(eq(clientAccounts.userId, userId));
+    return account;
+  }
+
+  async getClientAccountByVerificationToken(token: string): Promise<any> {
+    const [account] = await db.select().from(clientAccounts).where(eq(clientAccounts.emailVerificationToken, token));
+    return account;
+  }
+
+  async updateClientAccount(id: number, updates: any): Promise<any> {
+    const [updatedAccount] = await db
+      .update(clientAccounts)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(clientAccounts.id, id))
+      .returning();
+    return updatedAccount;
+  }
+
+  async updateUser(id: number, updates: any): Promise<any> {
+    const [updatedUser] = await db
+      .update(users)
+      .set({ ...updates, updatedAt: new Date() })
+      .where(eq(users.id, id))
+      .returning();
+    return updatedUser;
+  }
+
+  // Service request alias method
+  async getServiceRequest(id: number): Promise<ServiceRequest | undefined> {
+    return this.getServiceRequestById(id);
+  }
+
+  // Work orders alias method
+  async getWorkOrdersByServiceRequestId(serviceRequestId: number): Promise<FieldWorkOrder[]> {
+    return this.getFieldWorkOrdersByServiceRequest(serviceRequestId);
+  }
+
+  // Missing technician profile method
+  async getTechnicianProfileByTechId(technicianId: number): Promise<any> {
+    const [profile] = await db.select().from(technicianProfiles).where(eq(technicianProfiles.id, technicianId));
+    return profile;
   }
 }
 
