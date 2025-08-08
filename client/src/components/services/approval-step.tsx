@@ -61,18 +61,38 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
         return;
       }
 
-      // Simulate successful submission - no throwing errors
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Submit the service request to the backend
+      const submissionData = {
+        ...data,
+        ...values,
+        submittedAt: new Date().toISOString(),
+        status: 'pending_review'
+      };
+
+      console.log("Submitting service request:", submissionData);
+      
+      const response = await fetch('/api/service-requests', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(submissionData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to submit service request: ${response.statusText}`);
+      }
+
+      const result = await response.json();
       
       onUpdate(values);
       
       toast({
         title: "Service Request Submitted Successfully!",
-        description: "We'll send you a confirmation email shortly with next steps.",
+        description: `Request ID: ${result.id}. You'll receive a confirmation email shortly with next steps.`,
       });
 
-      // Here you would typically redirect or show success state
-      console.log("Final form data:", { ...data, ...values });
+      console.log("Service request submitted with ID:", result.id);
       
     } catch (error) {
       console.error("Submission error:", error);

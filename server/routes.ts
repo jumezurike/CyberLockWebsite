@@ -16,7 +16,8 @@ import {
   insertVisitorPageViewSchema,
   createInvitationSchema,
   acceptInvitationSchema,
-  insertServiceRequestSchema
+  insertServiceRequestSchema,
+  serviceRequests
 } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
@@ -755,9 +756,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
             phone: submission.phone,
             companySize: submission.companySize,
             industry: submission.industry,
-            interestedIn: submission.interestedIn,
+            interestedIn: submission.interestedIn || [],
             investmentLevel: submission.investmentLevel,
-            additionalInfo: submission.additionalInfo,
+            additionalInfo: submission.additionalInfo || "",
           });
         } catch (emailError) {
           console.error("Error sending approval email:", emailError);
