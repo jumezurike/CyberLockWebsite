@@ -53,6 +53,23 @@ app.use((req, res, next) => {
   next();
 });
 
+// Handle unhandled promise rejections
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  // Don't exit in development to prevent server crashes
+  if (process.env.NODE_ENV !== 'development') {
+    process.exit(1);
+  }
+});
+
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception:', error);
+  // Don't exit in development to prevent server crashes
+  if (process.env.NODE_ENV !== 'development') {
+    process.exit(1);
+  }
+});
+
 (async () => {
   const server = await registerRoutes(app);
 

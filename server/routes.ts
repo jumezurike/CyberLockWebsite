@@ -1288,10 +1288,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Send notification email
       try {
-        const mailgunInitialized = initMailgun();
-        if (mailgunInitialized) {
-          await sendServiceRequestNotification(request);
-        }
+        await sendServiceRequestNotification(request);
       } catch (emailError) {
         console.error("Failed to send service request notification:", emailError);
         // Don't fail the entire request if email fails

@@ -337,7 +337,7 @@ export async function sendEarlyAccessNotification(submission: SubmissionEmailDat
   }
 }
 
-export async function sendServiceRequestNotification(mg: any, serviceRequest: any): Promise<boolean> {
+export async function sendServiceRequestNotification(serviceRequest: any): Promise<boolean> {
   try {
     if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
       console.error('Mailgun not configured for service request notification');
@@ -345,13 +345,19 @@ export async function sendServiceRequestNotification(mg: any, serviceRequest: an
     }
 
     // Make sure Mailgun client is initialized
-    if (!mg) {
-      const initialized = initMailgun();
-      if (!initialized) {
-        console.error('Failed to initialize Mailgun client');
-        return false;
-      }
+    const initialized = initMailgun();
+    if (!initialized) {
+      console.error('Failed to initialize Mailgun client');
+      return false;
     }
+
+    const Mailgun = require('mailgun.js');
+    const formData = require('form-data');
+    const mailgunClient = new Mailgun(formData);
+    const mg = mailgunClient.client({
+      username: 'api',
+      key: process.env.MAILGUN_API_KEY!,
+    });
 
     const formatPrice = (price: number) => {
       return new Intl.NumberFormat('en-US', {
