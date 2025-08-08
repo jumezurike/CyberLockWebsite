@@ -42,7 +42,7 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
     // Add one-time site visit fee if any hourly services are selected
     const hasOnSiteServices = data.selectedServices?.some((service: any) => service.priceType === "hourly");
     if (hasOnSiteServices) {
-      siteVisitFee = 7500; // One-time $75 non-refundable fee
+      siteVisitFee = 75; // One-time $75 non-refundable fee
     }
 
     // Apply urgency multiplier
@@ -97,7 +97,7 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-    }).format(price / 100);
+    }).format(price);
   };
 
   const handleContinue = () => {

@@ -1463,6 +1463,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to fetch technician feedback" });
     }
   });
+
+  // CYST Service Report routes - E1T1 Tech Field Technician Service (CYST) Reports
+  app.get("/api/technician/cyst-reports", requireAdminAuth, async (req, res) => {
+    try {
+      const reports = await storage.getAllCystServiceReports();
+      res.json(reports);
+    } catch (error) {
+      console.error("Error fetching CYST reports:", error);
+      res.status(500).json({ error: "Failed to fetch CYST reports" });
+    }
+  });
+
+  app.get("/api/technician/cyst-reports/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const reportId = parseInt(req.params.id);
+      const report = await storage.getCystServiceReportById(reportId);
+      if (!report) {
+        return res.status(404).json({ error: "CYST report not found" });
+      }
+      res.json(report);
+    } catch (error) {
+      console.error("Error fetching CYST report:", error);
+      res.status(500).json({ error: "Failed to fetch CYST report" });
+    }
+  });
+
+  app.get("/api/technician/work-orders/:workOrderId/cyst-report", requireAdminAuth, async (req, res) => {
+    try {
+      const workOrderId = parseInt(req.params.workOrderId);
+      const report = await storage.getCystServiceReportByWorkOrder(workOrderId);
+      if (!report) {
+        return res.status(404).json({ error: "CYST report not found for this work order" });
+      }
+      res.json(report);
+    } catch (error) {
+      console.error("Error fetching CYST report by work order:", error);
+      res.status(500).json({ error: "Failed to fetch CYST report" });
+    }
+  });
+
+  app.post("/api/technician/cyst-reports", requireAdminAuth, async (req, res) => {
+    try {
+      console.log("Creating CYST service report:", req.body);
+      
+      const technicianId = req.session.adminUser?.id;
+      if (!technicianId) {
+        return res.status(401).json({ error: "Technician ID required" });
+      }
+
+      const reportData = {
+        ...req.body,
+        technicianId: technicianId
+      };
+
+      const validatedData = insertCystServiceReportSchema.parse(reportData);
+      const report = await storage.createCystServiceReport(validatedData);
+      
+      res.status(201).json(report);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Error creating CYST service report:", error);
+      res.status(500).json({ error: "Failed to create CYST service report" });
+    }
+  });
+
+  app.put("/api/technician/cyst-reports/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const reportId = parseInt(req.params.id);
+      const updatedReport = await storage.updateCystServiceReport(reportId, req.body);
+      if (!updatedReport) {
+        return res.status(404).json({ error: "CYST report not found" });
+      }
+      res.json(updatedReport);
+    } catch (error) {
+      console.error("Error updating CYST service report:", error);
+      res.status(500).json({ error: "Failed to update CYST service report" });
+    }
+  });
   
   const httpServer = createServer(app);
   return httpServer;

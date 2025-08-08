@@ -171,6 +171,69 @@ export const fieldWorkOrders = pgTable("field_work_orders", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// E1T1 CYST Field Service Report table
+export const cystServiceReports = pgTable("cyst_service_reports", {
+  id: serial("id").primaryKey(),
+  workOrderId: integer("work_order_id").references(() => fieldWorkOrders.id).notNull(),
+  technicianId: integer("technician_id").references(() => users.id).notNull(),
+  
+  // Business Information
+  businessName: text("business_name").notNull(),
+  businessDescription: text("business_description"),
+  businessType: text("business_type"), // SMB Gen-Contracting, SMB (IT), Health, etc.
+  
+  // Technician Details
+  technicianName: text("technician_name").notNull(),
+  technicianContact: text("technician_contact"),
+  serviceDate: date("service_date").notNull(),
+  checkinTime: text("checkin_time"),
+  checkoutTime: text("checkout_time"),
+  
+  // Organization Providing Service
+  providerName: text("provider_name"),
+  providerAddress: text("provider_address"),
+  providerContact: text("provider_contact"),
+  providerContactPerson: text("provider_contact_person"),
+  providerPhone: text("provider_phone"),
+  
+  // Organization Receiving Service  
+  receiverName: text("receiver_name"),
+  receiverAddress: text("receiver_address"),
+  receiverContact: text("receiver_contact"),
+  receiverContactPerson: text("receiver_contact_person"),
+  receiverPhone: text("receiver_phone"),
+  
+  // Service Types Performed (checkboxes)
+  serviceDiagnosis: boolean("service_diagnosis").default(false),
+  serviceCabling: boolean("service_cabling").default(false),
+  serviceSoftwareInstallation: boolean("service_software_installation").default(false),
+  serviceNetworkInstallation: boolean("service_network_installation").default(false),
+  serviceVirusRemoval: boolean("service_virus_removal").default(false),
+  serviceComputerOptimization: boolean("service_computer_optimization").default(false),
+  serviceSos2a: boolean("service_sos2a").default(false),
+  serviceWebsiteEncryption: boolean("service_website_encryption").default(false),
+  serviceThreatModeling: boolean("service_threat_modeling").default(false),
+  serviceWifiSetup: boolean("service_wifi_setup").default(false),
+  serviceComputerMaintenance: boolean("service_computer_maintenance").default(false),
+  
+  // Service Details
+  serviceTypes: text("service_types"), // Diagnosis, Cabling, etc.
+  completionStatus: text("completion_status"), // Pending/In Progress/Completed
+  workDescription: text("work_description"),
+  
+  // Devices worked on
+  devices: jsonb("devices"), // Array of device records with Type, OS, Make, Model, S/N, Tagged, Counts
+  
+  // Follow-up
+  followupRequired: boolean("followup_required").default(false),
+  managerOnDuty: text("manager_on_duty"),
+  managerSignature: text("manager_signature"),
+  managerName: text("manager_name"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Technician Feedback System
 export const technicianFeedback = pgTable("technician_feedback", {
   id: serial("id").primaryKey(),
@@ -565,6 +628,16 @@ export type FieldWorkOrder = typeof fieldWorkOrders.$inferSelect;
 export type UpdateFieldWorkOrder = z.infer<typeof updateFieldWorkOrderSchema>;
 
 export type InsertTechnicianFeedback = z.infer<typeof insertTechnicianFeedbackSchema>;
+
+// CYST Service Report schemas
+export const insertCystServiceReportSchema = createInsertSchema(cystServiceReports).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertCystServiceReport = z.infer<typeof insertCystServiceReportSchema>;
+export type CystServiceReport = typeof cystServiceReports.$inferSelect;
 export type TechnicianFeedback = typeof technicianFeedback.$inferSelect;
 
 // Visitor tracking schemas

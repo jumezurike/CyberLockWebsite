@@ -28,6 +28,7 @@ import {
   teamAvailability,
   fieldWorkOrders,
   technicianFeedback,
+  cystServiceReports,
   type ServiceRequest,
   type InsertServiceRequest,
   type ServiceCatalog,
@@ -36,7 +37,9 @@ import {
   type InsertFieldWorkOrder,
   type UpdateFieldWorkOrder,
   type TechnicianFeedback,
-  type InsertTechnicianFeedback
+  type InsertTechnicianFeedback,
+  type CystServiceReport,
+  type InsertCystServiceReport
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc } from "drizzle-orm";
@@ -213,12 +216,12 @@ export class DatabaseStorage implements IStorage {
     const result = await db.update(users)
       .set({ password: hashedPassword })
       .where(eq(users.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   async deleteAdminUser(id: number): Promise<boolean> {
     const result = await db.delete(users).where(eq(users.id, id));
-    return result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
   }
 
   // Assessment operations
@@ -1109,6 +1112,54 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return newFeedback;
+  }
+
+  // CYST Service Report operations
+  async getCystServiceReportById(id: number): Promise<CystServiceReport | undefined> {
+    const [report] = await db
+      .select()
+      .from(cystServiceReports)
+      .where(eq(cystServiceReports.id, id));
+    return report;
+  }
+
+  async getCystServiceReportByWorkOrder(workOrderId: number): Promise<CystServiceReport | undefined> {
+    const [report] = await db
+      .select()
+      .from(cystServiceReports)
+      .where(eq(cystServiceReports.workOrderId, workOrderId));
+    return report;
+  }
+
+  async getAllCystServiceReports(): Promise<CystServiceReport[]> {
+    return await db
+      .select()
+      .from(cystServiceReports)
+      .orderBy(desc(cystServiceReports.createdAt));
+  }
+
+  async createCystServiceReport(report: InsertCystServiceReport): Promise<CystServiceReport> {
+    const [newReport] = await db
+      .insert(cystServiceReports)
+      .values({
+        ...report,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+    return newReport;
+  }
+
+  async updateCystServiceReport(id: number, updates: Partial<InsertCystServiceReport>): Promise<CystServiceReport | undefined> {
+    const [updatedReport] = await db
+      .update(cystServiceReports)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(eq(cystServiceReports.id, id))
+      .returning();
+    return updatedReport;
   }
 }
 
