@@ -86,11 +86,11 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
     }
   };
 
-  const formatCurrency = (amount: number) => {
+  const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
-      currency: 'USD'
-    }).format(amount);
+      currency: 'USD',
+    }).format(price / 100);
   };
 
   return (
@@ -128,8 +128,13 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
                   <ul className="text-sm space-y-1 text-muted-foreground">
                     {data.selectedServices.map((service: any, index: number) => (
                       <li key={index}>
-                        {service.serviceName} - {formatCurrency(service.basePrice)}
+                        {service.serviceName} - {formatPrice(service.basePrice)}
                         {service.priceType === 'hourly' && ' per hour'}
+                        {service.priceType === "per_incident" && service.timeCapHours && (
+                          <span className="text-xs text-blue-600 ml-2">
+                            (includes up to {service.timeCapHours}h)
+                          </span>
+                        )}
                       </li>
                     ))}
                   </ul>
@@ -147,7 +152,7 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
               <div className="text-sm space-y-1">
                 <div className="flex justify-between">
                   <span>Estimated Total:</span>
-                  <span className="font-medium">{formatCurrency(data.calculatedTotal || 0)}</span>
+                  <span className="font-medium">{formatPrice(data.calculatedTotal || 0)}</span>
                 </div>
                 {data.serviceCategory && data.serviceCategory !== "Help Desk & Support" && (
                   <div className="flex justify-between text-orange-600">
