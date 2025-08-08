@@ -7,10 +7,51 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   password: text("password").notNull(),
   fullName: text("full_name"),
-  email: text("email"),
+  email: text("email").unique(),
   companyName: text("company_name"),
-  role: text("role").default("user"), // user, admin, super_admin, viewer
+  phone: text("phone"),
+  role: text("role").default("user"), // client, technician, admin, super_admin, viewer
+  isEmailVerified: boolean("is_email_verified").default(false),
+  mfaEnabled: boolean("mfa_enabled").default(false),
+  mfaSecret: text("mfa_secret"),
+  isActive: boolean("is_active").default(true),
+  lastLoginAt: timestamp("last_login_at"),
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Client accounts linked to service requests
+export const clientAccounts = pgTable("client_accounts", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  serviceRequestId: integer("service_request_id").references(() => serviceRequests.id),
+  accountCreatedFromPayment: boolean("account_created_from_payment").default(true),
+  paymentConfirmed: boolean("payment_confirmed").default(false),
+  emailVerificationToken: text("email_verification_token"),
+  emailVerificationExpiry: timestamp("email_verification_expiry"),
+  mfaVerificationCode: text("mfa_verification_code"),
+  mfaVerificationExpiry: timestamp("mfa_verification_expiry"),
+  captchaVerified: boolean("captcha_verified").default(false),
+  accessLevel: text("access_level").default("basic"), // basic, premium, enterprise
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Technician profiles
+export const technicianProfiles = pgTable("technician_profiles", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").references(() => users.id),
+  technicianId: text("technician_id").notNull().unique(),
+  specializations: text("specializations").array(),
+  certifications: jsonb("certifications"),
+  availabilitySchedule: jsonb("availability_schedule"),
+  currentStatus: text("current_status").default("available"), // available, assigned, on_break, off_duty
+  rating: integer("rating").default(5),
+  completedJobs: integer("completed_jobs").default(0),
+  joinedDate: timestamp("joined_date").defaultNow(),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const assessments = pgTable("assessments", {
@@ -542,6 +583,37 @@ export const insertUwaSchema = z.object({
 
 export type InsertUwa = z.infer<typeof insertUwaSchema>;
 export type Uwa = typeof uwas.$inferSelect;
+
+// User registration and authentication schemas
+export const insertClientAccountSchema = createInsertSchema(clientAccounts);
+export const insertTechnicianProfileSchema = createInsertSchema(technicianProfiles);
+
+export const userRegistrationSchema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  email: z.string().email("Please enter a valid email address"),
+  phone: z.string().min(10, "Please enter a valid phone number"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
+  companyName: z.string().optional(),
+  serviceRequestId: z.number().optional(),
+});
+
+export const emailVerificationSchema = z.object({
+  token: z.string().min(32, "Invalid verification token"),
+  email: z.string().email("Invalid email address"),
+});
+
+export const mfaVerificationSchema = z.object({
+  code: z.string().length(6, "Verification code must be 6 digits"),
+  email: z.string().email("Invalid email address"),
+});
+
+export type ClientAccount = typeof clientAccounts.$inferSelect;
+export type InsertClientAccount = z.infer<typeof insertClientAccountSchema>;
+export type TechnicianProfile = typeof technicianProfiles.$inferSelect;
+export type InsertTechnicianProfile = z.infer<typeof insertTechnicianProfileSchema>;
+export type UserRegistration = z.infer<typeof userRegistrationSchema>;
+export type EmailVerification = z.infer<typeof emailVerificationSchema>;
+export type MfaVerification = z.infer<typeof mfaVerificationSchema>;
 
 // Service Request Schemas
 export const insertServiceRequestSchema = createInsertSchema(serviceRequests, {

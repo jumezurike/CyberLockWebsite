@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import AdminLogin from "./login";
-import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2, LogOut, Settings, Shield, BarChart3, UserPlus, Send } from "lucide-react";
+import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2, LogOut, Settings, Shield, BarChart3, UserPlus, Send, Wrench, MapPin, FileText, Star, Clock } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -37,6 +38,7 @@ export default function EarlyAccessDashboard() {
   const queryClient = useQueryClient();
   const [selectedSubmission, setSelectedSubmission] = useState<EarlyAccessSubmission | null>(null);
   const [emailAlertSent, setEmailAlertSent] = useState(false);
+  const [activeTab, setActiveTab] = useState('early-access');
   const { adminUser, isLoading: authLoading, isAuthenticated, logout } = useAdminAuth();
 
   // Always call all hooks at the top level, regardless of auth state
@@ -181,8 +183,8 @@ export default function EarlyAccessDashboard() {
         {/* Header */}
         <div className="mb-8 flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Early Access Dashboard</h1>
-            <p className="text-gray-600">Manage partnership applications and early access requests</p>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">CyberLockX Administrative Control Center</h1>
+            <p className="text-gray-600">Unified management for partnerships, technicians, and field operations</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-sm text-gray-600">
@@ -212,18 +214,45 @@ export default function EarlyAccessDashboard() {
           </div>
         </div>
         
-        <div className="mb-8">
-          {/* Email Alert Notice */}
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <div className="flex items-center">
-              <Mail className="h-5 w-5 text-blue-600 mr-2" />
-              <div>
-                <p className="text-sm font-medium text-blue-900">Email Notifications Active</p>
-                <p className="text-sm text-blue-700">All new applications automatically send alerts to <strong>info@cyberlockx.xyz</strong></p>
+        {/* Navigation Tabs */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-8">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="early-access" className="flex items-center gap-2">
+              <Target className="w-4 h-4" />
+              Early Access
+            </TabsTrigger>
+            <TabsTrigger value="technicians" className="flex items-center gap-2">
+              <Wrench className="w-4 h-4" />
+              Technicians
+            </TabsTrigger>
+            <TabsTrigger value="field-ops" className="flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              Field Operations
+            </TabsTrigger>
+            <TabsTrigger value="reports" className="flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              CYST Reports
+            </TabsTrigger>
+            <TabsTrigger value="analytics" className="flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Performance
+            </TabsTrigger>
+          </TabsList>
+
+          {/* Early Access Tab Content */}
+          <TabsContent value="early-access" className="space-y-6">
+            <div className="mb-8">
+              {/* Email Alert Notice */}
+              <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="flex items-center">
+                  <Mail className="h-5 w-5 text-blue-600 mr-2" />
+                  <div>
+                    <p className="text-sm font-medium text-blue-900">Email Notifications Active</p>
+                    <p className="text-sm text-blue-700">All new applications automatically send alerts to <strong>info@cyberlockx.xyz</strong></p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
         {/* Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
@@ -449,6 +478,98 @@ export default function EarlyAccessDashboard() {
             )}
           </CardContent>
         </Card>
+          </TabsContent>
+
+          {/* Technician Management Tab */}
+          <TabsContent value="technicians" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Active Technicians</CardTitle>
+                  <Users className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">12</div>
+                  <p className="text-xs text-muted-foreground">Currently deployed</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Work Orders</CardTitle>
+                  <Clock className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">28</div>
+                  <p className="text-xs text-muted-foreground">Open assignments</p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">Avg Response Time</CardTitle>
+                  <Clock className="h-4 w-4 text-green-600" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold text-green-600">2.4h</div>
+                  <p className="text-xs text-muted-foreground">Last 30 days</p>
+                </CardContent>
+              </Card>
+            </div>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Technician Overview</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Comprehensive technician management interface coming soon. This will include work order assignment, scheduling, performance tracking, and real-time status monitoring.</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Field Operations Tab */}
+          <TabsContent value="field-ops" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5" />
+                  Field Operations Center
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Real-time field operations dashboard with live technician tracking, work order status, and geographical deployment overview.</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* CYST Reports Tab */}
+          <TabsContent value="reports" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-5 w-5" />
+                  E1T1 CYST Reports Management
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Court-admissible E1T1 Tech Field Technician Service (CYST) report review and approval system for professional field service documentation.</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Performance Analytics Tab */}
+          <TabsContent value="analytics" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Star className="h-5 w-5" />
+                  Performance Analytics
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Comprehensive performance metrics, client satisfaction scores, technician efficiency ratings, and operational analytics.</p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

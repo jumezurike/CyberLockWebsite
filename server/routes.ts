@@ -42,6 +42,12 @@ declare module 'express-session' {
       role: string;
       fullName?: string;
     };
+    clientUser?: {
+      id: number;
+      email: string;
+      role: string;
+      fullName?: string;
+    };
   }
 }
 
@@ -1576,6 +1582,426 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ error: "Failed to update CYST service report" });
     }
   });
+
+  // =========================================================================
+  // CLIENT AUTHENTICATION & RBAC SYSTEM
+  // =========================================================================
+
+  // Client authentication middleware
+  const requireClientAuth = (req: any, res: any, next: any) => {
+    if (!req.session.clientUser) {
+      return res.status(401).json({ error: "Client authentication required" });
+    }
+    next();
+  };
+
+  // Register new client account (triggered by service payment)
+  app.post("/api/client/auth/register", async (req, res) => {
+    try {
+      const { fullName, email, phone, password, companyName, serviceRequestId } = req.body;
+      
+      // Check if user already exists
+      const existingUser = await storage.getUserByEmail(email);
+      if (existingUser) {
+        return res.status(400).json({ error: "Account already exists with this email" });
+      }
+
+      // Hash password
+      const hashedPassword = await bcrypt.hash(password, 12);
+      
+      // Generate username from email
+      const username = email.split('@')[0] + '_' + Date.now();
+      
+      // Create user account
+      const newUser = await storage.createUser({
+        username,
+        password: hashedPassword,
+        fullName,
+        email,
+        phone,
+        companyName,
+        role: 'client',
+        isEmailVerified: false,
+        mfaEnabled: false
+      });
+
+      // Generate email verification token
+      const verificationToken = crypto.randomBytes(32).toString('hex');
+      const verificationExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 hours
+
+      // Create client account record
+      await storage.createClientAccount({
+        userId: newUser.id,
+        serviceRequestId: serviceRequestId || null,
+        emailVerificationToken: verificationToken,
+        emailVerificationExpiry: verificationExpiry,
+        accountCreatedFromPayment: true,
+        paymentConfirmed: false
+      });
+
+      // Send verification email
+      try {
+        await sendClientVerificationEmail(email, verificationToken, fullName);
+      } catch (emailError) {
+        console.error('Failed to send verification email:', emailError);
+        // Continue with registration even if email fails
+      }
+
+      res.json({ 
+        message: "Account created successfully. Please check your email for verification instructions.",
+        userId: newUser.id 
+      });
+    } catch (error) {
+      console.error("Registration error:", error);
+      res.status(500).json({ error: "Registration failed" });
+    }
+  });
+
+  // Verify email
+  app.post("/api/client/auth/verify-email", async (req, res) => {
+    try {
+      const { token, email } = req.body;
+      
+      // Find client account with matching token
+      const clientAccount = await storage.getClientAccountByVerificationToken(token);
+      if (!clientAccount) {
+        return res.status(400).json({ error: "Invalid or expired verification token" });
+      }
+
+      // Check if token is expired
+      if (new Date() > new Date(clientAccount.emailVerificationExpiry!)) {
+        return res.status(400).json({ error: "Verification token has expired" });
+      }
+
+      // Verify user email matches
+      const user = await storage.getUser(clientAccount.userId);
+      if (!user || user.email !== email) {
+        return res.status(400).json({ error: "Email verification failed" });
+      }
+
+      // Update user as email verified
+      await storage.updateUser(user.id, { isEmailVerified: true });
+      
+      // Generate MFA code
+      const mfaCode = Math.floor(100000 + Math.random() * 900000).toString();
+      const mfaExpiry = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+      // Update client account with MFA code
+      await storage.updateClientAccount(clientAccount.id, {
+        emailVerificationToken: null,
+        emailVerificationExpiry: null,
+        mfaVerificationCode: mfaCode,
+        mfaVerificationExpiry: mfaExpiry
+      });
+
+      // Send MFA code via email
+      try {
+        await sendMfaCode(email, mfaCode, user.fullName || 'Client');
+      } catch (error) {
+        console.error('Failed to send MFA code:', error);
+      }
+
+      res.json({ message: "Email verified. Please complete MFA verification." });
+    } catch (error) {
+      console.error("Email verification error:", error);
+      res.status(500).json({ error: "Email verification failed" });
+    }
+  });
+
+  // Verify MFA
+  app.post("/api/client/auth/verify-mfa", async (req, res) => {
+    try {
+      const { code, email } = req.body;
+      
+      // Find user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(400).json({ error: "User not found" });
+      }
+
+      // Find client account
+      const clientAccount = await storage.getClientAccountByUserId(user.id);
+      if (!clientAccount) {
+        return res.status(400).json({ error: "Client account not found" });
+      }
+
+      // Verify MFA code
+      if (clientAccount.mfaVerificationCode !== code) {
+        return res.status(400).json({ error: "Invalid verification code" });
+      }
+
+      // Check if code is expired
+      if (new Date() > new Date(clientAccount.mfaVerificationExpiry!)) {
+        return res.status(400).json({ error: "Verification code has expired" });
+      }
+
+      // Update user and client account
+      await storage.updateUser(user.id, { 
+        mfaEnabled: true,
+        lastLoginAt: new Date()
+      });
+      
+      await storage.updateClientAccount(clientAccount.id, {
+        mfaVerificationCode: null,
+        mfaVerificationExpiry: null,
+        captchaVerified: true // Auto-verify for now
+      });
+
+      // Create session
+      req.session.clientUser = {
+        id: user.id,
+        email: user.email!,
+        role: user.role!,
+        fullName: user.fullName
+      };
+
+      res.json({ 
+        message: "Account activated successfully",
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          role: user.role
+        }
+      });
+    } catch (error) {
+      console.error("MFA verification error:", error);
+      res.status(500).json({ error: "MFA verification failed" });
+    }
+  });
+
+  // Client login
+  app.post("/api/client/auth/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      // Find user by email
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      }
+
+      // Verify password
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        return res.status(400).json({ error: "Invalid email or password" });
+      }
+
+      // Check if account is verified
+      if (!user.isEmailVerified) {
+        return res.status(400).json({ error: "Please verify your email before logging in" });
+      }
+
+      // Update last login
+      await storage.updateUser(user.id, { lastLoginAt: new Date() });
+
+      // Create session
+      req.session.clientUser = {
+        id: user.id,
+        email: user.email!,
+        role: user.role!,
+        fullName: user.fullName
+      };
+
+      res.json({ 
+        message: "Login successful",
+        user: {
+          id: user.id,
+          email: user.email,
+          fullName: user.fullName,
+          role: user.role
+        }
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ error: "Login failed" });
+    }
+  });
+
+  // Get current client user
+  app.get("/api/client/auth/user", async (req, res) => {
+    try {
+      if (!req.session.clientUser) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
+      const user = await storage.getUser(req.session.clientUser.id);
+      if (!user) {
+        req.session.clientUser = undefined;
+        return res.status(401).json({ error: "User not found" });
+      }
+
+      res.json({
+        id: user.id,
+        email: user.email,
+        fullName: user.fullName,
+        role: user.role,
+        companyName: user.companyName,
+        phone: user.phone
+      });
+    } catch (error) {
+      console.error("Get user error:", error);
+      res.status(500).json({ error: "Failed to get user" });
+    }
+  });
+
+  // Client logout
+  app.post("/api/client/auth/logout", (req, res) => {
+    req.session.clientUser = undefined;
+    res.json({ message: "Logged out successfully" });
+  });
+
+  // Get client service data with real-time tracking
+  app.get("/api/client/service-data", requireClientAuth, async (req, res) => {
+    try {
+      // Get client account
+      const clientAccount = await storage.getClientAccountByUserId(req.session.clientUser!.id);
+      if (!clientAccount || !clientAccount.serviceRequestId) {
+        return res.status(404).json({ error: "No service request found" });
+      }
+
+      // Get service request
+      const serviceRequest = await storage.getServiceRequest(clientAccount.serviceRequestId);
+      if (!serviceRequest) {
+        return res.status(404).json({ error: "Service request not found" });
+      }
+
+      // Get assigned technician (if any)
+      const workOrders = await storage.getWorkOrdersByServiceRequestId(clientAccount.serviceRequestId);
+      let assignedTechnician = null;
+      let workOrder = null;
+
+      if (workOrders.length > 0) {
+        workOrder = workOrders[0]; // Get the latest work order
+        if (workOrder.technicianId) {
+          const techProfile = await storage.getTechnicianProfileByTechId(workOrder.technicianId);
+          if (techProfile) {
+            const techUser = await storage.getUser(techProfile.userId);
+            if (techUser) {
+              assignedTechnician = {
+                id: techProfile.id,
+                name: techUser.fullName || techUser.username,
+                phone: techUser.phone || 'Not provided',
+                email: techUser.email || 'Not provided',
+                specializations: techProfile.specializations || [],
+                rating: techProfile.rating || 5,
+                estimatedArrival: workOrder.scheduledDate || new Date().toISOString()
+              };
+            }
+          }
+        }
+      }
+
+      // Get documents from work order
+      const documents = [];
+      if (workOrder && workOrder.serviceReportFile) {
+        documents.push({
+          id: 1,
+          fileName: 'Service Report.pdf',
+          fileType: 'PDF',
+          uploadedAt: workOrder.updatedAt || new Date().toISOString(),
+          fileSize: '2.5 MB',
+          downloadUrl: `/api/documents/work-order/${workOrder.id}/report`
+        });
+      }
+
+      const responseData = {
+        serviceRequest: {
+          id: serviceRequest.id,
+          companyName: serviceRequest.companyName,
+          contactName: serviceRequest.contactName,
+          contactEmail: serviceRequest.contactEmail,
+          contactPhone: serviceRequest.contactPhone,
+          serviceType: serviceRequest.serviceType,
+          priority: serviceRequest.priority,
+          status: serviceRequest.status,
+          scheduledDate: serviceRequest.scheduledDate,
+          estimatedDuration: serviceRequest.estimatedDuration,
+          totalCost: serviceRequest.totalCost,
+          description: serviceRequest.description,
+          createdAt: serviceRequest.createdAt
+        },
+        assignedTechnician,
+        workOrder: workOrder ? {
+          id: workOrder.id,
+          status: workOrder.status,
+          arrivedAt: workOrder.arrivedAt,
+          departedAt: workOrder.departedAt,
+          totalHoursWorked: workOrder.totalHoursWorked,
+          workDescription: workOrder.workDescription,
+          beforePhotos: workOrder.beforePhotos || [],
+          afterPhotos: workOrder.afterPhotos || [],
+          serviceReportFile: workOrder.serviceReportFile,
+          clientSignature: workOrder.clientSignature,
+          closingRemarks: workOrder.closingRemarks
+        } : null,
+        documents
+      };
+
+      res.json(responseData);
+    } catch (error) {
+      console.error("Get service data error:", error);
+      res.status(500).json({ error: "Failed to get service data" });
+    }
+  });
+
+  // Helper function to send verification email
+  async function sendClientVerificationEmail(email: string, token: string, name: string) {
+    const mg = mailgun.client({
+      username: 'api',
+      key: process.env.MAILGUN_API_KEY!,
+    });
+
+    const verificationUrl = `${process.env.APP_URL || 'https://cyberlockx.xyz'}/verify-email?token=${token}&email=${encodeURIComponent(email)}`;
+
+    await mg.messages.create(process.env.MAILGUN_DOMAIN!, {
+      from: `CyberLockX <${process.env.NOTIFICATION_EMAIL}>`,
+      to: [email],
+      subject: 'Verify Your CyberLockX Account',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #1f2937;">Welcome to CyberLockX, ${name}!</h2>
+          <p>Thank you for creating your account. Please verify your email address to complete your registration.</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${verificationUrl}" style="background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+              Verify Email Address
+            </a>
+          </div>
+          <p>Or copy and paste this link into your browser:</p>
+          <p style="word-break: break-all; color: #6b7280;">${verificationUrl}</p>
+          <p style="color: #6b7280; font-size: 14px;">This link will expire in 24 hours.</p>
+        </div>
+      `
+    });
+  }
+
+  // Helper function to send MFA code
+  async function sendMfaCode(email: string, code: string, name: string) {
+    const mg = mailgun.client({
+      username: 'api',
+      key: process.env.MAILGUN_API_KEY!,
+    });
+
+    await mg.messages.create(process.env.MAILGUN_DOMAIN!, {
+      from: `CyberLockX <${process.env.NOTIFICATION_EMAIL}>`,
+      to: [email],
+      subject: 'Your CyberLockX Verification Code',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2 style="color: #1f2937;">Account Verification</h2>
+          <p>Hello ${name},</p>
+          <p>Your verification code is:</p>
+          <div style="text-align: center; margin: 30px 0;">
+            <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; font-size: 24px; font-weight: bold; letter-spacing: 2px;">
+              ${code}
+            </div>
+          </div>
+          <p>Enter this code to complete your account setup. This code will expire in 10 minutes.</p>
+          <p style="color: #6b7280; font-size: 14px;">For security reasons, do not share this code with anyone.</p>
+        </div>
+      `
+    });
+  }
   
   const httpServer = createServer(app);
   return httpServer;
