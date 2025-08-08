@@ -28,8 +28,15 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
         hourlyEstimate += service.quantity;
       }
       
+      // Handle per-incident services with time caps
+      if (service.priceType === "per_incident" && service.timeCapHours) {
+        // Display includes time cap information
+        breakdown[`${service.serviceName} (includes ${service.timeCapHours} hrs)`] = serviceTotal;
+      } else {
+        breakdown[service.serviceName] = serviceTotal;
+      }
+      
       subtotal += serviceTotal;
-      breakdown[service.serviceName] = serviceTotal;
     });
 
     // Add one-time site visit fee if any hourly services are selected
@@ -114,6 +121,42 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
 
   return (
     <div className="space-y-6">
+      {/* Time Cap Billing Information */}
+      {data.selectedServices?.some((service: any) => service.priceType === "per_incident" && service.timeCapHours) && (
+        <Card className="bg-blue-50 border-blue-200">
+          <CardHeader>
+            <CardTitle className="text-lg flex items-center gap-2 text-blue-900">
+              <AlertCircle className="h-5 w-5" />
+              Per-Incident Time Cap Billing
+            </CardTitle>
+            <CardDescription className="text-blue-700">
+              Understanding our incident-based pricing model
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="text-sm text-blue-800">
+              <p className="mb-2">
+                <strong>How Time Cap Billing Works:</strong>
+              </p>
+              <ul className="space-y-1 ml-4 list-disc">
+                <li>Each per-incident service includes a specific number of hours at the base price</li>
+                <li>If resolution requires additional time beyond the cap, you'll be billed at $75/hour</li>
+                <li>Time tracking begins when work starts and stops when the incident is resolved</li>
+                <li>You'll receive hourly updates for any work exceeding the time cap</li>
+              </ul>
+            </div>
+            <div className="bg-white p-3 rounded-lg border border-blue-200">
+              <p className="text-xs font-semibold text-blue-900 mb-1">SELECTED INCIDENT SERVICES:</p>
+              {data.selectedServices?.filter((service: any) => service.priceType === "per_incident" && service.timeCapHours).map((service: any, index: number) => (
+                <div key={index} className="text-xs text-blue-700">
+                  • {service.serviceName}: Up to {service.timeCapHours} hours included
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Cost Breakdown */}
       <Card>
         <CardHeader>
@@ -136,6 +179,11 @@ export default function PricingStep({ data, onUpdate, onNext, onPrev }: PricingS
                     {service.quantity} × {formatPrice(service.basePrice)}
                     {service.priceType === "hourly" && " per hour"}
                     {service.priceType === "per_unit" && service.unit && ` per ${service.unit}`}
+                    {service.priceType === "per_incident" && service.timeCapHours && (
+                      <div className="text-xs text-blue-600 mt-1">
+                        Includes up to {service.timeCapHours} hours • Additional time billed at $75/hour
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="font-semibold">

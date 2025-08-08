@@ -7,11 +7,11 @@ import { ArrowRight, ArrowLeft, Wrench, Brain, Shield, Users, Plus, Minus } from
 
 const SERVICE_CATALOG = {
   "Help Desk & Support": [
-    { name: "Password Resets & Account Unlocks", basePrice: 2500, priceType: "per_incident", description: "Quick password and account recovery services ($25-50 per incident)" },
-    { name: "Email Troubleshooting", basePrice: 3500, priceType: "per_incident", description: "Outlook/Google Workspace configuration and sync fixes" },
-    { name: "Printer/Scanner Support", basePrice: 4000, priceType: "per_incident", description: "Driver installs, network printing, queue management" },
-    { name: "Wi-Fi/Network Connectivity", basePrice: 4500, priceType: "per_incident", description: "Dead zones, DHCP errors, VPN setup" },
-    { name: "Software Installation & Updates", basePrice: 5000, priceType: "per_incident", description: "Licensed apps, updates, compatibility fixes" },
+    { name: "Password Resets & Account Unlocks", basePrice: 2500, priceType: "per_incident", description: "Quick password and account recovery services ($25-50 per incident)", timeCapHours: 0.5 },
+    { name: "Email Troubleshooting", basePrice: 3500, priceType: "per_incident", description: "Outlook/Google Workspace configuration and sync fixes", timeCapHours: 1 },
+    { name: "Printer/Scanner Support", basePrice: 4000, priceType: "per_incident", description: "Driver installs, network printing, queue management", timeCapHours: 1 },
+    { name: "Wi-Fi/Network Connectivity", basePrice: 4500, priceType: "per_incident", description: "Dead zones, DHCP errors, VPN setup", timeCapHours: 1.5 },
+    { name: "Software Installation & Updates", basePrice: 5000, priceType: "per_incident", description: "Licensed apps, updates, compatibility fixes", timeCapHours: 2 },
     { name: "Monthly Help Desk Package", basePrice: 5000, priceType: "per_user_monthly", description: "Unlimited Tier 1-2 support per user" },
     { name: "Remote Monitoring & Management", basePrice: 20000, priceType: "monthly", description: "Proactive patching and system monitoring" },
   ],
@@ -62,6 +62,7 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
     basePrice: number;
     priceType: "fixed" | "hourly" | "per_unit" | "per_incident" | "per_device" | "per_user_monthly" | "monthly" | "monthly_per_server" | "monthly_per_phone" | "per_session" | "markup" | "fixed_range";
     unit?: string;
+    timeCapHours?: number;
   }>>(data.selectedServices || []);
   const [forceUpdate, setForceUpdate] = React.useState(0);
 
@@ -78,7 +79,8 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
         quantity: 1,
         basePrice: service.basePrice,
         priceType: service.priceType,
-        unit: (service as any).unit
+        unit: (service as any).unit,
+        timeCapHours: (service as any).timeCapHours
       };
       console.log('Adding service:', newService);
       setSelectedServices(prev => {
@@ -120,7 +122,7 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
       case "fixed": return "Fixed Price";
       case "hourly": return "Per Hour + $75 Non-Refundable Site Visit";
       case "per_unit": return unit ? `Per ${unit}` : "Per Unit";
-      case "per_incident": return "Per Incident";
+      case "per_incident": return "Per Incident (includes time cap + $75/hr overage)";
       case "per_device": return "Per Device";
       case "per_user_monthly": return "Per User/Month";
       case "monthly": return "Monthly";
@@ -245,10 +247,15 @@ export default function ServiceSelectionStep({ data, onUpdate, onNext, onPrev }:
                         <div className="flex-1">
                           <h4 className="font-semibold">{service.name}</h4>
                           <p className="text-sm text-gray-600 mb-2">{service.description}</p>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-2 flex-wrap">
                             <Badge variant="outline">
                               {formatPrice(service.basePrice)} {getPriceTypeLabel(service.priceType, (service as any).unit)}
                             </Badge>
+                            {service.priceType === "per_incident" && (service as any).timeCapHours && (
+                              <Badge variant="secondary" className="text-xs">
+                                Up to {(service as any).timeCapHours}h included
+                              </Badge>
+                            )}
                           </div>
                         </div>
                       </div>

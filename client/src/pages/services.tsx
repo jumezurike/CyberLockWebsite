@@ -49,6 +49,7 @@ export default function ServicesPortal() {
       basePrice: number;
       priceType: "fixed" | "hourly" | "per_unit" | "per_incident" | "per_device" | "per_user_monthly" | "monthly" | "monthly_per_server" | "monthly_per_phone" | "per_session" | "markup" | "fixed_range";
       unit?: string;
+      timeCapHours?: number;
     }>,
     
     // Project Details

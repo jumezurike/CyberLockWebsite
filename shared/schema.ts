@@ -104,6 +104,10 @@ export const serviceRequests = pgTable("service_requests", {
   pricingBreakdown: jsonb("pricing_breakdown"), // Detailed pricing calculation
   hourlyRateEstimate: integer("hourly_rate_estimate"), // Estimated hours * rate
   
+  // Time Cap Billing
+  timeCapHours: integer("time_cap_hours"), // Hours included in fixed incident pricing
+  overageHourlyRate: integer("overage_hourly_rate").default(7500), // $75/hour in cents for overage
+  
   // Approval Workflow
   quoteGenerated: boolean("quote_generated").default(false),
   quoteData: jsonb("quote_data"), // Generated quote details
