@@ -41,6 +41,7 @@ import AnalyticsDashboard from "@/pages/admin/analytics-dashboard";
 import AcceptInvitation from "@/pages/accept-invitation";
 import TestStandalone from "@/pages/test-standalone";
 import ServicesPortal from "@/pages/services";
+import TechnicianPortal from "@/pages/technician";
 
 function Router() {
   const [location] = useLocation();
@@ -70,6 +71,7 @@ function Router() {
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/accept-invitation" component={AcceptInvitation} />
           <Route path="/services" component={ServicesPortal} />
+          <Route path="/technician" component={TechnicianPortal} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/about-us" component={AboutUs} />
           <Route path="/rasbita" component={RasbitaReport} />

@@ -26,10 +26,17 @@ import {
   serviceRequests,
   serviceCatalog,
   teamAvailability,
+  fieldWorkOrders,
+  technicianFeedback,
   type ServiceRequest,
   type InsertServiceRequest,
   type ServiceCatalog,
-  type TeamAvailability
+  type TeamAvailability,
+  type FieldWorkOrder,
+  type InsertFieldWorkOrder,
+  type UpdateFieldWorkOrder,
+  type TechnicianFeedback,
+  type InsertTechnicianFeedback
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc } from "drizzle-orm";
@@ -135,6 +142,20 @@ export interface IStorage {
   createServiceRequest(request: InsertServiceRequest): Promise<ServiceRequest>;
   updateServiceRequest(id: number, request: Partial<ServiceRequest>): Promise<ServiceRequest | undefined>;
   deleteServiceRequest(id: number): Promise<boolean>;
+
+  // Field Work Order operations
+  getAllFieldWorkOrders(): Promise<FieldWorkOrder[]>;
+  getFieldWorkOrderById(id: number): Promise<FieldWorkOrder | undefined>;
+  getFieldWorkOrdersByTechnician(technicianId: number): Promise<FieldWorkOrder[]>;
+  getFieldWorkOrdersByServiceRequest(serviceRequestId: number): Promise<FieldWorkOrder[]>;
+  createFieldWorkOrder(workOrder: InsertFieldWorkOrder): Promise<FieldWorkOrder>;
+  updateFieldWorkOrder(id: number, updates: UpdateFieldWorkOrder): Promise<FieldWorkOrder | undefined>;
+  
+  // Technician Feedback operations
+  getAllTechnicianFeedback(): Promise<TechnicianFeedback[]>;
+  getTechnicianFeedbackById(id: number): Promise<TechnicianFeedback | undefined>;
+  getTechnicianFeedbackByWorkOrder(workOrderId: number): Promise<TechnicianFeedback | undefined>;
+  createTechnicianFeedback(feedback: InsertTechnicianFeedback): Promise<TechnicianFeedback>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -995,6 +1016,99 @@ export class DatabaseStorage implements IStorage {
       .delete(serviceRequests)
       .where(eq(serviceRequests.id, id));
     return result.rowCount !== null && result.rowCount > 0;
+  }
+
+  // Field Work Order operations
+  async getAllFieldWorkOrders(): Promise<FieldWorkOrder[]> {
+    return await db
+      .select()
+      .from(fieldWorkOrders)
+      .orderBy(desc(fieldWorkOrders.createdAt));
+  }
+
+  async getFieldWorkOrderById(id: number): Promise<FieldWorkOrder | undefined> {
+    const [workOrder] = await db
+      .select()
+      .from(fieldWorkOrders)
+      .where(eq(fieldWorkOrders.id, id));
+    return workOrder;
+  }
+
+  async getFieldWorkOrdersByTechnician(technicianId: number): Promise<FieldWorkOrder[]> {
+    return await db
+      .select()
+      .from(fieldWorkOrders)
+      .where(eq(fieldWorkOrders.technicianId, technicianId))
+      .orderBy(desc(fieldWorkOrders.createdAt));
+  }
+
+  async getFieldWorkOrdersByServiceRequest(serviceRequestId: number): Promise<FieldWorkOrder[]> {
+    return await db
+      .select()
+      .from(fieldWorkOrders)
+      .where(eq(fieldWorkOrders.serviceRequestId, serviceRequestId))
+      .orderBy(desc(fieldWorkOrders.createdAt));
+  }
+
+  async createFieldWorkOrder(workOrder: InsertFieldWorkOrder): Promise<FieldWorkOrder> {
+    const [newWorkOrder] = await db
+      .insert(fieldWorkOrders)
+      .values({
+        ...workOrder,
+        status: "assigned",
+        workCompleted: false,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+    return newWorkOrder;
+  }
+
+  async updateFieldWorkOrder(id: number, updates: UpdateFieldWorkOrder): Promise<FieldWorkOrder | undefined> {
+    const [updatedWorkOrder] = await db
+      .update(fieldWorkOrders)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(eq(fieldWorkOrders.id, id))
+      .returning();
+    return updatedWorkOrder;
+  }
+
+  // Technician Feedback operations
+  async getAllTechnicianFeedback(): Promise<TechnicianFeedback[]> {
+    return await db
+      .select()
+      .from(technicianFeedback)
+      .orderBy(desc(technicianFeedback.submittedAt));
+  }
+
+  async getTechnicianFeedbackById(id: number): Promise<TechnicianFeedback | undefined> {
+    const [feedback] = await db
+      .select()
+      .from(technicianFeedback)
+      .where(eq(technicianFeedback.id, id));
+    return feedback;
+  }
+
+  async getTechnicianFeedbackByWorkOrder(workOrderId: number): Promise<TechnicianFeedback | undefined> {
+    const [feedback] = await db
+      .select()
+      .from(technicianFeedback)
+      .where(eq(technicianFeedback.workOrderId, workOrderId));
+    return feedback;
+  }
+
+  async createTechnicianFeedback(feedback: InsertTechnicianFeedback): Promise<TechnicianFeedback> {
+    const [newFeedback] = await db
+      .insert(technicianFeedback)
+      .values({
+        ...feedback,
+        submittedAt: new Date(),
+      })
+      .returning();
+    return newFeedback;
   }
 }
 

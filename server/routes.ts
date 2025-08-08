@@ -17,7 +17,10 @@ import {
   createInvitationSchema,
   acceptInvitationSchema,
   insertServiceRequestSchema,
-  serviceRequests
+  serviceRequests,
+  insertFieldWorkOrderSchema,
+  updateFieldWorkOrderSchema,
+  insertTechnicianFeedbackSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
@@ -1321,6 +1324,143 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting service request:", error);
       res.status(500).json({ error: "Failed to delete service request" });
+    }
+  });
+
+  // Field Technician Portal Routes
+  // -------------------------------------------------------------------------
+
+  // Get work orders for a technician
+  app.get("/api/technician/work-orders", requireAdminAuth, async (req, res) => {
+    try {
+      const technicianId = req.session.adminUser?.id;
+      if (!technicianId) {
+        return res.status(401).json({ error: "Technician ID required" });
+      }
+      
+      const workOrders = await storage.getFieldWorkOrdersByTechnician(technicianId);
+      res.json(workOrders);
+    } catch (error) {
+      console.error("Error fetching technician work orders:", error);
+      res.status(500).json({ error: "Failed to fetch work orders" });
+    }
+  });
+
+  // Get specific work order details
+  app.get("/api/technician/work-orders/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const workOrderId = parseInt(req.params.id);
+      const workOrder = await storage.getFieldWorkOrderById(workOrderId);
+      
+      if (!workOrder) {
+        return res.status(404).json({ error: "Work order not found" });
+      }
+
+      // Verify technician has access to this work order
+      const technicianId = req.session.adminUser?.id;
+      if (workOrder.technicianId !== technicianId && req.session.adminUser?.role !== 'super_admin') {
+        return res.status(403).json({ error: "Access denied to this work order" });
+      }
+
+      res.json(workOrder);
+    } catch (error) {
+      console.error("Error fetching work order:", error);
+      res.status(500).json({ error: "Failed to fetch work order" });
+    }
+  });
+
+  // Update work order (time tracking, status, etc.)
+  app.put("/api/technician/work-orders/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const workOrderId = parseInt(req.params.id);
+      const technicianId = req.session.adminUser?.id;
+      
+      // Verify work order exists and technician has access
+      const existingWorkOrder = await storage.getFieldWorkOrderById(workOrderId);
+      if (!existingWorkOrder) {
+        return res.status(404).json({ error: "Work order not found" });
+      }
+      
+      if (existingWorkOrder.technicianId !== technicianId && req.session.adminUser?.role !== 'super_admin') {
+        return res.status(403).json({ error: "Access denied to this work order" });
+      }
+
+      // Validate update data
+      const validatedData = updateFieldWorkOrderSchema.parse(req.body);
+      
+      // Calculate total hours worked if both arrived and departed times are provided
+      const updates = { ...validatedData };
+      if (updates.arrivedAt && updates.departedAt) {
+        const arrivedTime = new Date(updates.arrivedAt).getTime();
+        const departedTime = new Date(updates.departedAt).getTime();
+        updates.totalHoursWorked = Math.round((departedTime - arrivedTime) / (1000 * 60)); // in minutes
+      }
+      
+      const updatedWorkOrder = await storage.updateFieldWorkOrder(workOrderId, updates);
+      res.json(updatedWorkOrder);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Error updating work order:", error);
+      res.status(500).json({ error: "Failed to update work order" });
+    }
+  });
+
+  // Create new work order (admin only)
+  app.post("/api/technician/work-orders", requireAdminAuth, async (req, res) => {
+    try {
+      // Only super admins can create work orders
+      if (req.session.adminUser?.role !== 'super_admin') {
+        return res.status(403).json({ error: "Super admin access required" });
+      }
+
+      const validatedData = insertFieldWorkOrderSchema.parse(req.body);
+      const workOrder = await storage.createFieldWorkOrder(validatedData);
+      res.status(201).json(workOrder);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Error creating work order:", error);
+      res.status(500).json({ error: "Failed to create work order" });
+    }
+  });
+
+  // Submit technician feedback
+  app.post("/api/technician/feedback", requireAdminAuth, async (req, res) => {
+    try {
+      const technicianId = req.session.adminUser?.id;
+      if (!technicianId) {
+        return res.status(401).json({ error: "Technician ID required" });
+      }
+
+      const feedbackData = {
+        ...req.body,
+        technicianId: technicianId
+      };
+
+      const validatedData = insertTechnicianFeedbackSchema.parse(feedbackData);
+      const feedback = await storage.createTechnicianFeedback(validatedData);
+      
+      res.status(201).json(feedback);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Error submitting technician feedback:", error);
+      res.status(500).json({ error: "Failed to submit feedback" });
+    }
+  });
+
+  // Get all technician feedback (admin only)
+  app.get("/api/admin/technician-feedback", requireAdminAuth, async (req, res) => {
+    try {
+      const feedback = await storage.getAllTechnicianFeedback();
+      res.json(feedback);
+    } catch (error) {
+      console.error("Error fetching technician feedback:", error);
+      res.status(500).json({ error: "Failed to fetch technician feedback" });
     }
   });
   

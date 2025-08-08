@@ -118,13 +118,85 @@ export const serviceRequests = pgTable("service_requests", {
   revisionHistory: jsonb("revision_history"), // Array of revision changes
   
   // Status tracking
-  status: text("status").default("pending"), // pending, quoted, approved, in_progress, completed, cancelled
+  status: text("status").default("pending"), // pending, quoted, approved, in_progress, dispatched, on_site, completed, cancelled
   assignedTo: integer("assigned_to").references(() => users.id),
+  technicianId: integer("technician_id").references(() => users.id),
   internalNotes: text("internal_notes"),
   
   // Timestamps
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Field Technician Work Orders
+export const fieldWorkOrders = pgTable("field_work_orders", {
+  id: serial("id").primaryKey(),
+  serviceRequestId: integer("service_request_id").references(() => serviceRequests.id).notNull(),
+  technicianId: integer("technician_id").references(() => users.id).notNull(),
+  
+  // Time tracking
+  dispatchedAt: timestamp("dispatched_at"),
+  arrivedAt: timestamp("arrived_at"),
+  departedAt: timestamp("departed_at"),
+  totalHoursWorked: integer("total_hours_worked"), // minutes
+  
+  // Work details
+  workDescription: text("work_description"),
+  equipmentUsed: text("equipment_used").array(),
+  partsReplaced: jsonb("parts_replaced"), // Array of {part, quantity, cost}
+  
+  // File uploads
+  beforePhotos: text("before_photos").array(),
+  afterPhotos: text("after_photos").array(),
+  serviceReportFile: text("service_report_file"),
+  additionalDocuments: text("additional_documents").array(),
+  
+  // Completion details
+  workCompleted: boolean("work_completed").default(false),
+  clientSignature: text("client_signature"),
+  clientSignatureName: text("client_signature_name"),
+  clientSignatureTimestamp: timestamp("client_signature_timestamp"),
+  
+  // Closing remarks
+  closingRemarks: text("closing_remarks"),
+  issuesEncountered: text("issues_encountered"),
+  recommendedFollowUp: text("recommended_follow_up"),
+  
+  // Quality metrics
+  workQualityRating: integer("work_quality_rating"), // 1-5 scale
+  timeEfficiencyRating: integer("time_efficiency_rating"), // 1-5 scale
+  
+  status: text("status").default("assigned"), // assigned, en_route, on_site, completed, reviewed
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Technician Feedback System
+export const technicianFeedback = pgTable("technician_feedback", {
+  id: serial("id").primaryKey(),
+  workOrderId: integer("work_order_id").references(() => fieldWorkOrders.id).notNull(),
+  serviceRequestId: integer("service_request_id").references(() => serviceRequests.id).notNull(),
+  technicianId: integer("technician_id").references(() => users.id).notNull(),
+  
+  // Feedback to company
+  serviceQualityRating: integer("service_quality_rating"), // 1-5 scale
+  communicationRating: integer("communication_rating"), // 1-5 scale
+  siteAccessibilityRating: integer("site_accessibility_rating"), // 1-5 scale
+  
+  feedbackComments: text("feedback_comments"),
+  improvementSuggestions: text("improvement_suggestions"),
+  wouldWorkAgain: boolean("would_work_again"),
+  
+  // Internal feedback about the job
+  jobComplexityRating: integer("job_complexity_rating"), // 1-5 scale
+  resourcesAdequateRating: integer("resources_adequate_rating"), // 1-5 scale
+  timeAllocationRating: integer("time_allocation_rating"), // 1-5 scale
+  
+  internalComments: text("internal_comments"),
+  equipmentIssues: text("equipment_issues"),
+  trainingNeeded: text("training_needed"),
+  
+  submittedAt: timestamp("submitted_at").defaultNow(),
 });
 
 // Service Catalog table for pricing management
@@ -442,6 +514,58 @@ export type InsertServiceRequest = z.infer<typeof insertServiceRequestSchema>;
 export type ServiceRequest = typeof serviceRequests.$inferSelect;
 export type ServiceCatalog = typeof serviceCatalog.$inferSelect;
 export type TeamAvailability = typeof teamAvailability.$inferSelect;
+
+// Field Work Order Schemas
+export const insertFieldWorkOrderSchema = createInsertSchema(fieldWorkOrders, {
+  serviceRequestId: z.number().positive("Service request ID is required"),
+  technicianId: z.number().positive("Technician ID is required"),
+  workDescription: z.string().min(10, "Work description must be at least 10 characters"),
+  closingRemarks: z.string().min(5, "Closing remarks are required"),
+}).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const updateFieldWorkOrderSchema = z.object({
+  arrivedAt: z.string().datetime().optional(),
+  departedAt: z.string().datetime().optional(),
+  workDescription: z.string().optional(),
+  equipmentUsed: z.array(z.string()).optional(),
+  partsReplaced: z.any().optional(),
+  beforePhotos: z.array(z.string()).optional(),
+  afterPhotos: z.array(z.string()).optional(),
+  serviceReportFile: z.string().optional(),
+  additionalDocuments: z.array(z.string()).optional(),
+  workCompleted: z.boolean().optional(),
+  clientSignature: z.string().optional(),
+  clientSignatureName: z.string().optional(),
+  closingRemarks: z.string().optional(),
+  issuesEncountered: z.string().optional(),
+  recommendedFollowUp: z.string().optional(),
+  status: z.enum(["assigned", "en_route", "on_site", "completed", "reviewed"]).optional(),
+});
+
+// Technician Feedback Schemas  
+export const insertTechnicianFeedbackSchema = createInsertSchema(technicianFeedback, {
+  workOrderId: z.number().positive("Work order ID is required"),
+  serviceRequestId: z.number().positive("Service request ID is required"),
+  technicianId: z.number().positive("Technician ID is required"),
+  serviceQualityRating: z.number().min(1).max(5),
+  communicationRating: z.number().min(1).max(5),
+  siteAccessibilityRating: z.number().min(1).max(5),
+  feedbackComments: z.string().min(10, "Feedback comments must be at least 10 characters"),
+}).omit({
+  id: true,
+  submittedAt: true,
+});
+
+export type InsertFieldWorkOrder = z.infer<typeof insertFieldWorkOrderSchema>;
+export type FieldWorkOrder = typeof fieldWorkOrders.$inferSelect;
+export type UpdateFieldWorkOrder = z.infer<typeof updateFieldWorkOrderSchema>;
+
+export type InsertTechnicianFeedback = z.infer<typeof insertTechnicianFeedbackSchema>;
+export type TechnicianFeedback = typeof technicianFeedback.$inferSelect;
 
 // Visitor tracking schemas
 export const insertVisitorSessionSchema = z.object({
