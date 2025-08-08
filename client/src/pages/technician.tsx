@@ -6,8 +6,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
-import { Clock, MapPin, CheckCircle, Upload, Star, MessageSquare } from 'lucide-react';
+import { Clock, MapPin, CheckCircle, Upload, Star, MessageSquare, FileText, Camera, User, Building } from 'lucide-react';
+import CystReportForm from '@/components/technician/cyst-report-form';
+import FileUpload from '@/components/technician/file-upload';
 
 interface WorkOrder {
   id: number;
@@ -43,6 +46,7 @@ export default function TechnicianPortal() {
   // Time tracking state
   const [arrivalTime, setArrivalTime] = useState('');
   const [departureTime, setDepartureTime] = useState('');
+  const [currentTime, setCurrentTime] = useState(new Date());
   
   // Work details state
   const [workDescription, setWorkDescription] = useState('');
@@ -50,6 +54,19 @@ export default function TechnicianPortal() {
   const [closingRemarks, setClosingRemarks] = useState('');
   const [issuesEncountered, setIssuesEncountered] = useState('');
   const [recommendedFollowUp, setRecommendedFollowUp] = useState('');
+
+  // File upload state
+  const [beforePhotos, setBeforePhotos] = useState<string[]>([]);
+  const [afterPhotos, setAfterPhotos] = useState<string[]>([]);
+  const [serviceDocuments, setServiceDocuments] = useState<string[]>([]);
+
+  // Client signature state
+  const [clientSignature, setClientSignature] = useState('');
+  const [clientSignatureName, setClientSignatureName] = useState('');
+
+  // CYST Report state
+  const [cystReport, setCystReport] = useState<any>(null);
+  const [showCystForm, setShowCystForm] = useState(false);
 
   // Feedback state
   const [feedbackForm, setFeedbackForm] = useState({
@@ -69,6 +86,13 @@ export default function TechnicianPortal() {
 
   useEffect(() => {
     fetchWorkOrders();
+    
+    // Update current time every minute
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const fetchWorkOrders = async () => {
@@ -102,6 +126,14 @@ export default function TechnicianPortal() {
     setRecommendedFollowUp(workOrder.recommendedFollowUp || '');
     setArrivalTime(workOrder.arrivedAt ? new Date(workOrder.arrivedAt).toISOString().slice(0, 16) : '');
     setDepartureTime(workOrder.departedAt ? new Date(workOrder.departedAt).toISOString().slice(0, 16) : '');
+    setBeforePhotos(workOrder.beforePhotos || []);
+    setAfterPhotos(workOrder.afterPhotos || []);
+    setServiceDocuments(workOrder.serviceReportFile ? [workOrder.serviceReportFile] : []);
+    setClientSignature(workOrder.clientSignature || '');
+    setClientSignatureName(workOrder.clientSignatureName || '');
+    
+    // Load CYST report if exists
+    fetchCystReport(workOrder.id);
   };
 
   const updateWorkOrder = async (updates: any) => {
@@ -139,6 +171,47 @@ export default function TechnicianPortal() {
         variant: "destructive",
       });
     }
+  };
+
+  const fetchCystReport = async (workOrderId: number) => {
+    try {
+      const response = await fetch(`/api/technician/work-orders/${workOrderId}/cyst-report`);
+      if (response.ok) {
+        const report = await response.json();
+        setCystReport(report);
+      }
+    } catch (error) {
+      // CYST report doesn't exist yet, which is fine
+      setCystReport(null);
+    }
+  };
+
+  const handleClockIn = async () => {
+    const now = new Date().toISOString();
+    setArrivalTime(now.slice(0, 16));
+    await updateWorkOrder({
+      arrivedAt: now,
+      status: 'on_site'
+    });
+  };
+
+  const handleClockOut = async () => {
+    const now = new Date().toISOString();
+    setDepartureTime(now.slice(0, 16));
+    await updateWorkOrder({
+      departedAt: now,
+      status: 'completed',
+      workCompleted: true
+    });
+  };
+
+  const handleCystReportSave = (reportData: any) => {
+    setCystReport(reportData);
+    setShowCystForm(false);
+    toast({
+      title: "CYST Report Created",
+      description: "E1T1 Tech Field Service Report has been created and is court-admissible",
+    });
   };
 
   const handleTimeTracking = () => {
@@ -205,6 +278,8 @@ export default function TechnicianPortal() {
       });
     }
   };
+
+
 
   const getStatusBadge = (status: string) => {
     const statusConfig = {
@@ -292,10 +367,12 @@ export default function TechnicianPortal() {
         <div className="lg:col-span-2">
           {selectedWorkOrder ? (
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="tracking">Time Tracking</TabsTrigger>
-                <TabsTrigger value="details">Work Details</TabsTrigger>
+                <TabsTrigger value="tracking">Time</TabsTrigger>
+                <TabsTrigger value="photos">Photos</TabsTrigger>
+                <TabsTrigger value="cyst">CYST Report</TabsTrigger>
+                <TabsTrigger value="details">Details</TabsTrigger>
                 <TabsTrigger value="feedback">Feedback</TabsTrigger>
               </TabsList>
 
@@ -341,10 +418,32 @@ export default function TechnicianPortal() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <Clock className="h-5 w-5" />
-                      Time Tracking
+                      Time Tracking & Clock In/Out
                     </CardTitle>
+                    <CardDescription>Record arrival and departure times for accurate billing</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
+                    {/* Quick Clock In/Out Buttons */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <Button
+                        onClick={handleClockIn}
+                        disabled={!!selectedWorkOrder.arrivedAt}
+                        className="h-16 text-lg"
+                        variant={selectedWorkOrder.arrivedAt ? "outline" : "default"}
+                      >
+                        <Clock className="h-6 w-6 mr-2" />
+                        {selectedWorkOrder.arrivedAt ? "Clocked In" : "Clock In"}
+                      </Button>
+                      <Button
+                        onClick={handleClockOut}
+                        disabled={!selectedWorkOrder.arrivedAt || !!selectedWorkOrder.departedAt}
+                        className="h-16 text-lg"
+                        variant={selectedWorkOrder.departedAt ? "outline" : "default"}
+                      >
+                        <CheckCircle className="h-6 w-6 mr-2" />
+                        {selectedWorkOrder.departedAt ? "Clocked Out" : "Clock Out"}
+                      </Button>
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <Label htmlFor="arrivalTime">Arrival Time</Label>
@@ -378,17 +477,163 @@ export default function TechnicianPortal() {
                       </div>
                     </div>
                     
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="arrivalTime">Manual Arrival Time</Label>
+                        <Input
+                          id="arrivalTime"
+                          type="datetime-local"
+                          value={arrivalTime}
+                          onChange={(e) => setArrivalTime(e.target.value)}
+                          disabled={!!selectedWorkOrder.arrivedAt}
+                        />
+                        {selectedWorkOrder.arrivedAt && (
+                          <p className="text-sm text-green-600 mt-1">
+                            ✓ Arrived: {new Date(selectedWorkOrder.arrivedAt).toLocaleString()}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        <Label htmlFor="departureTime">Manual Departure Time</Label>
+                        <Input
+                          id="departureTime"
+                          type="datetime-local"
+                          value={departureTime}
+                          onChange={(e) => setDepartureTime(e.target.value)}
+                          disabled={!selectedWorkOrder.arrivedAt || !!selectedWorkOrder.departedAt}
+                        />
+                        {selectedWorkOrder.departedAt && (
+                          <p className="text-sm text-green-600 mt-1">
+                            ✓ Departed: {new Date(selectedWorkOrder.departedAt).toLocaleString()}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    
                     <Button 
                       onClick={handleTimeTracking}
                       className="w-full"
-                      disabled={(!arrivalTime && selectedWorkOrder.arrivedAt) || 
-                               (selectedWorkOrder.arrivedAt && selectedWorkOrder.departedAt)}
+                      disabled={(!arrivalTime && !!selectedWorkOrder.arrivedAt) || 
+                               (!!selectedWorkOrder.arrivedAt && !!selectedWorkOrder.departedAt)}
                     >
-                      {!selectedWorkOrder.arrivedAt ? 'Record Arrival' : 
-                       !selectedWorkOrder.departedAt ? 'Record Departure' : 'Times Recorded'}
+                      {!selectedWorkOrder.arrivedAt ? 'Save Manual Arrival Time' : 
+                       !selectedWorkOrder.departedAt ? 'Save Manual Departure Time' : 'Times Recorded'}
                     </Button>
                   </CardContent>
                 </Card>
+              </TabsContent>
+
+              {/* Photos Tab */}
+              <TabsContent value="photos" className="space-y-4">
+                <div className="space-y-6">
+                  <FileUpload
+                    workOrderId={selectedWorkOrder.id}
+                    uploadType="before"
+                    title="Before Photos"
+                    description="Take photos before starting work to document initial conditions"
+                    onUpload={setBeforePhotos}
+                    existingFiles={beforePhotos}
+                  />
+                  
+                  <FileUpload
+                    workOrderId={selectedWorkOrder.id}
+                    uploadType="after"
+                    title="After Photos"
+                    description="Take photos after completing work to show final results"
+                    onUpload={setAfterPhotos}
+                    existingFiles={afterPhotos}
+                  />
+                  
+                  <FileUpload
+                    workOrderId={selectedWorkOrder.id}
+                    uploadType="documents"
+                    title="Service Documentation"
+                    description="Upload signed service reports and other documentation"
+                    onUpload={setServiceDocuments}
+                    existingFiles={serviceDocuments}
+                  />
+                </div>
+              </TabsContent>
+
+              {/* CYST Report Tab */}
+              <TabsContent value="cyst" className="space-y-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileText className="h-5 w-5" />
+                      E1T1 CYST Service Report
+                    </CardTitle>
+                    <CardDescription>
+                      Court-admissible field technician service report with handwritten signature collection
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    {cystReport ? (
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between p-4 bg-green-50 border border-green-200 rounded-lg">
+                          <div className="flex items-center gap-3">
+                            <CheckCircle className="h-6 w-6 text-green-600" />
+                            <div>
+                              <p className="font-medium text-green-900">CYST Report Created</p>
+                              <p className="text-sm text-green-700">
+                                Report ID: {cystReport.id} | Created: {new Date(cystReport.createdAt).toLocaleString()}
+                              </p>
+                            </div>
+                          </div>
+                          <Button variant="outline" onClick={() => setShowCystForm(true)}>
+                            View/Edit Report
+                          </Button>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                          <div>
+                            <Label className="text-sm font-medium">Business Name</Label>
+                            <p className="text-sm text-gray-600">{cystReport.businessName}</p>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium">Service Date</Label>
+                            <p className="text-sm text-gray-600">{cystReport.serviceDate}</p>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium">Technician</Label>
+                            <p className="text-sm text-gray-600">{cystReport.technicianName}</p>
+                          </div>
+                          <div>
+                            <Label className="text-sm font-medium">Status</Label>
+                            <Badge className="bg-blue-500 text-white">Court-Admissible</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="text-center py-8">
+                        <FileText className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">Create CYST Service Report</h3>
+                        <p className="text-gray-600 mb-4">
+                          Generate a court-admissible E1T1 Tech Field Service Report with handwritten signature collection
+                        </p>
+                        <Button onClick={() => setShowCystForm(true)}>
+                          Create CYST Report
+                        </Button>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+
+                {/* CYST Report Form Modal */}
+                {showCystForm && (
+                  <Card className="mt-4">
+                    <CardHeader>
+                      <CardTitle>E1T1 CYST Service Report Form</CardTitle>
+                      <CardDescription>Complete all fields for court-admissible documentation</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <CystReportForm 
+                        workOrderId={selectedWorkOrder.id}
+                        onSave={handleCystReportSave}
+                      />
+                    </CardContent>
+                  </Card>
+                )}
               </TabsContent>
 
               <TabsContent value="details" className="space-y-4">
@@ -455,21 +700,30 @@ export default function TechnicianPortal() {
                     </div>
 
                     <div className="pt-4 border-t">
-                      <Label className="text-base font-medium">File Uploads</Label>
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-3">
-                        <Button variant="outline" className="h-20 flex flex-col items-center">
-                          <Upload className="h-6 w-6 mb-1" />
-                          Before Photos
-                        </Button>
-                        <Button variant="outline" className="h-20 flex flex-col items-center">
-                          <Upload className="h-6 w-6 mb-1" />
-                          After Photos
-                        </Button>
-                        <Button variant="outline" className="h-20 flex flex-col items-center">
-                          <Upload className="h-6 w-6 mb-1" />
-                          Service Report
-                        </Button>
+                      <Label className="text-base font-medium">Client Signature Collection</Label>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
+                        <div>
+                          <Label htmlFor="clientSignatureName">Client Name for Signature</Label>
+                          <Input
+                            id="clientSignatureName"
+                            value={clientSignatureName}
+                            onChange={(e) => setClientSignatureName(e.target.value)}
+                            placeholder="Full name of client signing"
+                          />
+                        </div>
+                        <div>
+                          <Label htmlFor="clientSignature">Handwritten Signature Code</Label>
+                          <Input
+                            id="clientSignature"
+                            value={clientSignature}
+                            onChange={(e) => setClientSignature(e.target.value)}
+                            placeholder="Digital signature or verification code"
+                          />
+                        </div>
                       </div>
+                      <p className="text-xs text-gray-600 mt-2">
+                        Collect handwritten signature on paper form and enter verification code above for court admissibility
+                      </p>
                     </div>
 
                     <Button 

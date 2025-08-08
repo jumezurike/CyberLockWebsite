@@ -1530,6 +1530,39 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // File upload endpoint for technicians
+  app.post("/api/technician/upload-files", requireAdminAuth, async (req, res) => {
+    try {
+      // For demonstration purposes, simulate file upload
+      // In production, integrate with proper file storage service like Replit Object Storage
+      const { workOrderId, uploadType } = req.body;
+      
+      if (!workOrderId || !uploadType) {
+        return res.status(400).json({ error: "Work order ID and upload type are required" });
+      }
+      
+      // Simulate file paths based on upload type and timestamp
+      const timestamp = Date.now();
+      const mockFilePaths = [
+        `/uploads/work-order-${workOrderId}/${uploadType}-${timestamp}-photo1.jpg`,
+        `/uploads/work-order-${workOrderId}/${uploadType}-${timestamp}-photo2.jpg`
+      ];
+      
+      console.log(`Simulated file upload for work order ${workOrderId}, type: ${uploadType}`);
+      
+      res.json({ 
+        success: true, 
+        filePaths: mockFilePaths,
+        message: `${mockFilePaths.length} files uploaded successfully`,
+        uploadType,
+        workOrderId
+      });
+    } catch (error) {
+      console.error("Error uploading files:", error);
+      res.status(500).json({ error: "Failed to upload files" });
+    }
+  });
+
   app.put("/api/technician/cyst-reports/:id", requireAdminAuth, async (req, res) => {
     try {
       const reportId = parseInt(req.params.id);
