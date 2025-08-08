@@ -1745,7 +1745,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         id: user.id,
         email: user.email!,
         role: user.role!,
-        fullName: user.fullName
+        fullName: user.fullName || undefined
       };
 
       res.json({ 
@@ -1793,7 +1793,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         id: user.id,
         email: user.email!,
         role: user.role!,
-        fullName: user.fullName
+        fullName: user.fullName || undefined
       };
 
       res.json({ 
@@ -1878,7 +1878,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
                 email: techUser.email || 'Not provided',
                 specializations: techProfile.specializations || [],
                 rating: techProfile.rating || 5,
-                estimatedArrival: workOrder.scheduledDate || new Date().toISOString()
+                estimatedArrival: workOrder.dispatchedAt || new Date().toISOString()
               };
             }
           }
@@ -1902,16 +1902,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         serviceRequest: {
           id: serviceRequest.id,
           companyName: serviceRequest.companyName,
-          contactName: serviceRequest.contactName,
-          contactEmail: serviceRequest.contactEmail,
-          contactPhone: serviceRequest.contactPhone,
-          serviceType: serviceRequest.serviceType,
-          priority: serviceRequest.priority,
+          contactName: serviceRequest.contactPersonName,
+          contactEmail: serviceRequest.primaryEmail,
+          contactPhone: serviceRequest.officePhone,
+          serviceType: serviceRequest.serviceCategory,
+          priority: serviceRequest.urgencyLevel || 'Medium',
           status: serviceRequest.status,
-          scheduledDate: serviceRequest.scheduledDate,
-          estimatedDuration: serviceRequest.estimatedDuration,
-          totalCost: serviceRequest.totalCost,
-          description: serviceRequest.description,
+          scheduledDate: serviceRequest.desiredStartDate,
+          estimatedDuration: serviceRequest.timeCapHours || 2,
+          totalCost: serviceRequest.calculatedTotal || 0,
+          description: serviceRequest.projectDescription,
           createdAt: serviceRequest.createdAt
         },
         assignedTechnician,
@@ -1940,66 +1940,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Helper function to send verification email
   async function sendClientVerificationEmail(email: string, token: string, name: string) {
-    const Mailgun = require('mailgun.js');
-    const formData = require('form-data');
-    const mailgunClient = new Mailgun(formData);
-    const mg = mailgunClient.client({
-      username: 'api',
-      key: process.env.MAILGUN_API_KEY!,
-    });
+    try {
+      if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+        console.log('Mailgun not configured, skipping email');
+        return;
+      }
 
-    const verificationUrl = `${process.env.APP_URL || 'https://cyberlockx.xyz'}/verify-email?token=${token}&email=${encodeURIComponent(email)}`;
+      const Mailgun = require('mailgun.js');
+      const formData = require('form-data');
+      const mailgunClient = new Mailgun(formData);
+      const mg = mailgunClient.client({
+        username: 'api',
+        key: process.env.MAILGUN_API_KEY!,
+      });
 
-    await mg.messages.create(process.env.MAILGUN_DOMAIN!, {
-      from: `CyberLockX <${process.env.NOTIFICATION_EMAIL}>`,
-      to: [email],
-      subject: 'Verify Your CyberLockX Account',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #1f2937;">Welcome to CyberLockX, ${name}!</h2>
-          <p>Thank you for creating your account. Please verify your email address to complete your registration.</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <a href="${verificationUrl}" style="background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
-              Verify Email Address
-            </a>
+      const verificationUrl = `${process.env.APP_URL || 'https://cyberlockx.xyz'}/verify-email?token=${token}&email=${encodeURIComponent(email)}`;
+
+      await mg.messages.create(process.env.MAILGUN_DOMAIN!, {
+        from: `CyberLockX <${process.env.NOTIFICATION_EMAIL}>`,
+        to: [email],
+        subject: 'Verify Your CyberLockX Account',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #1f2937;">Welcome to CyberLockX, ${name}!</h2>
+            <p>Thank you for creating your account. Please verify your email address to complete your registration.</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${verificationUrl}" style="background-color: #3b82f6; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; display: inline-block;">
+                Verify Email Address
+              </a>
+            </div>
+            <p>Or copy and paste this link into your browser:</p>
+            <p style="word-break: break-all; color: #6b7280;">${verificationUrl}</p>
+            <p style="color: #6b7280; font-size: 14px;">This link will expire in 24 hours.</p>
           </div>
-          <p>Or copy and paste this link into your browser:</p>
-          <p style="word-break: break-all; color: #6b7280;">${verificationUrl}</p>
-          <p style="color: #6b7280; font-size: 14px;">This link will expire in 24 hours.</p>
-        </div>
-      `
-    });
+        `
+      });
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+      // Don't throw error, just log it
+    }
   }
 
   // Helper function to send MFA code
   async function sendMfaCode(email: string, code: string, name: string) {
-    const Mailgun = require('mailgun.js');
-    const formData = require('form-data');
-    const mailgunClient = new Mailgun(formData);
-    const mg = mailgunClient.client({
-      username: 'api',
-      key: process.env.MAILGUN_API_KEY!,
-    });
+    try {
+      if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+        console.log('Mailgun not configured, skipping MFA email');
+        return;
+      }
 
-    await mg.messages.create(process.env.MAILGUN_DOMAIN!, {
-      from: `CyberLockX <${process.env.NOTIFICATION_EMAIL}>`,
-      to: [email],
-      subject: 'Your CyberLockX Verification Code',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #1f2937;">Account Verification</h2>
-          <p>Hello ${name},</p>
-          <p>Your verification code is:</p>
-          <div style="text-align: center; margin: 30px 0;">
-            <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; font-size: 24px; font-weight: bold; letter-spacing: 2px;">
-              ${code}
+      const Mailgun = require('mailgun.js');
+      const formData = require('form-data');
+      const mailgunClient = new Mailgun(formData);
+      const mg = mailgunClient.client({
+        username: 'api',
+        key: process.env.MAILGUN_API_KEY!,
+      });
+
+      await mg.messages.create(process.env.MAILGUN_DOMAIN!, {
+        from: `CyberLockX <${process.env.NOTIFICATION_EMAIL}>`,
+        to: [email],
+        subject: 'Your CyberLockX Verification Code',
+        html: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+            <h2 style="color: #1f2937;">Account Verification</h2>
+            <p>Hello ${name},</p>
+            <p>Your verification code is:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <div style="background-color: #f3f4f6; padding: 20px; border-radius: 8px; font-size: 24px; font-weight: bold; letter-spacing: 2px;">
+                ${code}
+              </div>
             </div>
+            <p>Enter this code to complete your account setup. This code will expire in 10 minutes.</p>
+            <p style="color: #6b7280; font-size: 14px;">For security reasons, do not share this code with anyone.</p>
           </div>
-          <p>Enter this code to complete your account setup. This code will expire in 10 minutes.</p>
-          <p style="color: #6b7280; font-size: 14px;">For security reasons, do not share this code with anyone.</p>
-        </div>
-      `
-    });
+        `
+      });
+    } catch (error) {
+      console.error('Error sending MFA code:', error);
+      // Don't throw error, just log it
+    }
   }
   
   const httpServer = createServer(app);
