@@ -56,6 +56,20 @@ CyberLockX is an advanced cybersecurity platform providing comprehensive digital
 - **Disaster Recovery & Business Continuity (DR/BC)**: Includes daily milestone backups, a strict deduplication policy, detailed work documentation, Git backup verification, and a deployment-based backup policy (only using backups created after or concurrent with deployed version).
 - **Application Organization**: Strict adherence to defined application structure for `client/src/components/sos2a/`, `client/src/lib/`, `client/src/pages/`, `server/`, and `shared/` directories for quick access and agility.
 
+## Authentication & Access Control (Updated: August 8, 2025)
+- **Three-Tier Authentication System**: Distinct login processes for Clients, Technicians, and Administrators
+- **Client Authentication**: Payment-triggered registration → Email verification → MFA → Dashboard access
+- **Technician Authentication**: Admin-issued credentials → Direct portal access with work order management
+- **Admin Authentication**: Role-based access control (Super Admin/Admin/Viewer) with comprehensive system oversight
+- **Session Management**: PostgreSQL-backed sessions with secure cookie handling and automatic timeout
+- **Security Features**: Email verification, MFA, password hashing (bcrypt), CSRF protection, activity logging
+
+## System Documentation (Added: August 8, 2025)
+- **Complete Class Diagrams**: Full system architecture with entity relationships and authentication flows
+- **Access URL Matrix**: Direct links for all user types with credential requirements
+- **Flow Process Documentation**: End-to-end user journeys, state machines, and business process flows
+- **Quick Reference Guides**: Testing credentials, troubleshooting, and support contact information
+
 ## External Dependencies
 - **Mailgun**: For sending professional HTML email notifications and status updates (e.g., partnership application approvals).
 - **PostgreSQL**: Used as the database for storing system data, including visitor sessions, page views, and partnership applications.

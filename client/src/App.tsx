@@ -43,6 +43,8 @@ import TestStandalone from "@/pages/test-standalone";
 import ServicesPortal from "@/pages/services";
 import TechnicianPortal from "@/pages/technician";
 import ClientDashboard from "@/pages/client-dashboard";
+import ClientLogin from "@/pages/client-login";
+import TechnicianLogin from "@/pages/technician-login";
 
 function Router() {
   const [location] = useLocation();
@@ -73,6 +75,8 @@ function Router() {
           <Route path="/accept-invitation" component={AcceptInvitation} />
           <Route path="/services" component={ServicesPortal} />
           <Route path="/technician" component={TechnicianPortal} />
+          <Route path="/technician-login" component={TechnicianLogin} />
+          <Route path="/client-login" component={ClientLogin} />
           <Route path="/client-dashboard" component={ClientDashboard} />
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/about-us" component={AboutUs} />
