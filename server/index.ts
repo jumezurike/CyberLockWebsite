@@ -94,9 +94,9 @@ process.on('uncaughtException', (error) => {
     serveStatic(app);
   }
 
-  // Serve the app on port 80 (the only accessible port)
+  // Serve the app on port 5000 for Replit external access
   // this serves both the API and the client.
-  const port = process.env.PORT || 80;
+  const port = process.env.PORT || 5000;
   server.listen({
     port,
     host: "0.0.0.0",
