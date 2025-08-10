@@ -52,6 +52,8 @@ interface WorkOrder {
   assignedAt: string;
   startedAt?: string;
   completedAt?: string;
+  arrivedAt?: string;
+  departedAt?: string;
   workCompleted: boolean;
   workDescription?: string;
   hoursWorked?: number;
@@ -619,9 +621,9 @@ export default function TechnicianLogin() {
                       <div>
                         <Label className="text-sm font-medium">Selected Services</Label>
                         <div className="mt-1 flex flex-wrap gap-2">
-                          {selectedWorkOrder.serviceRequest.selectedServices.map((service, index) => (
+                          {selectedWorkOrder.serviceRequest.selectedServices?.map((service, index) => (
                             <Badge key={index} variant="outline">{service}</Badge>
-                          ))}
+                          )) || <span className="text-sm text-gray-500">No services specified</span>}
                         </div>
                       </div>
                     </CardContent>
