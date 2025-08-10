@@ -169,9 +169,13 @@ export default function TechnicianLogin() {
 
   const checkAuth = async () => {
     try {
-      await apiRequest('GET', '/api/technician/me');
-      setIsAuthenticated(true);
-      loadWorkOrders();
+      const response = await fetch('/api/technician/me');
+      if (response.ok) {
+        setIsAuthenticated(true);
+        loadWorkOrders();
+      } else {
+        setIsAuthenticated(false);
+      }
     } catch (error) {
       setIsAuthenticated(false);
     } finally {
@@ -184,17 +188,33 @@ export default function TechnicianLogin() {
     setLoginLoading(true);
 
     try {
-      await apiRequest('POST', '/api/technician/login', loginData);
-      toast({
-        title: "Login Successful", 
-        description: "Welcome to the Technician Portal!"
+      const response = await fetch('/api/technician/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
       });
-      setIsAuthenticated(true);
-      loadWorkOrders();
+
+      if (response.ok) {
+        toast({
+          title: "Login Successful", 
+          description: "Welcome to the Technician Portal!"
+        });
+        setIsAuthenticated(true);
+        loadWorkOrders();
+      } else {
+        const error = await response.json();
+        toast({
+          title: "Login Failed",
+          description: error.error || "Invalid credentials",
+          variant: "destructive"
+        });
+      }
     } catch (error: any) {
       toast({
         title: "Login Failed",
-        description: error.message || "Invalid credentials",
+        description: "Connection failed",
         variant: "destructive"
       });
     } finally {
@@ -204,7 +224,7 @@ export default function TechnicianLogin() {
 
   const handleLogout = async () => {
     try {
-      await apiRequest('POST', '/api/technician/logout');
+      await fetch('/api/technician/logout', { method: 'POST' });
       setIsAuthenticated(false);
       setWorkOrders([]);
       setSelectedWorkOrder(null);
@@ -220,7 +240,11 @@ export default function TechnicianLogin() {
   const loadWorkOrders = async () => {
     setLoading(true);
     try {
-      const orders: WorkOrder[] = await apiRequest('GET', '/api/technician/work-orders');
+      const response = await fetch('/api/technician/work-orders');
+      if (!response.ok) {
+        throw new Error('Failed to fetch work orders');
+      }
+      const orders: WorkOrder[] = await response.json();
       setWorkOrders(orders);
       setFilteredWorkOrders(orders);
       if (orders.length > 0 && !selectedWorkOrder) {
