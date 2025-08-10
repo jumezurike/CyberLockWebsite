@@ -73,7 +73,6 @@ function Router() {
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/accept-invitation" component={AcceptInvitation} />
           <Route path="/services" component={ServicesPortal} />
-          <Route path="/technician" component={TechnicianLogin} />
           <Route path="/technician-login" component={TechnicianLogin} />
           <Route path="/client-login" component={ClientLogin} />
           <Route path="/client-dashboard" component={ClientDashboard} />

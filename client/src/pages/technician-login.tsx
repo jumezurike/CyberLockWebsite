@@ -139,6 +139,10 @@ export default function TechnicianLogin() {
 
   const { toast } = useToast();
 
+  // Additional state for manual time tracking
+  const [arrivalTime, setArrivalTime] = useState("");
+  const [departureTime, setDepartureTime] = useState("");
+
   // Authentication check on mount
   useEffect(() => {
     checkAuth();
@@ -234,6 +238,94 @@ export default function TechnicianLogin() {
       });
     } catch (error) {
       console.error('Logout error:', error);
+    }
+  };
+
+  // Time tracking functions
+  const handleClockIn = async () => {
+    if (!selectedWorkOrder) return;
+    
+    try {
+      const now = new Date().toISOString();
+      const response = await fetch('/api/technician/clock-in', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          workOrderId: selectedWorkOrder.id,
+          arrivedAt: now 
+        })
+      });
+      
+      if (response.ok) {
+        setSelectedWorkOrder({
+          ...selectedWorkOrder,
+          arrivedAt: now
+        });
+        toast({ title: "Clocked In", description: "Arrival time recorded" });
+      }
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to clock in", variant: "destructive" });
+    }
+  };
+
+  const handleClockOut = async () => {
+    if (!selectedWorkOrder) return;
+    
+    try {
+      const now = new Date().toISOString();
+      const response = await fetch('/api/technician/clock-out', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          workOrderId: selectedWorkOrder.id,
+          departedAt: now 
+        })
+      });
+      
+      if (response.ok) {
+        setSelectedWorkOrder({
+          ...selectedWorkOrder,
+          departedAt: now
+        });
+        toast({ title: "Clocked Out", description: "Departure time recorded" });
+      }
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to clock out", variant: "destructive" });
+    }
+  };
+
+  const handleTimeTracking = async () => {
+    if (!selectedWorkOrder) return;
+    
+    try {
+      const timeData: any = {};
+      if (arrivalTime && !selectedWorkOrder.arrivedAt) {
+        timeData.arrivedAt = arrivalTime;
+      }
+      if (departureTime && selectedWorkOrder.arrivedAt && !selectedWorkOrder.departedAt) {
+        timeData.departedAt = departureTime;
+      }
+      
+      const response = await fetch('/api/technician/update-time', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          workOrderId: selectedWorkOrder.id,
+          ...timeData
+        })
+      });
+      
+      if (response.ok) {
+        setSelectedWorkOrder({
+          ...selectedWorkOrder,
+          ...timeData
+        });
+        toast({ title: "Time Updated", description: "Manual time entry saved" });
+        setArrivalTime("");
+        setDepartureTime("");
+      }
+    } catch (error) {
+      toast({ title: "Error", description: "Failed to update time", variant: "destructive" });
     }
   };
 
@@ -533,14 +625,80 @@ export default function TechnicianLogin() {
                 )}
               </TabsContent>
 
-              <TabsContent value="tracking">
+              <TabsContent value="tracking" className="space-y-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Time Tracking</CardTitle>
-                    <CardDescription>Track arrival, departure, and work duration</CardDescription>
+                    <CardTitle className="flex items-center gap-2">
+                      <Clock className="h-5 w-5" />
+                      Time Tracking & Clock In/Out
+                    </CardTitle>
+                    <CardDescription>Record arrival and departure times for accurate billing</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-sm text-gray-600">Time tracking functionality would be implemented here</p>
+                    {/* Quick Clock In/Out Buttons */}
+                    <div className="grid grid-cols-2 gap-4">
+                      <Button
+                        onClick={handleClockIn}
+                        disabled={!!selectedWorkOrder.arrivedAt}
+                        className="h-16 text-lg"
+                        variant={selectedWorkOrder.arrivedAt ? "outline" : "default"}
+                      >
+                        <Clock className="h-6 w-6 mr-2" />
+                        {selectedWorkOrder.arrivedAt ? "Clocked In" : "Clock In"}
+                      </Button>
+                      <Button
+                        onClick={handleClockOut}
+                        disabled={!selectedWorkOrder.arrivedAt || !!selectedWorkOrder.departedAt}
+                        className="h-16 text-lg"
+                        variant={selectedWorkOrder.departedAt ? "outline" : "default"}
+                      >
+                        <CheckCircle className="h-6 w-6 mr-2" />
+                        {selectedWorkOrder.departedAt ? "Clocked Out" : "Clock Out"}
+                      </Button>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="manualArrivalTime">Manual Arrival Time</Label>
+                        <Input
+                          id="manualArrivalTime"
+                          type="datetime-local"
+                          value={arrivalTime}
+                          onChange={(e) => setArrivalTime(e.target.value)}
+                          disabled={!!selectedWorkOrder.arrivedAt}
+                        />
+                        {selectedWorkOrder.arrivedAt && (
+                          <p className="text-sm text-green-600 mt-1">
+                            ✓ Arrived: {new Date(selectedWorkOrder.arrivedAt).toLocaleString()}
+                          </p>
+                        )}
+                      </div>
+                      <div>
+                        <Label htmlFor="manualDepartureTime">Manual Departure Time</Label>
+                        <Input
+                          id="manualDepartureTime"
+                          type="datetime-local"
+                          value={departureTime}
+                          onChange={(e) => setDepartureTime(e.target.value)}
+                          disabled={!selectedWorkOrder.arrivedAt || !!selectedWorkOrder.departedAt}
+                        />
+                        {selectedWorkOrder.departedAt && (
+                          <p className="text-sm text-green-600 mt-1">
+                            ✓ Departed: {new Date(selectedWorkOrder.departedAt).toLocaleString()}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                    
+                    <Button 
+                      onClick={handleTimeTracking}
+                      className="w-full"
+                      disabled={(!arrivalTime && !!selectedWorkOrder.arrivedAt) || 
+                               (!!selectedWorkOrder.arrivedAt && !!selectedWorkOrder.departedAt)}
+                    >
+                      {!selectedWorkOrder.arrivedAt ? 'Save Manual Arrival Time' : 
+                       !selectedWorkOrder.departedAt ? 'Save Manual Departure Time' : 'Times Recorded'}
+                    </Button>
                   </CardContent>
                 </Card>
               </TabsContent>
