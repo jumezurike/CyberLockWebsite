@@ -220,7 +220,7 @@ export default function TechnicianLogin() {
   const loadWorkOrders = async () => {
     setLoading(true);
     try {
-      const orders = await apiRequest('GET', '/api/technician/work-orders');
+      const orders: WorkOrder[] = await apiRequest('GET', '/api/technician/work-orders');
       setWorkOrders(orders);
       setFilteredWorkOrders(orders);
       if (orders.length > 0 && !selectedWorkOrder) {
