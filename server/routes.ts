@@ -68,6 +68,20 @@ const requireSuperAdmin = (req: any, res: any, next: any) => {
   next();
 };
 
+const requireClientAuth = (req: any, res: any, next: any) => {
+  if (!req.session.clientUser) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
+  next();
+};
+
+const requireTechnicianAuth = (req: any, res: any, next: any) => {
+  if (!req.session.adminUser || !['technician', 'admin', 'super_admin'].includes(req.session.adminUser.role)) {
+    return res.status(403).json({ error: "Technician access required" });
+  }
+  next();
+};
+
 // Visitor tracking middleware
 const visitorTrackingMiddleware = async (req: any, res: any, next: any) => {
   // Skip tracking for API routes and admin routes
@@ -1336,7 +1350,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // -------------------------------------------------------------------------
 
   // Get work orders for a technician
-  app.get("/api/technician/work-orders", requireAdminAuth, async (req, res) => {
+  app.get("/api/technician/work-orders", requireTechnicianAuth, async (req, res) => {
     try {
       const technicianId = req.session.adminUser?.id;
       if (!technicianId) {
@@ -1352,7 +1366,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Get specific work order details
-  app.get("/api/technician/work-orders/:id", requireAdminAuth, async (req, res) => {
+  app.get("/api/technician/work-orders/:id", requireTechnicianAuth, async (req, res) => {
     try {
       const workOrderId = parseInt(req.params.id);
       const workOrder = await storage.getFieldWorkOrderById(workOrderId);
@@ -1375,7 +1389,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Update work order (time tracking, status, etc.)
-  app.put("/api/technician/work-orders/:id", requireAdminAuth, async (req, res) => {
+  app.put("/api/technician/work-orders/:id", requireTechnicianAuth, async (req, res) => {
     try {
       const workOrderId = parseInt(req.params.id);
       const technicianId = req.session.adminUser?.id;
@@ -1409,7 +1423,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Create new work order (admin only)
-  app.post("/api/technician/work-orders", requireAdminAuth, async (req, res) => {
+  app.post("/api/technician/work-orders", requireTechnicianAuth, async (req, res) => {
     try {
       // Only super admins can create work orders
       if (req.session.adminUser?.role !== 'super_admin') {
@@ -1429,7 +1443,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Submit technician feedback
-  app.post("/api/technician/feedback", requireAdminAuth, async (req, res) => {
+  app.post("/api/technician/feedback", requireTechnicianAuth, async (req, res) => {
     try {
       const technicianId = req.session.adminUser?.id;
       if (!technicianId) {
@@ -1466,7 +1480,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // CYST Service Report routes - E1T1 Tech Field Technician Service (CYST) Reports
-  app.get("/api/technician/cyst-reports", requireAdminAuth, async (req, res) => {
+  app.get("/api/technician/cyst-reports", requireTechnicianAuth, async (req, res) => {
     try {
       const reports = await storage.getAllCystServiceReports();
       res.json(reports);
@@ -1476,7 +1490,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/technician/cyst-reports/:id", requireAdminAuth, async (req, res) => {
+  app.get("/api/technician/cyst-reports/:id", requireTechnicianAuth, async (req, res) => {
     try {
       const reportId = parseInt(req.params.id);
       const report = await storage.getCystServiceReportById(reportId);
@@ -1490,7 +1504,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/technician/work-orders/:workOrderId/cyst-report", requireAdminAuth, async (req, res) => {
+  app.get("/api/technician/work-orders/:workOrderId/cyst-report", requireTechnicianAuth, async (req, res) => {
     try {
       const workOrderId = parseInt(req.params.workOrderId);
       const report = await storage.getCystServiceReportByWorkOrder(workOrderId);
@@ -1504,7 +1518,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/technician/cyst-reports", requireAdminAuth, async (req, res) => {
+  app.post("/api/technician/cyst-reports", requireTechnicianAuth, async (req, res) => {
     try {
       console.log("Creating CYST service report:", req.body);
       
@@ -1532,7 +1546,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // File upload endpoint for technicians
-  app.post("/api/technician/upload-files", requireAdminAuth, async (req, res) => {
+  app.post("/api/technician/upload-files", requireTechnicianAuth, async (req, res) => {
     try {
       // For demonstration purposes, simulate file upload
       // In production, integrate with proper file storage service like Replit Object Storage
@@ -1564,7 +1578,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/technician/cyst-reports/:id", requireAdminAuth, async (req, res) => {
+  app.put("/api/technician/cyst-reports/:id", requireTechnicianAuth, async (req, res) => {
     try {
       const reportId = parseInt(req.params.id);
       const updatedReport = await storage.updateCystServiceReport(reportId, req.body);
