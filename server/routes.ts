@@ -2037,7 +2037,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const searchParams = {
         chronologicalNumber: req.query.chronologicalNumber ? parseInt(req.query.chronologicalNumber as string) : undefined,
-        status: req.query.status as string,
+        status: req.query.status as "open" | "assigned" | "completed" | "in_progress" | "closed" | "cancelled" | undefined,
         stateCode: req.query.stateCode as string,
         cityCode: req.query.cityCode as string,
         companyCode: req.query.companyCode as string,

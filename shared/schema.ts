@@ -116,7 +116,7 @@ export const serviceRequests = pgTable("service_requests", {
   companyName: text("company_name").notNull(),
   contactPersonName: text("contact_person_name").notNull(),
   contactPersonTitle: text("contact_person_title").notNull(),
-  address: jsonb("address").notNull(), // {street, city, state, zipCode, country}
+  address: jsonb("address"), // {street, city, state, zipCode, country}
   primaryEmail: text("primary_email").notNull(),
   secondaryEmail: text("secondary_email"),
   officePhone: text("office_phone"),
@@ -125,7 +125,7 @@ export const serviceRequests = pgTable("service_requests", {
   
   // Service Selection
   serviceCategory: text("service_category").notNull(), // IT Services, AI Solutions, Cybersecurity, Combined Services
-  selectedServices: jsonb("selected_services").notNull(), // Array of selected services with quantities
+  selectedServices: jsonb("selected_services"), // Array of selected services with quantities
   
   // Project Details
   organizationDescription: text("organization_description"),
@@ -686,6 +686,8 @@ export const insertServiceRequestSchema = createInsertSchema(serviceRequests, {
   secondaryEmail: z.string().email("Valid email format").optional().or(z.literal("")),
   officePhone: z.string().optional().or(z.literal("")),
   mobilePhone: z.string().optional().or(z.literal("")),
+  address: z.any().optional(),
+  selectedServices: z.any().optional(),
   preferredContactMethod: z.enum(["email", "phone", "mobile"], {
     required_error: "Preferred contact method is required"
   }),

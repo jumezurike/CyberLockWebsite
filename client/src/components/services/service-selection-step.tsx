@@ -10,7 +10,7 @@ const SERVICE_CATALOG = {
     { name: "Password Resets & Account Unlocks", basePrice: 25, priceType: "per_incident", description: "Quick password and account recovery services ($25-50 per incident)", timeCapHours: 0.5 },
     { name: "Email Troubleshooting", basePrice: 35, priceType: "per_incident", description: "Outlook/Google Workspace configuration and sync fixes", timeCapHours: 1 },
     { name: "Printer/Scanner Support", basePrice: 40, priceType: "per_incident", description: "Driver installs, network printing, queue management", timeCapHours: 1 },
-    { name: "Wi-Fi/Network Connectivity", basePrice: 45, priceType: "per_incident", description: "Dead zones, DHCP errors, VPN setup", timeCapHours: 1.5 },
+    { name: "Wi-Fi/Network Connectivity", basePrice: 45, priceType: "per_incident", description: "Dead zones, DHCP errors, VPN setup", timeCapHours: 1 },
     { name: "Software Installation & Updates", basePrice: 50, priceType: "per_incident", description: "Licensed apps, updates, compatibility fixes", timeCapHours: 2 },
     { name: "Monthly Help Desk Package", basePrice: 50, priceType: "per_user_monthly", description: "Unlimited Tier 1-2 support per user" },
     { name: "Remote Monitoring & Management", basePrice: 200, priceType: "monthly", description: "Proactive patching and system monitoring" },
