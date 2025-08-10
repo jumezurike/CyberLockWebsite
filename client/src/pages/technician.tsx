@@ -34,6 +34,16 @@ interface WorkOrder {
   status: string;
   createdAt: string;
   updatedAt: string;
+  // Service request details
+  serviceRequest?: {
+    companyName: string;
+    contactPersonName: string;
+    projectDescription: string;
+    address: any;
+    officePhone: string;
+    primaryEmail: string;
+    requestCreated: string;
+  };
 }
 
 export default function TechnicianPortal() {
@@ -43,9 +53,11 @@ export default function TechnicianPortal() {
   const [loginLoading, setLoginLoading] = useState(false);
   
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
+  const [filteredWorkOrders, setFilteredWorkOrders] = useState<WorkOrder[]>([]);
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrder | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   const { toast } = useToast();
 
   // Time tracking state
@@ -176,6 +188,7 @@ export default function TechnicianPortal() {
       }
       const orders = await response.json();
       setWorkOrders(orders);
+      setFilteredWorkOrders(orders);
       if (orders.length > 0 && !selectedWorkOrder) {
         setSelectedWorkOrder(orders[0]);
         loadWorkOrderData(orders[0]);
@@ -189,6 +202,28 @@ export default function TechnicianPortal() {
     } finally {
       setLoading(false);
     }
+  };
+
+  // Filter work orders based on search query
+  useEffect(() => {
+    if (!searchQuery) {
+      setFilteredWorkOrders(workOrders);
+    } else {
+      const filtered = workOrders.filter(order => {
+        const searchLower = searchQuery.toLowerCase();
+        const canonicalNumber = `WO-${String(order.id).padStart(4, '0')}`;
+        return canonicalNumber.toLowerCase().includes(searchLower) ||
+               order.serviceRequest?.companyName?.toLowerCase().includes(searchLower) ||
+               order.serviceRequest?.contactPersonName?.toLowerCase().includes(searchLower) ||
+               order.status.toLowerCase().includes(searchLower);
+      });
+      setFilteredWorkOrders(filtered);
+    }
+  }, [searchQuery, workOrders]);
+
+  // Generate canonical work order number
+  const getCanonicalWorkOrderNumber = (id: number) => {
+    return `WO-${String(id).padStart(4, '0')}`;
   };
 
   const loadWorkOrderData = (workOrder: WorkOrder) => {
@@ -466,14 +501,26 @@ export default function TechnicianPortal() {
                 Active Work Orders
               </CardTitle>
               <CardDescription>
-                {workOrders.length} work order(s) assigned
+                {filteredWorkOrders.length} of {workOrders.length} work order(s) displayed
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3">
-              {workOrders.length === 0 ? (
-                <p className="text-gray-500 text-center py-4">No work orders assigned</p>
+              {/* Search Bar */}
+              <div className="mb-4">
+                <Input
+                  placeholder="Search by work order number, company, contact, or status..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full"
+                />
+              </div>
+              
+              {filteredWorkOrders.length === 0 ? (
+                <p className="text-gray-500 text-center py-4">
+                  {searchQuery ? 'No work orders match your search' : 'No work orders assigned'}
+                </p>
               ) : (
-                workOrders.map((order) => (
+                filteredWorkOrders.map((order) => (
                   <div 
                     key={order.id}
                     className={`p-3 border rounded-lg cursor-pointer transition-colors ${
@@ -487,11 +534,14 @@ export default function TechnicianPortal() {
                     }}
                   >
                     <div className="flex justify-between items-start mb-2">
-                      <h3 className="font-medium">Work Order #{order.id}</h3>
+                      <h3 className="font-medium">{getCanonicalWorkOrderNumber(order.id)}</h3>
                       {getStatusBadge(order.status)}
                     </div>
                     <p className="text-sm text-gray-600 mb-1">
-                      Service Request #{order.serviceRequestId}
+                      {order.serviceRequest?.companyName || 'Unknown Company'}
+                    </p>
+                    <p className="text-sm text-gray-500 mb-1">
+                      Contact: {order.serviceRequest?.contactPersonName || 'Unknown'}
                     </p>
                     <p className="text-sm text-gray-500">
                       Created: {new Date(order.createdAt).toLocaleDateString()}
@@ -519,9 +569,9 @@ export default function TechnicianPortal() {
               <TabsContent value="overview" className="space-y-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Work Order #{selectedWorkOrder.id}</CardTitle>
+                    <CardTitle>{getCanonicalWorkOrderNumber(selectedWorkOrder.id)}</CardTitle>
                     <CardDescription>
-                      Service Request #{selectedWorkOrder.serviceRequestId}
+                      Service Request #{selectedWorkOrder.serviceRequestId} • {selectedWorkOrder.serviceRequest?.companyName || 'Unknown Company'}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -551,6 +601,69 @@ export default function TechnicianPortal() {
                     </div>
                   </CardContent>
                 </Card>
+
+                {/* Original Service Request Details */}
+                {selectedWorkOrder.serviceRequest && (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Building className="h-5 w-5" />
+                        Original Service Request Details
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label className="text-sm font-medium">Company</Label>
+                          <p className="text-sm text-gray-900 mt-1">{selectedWorkOrder.serviceRequest.companyName}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">Contact Person</Label>
+                          <p className="text-sm text-gray-900 mt-1">{selectedWorkOrder.serviceRequest.contactPersonName}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">Phone</Label>
+                          <p className="text-sm text-gray-900 mt-1">{selectedWorkOrder.serviceRequest.officePhone || 'Not provided'}</p>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium">Email</Label>
+                          <p className="text-sm text-gray-900 mt-1">{selectedWorkOrder.serviceRequest.primaryEmail || 'Not provided'}</p>
+                        </div>
+                      </div>
+                      
+                      <div>
+                        <Label className="text-sm font-medium">Project Description</Label>
+                        <p className="text-sm text-gray-900 mt-1 bg-gray-50 p-3 rounded-md">
+                          {selectedWorkOrder.serviceRequest.projectDescription || 'No description provided'}
+                        </p>
+                      </div>
+
+                      {selectedWorkOrder.serviceRequest.address && (
+                        <div>
+                          <Label className="text-sm font-medium">Service Address</Label>
+                          <p className="text-sm text-gray-900 mt-1">
+                            {typeof selectedWorkOrder.serviceRequest.address === 'object' ? (
+                              `${selectedWorkOrder.serviceRequest.address.street || ''}, ${selectedWorkOrder.serviceRequest.address.city || ''}, ${selectedWorkOrder.serviceRequest.address.state || ''} ${selectedWorkOrder.serviceRequest.address.zipCode || ''}`
+                            ) : selectedWorkOrder.serviceRequest.address}
+                          </p>
+                        </div>
+                      )}
+                      
+                      <div>
+                        <Label className="text-sm font-medium">Request Created</Label>
+                        <p className="text-sm text-gray-900 mt-1">
+                          {new Date(selectedWorkOrder.serviceRequest.requestCreated).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </TabsContent>
 
               <TabsContent value="tracking" className="space-y-4">

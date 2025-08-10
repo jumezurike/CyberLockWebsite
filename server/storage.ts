@@ -1064,11 +1064,86 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getFieldWorkOrdersByTechnician(technicianId: number): Promise<FieldWorkOrder[]> {
-    return await db
-      .select()
+    const workOrdersWithServiceRequests = await db
+      .select({
+        id: fieldWorkOrders.id,
+        serviceRequestId: fieldWorkOrders.serviceRequestId,
+        technicianId: fieldWorkOrders.technicianId,
+        dispatchedAt: fieldWorkOrders.dispatchedAt,
+        arrivedAt: fieldWorkOrders.arrivedAt,
+        departedAt: fieldWorkOrders.departedAt,
+        totalHoursWorked: fieldWorkOrders.totalHoursWorked,
+        workDescription: fieldWorkOrders.workDescription,
+        equipmentUsed: fieldWorkOrders.equipmentUsed,
+        partsReplaced: fieldWorkOrders.partsReplaced,
+        beforePhotos: fieldWorkOrders.beforePhotos,
+        afterPhotos: fieldWorkOrders.afterPhotos,
+        serviceReportFile: fieldWorkOrders.serviceReportFile,
+        additionalDocuments: fieldWorkOrders.additionalDocuments,
+        workCompleted: fieldWorkOrders.workCompleted,
+        clientSignature: fieldWorkOrders.clientSignature,
+        clientSignatureName: fieldWorkOrders.clientSignatureName,
+        clientSignatureTimestamp: fieldWorkOrders.clientSignatureTimestamp,
+        closingRemarks: fieldWorkOrders.closingRemarks,
+        issuesEncountered: fieldWorkOrders.issuesEncountered,
+        recommendedFollowUp: fieldWorkOrders.recommendedFollowUp,
+        workQualityRating: fieldWorkOrders.workQualityRating,
+        timeEfficiencyRating: fieldWorkOrders.timeEfficiencyRating,
+        status: fieldWorkOrders.status,
+        createdAt: fieldWorkOrders.createdAt,
+        updatedAt: fieldWorkOrders.updatedAt,
+        // Service request details
+        companyName: serviceRequests.companyName,
+        contactPersonName: serviceRequests.contactPersonName,
+        projectDescription: serviceRequests.projectDescription,
+        address: serviceRequests.address,
+        officePhone: serviceRequests.officePhone,
+        primaryEmail: serviceRequests.primaryEmail,
+        requestCreated: serviceRequests.createdAt
+      })
       .from(fieldWorkOrders)
+      .leftJoin(serviceRequests, eq(fieldWorkOrders.serviceRequestId, serviceRequests.id))
       .where(eq(fieldWorkOrders.technicianId, technicianId))
       .orderBy(desc(fieldWorkOrders.createdAt));
+
+    // Transform the data to include serviceRequest object
+    return workOrdersWithServiceRequests.map(row => ({
+      id: row.id,
+      serviceRequestId: row.serviceRequestId,
+      technicianId: row.technicianId,
+      dispatchedAt: row.dispatchedAt,
+      arrivedAt: row.arrivedAt,
+      departedAt: row.departedAt,
+      totalHoursWorked: row.totalHoursWorked,
+      workDescription: row.workDescription,
+      equipmentUsed: row.equipmentUsed,
+      partsReplaced: row.partsReplaced,
+      beforePhotos: row.beforePhotos,
+      afterPhotos: row.afterPhotos,
+      serviceReportFile: row.serviceReportFile,
+      additionalDocuments: row.additionalDocuments,
+      workCompleted: row.workCompleted,
+      clientSignature: row.clientSignature,
+      clientSignatureName: row.clientSignatureName,
+      clientSignatureTimestamp: row.clientSignatureTimestamp,
+      closingRemarks: row.closingRemarks,
+      issuesEncountered: row.issuesEncountered,
+      recommendedFollowUp: row.recommendedFollowUp,
+      workQualityRating: row.workQualityRating,
+      timeEfficiencyRating: row.timeEfficiencyRating,
+      status: row.status,
+      createdAt: row.createdAt,
+      updatedAt: row.updatedAt,
+      serviceRequest: row.companyName ? {
+        companyName: row.companyName,
+        contactPersonName: row.contactPersonName,
+        projectDescription: row.projectDescription,
+        address: row.address,
+        officePhone: row.officePhone,
+        primaryEmail: row.primaryEmail,
+        requestCreated: row.requestCreated
+      } : undefined
+    }));
   }
 
   async getFieldWorkOrdersByServiceRequest(serviceRequestId: number): Promise<FieldWorkOrder[]> {
