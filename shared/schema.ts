@@ -420,6 +420,39 @@ export const visitorPageViews = pgTable("visitor_page_views", {
   timestamp: timestamp("timestamp").defaultNow(),
 });
 
+// Service Tickets with custom naming convention
+export const serviceTickets = pgTable("service_tickets", {
+  id: serial("id").primaryKey(),
+  ticketNumber: text("ticket_number").notNull().unique(), // SCCOLA20250809OHI00 format
+  serviceRequestId: integer("service_request_id").references(() => serviceRequests.id).notNull(),
+  workOrderId: integer("work_order_id").references(() => fieldWorkOrders.id),
+  
+  // Ticket components for search and tracking
+  stateCode: text("state_code").notNull(), // SC
+  cityCode: text("city_code").notNull(), // COLA
+  ticketDate: date("ticket_date").notNull(), // Date ticket was created
+  companyCode: text("company_code").notNull(), // OHI
+  chronologicalNumber: integer("chronological_number").notNull(), // 00, 01, 02, etc.
+  
+  // Ticket status and tracking
+  status: text("status").default("open"), // open, assigned, in_progress, completed, closed, cancelled
+  priority: text("priority").default("medium"), // low, medium, high, critical
+  
+  // Assignment and tracking
+  assignedTechnicianId: integer("assigned_technician_id").references(() => users.id),
+  assignedAt: timestamp("assigned_at"),
+  completedAt: timestamp("completed_at"),
+  
+  // Additional tracking info
+  clientCompanyName: text("client_company_name").notNull(),
+  clientLocation: text("client_location").notNull(),
+  serviceDescription: text("service_description"),
+  internalNotes: text("internal_notes"),
+  
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
 // Viewer invitation system
 export const viewerInvitations = pgTable("viewer_invitations", {
   id: serial("id").primaryKey(),
@@ -553,6 +586,34 @@ export const insertRasbitaReportSchema = z.object({
 
 export type InsertRasbitaReport = z.infer<typeof insertRasbitaReportSchema>;
 export type RasbitaReport = typeof rasbitaReports.$inferSelect;
+
+// Service Ticket schemas
+export const insertServiceTicketSchema = z.object({
+  serviceRequestId: z.number(),
+  workOrderId: z.number().optional(),
+  stateCode: z.string().length(2, "State code must be 2 characters"),
+  cityCode: z.string().length(4, "City code must be 4 characters"),
+  companyCode: z.string().length(3, "Company code must be 3 characters"),
+  clientCompanyName: z.string().min(1, "Client company name is required"),
+  clientLocation: z.string().min(1, "Client location is required"),
+  serviceDescription: z.string().optional(),
+  priority: z.enum(["low", "medium", "high", "critical"]).default("medium"),
+});
+
+export const searchTicketSchema = z.object({
+  chronologicalNumber: z.number().min(0).optional(),
+  status: z.enum(["open", "assigned", "in_progress", "completed", "closed", "cancelled"]).optional(),
+  stateCode: z.string().length(2).optional(),
+  cityCode: z.string().length(4).optional(),
+  companyCode: z.string().length(3).optional(),
+  assignedTechnicianId: z.number().optional(),
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
+});
+
+export type InsertServiceTicket = z.infer<typeof insertServiceTicketSchema>;
+export type ServiceTicket = typeof serviceTickets.$inferSelect;
+export type SearchTicket = z.infer<typeof searchTicketSchema>;
 
 // Universal Wallet Address (UWA) table
 export const uwas = pgTable("uwas", {

@@ -2022,6 +2022,179 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   }
   
+  // Service Ticket API routes
+  app.get("/api/tickets", requireAdminAuth, async (req, res) => {
+    try {
+      const tickets = await storage.getAllServiceTickets();
+      res.json(tickets);
+    } catch (error) {
+      console.error("Error fetching tickets:", error);
+      res.status(500).json({ error: "Failed to fetch tickets" });
+    }
+  });
+
+  app.get("/api/tickets/search", requireAdminAuth, async (req, res) => {
+    try {
+      const searchParams = {
+        chronologicalNumber: req.query.chronologicalNumber ? parseInt(req.query.chronologicalNumber as string) : undefined,
+        status: req.query.status as string,
+        stateCode: req.query.stateCode as string,
+        cityCode: req.query.cityCode as string,
+        companyCode: req.query.companyCode as string,
+        assignedTechnicianId: req.query.assignedTechnicianId ? parseInt(req.query.assignedTechnicianId as string) : undefined,
+        startDate: req.query.startDate as string,
+        endDate: req.query.endDate as string,
+      };
+      
+      const tickets = await storage.searchServiceTickets(searchParams);
+      res.json(tickets);
+    } catch (error) {
+      console.error("Error searching tickets:", error);
+      res.status(500).json({ error: "Failed to search tickets" });
+    }
+  });
+
+  app.get("/api/tickets/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const ticketId = parseInt(req.params.id);
+      const ticket = await storage.getServiceTicketById(ticketId);
+      
+      if (!ticket) {
+        return res.status(404).json({ error: "Ticket not found" });
+      }
+      
+      res.json(ticket);
+    } catch (error) {
+      console.error("Error fetching ticket:", error);
+      res.status(500).json({ error: "Failed to fetch ticket" });
+    }
+  });
+
+  app.post("/api/tickets", requireAdminAuth, async (req, res) => {
+    try {
+      const ticketData = req.body;
+      const newTicket = await storage.createServiceTicket(ticketData);
+      res.json(newTicket);
+    } catch (error) {
+      console.error("Error creating ticket:", error);
+      res.status(500).json({ error: "Failed to create ticket" });
+    }
+  });
+
+  app.patch("/api/tickets/:id/assign", requireAdminAuth, async (req, res) => {
+    try {
+      const ticketId = parseInt(req.params.id);
+      const { technicianId } = req.body;
+      
+      const updatedTicket = await storage.assignTicketToTechnician(ticketId, technicianId);
+      
+      if (!updatedTicket) {
+        return res.status(404).json({ error: "Ticket not found" });
+      }
+      
+      res.json(updatedTicket);
+    } catch (error) {
+      console.error("Error assigning ticket:", error);
+      res.status(500).json({ error: "Failed to assign ticket" });
+    }
+  });
+
+  app.patch("/api/tickets/:id/status", requireAdminAuth, async (req, res) => {
+    try {
+      const ticketId = parseInt(req.params.id);
+      const { status } = req.body;
+      
+      const updatedTicket = await storage.updateTicketStatus(ticketId, status);
+      
+      if (!updatedTicket) {
+        return res.status(404).json({ error: "Ticket not found" });
+      }
+      
+      res.json(updatedTicket);
+    } catch (error) {
+      console.error("Error updating ticket status:", error);
+      res.status(500).json({ error: "Failed to update ticket status" });
+    }
+  });
+
+  // Automatically create tickets when service requests are created
+  app.post("/api/service-requests", async (req, res) => {
+    try {
+      const serviceRequestData = req.body;
+      
+      // Create the service request first
+      const serviceRequest = await storage.createServiceRequest(serviceRequestData);
+      
+      // Extract location information for ticket generation
+      const address = serviceRequest.address as any;
+      
+      // Generate ticket with naming convention
+      const ticketData = {
+        serviceRequestId: serviceRequest.id,
+        stateCode: extractStateCode(address?.state || ''),
+        cityCode: extractCityCode(address?.city || ''),
+        companyCode: extractCompanyCode(serviceRequest.companyName),
+        clientCompanyName: serviceRequest.companyName,
+        clientLocation: `${address?.city || ''}, ${address?.state || ''}`,
+        serviceDescription: serviceRequest.projectDescription || '',
+        priority: mapUrgencyToPriority(serviceRequest.urgencyLevel || 'medium')
+      };
+      
+      // Create the ticket
+      const ticket = await storage.createServiceTicket(ticketData);
+      
+      res.json({
+        serviceRequest,
+        ticket
+      });
+    } catch (error) {
+      console.error("Error creating service request and ticket:", error);
+      res.status(500).json({ error: "Failed to create service request" });
+    }
+  });
+
+  // Helper functions for ticket naming convention
+  function extractStateCode(state: string): string {
+    const stateMap: { [key: string]: string } = {
+      'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR', 'California': 'CA',
+      'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE', 'Florida': 'FL', 'Georgia': 'GA',
+      'Hawaii': 'HI', 'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
+      'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME', 'Maryland': 'MD',
+      'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN', 'Mississippi': 'MS', 'Missouri': 'MO',
+      'Montana': 'MT', 'Nebraska': 'NE', 'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ',
+      'New Mexico': 'NM', 'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
+      'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI', 'South Carolina': 'SC',
+      'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX', 'Utah': 'UT', 'Vermont': 'VT',
+      'Virginia': 'VA', 'Washington': 'WA', 'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY'
+    };
+    return stateMap[state] || state.substring(0, 2).toUpperCase();
+  }
+
+  function extractCityCode(city: string): string {
+    return city.replace(/[^A-Za-z]/g, '').substring(0, 4).toUpperCase().padEnd(4, 'X');
+  }
+
+  function extractCompanyCode(companyName: string): string {
+    const words = companyName.split(' ').filter(word => word.length > 0);
+    if (words.length >= 3) {
+      return words.slice(0, 3).map(word => word.charAt(0).toUpperCase()).join('');
+    } else if (words.length === 2) {
+      return (words[0].substring(0, 2) + words[1].charAt(0)).toUpperCase();
+    } else {
+      return companyName.replace(/[^A-Za-z]/g, '').substring(0, 3).toUpperCase().padEnd(3, 'X');
+    }
+  }
+
+  function mapUrgencyToPriority(urgency: string): 'low' | 'medium' | 'high' | 'critical' {
+    const urgencyMap: { [key: string]: 'low' | 'medium' | 'high' | 'critical' } = {
+      'Low': 'low',
+      'Medium': 'medium', 
+      'High': 'high',
+      'Critical': 'critical'
+    };
+    return urgencyMap[urgency] || 'medium';
+  }
+
   const httpServer = createServer(app);
   return httpServer;
 }

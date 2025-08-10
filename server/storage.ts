@@ -31,6 +31,7 @@ import {
   technicianProfiles,
   technicianFeedback,
   cystServiceReports,
+  serviceTickets,
   type ServiceRequest,
   type InsertServiceRequest,
   type ServiceCatalog,
@@ -41,10 +42,13 @@ import {
   type TechnicianFeedback,
   type InsertTechnicianFeedback,
   type CystServiceReport,
-  type InsertCystServiceReport
+  type InsertCystServiceReport,
+  type ServiceTicket,
+  type InsertServiceTicket,
+  type SearchTicket
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, sql, desc } from "drizzle-orm";
+import { eq, sql, desc, and } from "drizzle-orm";
 
 // Interface for storage operations
 // Interface for assessment search parameters
@@ -170,6 +174,17 @@ export interface IStorage {
   getTechnicianFeedbackById(id: number): Promise<TechnicianFeedback | undefined>;
   getTechnicianFeedbackByWorkOrder(workOrderId: number): Promise<TechnicianFeedback | undefined>;
   createTechnicianFeedback(feedback: InsertTechnicianFeedback): Promise<TechnicianFeedback>;
+
+  // Service Ticket operations
+  getAllServiceTickets(): Promise<ServiceTicket[]>;
+  getServiceTicketById(id: number): Promise<ServiceTicket | undefined>;
+  getServiceTicketByNumber(ticketNumber: string): Promise<ServiceTicket | undefined>;
+  searchServiceTickets(searchParams: SearchTicket): Promise<ServiceTicket[]>;
+  createServiceTicket(ticket: InsertServiceTicket): Promise<ServiceTicket>;
+  updateServiceTicket(id: number, updates: Partial<ServiceTicket>): Promise<ServiceTicket | undefined>;
+  assignTicketToTechnician(ticketId: number, technicianId: number): Promise<ServiceTicket | undefined>;
+  updateTicketStatus(ticketId: number, status: string): Promise<ServiceTicket | undefined>;
+  getNextChronologicalNumber(): Promise<number>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1242,6 +1257,134 @@ export class DatabaseStorage implements IStorage {
   async getTechnicianProfileByTechId(technicianId: number): Promise<any> {
     const [profile] = await db.select().from(technicianProfiles).where(eq(technicianProfiles.id, technicianId));
     return profile;
+  }
+
+  // Service Ticket operations
+  async getAllServiceTickets(): Promise<ServiceTicket[]> {
+    return await db.select().from(serviceTickets).orderBy(desc(serviceTickets.createdAt));
+  }
+
+  async getServiceTicketById(id: number): Promise<ServiceTicket | undefined> {
+    const [ticket] = await db.select().from(serviceTickets).where(eq(serviceTickets.id, id));
+    return ticket;
+  }
+
+  async getServiceTicketByNumber(ticketNumber: string): Promise<ServiceTicket | undefined> {
+    const [ticket] = await db.select().from(serviceTickets).where(eq(serviceTickets.ticketNumber, ticketNumber));
+    return ticket;
+  }
+
+  async searchServiceTickets(searchParams: SearchTicket): Promise<ServiceTicket[]> {
+    const conditions = [];
+    
+    if (searchParams.chronologicalNumber !== undefined) {
+      conditions.push(eq(serviceTickets.chronologicalNumber, searchParams.chronologicalNumber));
+    }
+    if (searchParams.status) {
+      conditions.push(eq(serviceTickets.status, searchParams.status));
+    }
+    if (searchParams.stateCode) {
+      conditions.push(eq(serviceTickets.stateCode, searchParams.stateCode));
+    }
+    if (searchParams.cityCode) {
+      conditions.push(eq(serviceTickets.cityCode, searchParams.cityCode));
+    }
+    if (searchParams.companyCode) {
+      conditions.push(eq(serviceTickets.companyCode, searchParams.companyCode));
+    }
+    if (searchParams.assignedTechnicianId) {
+      conditions.push(eq(serviceTickets.assignedTechnicianId, searchParams.assignedTechnicianId));
+    }
+    
+    let query = db.select().from(serviceTickets);
+    
+    if (conditions.length > 0) {
+      query = query.where(and(...conditions));
+    }
+    
+    return await query.orderBy(desc(serviceTickets.createdAt));
+  }
+
+  async createServiceTicket(ticket: InsertServiceTicket): Promise<ServiceTicket> {
+    const chronologicalNumber = await this.getNextChronologicalNumber();
+    const now = new Date();
+    const ticketDate = now.toISOString().split('T')[0]; // YYYY-MM-DD format
+    const formattedDate = ticketDate.replace(/-/g, ''); // YYYYMMDD format
+    
+    const ticketNumber = `${ticket.stateCode}${ticket.cityCode}${formattedDate}${ticket.companyCode}${chronologicalNumber.toString().padStart(2, '0')}`;
+    
+    const [newTicket] = await db
+      .insert(serviceTickets)
+      .values({
+        ticketNumber,
+        serviceRequestId: ticket.serviceRequestId,
+        workOrderId: ticket.workOrderId || null,
+        stateCode: ticket.stateCode,
+        cityCode: ticket.cityCode,
+        ticketDate: ticketDate,
+        companyCode: ticket.companyCode,
+        chronologicalNumber,
+        clientCompanyName: ticket.clientCompanyName,
+        clientLocation: ticket.clientLocation,
+        serviceDescription: ticket.serviceDescription || null,
+        priority: ticket.priority || 'medium',
+        status: 'open',
+        createdAt: now,
+        updatedAt: now,
+      })
+      .returning();
+    return newTicket;
+  }
+
+  async updateServiceTicket(id: number, updates: Partial<ServiceTicket>): Promise<ServiceTicket | undefined> {
+    const [updatedTicket] = await db
+      .update(serviceTickets)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(eq(serviceTickets.id, id))
+      .returning();
+    return updatedTicket;
+  }
+
+  async assignTicketToTechnician(ticketId: number, technicianId: number): Promise<ServiceTicket | undefined> {
+    const [updatedTicket] = await db
+      .update(serviceTickets)
+      .set({
+        assignedTechnicianId: technicianId,
+        assignedAt: new Date(),
+        status: 'assigned',
+        updatedAt: new Date(),
+      })
+      .where(eq(serviceTickets.id, ticketId))
+      .returning();
+    return updatedTicket;
+  }
+
+  async updateTicketStatus(ticketId: number, status: string): Promise<ServiceTicket | undefined> {
+    const updateData: any = {
+      status,
+      updatedAt: new Date(),
+    };
+    
+    if (status === 'completed') {
+      updateData.completedAt = new Date();
+    }
+    
+    const [updatedTicket] = await db
+      .update(serviceTickets)
+      .set(updateData)
+      .where(eq(serviceTickets.id, ticketId))
+      .returning();
+    return updatedTicket;
+  }
+
+  async getNextChronologicalNumber(): Promise<number> {
+    const [result] = await db
+      .select({ maxNumber: sql<number>`COALESCE(MAX(${serviceTickets.chronologicalNumber}), -1)` })
+      .from(serviceTickets);
+    return (result?.maxNumber || -1) + 1;
   }
 }
 

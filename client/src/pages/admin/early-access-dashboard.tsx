@@ -11,7 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { useAdminAuth } from "@/hooks/useAdminAuth";
 import AdminLogin from "./login";
-import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2, LogOut, Settings, Shield, BarChart3, UserPlus, Send, Wrench, MapPin, FileText, Star, Clock } from "lucide-react";
+import { TicketManagement } from "@/components/admin/TicketManagement";
+import { Users, Mail, Building, Phone, Calendar, Target, AlertCircle, Trash2, LogOut, Settings, Shield, BarChart3, UserPlus, Send, Wrench, MapPin, FileText, Star, Clock, Ticket } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -236,6 +237,10 @@ export default function EarlyAccessDashboard() {
             <TabsTrigger value="analytics" className="flex items-center gap-2">
               <BarChart3 className="w-4 h-4" />
               Performance
+            </TabsTrigger>
+            <TabsTrigger value="tickets" className="flex items-center gap-2">
+              <Ticket className="w-4 h-4" />
+              Service Tickets
             </TabsTrigger>
           </TabsList>
 
@@ -568,6 +573,11 @@ export default function EarlyAccessDashboard() {
                 <p className="text-muted-foreground">Comprehensive performance metrics, client satisfaction scores, technician efficiency ratings, and operational analytics.</p>
               </CardContent>
             </Card>
+          </TabsContent>
+
+          {/* Service Tickets Tab */}
+          <TabsContent value="tickets" className="space-y-6">
+            <TicketManagement />
           </TabsContent>
         </Tabs>
       </div>
