@@ -21,7 +21,11 @@ import {
   Building,
   Upload,
   Plus,
-  X
+  X,
+  Camera,
+  Star,
+  Pen,
+  Save
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
@@ -703,50 +707,215 @@ export default function TechnicianLogin() {
                 </Card>
               </TabsContent>
 
-              <TabsContent value="photos">
+              <TabsContent value="photos" className="space-y-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Photo Documentation</CardTitle>
-                    <CardDescription>Upload before and after photos</CardDescription>
+                    <CardTitle className="flex items-center gap-2">
+                      <Camera className="h-5 w-5" />
+                      Photo Documentation
+                    </CardTitle>
+                    <CardDescription>Upload before and after photos of work performed</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-sm text-gray-600">Photo upload functionality would be implemented here</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor="beforePhoto">Before Photo</Label>
+                        <Input
+                          id="beforePhoto"
+                          type="file"
+                          accept="image/*"
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor="afterPhoto">After Photo</Label>
+                        <Input
+                          id="afterPhoto"
+                          type="file"
+                          accept="image/*"
+                          className="mt-1"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="photoDescription">Photo Description</Label>
+                      <textarea
+                        id="photoDescription"
+                        className="w-full mt-1 p-2 border rounded-md"
+                        rows={3}
+                        placeholder="Describe the work performed and any notable observations..."
+                        value={newPhotoDescription}
+                        onChange={(e) => setNewPhotoDescription(e.target.value)}
+                      />
+                    </div>
+                    <Button className="w-full">
+                      <Upload className="h-4 w-4 mr-2" />
+                      Upload Photos
+                    </Button>
                   </CardContent>
                 </Card>
               </TabsContent>
 
-              <TabsContent value="cyst">
+              <TabsContent value="cyst" className="space-y-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle>CYST Report</CardTitle>
-                    <CardDescription>Create comprehensive service report</CardDescription>
+                    <CardTitle className="flex items-center gap-2">
+                      <FileText className="h-5 w-5" />
+                      CYST Report (Cybersecurity Service & Threat)
+                    </CardTitle>
+                    <CardDescription>Create comprehensive before, during, and after service report</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-sm text-gray-600">CYST report functionality would be implemented here</p>
+                    <div>
+                      <Label htmlFor="beforeDescription">Before Service Description</Label>
+                      <textarea
+                        id="beforeDescription"
+                        className="w-full mt-1 p-2 border rounded-md"
+                        rows={3}
+                        placeholder="Describe the initial state and observed issues..."
+                        value={cystFormData.beforeDescription}
+                        onChange={(e) => setCystFormData({...cystFormData, beforeDescription: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="duringDescription">During Service Description</Label>
+                      <textarea
+                        id="duringDescription"
+                        className="w-full mt-1 p-2 border rounded-md"
+                        rows={3}
+                        placeholder="Document the work performed and methods used..."
+                        value={cystFormData.duringDescription}
+                        onChange={(e) => setCystFormData({...cystFormData, duringDescription: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="afterDescription">After Service Description</Label>
+                      <textarea
+                        id="afterDescription"
+                        className="w-full mt-1 p-2 border rounded-md"
+                        rows={3}
+                        placeholder="Describe the final state and results achieved..."
+                        value={cystFormData.afterDescription}
+                        onChange={(e) => setCystFormData({...cystFormData, afterDescription: e.target.value})}
+                      />
+                    </div>
+                    <Button className="w-full">
+                      <Save className="h-4 w-4 mr-2" />
+                      Save CYST Report
+                    </Button>
                   </CardContent>
                 </Card>
               </TabsContent>
 
-              <TabsContent value="details">
+              <TabsContent value="details" className="space-y-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Work Details</CardTitle>
-                    <CardDescription>Document work performed and equipment used</CardDescription>
+                    <CardTitle className="flex items-center gap-2">
+                      <Wrench className="h-5 w-5" />
+                      Work Details & Equipment
+                    </CardTitle>
+                    <CardDescription>Document detailed work performed and equipment used</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-sm text-gray-600">Work details functionality would be implemented here</p>
+                    <div>
+                      <Label htmlFor="workPerformed">Work Performed</Label>
+                      <textarea
+                        id="workPerformed"
+                        className="w-full mt-1 p-2 border rounded-md"
+                        rows={4}
+                        placeholder="Detailed description of work performed..."
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="equipmentUsed">Equipment/Parts Used</Label>
+                      <textarea
+                        id="equipmentUsed"
+                        className="w-full mt-1 p-2 border rounded-md"
+                        rows={3}
+                        placeholder="List equipment, tools, and parts used..."
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="additionalNotes">Additional Notes</Label>
+                      <textarea
+                        id="additionalNotes"
+                        className="w-full mt-1 p-2 border rounded-md"
+                        rows={3}
+                        placeholder="Any additional observations or recommendations..."
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="workCompleted"
+                        className="rounded"
+                      />
+                      <Label htmlFor="workCompleted">Mark work as completed</Label>
+                    </div>
+                    <Button className="w-full">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Save Work Details
+                    </Button>
                   </CardContent>
                 </Card>
               </TabsContent>
 
-              <TabsContent value="feedback">
+              <TabsContent value="feedback" className="space-y-4">
                 <Card>
                   <CardHeader>
-                    <CardTitle>Client Feedback</CardTitle>
-                    <CardDescription>Collect client signature and feedback</CardDescription>
+                    <CardTitle className="flex items-center gap-2">
+                      <Star className="h-5 w-5" />
+                      Client Feedback & Signature
+                    </CardTitle>
+                    <CardDescription>Collect client satisfaction rating and digital signature</CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <p className="text-sm text-gray-600">Feedback collection functionality would be implemented here</p>
+                    <div>
+                      <Label>Service Rating</Label>
+                      <div className="flex items-center gap-2 mt-2">
+                        {[1, 2, 3, 4, 5].map((rating) => (
+                          <button
+                            key={rating}
+                            onClick={() => setFeedbackFormData({...feedbackFormData, rating})}
+                            className={`p-2 rounded ${
+                              feedbackFormData.rating >= rating
+                                ? 'text-yellow-400 fill-current'
+                                : 'text-gray-300'
+                            }`}
+                          >
+                            <Star className="h-6 w-6" fill={feedbackFormData.rating >= rating ? 'currentColor' : 'none'} />
+                          </button>
+                        ))}
+                        <span className="ml-2 text-sm text-gray-600">
+                          {feedbackFormData.rating}/5 stars
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <Label htmlFor="clientComments">Client Comments</Label>
+                      <textarea
+                        id="clientComments"
+                        className="w-full mt-1 p-2 border rounded-md"
+                        rows={3}
+                        placeholder="Client feedback and comments..."
+                        value={feedbackFormData.comments}
+                        onChange={(e) => setFeedbackFormData({...feedbackFormData, comments: e.target.value})}
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="clientSignature">Client Signature</Label>
+                      <div className="mt-2 border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                        <Pen className="h-8 w-8 text-gray-400 mx-auto mb-2" />
+                        <p className="text-sm text-gray-600">Digital signature capture would be implemented here</p>
+                        <Button variant="outline" className="mt-2">
+                          Capture Signature
+                        </Button>
+                      </div>
+                    </div>
+                    <Button className="w-full">
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Submit Client Feedback
+                    </Button>
                   </CardContent>
                 </Card>
               </TabsContent>
