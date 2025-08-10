@@ -32,6 +32,8 @@ import {
   technicianFeedback,
   cystServiceReports,
   serviceTickets,
+  cystReports,
+  cystPhotos,
   type ServiceRequest,
   type InsertServiceRequest,
   type ServiceCatalog,
@@ -45,7 +47,11 @@ import {
   type InsertCystServiceReport,
   type ServiceTicket,
   type InsertServiceTicket,
-  type SearchTicket
+  type SearchTicket,
+  type CystReport,
+  type InsertCystReport,
+  type CystPhoto,
+  type InsertCystPhoto
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, and } from "drizzle-orm";
@@ -185,6 +191,24 @@ export interface IStorage {
   assignTicketToTechnician(ticketId: number, technicianId: number): Promise<ServiceTicket | undefined>;
   updateTicketStatus(ticketId: number, status: string): Promise<ServiceTicket | undefined>;
   getNextChronologicalNumber(): Promise<number>;
+  
+  // CYST Reports for legal compliance
+  createCystReport(report: InsertCystReport): Promise<CystReport>;
+  getCystReport(id: number): Promise<CystReport | undefined>;
+  getCystReports(): Promise<CystReport[]>;
+  getCystReportsByTechnician(technicianId: number): Promise<CystReport[]>;
+  getCystReportsByWorkOrder(workOrderId: number): Promise<CystReport[]>;
+  updateCystReport(id: number, report: Partial<InsertCystReport>): Promise<CystReport | undefined>;
+  updateCystReportStatus(id: number, status: string): Promise<CystReport | undefined>;
+  deleteCystReport(id: number): Promise<void>;
+  generateCystReportNumber(): Promise<string>;
+  
+  // CYST Photos
+  createCystPhoto(photo: InsertCystPhoto): Promise<CystPhoto>;
+  getCystPhoto(id: number): Promise<CystPhoto | undefined>;
+  getCystPhotosByReport(cystReportId: number): Promise<CystPhoto[]>;
+  getCystPhotosByWorkOrder(workOrderId: number): Promise<CystPhoto[]>;
+  deleteCystPhoto(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1460,6 +1484,145 @@ export class DatabaseStorage implements IStorage {
       .select({ maxNumber: sql<number>`COALESCE(MAX(${serviceTickets.chronologicalNumber}), -1)` })
       .from(serviceTickets);
     return (result?.maxNumber || -1) + 1;
+  }
+
+  // CYST Reports for legal compliance
+  async createCystReport(report: InsertCystReport): Promise<CystReport> {
+    const reportNumber = await this.generateCystReportNumber();
+    
+    const [newReport] = await db
+      .insert(cystReports)
+      .values({
+        ...report,
+        reportNumber,
+        status: "draft",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+    return newReport;
+  }
+
+  async getCystReport(id: number): Promise<CystReport | undefined> {
+    const [report] = await db
+      .select()
+      .from(cystReports)
+      .where(eq(cystReports.id, id));
+    return report;
+  }
+
+  async getCystReports(): Promise<CystReport[]> {
+    return await db
+      .select()
+      .from(cystReports)
+      .orderBy(desc(cystReports.createdAt));
+  }
+
+  async getCystReportsByTechnician(technicianId: number): Promise<CystReport[]> {
+    return await db
+      .select()
+      .from(cystReports)
+      .where(eq(cystReports.technicianId, technicianId))
+      .orderBy(desc(cystReports.createdAt));
+  }
+
+  async getCystReportsByWorkOrder(workOrderId: number): Promise<CystReport[]> {
+    return await db
+      .select()
+      .from(cystReports)
+      .where(eq(cystReports.workOrderId, workOrderId))
+      .orderBy(desc(cystReports.createdAt));
+  }
+
+  async updateCystReport(id: number, report: Partial<InsertCystReport>): Promise<CystReport | undefined> {
+    const [updatedReport] = await db
+      .update(cystReports)
+      .set({
+        ...report,
+        updatedAt: new Date(),
+      })
+      .where(eq(cystReports.id, id))
+      .returning();
+    return updatedReport;
+  }
+
+  async updateCystReportStatus(id: number, status: string): Promise<CystReport | undefined> {
+    const [updatedReport] = await db
+      .update(cystReports)
+      .set({
+        status,
+        updatedAt: new Date(),
+        ...(status === 'submitted' && { submittedAt: new Date() }),
+        ...(status === 'approved' && { approvedAt: new Date() }),
+      })
+      .where(eq(cystReports.id, id))
+      .returning();
+    return updatedReport;
+  }
+
+  async deleteCystReport(id: number): Promise<void> {
+    await db.delete(cystReports).where(eq(cystReports.id, id));
+  }
+
+  async generateCystReportNumber(): Promise<string> {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = (now.getMonth() + 1).toString().padStart(2, '0');
+    const day = now.getDate().toString().padStart(2, '0');
+    
+    // Get count of reports today
+    const today = now.toISOString().split('T')[0];
+    const [result] = await db
+      .select({ 
+        count: sql<number>`count(*)` 
+      })
+      .from(cystReports)
+      .where(sql`DATE(${cystReports.createdAt}) = ${today}`);
+    
+    const dailySequence = ((result?.count ?? 0) + 1).toString().padStart(3, '0');
+    
+    return `CYST-${year}${month}${day}-${dailySequence}`;
+  }
+
+  // CYST Photos
+  async createCystPhoto(photo: InsertCystPhoto): Promise<CystPhoto> {
+    const [newPhoto] = await db
+      .insert(cystPhotos)
+      .values({
+        ...photo,
+        uploadedAt: new Date(),
+        createdAt: new Date(),
+      })
+      .returning();
+    return newPhoto;
+  }
+
+  async getCystPhoto(id: number): Promise<CystPhoto | undefined> {
+    const [photo] = await db
+      .select()
+      .from(cystPhotos)
+      .where(eq(cystPhotos.id, id));
+    return photo;
+  }
+
+  async getCystPhotosByReport(cystReportId: number): Promise<CystPhoto[]> {
+    return await db
+      .select()
+      .from(cystPhotos)
+      .where(eq(cystPhotos.cystReportId, cystReportId))
+      .orderBy(desc(cystPhotos.uploadedAt));
+  }
+
+  async getCystPhotosByWorkOrder(workOrderId: number): Promise<CystPhoto[]> {
+    return await db
+      .select()
+      .from(cystPhotos)
+      .where(eq(cystPhotos.workOrderId, workOrderId))
+      .orderBy(desc(cystPhotos.uploadedAt));
+  }
+
+  async deleteCystPhoto(id: number): Promise<void> {
+    await db.delete(cystPhotos).where(eq(cystPhotos.id, id));
   }
 }
 

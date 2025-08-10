@@ -800,3 +800,130 @@ export type VisitorSession = typeof visitorSessions.$inferSelect;
 
 export type InsertVisitorPageView = z.infer<typeof insertVisitorPageViewSchema>;
 export type VisitorPageView = typeof visitorPageViews.$inferSelect;
+
+// CYST Reports for legal compliance (E1T1 Tech Field Technician Service Report)
+export const cystReports = pgTable("cyst_reports", {
+  id: serial("id").primaryKey(),
+  workOrderId: integer("work_order_id").references(() => fieldWorkOrders.id),
+  technicianId: integer("technician_id").references(() => users.id),
+  reportNumber: text("report_number").notNull().unique(), // Auto-generated unique number
+  
+  // Business Information
+  businessName: text("business_name").notNull(),
+  businessDescription: text("business_description"),
+  businessType: text("business_type").array(), // SMB Gen-Contracting, SMB (IT), etc.
+  
+  // Technician Details
+  technicianName: text("technician_name").notNull(),
+  technicianContact: text("technician_contact"),
+  serviceDate: date("service_date").notNull(),
+  checkinTime: text("checkin_time"),
+  checkoutTime: text("checkout_time"),
+  
+  // Service Organization Details
+  providerName: text("provider_name"),
+  providerAddress: text("provider_address"),
+  providerContact: text("provider_contact"),
+  providerContactPerson: text("provider_contact_person"),
+  
+  receiverName: text("receiver_name"),
+  receiverAddress: text("receiver_address"),
+  receiverContact: text("receiver_contact"),
+  receiverContactPerson: text("receiver_contact_person"),
+  
+  // Service Details
+  serviceTypes: text("service_types"),
+  completionStatus: text("completion_status").notNull(), // Pending, In Progress, Completed
+  workDescription: text("work_description"),
+  servicesPerformed: text("services_performed").array(), // Diagnosis, Cabling, etc.
+  
+  // Device Information (JSON array of devices)
+  deviceInfo: jsonb("device_info"), // [{type, os, make, model, serial, tagged, count}]
+  
+  // Follow-up and Legal
+  followupRequired: boolean("followup_required").default(false),
+  managerName: text("manager_name"), // Manager on Duty
+  managerSignature: text("manager_signature"), // Digital signature
+  managerSignedAt: timestamp("manager_signed_at"),
+  technicianSignature: text("technician_signature"),
+  technicianSignedAt: timestamp("technician_signed_at"),
+  
+  // Document Management
+  pdfUrl: text("pdf_url"), // URL to signed PDF document
+  documentHash: text("document_hash"), // For integrity verification
+  legallyValid: boolean("legally_valid").default(false),
+  
+  // Audit Trail
+  status: text("status").default("draft"), // draft, signed, submitted, approved
+  submittedAt: timestamp("submitted_at"),
+  approvedAt: timestamp("approved_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+// Photos attached to CYST reports
+export const cystPhotos = pgTable("cyst_photos", {
+  id: serial("id").primaryKey(),
+  cystReportId: integer("cyst_report_id").references(() => cystReports.id),
+  workOrderId: integer("work_order_id").references(() => fieldWorkOrders.id),
+  technicianId: integer("technician_id").references(() => users.id),
+  filename: text("filename").notNull(),
+  originalName: text("original_name").notNull(),
+  fileUrl: text("file_url").notNull(), // Object storage URL
+  photoType: text("photo_type").notNull(), // before, after, during
+  description: text("description"),
+  fileSize: integer("file_size"),
+  mimeType: text("mime_type"),
+  uploadedAt: timestamp("uploaded_at").defaultNow(),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+// CYST Report schemas
+export const insertCystReportSchema = z.object({
+  workOrderId: z.number().optional(),
+  technicianId: z.number(),
+  businessName: z.string().min(1, "Business name is required"),
+  businessDescription: z.string().optional(),
+  businessType: z.array(z.string()).optional(),
+  technicianName: z.string().min(1, "Technician name is required"),
+  technicianContact: z.string().optional(),
+  serviceDate: z.string(), // Will be converted to date
+  checkinTime: z.string().optional(),
+  checkoutTime: z.string().optional(),
+  providerName: z.string().optional(),
+  providerAddress: z.string().optional(),
+  providerContact: z.string().optional(),
+  providerContactPerson: z.string().optional(),
+  receiverName: z.string().optional(),
+  receiverAddress: z.string().optional(),
+  receiverContact: z.string().optional(),
+  receiverContactPerson: z.string().optional(),
+  serviceTypes: z.string().optional(),
+  completionStatus: z.enum(["Pending", "In Progress", "Completed"]),
+  workDescription: z.string().optional(),
+  servicesPerformed: z.array(z.string()).optional(),
+  deviceInfo: z.any().optional(),
+  followupRequired: z.boolean().default(false),
+  managerName: z.string().optional(),
+  managerSignature: z.string().optional(),
+  technicianSignature: z.string().optional(),
+});
+
+export const insertCystPhotoSchema = z.object({
+  cystReportId: z.number().optional(),
+  workOrderId: z.number().optional(),
+  technicianId: z.number(),
+  filename: z.string(),
+  originalName: z.string(),
+  fileUrl: z.string(),
+  photoType: z.enum(["before", "after", "during"]),
+  description: z.string().optional(),
+  fileSize: z.number().optional(),
+  mimeType: z.string().optional(),
+});
+
+export type InsertCystReport = z.infer<typeof insertCystReportSchema>;
+export type CystReport = typeof cystReports.$inferSelect;
+
+export type InsertCystPhoto = z.infer<typeof insertCystPhotoSchema>;
+export type CystPhoto = typeof cystPhotos.$inferSelect;

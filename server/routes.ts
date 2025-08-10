@@ -22,7 +22,9 @@ import {
   insertFieldWorkOrderSchema,
   updateFieldWorkOrderSchema,
   insertTechnicianFeedbackSchema,
-  insertCystServiceReportSchema
+  insertCystServiceReportSchema,
+  insertCystReportSchema,
+  insertCystPhotoSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
@@ -47,6 +49,12 @@ declare module 'express-session' {
     clientUser?: {
       id: number;
       email: string;
+      role: string;
+      fullName?: string;
+    };
+    technicianUser?: {
+      id: number;
+      username: string;
       role: string;
       fullName?: string;
     };
@@ -76,7 +84,15 @@ const requireClientAuth = (req: any, res: any, next: any) => {
 };
 
 const requireTechnicianAuth = (req: any, res: any, next: any) => {
-  if (!req.session.adminUser || !['technician', 'admin', 'super_admin'].includes(req.session.adminUser.role)) {
+  if (!req.session.technicianUser && !req.session.adminUser) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
+  
+  // Allow technicians with their own session or admins/super_admins
+  const isValidTechnician = req.session.technicianUser?.role === 'technician';
+  const isValidAdmin = req.session.adminUser && ['admin', 'super_admin'].includes(req.session.adminUser.role);
+  
+  if (!isValidTechnician && !isValidAdmin) {
     return res.status(403).json({ error: "Technician access required" });
   }
   next();
@@ -223,7 +239,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: "Invalid credentials" });
       }
       
-      req.session.adminUser = {
+      req.session.technicianUser = {
         id: user.id,
         username: user.username,
         role: user.role || 'technician',
@@ -247,8 +263,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/technician/me", requireTechnicianAuth, async (req, res) => {
     try {
-      const user = await storage.getUser(req.session.adminUser!.id);
+      const userId = req.session.technicianUser?.id || req.session.adminUser?.id;
+      if (!userId) {
+        return res.status(401).json({ error: "Authentication required" });
+      }
+      
+      const user = await storage.getUser(userId);
       if (!user) {
+        req.session.technicianUser = undefined;
         req.session.adminUser = undefined;
         return res.status(401).json({ error: "User not found" });
       }
@@ -265,7 +287,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/api/technician/logout", (req, res) => {
-    req.session.adminUser = undefined;
+    req.session.technicianUser = undefined;
     res.json({ message: "Logged out successfully" });
   });
 
@@ -1540,71 +1562,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // CYST Service Report routes - E1T1 Tech Field Technician Service (CYST) Reports
-  app.get("/api/technician/cyst-reports", requireTechnicianAuth, async (req, res) => {
-    try {
-      const reports = await storage.getAllCystServiceReports();
-      res.json(reports);
-    } catch (error) {
-      console.error("Error fetching CYST reports:", error);
-      res.status(500).json({ error: "Failed to fetch CYST reports" });
-    }
-  });
-
-  app.get("/api/technician/cyst-reports/:id", requireTechnicianAuth, async (req, res) => {
-    try {
-      const reportId = parseInt(req.params.id);
-      const report = await storage.getCystServiceReportById(reportId);
-      if (!report) {
-        return res.status(404).json({ error: "CYST report not found" });
-      }
-      res.json(report);
-    } catch (error) {
-      console.error("Error fetching CYST report:", error);
-      res.status(500).json({ error: "Failed to fetch CYST report" });
-    }
-  });
-
-  app.get("/api/technician/work-orders/:workOrderId/cyst-report", requireTechnicianAuth, async (req, res) => {
-    try {
-      const workOrderId = parseInt(req.params.workOrderId);
-      const report = await storage.getCystServiceReportByWorkOrder(workOrderId);
-      if (!report) {
-        return res.status(404).json({ error: "CYST report not found for this work order" });
-      }
-      res.json(report);
-    } catch (error) {
-      console.error("Error fetching CYST report by work order:", error);
-      res.status(500).json({ error: "Failed to fetch CYST report" });
-    }
-  });
-
-  app.post("/api/technician/cyst-reports", requireTechnicianAuth, async (req, res) => {
-    try {
-      console.log("Creating CYST service report:", req.body);
-      
-      const technicianId = req.session.adminUser?.id;
-      if (!technicianId) {
-        return res.status(401).json({ error: "Technician ID required" });
-      }
-
-      const reportData = {
-        ...req.body,
-        technicianId: technicianId
-      };
-
-      const validatedData = insertCystServiceReportSchema.parse(reportData);
-      const report = await storage.createCystServiceReport(validatedData);
-      
-      res.status(201).json(report);
-    } catch (error) {
-      if (error instanceof ZodError) {
-        return res.status(400).json({ error: "Validation failed", details: error.errors });
-      }
-      console.error("Error creating CYST service report:", error);
-      res.status(500).json({ error: "Failed to create CYST service report" });
-    }
-  });
+  // Note: CYST Service Report routes moved to the legal compliance section below
 
   // File upload endpoint for technicians
   app.post("/api/technician/upload-files", requireTechnicianAuth, async (req, res) => {
@@ -1639,19 +1597,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/technician/cyst-reports/:id", requireTechnicianAuth, async (req, res) => {
-    try {
-      const reportId = parseInt(req.params.id);
-      const updatedReport = await storage.updateCystServiceReport(reportId, req.body);
-      if (!updatedReport) {
-        return res.status(404).json({ error: "CYST report not found" });
-      }
-      res.json(updatedReport);
-    } catch (error) {
-      console.error("Error updating CYST service report:", error);
-      res.status(500).json({ error: "Failed to update CYST service report" });
-    }
-  });
+  // Note: CYST Service Report update routes moved to the legal compliance section below
 
   // =========================================================================
   // CLIENT AUTHENTICATION & RBAC SYSTEM
@@ -2269,6 +2215,239 @@ export async function registerRoutes(app: Express): Promise<Server> {
     };
     return urgencyMap[urgency] || 'medium';
   }
+
+  // CYST Reports API Routes (Legal Compliance)
+  
+  // Get all CYST reports (admin only)
+  app.get("/api/cyst-reports", requireAdminAuth, async (req, res) => {
+    try {
+      const reports = await storage.getCystReports();
+      res.json(reports);
+    } catch (error) {
+      console.error("Error getting CYST reports:", error);
+      res.status(500).json({ error: "Failed to get CYST reports" });
+    }
+  });
+
+  // Get CYST report by ID
+  app.get("/api/cyst-reports/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const report = await storage.getCystReport(id);
+      if (!report) {
+        return res.status(404).json({ error: "CYST report not found" });
+      }
+      res.json(report);
+    } catch (error) {
+      console.error("Error getting CYST report:", error);
+      res.status(500).json({ error: "Failed to get CYST report" });
+    }
+  });
+
+  // Get CYST reports by technician (technician can see their own)
+  app.get("/api/technician/cyst-reports", requireTechnicianAuth, async (req, res) => {
+    try {
+      const technicianId = req.session.technicianUser?.id;
+      if (!technicianId) {
+        return res.status(401).json({ error: "Technician authentication required" });
+      }
+      
+      const reports = await storage.getCystReportsByTechnician(technicianId);
+      res.json(reports);
+    } catch (error) {
+      console.error("Error getting technician CYST reports:", error);
+      res.status(500).json({ error: "Failed to get CYST reports" });
+    }
+  });
+
+  // Get CYST reports by work order
+  app.get("/api/work-orders/:workOrderId/cyst-reports", requireAdminAuth, async (req, res) => {
+    try {
+      const workOrderId = parseInt(req.params.workOrderId);
+      const reports = await storage.getCystReportsByWorkOrder(workOrderId);
+      res.json(reports);
+    } catch (error) {
+      console.error("Error getting work order CYST reports:", error);
+      res.status(500).json({ error: "Failed to get CYST reports" });
+    }
+  });
+
+  // Create new CYST report (technician only)
+  app.post("/api/cyst-reports", requireTechnicianAuth, async (req, res) => {
+    try {
+      const technicianId = req.session.technicianUser?.id;
+      if (!technicianId) {
+        return res.status(401).json({ error: "Technician authentication required" });
+      }
+
+      const validatedData = insertCystReportSchema.parse({
+        ...req.body,
+        technicianId
+      });
+      
+      const report = await storage.createCystReport(validatedData);
+      res.status(201).json(report);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Error creating CYST report:", error);
+      res.status(500).json({ error: "Failed to create CYST report" });
+    }
+  });
+
+  // Update CYST report (technician can update their own drafts)
+  app.put("/api/cyst-reports/:id", requireTechnicianAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const technicianId = req.session.technicianUser?.id;
+      
+      // Check if report exists and belongs to this technician
+      const existingReport = await storage.getCystReport(id);
+      if (!existingReport) {
+        return res.status(404).json({ error: "CYST report not found" });
+      }
+      
+      if (existingReport.technicianId !== technicianId) {
+        return res.status(403).json({ error: "Can only update your own reports" });
+      }
+      
+      if (existingReport.status !== 'draft') {
+        return res.status(400).json({ error: "Can only update draft reports" });
+      }
+
+      const report = await storage.updateCystReport(id, req.body);
+      if (!report) {
+        return res.status(404).json({ error: "CYST report not found" });
+      }
+      res.json(report);
+    } catch (error) {
+      console.error("Error updating CYST report:", error);
+      res.status(500).json({ error: "Failed to update CYST report" });
+    }
+  });
+
+  // Submit CYST report for manager approval
+  app.post("/api/cyst-reports/:id/submit", requireTechnicianAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const technicianId = req.session.technicianUser?.id;
+      
+      const existingReport = await storage.getCystReport(id);
+      if (!existingReport) {
+        return res.status(404).json({ error: "CYST report not found" });
+      }
+      
+      if (existingReport.technicianId !== technicianId) {
+        return res.status(403).json({ error: "Can only submit your own reports" });
+      }
+      
+      if (existingReport.status !== 'draft') {
+        return res.status(400).json({ error: "Report has already been submitted" });
+      }
+
+      const report = await storage.updateCystReportStatus(id, 'submitted');
+      res.json(report);
+    } catch (error) {
+      console.error("Error submitting CYST report:", error);
+      res.status(500).json({ error: "Failed to submit CYST report" });
+    }
+  });
+
+  // Approve CYST report (admin/manager only)
+  app.post("/api/cyst-reports/:id/approve", requireAdminAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { managerName, managerSignature } = req.body;
+      
+      if (!managerName || !managerSignature) {
+        return res.status(400).json({ error: "Manager name and signature required" });
+      }
+
+      // Update with manager approval
+      const report = await storage.updateCystReport(id, {
+        managerName,
+        managerSignature,
+        managerSignedAt: new Date(),
+        legallyValid: true
+      });
+      
+      if (!report) {
+        return res.status(404).json({ error: "CYST report not found" });
+      }
+
+      // Set status to approved
+      const approvedReport = await storage.updateCystReportStatus(id, 'approved');
+      res.json(approvedReport);
+    } catch (error) {
+      console.error("Error approving CYST report:", error);
+      res.status(500).json({ error: "Failed to approve CYST report" });
+    }
+  });
+
+  // CYST Photos API Routes
+  
+  // Get photos for a CYST report
+  app.get("/api/cyst-reports/:reportId/photos", requireAdminAuth, async (req, res) => {
+    try {
+      const reportId = parseInt(req.params.reportId);
+      const photos = await storage.getCystPhotosByReport(reportId);
+      res.json(photos);
+    } catch (error) {
+      console.error("Error getting CYST photos:", error);
+      res.status(500).json({ error: "Failed to get CYST photos" });
+    }
+  });
+
+  // Upload photo for CYST report (technician only)
+  app.post("/api/cyst-reports/:reportId/photos", requireTechnicianAuth, async (req, res) => {
+    try {
+      const reportId = parseInt(req.params.reportId);
+      const technicianId = req.session.technicianUser?.id;
+      
+      if (!technicianId) {
+        return res.status(401).json({ error: "Technician authentication required" });
+      }
+
+      const validatedData = insertCystPhotoSchema.parse({
+        ...req.body,
+        cystReportId: reportId,
+        technicianId
+      });
+      
+      const photo = await storage.createCystPhoto(validatedData);
+      res.status(201).json(photo);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Error creating CYST photo:", error);
+      res.status(500).json({ error: "Failed to upload photo" });
+    }
+  });
+
+  // Delete CYST photo (technician can delete their own)
+  app.delete("/api/cyst-photos/:id", requireTechnicianAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const technicianId = req.session.technicianUser?.id;
+      
+      const photo = await storage.getCystPhoto(id);
+      if (!photo) {
+        return res.status(404).json({ error: "Photo not found" });
+      }
+      
+      if (photo.technicianId !== technicianId) {
+        return res.status(403).json({ error: "Can only delete your own photos" });
+      }
+
+      await storage.deleteCystPhoto(id);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error deleting CYST photo:", error);
+      res.status(500).json({ error: "Failed to delete photo" });
+    }
+  });
 
   const httpServer = createServer(app);
   return httpServer;

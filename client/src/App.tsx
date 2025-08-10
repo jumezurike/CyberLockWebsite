@@ -44,6 +44,7 @@ import ServicesPortal from "@/pages/services";
 import ClientDashboard from "@/pages/client-dashboard";
 import ClientLogin from "@/pages/client-login";
 import TechnicianLogin from "@/pages/technician-login";
+import TechnicianCystReports from "@/pages/technician-cyst-reports";
 
 function Router() {
   const [location] = useLocation();
@@ -74,6 +75,7 @@ function Router() {
           <Route path="/accept-invitation" component={AcceptInvitation} />
           <Route path="/services" component={ServicesPortal} />
           <Route path="/technician-login" component={TechnicianLogin} />
+          <Route path="/technician/cyst-reports" component={TechnicianCystReports} />
           <Route path="/client-login" component={ClientLogin} />
           <Route path="/client-dashboard" component={ClientDashboard} />
           <Route path="/dashboard" component={Dashboard} />
