@@ -49,7 +49,7 @@ interface WorkOrder {
 export default function TechnicianPortal() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
-  const [loginData, setLoginData] = useState({ username: 'tech1', password: 'tech123' });
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
   const [loginLoading, setLoginLoading] = useState(false);
   
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);

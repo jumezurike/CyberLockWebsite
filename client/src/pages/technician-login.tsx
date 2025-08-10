@@ -34,7 +34,7 @@ export default function TechnicianLogin() {
     setIsLoading(true);
 
     try {
-      const response = await apiRequest('POST', '/api/admin/login', loginData);
+      const response = await apiRequest('POST', '/api/technician/login', loginData);
       toast({
         title: "Login Successful",
         description: "Welcome to the Technician Portal!",
