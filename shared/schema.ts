@@ -691,7 +691,7 @@ export const insertServiceRequestSchema = createInsertSchema(serviceRequests, {
   preferredContactMethod: z.enum(["email", "phone", "mobile"], {
     required_error: "Preferred contact method is required"
   }),
-  serviceCategory: z.enum(["IT Services", "AI Solutions", "Cybersecurity", "Combined Services"], {
+  serviceCategory: z.enum(["Help Desk & Support", "IT Services", "Industry-Specific Services", "Emergency Services", "Managed Services"], {
     required_error: "Service category is required"
   }),
   urgencyLevel: z.enum(["Critical", "High", "Medium", "Low"], {

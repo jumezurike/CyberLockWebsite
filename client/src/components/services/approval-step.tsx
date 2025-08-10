@@ -64,10 +64,15 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
       // Submit the service request to the backend
       const submissionData = {
         ...data,
-        ...values,
-        submittedAt: new Date().toISOString(),
-        status: 'pending_review'
+        // Remove extra fields that aren't in the schema
+        status: 'pending'  // Use valid status value
       };
+
+      // Remove fields that shouldn't be sent to the API
+      delete submissionData.submittedAt;
+      delete submissionData.termsAccepted;
+      delete submissionData.accuracyConfirmed;
+      delete submissionData.communicationConsent;
 
       console.log("Submitting service request:", submissionData);
       
@@ -80,7 +85,9 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to submit service request: ${response.statusText}`);
+        const errorData = await response.json();
+        console.error("API Error:", errorData);
+        throw new Error(`Submission failed: ${errorData.error || response.statusText}`);
       }
 
       const result = await response.json();
@@ -110,7 +117,7 @@ export default function ApprovalStep({ data, onUpdate, onPrev }: ApprovalStepPro
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency: 'USD',
-    }).format(price / 100);
+    }).format(price);
   };
 
   return (
