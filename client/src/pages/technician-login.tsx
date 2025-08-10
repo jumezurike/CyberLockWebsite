@@ -763,44 +763,246 @@ export default function TechnicianLogin() {
                   <CardHeader>
                     <CardTitle className="flex items-center gap-2">
                       <FileText className="h-5 w-5" />
-                      CYST Report (Cybersecurity Service & Threat)
+                      E1T1 Tech Field Technician Service (CYST) Report
                     </CardTitle>
-                    <CardDescription>Create comprehensive before, during, and after service report</CardDescription>
+                    <CardDescription>Cybersecurity Support Technician field service documentation</CardDescription>
                   </CardHeader>
-                  <CardContent className="space-y-4">
+                  <CardContent className="space-y-6">
+                    {/* Business Information */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Business Information</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="businessName">Business Name</Label>
+                          <Input id="businessName" className="mt-1" />
+                        </div>
+                        <div>
+                          <Label htmlFor="businessDescription">Description</Label>
+                          <Input id="businessDescription" className="mt-1" />
+                        </div>
+                      </div>
+                      <div>
+                        <Label>Type of Business</Label>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+                          {[
+                            'SMB Gen-Contracting', 'SMB (IT)', 'SMB (Social Impact)', 'Health',
+                            'SMB (Accounting/Tax)', 'Education', 'Non-profit (Church)', 'SMB (Food)'
+                          ].map((type) => (
+                            <label key={type} className="flex items-center space-x-2">
+                              <input type="checkbox" className="rounded" />
+                              <span className="text-sm">{type}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Technician Details */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Technician's Details</h3>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                          <Label htmlFor="techName">Technician Name</Label>
+                          <Input id="techName" className="mt-1" defaultValue="tech1" />
+                        </div>
+                        <div>
+                          <Label htmlFor="techContact">Technician Contact Info</Label>
+                          <Input id="techContact" className="mt-1" />
+                        </div>
+                        <div>
+                          <Label htmlFor="serviceDate">Date of Service</Label>
+                          <Input id="serviceDate" type="date" className="mt-1" />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="checkinTime">Check-in Time</Label>
+                          <Input id="checkinTime" type="time" className="mt-1" />
+                        </div>
+                        <div>
+                          <Label htmlFor="checkoutTime">Check-out Time</Label>
+                          <Input id="checkoutTime" type="time" className="mt-1" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Service Details */}
+                    <div className="space-y-4">
+                      <h3 className="font-semibold text-lg">Service Details</h3>
+                      
+                      {/* Organization Providing Service */}
+                      <div className="space-y-3">
+                        <h4 className="font-medium">Organization Providing Service</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="providerName">Name & Address</Label>
+                            <textarea id="providerName" className="w-full mt-1 p-2 border rounded-md" rows={2} />
+                          </div>
+                          <div>
+                            <Label htmlFor="providerContact">Contact Info</Label>
+                            <Input id="providerContact" className="mt-1" />
+                          </div>
+                          <div>
+                            <Label htmlFor="providerPerson">Contact Person & Phone</Label>
+                            <Input id="providerPerson" className="mt-1" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Organization Receiving Service */}
+                      <div className="space-y-3">
+                        <h4 className="font-medium">Organization Receiving Service</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="receiverName">Name & Address</Label>
+                            <textarea id="receiverName" className="w-full mt-1 p-2 border rounded-md" rows={2} />
+                          </div>
+                          <div>
+                            <Label htmlFor="receiverContact">Contact Info</Label>
+                            <Input id="receiverContact" className="mt-1" />
+                          </div>
+                          <div>
+                            <Label htmlFor="receiverPerson">Contact Person & Phone</Label>
+                            <Input id="receiverPerson" className="mt-1" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Service Types and Status */}
+                    <div className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="serviceTypes">Service Types (Diagnosis, Cabling, etc.)</Label>
+                          <Input id="serviceTypes" className="mt-1" />
+                        </div>
+                        <div>
+                          <Label>Completion Status</Label>
+                          <select className="w-full mt-1 p-2 border rounded-md">
+                            <option>Pending</option>
+                            <option>In Progress</option>
+                            <option>Completed</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Description of Work */}
                     <div>
-                      <Label htmlFor="beforeDescription">Before Service Description</Label>
-                      <textarea
-                        id="beforeDescription"
-                        className="w-full mt-1 p-2 border rounded-md"
-                        rows={3}
-                        placeholder="Describe the initial state and observed issues..."
-                        value={cystFormData.beforeDescription}
-                        onChange={(e) => setCystFormData({...cystFormData, beforeDescription: e.target.value})}
+                      <Label htmlFor="workDescription">Description of Work Done</Label>
+                      <textarea 
+                        id="workDescription" 
+                        className="w-full mt-1 p-2 border rounded-md" 
+                        rows={4}
+                        placeholder="Detailed description of work performed..."
                       />
                     </div>
+
+                    {/* Service Performed Checkboxes */}
                     <div>
-                      <Label htmlFor="duringDescription">During Service Description</Label>
-                      <textarea
-                        id="duringDescription"
-                        className="w-full mt-1 p-2 border rounded-md"
-                        rows={3}
-                        placeholder="Document the work performed and methods used..."
-                        value={cystFormData.duringDescription}
-                        onChange={(e) => setCystFormData({...cystFormData, duringDescription: e.target.value})}
-                      />
+                      <Label>Service Performed</Label>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
+                        {[
+                          'Diagnosis', 'Cabling', 'Software Installation', 'Network Installation',
+                          'Virus Removal', 'Computer Optimization', 'SOS2A', 'Website Encryption',
+                          'Threat Modeling', 'Wi-Fi Setup', 'Computer Maintenance'
+                        ].map((service) => (
+                          <label key={service} className="flex items-center space-x-2">
+                            <input type="checkbox" className="rounded" />
+                            <span className="text-sm">{service}</span>
+                          </label>
+                        ))}
+                      </div>
                     </div>
+
+                    {/* Device Information Table */}
                     <div>
-                      <Label htmlFor="afterDescription">After Service Description</Label>
-                      <textarea
-                        id="afterDescription"
-                        className="w-full mt-1 p-2 border rounded-md"
-                        rows={3}
-                        placeholder="Describe the final state and results achieved..."
-                        value={cystFormData.afterDescription}
-                        onChange={(e) => setCystFormData({...cystFormData, afterDescription: e.target.value})}
-                      />
+                      <Label>Device Information</Label>
+                      <div className="mt-2 overflow-x-auto">
+                        <table className="w-full border-collapse border border-gray-300">
+                          <thead>
+                            <tr className="bg-gray-50">
+                              <th className="border border-gray-300 p-2 text-left">Device Type</th>
+                              <th className="border border-gray-300 p-2 text-left">OS</th>
+                              <th className="border border-gray-300 p-2 text-left">Make</th>
+                              <th className="border border-gray-300 p-2 text-left">Model</th>
+                              <th className="border border-gray-300 p-2 text-left">S/N</th>
+                              <th className="border border-gray-300 p-2 text-left">Tagged (Y/N)</th>
+                              <th className="border border-gray-300 p-2 text-left">Counts</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {[1, 2, 3].map((row) => (
+                              <tr key={row}>
+                                <td className="border border-gray-300 p-2">
+                                  <Input className="w-full border-0" />
+                                </td>
+                                <td className="border border-gray-300 p-2">
+                                  <Input className="w-full border-0" />
+                                </td>
+                                <td className="border border-gray-300 p-2">
+                                  <Input className="w-full border-0" />
+                                </td>
+                                <td className="border border-gray-300 p-2">
+                                  <Input className="w-full border-0" />
+                                </td>
+                                <td className="border border-gray-300 p-2">
+                                  <Input className="w-full border-0" />
+                                </td>
+                                <td className="border border-gray-300 p-2">
+                                  <select className="w-full border-0">
+                                    <option>Y</option>
+                                    <option>N</option>
+                                  </select>
+                                </td>
+                                <td className="border border-gray-300 p-2">
+                                  <Input className="w-full border-0" type="number" />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
                     </div>
+
+                    {/* Follow-up and Manager Sign-off */}
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Follow-up Required?</Label>
+                        <div className="flex gap-4 mt-2">
+                          <label className="flex items-center space-x-2">
+                            <input type="radio" name="followup" value="yes" />
+                            <span>Yes</span>
+                          </label>
+                          <label className="flex items-center space-x-2">
+                            <input type="radio" name="followup" value="no" />
+                            <span>No</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      {/* Manager Sign-off Section */}
+                      <div className="border-t pt-4">
+                        <h4 className="font-medium mb-3">Manager on Duty (MOD) Sign-off</h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="modName">Manager Name</Label>
+                            <Input id="modName" className="mt-1" placeholder="Manager name" />
+                          </div>
+                          <div>
+                            <Label htmlFor="modSignature">Digital Signature</Label>
+                            <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                              <Pen className="h-6 w-6 text-gray-400 mx-auto mb-2" />
+                              <p className="text-sm text-gray-600">Manager signature required</p>
+                              <Button variant="outline" className="mt-2" size="sm">
+                                Capture Signature
+                              </Button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
                     <Button className="w-full">
                       <Save className="h-4 w-4 mr-2" />
                       Save CYST Report
