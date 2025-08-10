@@ -49,7 +49,7 @@ interface WorkOrder {
 export default function TechnicianPortal() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [authLoading, setAuthLoading] = useState(true);
-  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [loginData, setLoginData] = useState({ username: 'tech1', password: 'tech123' });
   const [loginLoading, setLoginLoading] = useState(false);
   
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
@@ -135,6 +135,8 @@ export default function TechnicianPortal() {
     e.preventDefault();
     setLoginLoading(true);
 
+    console.log('Login attempt with:', { username: loginData.username, passwordLength: loginData.password.length });
+
     try {
       const response = await fetch('/api/technician/login', {
         method: 'POST',
@@ -144,7 +146,11 @@ export default function TechnicianPortal() {
         body: JSON.stringify(loginData),
       });
 
+      console.log('Login response status:', response.status);
+      
       if (response.ok) {
+        const result = await response.json();
+        console.log('Login successful:', result);
         setIsAuthenticated(true);
         toast({
           title: "Success",
@@ -152,16 +158,18 @@ export default function TechnicianPortal() {
         });
       } else {
         const error = await response.json();
+        console.error('Login error response:', error);
         toast({
-          title: "Error",
-          description: error.error || "Login failed",
+          title: "Login Failed",
+          description: error.error || "Invalid credentials",
           variant: "destructive",
         });
       }
     } catch (error) {
+      console.error('Login fetch error:', error);
       toast({
         title: "Error",
-        description: "Login failed",
+        description: "Connection failed",
         variant: "destructive",
       });
     } finally {
