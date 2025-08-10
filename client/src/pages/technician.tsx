@@ -37,6 +37,11 @@ interface WorkOrder {
 }
 
 export default function TechnicianPortal() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
+  const [loginData, setLoginData] = useState({ username: '', password: '' });
+  const [loginLoading, setLoginLoading] = useState(false);
+  
   const [workOrders, setWorkOrders] = useState<WorkOrder[]>([]);
   const [selectedWorkOrder, setSelectedWorkOrder] = useState<WorkOrder | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -85,7 +90,7 @@ export default function TechnicianPortal() {
   });
 
   useEffect(() => {
-    fetchWorkOrders();
+    checkAuth();
     
     // Update current time every minute
     const timer = setInterval(() => {
@@ -94,6 +99,74 @@ export default function TechnicianPortal() {
 
     return () => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchWorkOrders();
+    }
+  }, [isAuthenticated]);
+
+  const checkAuth = async () => {
+    try {
+      const response = await fetch('/api/technician/me');
+      if (response.ok) {
+        setIsAuthenticated(true);
+      }
+    } catch (error) {
+      console.log('Not authenticated');
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginLoading(true);
+
+    try {
+      const response = await fetch('/api/technician/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (response.ok) {
+        setIsAuthenticated(true);
+        toast({
+          title: "Success",
+          description: "Logged in successfully",
+        });
+      } else {
+        const error = await response.json();
+        toast({
+          title: "Error",
+          description: error.error || "Login failed",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Login failed",
+        variant: "destructive",
+      });
+    } finally {
+      setLoginLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await fetch('/api/technician/logout', { method: 'POST' });
+      setIsAuthenticated(false);
+      setWorkOrders([]);
+      setSelectedWorkOrder(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
   const fetchWorkOrders = async () => {
     try {
@@ -301,6 +374,68 @@ export default function TechnicianPortal() {
     return `${hours}h ${mins}m`;
   };
 
+  // Show loading state while checking auth
+  if (authLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login form if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <CardTitle>Technician Portal Login</CardTitle>
+            <CardDescription>Enter your credentials to access the technician portal</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleLogin} className="space-y-4">
+              <div>
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  type="text"
+                  value={loginData.username}
+                  onChange={(e) => setLoginData({ ...loginData, username: e.target.value })}
+                  placeholder="Enter your username"
+                  required
+                />
+              </div>
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={loginData.password}
+                  onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+              <Button 
+                type="submit" 
+                className="w-full" 
+                disabled={loginLoading}
+              >
+                {loginLoading ? 'Logging in...' : 'Login'}
+              </Button>
+            </form>
+            <div className="mt-4 text-center text-sm text-gray-600">
+              <p>Test credentials: tech1 / tech123</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -311,9 +446,14 @@ export default function TechnicianPortal() {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-6xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Field Technician Portal</h1>
-        <p className="text-gray-600 mt-2">Manage your service requests, time tracking, and feedback</p>
+      <div className="mb-8 flex justify-between items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Field Technician Portal</h1>
+          <p className="text-gray-600 mt-2">Manage your service requests, time tracking, and feedback</p>
+        </div>
+        <Button variant="outline" onClick={handleLogout}>
+          Logout
+        </Button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

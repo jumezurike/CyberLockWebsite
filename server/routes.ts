@@ -208,6 +208,67 @@ export async function registerRoutes(app: Express): Promise<Server> {
     res.json(req.session.adminUser);
   });
 
+  // Technician Authentication Routes
+  app.post("/api/technician/login", async (req, res) => {
+    try {
+      const { username, password } = adminLoginSchema.parse(req.body);
+      
+      const user = await storage.getUserByUsername(username);
+      if (!user || user.role !== 'technician') {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      
+      const isValidPassword = await bcrypt.compare(password, user.password);
+      if (!isValidPassword) {
+        return res.status(401).json({ error: "Invalid credentials" });
+      }
+      
+      req.session.adminUser = {
+        id: user.id,
+        username: user.username,
+        role: user.role || 'technician',
+        fullName: user.fullName || undefined
+      };
+      
+      res.json({ 
+        success: true, 
+        user: { 
+          id: user.id, 
+          username: user.username, 
+          role: user.role, 
+          fullName: user.fullName 
+        } 
+      });
+    } catch (error) {
+      console.error("Technician login error:", error);
+      res.status(500).json({ error: "Login failed" });
+    }
+  });
+
+  app.get("/api/technician/me", requireTechnicianAuth, async (req, res) => {
+    try {
+      const user = await storage.getUser(req.session.adminUser!.id);
+      if (!user) {
+        req.session.adminUser = undefined;
+        return res.status(401).json({ error: "User not found" });
+      }
+      res.json({ 
+        id: user.id, 
+        username: user.username, 
+        role: user.role, 
+        fullName: user.fullName 
+      });
+    } catch (error) {
+      console.error("Get technician user error:", error);
+      res.status(500).json({ error: "Failed to get user" });
+    }
+  });
+
+  app.post("/api/technician/logout", (req, res) => {
+    req.session.adminUser = undefined;
+    res.json({ message: "Logged out successfully" });
+  });
+
   // Admin user management routes
   app.get("/api/admin/users", requireSuperAdmin, async (req, res) => {
     try {
