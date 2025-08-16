@@ -27,6 +27,13 @@ CyberLockX is an advanced cybersecurity platform providing comprehensive digital
 - **Integration**: Leverages existing admin infrastructure (PostgreSQL, Mailgun, RBAC)
 - **Business Features**: $75 site visit fee integration, comprehensive pricing structure, nationwide service coverage
 
+### Pricing Structure (Updated: August 16, 2025)
+- **Healthcare-Focused Pricing**: Updated from general tiers to specialized healthcare pricing
+- **Small Medical/Health Practices**: $99.99/month (was $29.99) - Up to 5 users
+- **Clinics**: $199.99/month (was $49.99) - Up to 15 users  
+- **Hospitals/HealthTechs**: $399.99/month (was $99.99) - Up to 50 users
+- **Target Market**: Medical practices, clinics, hospitals, and health technology companies
+
 ### Identity Management System
 - **Universal Identity Verification System (UIVS)**: Supports various identity types including Human, Machine Physical, Machine Virtual, Avatar, API, and Third-Party.
 - **Digital Data Nucleic Authority (DDNA) framework**: Used for security risk mapping.

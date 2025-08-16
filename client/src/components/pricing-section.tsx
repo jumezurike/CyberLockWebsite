@@ -209,7 +209,7 @@ export default function PricingSection() {
   const plans: PricingPlan[] = [
     {
       name: "Small Medical/Health Practices",
-      price: "29.99",
+      price: "99.99",
       description: "Best for small medical practices up to 5 users",
       features: [
         { included: true, text: "Addition of up to 5 users" },
@@ -229,7 +229,7 @@ export default function PricingSection() {
     },
     {
       name: "Clinics",
-      price: "49.99",
+      price: "199.99",
       description: "Ideal for growing clinics up to 15 users",
       isPopular: true,
       features: [
@@ -252,7 +252,7 @@ export default function PricingSection() {
     },
     {
       name: "Hospitals/HealthTechs",
-      price: "99.99",
+      price: "399.99",
       description: "Perfect for hospitals and health technology companies up to 50 users",
       features: [
         { included: true, text: "Addition of up to 50 users" },
