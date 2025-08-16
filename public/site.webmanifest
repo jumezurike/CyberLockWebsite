@@ -1,6 +1,7 @@
 {
-  "name": "CyberLockX",
+  "name": "CyberLockX: Healthcare Apps & Devices Security Hub",
   "short_name": "CyberLockX",
+  "description": "Healthcare cybersecurity platform with quantum-safe encryption and compliance automation",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -11,9 +12,16 @@
       "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
       "type": "image/png"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
     }
   ],
-  "theme_color": "#9333ea",
+  "theme_color": "#8B5CF6",
   "background_color": "#ffffff",
-  "display": "standalone"
+  "display": "standalone",
+  "start_url": "/",
+  "orientation": "portrait"
 }

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#6366F1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background rounded rectangle -->
+  <rect x="64" y="64" width="384" height="240" rx="40" ry="40" fill="url(#grad)"/>
+  
+  <!-- Binary code pattern on left -->
+  <text x="80" y="100" fill="white" font-family="monospace" font-size="14" opacity="0.8">
+    1100
+    01010
+    101
+    101
+    010
+    101
+    110
+    100
+    00110
+    1011
+  </text>
+  
+  <!-- Central keyhole with fingerprint -->
+  <g transform="translate(256,180)">
+    <!-- Keyhole base -->
+    <path d="M-20,0 L-20,40 Q-20,50 -10,50 L10,50 Q20,50 20,40 L20,0 Z" fill="white"/>
+    <!-- Keyhole circle -->
+    <circle cx="0" cy="-15" r="25" fill="white"/>
+    <!-- Fingerprint pattern -->
+    <g stroke="url(#grad)" stroke-width="2" fill="none">
+      <circle cx="0" cy="-15" r="8"/>
+      <circle cx="0" cy="-15" r="12"/>
+      <circle cx="0" cy="-15" r="16"/>
+      <circle cx="0" cy="-15" r="20"/>
+    </g>
+  </g>
+  
+  <!-- Binary code pattern on right -->
+  <text x="320" y="100" fill="white" font-family="monospace" font-size="14" opacity="0.8">
+    010
+    010
+    001
+    011
+    001
+    100
+    111
+    001
+    100
+    010010
+    001100
+  </text>
+  
+  <!-- CyberLockX text -->
+  <text x="256" y="380" text-anchor="middle" fill="#374151" font-family="Arial, sans-serif" font-size="48" font-weight="bold">CyberLockX</text>
+</svg>
