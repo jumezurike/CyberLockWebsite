@@ -1193,19 +1193,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async updateFieldWorkOrder(id: number, updates: UpdateFieldWorkOrder): Promise<FieldWorkOrder | undefined> {
-    // Convert string dates to Date objects
-    const processedUpdates = { ...updates };
-    if (processedUpdates.arrivedAt && typeof processedUpdates.arrivedAt === 'string') {
-      processedUpdates.arrivedAt = new Date(processedUpdates.arrivedAt);
-    }
-    if (processedUpdates.departedAt && typeof processedUpdates.departedAt === 'string') {
-      processedUpdates.departedAt = new Date(processedUpdates.departedAt);
-    }
-    
     const [updatedWorkOrder] = await db
       .update(fieldWorkOrders)
       .set({
-        ...processedUpdates,
+        ...updates,
         updatedAt: new Date(),
       })
       .where(eq(fieldWorkOrders.id, id))
