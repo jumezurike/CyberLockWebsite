@@ -26,6 +26,7 @@ interface PricingPlan {
 
 export default function PricingSection() {
   const [selectedPlan, setSelectedPlan] = useState<string>("clinics");
+  const [billingPeriod, setBillingPeriod] = useState<"monthly" | "yearly">("monthly");
   const [selectedAddons, setSelectedAddons] = useState<Record<string, Record<string, boolean>>>({
     "small medical/health practices": {},
     clinics: {},
@@ -178,11 +179,16 @@ export default function PricingSection() {
     
     // Calculate total amount (plan price + addons + infrastructure costs)
     const basePlanPrice = parseFloat(plan.price);
+    
+    // Apply yearly discount if applicable
+    const yearlyDiscount = billingPeriod === "yearly" ? 0.9 : 1; // 10% discount for yearly
+    const discountedPlanPrice = basePlanPrice * yearlyDiscount;
+    
     const addonsTotal = selectedAddonsList.reduce(
       (sum, addon) => sum + (addon ? parseFloat(addon.price) : 0), 
       0
     );
-    const totalAmount = (basePlanPrice + addonsTotal + infraCost).toFixed(2);
+    const totalAmount = (discountedPlanPrice + addonsTotal + infraCost).toFixed(2);
     
     // Create URL query params for checkout
     const params = new URLSearchParams();
@@ -197,6 +203,8 @@ export default function PricingSection() {
     
     // Add the infrastructure cost to checkout parameters
     params.set('infraCost', infraCost.toString());
+    params.set('billingPeriod', billingPeriod);
+    params.set('yearlyDiscount', (billingPeriod === "yearly" ? "10" : "0"));
     
     if (selectedAddonsList.length > 0) {
       params.set('addons', encodeURIComponent(JSON.stringify(selectedAddonsList)));
@@ -281,7 +289,36 @@ export default function PricingSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl font-bold font-heading text-primary mb-4">Simple, Transparent Pricing</h2>
-          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">Choose the plan that's right for your business with no hidden fees.</p>
+          <p className="text-lg text-neutral-600 max-w-3xl mx-auto mb-8">Choose the plan that's right for your business with no hidden fees.</p>
+          
+          {/* Billing Period Toggle */}
+          <div className="flex items-center justify-center mb-8">
+            <div className="bg-white rounded-lg p-1 border border-gray-200 shadow-sm">
+              <button
+                onClick={() => setBillingPeriod("monthly")}
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-all ${
+                  billingPeriod === "monthly"
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Monthly
+              </button>
+              <button
+                onClick={() => setBillingPeriod("yearly")}
+                className={`px-6 py-2 rounded-md text-sm font-medium transition-all relative ${
+                  billingPeriod === "yearly"
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-gray-600 hover:text-gray-900"
+                }`}
+              >
+                Yearly
+                <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
+                  10% OFF
+                </span>
+              </button>
+            </div>
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -305,7 +342,22 @@ export default function PricingSection() {
                     </div>
                   )}
                   <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
-                  <div className="text-3xl font-bold">${plan.price}<span className="text-sm font-normal">/month</span></div>
+                  <div className="text-3xl font-bold">
+                    {billingPeriod === "yearly" ? (
+                      <>
+                        <span className="line-through text-2xl opacity-75">${plan.price}</span>
+                        <span className="ml-2">${(parseFloat(plan.price) * 0.9).toFixed(2)}</span>
+                        <span className="text-sm font-normal">/month</span>
+                        <div className="text-sm font-normal mt-1">
+                          Billed ${(parseFloat(plan.price) * 0.9 * 12).toFixed(2)} yearly
+                        </div>
+                      </>
+                    ) : (
+                      <>
+                        ${plan.price}<span className="text-sm font-normal">/month</span>
+                      </>
+                    )}
+                  </div>
                   <p className="text-neutral-100 mt-2">{plan.description}</p>
                 </div>
                 
