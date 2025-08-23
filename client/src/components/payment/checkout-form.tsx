@@ -164,15 +164,13 @@ export default function CheckoutForm({
           )}
           
           {/* Monthly add-ons */}
-          {parseFloat(monthlyAddonsTotal) > 0 && (
-            <div className="flex justify-between mb-2 text-sm text-neutral-600">
-              <span>Monthly Services{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
-              <span>${billingPeriod === 'yearly' ? 
-                (parseFloat(monthlyAddonsTotal) * 0.9 * 12).toFixed(2) : 
-                parseFloat(monthlyAddonsTotal).toFixed(2)
-              }</span>
-            </div>
-          )}
+          <div className="flex justify-between mb-2 text-sm text-neutral-600">
+            <span>Monthly Services{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
+            <span>${billingPeriod === 'yearly' ? 
+              (parseFloat(monthlyAddonsTotal) * 0.9 * 12).toFixed(2) : 
+              parseFloat(monthlyAddonsTotal).toFixed(2)
+            }</span>
+          </div>
           
           {/* One-time add-ons */}
           {parseFloat(oneTimeAddonsTotal) > 0 && (
