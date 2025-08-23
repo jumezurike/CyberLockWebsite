@@ -173,8 +173,8 @@ export default function CheckoutForm({
           <div className="flex justify-between mb-2 text-sm text-neutral-600">
             <span>Monthly Services{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
             <span>${billingPeriod === 'yearly' ? 
-              (99 * 0.9 * 12).toFixed(2) : 
-              '99.00'
+              (parseFloat(monthlyAddonsTotal) * 0.9 * 12).toFixed(2) : 
+              parseFloat(monthlyAddonsTotal).toFixed(2)
             }</span>
           </div>
           {parseFloat(monthlyAddonsTotal) > 0 && (
