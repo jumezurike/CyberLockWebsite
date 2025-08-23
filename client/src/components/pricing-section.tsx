@@ -197,9 +197,9 @@ export default function PricingSection() {
       }
     });
     
-    // Add base monthly services for Hospital tier
+    // Add base monthly services for Hospital tier - the base plan price IS the monthly service
     if (plan.name === "Hospitals/HealthTechs") {
-      monthlyAddonsTotal += 100; // Include $100/month base policy development service
+      monthlyAddonsTotal = parseFloat(plan.price); // Monthly Services = base plan price
     }
     
     // Calculate admin fees - standardized across all plans for regulatory compliance
