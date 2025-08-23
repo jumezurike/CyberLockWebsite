@@ -79,7 +79,6 @@ export default function PricingSection() {
         ...prev,
         [planId]: {
           ...prev[planId],
-          "monitoring": true,         // "Continuous Monitoring & Incident Response"
           "policy": true,             // "Policies, Processes, Procedures, and Plans continuous development"
           "annual": true              // "Annual Security Posture Update & Assessment"
         }
@@ -230,7 +229,6 @@ export default function PricingSection() {
       ],
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$250 one time" },
-        { id: "monitoring", label: "Continuous Monitoring & Incident Response", price: "$65/device/month" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$25/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$300" }
       ]
@@ -252,7 +250,6 @@ export default function PricingSection() {
       ],
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$750 one time" },
-        { id: "monitoring", label: "Continuous Monitoring & Incident Response", price: "$65/device/month" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$50/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$600" },
         { id: "admin", label: "Annual Administrative and maintenance fees", price: "$250" }
@@ -276,7 +273,6 @@ export default function PricingSection() {
       ],
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$2250 one time" },
-        { id: "monitoring", label: "Continuous Monitoring & Incident Response", price: "$65/device/month" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$100/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" },
         { id: "admin", label: "Annual Administrative and maintenance fees", price: "$350" }
@@ -377,7 +373,8 @@ export default function PricingSection() {
                       <div className="flex justify-between items-center">
                         <div>
                           <label htmlFor={`${planId}-server-count`} className="text-sm font-medium">Server (Physical or Virtual)</label>
-                          <p className="text-xs text-gray-500">$65/server/month</p>
+                          <p className="text-xs text-gray-500">Includes continuous monitoring & incident response</p>
+                          <p className="text-xs text-gray-500 font-medium">$65/server/month</p>
                         </div>
                         <input 
                           type="text" 
@@ -392,7 +389,8 @@ export default function PricingSection() {
                       <div className="flex justify-between items-center">
                         <div>
                           <label htmlFor={`${planId}-endpoint-count`} className="text-sm font-medium">End-point (Subject accessing server)</label>
-                          <p className="text-xs text-gray-500">$45/endpoint/month</p>
+                          <p className="text-xs text-gray-500">Includes continuous monitoring & incident response</p>
+                          <p className="text-xs text-gray-500 font-medium">$45/endpoint/month</p>
                         </div>
                         <input 
                           type="text" 
@@ -407,7 +405,8 @@ export default function PricingSection() {
                       <div className="flex justify-between items-center">
                         <div>
                           <label htmlFor={`${planId}-app-count`} className="text-sm font-medium">Application (Business Functionality)</label>
-                          <p className="text-xs text-gray-500">$55/application/month</p>
+                          <p className="text-xs text-gray-500">Includes continuous monitoring & incident response</p>
+                          <p className="text-xs text-gray-500 font-medium">$55/application/month</p>
                         </div>
                         <input 
                           type="text" 
