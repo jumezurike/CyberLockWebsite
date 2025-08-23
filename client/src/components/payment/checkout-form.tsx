@@ -151,7 +151,7 @@ export default function CheckoutForm({
         </div>
         
         <div className="bg-neutral-50 p-4 rounded-md text-left">
-          {/* Base plan cost - shown for clarity */}
+          {/* Individual Components */}
           <div className="flex justify-between mb-2">
             <span className="font-medium">CyberLockX Connect{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
             <span>${billingPeriod === 'yearly' ? 
@@ -159,25 +159,10 @@ export default function CheckoutForm({
               parseFloat(basePlanPrice).toFixed(2)
             }</span>
           </div>
-          <div className="text-xs text-neutral-500 mb-2 ml-2">
+          <div className="text-xs text-neutral-500 mb-3 ml-2">
             Includes: Secure Cloud, Meet, Payment App, Digital ID, AI Language Support
           </div>
           
-          {/* Monthly add-ons - shown separately for clarity */}
-          <div className="flex justify-between mb-2 text-sm text-neutral-600">
-            <span>Monthly Services{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
-            <span>${billingPeriod === 'yearly' ? 
-              (parseFloat(monthlyAddonsTotal) * 0.9 * 12).toFixed(2) : 
-              parseFloat(monthlyAddonsTotal).toFixed(2)
-            }</span>
-          </div>
-          {parseFloat(monthlyAddonsTotal) > 0 && (
-            <div className="text-xs text-neutral-500 mb-2 ml-2">
-              Additional cybersecurity services: Policy development, compliance reports, assessments
-            </div>
-          )}
-          
-          {/* Infrastructure cost - always show */}
           <div className="flex justify-between mb-2 text-sm text-neutral-600">
             <span>Infrastructure Monitoring{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
             <span>${billingPeriod === 'yearly' ? 
@@ -185,27 +170,64 @@ export default function CheckoutForm({
               parseFloat(monthlyInfraCost).toFixed(2)
             }</span>
           </div>
-          {parseFloat(monthlyInfraCost) > 0 && (
-            <div className="text-xs text-neutral-500 mb-2 ml-2">
-              24/7 monitoring of servers, endpoints, and applications with automated threat response
-            </div>
+          <div className="text-xs text-neutral-500 mb-3 ml-2">
+            24/7 monitoring of servers, endpoints, and applications with automated threat response
+          </div>
+          
+          {parseFloat(monthlyAddonsTotal) > 0 && (
+            <>
+              <div className="flex justify-between mb-2 text-sm text-neutral-600">
+                <span>Optional Add-ons (monthly){billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
+                <span>${billingPeriod === 'yearly' ? 
+                  (parseFloat(monthlyAddonsTotal) * 0.9 * 12).toFixed(2) : 
+                  parseFloat(monthlyAddonsTotal).toFixed(2)
+                }</span>
+              </div>
+              <div className="text-xs text-neutral-500 mb-3 ml-2">
+                Policy development, compliance reports, assessments
+              </div>
+            </>
           )}
           
-          {/* One-time add-ons - always show */}
-          <div className="flex justify-between mb-2 text-sm text-neutral-600">
-            <span>Optional Add-ons:</span>
-            <span>${parseFloat(oneTimeAddonsTotal).toFixed(2)}</span>
-          </div>
-          {parseFloat(oneTimeAddonsTotal) > 0 && (
-            <div className="text-xs text-neutral-500 mb-2 ml-2">
-              One-time professional services and assessments
+          {/* Summary Section */}
+          <div className="border-t pt-3 mt-3">
+            <div className="flex justify-between mb-2 font-medium">
+              <span>Monthly Services:</span>
+              <span>${billingPeriod === 'yearly' ? 
+                ((parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)) * 0.9 * 12).toFixed(2) : 
+                (parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)).toFixed(2)
+              }</span>
             </div>
+            <div className="text-xs text-neutral-500 mb-3 ml-2">
+              CyberLockX Connect + Infrastructure Monitoring + Optional Add-ons (monthly)
+            </div>
+          </div>
+          
+          {/* One-time add-ons - detailed breakdown */}
+          {parseFloat(oneTimeAddonsTotal) > 0 && (
+            <>
+              <div className="mb-2 font-medium text-sm">
+                Optional Add-ons (One time/annual):
+              </div>
+              {JSON.parse(addons || '[]').filter(addon => {
+                return addon.label.toLowerCase().includes('one time') || 
+                       addon.price.toLowerCase().includes('one time') ||
+                       addon.label.toLowerCase().includes('annual security posture') ||
+                       addon.label.toLowerCase().includes('comprehensive cybersecurity analysis');
+              }).map((addon, index) => (
+                <div key={index} className="flex justify-between mb-1 text-sm text-neutral-600 ml-2">
+                  <span>{addon.label}</span>
+                  <span>${parseFloat(addon.price).toFixed(2)}</span>
+                </div>
+              ))}
+              <div className="mb-3"></div>
+            </>
           )}
           
           {/* Administrative fees */}
           <div className="flex justify-between mb-2 text-sm text-neutral-600 border-t pt-2 mt-2">
             <span><strong>Administrative & Maintenance Fee (Annual - One-Time Upfront)</strong>:</span>
-            <span><strong>${parseFloat(annualAdminFee).toFixed(2)} (Annual)</strong></span>
+            <span><strong>${parseFloat(annualAdminFee).toFixed(2)}</strong></span>
           </div>
           <div className="text-xs text-neutral-500 mb-2 ml-2">
             One-time annual fee: Account setup, system maintenance, customer support, and regulatory compliance
