@@ -197,6 +197,11 @@ export default function PricingSection() {
       }
     });
     
+    // Add base monthly services for Hospital tier
+    if (plan.name === "Hospitals/HealthTechs") {
+      monthlyAddonsTotal += 100; // Include $100/month base policy development service
+    }
+    
     // Calculate admin fees - standardized across all plans for regulatory compliance
     const annualAdminFee = 250;
     
