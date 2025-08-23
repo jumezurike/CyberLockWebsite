@@ -191,7 +191,10 @@ export default function PricingSection() {
       if (addon.id === 'admin') {
         return;
       }
-      if (addon.label.toLowerCase().includes('one time')) {
+      if (addon.label.toLowerCase().includes('one time') || 
+          addon.price.toLowerCase().includes('one time') ||
+          addon.label.toLowerCase().includes('annual security posture') ||
+          addon.label.toLowerCase().includes('comprehensive cybersecurity analysis')) {
         oneTimeAddonsTotal += price;
       } else {
         monthlyAddonsTotal += price;
