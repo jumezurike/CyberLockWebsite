@@ -16,13 +16,86 @@ interface CheckoutPageProps {
   planName: string;
   amount: string;
   addons?: Array<{id: string; label: string; price: string}>;
+  basePlanPrice?: string;
+  monthlyInfraCost?: string;
+  monthlyAddonsTotal?: string;
+  oneTimeAddonsTotal?: string;
+  billingPeriod?: string;
+  serverCount?: string;
+  endpointCount?: string;
+  appCount?: string;
 }
 
-export default function CheckoutPage({ planId, planName, amount, addons = [] }: CheckoutPageProps) {
+export default function CheckoutPage({ 
+  planId, 
+  planName, 
+  amount, 
+  addons = [],
+  basePlanPrice = "0",
+  monthlyInfraCost = "0", 
+  monthlyAddonsTotal = "0",
+  oneTimeAddonsTotal = "0",
+  billingPeriod = "monthly",
+  serverCount = "0",
+  endpointCount = "0",
+  appCount = "0"
+}: CheckoutPageProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentBillingPeriod, setCurrentBillingPeriod] = useState(billingPeriod);
+  const [currentAmount, setCurrentAmount] = useState(amount);
   const [, setLocation] = useLocation();
+
+  // Recalculate total when billing period changes
+  const recalculateTotal = (newBillingPeriod: string) => {
+    const basePlan = parseFloat(basePlanPrice);
+    const monthlyInfra = parseFloat(monthlyInfraCost);
+    const monthlyAddons = parseFloat(monthlyAddonsTotal);
+    const oneTimeAddons = parseFloat(oneTimeAddonsTotal);
+    
+    let newTotal;
+    if (newBillingPeriod === "yearly") {
+      const yearlyDiscount = 0.9;
+      const discountedYearlyPlan = basePlan * yearlyDiscount * 12;
+      const discountedYearlyInfra = monthlyInfra * yearlyDiscount * 12;
+      const discountedYearlyAddons = monthlyAddons * yearlyDiscount * 12;
+      newTotal = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddons).toFixed(2);
+    } else {
+      newTotal = (basePlan + monthlyInfra + monthlyAddons + oneTimeAddons).toFixed(2);
+    }
+    
+    return newTotal;
+  };
+
+  const handleBillingPeriodChange = async (newPeriod: "monthly" | "yearly") => {
+    setCurrentBillingPeriod(newPeriod);
+    const newAmount = recalculateTotal(newPeriod);
+    setCurrentAmount(newAmount);
+    
+    // Create new payment intent with updated amount
+    try {
+      setIsLoading(true);
+      const response = await apiRequest("POST", "/api/create-payment-intent", {
+        planId,
+        amount: newAmount,
+        addons
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+      
+      setClientSecret(data.clientSecret);
+    } catch (error) {
+      console.error("Error updating payment intent:", error);
+      setError(error instanceof Error ? error.message : "Failed to update payment");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
     // Check if Stripe is available before creating payment intent
@@ -107,9 +180,15 @@ export default function CheckoutPage({ planId, planName, amount, addons = [] }: 
           }}
         >
           <CheckoutForm 
-            amount={amount} 
+            amount={currentAmount} 
             planName={planName} 
             addons={addons}
+            billingPeriod={currentBillingPeriod}
+            basePlanPrice={basePlanPrice}
+            monthlyInfraCost={monthlyInfraCost}
+            monthlyAddonsTotal={monthlyAddonsTotal}
+            oneTimeAddonsTotal={oneTimeAddonsTotal}
+            onBillingPeriodChange={handleBillingPeriodChange}
             onCancel={handleCancel}
             onSuccess={handleSuccess}
           />

@@ -9,29 +9,11 @@ interface CheckoutFormProps {
   amount: string;
   planName: string;
   addons?: Array<{id: string; label: string; price: string}>;
-  billingPeriod?: string;
-  basePlanPrice?: string;
-  monthlyInfraCost?: string;
-  monthlyAddonsTotal?: string;
-  oneTimeAddonsTotal?: string;
-  onBillingPeriodChange?: (period: "monthly" | "yearly") => void;
   onSuccess?: () => void;
   onCancel?: () => void;
 }
 
-export default function CheckoutForm({ 
-  amount, 
-  planName, 
-  addons = [], 
-  billingPeriod = "monthly",
-  basePlanPrice = "0",
-  monthlyInfraCost = "0",
-  monthlyAddonsTotal = "0",
-  oneTimeAddonsTotal = "0",
-  onBillingPeriodChange,
-  onSuccess, 
-  onCancel 
-}: CheckoutFormProps) {
+export default function CheckoutForm({ amount, planName, addons = [], onSuccess, onCancel }: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
   const { toast } = useToast();
@@ -109,90 +91,25 @@ export default function CheckoutForm({
         <p className="text-lg font-semibold text-neutral-700 mb-2">
           {planName} Plan
         </p>
-        
-        {/* Billing Period Toggle */}
-        <div className="flex items-center justify-center mb-4">
-          <div className="bg-white rounded-lg p-1 border border-gray-200 shadow-sm">
-            <button
-              type="button"
-              onClick={() => onBillingPeriodChange?.("monthly")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
-                billingPeriod === "monthly"
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              Monthly
-            </button>
-            <button
-              type="button"
-              onClick={() => onBillingPeriodChange?.("yearly")}
-              className={`px-4 py-2 rounded-md text-sm font-medium transition-all relative ${
-                billingPeriod === "yearly"
-                  ? "bg-primary text-white shadow-sm"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              Yearly
-              <span className="absolute -top-1 -right-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded-full">
-                10% OFF
-              </span>
-            </button>
-          </div>
-        </div>
         <div className="bg-neutral-50 p-4 rounded-md text-left">
           {/* Base plan cost */}
           <div className="flex justify-between mb-2">
-            <span className="font-medium">{planName} Base Plan{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
-            <span>${billingPeriod === 'yearly' ? 
-              (parseFloat(basePlanPrice) * 0.9 * 12).toFixed(2) : 
-              parseFloat(basePlanPrice).toFixed(2)
-            }</span>
+            <span className="font-medium">{planName} Base Plan:</span>
+            <span>${parseFloat(amount) - addons.reduce((sum, addon) => sum + parseFloat(addon.price), 0)}</span>
           </div>
           
-          {/* Infrastructure cost if any */}
-          {parseFloat(monthlyInfraCost) > 0 && (
-            <div className="flex justify-between mb-2 text-sm text-neutral-600">
-              <span>Infrastructure Monitoring{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
-              <span>${billingPeriod === 'yearly' ? 
-                (parseFloat(monthlyInfraCost) * 0.9 * 12).toFixed(2) : 
-                parseFloat(monthlyInfraCost).toFixed(2)
-              }</span>
-            </div>
+          {/* Add-ons */}
+          {addons.length > 0 && (
+            <>
+              {addons.map((addon, index) => (
+                <div key={addon.id} className="flex justify-between text-sm text-neutral-600 mb-1">
+                  <span>{addon.label}:</span>
+                  <span>${addon.price}</span>
+                </div>
+              ))}
+              <div className="border-t border-neutral-200 my-2 pt-2"></div>
+            </>
           )}
-          
-          {/* Monthly add-ons */}
-          {parseFloat(monthlyAddonsTotal) > 0 && (
-            <div className="flex justify-between mb-2 text-sm text-neutral-600">
-              <span>Monthly Services{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
-              <span>${billingPeriod === 'yearly' ? 
-                (parseFloat(monthlyAddonsTotal) * 0.9 * 12).toFixed(2) : 
-                parseFloat(monthlyAddonsTotal).toFixed(2)
-              }</span>
-            </div>
-          )}
-          
-          {/* One-time add-ons */}
-          {parseFloat(oneTimeAddonsTotal) > 0 && (
-            <div className="flex justify-between mb-2 text-sm text-neutral-600">
-              <span>One-time Services:</span>
-              <span>${parseFloat(oneTimeAddonsTotal).toFixed(2)}</span>
-            </div>
-          )}
-          
-          {/* Show discount if yearly */}
-          {billingPeriod === 'yearly' && (
-            <div className="flex justify-between mb-2 text-sm text-green-600">
-              <span>Annual Discount (10%):</span>
-              <span>-${((
-                parseFloat(basePlanPrice) * 12 + 
-                parseFloat(monthlyInfraCost) * 12 + 
-                parseFloat(monthlyAddonsTotal) * 12
-              ) * 0.1).toFixed(2)}</span>
-            </div>
-          )}
-          
-          <div className="border-t border-neutral-200 my-2 pt-2"></div>
           
           {/* Total */}
           <div className="flex justify-between font-bold text-primary">

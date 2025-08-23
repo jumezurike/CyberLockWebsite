@@ -216,11 +216,8 @@ export default function PricingSection() {
     params.set('endpointCount', endpointCount[selectedPlan]);
     params.set('appCount', appCount[selectedPlan]);
     
-    // Add detailed pricing information for checkout recalculation
-    params.set('basePlanPrice', plan.price);
-    params.set('monthlyInfraCost', monthlyInfraCost.toString());
-    params.set('monthlyAddonsTotal', monthlyAddonsTotal.toString());
-    params.set('oneTimeAddonsTotal', oneTimeAddonsTotal.toString());
+    // Add the infrastructure cost to checkout parameters
+    params.set('infraCost', monthlyInfraCost.toString());
     params.set('billingPeriod', billingPeriod);
     params.set('yearlyDiscount', (billingPeriod === "yearly" ? "10" : "0"));
     

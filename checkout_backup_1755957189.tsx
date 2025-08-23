@@ -11,14 +11,6 @@ export default function CheckoutRoute() {
     planName: string;
     amount: string;
     addons: Array<{id: string; label: string; price: string}>;
-    basePlanPrice: string;
-    monthlyInfraCost: string;
-    monthlyAddonsTotal: string;
-    oneTimeAddonsTotal: string;
-    billingPeriod: string;
-    serverCount: string;
-    endpointCount: string;
-    appCount: string;
   } | null>(null);
 
   useEffect(() => {
@@ -28,14 +20,6 @@ export default function CheckoutRoute() {
     const planName = params.get("planName");
     const amount = params.get("amount");
     const addonsParam = params.get("addons");
-    const basePlanPrice = params.get("basePlanPrice") || "0";
-    const monthlyInfraCost = params.get("monthlyInfraCost") || "0";
-    const monthlyAddonsTotal = params.get("monthlyAddonsTotal") || "0";
-    const oneTimeAddonsTotal = params.get("oneTimeAddonsTotal") || "0";
-    const billingPeriod = params.get("billingPeriod") || "monthly";
-    const serverCount = params.get("serverCount") || "0";
-    const endpointCount = params.get("endpointCount") || "0";
-    const appCount = params.get("appCount") || "0";
     
     // If we have the required params, set them in state
     if (planId && planName && amount) {
@@ -53,15 +37,7 @@ export default function CheckoutRoute() {
         planId,
         planName,
         amount,
-        addons,
-        basePlanPrice,
-        monthlyInfraCost,
-        monthlyAddonsTotal,
-        oneTimeAddonsTotal,
-        billingPeriod,
-        serverCount,
-        endpointCount,
-        appCount
+        addons
       });
     }
   }, [location]);
@@ -102,14 +78,6 @@ export default function CheckoutRoute() {
           planName={planInfo.planName}
           amount={planInfo.amount}
           addons={planInfo.addons}
-          basePlanPrice={planInfo.basePlanPrice}
-          monthlyInfraCost={planInfo.monthlyInfraCost}
-          monthlyAddonsTotal={planInfo.monthlyAddonsTotal}
-          oneTimeAddonsTotal={planInfo.oneTimeAddonsTotal}
-          billingPeriod={planInfo.billingPeriod}
-          serverCount={planInfo.serverCount}
-          endpointCount={planInfo.endpointCount}
-          appCount={planInfo.appCount}
         />
       </div>
     </div>
