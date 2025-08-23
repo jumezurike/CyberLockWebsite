@@ -207,7 +207,7 @@ export default function PricingSection() {
     } else if (plan.name === "Clinics") {
       annualAdminFee = 750;
     } else if (plan.name === "Hospitals/HealthTechs") {
-      annualAdminFee = 1250;
+      annualAdminFee = 2500;
     }
     
     // Calculate total amount based on billing period
@@ -313,7 +313,7 @@ export default function PricingSection() {
         { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" }
       ],
       addons: [
-        { id: "admin", label: "Annual Administrative and maintenance fees (Required)", price: "$1250", required: true },
+        { id: "admin", label: "Annual Administrative and maintenance fees (Required)", price: "$2500", required: true },
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$2250 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$100/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" }
