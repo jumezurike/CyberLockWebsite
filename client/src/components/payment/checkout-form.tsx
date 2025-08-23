@@ -14,6 +14,7 @@ interface CheckoutFormProps {
   monthlyInfraCost?: string;
   monthlyAddonsTotal?: string;
   oneTimeAddonsTotal?: string;
+  annualAdminFee?: string;
   onBillingPeriodChange?: (period: "monthly" | "yearly") => void;
   onSuccess?: () => void;
   onCancel?: () => void;
@@ -28,6 +29,7 @@ export default function CheckoutForm({
   monthlyInfraCost = "0",
   monthlyAddonsTotal = "0",
   oneTimeAddonsTotal = "0",
+  annualAdminFee = "0",
   onBillingPeriodChange,
   onSuccess, 
   onCancel 
@@ -179,6 +181,15 @@ export default function CheckoutForm({
               <span>${parseFloat(oneTimeAddonsTotal).toFixed(2)}</span>
             </div>
           )}
+          
+          {/* Administrative fees */}
+          <div className="flex justify-between mb-2 text-sm text-neutral-600">
+            <span>Administrative & Maintenance{billingPeriod === 'yearly' ? ' (Annual)' : ' (Monthly)'}:</span>
+            <span>${billingPeriod === 'yearly' ? 
+              parseFloat(annualAdminFee).toFixed(2) : 
+              (parseFloat(annualAdminFee) / 12).toFixed(2)
+            }</span>
+          </div>
           
           {/* Show discount if yearly */}
           {billingPeriod === 'yearly' && (

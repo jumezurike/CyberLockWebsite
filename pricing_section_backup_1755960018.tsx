@@ -189,31 +189,20 @@ export default function PricingSection() {
       }
     });
     
-    // Calculate admin fees based on plan
-    let annualAdminFee = 0;
-    if (plan.name === "Small Medical/Health Practices") {
-      annualAdminFee = 250;
-    } else if (plan.name === "Clinics") {
-      annualAdminFee = 500;
-    } else if (plan.name === "Hospitals/HealthTechs") {
-      annualAdminFee = 750;
-    }
-    
     // Calculate total amount based on billing period
     const basePlanPrice = parseFloat(plan.price);
     let totalAmount;
     
     if (billingPeriod === "yearly") {
-      // Yearly billing: Apply 10% discount and multiply monthly costs by 12, plus annual admin fee
+      // Yearly billing: Apply 10% discount and multiply monthly costs by 12
       const yearlyDiscount = 0.9;
       const discountedYearlyPlan = basePlanPrice * yearlyDiscount * 12;
       const discountedYearlyInfra = monthlyInfraCost * yearlyDiscount * 12;
       const discountedYearlyAddons = monthlyAddonsTotal * yearlyDiscount * 12;
-      totalAmount = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddonsTotal + annualAdminFee).toFixed(2);
+      totalAmount = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddonsTotal).toFixed(2);
     } else {
-      // Monthly billing: No discount, no multiplication, add monthly equivalent of admin fee
-      const monthlyAdminFee = annualAdminFee / 12;
-      totalAmount = (basePlanPrice + monthlyInfraCost + monthlyAddonsTotal + oneTimeAddonsTotal + monthlyAdminFee).toFixed(2);
+      // Monthly billing: No discount, no multiplication
+      totalAmount = (basePlanPrice + monthlyInfraCost + monthlyAddonsTotal + oneTimeAddonsTotal).toFixed(2);
     }
     
     // Create URL query params for checkout
@@ -232,7 +221,6 @@ export default function PricingSection() {
     params.set('monthlyInfraCost', monthlyInfraCost.toString());
     params.set('monthlyAddonsTotal', monthlyAddonsTotal.toString());
     params.set('oneTimeAddonsTotal', oneTimeAddonsTotal.toString());
-    params.set('annualAdminFee', annualAdminFee.toString());
     params.set('billingPeriod', billingPeriod);
     params.set('yearlyDiscount', (billingPeriod === "yearly" ? "10" : "0"));
     
@@ -256,13 +244,13 @@ export default function PricingSection() {
         { included: true, text: "Secure Payment application" },
         { included: true, text: "Secure True Digital ID" },
         { included: true, text: "Secure AI Language Augmentation (Low Resource)" },
-        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" },
-        { included: true, text: "Annual Administrative and maintenance fees ($250/year)" }
+        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" }
       ],
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$250 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$25/month" },
-        { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$300" }
+        { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$300" },
+        { id: "admin", label: "Annual Administrative and maintenance fees", price: "$250" }
       ]
     },
     {
@@ -278,13 +266,13 @@ export default function PricingSection() {
         { included: true, text: "Secure Payment application" },
         { included: true, text: "Secure True Digital ID" },
         { included: true, text: "Secure AI Language Augmentation (High Resource)" },
-        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" },
-        { included: true, text: "Annual Administrative and maintenance fees ($500/year)" }
+        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" }
       ],
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$750 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$50/month" },
-        { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$600" }
+        { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$600" },
+        { id: "admin", label: "Annual Administrative and maintenance fees", price: "$500" }
       ]
     },
     {
@@ -301,13 +289,13 @@ export default function PricingSection() {
         { included: true, text: "Secure AI Language Augmentation (High Resource)" },
         { included: true, text: "Customized solutions for businesses" },
         { included: true, text: "Dedicated customer support" },
-        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" },
-        { included: true, text: "Annual Administrative and maintenance fees ($750/year)" }
+        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" }
       ],
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$2250 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$100/month" },
-        { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" }
+        { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" },
+        { id: "admin", label: "Annual Administrative and maintenance fees", price: "$750" }
       ]
     }
   ];

@@ -20,6 +20,7 @@ interface CheckoutPageProps {
   monthlyInfraCost?: string;
   monthlyAddonsTotal?: string;
   oneTimeAddonsTotal?: string;
+  annualAdminFee?: string;
   billingPeriod?: string;
   serverCount?: string;
   endpointCount?: string;
@@ -35,6 +36,7 @@ export default function CheckoutPage({
   monthlyInfraCost = "0", 
   monthlyAddonsTotal = "0",
   oneTimeAddonsTotal = "0",
+  annualAdminFee = "0",
   billingPeriod = "monthly",
   serverCount = "0",
   endpointCount = "0",
@@ -53,6 +55,7 @@ export default function CheckoutPage({
     const monthlyInfra = parseFloat(monthlyInfraCost);
     const monthlyAddons = parseFloat(monthlyAddonsTotal);
     const oneTimeAddons = parseFloat(oneTimeAddonsTotal);
+    const adminFee = parseFloat(annualAdminFee);
     
     let newTotal;
     if (newBillingPeriod === "yearly") {
@@ -60,9 +63,10 @@ export default function CheckoutPage({
       const discountedYearlyPlan = basePlan * yearlyDiscount * 12;
       const discountedYearlyInfra = monthlyInfra * yearlyDiscount * 12;
       const discountedYearlyAddons = monthlyAddons * yearlyDiscount * 12;
-      newTotal = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddons).toFixed(2);
+      newTotal = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddons + adminFee).toFixed(2);
     } else {
-      newTotal = (basePlan + monthlyInfra + monthlyAddons + oneTimeAddons).toFixed(2);
+      const monthlyAdminFee = adminFee / 12;
+      newTotal = (basePlan + monthlyInfra + monthlyAddons + oneTimeAddons + monthlyAdminFee).toFixed(2);
     }
     
     return newTotal;
@@ -188,6 +192,7 @@ export default function CheckoutPage({
             monthlyInfraCost={monthlyInfraCost}
             monthlyAddonsTotal={monthlyAddonsTotal}
             oneTimeAddonsTotal={oneTimeAddonsTotal}
+            annualAdminFee={annualAdminFee}
             onBillingPeriodChange={handleBillingPeriodChange}
             onCancel={handleCancel}
             onSuccess={handleSuccess}

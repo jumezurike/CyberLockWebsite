@@ -15,6 +15,7 @@ export default function CheckoutRoute() {
     monthlyInfraCost: string;
     monthlyAddonsTotal: string;
     oneTimeAddonsTotal: string;
+    annualAdminFee: string;
     billingPeriod: string;
     serverCount: string;
     endpointCount: string;
@@ -32,6 +33,7 @@ export default function CheckoutRoute() {
     const monthlyInfraCost = params.get("monthlyInfraCost") || "0";
     const monthlyAddonsTotal = params.get("monthlyAddonsTotal") || "0";
     const oneTimeAddonsTotal = params.get("oneTimeAddonsTotal") || "0";
+    const annualAdminFee = params.get("annualAdminFee") || "0";
     const billingPeriod = params.get("billingPeriod") || "monthly";
     const serverCount = params.get("serverCount") || "0";
     const endpointCount = params.get("endpointCount") || "0";
@@ -58,6 +60,7 @@ export default function CheckoutRoute() {
         monthlyInfraCost,
         monthlyAddonsTotal,
         oneTimeAddonsTotal,
+        annualAdminFee,
         billingPeriod,
         serverCount,
         endpointCount,
@@ -106,6 +109,7 @@ export default function CheckoutRoute() {
           monthlyInfraCost={planInfo.monthlyInfraCost}
           monthlyAddonsTotal={planInfo.monthlyAddonsTotal}
           oneTimeAddonsTotal={planInfo.oneTimeAddonsTotal}
+          annualAdminFee={planInfo.annualAdminFee}
           billingPeriod={planInfo.billingPeriod}
           serverCount={planInfo.serverCount}
           endpointCount={planInfo.endpointCount}
