@@ -200,8 +200,15 @@ export default function PricingSection() {
     // For all tiers, Monthly Services = base plan price (consistent structure)
     monthlyAddonsTotal = parseFloat(plan.price) + monthlyAddonsTotal;
     
-    // Calculate admin fees - standardized across all plans for regulatory compliance
-    const annualAdminFee = 250;
+    // Calculate admin fees based on plan tier
+    let annualAdminFee = 0;
+    if (plan.name === "Small Medical/Health Practices") {
+      annualAdminFee = 250;
+    } else if (plan.name === "Clinics") {
+      annualAdminFee = 750;
+    } else if (plan.name === "Hospitals/HealthTechs") {
+      annualAdminFee = 1250;
+    }
     
     // Calculate total amount based on billing period
     const basePlanPrice = parseFloat(plan.price);
@@ -283,7 +290,7 @@ export default function PricingSection() {
         { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" }
       ],
       addons: [
-        { id: "admin", label: "Annual Administrative and maintenance fees (Required)", price: "$250", required: true },
+        { id: "admin", label: "Annual Administrative and maintenance fees (Required)", price: "$750", required: true },
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$750 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$50/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$600" }
@@ -306,7 +313,7 @@ export default function PricingSection() {
         { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" }
       ],
       addons: [
-        { id: "admin", label: "Annual Administrative and maintenance fees (Required)", price: "$250", required: true },
+        { id: "admin", label: "Annual Administrative and maintenance fees (Required)", price: "$1250", required: true },
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$2250 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$100/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" }
