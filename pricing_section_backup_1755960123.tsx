@@ -540,13 +540,7 @@ export default function PricingSection() {
                   
                   <div className="space-y-3 mt-6">
                     <button 
-                      onClick={() => {
-                        setSelectedPlan(planId);
-                        // Auto-select recommended add-ons when plan is selected
-                        if (!isSelected) {
-                          autoSelectRelevantAddons(planId);
-                        }
-                      }}
+                      onClick={() => setSelectedPlan(planId)}
                       className={`w-full ${isSelected ? 'bg-secondary' : 'bg-primary'} hover:bg-primary/90 text-white py-3 rounded-md transition duration-150 ease-in-out font-medium`}
                     >
                       {isSelected ? 'Selected' : 'Select Plan'}
