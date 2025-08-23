@@ -182,6 +182,10 @@ export default function PricingSection() {
     
     selectedAddonsList.forEach(addon => {
       const price = parseFloat(addon.price);
+      // Skip admin fees as they're calculated separately to avoid double-counting
+      if (addon.id === 'admin') {
+        return;
+      }
       if (addon.label.toLowerCase().includes('one time')) {
         oneTimeAddonsTotal += price;
       } else {
