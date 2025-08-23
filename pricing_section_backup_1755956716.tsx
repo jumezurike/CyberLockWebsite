@@ -171,9 +171,9 @@ export default function PricingSection() {
       .filter((addon): addon is { id: string, label: string, price: string } => addon !== null);
     
     // Calculate infrastructure costs (monthly)
-    const serverTotal = parseInt(serverCount[selectedPlan] || "0") * 85; // $85/server/month
-    const endpointTotal = parseInt(endpointCount[selectedPlan] || "0") * 55; // $55/endpoint/month
-    const appTotal = parseInt(appCount[selectedPlan] || "0") * 65; // $65/application/month
+    const serverTotal = parseInt(serverCount[selectedPlan] || "0") * 65; // $65/server/month
+    const endpointTotal = parseInt(endpointCount[selectedPlan] || "0") * 45; // $45/endpoint/month
+    const appTotal = parseInt(appCount[selectedPlan] || "0") * 55; // $55/application/month
     const monthlyInfraCost = serverTotal + endpointTotal + appTotal;
     
     // Calculate add-ons (separate monthly and one-time)
@@ -390,7 +390,7 @@ export default function PricingSection() {
                         <div>
                           <label htmlFor={`${planId}-server-count`} className="text-sm font-medium">Server (Physical or Virtual)</label>
                           <p className="text-xs text-gray-500">Includes continuous monitoring & incident response</p>
-                          <p className="text-xs text-gray-500 font-medium">$85/server/month</p>
+                          <p className="text-xs text-gray-500 font-medium">$65/server/month</p>
                         </div>
                         <input 
                           type="text" 
@@ -405,9 +405,8 @@ export default function PricingSection() {
                       <div className="flex justify-between items-center">
                         <div>
                           <label htmlFor={`${planId}-endpoint-count`} className="text-sm font-medium">End-point (Subject accessing server)</label>
-                          <p className="text-xs text-gray-500">Includes desktop, laptops, IoT devices</p>
                           <p className="text-xs text-gray-500">Includes continuous monitoring & incident response</p>
-                          <p className="text-xs text-gray-500 font-medium">$55/endpoint/month</p>
+                          <p className="text-xs text-gray-500 font-medium">$45/endpoint/month</p>
                         </div>
                         <input 
                           type="text" 
@@ -423,7 +422,7 @@ export default function PricingSection() {
                         <div>
                           <label htmlFor={`${planId}-app-count`} className="text-sm font-medium">Application (Business Functionality)</label>
                           <p className="text-xs text-gray-500">Includes continuous monitoring & incident response</p>
-                          <p className="text-xs text-gray-500 font-medium">$65/application/month</p>
+                          <p className="text-xs text-gray-500 font-medium">$55/application/month</p>
                         </div>
                         <input 
                           type="text" 
