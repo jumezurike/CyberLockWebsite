@@ -1117,14 +1117,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         planId, 
         planName,
         billingPeriod,
+        amount, 
         monthlyAmount, 
         oneTimeFees = [],
         monthlyAddons = []
       } = req.body;
       
-      if (!email || !planId || !monthlyAmount) {
+      // Use amount if monthlyAmount is not provided (for backwards compatibility)
+      const finalAmount = monthlyAmount || amount;
+      
+      if (!email || !planId || !finalAmount) {
         return res.status(400).json({ 
-          error: "Email, plan ID, and monthly amount are required" 
+          error: "Email, plan ID, and amount are required" 
         });
       }
 
@@ -1184,7 +1188,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
 
       // Calculate total for first payment (monthly + valid one-time fees)
-      const monthlyAmountCents = Math.round(monthlyAmount * 100);
+      const monthlyAmountCents = Math.round(finalAmount * 100);
       const oneTimeTotal = validOneTimeFees.reduce((total, fee) => total + fee.amount, 0);
       const oneTimeTotalCents = Math.round(oneTimeTotal * 100);
       
