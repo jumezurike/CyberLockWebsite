@@ -51,16 +51,7 @@ import {
   type CystReport,
   type InsertCystReport,
   type CystPhoto,
-  type InsertCystPhoto,
-  customers,
-  oneTimePurchases,
-  subscriptionItems,
-  type Customer,
-  type InsertCustomer,
-  type OneTimePurchase,
-  type InsertOneTimePurchase,
-  type SubscriptionItem,
-  type InsertSubscriptionItem
+  type InsertCystPhoto
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, and } from "drizzle-orm";
@@ -1623,103 +1614,6 @@ export class DatabaseStorage implements IStorage {
 
   async deleteCystPhoto(id: number): Promise<void> {
     await db.delete(cystPhotos).where(eq(cystPhotos.id, id));
-  }
-
-  // Customer Management Methods
-  async getCustomerByEmail(email: string): Promise<Customer | undefined> {
-    const [customer] = await db
-      .select()
-      .from(customers)
-      .where(eq(customers.email, email));
-    return customer;
-  }
-
-  async getCustomerByStripeId(stripeCustomerId: string): Promise<Customer | undefined> {
-    const [customer] = await db
-      .select()
-      .from(customers)
-      .where(eq(customers.stripeCustomerId, stripeCustomerId));
-    return customer;
-  }
-
-  async createCustomer(customerData: InsertCustomer): Promise<Customer> {
-    const [customer] = await db
-      .insert(customers)
-      .values(customerData)
-      .returning();
-    return customer;
-  }
-
-  async updateCustomer(id: number, customerData: Partial<Customer>): Promise<Customer> {
-    const [customer] = await db
-      .update(customers)
-      .set({...customerData, updatedAt: new Date()})
-      .where(eq(customers.id, id))
-      .returning();
-    return customer;
-  }
-
-  // One-time Purchase Tracking
-  async hasOneTimePurchase(customerId: number, feeType: string): Promise<boolean> {
-    const [purchase] = await db
-      .select()
-      .from(oneTimePurchases)
-      .where(
-        and(
-          eq(oneTimePurchases.customerId, customerId),
-          eq(oneTimePurchases.feeType, feeType),
-          eq(oneTimePurchases.status, 'completed')
-        )
-      );
-    return !!purchase;
-  }
-
-  async recordOneTimePurchase(purchaseData: InsertOneTimePurchase): Promise<OneTimePurchase> {
-    const [purchase] = await db
-      .insert(oneTimePurchases)
-      .values(purchaseData)
-      .returning();
-    return purchase;
-  }
-
-  async getOneTimePurchases(customerId: number): Promise<OneTimePurchase[]> {
-    return await db
-      .select()
-      .from(oneTimePurchases)
-      .where(eq(oneTimePurchases.customerId, customerId))
-      .orderBy(desc(oneTimePurchases.purchasedAt));
-  }
-
-  // Subscription Item Management
-  async createSubscriptionItem(itemData: InsertSubscriptionItem): Promise<SubscriptionItem> {
-    const [item] = await db
-      .insert(subscriptionItems)
-      .values(itemData)
-      .returning();
-    return item;
-  }
-
-  async getSubscriptionItems(customerId: number): Promise<SubscriptionItem[]> {
-    return await db
-      .select()
-      .from(subscriptionItems)
-      .where(
-        and(
-          eq(subscriptionItems.customerId, customerId),
-          eq(subscriptionItems.isActive, true)
-        )
-      )
-      .orderBy(desc(subscriptionItems.createdAt));
-  }
-
-  async deactivateSubscriptionItems(customerId: number): Promise<void> {
-    await db
-      .update(subscriptionItems)
-      .set({
-        isActive: false,
-        updatedAt: new Date()
-      })
-      .where(eq(subscriptionItems.customerId, customerId));
   }
 }
 
