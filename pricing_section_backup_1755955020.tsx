@@ -170,40 +170,24 @@ export default function PricingSection() {
       })
       .filter((addon): addon is { id: string, label: string, price: string } => addon !== null);
     
-    // Calculate infrastructure costs (monthly)
+    // Calculate infrastructure costs
     const serverTotal = parseInt(serverCount[selectedPlan] || "0") * 65; // $65/server/month
     const endpointTotal = parseInt(endpointCount[selectedPlan] || "0") * 45; // $45/endpoint/month
     const appTotal = parseInt(appCount[selectedPlan] || "0") * 55; // $55/application/month
-    const monthlyInfraCost = serverTotal + endpointTotal + appTotal;
+    const infraCost = serverTotal + endpointTotal + appTotal;
     
-    // Calculate add-ons (separate monthly and one-time)
-    let monthlyAddonsTotal = 0;
-    let oneTimeAddonsTotal = 0;
-    
-    selectedAddonsList.forEach(addon => {
-      const price = parseFloat(addon.price);
-      if (addon.label.toLowerCase().includes('one time')) {
-        oneTimeAddonsTotal += price;
-      } else {
-        monthlyAddonsTotal += price;
-      }
-    });
-    
-    // Calculate total amount based on billing period
+    // Calculate total amount (plan price + addons + infrastructure costs)
     const basePlanPrice = parseFloat(plan.price);
-    let totalAmount;
     
-    if (billingPeriod === "yearly") {
-      // Yearly billing: Apply 10% discount and multiply monthly costs by 12
-      const yearlyDiscount = 0.9;
-      const discountedYearlyPlan = basePlanPrice * yearlyDiscount * 12;
-      const discountedYearlyInfra = monthlyInfraCost * yearlyDiscount * 12;
-      const discountedYearlyAddons = monthlyAddonsTotal * yearlyDiscount * 12;
-      totalAmount = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddonsTotal).toFixed(2);
-    } else {
-      // Monthly billing: No discount, no multiplication
-      totalAmount = (basePlanPrice + monthlyInfraCost + monthlyAddonsTotal + oneTimeAddonsTotal).toFixed(2);
-    }
+    // Apply yearly discount if applicable
+    const yearlyDiscount = billingPeriod === "yearly" ? 0.9 : 1; // 10% discount for yearly
+    const discountedPlanPrice = basePlanPrice * yearlyDiscount;
+    
+    const addonsTotal = selectedAddonsList.reduce(
+      (sum, addon) => sum + (addon ? parseFloat(addon.price) : 0), 
+      0
+    );
+    const totalAmount = (discountedPlanPrice + addonsTotal + infraCost).toFixed(2);
     
     // Create URL query params for checkout
     const params = new URLSearchParams();
@@ -217,7 +201,7 @@ export default function PricingSection() {
     params.set('appCount', appCount[selectedPlan]);
     
     // Add the infrastructure cost to checkout parameters
-    params.set('infraCost', monthlyInfraCost.toString());
+    params.set('infraCost', infraCost.toString());
     params.set('billingPeriod', billingPeriod);
     params.set('yearlyDiscount', (billingPeriod === "yearly" ? "10" : "0"));
     
