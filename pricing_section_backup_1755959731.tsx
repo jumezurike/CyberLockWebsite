@@ -249,8 +249,7 @@ export default function PricingSection() {
       addons: [
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$250 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$25/month" },
-        { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$300" },
-        { id: "admin", label: "Annual Administrative and maintenance fees", price: "$250" }
+        { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$300" }
       ]
     },
     {
@@ -272,7 +271,7 @@ export default function PricingSection() {
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$750 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$50/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$600" },
-        { id: "admin", label: "Annual Administrative and maintenance fees", price: "$500" }
+        { id: "admin", label: "Annual Administrative and maintenance fees", price: "$250" }
       ]
     },
     {
@@ -295,7 +294,7 @@ export default function PricingSection() {
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$2250 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$100/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" },
-        { id: "admin", label: "Annual Administrative and maintenance fees", price: "$750" }
+        { id: "admin", label: "Annual Administrative and maintenance fees", price: "$350" }
       ]
     }
   ];
