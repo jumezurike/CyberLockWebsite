@@ -151,23 +151,24 @@ export default function PricingSection() {
     
     if (!plan) return;
     
-    // Get selected addons for this plan (including required ones)
-    const selectedAddonsList = plan.addons
-      .filter(addon => {
-        // Include required addons or manually selected ones
-        return addon.required || !!selectedAddons[selectedPlan]?.[addon.id];
-      })
-      .map(addon => {
+    // Get selected addons for this plan
+    const selectedAddonsList = Object.entries(selectedAddons[selectedPlan] || {})
+      .filter(([, isSelected]) => isSelected)
+      .map(([addonId]) => {
+        const addonDetails = plan.addons.find(a => a.id === addonId);
+        if (!addonDetails) return null;
+        
         // Extract just the numeric part from the price string (e.g. "$25/month" -> "25")
-        const priceMatch = addon.price.match(/\$(\d+)/);
+        const priceMatch = addonDetails.price.match(/\$(\d+)/);
         const price = priceMatch ? priceMatch[1] : "0";
         
         return {
-          id: addon.id,
-          label: addon.label,
+          id: addonId,
+          label: addonDetails.label,
           price
         };
-      });
+      })
+      .filter((addon): addon is { id: string, label: string, price: string } => addon !== null);
     
     // Calculate infrastructure costs (monthly)
     const serverTotal = parseInt(serverCount[selectedPlan] || "0") * 85; // $85/server/month
@@ -255,10 +256,10 @@ export default function PricingSection() {
         { included: true, text: "Secure Payment application" },
         { included: true, text: "Secure True Digital ID" },
         { included: true, text: "Secure AI Language Augmentation (Low Resource)" },
-        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" }
+        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" },
+        { included: true, text: "Annual Administrative and maintenance fees ($250/year)" }
       ],
       addons: [
-        { id: "admin", label: "Annual Administrative and maintenance fees (Required)", price: "$250", required: true },
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$250 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$25/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$300" }
@@ -277,10 +278,10 @@ export default function PricingSection() {
         { included: true, text: "Secure Payment application" },
         { included: true, text: "Secure True Digital ID" },
         { included: true, text: "Secure AI Language Augmentation (High Resource)" },
-        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" }
+        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" },
+        { included: true, text: "Annual Administrative and maintenance fees ($500/year)" }
       ],
       addons: [
-        { id: "admin", label: "Annual Administrative and maintenance fees (Required)", price: "$500", required: true },
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$750 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$50/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$600" }
@@ -300,10 +301,10 @@ export default function PricingSection() {
         { included: true, text: "Secure AI Language Augmentation (High Resource)" },
         { included: true, text: "Customized solutions for businesses" },
         { included: true, text: "Dedicated customer support" },
-        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" }
+        { included: true, text: "SMB Preliminary cybersecurity analysis reports (Free)" },
+        { included: true, text: "Annual Administrative and maintenance fees ($750/year)" }
       ],
       addons: [
-        { id: "admin", label: "Annual Administrative and maintenance fees (Required)", price: "$750", required: true },
         { id: "comp-report", label: "Comprehensive cybersecurity analysis reports", price: "$2250 one time" },
         { id: "policy", label: "Policies, Processes, Procedures, and Plans continuous development", price: "$100/month" },
         { id: "annual", label: "Annual Security Posture Update & Assessment", price: "$1000" }
@@ -520,21 +521,18 @@ export default function PricingSection() {
                     
                     <div className="space-y-3">
                       {plan.addons.map((addon) => (
-                        <div key={addon.id} className={`flex justify-between items-center ${addon.required ? 'opacity-75 bg-gray-50 p-2 rounded' : ''}`}>
+                        <div key={addon.id} className="flex justify-between items-center">
                           <div className="flex items-start">
                             <input 
                               type="checkbox" 
                               id={`${planId}-${addon.id}`} 
-                              className={`mt-1 mr-2 ${addon.required ? 'cursor-not-allowed' : ''}`}
-                              checked={addon.required || !!selectedAddons[planId]?.[addon.id]}
-                              disabled={addon.required}
-                              onChange={(e) => !addon.required && handleAddonChange(planId, addon.id, e.target.checked)}
+                              className="mt-1 mr-2"
+                              checked={!!selectedAddons[planId]?.[addon.id]}
+                              onChange={(e) => handleAddonChange(planId, addon.id, e.target.checked)}
                             />
-                            <label htmlFor={`${planId}-${addon.id}`} className={`text-sm ${addon.required ? 'text-gray-600 font-medium' : ''}`}>
-                              {addon.label}
-                            </label>
+                            <label htmlFor={`${planId}-${addon.id}`} className="text-sm">{addon.label}</label>
                           </div>
-                          <span className={`text-sm font-medium ${addon.required ? 'text-gray-600' : ''}`}>{addon.price}</span>
+                          <span className="text-sm font-medium">{addon.price}</span>
                         </div>
                       ))}
                     </div>
