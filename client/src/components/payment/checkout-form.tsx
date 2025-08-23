@@ -235,7 +235,13 @@ export default function CheckoutForm({
               </div>
               {(() => {
                 try {
-                  const addonsList = addons ? JSON.parse(addons) : [];
+                  let addonsList: any[] = [];
+                  if (typeof addons === 'string') {
+                    addonsList = JSON.parse(addons);
+                  } else if (Array.isArray(addons)) {
+                    addonsList = addons;
+                  }
+                  
                   return addonsList.filter((addon: any) => {
                     return addon.label.toLowerCase().includes('one time') || 
                            addon.price.toLowerCase().includes('one time') ||
