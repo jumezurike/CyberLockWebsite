@@ -152,11 +152,15 @@ export default function PricingSection() {
     
     if (!plan) return;
     
-    // Get selected addons for this plan (including required ones)
+    // Get selected addons for this plan (excluding admin fees which are handled separately)
     const selectedAddonsList = plan.addons
       .filter(addon => {
-        // Include required addons or manually selected ones
-        return addon.required || !!selectedAddons[selectedPlan]?.[addon.id];
+        // Exclude admin fees as they're handled separately
+        if (addon.id === 'admin') {
+          return false;
+        }
+        // Include manually selected ones (required admin fees are handled separately)
+        return !!selectedAddons[selectedPlan]?.[addon.id];
       })
       .map(addon => {
         // Extract just the numeric part from the price string (e.g. "$25/month" -> "25")
