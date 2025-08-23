@@ -215,12 +215,13 @@ export default function PricingSection() {
     if (billingPeriod === "yearly") {
       // Yearly billing: Apply 10% discount and multiply monthly costs by 12, plus annual admin fee
       const yearlyDiscount = 0.9;
+      const discountedYearlyPlan = basePlanPrice * yearlyDiscount * 12;
       const discountedYearlyInfra = monthlyInfraCost * yearlyDiscount * 12;
       const discountedYearlyAddons = monthlyAddonsTotal * yearlyDiscount * 12;
-      totalAmount = (discountedYearlyInfra + discountedYearlyAddons + oneTimeAddonsTotal + annualAdminFee).toFixed(2);
+      totalAmount = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddonsTotal + annualAdminFee).toFixed(2);
     } else {
-      // Monthly billing: Monthly services already include base plan, so don't double-count
-      totalAmount = (monthlyInfraCost + monthlyAddonsTotal + oneTimeAddonsTotal + annualAdminFee).toFixed(2);
+      // Monthly billing: Include base plan price once + infrastructure + add-ons + AMF
+      totalAmount = (basePlanPrice + monthlyInfraCost + monthlyAddonsTotal + oneTimeAddonsTotal + annualAdminFee).toFixed(2);
     }
     
     // Create URL query params for checkout
