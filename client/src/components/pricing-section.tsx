@@ -13,6 +13,7 @@ interface AddonOption {
   id: string;
   label: string;
   price: string;
+  required?: boolean;
 }
 
 interface PricingPlan {
