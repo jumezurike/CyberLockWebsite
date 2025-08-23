@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStripe, useElements, PaymentElement } from "@stripe/react-stripe-js";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 interface CheckoutFormProps {
   amount: string;
   planName: string;
+  planId: string;
   addons?: Array<{id: string; label: string; price: string}>;
   billingPeriod?: string;
   basePlanPrice?: string;
@@ -15,6 +16,14 @@ interface CheckoutFormProps {
   monthlyAddonsTotal?: string;
   oneTimeAddonsTotal?: string;
   annualAdminFee?: string;
+  oneTimeFees?: Array<{type: string; amount: number; description: string}>;
+  monthlyAddons?: Array<{name: string; amount: number; quantity?: number}>;
+  customerInfo?: {
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    companyName?: string;
+  };
   onBillingPeriodChange?: (period: "monthly" | "yearly") => void;
   onSuccess?: () => void;
   onCancel?: () => void;
@@ -22,7 +31,8 @@ interface CheckoutFormProps {
 
 export default function CheckoutForm({ 
   amount, 
-  planName, 
+  planName,
+  planId,
   addons = [], 
   billingPeriod = "monthly",
   basePlanPrice = "0",
@@ -30,6 +40,9 @@ export default function CheckoutForm({
   monthlyAddonsTotal = "0",
   oneTimeAddonsTotal = "0",
   annualAdminFee = "0",
+  oneTimeFees = [],
+  monthlyAddons = [],
+  customerInfo,
   onBillingPeriodChange,
   onSuccess, 
   onCancel 
@@ -39,11 +52,65 @@ export default function CheckoutForm({
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
+  const [subscriptionId, setSubscriptionId] = useState<string | null>(null);
+
+  // Initialize subscription on component mount
+  useEffect(() => {
+    const initializeSubscription = async () => {
+      if (!customerInfo?.email) {
+        console.error("Customer email is required");
+        return;
+      }
+
+      try {
+        // Create subscription with customer info
+        const response = await fetch("/api/create-subscription", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: customerInfo.email,
+            firstName: customerInfo.firstName,
+            lastName: customerInfo.lastName,
+            companyName: customerInfo.companyName,
+            planId: planId,
+            planName: planName,
+            billingPeriod: billingPeriod,
+            monthlyAmount: parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost),
+            oneTimeFees: oneTimeFees,
+            monthlyAddons: monthlyAddons,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to create subscription");
+        }
+
+        const data = await response.json();
+        setClientSecret(data.clientSecret);
+        setSubscriptionId(data.subscriptionId);
+
+        if (data.oneTimeFeesSkipped > 0) {
+          toast({
+            title: "One-time fees already paid",
+            description: `${data.oneTimeFeesSkipped} one-time fees have been excluded as they were already purchased.`,
+          });
+        }
+      } catch (error) {
+        console.error("Error initializing subscription:", error);
+        setErrorMessage("Failed to initialize payment. Please try again.");
+      }
+    };
+
+    initializeSubscription();
+  }, [customerInfo?.email, planId, planName, billingPeriod, basePlanPrice, monthlyInfraCost]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!stripe || !elements) {
+    if (!stripe || !elements || !clientSecret || !subscriptionId) {
       return;
     }
 
@@ -53,6 +120,7 @@ export default function CheckoutForm({
     try {
       const { error, paymentIntent } = await stripe.confirmPayment({
         elements,
+        clientSecret,
         confirmParams: {
           return_url: `${window.location.origin}/payment-success`,
         },
@@ -69,24 +137,27 @@ export default function CheckoutForm({
       } else if (paymentIntent && paymentIntent.status === "succeeded") {
         toast({
           title: "Payment Successful!",
-          description: `Thank you for your purchase of ${planName}`,
+          description: `Welcome to ${planName}! Your subscription is now active.`,
         });
         
-        // Notify the server about successful payment
+        // Notify the server about successful subscription
         try {
-          await fetch("/api/payment-success", {
+          await fetch("/api/subscription-success", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ paymentIntentId: paymentIntent.id }),
+            body: JSON.stringify({ 
+              subscriptionId: subscriptionId,
+              paymentIntentId: paymentIntent.id 
+            }),
           });
           
           if (onSuccess) {
             onSuccess();
           }
         } catch (serverError) {
-          console.error("Error notifying server about successful payment:", serverError);
+          console.error("Error notifying server about successful subscription:", serverError);
         }
       }
     } catch (error) {

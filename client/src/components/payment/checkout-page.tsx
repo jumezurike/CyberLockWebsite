@@ -25,6 +25,12 @@ interface CheckoutPageProps {
   serverCount?: string;
   endpointCount?: string;
   appCount?: string;
+  customerInfo?: {
+    email: string;
+    firstName?: string;
+    lastName?: string;
+    companyName?: string;
+  };
 }
 
 export default function CheckoutPage({ 
@@ -40,7 +46,8 @@ export default function CheckoutPage({
   billingPeriod = "monthly",
   serverCount = "0",
   endpointCount = "0",
-  appCount = "0"
+  appCount = "0",
+  customerInfo
 }: CheckoutPageProps) {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -86,13 +93,40 @@ export default function CheckoutPage({
     const newAmount = recalculateTotal(newPeriod);
     setCurrentAmount(newAmount);
     
-    // Create new payment intent with updated amount
+    // Create new subscription with updated billing period
     try {
       setIsLoading(true);
-      const response = await apiRequest("POST", "/api/create-payment-intent", {
+      if (!customerInfo) {
+        throw new Error("Customer information is required");
+      }
+      
+      const response = await apiRequest("POST", "/api/create-subscription", {
         planId,
+        planName,
+        email: customerInfo.email,
+        firstName: customerInfo.firstName || '',
+        lastName: customerInfo.lastName || '',
+        companyName: customerInfo.companyName || '',
         amount: newAmount,
-        addons
+        billingPeriod: newPeriod,
+        basePlanPrice,
+        monthlyInfraCost,
+        monthlyAddonsTotal,
+        oneTimeAddonsTotal,
+        annualAdminFee,
+        serverCount,
+        endpointCount,
+        appCount,
+        oneTimeFees: [{
+          type: 'admin',
+          amount: parseFloat(annualAdminFee || "0"),
+          description: 'Annual Management Fee'
+        }],
+        monthlyAddons: [{
+          name: 'Infrastructure Monitoring',
+          amount: parseFloat(monthlyInfraCost || "0"),
+          quantity: 1
+        }]
       });
       
       const data = await response.json();
@@ -103,8 +137,8 @@ export default function CheckoutPage({
       
       setClientSecret(data.clientSecret);
     } catch (error) {
-      console.error("Error updating payment intent:", error);
-      setError(error instanceof Error ? error.message : "Failed to update payment");
+      console.error("Error updating subscription:", error);
+      setError(error instanceof Error ? error.message : "Failed to update subscription");
     } finally {
       setIsLoading(false);
     }
@@ -118,14 +152,41 @@ export default function CheckoutPage({
       return;
     }
 
-    // Create PaymentIntent as soon as the page loads
-    const createPaymentIntent = async () => {
+    // Create subscription as soon as the page loads
+    const createSubscription = async () => {
       try {
         setIsLoading(true);
-        const response = await apiRequest("POST", "/api/create-payment-intent", {
+        if (!customerInfo) {
+          throw new Error("Customer information is required");
+        }
+        
+        const response = await apiRequest("POST", "/api/create-subscription", {
           planId,
+          planName,
+          email: customerInfo.email,
+          firstName: customerInfo.firstName || '',
+          lastName: customerInfo.lastName || '',
+          companyName: customerInfo.companyName || '',
           amount,
-          addons
+          billingPeriod: currentBillingPeriod,
+          basePlanPrice,
+          monthlyInfraCost,
+          monthlyAddonsTotal,
+          oneTimeAddonsTotal,
+          annualAdminFee,
+          serverCount,
+          endpointCount,
+          appCount,
+          oneTimeFees: [{
+            type: 'admin',
+            amount: parseFloat(annualAdminFee || "0"),
+            description: 'Annual Management Fee'
+          }],
+          monthlyAddons: [{
+            name: 'Infrastructure Monitoring',
+            amount: parseFloat(monthlyInfraCost || "0"),
+            quantity: 1
+          }]
         });
         
         const data = await response.json();
@@ -143,8 +204,8 @@ export default function CheckoutPage({
       }
     };
 
-    createPaymentIntent();
-  }, [planId, amount, addons]);
+    createSubscription();
+  }, [planId, amount, addons, customerInfo]);
 
   const handleCancel = () => {
     setLocation("/");
@@ -195,6 +256,7 @@ export default function CheckoutPage({
           <CheckoutForm 
             amount={currentAmount} 
             planName={planName} 
+            planId={planId}
             addons={addons}
             billingPeriod={currentBillingPeriod}
             basePlanPrice={basePlanPrice}
@@ -202,6 +264,21 @@ export default function CheckoutPage({
             monthlyAddonsTotal={monthlyAddonsTotal}
             oneTimeAddonsTotal={oneTimeAddonsTotal}
             annualAdminFee={annualAdminFee}
+            oneTimeFees={[
+              {
+                type: 'admin',
+                amount: parseFloat(annualAdminFee || "0"),
+                description: 'Annual Management Fee'
+              }
+            ]}
+            monthlyAddons={[
+              {
+                name: 'Infrastructure Monitoring',
+                amount: parseFloat(monthlyInfraCost || "0"),
+                quantity: 1
+              }
+            ]}
+            customerInfo={customerInfo}
             onBillingPeriodChange={handleBillingPeriodChange}
             onCancel={handleCancel}
             onSuccess={handleSuccess}

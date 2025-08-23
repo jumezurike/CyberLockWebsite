@@ -1106,44 +1106,261 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Stripe Payment Integration API
   // -------------------------------------------------------------------------
   
-  // Create a payment intent for checkout
-  app.post("/api/create-payment-intent", async (req, res) => {
+  // Create subscription-based payment with one-time fee tracking
+  app.post("/api/create-subscription", async (req, res) => {
     try {
-      const { planId, amount, addons = [] } = req.body;
+      const { 
+        email, 
+        firstName, 
+        lastName, 
+        companyName,
+        planId, 
+        planName,
+        billingPeriod,
+        monthlyAmount, 
+        oneTimeFees = [],
+        monthlyAddons = []
+      } = req.body;
       
-      if (!planId || !amount) {
-        return res.status(400).json({ error: "Plan ID and amount are required" });
+      if (!email || !planId || !monthlyAmount) {
+        return res.status(400).json({ 
+          error: "Email, plan ID, and monthly amount are required" 
+        });
       }
+
+      // Check if customer already exists
+      let customer = await storage.getCustomerByEmail(email);
+      let stripeCustomer;
       
-      // Calculate total amount (in cents as Stripe requires)
-      const totalAmount = Math.round(parseFloat(amount) * 100);
+      if (customer) {
+        // Get existing Stripe customer
+        if (customer.stripeCustomerId) {
+          stripeCustomer = await stripe.customers.retrieve(customer.stripeCustomerId);
+        } else {
+          // Create new Stripe customer for existing DB customer
+          stripeCustomer = await stripe.customers.create({
+            email: email,
+            name: `${firstName || ''} ${lastName || ''}`.trim(),
+            metadata: {
+              companyName: companyName || '',
+            }
+          });
+          
+          // Update customer record with Stripe ID
+          customer = await storage.updateCustomer(customer.id, {
+            stripeCustomerId: stripeCustomer.id
+          });
+        }
+      } else {
+        // Create new Stripe customer
+        stripeCustomer = await stripe.customers.create({
+          email: email,
+          name: `${firstName || ''} ${lastName || ''}`.trim(),
+          metadata: {
+            companyName: companyName || '',
+          }
+        });
+        
+        // Create customer record in database
+        customer = await storage.createCustomer({
+          email: email,
+          stripeCustomerId: stripeCustomer.id,
+          firstName: firstName,
+          lastName: lastName,
+          companyName: companyName,
+          planId: planId,
+          planName: planName,
+          billingPeriod: billingPeriod || 'monthly'
+        });
+      }
+
+      // Filter out one-time fees that have already been purchased
+      const validOneTimeFees = [];
+      for (const fee of oneTimeFees) {
+        const hasPurchased = await storage.hasOneTimePurchase(customer.id, fee.type);
+        if (!hasPurchased) {
+          validOneTimeFees.push(fee);
+        }
+      }
+
+      // Calculate total for first payment (monthly + valid one-time fees)
+      const monthlyAmountCents = Math.round(monthlyAmount * 100);
+      const oneTimeTotal = validOneTimeFees.reduce((total, fee) => total + fee.amount, 0);
+      const oneTimeTotalCents = Math.round(oneTimeTotal * 100);
       
-      // Create a payment intent
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: totalAmount,
-        currency: "usd",
+      // Create subscription
+      const subscription = await stripe.subscriptions.create({
+        customer: stripeCustomer.id,
+        items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: `${planName} - ${billingPeriod === 'yearly' ? 'Annual' : 'Monthly'} Plan`,
+              },
+              unit_amount: monthlyAmountCents,
+              recurring: {
+                interval: billingPeriod === 'yearly' ? 'year' : 'month',
+              },
+            } as any,
+          }
+        ],
+        payment_behavior: 'default_incomplete',
+        expand: ['latest_invoice.payment_intent'],
         metadata: {
-          planId,
-          addons: JSON.stringify(addons)
-        },
-        // Secure the payment intent with ECSMID encryption technology
-        description: "CyberLockX Secured Payment - Protected by ECSMID Encryption",
+          planId: planId,
+          customerId: customer.id.toString(),
+          oneTimeFees: JSON.stringify(validOneTimeFees),
+        }
+      });
+
+      // Add one-time fees to the first invoice if any
+      if (oneTimeTotalCents > 0 && subscription.latest_invoice && typeof subscription.latest_invoice === 'object') {
+        await stripe.invoiceItems.create({
+          customer: stripeCustomer!.id,
+          amount: oneTimeTotalCents,
+          currency: 'usd',
+          description: `One-time fees: ${validOneTimeFees.map(f => f.description).join(', ')}`,
+          invoice: subscription.latest_invoice.id,
+        });
+        
+        // Finalize the invoice to include the one-time fees
+        await stripe.invoices.finalizeInvoice(subscription.latest_invoice.id);
+      }
+
+      // Update customer record with subscription info
+      await storage.updateCustomer(customer.id, {
+        stripeSubscriptionId: subscription.id,
+        subscriptionStatus: subscription.status
+      });
+
+      // Store subscription items for tracking
+      await storage.createSubscriptionItem({
+        customerId: customer.id,
+        itemType: 'base_plan',
+        itemName: planName,
+        monthlyAmount: monthlyAmountCents,
+        isActive: true
+      });
+
+      // Store monthly addons
+      for (const addon of monthlyAddons) {
+        await storage.createSubscriptionItem({
+          customerId: customer.id,
+          itemType: 'monthly_addons',
+          itemName: addon.name,
+          monthlyAmount: Math.round(addon.amount * 100),
+          quantity: addon.quantity || 1,
+          isActive: true
+        });
+      }
+
+      const latestInvoice = subscription.latest_invoice;
+      const clientSecret = latestInvoice && typeof latestInvoice === 'object' && latestInvoice.payment_intent && typeof latestInvoice.payment_intent === 'object' 
+        ? latestInvoice.payment_intent.client_secret 
+        : null;
+
+      res.json({
+        clientSecret: clientSecret,
+        subscriptionId: subscription.id,
+        customerId: customer.id,
+        oneTimeFeesIncluded: validOneTimeFees.length,
+        oneTimeFeesSkipped: oneTimeFees.length - validOneTimeFees.length
       });
       
-      res.status(200).json({
-        clientSecret: paymentIntent.client_secret,
-        paymentIntentId: paymentIntent.id
-      });
-    } catch (error) {
-      console.error("Error creating payment intent:", error);
-      res.status(500).json({ 
-        error: "Failed to create payment intent",
-        details: error instanceof Error ? error.message : "Unknown error" 
-      });
+    } catch (error: any) {
+      console.error("Subscription creation error:", error);
+      res.status(500).json({ error: "Payment processing error" });
     }
   });
   
-  // Confirm payment completion and provision services
+  // Handle successful subscription payment and record one-time purchases
+  app.post("/api/subscription-success", async (req, res) => {
+    try {
+      const { subscriptionId, paymentIntentId } = req.body;
+      
+      if (!subscriptionId) {
+        return res.status(400).json({ error: "Subscription ID is required" });
+      }
+      
+      // Retrieve the subscription
+      const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+      
+      if (subscription.status !== 'active') {
+        return res.status(400).json({ error: "Subscription is not active" });
+      }
+      
+      // Get customer info
+      const customerId = parseInt(subscription.metadata.customerId);
+      const customer = await storage.updateCustomer(customerId, {
+        subscriptionStatus: subscription.status
+      });
+      
+      // Record one-time fees if they were included
+      const oneTimeFees = JSON.parse(subscription.metadata.oneTimeFees || '[]');
+      for (const fee of oneTimeFees) {
+        await storage.recordOneTimePurchase({
+          customerId: customerId,
+          feeType: fee.type,
+          feeAmount: Math.round(fee.amount * 100),
+          description: fee.description,
+          stripePaymentIntentId: paymentIntentId || (subscription.latest_invoice && typeof subscription.latest_invoice === 'object' && subscription.latest_invoice.payment_intent && typeof subscription.latest_invoice.payment_intent === 'object' ? subscription.latest_invoice.payment_intent.id : undefined),
+          status: 'completed'
+        });
+      }
+      
+      res.json({
+        success: true,
+        message: "Subscription activated successfully",
+        customer: customer,
+        oneTimeFeesRecorded: oneTimeFees.length
+      });
+      
+    } catch (error: any) {
+      console.error("Subscription success error:", error);
+      res.status(500).json({ error: "Error processing subscription success" });
+    }
+  });
+
+  // Check customer's one-time purchase history
+  app.post("/api/check-customer-fees", async (req, res) => {
+    try {
+      const { email, feeTypes = [] } = req.body;
+      
+      if (!email) {
+        return res.status(400).json({ error: "Email is required" });
+      }
+      
+      const customer = await storage.getCustomerByEmail(email);
+      if (!customer) {
+        return res.json({ 
+          customerExists: false, 
+          purchasedFees: [] 
+        });
+      }
+      
+      const purchasedFees = [];
+      for (const feeType of feeTypes) {
+        const hasPurchased = await storage.hasOneTimePurchase(customer.id, feeType);
+        if (hasPurchased) {
+          purchasedFees.push(feeType);
+        }
+      }
+      
+      res.json({
+        customerExists: true,
+        customerId: customer.id,
+        purchasedFees: purchasedFees,
+        allPurchases: await storage.getOneTimePurchases(customer.id)
+      });
+      
+    } catch (error: any) {
+      console.error("Error checking customer fees:", error);
+      res.status(500).json({ error: "Error checking customer fees" });
+    }
+  });
+
+  // Legacy endpoint for backward compatibility
   app.post("/api/payment-success", async (req, res) => {
     try {
       const { paymentIntentId } = req.body;
