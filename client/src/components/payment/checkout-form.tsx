@@ -142,6 +142,14 @@ export default function CheckoutForm({
             </button>
           </div>
         </div>
+        {/* Payment Structure Notice */}
+        <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm text-blue-800">
+            <strong>Payment Structure:</strong> This initial payment includes your annual administrative fee. 
+            Future monthly payments will only include recurring services (no additional admin fees).
+          </p>
+        </div>
+        
         <div className="bg-neutral-50 p-4 rounded-md text-left">
           {/* Base plan cost */}
           <div className="flex justify-between mb-2">
@@ -195,12 +203,12 @@ export default function CheckoutForm({
           )}
           
           {/* Administrative fees */}
-          <div className="flex justify-between mb-2 text-sm text-neutral-600">
-            <span>Administrative & Maintenance Fee (Annual - Paid Upfront):</span>
-            <span>${parseFloat(annualAdminFee).toFixed(2)}</span>
+          <div className="flex justify-between mb-2 text-sm text-neutral-600 border-t pt-2 mt-2">
+            <span><strong>Administrative & Maintenance Fee (Annual - One-Time Upfront)</strong>:</span>
+            <span><strong>${parseFloat(annualAdminFee).toFixed(2)} (Annual)</strong></span>
           </div>
           <div className="text-xs text-neutral-500 mb-2 ml-2">
-            Account setup, system maintenance, customer support, and regulatory compliance
+            One-time annual fee: Account setup, system maintenance, customer support, and regulatory compliance
           </div>
           
           {/* Show discount if yearly */}

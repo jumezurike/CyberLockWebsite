@@ -65,11 +65,20 @@ export default function CheckoutPage({
       const discountedYearlyAddons = monthlyAddons * yearlyDiscount * 12;
       newTotal = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddons + adminFee).toFixed(2);
     } else {
-      // Monthly billing: collect full annual admin fee upfront
+      // Monthly billing: Initial payment includes annual admin fee upfront, then monthly recurring without admin fee
+      // This calculation is for the initial payment only (includes AMF)
       newTotal = (basePlan + monthlyInfra + monthlyAddons + oneTimeAddons + adminFee).toFixed(2);
     }
     
     return newTotal;
+  };
+
+  // Calculate monthly recurring amount (without admin fee for subsequent payments)
+  const getMonthlyRecurringAmount = () => {
+    const basePlan = parseFloat(basePlanPrice);
+    const monthlyInfra = parseFloat(monthlyInfraCost);
+    const monthlyAddons = parseFloat(monthlyAddonsTotal);
+    return (basePlan + monthlyInfra + monthlyAddons).toFixed(2);
   };
 
   const handleBillingPeriodChange = async (newPeriod: "monthly" | "yearly") => {
