@@ -147,7 +147,7 @@ export default function PricingSection() {
   
   const proceedToCheckout = () => {
     // Find the selected plan
-    const plan = plans.find(p => p.name.toLowerCase() === selectedPlan);
+    const plan = plans.find(p => p.name.toLowerCase().replace(/[\/\s]/g, '-') === selectedPlan);
     
     if (!plan) return;
     
