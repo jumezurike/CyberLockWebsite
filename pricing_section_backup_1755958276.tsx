@@ -338,7 +338,7 @@ export default function PricingSection() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {plans.map((plan) => {
-            const planId = plan.name.toLowerCase().replace(/[\/\s]/g, '-');
+            const planId = plan.name.toLowerCase();
             const isSelected = selectedPlan === planId;
             
             return (
@@ -514,7 +514,7 @@ export default function PricingSection() {
                               type="checkbox" 
                               id={`${planId}-${addon.id}`} 
                               className="mt-1 mr-2"
-                              checked={!!selectedAddons[planId]?.[addon.id]}
+                              checked={!!selectedAddons[planId][addon.id]}
                               onChange={(e) => handleAddonChange(planId, addon.id, e.target.checked)}
                             />
                             <label htmlFor={`${planId}-${addon.id}`} className="text-sm">{addon.label}</label>
