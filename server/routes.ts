@@ -1109,6 +1109,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Create subscription-based payment with one-time fee tracking
   app.post("/api/create-subscription", async (req, res) => {
     try {
+      console.log("Create subscription request body:", JSON.stringify(req.body, null, 2));
+      
       const { 
         email, 
         firstName, 
@@ -1125,6 +1127,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Use amount if monthlyAmount is not provided (for backwards compatibility)
       const finalAmount = monthlyAmount || amount;
+      
+      console.log("Validation check:", { email, planId, finalAmount });
       
       if (!email || !planId || !finalAmount) {
         return res.status(400).json({ 
@@ -1192,21 +1196,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const oneTimeTotal = validOneTimeFees.reduce((total, fee) => total + fee.amount, 0);
       const oneTimeTotalCents = Math.round(oneTimeTotal * 100);
       
+      // Create a product first, then price, then subscription
+      const product = await stripe.products.create({
+        name: `${planName} - ${billingPeriod === 'yearly' ? 'Annual' : 'Monthly'} Plan`,
+        description: `CyberLockX ${planName} subscription`,
+      });
+
+      const price = await stripe.prices.create({
+        currency: 'usd',
+        unit_amount: monthlyAmountCents,
+        recurring: {
+          interval: billingPeriod === 'yearly' ? 'year' : 'month',
+        },
+        product: product.id,
+      });
+
       // Create subscription
       const subscription = await stripe.subscriptions.create({
         customer: stripeCustomer.id,
         items: [
           {
-            price_data: {
-              currency: 'usd',
-              product_data: {
-                name: `${planName} - ${billingPeriod === 'yearly' ? 'Annual' : 'Monthly'} Plan`,
-              },
-              unit_amount: monthlyAmountCents,
-              recurring: {
-                interval: billingPeriod === 'yearly' ? 'year' : 'month',
-              },
-            } as any,
+            price: price.id,
           }
         ],
         payment_behavior: 'default_incomplete',
