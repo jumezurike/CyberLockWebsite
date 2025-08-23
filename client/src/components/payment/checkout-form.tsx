@@ -161,23 +161,33 @@ export default function CheckoutForm({
           </div>
           <div className="text-xs text-neutral-500 mb-3 ml-2">
             Includes: Secure Cloud, Meet, Payment App, Digital ID, AI Language Support
+            {billingPeriod === 'yearly' && (
+              <span className="text-green-600 font-medium"> (10% discount applied)</span>
+            )}
           </div>
           
-          <div className="flex justify-between mb-2 text-sm text-neutral-600">
-            <span>Infrastructure Monitoring{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
-            <span>${billingPeriod === 'yearly' ? 
-              (parseFloat(monthlyInfraCost) * 0.9 * 12).toFixed(2) : 
-              parseFloat(monthlyInfraCost).toFixed(2)
-            }</span>
-          </div>
-          <div className="text-xs text-neutral-500 mb-3 ml-2">
-            24/7 monitoring of servers, endpoints, and applications with automated threat response
-          </div>
+          {parseFloat(monthlyInfraCost) > 0 && (
+            <>
+              <div className="flex justify-between mb-2 text-sm text-neutral-600">
+                <span>Infrastructure Monitoring{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
+                <span>${billingPeriod === 'yearly' ? 
+                  (parseFloat(monthlyInfraCost) * 0.9 * 12).toFixed(2) : 
+                  parseFloat(monthlyInfraCost).toFixed(2)
+                }</span>
+              </div>
+              <div className="text-xs text-neutral-500 mb-3 ml-2">
+                24/7 monitoring of servers, endpoints, and applications with automated threat response
+                {billingPeriod === 'yearly' && (
+                  <span className="text-green-600 font-medium"> (10% discount applied)</span>
+                )}
+              </div>
+            </>
+          )}
           
           {parseFloat(monthlyAddonsTotal) > 0 && (
             <>
               <div className="flex justify-between mb-2 text-sm text-neutral-600">
-                <span>Optional Add-ons (monthly){billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
+                <span>Optional Add-ons{billingPeriod === 'yearly' ? ' (Annual)' : ' (Monthly)'}:</span>
                 <span>${billingPeriod === 'yearly' ? 
                   (parseFloat(monthlyAddonsTotal) * 0.9 * 12).toFixed(2) : 
                   parseFloat(monthlyAddonsTotal).toFixed(2)
@@ -185,23 +195,37 @@ export default function CheckoutForm({
               </div>
               <div className="text-xs text-neutral-500 mb-3 ml-2">
                 Policy development, compliance reports, assessments
+                {billingPeriod === 'yearly' && (
+                  <span className="text-green-600 font-medium"> (10% discount applied)</span>
+                )}
               </div>
             </>
           )}
           
-          {/* Summary Section */}
-          <div className="border-t pt-3 mt-3">
-            <div className="flex justify-between mb-2 font-medium">
-              <span>Monthly Services:</span>
-              <span>${billingPeriod === 'yearly' ? 
-                ((parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)) * 0.9 * 12).toFixed(2) : 
-                (parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)).toFixed(2)
-              }</span>
+          {/* Monthly Payment Summary - only show for monthly billing */}
+          {billingPeriod === 'monthly' && (
+            <div className="border-t pt-3 mt-3">
+              <div className="flex justify-between mb-2 font-medium">
+                <span>Monthly Services:</span>
+                <span>${(parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)).toFixed(2)}</span>
+              </div>
+              <div className="text-xs text-neutral-500 mb-3 ml-2">
+                CyberLockX Connect + Infrastructure Monitoring + Optional Add-ons (monthly)
+              </div>
             </div>
-            <div className="text-xs text-neutral-500 mb-3 ml-2">
-              CyberLockX Connect + Infrastructure Monitoring + Optional Add-ons (monthly)
+          )}
+          
+          {/* Yearly equivalent note - only show for yearly billing */}
+          {billingPeriod === 'yearly' && (
+            <div className="border-t pt-3 mt-3">
+              <div className="text-sm text-blue-600 mb-3">
+                <strong>Monthly equivalent:</strong> ${((parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)) * 0.9).toFixed(2)}/month
+                <div className="text-xs text-neutral-500">
+                  You save ${((parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)) * 12 * 0.1).toFixed(2)} annually with yearly billing
+                </div>
+              </div>
             </div>
-          </div>
+          )}
           
           {/* One-time add-ons - detailed breakdown */}
           {parseFloat(oneTimeAddonsTotal) > 0 && (
