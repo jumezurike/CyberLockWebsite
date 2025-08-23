@@ -151,17 +151,31 @@ export default function CheckoutForm({
         </div>
         
         <div className="bg-neutral-50 p-4 rounded-md text-left">
-          {/* Combined monthly services - base plan + monthly add-ons */}
+          {/* Base plan cost - shown for clarity */}
           <div className="flex justify-between mb-2">
-            <span className="font-medium">Monthly Services{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
+            <span className="font-medium">CyberLockX Connect{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
             <span>${billingPeriod === 'yearly' ? 
-              ((parseFloat(basePlanPrice) + parseFloat(monthlyAddonsTotal)) * 0.9 * 12).toFixed(2) : 
-              (parseFloat(basePlanPrice) + parseFloat(monthlyAddonsTotal)).toFixed(2)
+              (parseFloat(basePlanPrice) * 0.9 * 12).toFixed(2) : 
+              parseFloat(basePlanPrice).toFixed(2)
             }</span>
           </div>
           <div className="text-xs text-neutral-500 mb-2 ml-2">
-            CyberLockX Connect platform + Additional cybersecurity services
+            Includes: Secure Cloud, Meet, Payment App, Digital ID, AI Language Support
           </div>
+          
+          {/* Monthly add-ons - shown separately for clarity */}
+          <div className="flex justify-between mb-2 text-sm text-neutral-600">
+            <span>Monthly Services{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
+            <span>${billingPeriod === 'yearly' ? 
+              (parseFloat(monthlyAddonsTotal) * 0.9 * 12).toFixed(2) : 
+              parseFloat(monthlyAddonsTotal).toFixed(2)
+            }</span>
+          </div>
+          {parseFloat(monthlyAddonsTotal) > 0 && (
+            <div className="text-xs text-neutral-500 mb-2 ml-2">
+              Additional cybersecurity services: Policy development, compliance reports, assessments
+            </div>
+          )}
           
           {/* Infrastructure cost - always show */}
           <div className="flex justify-between mb-2 text-sm text-neutral-600">
