@@ -150,6 +150,9 @@ export default function PricingSection() {
     // Find the selected plan
     const plan = plans.find(p => p.name.toLowerCase().replace(/[\/\s]/g, '-') === selectedPlan);
     
+    console.log("Selected plan ID:", selectedPlan);
+    console.log("Found plan object:", plan);
+    
     if (!plan) return;
     
     // Get selected addons for this plan (excluding admin fees which are handled separately)
