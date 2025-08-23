@@ -145,7 +145,7 @@ export default function CheckoutForm({
         <div className="bg-neutral-50 p-4 rounded-md text-left">
           {/* Base plan cost */}
           <div className="flex justify-between mb-2">
-            <span className="font-medium">{planName} Base Plan{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
+            <span className="font-medium">CyberLockX Connect{billingPeriod === 'yearly' ? ' (Annual)' : ''}:</span>
             <span>${billingPeriod === 'yearly' ? 
               (parseFloat(basePlanPrice) * 0.9 * 12).toFixed(2) : 
               parseFloat(basePlanPrice).toFixed(2)
