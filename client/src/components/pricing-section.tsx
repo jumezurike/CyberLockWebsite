@@ -215,9 +215,8 @@ export default function PricingSection() {
       const discountedYearlyAddons = monthlyAddonsTotal * yearlyDiscount * 12;
       totalAmount = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddonsTotal + annualAdminFee).toFixed(2);
     } else {
-      // Monthly billing: No discount, no multiplication, add monthly equivalent of admin fee
-      const monthlyAdminFee = annualAdminFee / 12;
-      totalAmount = (basePlanPrice + monthlyInfraCost + monthlyAddonsTotal + oneTimeAddonsTotal + monthlyAdminFee).toFixed(2);
+      // Monthly billing: No discount, no multiplication, add full annual admin fee upfront
+      totalAmount = (basePlanPrice + monthlyInfraCost + monthlyAddonsTotal + oneTimeAddonsTotal + annualAdminFee).toFixed(2);
     }
     
     // Create URL query params for checkout

@@ -184,11 +184,8 @@ export default function CheckoutForm({
           
           {/* Administrative fees */}
           <div className="flex justify-between mb-2 text-sm text-neutral-600">
-            <span>Administrative & Maintenance (Annual Fee{billingPeriod === 'monthly' ? ' - Monthly Portion' : ''}):</span>
-            <span>${billingPeriod === 'yearly' ? 
-              parseFloat(annualAdminFee).toFixed(2) : 
-              (parseFloat(annualAdminFee) / 12).toFixed(2)
-            }</span>
+            <span>Administrative & Maintenance Fee (Annual - Paid Upfront):</span>
+            <span>${parseFloat(annualAdminFee).toFixed(2)}</span>
           </div>
           
           {/* Show discount if yearly */}

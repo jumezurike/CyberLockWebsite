@@ -65,8 +65,8 @@ export default function CheckoutPage({
       const discountedYearlyAddons = monthlyAddons * yearlyDiscount * 12;
       newTotal = (discountedYearlyPlan + discountedYearlyInfra + discountedYearlyAddons + oneTimeAddons + adminFee).toFixed(2);
     } else {
-      const monthlyAdminFee = adminFee / 12;
-      newTotal = (basePlan + monthlyInfra + monthlyAddons + oneTimeAddons + monthlyAdminFee).toFixed(2);
+      // Monthly billing: collect full annual admin fee upfront
+      newTotal = (basePlan + monthlyInfra + monthlyAddons + oneTimeAddons + adminFee).toFixed(2);
     }
     
     return newTotal;
