@@ -197,10 +197,8 @@ export default function PricingSection() {
       }
     });
     
-    // Add base monthly services for Hospital tier - the base plan price IS the monthly service
-    if (plan.name === "Hospitals/HealthTechs") {
-      monthlyAddonsTotal = parseFloat(plan.price); // Monthly Services = base plan price
-    }
+    // For all tiers, Monthly Services = base plan price (consistent structure)
+    monthlyAddonsTotal = parseFloat(plan.price) + monthlyAddonsTotal;
     
     // Calculate admin fees - standardized across all plans for regulatory compliance
     const annualAdminFee = 250;
