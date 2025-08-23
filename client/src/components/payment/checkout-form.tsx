@@ -209,17 +209,24 @@ export default function CheckoutForm({
               <div className="mb-2 font-medium text-sm">
                 Optional Add-ons (One time/annual):
               </div>
-              {JSON.parse(addons || '[]').filter(addon => {
-                return addon.label.toLowerCase().includes('one time') || 
-                       addon.price.toLowerCase().includes('one time') ||
-                       addon.label.toLowerCase().includes('annual security posture') ||
-                       addon.label.toLowerCase().includes('comprehensive cybersecurity analysis');
-              }).map((addon, index) => (
-                <div key={index} className="flex justify-between mb-1 text-sm text-neutral-600 ml-2">
-                  <span>{addon.label}</span>
-                  <span>${parseFloat(addon.price).toFixed(2)}</span>
-                </div>
-              ))}
+              {(() => {
+                try {
+                  const addonsList = addons ? JSON.parse(addons) : [];
+                  return addonsList.filter((addon: any) => {
+                    return addon.label.toLowerCase().includes('one time') || 
+                           addon.price.toLowerCase().includes('one time') ||
+                           addon.label.toLowerCase().includes('annual security posture') ||
+                           addon.label.toLowerCase().includes('comprehensive cybersecurity analysis');
+                  }).map((addon: any, index: number) => (
+                    <div key={index} className="flex justify-between mb-1 text-sm text-neutral-600 ml-2">
+                      <span>{addon.label}</span>
+                      <span>${parseFloat(addon.price).toFixed(2)}</span>
+                    </div>
+                  ));
+                } catch {
+                  return null;
+                }
+              })()}
               <div className="mb-3"></div>
             </>
           )}
