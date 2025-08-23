@@ -150,8 +150,6 @@ export default function PricingSection() {
     // Find the selected plan
     const plan = plans.find(p => p.name.toLowerCase().replace(/[\/\s]/g, '-') === selectedPlan);
     
-    console.log("Selected plan ID:", selectedPlan);
-    console.log("Found plan object:", plan);
     
     if (!plan) return;
     
@@ -200,12 +198,8 @@ export default function PricingSection() {
       }
     });
     
-    // For all tiers, Monthly Services = base plan price (consistent structure)
-    monthlyAddonsTotal = parseFloat(plan.price) + monthlyAddonsTotal;
-    
     // Calculate admin fees based on plan tier
     let annualAdminFee = 0;
-    console.log("Plan name for AMF calculation:", plan.name);
     if (plan.name === "Small Medical/Health Practices") {
       annualAdminFee = 250;
     } else if (plan.name === "Clinics") {
@@ -213,7 +207,6 @@ export default function PricingSection() {
     } else if (plan.name === "Hospitals/HealthTechs") {
       annualAdminFee = 2500;
     }
-    console.log("Calculated AMF:", annualAdminFee);
     
     // Calculate total amount based on billing period
     const basePlanPrice = parseFloat(plan.price);

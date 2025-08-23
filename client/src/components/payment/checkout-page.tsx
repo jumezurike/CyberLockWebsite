@@ -42,8 +42,6 @@ export default function CheckoutPage({
   endpointCount = "0",
   appCount = "0"
 }: CheckoutPageProps) {
-  console.log("Checkout page received - Plan Name:", planName);
-  console.log("Checkout page received - Annual Admin Fee:", annualAdminFee);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
