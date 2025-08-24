@@ -202,17 +202,48 @@ export default function CheckoutForm({
             </>
           )}
           
-          {/* Monthly Payment Summary - only show for monthly billing */}
+          {/* Monthly Payment Breakdown - only show for monthly billing */}
           {billingPeriod === 'monthly' && (
-            <div className="border-t pt-3 mt-3">
-              <div className="flex justify-between mb-2 font-medium">
-                <span>Monthly Services:</span>
-                <span>${(parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)).toFixed(2)}</span>
+            <>
+              <div className="border-t pt-3 mt-3">
+                <div className="bg-blue-50 p-3 rounded-md mb-3">
+                  <div className="font-medium text-blue-800 mb-2">💡 Payment Structure</div>
+                  <div className="text-sm text-blue-700">
+                    <strong>Today's Payment:</strong> Includes one-time fees + first month service<br/>
+                    <strong>Starting Month 2:</strong> Only recurring monthly services
+                  </div>
+                </div>
+                
+                <div className="font-medium text-green-700 mb-2">🔄 Your Recurring Monthly Payment:</div>
+                <div className="bg-green-50 p-3 rounded-md border border-green-200">
+                  <div className="flex justify-between mb-1 text-sm">
+                    <span>CyberLockX Connect:</span>
+                    <span>${parseFloat(basePlanPrice).toFixed(2)}</span>
+                  </div>
+                  {parseFloat(monthlyInfraCost) > 0 && (
+                    <div className="flex justify-between mb-1 text-sm">
+                      <span>Infrastructure Monitoring:</span>
+                      <span>${parseFloat(monthlyInfraCost).toFixed(2)}</span>
+                    </div>
+                  )}
+                  {parseFloat(monthlyAddonsTotal) > 0 && (
+                    <div className="flex justify-between mb-1 text-sm">
+                      <span>Monthly Add-ons:</span>
+                      <span>${parseFloat(monthlyAddonsTotal).toFixed(2)}</span>
+                    </div>
+                  )}
+                  <div className="border-t border-green-300 pt-2 mt-2">
+                    <div className="flex justify-between font-bold text-green-800">
+                      <span>Monthly Total:</span>
+                      <span>${(parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)).toFixed(2)}/month</span>
+                    </div>
+                  </div>
+                  <div className="text-xs text-green-600 mt-1">
+                    This amount will be charged automatically each month starting Month 2
+                  </div>
+                </div>
               </div>
-              <div className="text-xs text-neutral-500 mb-3 ml-2">
-                CyberLockX Connect + Infrastructure Monitoring + Optional Add-ons (monthly)
-              </div>
-            </div>
+            </>
           )}
           
           {/* Yearly equivalent note - only show for yearly billing */}
@@ -230,8 +261,8 @@ export default function CheckoutForm({
           {/* One-time add-ons - detailed breakdown */}
           {parseFloat(oneTimeAddonsTotal) > 0 && (
             <>
-              <div className="mb-2 font-medium text-sm">
-                Optional Add-ons (One time/annual):
+              <div className="mb-2 font-medium text-sm text-orange-700">
+                🏷️ Optional Add-ons (One-time fees - First Payment Only):
               </div>
               {(() => {
                 try {
@@ -262,12 +293,13 @@ export default function CheckoutForm({
           )}
           
           {/* Administrative fees */}
-          <div className="flex justify-between mb-2 text-sm text-neutral-600 border-t pt-2 mt-2">
-            <span><strong>Administrative & Maintenance Fee (Annual - One-Time Upfront)</strong>:</span>
+          <div className="flex justify-between mb-2 text-sm text-purple-700 border-t pt-2 mt-2">
+            <span><strong>🏛️ Administrative & Maintenance Fee (First Year Only)</strong>:</span>
             <span><strong>${parseFloat(annualAdminFee).toFixed(2)}</strong></span>
           </div>
-          <div className="text-xs text-neutral-500 mb-2 ml-2">
+          <div className="text-xs text-purple-600 mb-2 ml-2">
             One-time annual fee: Account setup, system maintenance, customer support, and regulatory compliance
+            <strong> • Not charged in future months</strong>
           </div>
           
           {/* Show discount if yearly */}
