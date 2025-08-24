@@ -242,6 +242,24 @@ export default function CheckoutForm({
                     This amount will be charged automatically each month starting Month 2
                   </div>
                 </div>
+                
+                <div className="mt-3 p-3 bg-white border border-green-300 rounded-md">
+                  <div className="flex items-center mb-2">
+                    <input 
+                      type="checkbox" 
+                      id="enableRecurring" 
+                      className="mr-2 text-green-600 focus:ring-green-500" 
+                      defaultChecked={true}
+                    />
+                    <label htmlFor="enableRecurring" className="text-sm font-medium text-green-800">
+                      ✅ Enable Automatic Recurring Payments
+                    </label>
+                  </div>
+                  <div className="text-xs text-gray-600 ml-6">
+                    Automatically charge ${(parseFloat(basePlanPrice) + parseFloat(monthlyInfraCost) + parseFloat(monthlyAddonsTotal)).toFixed(2)} each month for uninterrupted service. 
+                    You can cancel or modify anytime in your account settings.
+                  </div>
+                </div>
               </div>
             </>
           )}
