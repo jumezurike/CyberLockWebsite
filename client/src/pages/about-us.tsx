@@ -234,7 +234,7 @@ const AboutUs = () => {
               <CardHeader className="pb-2">
                 <CardTitle className="text-2xl">Josiah Umezurike</CardTitle>
                 <CardDescription className="text-secondary font-medium">
-                  Founder / CEO / CTO
+                  Founder / CEO
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
