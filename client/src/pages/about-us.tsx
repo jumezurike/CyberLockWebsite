@@ -20,6 +20,7 @@ import solomonPhoto from '@/assets/team/solomon-sogunro.jpg';
 import christopherPhoto from '@/assets/team/christopher-amato.jpg';
 import georgeOseiPhoto from '@assets/GeorgeOsei_1751650545585.png';
 import marcoBenjaminPhoto from '@assets/Remove-BGR-photoaidcom-cropped_1752784297774.png';
+import georgiaBaileyPhoto from '@/assets/team/georgia-bailey.jpg';
 
 const AboutUs = () => {
   return (
@@ -213,11 +214,11 @@ const AboutUs = () => {
               <h2 className="text-3xl font-bold text-gray-900">Our Leadership</h2>
             </div>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Meet the founders driving innovation in cybersecurity
+              Meet the leadership team driving innovation in cybersecurity
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
             {/* Josiah Umezurike */}
             <Card className="border-primary/10 shadow-md overflow-hidden">
               <div className="h-56 bg-white relative flex items-center justify-center">
@@ -373,6 +374,35 @@ const AboutUs = () => {
                   </svg>
                   LinkedIn Profile
                 </a>
+              </CardContent>
+            </Card>
+
+            {/* Dr. Georgia Bailey */}
+            <Card className="border-primary/10 shadow-md overflow-hidden">
+              <div className="h-56 bg-white relative flex items-center justify-center">
+                <div className="w-40 h-40 relative mx-auto">
+                  <div className="absolute inset-0 rounded-full overflow-hidden">
+                    <img 
+                      src={georgiaBaileyPhoto} 
+                      alt="Dr. Georgia Bailey" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                </div>
+              </div>
+              <CardHeader className="pb-2">
+                <CardTitle className="text-2xl">Dr. Georgia Bailey, Ed.D.</CardTitle>
+                <CardDescription className="text-secondary font-medium">
+                  SBIR PI/PM
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-gray-700">
+                  Dr. Bailey is a U.S. Army Major (veteran) with three decades of leadership spanning military service, federal R&D, and business consulting. She led critical security research at NSA, including the LOCK initiative for A-1 level security, and co-led joint NSA/NIST projects for network-layer security protocols.
+                </p>
+                <p className="text-gray-700">
+                  As founder of Asgard Group, LLC, she has guided organizations to secure over $800 million in contract awards through strategic business development and proposal leadership, supporting clients including the FBI, U.S. Army Intelligence Command, and Pentagon Force Protection Agency.
+                </p>
               </CardContent>
             </Card>
           </div>
