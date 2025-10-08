@@ -3,6 +3,19 @@
 ## Overview
 CyberLockX is an advanced cybersecurity platform providing comprehensive digital identity management and security risk assessment. It features the HOS²A (Healthcare Organizational and System Security Analysis) assessment tool, powered by the RASBITA framework, to offer flexible, user-centric identification processes. The project aims to deliver a robust system for securing assets through proof-based analysis, real-time threat neutralization, and automated compliance, particularly for healthcare applications and devices.
 
+## Organizational Structure (Updated: October 8, 2025)
+
+### Leadership Team
+- **Josiah Umezurike** - Founder / CEO
+- **Solomon Sogunro** - Lead Product Manager
+- **Dr. Georgia Bailey, Ed.D.** - COO / SBIR PI/PM
+
+### Advisory Team
+- **Mike Ikonomou** - Technical Strategist
+- **Christopher Amato** - Financial Advisor
+- **Dr. George E. Osei, MD** - Clinical Advisor, Healthcare Security & Compliance
+- **Marco Benjamin** - Clinical Advisor, JHN Health Collaborative Director of Social Determination of Health
+
 ## User Preferences
 - Historical data integrity is paramount - never modify authentic data
 - Follow Problem Resolution Protocol (PRP) 3.0 for all changes (MANDATORY BACKUP STRATEGY)
