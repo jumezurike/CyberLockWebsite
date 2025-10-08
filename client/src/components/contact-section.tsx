@@ -86,7 +86,7 @@ export default function ContactSection() {
                   <i className="fas fa-map-marker-alt text-accent mt-1 mr-3"></i>
                   <div>
                     <h3 className="font-medium mb-1">Visit Us</h3>
-                    <p className="text-neutral-100">1225 Laurel St.<br/>Columbia, SC 29201</p>
+                    <p className="text-neutral-100">711 Saluda Ave<br/>Columbia, SC 29201</p>
                   </div>
                 </div>
               </div>
