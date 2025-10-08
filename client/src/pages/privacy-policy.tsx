@@ -92,8 +92,7 @@ export default function PrivacyPolicy() {
             If you have any questions about this Privacy Policy, please contact us at:
           </p>
           <p>
-            <strong>Email:</strong> privacy@cyberlockx.xyz<br />
-            <strong>Address:</strong> CyberLockX Headquarters, 123 Security Drive, Cyber City, TX 12345
+            <strong>Email:</strong> info@cyberlockx.xyz
           </p>
           
           <div className="mt-12 text-center">
