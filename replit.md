@@ -7,8 +7,8 @@ CyberLockX is an advanced cybersecurity platform providing comprehensive digital
 
 ### Leadership Team
 - **Josiah Umezurike** - Founder / CEO
-- **Solomon Sogunro** - Lead Product Manager
 - **Dr. Georgia Bailey, Ed.D.** - COO / SBIR PI/PM
+- **Solomon Sogunro** - Lead Product Manager
 
 ### Advisory Team
 - **Mike Ikonomou** - Technical Strategist
