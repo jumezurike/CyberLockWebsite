@@ -1,7 +1,30 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
+import type { MouseEvent } from "react";
 import logoImage from "@/assets/cyberlockx-logo-resized.png";
 
 export default function Footer() {
+  const [location] = useLocation();
+  const isHomePage = location === "/";
+  
+  // Helper function to navigate to a section
+  const navigateToSection = (sectionId: string) => (e: MouseEvent) => {
+    e.preventDefault();
+    
+    // If not on home page, go to home page first
+    if (!isHomePage) {
+      window.location.href = `/#${sectionId}`;
+      return;
+    }
+    
+    // If on home page, scroll to the section
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+  
+  const getHashLink = (hash: string) => isHomePage ? `#${hash}` : `/#${hash}`;
+  
   return (
     <footer className="bg-primary text-white py-12 relative overflow-hidden">
       {/* Cyber grid overlay - more subtle */}
@@ -81,12 +104,12 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">Products</h4>
             <ul className="space-y-2">
-              <li><Link href="/#sos2a" className="text-neutral-300 hover:text-secondary">SOS²A</Link></li>
-              <li><Link href="/#features" className="text-neutral-300 hover:text-secondary">Secure Cloud (Google Docs/Sheets)</Link></li>
-              <li><Link href="/#features" className="text-neutral-300 hover:text-secondary">Secure Meet</Link></li>
-              <li><Link href="/#features" className="text-neutral-300 hover:text-secondary">Secure Payment</Link></li>
-              <li><Link href="/#features" className="text-neutral-300 hover:text-secondary">Secure Business Cloud</Link></li>
-              <li><Link href="/#features" className="text-neutral-300 hover:text-secondary">Secure True Digital ID</Link></li>
+              <li><a href={getHashLink("sos2a")} onClick={navigateToSection("sos2a")} className="text-neutral-300 hover:text-secondary cursor-pointer">SOS²A</a></li>
+              <li><a href={getHashLink("features")} onClick={navigateToSection("features")} className="text-neutral-300 hover:text-secondary cursor-pointer">Secure Cloud (Google Docs/Sheets)</a></li>
+              <li><a href={getHashLink("features")} onClick={navigateToSection("features")} className="text-neutral-300 hover:text-secondary cursor-pointer">Secure Meet</a></li>
+              <li><a href={getHashLink("features")} onClick={navigateToSection("features")} className="text-neutral-300 hover:text-secondary cursor-pointer">Secure Payment</a></li>
+              <li><a href={getHashLink("features")} onClick={navigateToSection("features")} className="text-neutral-300 hover:text-secondary cursor-pointer">Secure Business Cloud</a></li>
+              <li><a href={getHashLink("features")} onClick={navigateToSection("features")} className="text-neutral-300 hover:text-secondary cursor-pointer">Secure True Digital ID</a></li>
             </ul>
           </div>
           
@@ -106,7 +129,7 @@ export default function Footer() {
             <ul className="space-y-2">
               <li><Link href="/about-us" className="text-neutral-300 hover:text-secondary">About Us</Link></li>
               <li><Link href="/#" className="text-neutral-300 hover:text-secondary">Careers</Link></li>
-              <li><Link href="/#contact" className="text-neutral-300 hover:text-secondary">Contact</Link></li>
+              <li><a href={getHashLink("contact")} onClick={navigateToSection("contact")} className="text-neutral-300 hover:text-secondary cursor-pointer">Contact</a></li>
               <li><Link href="/#" className="text-neutral-300 hover:text-secondary">Partners</Link></li>
               <li><Link href="/privacy-policy" className="text-neutral-300 hover:text-secondary">Legal Documents</Link></li>
             </ul>
