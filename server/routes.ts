@@ -2279,7 +2279,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/admin/work-orders", requireAdminAuth, async (req, res) => {
     try {
       const workOrders = await storage.getAllFieldWorkOrders();
-      res.json(workOrders);
+      
+      // Enrich work orders with service request and technician data
+      const enrichedWorkOrders = await Promise.all(
+        workOrders.map(async (workOrder) => {
+          const serviceRequest = await storage.getServiceRequest(workOrder.serviceRequestId);
+          let technician = null;
+          if (workOrder.technicianId) {
+            technician = await storage.getUser(workOrder.technicianId);
+          }
+          
+          return {
+            ...workOrder,
+            serviceRequest,
+            technician
+          };
+        })
+      );
+      
+      res.json(enrichedWorkOrders);
     } catch (error) {
       console.error("Error getting all work orders:", error);
       res.status(500).json({ error: "Failed to get work orders" });
