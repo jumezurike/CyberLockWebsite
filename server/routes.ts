@@ -2274,6 +2274,48 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin Work Orders Routes
+  // Get all work orders (admin only)
+  app.get("/api/admin/work-orders", requireAdminAuth, async (req, res) => {
+    try {
+      const workOrders = await storage.getAllFieldWorkOrders();
+      res.json(workOrders);
+    } catch (error) {
+      console.error("Error getting all work orders:", error);
+      res.status(500).json({ error: "Failed to get work orders" });
+    }
+  });
+
+  // Get specific work order with service request details (admin only)
+  app.get("/api/admin/work-orders/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const workOrderId = parseInt(req.params.id);
+      const workOrder = await storage.getFieldWorkOrderById(workOrderId);
+      
+      if (!workOrder) {
+        return res.status(404).json({ error: "Work order not found" });
+      }
+
+      // Get associated service request
+      const serviceRequest = await storage.getServiceRequest(workOrder.serviceRequestId);
+      
+      // Get technician details
+      let technician = null;
+      if (workOrder.technicianId) {
+        technician = await storage.getUser(workOrder.technicianId);
+      }
+
+      res.json({
+        ...workOrder,
+        serviceRequest,
+        technician
+      });
+    } catch (error) {
+      console.error("Error getting work order:", error);
+      res.status(500).json({ error: "Failed to get work order" });
+    }
+  });
+
   // Get CYST reports by work order
   app.get("/api/work-orders/:workOrderId/cyst-reports", requireAdminAuth, async (req, res) => {
     try {
