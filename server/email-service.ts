@@ -483,3 +483,137 @@ export async function sendServiceRequestNotification(serviceRequest: any): Promi
     return false;
   }
 }
+
+export async function sendServiceRequestConfirmation(serviceRequest: any): Promise<boolean> {
+  try {
+    if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+      console.error('Mailgun not configured for service request confirmation');
+      return false;
+    }
+
+    // Make sure Mailgun client is initialized
+    const initialized = initMailgun();
+    if (!initialized) {
+      console.error('Failed to initialize Mailgun client');
+      return false;
+    }
+
+    const Mailgun = require('mailgun.js');
+    const formData = require('form-data');
+    const mailgunClient = new Mailgun(formData);
+    const mg = mailgunClient.client({
+      username: 'api',
+      key: process.env.MAILGUN_API_KEY!,
+    });
+
+    const formatPrice = (price: number) => {
+      return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+      }).format(price / 100);
+    };
+
+    const selectedServices = Array.isArray(serviceRequest.selectedServices) 
+      ? serviceRequest.selectedServices 
+      : JSON.parse(serviceRequest.selectedServices || '[]');
+
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">✅ Service Request Confirmed</h1>
+          <p style="color: #f0f0f0; margin: 10px 0 0 0; font-size: 16px;">Request ID: #${serviceRequest.id}</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border: 1px solid #e0e0e0;">
+          <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
+            Dear <strong>${serviceRequest.contactPersonName}</strong>,
+          </p>
+          
+          <p style="font-size: 16px; color: #333; margin-bottom: 20px;">
+            Thank you for submitting your service request to CyberLockX! We have received your request and our team will review it shortly.
+          </p>
+          
+          <div style="background: #e7f3ff; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea; margin-bottom: 25px;">
+            <h3 style="color: #667eea; margin-top: 0; margin-bottom: 10px;">📋 Request Summary</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              <li style="padding: 5px 0;"><strong>Request ID:</strong> #${serviceRequest.id}</li>
+              <li style="padding: 5px 0;"><strong>Company:</strong> ${serviceRequest.companyName}</li>
+              <li style="padding: 5px 0;"><strong>Service Category:</strong> ${serviceRequest.serviceCategory}</li>
+              <li style="padding: 5px 0;"><strong>Priority Level:</strong> ${serviceRequest.urgencyLevel || 'Medium'}</li>
+            </ul>
+          </div>
+
+          ${selectedServices.length > 0 ? `
+          <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h3 style="color: #495057; margin-top: 0; margin-bottom: 15px;">🛠️ Selected Services</h3>
+            <ul style="list-style: none; padding: 0; margin: 0;">
+              ${selectedServices.map((service: any) => `
+                <li style="padding: 8px 0; border-bottom: 1px solid #dee2e6;">
+                  <strong>${service.serviceName}</strong> (Qty: ${service.quantity})
+                </li>
+              `).join('')}
+            </ul>
+            ${serviceRequest.calculatedTotal ? `
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 2px solid #667eea;">
+              <div style="text-align: right; font-size: 20px; font-weight: bold; color: #667eea;">
+                Estimated Total: ${formatPrice(serviceRequest.calculatedTotal)}
+              </div>
+            </div>
+            ` : ''}
+          </div>
+          ` : ''}
+
+          <div style="background: #fff3cd; padding: 20px; border-radius: 8px; border-left: 4px solid #ffc107; margin-bottom: 25px;">
+            <h3 style="color: #856404; margin-top: 0; margin-bottom: 10px;">⏱️ What Happens Next?</h3>
+            <ol style="margin: 0; padding-left: 20px; color: #856404;">
+              <li style="padding: 5px 0;">Our team will review your request within <strong>24 hours</strong></li>
+              <li style="padding: 5px 0;">We'll contact you via <strong>${serviceRequest.preferredContactMethod}</strong> to discuss details</li>
+              <li style="padding: 5px 0;">You'll receive a detailed quote and project timeline</li>
+              <li style="padding: 5px 0;">Upon approval, we'll schedule and begin your service</li>
+            </ol>
+          </div>
+
+          <div style="background: #d4edda; padding: 20px; border-radius: 8px; border-left: 4px solid #28a745; margin-bottom: 25px;">
+            <p style="margin: 0; color: #155724;">
+              <strong>📧 Questions or Changes?</strong><br/>
+              If you need to modify your request or have any questions, please reply to this email or contact us at:
+              <br/><br/>
+              <strong>Email:</strong> <a href="mailto:info@cyberlockx.xyz" style="color: #667eea;">info@cyberlockx.xyz</a><br/>
+              <strong>Request ID:</strong> #${serviceRequest.id}
+            </p>
+          </div>
+
+          <div style="text-align: center; padding: 20px;">
+            <p style="color: #6c757d; margin-bottom: 15px;">Keep this email for your records</p>
+          </div>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+          <p style="margin: 0; color: #6c757d; font-size: 14px;">
+            <strong>CyberLockX Professional Services</strong><br/>
+            Healthcare Apps & Devices Security Hub<br/>
+            Securing every CLICK!!!
+          </p>
+        </div>
+      </div>
+    `;
+
+    const data = {
+      from: `CyberLockX Service Portal <services@${process.env.MAILGUN_DOMAIN}>`,
+      to: serviceRequest.primaryEmail,
+      subject: `Service Request Confirmed - Request #${serviceRequest.id}`,
+      html: emailContent
+    };
+
+    console.log('Sending service request confirmation email');
+    console.log('To:', serviceRequest.primaryEmail);
+    console.log('Subject:', data.subject);
+    
+    const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, data);
+    console.log('Service request confirmation sent:', result.id);
+    return true;
+  } catch (error) {
+    console.error('Error sending service request confirmation:', error);
+    return false;
+  }
+}
