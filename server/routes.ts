@@ -28,7 +28,7 @@ import {
 } from "@shared/schema";
 import { ZodError } from "zod";
 import Stripe from "stripe";
-import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail, sendServiceRequestNotification } from "./email-service";
+import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail, sendServiceRequestNotification, sendServiceRequestConfirmation } from "./email-service";
 
 // Initialize Stripe with API key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -2163,6 +2163,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Create the ticket
       const ticket = await storage.createServiceTicket(ticketData);
+      
+      // Send email notifications (customer confirmation + admin notification)
+      try {
+        // Send confirmation email to customer
+        await sendServiceRequestConfirmation(serviceRequest);
+        console.log('Customer confirmation email sent successfully');
+        
+        // Send notification email to admin
+        await sendServiceRequestNotification(serviceRequest);
+        console.log('Admin notification email sent successfully');
+      } catch (emailError) {
+        console.error('Error sending email notifications:', emailError);
+        // Continue even if email fails - don't block the request
+      }
       
       res.json({
         serviceRequest,
