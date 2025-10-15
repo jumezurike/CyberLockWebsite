@@ -56,6 +56,9 @@ import {
 import { db } from "./db";
 import { eq, sql, desc, and } from "drizzle-orm";
 
+// Re-export db for use in routes
+export { db };
+
 // Interface for storage operations
 // Interface for assessment search parameters
 export interface AssessmentSearchParams {

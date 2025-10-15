@@ -4,7 +4,7 @@ import session from "express-session";
 import bcrypt from "bcryptjs";
 import cookieParser from "cookie-parser";
 import crypto from "crypto";
-import { storage } from "./storage";
+import { storage, db } from "./storage";
 import { 
   insertAssessmentSchema, 
   insertEarlyAccessSubmissionSchema, 
@@ -24,9 +24,11 @@ import {
   insertTechnicianFeedbackSchema,
   insertCystServiceReportSchema,
   insertCystReportSchema,
-  insertCystPhotoSchema
+  insertCystPhotoSchema,
+  users
 } from "@shared/schema";
 import { ZodError } from "zod";
+import { eq } from "drizzle-orm";
 import Stripe from "stripe";
 import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail, sendServiceRequestNotification, sendServiceRequestConfirmation } from "./email-service";
 
@@ -2271,6 +2273,73 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error getting technician CYST reports:", error);
       res.status(500).json({ error: "Failed to get CYST reports" });
+    }
+  });
+
+  // Admin Service Requests Routes
+  // Get all service requests (admin only)
+  app.get("/api/admin/service-requests", requireAdminAuth, async (req, res) => {
+    try {
+      const requests = await storage.getAllServiceRequests();
+      res.json(requests);
+    } catch (error) {
+      console.error("Error getting service requests:", error);
+      res.status(500).json({ error: "Failed to get service requests" });
+    }
+  });
+
+  // Get all technicians (admin only)
+  app.get("/api/admin/technicians", requireAdminAuth, async (req, res) => {
+    try {
+      const technicians = await db.select().from(users).where(eq(users.role, 'technician'));
+      res.json(technicians);
+    } catch (error) {
+      console.error("Error getting technicians:", error);
+      res.status(500).json({ error: "Failed to get technicians" });
+    }
+  });
+
+  // Create work order from service request (admin only)
+  app.post("/api/admin/work-orders/create", requireAdminAuth, async (req, res) => {
+    try {
+      const { serviceRequestId, technicianId } = req.body;
+      
+      if (!serviceRequestId || !technicianId) {
+        return res.status(400).json({ error: "Service request ID and technician ID are required" });
+      }
+
+      // Verify service request exists
+      const serviceRequest = await storage.getServiceRequest(serviceRequestId);
+      if (!serviceRequest) {
+        return res.status(404).json({ error: "Service request not found" });
+      }
+
+      // Check if work order already exists for this service request
+      const existingWorkOrders = await storage.getWorkOrdersByServiceRequestId(serviceRequestId);
+      if (existingWorkOrders.length > 0) {
+        return res.status(400).json({ error: "Work order already exists for this service request" });
+      }
+
+      // Create work order
+      const workOrder = await storage.createFieldWorkOrder({
+        serviceRequestId,
+        technicianId,
+        workDescription: serviceRequest.projectDescription || 'Service request assigned',
+        closingRemarks: 'Pending',
+        status: 'assigned',
+        workCompleted: false,
+      });
+
+      // Update service request status
+      await storage.updateServiceRequest(serviceRequestId, { 
+        status: 'dispatched',
+        technicianId 
+      });
+
+      res.status(201).json(workOrder);
+    } catch (error) {
+      console.error("Error creating work order:", error);
+      res.status(500).json({ error: "Failed to create work order" });
     }
   });
 
