@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { CheckCircle, Clock, ArrowRight, ArrowLeft, Building, Wrench, Brain, Shield, Users } from "lucide-react";
+import { CheckCircle, Clock, ArrowRight, ArrowLeft, Building, Wrench, Brain, Shield, Users, Search } from "lucide-react";
+import { Link } from "wouter";
 import OrganizationInfoStep from "@/components/services/organization-info-step";
 import ServiceSelectionStep from "@/components/services/service-selection-step";
 import ProjectDetailsStep from "@/components/services/project-details-step";
@@ -126,6 +127,12 @@ export default function ServicesPortal() {
               <p className="text-blue-100">Serving most states nationwide • $75 non-refundable site visit fee applies to on-site services</p>
             </div>
             <div className="mt-4 md:mt-0 flex flex-col gap-2">
+              <Link href="/track-requests">
+                <Button variant="secondary" className="w-full" data-testid="button-track-requests">
+                  <Search className="h-4 w-4 mr-2" />
+                  Track My Requests
+                </Button>
+              </Link>
               <Badge variant="secondary" className="bg-white text-blue-600 font-medium">
                 Available in Most US States
               </Badge>
