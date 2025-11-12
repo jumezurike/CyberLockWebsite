@@ -62,10 +62,7 @@ export default function TrackRequests() {
 
   const requestOtpMutation = useMutation({
     mutationFn: async (email: string) => {
-      return await apiRequest('/api/customer/request-otp', {
-        method: 'POST',
-        body: JSON.stringify({ email }),
-      });
+      return await apiRequest('POST', '/api/customer/request-otp', { email });
     },
     onSuccess: () => {
       setStep('otp');
@@ -85,10 +82,7 @@ export default function TrackRequests() {
 
   const verifyOtpMutation = useMutation({
     mutationFn: async ({ email, otpCode }: { email: string; otpCode: string }) => {
-      return await apiRequest('/api/customer/verify-otp', {
-        method: 'POST',
-        body: JSON.stringify({ email, otpCode }),
-      });
+      return await apiRequest('POST', '/api/customer/verify-otp', { email, otpCode });
     },
     onSuccess: () => {
       setStep('verified');
