@@ -48,6 +48,7 @@ import TechnicianCystReports from "@/pages/technician-cyst-reports";
 import WorkOrdersPage from "@/pages/admin/work-orders";
 import ServiceRequestsPage from "@/pages/admin/service-requests";
 import ITReference from "@/pages/it-reference";
+import TrackRequests from "@/pages/track-requests";
 
 function Router() {
   const [location] = useLocation();
@@ -80,6 +81,7 @@ function Router() {
           <Route path="/it-reference" component={ITReference} />
           <Route path="/accept-invitation" component={AcceptInvitation} />
           <Route path="/services" component={ServicesPortal} />
+          <Route path="/track-requests" component={TrackRequests} />
           <Route path="/technician-login" component={TechnicianLogin} />
           <Route path="/technician/cyst-reports" component={TechnicianCystReports} />
           <Route path="/client-login" component={ClientLogin} />
