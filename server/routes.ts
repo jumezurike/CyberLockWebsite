@@ -1548,7 +1548,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       
       // Check attempts (max 3)
-      if (otpRecord.attempts >= 3) {
+      const attempts = otpRecord.attempts ?? 0;
+      if (attempts >= 3) {
         return res.status(400).json({ error: "Too many failed attempts. Please request a new code." });
       }
       
@@ -1556,7 +1557,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (otpRecord.otpCode !== otpCode) {
         // Increment attempts
         await db.update(customerOtpCodes)
-          .set({ attempts: otpRecord.attempts + 1 })
+          .set({ attempts: attempts + 1 })
           .where(eq(customerOtpCodes.id, otpRecord.id));
         
         return res.status(400).json({ error: "Invalid verification code" });
