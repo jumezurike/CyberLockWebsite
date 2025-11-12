@@ -467,6 +467,18 @@ export const viewerInvitations = pgTable("viewer_invitations", {
   updatedAt: timestamp("updated_at").defaultNow(),
 });
 
+// OTP codes for customer service request tracking
+export const customerOtpCodes = pgTable("customer_otp_codes", {
+  id: serial("id").primaryKey(),
+  email: text("email").notNull(),
+  otpCode: text("otp_code").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  attempts: integer("attempts").default(0),
+  verified: boolean("verified").default(false),
+  verifiedAt: timestamp("verified_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,

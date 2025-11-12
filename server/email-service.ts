@@ -617,3 +617,82 @@ export async function sendServiceRequestConfirmation(serviceRequest: any): Promi
     return false;
   }
 }
+
+export async function sendOtpCode(email: string, otpCode: string): Promise<boolean> {
+  try {
+    if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+      console.error('Mailgun not configured. API Key or Domain missing.');
+      return false;
+    }
+    
+    if (!mg) {
+      const initialized = initMailgun();
+      if (!initialized) {
+        console.error('Failed to initialize Mailgun client');
+        return false;
+      }
+    }
+
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">🔐 Service Request Verification</h1>
+          <p style="color: #f0f0f0; margin: 10px 0 0 0; font-size: 16px;">CyberLockX Professional Services</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border: 1px solid #e0e0e0;">
+          <p style="font-size: 18px; color: #333; margin-bottom: 25px;">
+            <strong>Your Verification Code</strong>
+          </p>
+          
+          <p style="font-size: 16px; color: #555; line-height: 1.6; margin-bottom: 20px;">
+            You requested to view your service requests. Please use the verification code below to access your information:
+          </p>
+          
+          <div style="background: #f8f9fa; padding: 30px; border-radius: 8px; margin: 25px 0; text-align: center; border: 2px dashed #667eea;">
+            <p style="color: #667eea; margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">VERIFICATION CODE</p>
+            <p style="font-size: 36px; font-weight: bold; color: #333; letter-spacing: 8px; margin: 0; font-family: 'Courier New', monospace;">
+              ${otpCode}
+            </p>
+          </div>
+          
+          <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 25px 0; border: 1px solid #ffeaa7;">
+            <p style="margin: 0; color: #856404; font-size: 14px;">
+              <strong>⏰ This code expires in 10 minutes.</strong> Do not share this code with anyone.
+            </p>
+          </div>
+          
+          <p style="font-size: 14px; color: #777; margin-top: 30px;">
+            If you didn't request this code, you can safely ignore this email. Your service requests remain secure.
+          </p>
+          
+          <p style="font-size: 14px; color: #777; text-align: center; margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+            Questions? Contact us at <a href="mailto:info@cyberlockx.xyz" style="color: #667eea;">info@cyberlockx.xyz</a>
+          </p>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+          <p style="margin: 0; color: #666; font-size: 14px;">
+            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub<br>
+            Securing every CLICK!!!
+          </p>
+        </div>
+      </div>
+    `;
+
+    const messageData = {
+      from: `CyberLockX Security <security@${process.env.MAILGUN_DOMAIN}>`,
+      to: email,
+      subject: `Your CyberLockX Verification Code: ${otpCode}`,
+      html: emailContent,
+    };
+
+    console.log('Sending OTP code to:', email);
+    const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, messageData);
+    console.log('OTP code sent successfully:', result.id);
+    return true;
+  } catch (error) {
+    console.error('Error sending OTP code:', error);
+    return false;
+  }
+}

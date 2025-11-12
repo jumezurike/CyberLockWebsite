@@ -25,12 +25,13 @@ import {
   insertCystServiceReportSchema,
   insertCystReportSchema,
   insertCystPhotoSchema,
-  users
+  users,
+  customerOtpCodes
 } from "@shared/schema";
 import { ZodError } from "zod";
-import { eq } from "drizzle-orm";
+import { eq, and, gt } from "drizzle-orm";
 import Stripe from "stripe";
-import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail, sendServiceRequestNotification, sendServiceRequestConfirmation } from "./email-service";
+import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail, sendServiceRequestNotification, sendServiceRequestConfirmation, sendOtpCode } from "./email-service";
 
 // Initialize Stripe with API key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -60,6 +61,8 @@ declare module 'express-session' {
       role: string;
       fullName?: string;
     };
+    verifiedEmail?: string;
+    verifiedAt?: number;
   }
 }
 
@@ -1431,15 +1434,173 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Customer Service Request Tracking (No auth required)
-  app.get("/api/customer/service-requests/:email", async (req, res) => {
+  // Customer Service Request Tracking - Secure OTP-based verification
+  
+  // Rate limiting map for OTP requests (in-memory, simple implementation)
+  const otpRateLimits = new Map<string, { count: number; resetAt: number }>();
+  
+  const checkRateLimit = (email: string): boolean => {
+    const now = Date.now();
+    const limit = otpRateLimits.get(email);
+    
+    if (!limit || now > limit.resetAt) {
+      otpRateLimits.set(email, { count: 1, resetAt: now + 3600000 }); // 1 hour
+      return true;
+    }
+    
+    if (limit.count >= 5) {
+      return false;
+    }
+    
+    limit.count++;
+    return true;
+  };
+  
+  // Request OTP code
+  app.post("/api/customer/request-otp", async (req, res) => {
     try {
-      const email = decodeURIComponent(req.params.email);
+      const { email } = req.body;
       
-      // Get all service requests for this email
+      if (!email || typeof email !== 'string') {
+        return res.status(400).json({ error: "Valid email is required" });
+      }
+      
+      const normalizedEmail = email.toLowerCase().trim();
+      
+      // Check rate limiting
+      if (!checkRateLimit(normalizedEmail)) {
+        return res.status(429).json({ 
+          error: "Too many OTP requests. Please try again later." 
+        });
+      }
+      
+      // Check if email has any service requests
+      const allRequests = await storage.getAllServiceRequests();
+      const hasRequests = allRequests.some(
+        (req: any) => req.primaryEmail?.toLowerCase() === normalizedEmail
+      );
+      
+      if (!hasRequests) {
+        // Don't reveal that email doesn't exist (security)
+        return res.json({ success: true, message: "If the email exists, a verification code has been sent." });
+      }
+      
+      // Generate 6-digit OTP
+      const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      // Store OTP in database with 10-minute expiration
+      const expiresAt = new Date(Date.now() + 600000); // 10 minutes
+      
+      await db.insert(customerOtpCodes).values({
+        email: normalizedEmail,
+        otpCode,
+        expiresAt,
+        attempts: 0,
+        verified: false,
+      });
+      
+      // Send OTP via email
+      const emailSent = await sendOtpCode(normalizedEmail, otpCode);
+      
+      if (!emailSent) {
+        console.error("Failed to send OTP email");
+        return res.status(500).json({ error: "Failed to send verification code" });
+      }
+      
+      res.json({ 
+        success: true, 
+        message: "Verification code sent to your email" 
+      });
+    } catch (error) {
+      console.error("Error requesting OTP:", error);
+      res.status(500).json({ error: "Failed to send verification code" });
+    }
+  });
+  
+  // Verify OTP code
+  app.post("/api/customer/verify-otp", async (req, res) => {
+    try {
+      const { email, otpCode } = req.body;
+      
+      if (!email || !otpCode) {
+        return res.status(400).json({ error: "Email and verification code are required" });
+      }
+      
+      const normalizedEmail = email.toLowerCase().trim();
+      
+      // Find the most recent non-verified OTP for this email
+      const otpRecords = await db.select()
+        .from(customerOtpCodes)
+        .where(
+          and(
+            eq(customerOtpCodes.email, normalizedEmail),
+            eq(customerOtpCodes.verified, false),
+            gt(customerOtpCodes.expiresAt, new Date())
+          )
+        )
+        .orderBy(customerOtpCodes.createdAt)
+        .limit(1);
+      
+      const otpRecord = otpRecords[0];
+      
+      if (!otpRecord) {
+        return res.status(400).json({ error: "Invalid or expired verification code" });
+      }
+      
+      // Check attempts (max 3)
+      if (otpRecord.attempts >= 3) {
+        return res.status(400).json({ error: "Too many failed attempts. Please request a new code." });
+      }
+      
+      // Verify OTP
+      if (otpRecord.otpCode !== otpCode) {
+        // Increment attempts
+        await db.update(customerOtpCodes)
+          .set({ attempts: otpRecord.attempts + 1 })
+          .where(eq(customerOtpCodes.id, otpRecord.id));
+        
+        return res.status(400).json({ error: "Invalid verification code" });
+      }
+      
+      // Mark OTP as verified
+      await db.update(customerOtpCodes)
+        .set({ verified: true, verifiedAt: new Date() })
+        .where(eq(customerOtpCodes.id, otpRecord.id));
+      
+      // Create verified session
+      req.session.verifiedEmail = normalizedEmail;
+      req.session.verifiedAt = Date.now();
+      
+      res.json({ 
+        success: true, 
+        message: "Email verified successfully" 
+      });
+    } catch (error) {
+      console.error("Error verifying OTP:", error);
+      res.status(500).json({ error: "Failed to verify code" });
+    }
+  });
+  
+  // Get service requests (requires verified session)
+  app.get("/api/customer/service-requests", async (req, res) => {
+    try {
+      // Check for verified session
+      if (!req.session.verifiedEmail || !req.session.verifiedAt) {
+        return res.status(401).json({ error: "Email verification required" });
+      }
+      
+      // Check session expiration (1 hour)
+      const sessionAge = Date.now() - req.session.verifiedAt;
+      if (sessionAge > 3600000) {
+        delete req.session.verifiedEmail;
+        delete req.session.verifiedAt;
+        return res.status(401).json({ error: "Session expired. Please verify again." });
+      }
+      
+      // Get service requests for verified email
       const allRequests = await storage.getAllServiceRequests();
       const customerRequests = allRequests.filter(
-        (request: any) => request.primaryEmail?.toLowerCase() === email.toLowerCase()
+        (request: any) => request.primaryEmail?.toLowerCase() === req.session.verifiedEmail
       );
       
       res.json(customerRequests);
