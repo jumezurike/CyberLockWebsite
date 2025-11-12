@@ -1431,6 +1431,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Customer Service Request Tracking (No auth required)
+  app.get("/api/customer/service-requests/:email", async (req, res) => {
+    try {
+      const email = decodeURIComponent(req.params.email);
+      
+      // Get all service requests for this email
+      const allRequests = await storage.getAllServiceRequests();
+      const customerRequests = allRequests.filter(
+        (request: any) => request.primaryEmail?.toLowerCase() === email.toLowerCase()
+      );
+      
+      res.json(customerRequests);
+    } catch (error) {
+      console.error("Error getting customer service requests:", error);
+      res.status(500).json({ error: "Failed to get service requests" });
+    }
+  });
+
   // Field Technician Portal Routes
   // -------------------------------------------------------------------------
 
