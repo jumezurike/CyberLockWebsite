@@ -51,7 +51,10 @@ import {
   type CystReport,
   type InsertCystReport,
   type CystPhoto,
-  type InsertCystPhoto
+  type InsertCystPhoto,
+  contactSubmissions,
+  type ContactSubmission,
+  type InsertContactSubmission
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, and } from "drizzle-orm";
@@ -212,6 +215,13 @@ export interface IStorage {
   getCystPhotosByReport(cystReportId: number): Promise<CystPhoto[]>;
   getCystPhotosByWorkOrder(workOrderId: number): Promise<CystPhoto[]>;
   deleteCystPhoto(id: number): Promise<void>;
+
+  // Contact Submissions operations
+  getAllContactSubmissions(): Promise<ContactSubmission[]>;
+  getContactSubmissionById(id: number): Promise<ContactSubmission | undefined>;
+  createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
+  updateContactSubmission(id: number, updates: Partial<ContactSubmission>): Promise<ContactSubmission | undefined>;
+  deleteContactSubmission(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1617,6 +1627,53 @@ export class DatabaseStorage implements IStorage {
 
   async deleteCystPhoto(id: number): Promise<void> {
     await db.delete(cystPhotos).where(eq(cystPhotos.id, id));
+  }
+
+  // Contact Submissions operations
+  async getAllContactSubmissions(): Promise<ContactSubmission[]> {
+    return await db
+      .select()
+      .from(contactSubmissions)
+      .orderBy(desc(contactSubmissions.createdAt));
+  }
+
+  async getContactSubmissionById(id: number): Promise<ContactSubmission | undefined> {
+    const [submission] = await db
+      .select()
+      .from(contactSubmissions)
+      .where(eq(contactSubmissions.id, id));
+    return submission;
+  }
+
+  async createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission> {
+    const [newSubmission] = await db
+      .insert(contactSubmissions)
+      .values({
+        ...submission,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      })
+      .returning();
+    return newSubmission;
+  }
+
+  async updateContactSubmission(id: number, updates: Partial<ContactSubmission>): Promise<ContactSubmission | undefined> {
+    const [updated] = await db
+      .update(contactSubmissions)
+      .set({
+        ...updates,
+        updatedAt: new Date(),
+      })
+      .where(eq(contactSubmissions.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteContactSubmission(id: number): Promise<boolean> {
+    const result = await db
+      .delete(contactSubmissions)
+      .where(eq(contactSubmissions.id, id));
+    return (result.rowCount ?? 0) > 0;
   }
 }
 
