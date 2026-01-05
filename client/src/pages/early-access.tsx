@@ -205,90 +205,61 @@ export default function EarlyAccess() {
                   </div>
                 </div>
               </div>
+              
+              {/* Founder's Circle Benefits */}
+              <div className="mt-6 pt-6 border-t border-white/20">
+                <h3 className="text-xl font-bold mb-4 text-yellow-300">Founder's Circle Benefits</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                  <div className="bg-white/10 rounded-lg p-3 text-center">
+                    <div className="text-2xl mb-2">🔓</div>
+                    <div className="font-bold text-sm">Early Product Access</div>
+                    <div className="text-xs opacity-80">Be the first to try our patented security technologies</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-3 text-center">
+                    <div className="text-2xl mb-2">💰</div>
+                    <div className="font-bold text-sm">Exclusive Pricing</div>
+                    <div className="text-xs opacity-80">Up to 50% off retail pricing, locked in for life</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-3 text-center">
+                    <div className="text-2xl mb-2">📢</div>
+                    <div className="font-bold text-sm">Product Direction Influence</div>
+                    <div className="text-xs opacity-80">Direct input on feature priorities and roadmap</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-3 text-center">
+                    <div className="text-2xl mb-2">👥</div>
+                    <div className="font-bold text-sm">Direct Access to Leadership</div>
+                    <div className="text-xs opacity-80">Regular meetings with our executive team</div>
+                  </div>
+                </div>
+                
+                <div className="bg-white/10 rounded-lg p-4">
+                  <h4 className="font-bold text-yellow-300 mb-3 text-center">Investment Tiers</h4>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center text-sm">
+                    <div className="bg-white/10 rounded-lg p-2">
+                      <div className="font-bold">Explorer</div>
+                      <div className="text-yellow-300">$5K-10K</div>
+                    </div>
+                    <div className="bg-white/10 rounded-lg p-2">
+                      <div className="font-bold">Innovator</div>
+                      <div className="text-yellow-300">$10K-25K</div>
+                    </div>
+                    <div className="bg-white/10 rounded-lg p-2">
+                      <div className="font-bold">Visionary</div>
+                      <div className="text-yellow-300">$25K-50K</div>
+                    </div>
+                    <div className="bg-white/10 rounded-lg p-2">
+                      <div className="font-bold">Strategic Partner</div>
+                      <div className="text-yellow-300">$50K+</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-md p-6 sticky top-24">
-              <h2 className="text-xl font-bold text-primary mb-4">Founder's Circle Benefits</h2>
-              
-              <div className="space-y-4 mb-8">
-                <div className="flex items-start">
-                  <div className="bg-primary/10 p-2 rounded-full mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">Early Product Access</h3>
-                    <p className="text-sm text-neutral-600">Be the first to try our patented security technologies</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-primary/10 p-2 rounded-full mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">Exclusive Pricing</h3>
-                    <p className="text-sm text-neutral-600">Up to 50% off retail pricing, locked in for life</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-primary/10 p-2 rounded-full mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">Product Direction Influence</h3>
-                    <p className="text-sm text-neutral-600">Direct input on feature priorities and roadmap</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-start">
-                  <div className="bg-primary/10 p-2 rounded-full mr-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold">Direct Access to Leadership</h3>
-                    <p className="text-sm text-neutral-600">Regular meetings with our executive team</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="bg-primary/5 p-4 rounded-lg">
-                <h3 className="font-semibold mb-2">Investment Tiers</h3>
-                <ul className="space-y-3 text-sm">
-                  <li className="flex justify-between">
-                    <span>Explorer</span>
-                    <span className="font-semibold">$5K-10K</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Innovator</span>
-                    <span className="font-semibold">$10K-25K</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Visionary</span>
-                    <span className="font-semibold">$25K-50K</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>Strategic Partner</span>
-                    <span className="font-semibold">$50K+</span>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
-
-          <div className="lg:col-span-3">
+        <div className="max-w-4xl mx-auto mt-8">
+          <div>
             <div className="bg-white rounded-xl shadow-md p-8">
               <h2 className="text-xl font-bold text-primary mb-6">Apply for Early Access</h2>
               
