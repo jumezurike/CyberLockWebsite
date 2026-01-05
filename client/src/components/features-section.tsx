@@ -66,9 +66,13 @@ export default function FeaturesSection() {
                 <h3 className="text-xl font-semibold font-heading mb-3 text-primary">{feature.title}</h3>
                 <p className="text-neutral-600 mb-4">{feature.description}</p>
                 {feature.status && (
-                  <p className="text-sm font-semibold text-green-600 bg-green-50 px-3 py-2 rounded-md mb-4 inline-block">
+                  <a 
+                    href="#contact" 
+                    className="text-sm font-semibold text-green-600 bg-green-50 px-3 py-2 rounded-md mb-4 inline-block hover:bg-green-100 transition-colors"
+                    data-testid="link-request-demo"
+                  >
                     {feature.status}
-                  </p>
+                  </a>
                 )}
                 <div>
                   <a href="#" className="text-secondary hover:text-green-600 font-medium inline-flex items-center">
