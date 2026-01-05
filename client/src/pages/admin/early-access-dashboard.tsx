@@ -193,6 +193,16 @@ export default function EarlyAccessDashboard() {
               <span>Welcome, {adminUser?.fullName || adminUser?.username}</span>
               <Badge variant="secondary">{adminUser?.role}</Badge>
             </div>
+            <Link href="/admin/contact-submissions">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex items-center gap-2"
+              >
+                <Mail className="w-4 h-4" />
+                Contact Inquiries
+              </Button>
+            </Link>
             <Link href="/admin/analytics">
               <Button
                 variant="outline"

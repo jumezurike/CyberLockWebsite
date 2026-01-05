@@ -47,6 +47,7 @@ import TechnicianLogin from "@/pages/technician-login";
 import TechnicianCystReports from "@/pages/technician-cyst-reports";
 import WorkOrdersPage from "@/pages/admin/work-orders";
 import ServiceRequestsPage from "@/pages/admin/service-requests";
+import ContactSubmissionsPage from "@/pages/admin/contact-submissions";
 import ITReference from "@/pages/it-reference";
 import TrackRequests from "@/pages/track-requests";
 
@@ -78,6 +79,7 @@ function Router() {
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/admin/work-orders" component={WorkOrdersPage} />
           <Route path="/admin/service-requests" component={ServiceRequestsPage} />
+          <Route path="/admin/contact-submissions" component={ContactSubmissionsPage} />
           <Route path="/it-reference" component={ITReference} />
           <Route path="/accept-invitation" component={AcceptInvitation} />
           <Route path="/services" component={ServicesPortal} />
