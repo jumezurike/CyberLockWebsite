@@ -174,7 +174,7 @@ export default function RoadmapSection() {
       case "development":
         return <span className="bg-blue-500 text-white text-xs font-bold px-2 py-1 rounded-full">In Development</span>;
       case "planned":
-        return <span className="bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded-full">Coming Soon</span>;
+        return <span className="bg-purple-500 text-white text-xs font-bold px-2 py-1 rounded-full">In Development</span>;
       default:
         return null;
     }
