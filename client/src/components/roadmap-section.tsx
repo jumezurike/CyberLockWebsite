@@ -31,7 +31,7 @@ export default function RoadmapSection() {
       name: "Secure Cloud",
       description: "End-to-end encrypted Google Docs and Sheets integration with cell-level security",
       status: "development",
-      timeline: "Q3 2025",
+      timeline: "Q4 2026",
       features: [
         "Cell-level encryption in spreadsheets",
         "Document-level access controls",
@@ -54,7 +54,7 @@ export default function RoadmapSection() {
       name: "Secure Business Cloud",
       description: "Unified security layer for Azure, AWS, GCP, and Digital Ocean",
       status: "development",
-      timeline: "Q4 2025",
+      timeline: "Q4 2026",
       features: [
         "Multi-cloud security orchestration",
         "API and data encryption",
@@ -77,7 +77,7 @@ export default function RoadmapSection() {
       name: "Secure Meet",
       description: "Quantum-encrypted audio/video conferencing with verifiable compliance",
       status: "planned",
-      timeline: "Q1 2026",
+      timeline: "Q4 2026",
       features: [
         "End-to-end encrypted meetings",
         "Zero-trust authentication",
@@ -100,7 +100,7 @@ export default function RoadmapSection() {
       name: "Secure Payment",
       description: "PCI DSS-compliant payment processing with quantum encryption",
       status: "planned",
-      timeline: "Q2 2026",
+      timeline: "Q4 2026",
       features: [
         "Quantum-resistant payment processing",
         "Automatic PCI DSS compliance",
@@ -123,7 +123,7 @@ export default function RoadmapSection() {
       name: "Secure True Digital ID",
       description: "Self-sovereign identity with quantum-proof verification",
       status: "planned",
-      timeline: "Q3 2026",
+      timeline: "Q4 2026",
       features: [
         "Decentralized identity management",
         "Biometric authentication",
