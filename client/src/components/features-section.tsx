@@ -16,32 +16,38 @@ export default function FeaturesSection() {
     {
       icon: "fas fa-file-alt",
       title: "Secure Cloud (Google Docs/Sheets)",
-      description: "Safeguards data with advanced encryption by tokens, cell level, and data access controls for complete document security."
+      description: "Safeguards data with advanced encryption by tokens, cell level, and data access controls for complete document security.",
+      status: "📅 Q4 2026"
     },
     {
       icon: "fas fa-video",
       title: "Secure Meet",
-      description: "Encrypted communications platform for secure video conferences, messaging, and collaboration with E2E encryption."
+      description: "Encrypted communications platform for secure video conferences, messaging, and collaboration with E2E encryption.",
+      status: "📅 Q4 2026"
     },
     {
       icon: "fas fa-credit-card",
       title: "Secure Payment",
-      description: "Advanced transaction encryption to protect your financial data and customer information with patented security."
+      description: "Advanced transaction encryption to protect your financial data and customer information with patented security.",
+      status: "📅 Q4 2026"
     },
     {
       icon: "fas fa-cloud",
       title: "Secure Business Cloud",
-      description: "Robust data protection and collaboration tools, with seamless integration for managed service providers."
+      description: "Robust data protection and collaboration tools, with seamless integration for managed service providers.",
+      status: "📅 Q4 2026"
     },
     {
       icon: "fas fa-fingerprint",
       title: "Secure True Digital ID",
-      description: "Next-generation identity verification and industry-specific encryption for unparalleled security."
+      description: "Next-generation identity verification and industry-specific encryption for unparalleled security.",
+      status: "📅 Q4 2026"
     },
     {
       icon: "fas fa-brain",
       title: "Secure ML/AI Language Augmentation",
-      description: "Threat-anomaly detection, text, form data, cookies, cache encryption and language enhancement."
+      description: "Threat-anomaly detection, text, form data, cookies, cache encryption and language enhancement.",
+      status: "📅 Q4 2026"
     }
   ];
 
@@ -68,7 +74,11 @@ export default function FeaturesSection() {
                 {feature.status && (
                   <a 
                     href="#contact" 
-                    className="text-sm font-semibold text-green-600 bg-green-50 px-3 py-2 rounded-md mb-4 inline-block hover:bg-green-100 transition-colors"
+                    className={`text-sm font-semibold px-3 py-2 rounded-md mb-4 inline-block transition-colors ${
+                      feature.status.includes('Available Now') 
+                        ? 'text-green-600 bg-green-50 hover:bg-green-100' 
+                        : 'text-amber-700 bg-amber-50 hover:bg-amber-100'
+                    }`}
                     data-testid="link-request-demo"
                   >
                     {feature.status}
