@@ -696,3 +696,95 @@ export async function sendOtpCode(email: string, otpCode: string): Promise<boole
     return false;
   }
 }
+
+interface ContactNotificationData {
+  fullName: string;
+  email: string;
+  company: string;
+  message: string;
+  source: string;
+}
+
+export async function sendContactNotification(data: ContactNotificationData): Promise<boolean> {
+  try {
+    if (!process.env.MAILGUN_API_KEY || !process.env.MAILGUN_DOMAIN) {
+      console.error('Mailgun not configured. API Key or Domain missing.');
+      return false;
+    }
+    
+    if (!mg) {
+      const initialized = initMailgun();
+      if (!initialized) {
+        console.error('Failed to initialize Mailgun client');
+        return false;
+      }
+    }
+
+    const sourceLabel = data.source === 'demo_request' ? '🎯 Live Demo Request' : '📬 Contact Form Inquiry';
+
+    const emailContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">${sourceLabel}</h1>
+          <p style="color: #f0f0f0; margin: 10px 0 0 0; font-size: 16px;">New submission from CyberLockX website</p>
+        </div>
+        
+        <div style="background: white; padding: 40px; border: 1px solid #e0e0e0;">
+          <h2 style="color: #333; margin-bottom: 20px; font-size: 20px;">Contact Information</h2>
+          
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+              <td style="padding: 12px; border-bottom: 1px solid #eee; color: #666; width: 140px;"><strong>Name:</strong></td>
+              <td style="padding: 12px; border-bottom: 1px solid #eee; color: #333;">${data.fullName}</td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; border-bottom: 1px solid #eee; color: #666;"><strong>Email:</strong></td>
+              <td style="padding: 12px; border-bottom: 1px solid #eee; color: #333;"><a href="mailto:${data.email}" style="color: #667eea;">${data.email}</a></td>
+            </tr>
+            <tr>
+              <td style="padding: 12px; border-bottom: 1px solid #eee; color: #666;"><strong>Company:</strong></td>
+              <td style="padding: 12px; border-bottom: 1px solid #eee; color: #333;">${data.company}</td>
+            </tr>
+          </table>
+          
+          <div style="margin-top: 30px;">
+            <h3 style="color: #333; margin-bottom: 15px; font-size: 18px;">Message</h3>
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; border-left: 4px solid #667eea;">
+              <p style="margin: 0; color: #444; line-height: 1.6; white-space: pre-wrap;">${data.message}</p>
+            </div>
+          </div>
+          
+          <div style="margin-top: 30px; background: #e8f5e9; padding: 15px; border-radius: 8px; border: 1px solid #c8e6c9;">
+            <p style="margin: 0; color: #2e7d32; font-size: 14px;">
+              <strong>📋 Action Required:</strong> Please respond to this inquiry within 24 hours.
+              <br/><br/>
+              <a href="mailto:${data.email}" style="display: inline-block; background: #667eea; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; margin-top: 10px;">Reply to ${data.fullName}</a>
+            </p>
+          </div>
+        </div>
+        
+        <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
+          <p style="margin: 0; color: #666; font-size: 14px;">
+            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub<br>
+            Manage inquiries at: <a href="https://cyberlockx.xyz/admin/contact-submissions" style="color: #667eea;">Admin Dashboard</a>
+          </p>
+        </div>
+      </div>
+    `;
+
+    const messageData = {
+      from: `CyberLockX Website <noreply@${process.env.MAILGUN_DOMAIN}>`,
+      to: 'info@cyberlockx.xyz',
+      subject: `${sourceLabel} from ${data.fullName}`,
+      html: emailContent,
+    };
+
+    console.log('Sending contact notification to: info@cyberlockx.xyz');
+    const result = await mg.messages.create(process.env.MAILGUN_DOMAIN, messageData);
+    console.log('Contact notification sent successfully:', result.id);
+    return true;
+  } catch (error) {
+    console.error('Error sending contact notification:', error);
+    return false;
+  }
+}

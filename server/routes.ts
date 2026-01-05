@@ -26,12 +26,13 @@ import {
   insertCystReportSchema,
   insertCystPhotoSchema,
   users,
-  customerOtpCodes
+  customerOtpCodes,
+  insertContactSubmissionSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import { eq, and, gt } from "drizzle-orm";
 import Stripe from "stripe";
-import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail, sendServiceRequestNotification, sendServiceRequestConfirmation, sendOtpCode } from "./email-service";
+import { initMailgun, sendEarlyAccessNotification, sendApprovalNotification, sendInvitationEmail, sendServiceRequestNotification, sendServiceRequestConfirmation, sendOtpCode, sendContactNotification } from "./email-service";
 
 // Initialize Stripe with API key
 if (!process.env.STRIPE_SECRET_KEY) {
@@ -909,6 +910,99 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting early access submission:", error);
       res.status(500).json({ error: "Failed to delete early access submission" });
+    }
+  });
+
+  // Contact Submissions API (Demo Requests)
+  // -------------------------------------------------------------------------
+  
+  // Public endpoint - Create contact submission (for contact form)
+  app.post("/api/contact-submissions", async (req, res) => {
+    try {
+      const validatedData = insertContactSubmissionSchema.parse(req.body);
+      const submission = await storage.createContactSubmission(validatedData);
+      
+      // Send email notification to admin
+      try {
+        await sendContactNotification({
+          fullName: submission.fullName,
+          email: submission.email,
+          company: submission.company || "Not provided",
+          message: submission.message,
+          source: submission.source || "contact_form",
+        });
+      } catch (emailError) {
+        console.error("Error sending contact notification email:", emailError);
+        // Don't fail the submission if email fails
+      }
+      
+      res.status(201).json({ success: true, message: "Your message has been received. We will contact you soon." });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Error creating contact submission:", error);
+      res.status(500).json({ error: "Failed to submit contact form" });
+    }
+  });
+
+  // Admin endpoints - Get all contact submissions
+  app.get("/api/contact-submissions", requireAdminAuth, async (req, res) => {
+    try {
+      const submissions = await storage.getAllContactSubmissions();
+      res.json(submissions);
+    } catch (error) {
+      console.error("Error fetching contact submissions:", error);
+      res.status(500).json({ error: "Failed to fetch contact submissions" });
+    }
+  });
+
+  // Admin endpoint - Get single contact submission
+  app.get("/api/contact-submissions/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const submission = await storage.getContactSubmissionById(parseInt(req.params.id));
+      if (!submission) {
+        return res.status(404).json({ error: "Submission not found" });
+      }
+      res.json(submission);
+    } catch (error) {
+      console.error("Error fetching contact submission:", error);
+      res.status(500).json({ error: "Failed to fetch contact submission" });
+    }
+  });
+
+  // Admin endpoint - Update contact submission status/notes
+  app.patch("/api/contact-submissions/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const { status, notes } = req.body;
+      const updates: any = {};
+      
+      if (status) updates.status = status;
+      if (notes !== undefined) updates.notes = notes;
+      if (status === "contacted") updates.respondedAt = new Date();
+      
+      const submission = await storage.updateContactSubmission(parseInt(req.params.id), updates);
+      if (!submission) {
+        return res.status(404).json({ error: "Submission not found" });
+      }
+      res.json(submission);
+    } catch (error) {
+      console.error("Error updating contact submission:", error);
+      res.status(500).json({ error: "Failed to update contact submission" });
+    }
+  });
+
+  // Admin endpoint - Delete contact submission
+  app.delete("/api/contact-submissions/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const deleted = await storage.deleteContactSubmission(parseInt(req.params.id));
+      if (!deleted) {
+        return res.status(404).json({ error: "Submission not found" });
+      }
+      res.json({ success: true, message: "Submission deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting contact submission:", error);
+      res.status(500).json({ error: "Failed to delete contact submission" });
     }
   });
 
