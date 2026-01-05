@@ -180,15 +180,15 @@ export default function EarlyAccess() {
               <h2 className="text-2xl font-bold mb-3">Only 25 Pilot Partner Slots Available</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                 <div className="bg-white/10 rounded-lg p-3">
-                  <div className="font-bold text-yellow-300">Healthcare Focus</div>
-                  <div>10 slots for medical practices</div>
+                  <div className="font-bold text-yellow-300">Healthcare Pilot Partner</div>
+                  <div>15 slots for medical practices</div>
                 </div>
                 <div className="bg-white/10 rounded-lg p-3">
-                  <div className="font-bold text-yellow-300">Enterprise Security</div>
-                  <div>10 slots for business enterprises</div>
+                  <div className="font-bold text-yellow-300">Enterprise Security Pilot Partner</div>
+                  <div>5 slots for business enterprises</div>
                 </div>
                 <div className="bg-white/10 rounded-lg p-3">
-                  <div className="font-bold text-yellow-300">Strategic Investors</div>
+                  <div className="font-bold text-yellow-300">Strategic Investor Partner</div>
                   <div>5 slots for funding partners</div>
                 </div>
               </div>
@@ -233,23 +233,19 @@ export default function EarlyAccess() {
                 </div>
                 
                 <div className="bg-white/10 rounded-lg p-4">
-                  <h4 className="font-bold text-yellow-300 mb-3 text-center">Investment Tiers</h4>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center text-sm">
+                  <h4 className="font-bold text-yellow-300 mb-3 text-center">Partner Tiers</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center text-sm">
                     <div className="bg-white/10 rounded-lg p-2">
-                      <div className="font-bold">Explorer</div>
-                      <div className="text-yellow-300">$5K-10K</div>
+                      <div className="font-bold">Healthcare Pilot Partner</div>
+                      <div className="text-yellow-300">15 slots</div>
                     </div>
                     <div className="bg-white/10 rounded-lg p-2">
-                      <div className="font-bold">Innovator</div>
-                      <div className="text-yellow-300">$10K-25K</div>
+                      <div className="font-bold">Enterprise Security Pilot Partner</div>
+                      <div className="text-yellow-300">5 slots</div>
                     </div>
                     <div className="bg-white/10 rounded-lg p-2">
-                      <div className="font-bold">Visionary</div>
-                      <div className="text-yellow-300">$25K-50K</div>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-2">
-                      <div className="font-bold">Strategic Partner</div>
-                      <div className="text-yellow-300">$50K+</div>
+                      <div className="font-bold">Strategic Investor Partner</div>
+                      <div className="text-yellow-300">5 slots</div>
                     </div>
                   </div>
                 </div>
