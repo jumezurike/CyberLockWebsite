@@ -479,6 +479,34 @@ export const customerOtpCodes = pgTable("customer_otp_codes", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
+// Contact form submissions (demo requests, inquiries)
+export const contactSubmissions = pgTable("contact_submissions", {
+  id: serial("id").primaryKey(),
+  fullName: text("full_name").notNull(),
+  email: text("email").notNull(),
+  company: text("company"),
+  message: text("message").notNull(),
+  source: text("source").default("contact_form"), // contact_form, demo_request, etc.
+  status: text("status").default("new"), // new, contacted, converted, closed
+  assignedTo: integer("assigned_to").references(() => users.id),
+  notes: text("notes"),
+  respondedAt: timestamp("responded_at"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertContactSubmissionSchema = createInsertSchema(contactSubmissions).omit({
+  id: true,
+  assignedTo: true,
+  notes: true,
+  respondedAt: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type InsertContactSubmission = z.infer<typeof insertContactSubmissionSchema>;
+export type ContactSubmission = typeof contactSubmissions.$inferSelect;
+
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   password: true,
