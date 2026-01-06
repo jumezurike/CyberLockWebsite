@@ -199,17 +199,38 @@ export default function EarlyAccess() {
               
               <h2 className="text-2xl font-bold mb-3">Only 25 Pilot Partner Slots Available</h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div className="bg-white/10 rounded-lg p-3">
-                  <div className="font-bold text-yellow-300">Healthcare Pilot Partner</div>
-                  <div>15 slots for medical practices</div>
+                <div className="bg-white/10 rounded-lg p-4">
+                  <div className="font-bold text-yellow-300 text-lg mb-1">🏥 Healthcare Pilot Partner</div>
+                  <div className="text-white font-semibold mb-2">15 slots</div>
+                  <div className="text-white/80 text-xs mb-2">For: Medical practices, clinics, hospitals</div>
+                  <ul className="text-white/90 text-xs space-y-1">
+                    <li>• 20% discount on all services</li>
+                    <li>• Deploy our live SOS²A AI Audit Engine</li>
+                    <li>• Co-design features for clinical workflows</li>
+                    <li>• Direct founder access</li>
+                  </ul>
                 </div>
-                <div className="bg-white/10 rounded-lg p-3">
-                  <div className="font-bold text-yellow-300">Enterprise Security Pilot Partner</div>
-                  <div>5 slots for business enterprises</div>
+                <div className="bg-white/10 rounded-lg p-4">
+                  <div className="font-bold text-yellow-300 text-lg mb-1">🏢 Enterprise Security Pilot Partner</div>
+                  <div className="text-white font-semibold mb-2">5 slots</div>
+                  <div className="text-white/80 text-xs mb-2">For: Tech firms, MSPs, large enterprises</div>
+                  <ul className="text-white/90 text-xs space-y-1">
+                    <li>• All Healthcare Partner benefits</li>
+                    <li>• Priority integration for your tech stack</li>
+                    <li>• Influence on core platform architecture</li>
+                    <li>• Potential revenue share on joint solutions</li>
+                  </ul>
                 </div>
-                <div className="bg-white/10 rounded-lg p-3">
-                  <div className="font-bold text-yellow-300">Strategic Investor Partner</div>
-                  <div>5 slots for funding partners</div>
+                <div className="bg-white/10 rounded-lg p-4">
+                  <div className="font-bold text-yellow-300 text-lg mb-1">💡 Strategic Investor Partner</div>
+                  <div className="text-white font-semibold mb-2">5 slots</div>
+                  <div className="text-white/80 text-xs mb-2">For: Angels & VCs funding integration & growth</div>
+                  <ul className="text-white/90 text-xs space-y-1">
+                    <li>• All Enterprise Partner benefits (optional)</li>
+                    <li>• Equity stake in CyberLockX Inc.</li>
+                    <li>• Full strategic & due diligence access</li>
+                    <li>• Fund the bridge from audit to auto-remediation</li>
+                  </ul>
                 </div>
               </div>
               
@@ -231,15 +252,15 @@ export default function EarlyAccess() {
                     <h4 className="font-bold text-yellow-300 mb-3 text-center">Partner Tiers</h4>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center text-sm">
                       <div className="bg-white/10 rounded-lg p-2">
-                        <div className="font-bold">Healthcare Pilot Partner</div>
+                        <div className="font-bold">🏥 Healthcare Pilot Partner</div>
                         <div className="text-yellow-300">15 slots</div>
                       </div>
                       <div className="bg-white/10 rounded-lg p-2">
-                        <div className="font-bold">Enterprise Security Pilot Partner</div>
+                        <div className="font-bold">🏢 Enterprise Security Pilot Partner</div>
                         <div className="text-yellow-300">5 slots</div>
                       </div>
                       <div className="bg-white/10 rounded-lg p-2">
-                        <div className="font-bold">Strategic Investor Partner</div>
+                        <div className="font-bold">💡 Strategic Investor Partner</div>
                         <div className="text-yellow-300">5 slots</div>
                       </div>
                     </div>
