@@ -252,7 +252,7 @@ export default function EarlyAccess() {
                 <div className="text-center mb-4">
                   <span className="text-2xl font-bold text-white">🚀 Build With Us!</span>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-yellow-300 text-center">Founder's Circle Benefits</h3>
+                <h3 className="text-xl font-bold mb-4 text-yellow-300 text-center">Founder's Circle Benefits (Developer Partners)</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="bg-white/10 rounded-lg p-3 text-center">
                     <div className="text-2xl mb-2">🔓</div>
