@@ -206,14 +206,35 @@ export default function EarlyAccess() {
               </div>
               
               <div className="mt-4 p-4 bg-white/10 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div className="text-left">
-                    <div className="font-bold text-lg">Pilot Partnership Benefits:</div>
-                    <div className="text-sm">✓ 20% discount on all services ✓ Direct founder access ✓ Custom feature development</div>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center justify-between">
+                    <div className="text-left">
+                      <div className="font-bold text-lg">Pilot Partnership Benefits:</div>
+                      <div className="text-sm">✓ 20% discount on all services ✓ Direct founder access ✓ Custom feature development</div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-yellow-300 font-bold text-lg">Applications close:</div>
+                      <div className="text-xl font-bold">March 31, 2026</div>
+                    </div>
                   </div>
-                  <div className="text-right">
-                    <div className="text-yellow-300 font-bold text-lg">Applications close:</div>
-                    <div className="text-xl font-bold">March 31, 2026</div>
+                  
+                  {/* Partner Tiers - directly under Pilot Partnership Benefits */}
+                  <div className="bg-white/10 rounded-lg p-4 mt-2">
+                    <h4 className="font-bold text-yellow-300 mb-3 text-center">Partner Tiers</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center text-sm">
+                      <div className="bg-white/10 rounded-lg p-2">
+                        <div className="font-bold">Healthcare Pilot Partner</div>
+                        <div className="text-yellow-300">15 slots</div>
+                      </div>
+                      <div className="bg-white/10 rounded-lg p-2">
+                        <div className="font-bold">Enterprise Security Pilot Partner</div>
+                        <div className="text-yellow-300">5 slots</div>
+                      </div>
+                      <div className="bg-white/10 rounded-lg p-2">
+                        <div className="font-bold">Strategic Investor Partner</div>
+                        <div className="text-yellow-300">5 slots</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -221,7 +242,7 @@ export default function EarlyAccess() {
               {/* Founder's Circle Benefits */}
               <div className="mt-6 pt-6 border-t border-white/20">
                 <h3 className="text-xl font-bold mb-4 text-yellow-300">Founder's Circle Benefits</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div className="bg-white/10 rounded-lg p-3 text-center">
                     <div className="text-2xl mb-2">🔓</div>
                     <div className="font-bold text-sm">Early Product Access</div>
@@ -241,24 +262,6 @@ export default function EarlyAccess() {
                     <div className="text-2xl mb-2">👥</div>
                     <div className="font-bold text-sm">Direct Access to Leadership</div>
                     <div className="text-xs opacity-80">Regular meetings with our executive team</div>
-                  </div>
-                </div>
-                
-                <div className="bg-white/10 rounded-lg p-4">
-                  <h4 className="font-bold text-yellow-300 mb-3 text-center">Partner Tiers</h4>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-center text-sm">
-                    <div className="bg-white/10 rounded-lg p-2">
-                      <div className="font-bold">Healthcare Pilot Partner</div>
-                      <div className="text-yellow-300">15 slots</div>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-2">
-                      <div className="font-bold">Enterprise Security Pilot Partner</div>
-                      <div className="text-yellow-300">5 slots</div>
-                    </div>
-                    <div className="bg-white/10 rounded-lg p-2">
-                      <div className="font-bold">Strategic Investor Partner</div>
-                      <div className="text-yellow-300">5 slots</div>
-                    </div>
                   </div>
                 </div>
               </div>
