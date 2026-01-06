@@ -321,7 +321,7 @@ const generatePDFReport = async (
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(100, 100, 100);
-  doc.text("Based on 6 of 106 NIST CSF 2.0 subcategories", margin + 70, yPos + 40);
+  doc.text("Based on 6 of 116 total evaluation points", margin + 70, yPos + 40);
   
   yPos += 60;
   
@@ -348,7 +348,7 @@ const generatePDFReport = async (
   doc.setTextColor(146, 64, 14);
   doc.text("IMPORTANT: This is a preliminary assessment covering only 6 high-level questions.", margin + 5, yPos + 10);
   doc.setFont("helvetica", "normal");
-  doc.text("The full HOS²A assessment evaluates all 106 NIST CSF 2.0 subcategories for comprehensive compliance.", margin + 5, yPos + 18);
+  doc.text("The full HOS²A assessment evaluates all 116 controls (106 NIST CSF 2.0 + 10 healthcare-specific).", margin + 5, yPos + 18);
   
   addFooter();
   
@@ -512,7 +512,7 @@ const generatePDFReport = async (
     yPos += 22;
   });
   
-  // Check if we need a new page for the 106 subcategories section
+  // Check if we need a new page for the 116 controls section
   if (yPos > 150) {
     addFooter();
     doc.addPage();
@@ -521,11 +521,11 @@ const generatePDFReport = async (
     yPos += 15;
   }
   
-  // The 106 Subcategories Section
+  // The 116 Controls Section
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(30, 64, 175);
-  doc.text("THE COMPLETE PICTURE: 106 SUBCATEGORIES", margin, yPos);
+  doc.text("THE COMPLETE PICTURE: 116 CONTROLS", margin, yPos);
   yPos += 10;
   
   doc.setFontSize(10);
@@ -536,16 +536,20 @@ const generatePDFReport = async (
     "This preliminary report assessed only 6 high-level questions - one from each NIST CSF 2.0 function.",
     "The complete HOS²A (Healthcare Organizational and System Security Analysis) assessment covers:",
     "",
+    "NIST CSF 2.0 Framework (106 subcategories):",
     "• GOVERN: 18 subcategories (organizational context, risk strategy, policy, oversight)",
     "• IDENTIFY: 17 subcategories (asset management, risk assessment, supply chain)",
     "• PROTECT: 22 subcategories (access control, awareness, data security, platform security)",
     "• DETECT: 18 subcategories (anomaly detection, continuous monitoring, detection processes)",
     "• RESPOND: 16 subcategories (response planning, communications, analysis, mitigation)",
-    "• RECOVER: 17 subcategories (recovery planning, improvements, communications)",
+    "• RECOVER: 15 subcategories (recovery planning, improvements, communications)",
     "",
-    "Total: 106 subcategories across all NIST CSF 2.0 categories for comprehensive evaluation",
+    "Healthcare-Specific Controls (10 additional):",
+    "• HIPAA compliance, PHI protection, medical device security, telehealth security, and more",
     "",
-    "Each subcategory is scored on the same 0-4 maturity scale, providing a granular view of your",
+    "Total: 106 NIST CSF 2.0 subcategories + 10 healthcare-specific controls = 116 evaluation points",
+    "",
+    "Each control is scored on the same 0-4 maturity scale, providing a granular view of your",
     "security posture and a precise roadmap for improvement prioritized by risk and ROI."
   ];
   
