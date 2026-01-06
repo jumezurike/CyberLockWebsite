@@ -69,6 +69,62 @@ const getScoreInterpretation = (score: number): { level: string; meaning: string
   return { level: "Managed/Optimized", meaning: "Mature, continuously improved processes with metrics and automation. Industry best practice.", color: "#059669" };
 };
 
+// Question text lookup for PDF
+const questionTextLookup: Record<string, string> = {
+  govern: "Do you have a formal, written plan for how your clinic handles patient data security and responds to a cyber incident?",
+  identify: "Do you know exactly all the devices (computers, tablets, servers) and software that have access to your patient records?",
+  protect: "Is all sensitive patient data on your devices automatically encrypted?",
+  detect: "Do you have 24/7 active monitoring that alerts you to suspicious activity?",
+  respond: "If you detected a breach right now, is there a clear, assigned team with steps to contain it and notify patients within the legally required 60-hour window?",
+  recover: "If you were hit by ransomware today, do you have a guaranteed and tested way to recover your data without paying the hackers?"
+};
+
+// Answer text lookup for PDF
+const answerTextLookup: Record<string, Record<number, string>> = {
+  govern: {
+    0: "No plan exists",
+    1: "Informal/undocumented procedures",
+    2: "Basic written plan, not regularly tested",
+    3: "Comprehensive plan, tested annually",
+    4: "Fully documented, tested quarterly, staff trained"
+  },
+  identify: {
+    0: "No inventory exists",
+    1: "Partial list, not maintained",
+    2: "Complete list, updated occasionally",
+    3: "Automated inventory, updated weekly",
+    4: "Real-time asset tracking with risk classification"
+  },
+  protect: {
+    0: "No encryption",
+    1: "Some data encrypted manually",
+    2: "Most data encrypted at rest",
+    3: "All data encrypted at rest and in transit",
+    4: "End-to-end encryption with key management"
+  },
+  detect: {
+    0: "No monitoring in place",
+    1: "Basic antivirus only",
+    2: "Periodic log reviews",
+    3: "Automated alerts with business-hours response",
+    4: "24/7 SOC monitoring with immediate response"
+  },
+  respond: {
+    0: "No response plan or team",
+    1: "Informal understanding of who to call",
+    2: "Written plan, no dedicated team",
+    3: "Dedicated team, documented procedures",
+    4: "Tested response team with 60-hour compliance verified"
+  },
+  recover: {
+    0: "No backups",
+    1: "Occasional manual backups",
+    2: "Regular backups, not tested",
+    3: "Automated backups, tested quarterly",
+    4: "Immutable backups with verified recovery < 4 hours"
+  }
+};
+
 // Generate PDF report function
 const generatePDFReport = (
   reportData: { totalScore: number; answers: Record<string, string>; recommendations: string[] },
@@ -79,241 +135,398 @@ const generatePDFReport = (
   const margin = 20;
   let yPos = 20;
 
+  // Helper to add footer on each page
+  const addFooter = () => {
+    doc.setTextColor(128, 128, 128);
+    doc.setFontSize(8);
+    doc.text("CyberLockX | info@cyberlockx.xyz | www.cyberlockx.com", margin, 285);
+    doc.text("CONFIDENTIAL", pageWidth - margin - 25, 285);
+  };
+
+  // ===================== PAGE 1: COVER & EXECUTIVE SUMMARY =====================
   // Header
-  doc.setFillColor(30, 64, 175); // Primary blue
-  doc.rect(0, 0, pageWidth, 40, 'F');
+  doc.setFillColor(30, 64, 175);
+  doc.rect(0, 0, pageWidth, 45, 'F');
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(22);
+  doc.setFontSize(24);
   doc.setFont("helvetica", "bold");
-  doc.text("CyberLockX Security Risk Assessment", margin, 25);
-  doc.setFontSize(11);
-  doc.setFont("helvetica", "normal");
-  doc.text("NIST CSF 2.0 Preliminary Analysis Report", margin, 35);
-
-  // Reset text color
-  doc.setTextColor(0, 0, 0);
-  yPos = 55;
-
-  // Contact Info Section
+  doc.text("CyberLockX", margin, 25);
   doc.setFontSize(12);
-  doc.setFont("helvetica", "bold");
-  doc.text("Assessment Details", margin, yPos);
-  yPos += 8;
   doc.setFont("helvetica", "normal");
+  doc.text("NIST CSF 2.0 Preliminary Risk Assessment Report", margin, 38);
+  
+  yPos = 60;
+  doc.setTextColor(0, 0, 0);
+  
+  // Report Info Box
+  doc.setFillColor(245, 247, 250);
+  doc.rect(margin, yPos, pageWidth - margin * 2, 45, 'F');
   doc.setFontSize(10);
-  doc.text(`Organization: ${contactInfo.company}`, margin, yPos);
-  yPos += 6;
-  doc.text(`Contact: ${contactInfo.fullName} | ${contactInfo.email} | ${contactInfo.phone}`, margin, yPos);
-  yPos += 6;
-  doc.text(`Industry: ${contactInfo.industry} | Size: ${contactInfo.companySize}`, margin, yPos);
-  yPos += 6;
-  doc.text(`Assessment Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, margin, yPos);
-  yPos += 15;
-
-  // Overall Score with Pie Chart
+  doc.setFont("helvetica", "bold");
+  doc.text("PREPARED FOR:", margin + 5, yPos + 10);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${contactInfo.company}`, margin + 45, yPos + 10);
+  doc.setFont("helvetica", "bold");
+  doc.text("CONTACT:", margin + 5, yPos + 20);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${contactInfo.fullName} | ${contactInfo.email}`, margin + 35, yPos + 20);
+  doc.setFont("helvetica", "bold");
+  doc.text("INDUSTRY:", margin + 5, yPos + 30);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${contactInfo.industry} | ${contactInfo.companySize} employees`, margin + 35, yPos + 30);
+  doc.setFont("helvetica", "bold");
+  doc.text("DATE:", margin + 5, yPos + 40);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, margin + 25, yPos + 40);
+  
+  yPos += 55;
+  
+  // EXECUTIVE SUMMARY
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(30, 64, 175);
+  doc.text("EXECUTIVE SUMMARY", margin, yPos);
+  yPos += 10;
+  
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  
+  // Score interpretation for executive summary
+  let riskLevel = "";
+  let riskExplanation = "";
+  let riskAction = "";
+  
+  if (reportData.totalScore < 25) {
+    riskLevel = "CRITICAL RISK";
+    riskExplanation = "Your organization has significant security gaps that expose you to immediate compliance violations and cyber threats. Most assessed areas lack basic protections, putting patient data and business operations at severe risk.";
+    riskAction = "Immediate intervention is required. We strongly recommend scheduling an emergency consultation to address critical vulnerabilities before a breach occurs.";
+  } else if (reportData.totalScore < 50) {
+    riskLevel = "HIGH RISK";
+    riskExplanation = "Your security posture shows notable weaknesses across multiple areas. While some protections exist, they are inconsistent or underdeveloped, leaving significant exposure to threats and compliance gaps.";
+    riskAction = "Urgent attention is needed. A comprehensive assessment will identify priority areas for rapid improvement to reduce your risk exposure.";
+  } else if (reportData.totalScore < 75) {
+    riskLevel = "MODERATE RISK";
+    riskExplanation = "Your organization has foundational security measures in place, but there is room for improvement. Some areas need strengthening to meet industry best practices and full HIPAA compliance.";
+    riskAction = "Proactive enhancement recommended. A full assessment will optimize your security investments and close remaining gaps.";
+  } else {
+    riskLevel = "LOW RISK";
+    riskExplanation = "Your security posture is strong across most areas. You have mature processes and controls in place. This preliminary assessment suggests good alignment with NIST CSF 2.0 and HIPAA requirements.";
+    riskAction = "Continue monitoring and optimizing. A comprehensive assessment can validate your posture and identify advanced optimization opportunities.";
+  }
+  
+  // Score display with pie chart
   doc.setFillColor(245, 245, 245);
-  doc.rect(margin, yPos, pageWidth - margin * 2, 50, 'F');
+  doc.rect(margin, yPos, pageWidth - margin * 2, 55, 'F');
   
   // Draw pie chart
   const centerX = margin + 35;
-  const centerY = yPos + 25;
-  const radius = 18;
+  const centerY = yPos + 28;
+  const radius = 20;
   const scorePercent = reportData.totalScore / 100;
   
-  // Background circle (remaining)
+  // Background circle
   doc.setFillColor(220, 220, 220);
   doc.circle(centerX, centerY, radius, 'F');
   
-  // Score arc (filled portion)
+  // Score arc
   if (scorePercent > 0) {
-    const scoreColor = reportData.totalScore >= 70 ? [22, 163, 74] : reportData.totalScore >= 40 ? [202, 138, 4] : [220, 38, 38];
+    const scoreColor = reportData.totalScore >= 75 ? [22, 163, 74] : reportData.totalScore >= 50 ? [202, 138, 4] : reportData.totalScore >= 25 ? [234, 88, 12] : [220, 38, 38];
     doc.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
     
-    // Draw pie slice using multiple small triangles
     const startAngle = -Math.PI / 2;
-    const endAngle = startAngle + (2 * Math.PI * scorePercent);
     const segments = Math.ceil(scorePercent * 36);
-    
     for (let i = 0; i < segments; i++) {
       const angle1 = startAngle + (i / 36) * 2 * Math.PI;
       const angle2 = startAngle + ((i + 1) / 36) * 2 * Math.PI;
-      if (angle2 > endAngle) break;
-      
       const x1 = centerX + radius * Math.cos(angle1);
       const y1 = centerY + radius * Math.sin(angle1);
       const x2 = centerX + radius * Math.cos(angle2);
       const y2 = centerY + radius * Math.sin(angle2);
-      
       doc.triangle(centerX, centerY, x1, y1, x2, y2, 'F');
     }
   }
   
-  // Center circle (donut hole)
+  // Center circle (donut)
   doc.setFillColor(245, 245, 245);
-  doc.circle(centerX, centerY, 10, 'F');
-  
-  // Score text inside donut
-  doc.setFontSize(10);
+  doc.circle(centerX, centerY, 12, 'F');
+  doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(0, 0, 0);
-  doc.text(`${Math.round(reportData.totalScore)}%`, centerX - 6, centerY + 3);
+  doc.text(`${Math.round(reportData.totalScore)}%`, centerX - 7, centerY + 4);
   
-  // Score label
-  doc.setFontSize(16);
+  // Score text
+  doc.setFontSize(18);
   doc.setFont("helvetica", "bold");
-  const overallLabel = reportData.totalScore >= 70 ? "GOOD" : reportData.totalScore >= 40 ? "NEEDS IMPROVEMENT" : "CRITICAL";
-  doc.text(`Overall Security Score: ${Math.round(reportData.totalScore)}%`, margin + 70, yPos + 20);
-  doc.setFontSize(12);
-  doc.text(overallLabel, margin + 70, yPos + 32);
+  const riskColor = reportData.totalScore >= 75 ? [22, 163, 74] : reportData.totalScore >= 50 ? [202, 138, 4] : [220, 38, 38];
+  doc.setTextColor(riskColor[0], riskColor[1], riskColor[2]);
+  doc.text(riskLevel, margin + 70, yPos + 18);
+  doc.setFontSize(14);
+  doc.setTextColor(0, 0, 0);
+  doc.text(`Overall Score: ${Math.round(reportData.totalScore)}%`, margin + 70, yPos + 30);
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.text("Based on NIST Cybersecurity Framework 2.0 preliminary assessment", margin + 70, yPos + 42);
+  doc.setTextColor(100, 100, 100);
+  doc.text("Based on 6 of 118 NIST CSF 2.0 subcategories", margin + 70, yPos + 40);
   
   yPos += 60;
-
-  // Category Breakdown
-  doc.setFontSize(14);
+  
+  // Risk explanation
+  const explanationLines = doc.splitTextToSize(riskExplanation, pageWidth - margin * 2);
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(10);
+  doc.text(explanationLines, margin, yPos);
+  yPos += explanationLines.length * 5 + 5;
+  
   doc.setFont("helvetica", "bold");
-  doc.text("Domain Analysis", margin, yPos);
-  yPos += 10;
-
+  doc.text("Recommended Action:", margin, yPos);
+  yPos += 5;
+  doc.setFont("helvetica", "normal");
+  const actionLines = doc.splitTextToSize(riskAction, pageWidth - margin * 2);
+  doc.text(actionLines, margin, yPos);
+  yPos += actionLines.length * 5 + 10;
+  
+  // Important Notice
+  doc.setFillColor(254, 243, 199);
+  doc.rect(margin, yPos, pageWidth - margin * 2, 25, 'F');
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(146, 64, 14);
+  doc.text("IMPORTANT: This is a preliminary assessment covering only 6 high-level questions.", margin + 5, yPos + 10);
+  doc.setFont("helvetica", "normal");
+  doc.text("The full HOS²A assessment evaluates all 118 NIST CSF 2.0 subcategories for comprehensive compliance.", margin + 5, yPos + 18);
+  
+  addFooter();
+  
+  // ===================== PAGE 2: YOUR RESPONSES =====================
+  doc.addPage();
+  yPos = 20;
+  
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(30, 64, 175);
+  doc.text("YOUR ASSESSMENT RESPONSES", margin, yPos);
+  yPos += 15;
+  
   const categories = ['govern', 'identify', 'protect', 'detect', 'respond', 'recover'];
   
   categories.forEach((catId) => {
     const score = parseInt(reportData.answers[catId] || "0");
-    const scorePercent = score === 0 ? 0 : score === 1 ? 4.16 : score === 2 ? 8.32 : score === 3 ? 12.48 : 16.66;
+    const catScorePercent = score === 0 ? 0 : score === 1 ? 4.16 : score === 2 ? 8.32 : score === 3 ? 12.48 : 16.66;
     const interpretation = getScoreInterpretation(score);
     const explanation = categoryExplanations[catId];
+    const questionText = questionTextLookup[catId];
+    const answerText = answerTextLookup[catId][score];
     
-    // Check if we need a new page
-    if (yPos > 240) {
+    if (yPos > 230) {
+      addFooter();
       doc.addPage();
       yPos = 20;
     }
     
-    // Category header with score bar
-    doc.setFillColor(240, 240, 240);
-    doc.rect(margin, yPos, pageWidth - margin * 2, 35, 'F');
+    // Category header
+    doc.setFillColor(240, 245, 255);
+    doc.rect(margin, yPos, pageWidth - margin * 2, 40, 'F');
     
+    // Category title and score badge
     doc.setFontSize(11);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(30, 64, 175);
-    doc.text(explanation.title, margin + 5, yPos + 8);
+    doc.text(explanation.title, margin + 5, yPos + 10);
     
-    // Score indicator
+    // Score badge
     const hexColor = interpretation.color;
     const r = parseInt(hexColor.slice(1, 3), 16);
     const g = parseInt(hexColor.slice(3, 5), 16);
     const b = parseInt(hexColor.slice(5, 7), 16);
     doc.setFillColor(r, g, b);
-    doc.rect(pageWidth - margin - 45, yPos + 3, 40, 10, 'F');
+    doc.roundedRect(pageWidth - margin - 50, yPos + 3, 45, 12, 2, 2, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(9);
-    doc.text(`${scorePercent.toFixed(2)}%`, pageWidth - margin - 40, yPos + 10);
+    doc.text(`${catScorePercent.toFixed(2)}% (${score}/4)`, pageWidth - margin - 45, yPos + 11);
     
-    // Score bar
-    doc.setFillColor(220, 220, 220);
-    doc.rect(margin + 5, yPos + 14, pageWidth - margin * 2 - 10, 4, 'F');
-    doc.setFillColor(r, g, b);
-    doc.rect(margin + 5, yPos + 14, (pageWidth - margin * 2 - 10) * (score / 4), 4, 'F');
+    // Question asked
+    doc.setTextColor(60, 60, 60);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "italic");
+    const qLines = doc.splitTextToSize(`Q: ${questionText}`, pageWidth - margin * 2 - 10);
+    doc.text(qLines, margin + 5, yPos + 20);
+    
+    // Answer given
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Your Answer: ${answerText}`, margin + 5, yPos + 35);
+    
+    yPos += 45;
     
     // Interpretation
-    doc.setTextColor(0, 0, 0);
     doc.setFontSize(9);
-    doc.setFont("helvetica", "bold");
-    doc.text(`Level: ${interpretation.level}`, margin + 5, yPos + 25);
     doc.setFont("helvetica", "normal");
-    doc.text(interpretation.meaning.substring(0, 100), margin + 5, yPos + 31);
-    
-    yPos += 40;
-    
-    // Description (if space allows)
-    if (yPos < 230) {
-      doc.setFontSize(8);
-      doc.setTextColor(80, 80, 80);
-      const descLines = doc.splitTextToSize(explanation.description, pageWidth - margin * 2 - 10);
-      doc.text(descLines, margin + 5, yPos);
-      yPos += descLines.length * 4 + 5;
-      
-      // Subcategories note
-      doc.setFont("helvetica", "italic");
-      doc.text(explanation.subcategories, margin + 5, yPos);
-      yPos += 10;
-    }
+    doc.setTextColor(80, 80, 80);
+    doc.text(`Maturity Level: ${interpretation.level} - ${interpretation.meaning}`, margin + 5, yPos);
+    yPos += 10;
   });
-
-  // New page for recommendations
+  
+  addFooter();
+  
+  // ===================== PAGE 3: DOMAIN ANALYSIS =====================
   doc.addPage();
   yPos = 20;
   
-  // Recommendations section
-  doc.setFontSize(14);
+  doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
-  doc.setTextColor(0, 0, 0);
-  doc.text("Priority Recommendations", margin, yPos);
+  doc.setTextColor(30, 64, 175);
+  doc.text("DOMAIN ANALYSIS & WHAT YOUR SCORES MEAN", margin, yPos);
+  yPos += 15;
+  
+  categories.forEach((catId) => {
+    const score = parseInt(reportData.answers[catId] || "0");
+    const explanation = categoryExplanations[catId];
+    
+    if (yPos > 220) {
+      addFooter();
+      doc.addPage();
+      yPos = 20;
+    }
+    
+    // Category title
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(30, 64, 175);
+    doc.text(explanation.title, margin, yPos);
+    yPos += 7;
+    
+    // Description
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(0, 0, 0);
+    const descLines = doc.splitTextToSize(explanation.description, pageWidth - margin * 2);
+    doc.text(descLines, margin, yPos);
+    yPos += descLines.length * 4 + 3;
+    
+    // Why it matters
+    doc.setFont("helvetica", "bold");
+    doc.text("Why This Matters:", margin, yPos);
+    yPos += 4;
+    doc.setFont("helvetica", "normal");
+    const impLines = doc.splitTextToSize(explanation.importance, pageWidth - margin * 2);
+    doc.text(impLines, margin, yPos);
+    yPos += impLines.length * 4 + 3;
+    
+    // Full assessment note
+    doc.setFont("helvetica", "italic");
+    doc.setTextColor(100, 100, 100);
+    doc.text(explanation.subcategories, margin, yPos);
+    yPos += 12;
+  });
+  
+  addFooter();
+  
+  // ===================== PAGE 4: RECOMMENDATIONS & NEXT STEPS =====================
+  doc.addPage();
+  yPos = 20;
+  
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(30, 64, 175);
+  doc.text("PRIORITY RECOMMENDATIONS", margin, yPos);
   yPos += 12;
   
   reportData.recommendations.forEach((rec, index) => {
+    // Check if we need a new page before each recommendation
+    if (yPos > 240) {
+      addFooter();
+      doc.addPage();
+      yPos = 20;
+      doc.setFontSize(14);
+      doc.setFont("helvetica", "bold");
+      doc.setTextColor(30, 64, 175);
+      doc.text("PRIORITY RECOMMENDATIONS (continued)", margin, yPos);
+      yPos += 12;
+    }
+    
     doc.setFillColor(254, 242, 242);
-    doc.rect(margin, yPos, pageWidth - margin * 2, 15, 'F');
+    doc.rect(margin, yPos, pageWidth - margin * 2, 18, 'F');
     doc.setFontSize(10);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(185, 28, 28);
-    doc.text(`${index + 1}.`, margin + 5, yPos + 10);
+    doc.text(`${index + 1}.`, margin + 5, yPos + 12);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(0, 0, 0);
-    const recLines = doc.splitTextToSize(rec, pageWidth - margin * 2 - 20);
-    doc.text(recLines, margin + 15, yPos + 10);
-    yPos += 20;
+    const recLines = doc.splitTextToSize(rec, pageWidth - margin * 2 - 25);
+    doc.text(recLines, margin + 15, yPos + 12);
+    yPos += 22;
   });
   
-  yPos += 10;
+  // Check if we need a new page for the 118 subcategories section
+  if (yPos > 150) {
+    addFooter();
+    doc.addPage();
+    yPos = 20;
+  } else {
+    yPos += 15;
+  }
   
-  // Next Steps
-  doc.setFontSize(14);
+  // The 118 Subcategories Section
+  doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
-  doc.text("Next Steps: Full HOS²A Assessment", margin, yPos);
+  doc.setTextColor(30, 64, 175);
+  doc.text("THE COMPLETE PICTURE: 118 SUBCATEGORIES", margin, yPos);
   yPos += 10;
   
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  const nextStepsText = [
-    "This preliminary assessment covers 6 high-level questions from the NIST CSF 2.0 framework.",
-    "The complete HOS²A (Healthcare Organizational and System Security Analysis) assessment",
-    "expands this analysis across all 118 subcategories, providing:",
+  doc.setTextColor(0, 0, 0);
+  
+  const fullAssessmentText = [
+    "This preliminary report assessed only 6 high-level questions - one from each NIST CSF 2.0 function.",
+    "The complete HOS²A (Healthcare Organizational and System Security Analysis) assessment covers:",
     "",
-    "• Detailed gap analysis across all 6 NIST CSF 2.0 functions",
-    "• HIPAA compliance mapping and risk quantification",
-    "• Custom remediation roadmap with prioritized actions",
-    "• Cost-benefit analysis using RASBITA methodology",
-    "• Executive-ready compliance documentation"
+    "• GOVERN: 18 subcategories (organizational context, risk strategy, policy, oversight)",
+    "• IDENTIFY: 17 subcategories (asset management, risk assessment, supply chain)",
+    "• PROTECT: 22 subcategories (access control, awareness, data security, platform security)",
+    "• DETECT: 18 subcategories (anomaly detection, continuous monitoring, detection processes)",
+    "• RESPOND: 16 subcategories (response planning, communications, analysis, mitigation)",
+    "• RECOVER: 17 subcategories (recovery planning, improvements, communications)",
+    "",
+    "Total: 108 subcategories + 10 additional healthcare-specific controls = 118 evaluation points",
+    "",
+    "Each subcategory is scored on the same 0-4 maturity scale, providing a granular view of your",
+    "security posture and a precise roadmap for improvement prioritized by risk and ROI."
   ];
   
-  nextStepsText.forEach((line) => {
+  fullAssessmentText.forEach((line) => {
     doc.text(line, margin, yPos);
-    yPos += 6;
+    yPos += 5;
   });
   
-  yPos += 15;
+  yPos += 10;
   
-  // CTA Box
+  // CTA Box - ensure it fits on the page
+  if (yPos > 220) {
+    addFooter();
+    doc.addPage();
+    yPos = 20;
+  }
+  
   doc.setFillColor(30, 64, 175);
-  doc.rect(margin, yPos, pageWidth - margin * 2, 35, 'F');
+  doc.rect(margin, yPos, pageWidth - margin * 2, 40, 'F');
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(12);
+  doc.setFontSize(14);
   doc.setFont("helvetica", "bold");
-  doc.text("Ready to secure your organization?", margin + 10, yPos + 12);
+  doc.text("Schedule Your Free 1-Hour Consultation", margin + 10, yPos + 15);
   doc.setFontSize(10);
   doc.setFont("helvetica", "normal");
-  doc.text("Schedule your free 1-hour consultation:", margin + 10, yPos + 22);
-  doc.setTextColor(200, 230, 255);
-  doc.text("https://cal.com/cyberlockx/cybersecurity-consultation", margin + 10, yPos + 30);
+  doc.text("Get expert guidance on your security gaps and learn how the full HOS²A assessment", margin + 10, yPos + 25);
+  doc.text("can help you achieve compliance and protect your patients.", margin + 10, yPos + 32);
   
-  // Footer
-  doc.setTextColor(128, 128, 128);
-  doc.setFontSize(8);
-  doc.text("CyberLockX | info@cyberlockx.xyz | www.cyberlockx.com", margin, 285);
-  doc.text("This report is confidential and intended for the named recipient only.", pageWidth - margin - 80, 285);
+  yPos += 50;
+  
+  doc.setTextColor(30, 64, 175);
+  doc.setFontSize(11);
+  doc.text("Book Now: https://cal.com/cyberlockx/cybersecurity-consultation", margin, yPos);
+  
+  addFooter();
 
   // Save PDF
   doc.save(`CyberLockX-Risk-Assessment-${contactInfo.company.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
