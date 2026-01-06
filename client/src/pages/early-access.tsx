@@ -523,6 +523,7 @@ export default function EarlyAccess() {
                             <SelectItem value="healthcare">Healthcare Pilot Partner (15 slots)</SelectItem>
                             <SelectItem value="enterprise">Enterprise Security Pilot Partner (5 slots)</SelectItem>
                             <SelectItem value="strategic">Strategic Investor Partner (5 slots)</SelectItem>
+                            <SelectItem value="development">Development Partner (Build With Us)</SelectItem>
                             <SelectItem value="undecided">Not sure yet</SelectItem>
                           </SelectContent>
                         </Select>
