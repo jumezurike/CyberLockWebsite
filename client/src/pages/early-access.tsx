@@ -321,7 +321,7 @@ const generatePDFReport = async (
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(100, 100, 100);
-  doc.text("Based on 6 of 118 NIST CSF 2.0 subcategories", margin + 70, yPos + 40);
+  doc.text("Based on 6 of 108 NIST CSF 2.0 subcategories", margin + 70, yPos + 40);
   
   yPos += 60;
   
@@ -348,7 +348,7 @@ const generatePDFReport = async (
   doc.setTextColor(146, 64, 14);
   doc.text("IMPORTANT: This is a preliminary assessment covering only 6 high-level questions.", margin + 5, yPos + 10);
   doc.setFont("helvetica", "normal");
-  doc.text("The full HOS²A assessment evaluates all 118 NIST CSF 2.0 subcategories for comprehensive compliance.", margin + 5, yPos + 18);
+  doc.text("The full HOS²A assessment evaluates all 108 NIST CSF 2.0 subcategories for comprehensive compliance.", margin + 5, yPos + 18);
   
   addFooter();
   
@@ -512,7 +512,7 @@ const generatePDFReport = async (
     yPos += 22;
   });
   
-  // Check if we need a new page for the 118 subcategories section
+  // Check if we need a new page for the 108 subcategories section
   if (yPos > 150) {
     addFooter();
     doc.addPage();
@@ -521,11 +521,11 @@ const generatePDFReport = async (
     yPos += 15;
   }
   
-  // The 118 Subcategories Section
+  // The 108 Subcategories Section
   doc.setFontSize(16);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(30, 64, 175);
-  doc.text("THE COMPLETE PICTURE: 118 SUBCATEGORIES", margin, yPos);
+  doc.text("THE COMPLETE PICTURE: 108 SUBCATEGORIES", margin, yPos);
   yPos += 10;
   
   doc.setFontSize(10);
@@ -543,7 +543,7 @@ const generatePDFReport = async (
     "• RESPOND: 16 subcategories (response planning, communications, analysis, mitigation)",
     "• RECOVER: 17 subcategories (recovery planning, improvements, communications)",
     "",
-    "Total: 108 subcategories + 10 additional healthcare-specific controls = 118 evaluation points",
+    "Total: 108 subcategories across all NIST CSF 2.0 categories for comprehensive evaluation",
     "",
     "Each subcategory is scored on the same 0-4 maturity scale, providing a granular view of your",
     "security posture and a precise roadmap for improvement prioritized by risk and ROI."
