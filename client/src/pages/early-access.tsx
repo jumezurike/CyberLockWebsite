@@ -192,7 +192,7 @@ const generatePDFReport = async (
   // Report title
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
-  doc.text("CYBER RISK HEALTH CHECKUP REPORT", margin, 52);
+  doc.text("FREE S/HOS²A CYBER RISK HEALTH CHECKUP REPORT", margin, 52);
   
   yPos = 70;
   doc.setTextColor(0, 0, 0);
@@ -930,7 +930,7 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-primary">
-            {showReport ? "Cyber Risk Health Checkup Report" : "FREE Cyber Risk Health Checkup"}
+            {showReport ? "Free S/HOS²A Cyber Risk Health Checkup Report" : "FREE S/HOS²A Cyber Risk Checkup"}
           </DialogTitle>
         </DialogHeader>
 
@@ -1465,7 +1465,7 @@ export default function EarlyAccess() {
         <div className="max-w-4xl mx-auto mt-8">
           {/* FREE S/HOS²A Cyber Risk Checkup Section */}
           <div className="bg-secondary text-white rounded-xl p-6 shadow-lg mb-8">
-            <h2 className="text-2xl font-bold text-center mb-4">✅ FREE Cyber Risk Health Checkup for Healthcare Clinics</h2>
+            <h2 className="text-2xl font-bold text-center mb-4">✅ FREE S/HOS²A Cyber Risk Checkup for Healthcare Clinics</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
               <div className="bg-white/10 rounded-lg p-4 text-center">
                 <div className="text-3xl mb-2">🔍</div>
