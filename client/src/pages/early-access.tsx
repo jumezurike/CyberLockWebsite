@@ -587,7 +587,7 @@ const generatePDFReport = async (
   addFooter();
 
   // Save PDF
-  doc.save(`CyberLockX-Risk-Assessment-${contactInfo.company.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
+  doc.save(`Cyber-Risk-Health-Checkup-Report-${contactInfo.company.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
 };
 
 // NIST CSF 2.0 Risk Assessment Schema
