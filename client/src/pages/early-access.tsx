@@ -127,7 +127,7 @@ const answerTextLookup: Record<string, Record<number, string>> = {
 
 // Generate PDF report function
 const generatePDFReport = (
-  reportData: { totalScore: number; answers: Record<string, string>; recommendations: string[] },
+  reportData: { totalScore: number; answers: Record<string, string>; recommendations: string[]; completedAt: string },
   contactInfo: { fullName: string; email: string; company: string; phone: string; companySize: string; industry: string }
 ) => {
   const doc = new jsPDF();
@@ -208,9 +208,9 @@ const generatePDFReport = (
   doc.text(`${contactInfo.email} | ${contactInfo.phone}`, margin + 5, yPos + 43);
   doc.text(`${contactInfo.industry} | ${contactInfo.companySize} employees`, margin + 5, yPos + 51);
   
-  // Date on right side
+  // Date and time on right side
   doc.setFontSize(9);
-  doc.text(`Report Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, pageWidth - margin - 60, yPos + 10);
+  doc.text(`Completed: ${reportData.completedAt}`, pageWidth - margin - 55, yPos + 10);
   
   yPos += 65;
   
@@ -683,6 +683,7 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     totalScore: number;
     answers: Record<string, string>;
     recommendations: string[];
+    completedAt: string;
   } | null>(null);
 
   const submitMutation = useMutation({
@@ -853,7 +854,15 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     setReportData({
       totalScore,
       answers,
-      recommendations
+      recommendations,
+      completedAt: new Date().toLocaleString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric', 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: true 
+      })
     });
 
     // Submit scores to backend
@@ -1013,6 +1022,21 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
           </form>
         ) : (
           <div className="space-y-6">
+            {/* Assessment Timestamp & Client Info */}
+            <div className="bg-gray-50 rounded-lg p-4 border">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="text-xs text-gray-500">Prepared for</p>
+                  <p className="font-bold text-primary">{contactInfo.company}</p>
+                  <p className="text-sm text-gray-600">{contactInfo.fullName}</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-gray-500">Assessment Completed</p>
+                  <p className="text-sm font-medium">{reportData?.completedAt}</p>
+                </div>
+              </div>
+            </div>
+
             {/* Overall Score */}
             <div className="text-center p-6 bg-gradient-to-r from-primary to-primary/80 rounded-xl text-white">
               <p className="text-sm opacity-90 mb-2">Your Cyber Risk Score</p>
