@@ -171,7 +171,7 @@ export default function EarlyAccess() {
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-primary mb-4">Join the CyberLockX Founder's and Partner's Circle</h1>
           <p className="text-lg text-neutral-600 max-w-3xl mx-auto mb-6">
-            Be among the first to access our revolutionary security products and shape the future of business cybersecurity.
+            Be among the first to access our revolutionary security products and shape the future of Healthcare cybersecurity.
           </p>
           
           {/* Limited 2025 Pilot Slots Section */}
