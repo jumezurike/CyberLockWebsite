@@ -1036,6 +1036,42 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Admin endpoint - Get single risk assessment
+  app.get("/api/risk-assessments/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid ID" });
+      }
+      const assessment = await storage.getRiskAssessmentById(id);
+      if (!assessment) {
+        return res.status(404).json({ error: "Risk assessment not found" });
+      }
+      res.json(assessment);
+    } catch (error) {
+      console.error("Error fetching risk assessment:", error);
+      res.status(500).json({ error: "Failed to fetch risk assessment" });
+    }
+  });
+
+  // Admin endpoint - Delete risk assessment
+  app.delete("/api/risk-assessments/:id", requireAdminAuth, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ error: "Invalid ID" });
+      }
+      const deleted = await storage.deleteRiskAssessment(id);
+      if (!deleted) {
+        return res.status(404).json({ error: "Risk assessment not found" });
+      }
+      res.json({ success: true, message: "Risk assessment deleted" });
+    } catch (error) {
+      console.error("Error deleting risk assessment:", error);
+      res.status(500).json({ error: "Failed to delete risk assessment" });
+    }
+  });
+
   // RASBITA Report API
   // -------------------------------------------------------------------------
   
