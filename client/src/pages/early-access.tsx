@@ -1320,7 +1320,7 @@ export default function EarlyAccess() {
   }
 
   return (
-    <div className="min-h-screen bg-neutral-50 py-12">
+    <div id="founders-circle" className="min-h-screen bg-neutral-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-primary mb-4">Join the CyberLockX Founder's and Partner's Circle</h1>

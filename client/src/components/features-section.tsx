@@ -85,7 +85,10 @@ export default function FeaturesSection() {
                   </a>
                 )}
                 <div>
-                  <a href="#" className="text-secondary hover:text-green-600 font-medium inline-flex items-center">
+                  <a 
+                    href={feature.status?.includes('Available Now') ? '#contact' : '/early-access#founders-circle'}
+                    className="text-secondary hover:text-green-600 font-medium inline-flex items-center"
+                  >
                     Learn more <i className="fas fa-arrow-right ml-2"></i>
                   </a>
                 </div>
