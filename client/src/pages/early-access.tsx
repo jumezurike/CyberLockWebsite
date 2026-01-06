@@ -219,6 +219,7 @@ export default function EarlyAccess() {
                     <li>• Priority integration for your tech stack</li>
                     <li>• Influence on core platform architecture</li>
                     <li>• Potential revenue share on joint solutions</li>
+                    <li>• Custom feature development</li>
                   </ul>
                 </div>
                 <div className="bg-white/10 rounded-lg p-4">
