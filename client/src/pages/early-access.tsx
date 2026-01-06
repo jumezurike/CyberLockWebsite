@@ -247,7 +247,7 @@ export default function EarlyAccess() {
                   <span className="text-2xl font-bold text-white">🚀 Build With Us!</span>
                 </div>
                 <h3 className="text-xl font-bold mb-4 text-yellow-300 text-center">Founder's Circle Benefits (Developer Partners)</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                   <div className="bg-white/10 rounded-lg p-3 text-center">
                     <div className="text-2xl mb-2">🔓</div>
                     <div className="font-bold text-sm">Early Product Access</div>
@@ -267,6 +267,11 @@ export default function EarlyAccess() {
                     <div className="text-2xl mb-2">👥</div>
                     <div className="font-bold text-sm">Direct Access to Leadership</div>
                     <div className="text-xs opacity-80">Regular meetings with our executive team</div>
+                  </div>
+                  <div className="bg-white/10 rounded-lg p-3 text-center">
+                    <div className="text-2xl mb-2">🛠️</div>
+                    <div className="font-bold text-sm">Custom Feature Development</div>
+                    <div className="text-xs opacity-80">Build and shape features tailored to your needs</div>
                   </div>
                 </div>
               </div>
