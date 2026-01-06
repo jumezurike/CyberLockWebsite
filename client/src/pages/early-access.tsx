@@ -332,7 +332,7 @@ export default function EarlyAccess() {
 
           <div>
             <div className="bg-white rounded-xl shadow-md p-8">
-              <h2 className="text-xl font-bold text-primary mb-6">Apply for Early Access</h2>
+              <h2 className="text-xl font-bold text-primary mb-6">Apply for the 2026 Pilot</h2>
               
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
