@@ -319,6 +319,15 @@ export default function EarlyAccess() {
             <div className="text-center">
               <p className="text-lg font-medium">🎯 Perfect for clinics, medical practices, and healthcare organizations looking to strengthen their cybersecurity posture</p>
             </div>
+            
+            {/* Zero-Risk Guarantee */}
+            <div className="mt-4 p-4 bg-white/20 rounded-lg border border-white/30">
+              <div className="text-center">
+                <p className="text-sm font-bold text-white mb-2">Our Zero-Risk Guarantee:</p>
+                <p className="text-xl font-bold text-yellow-300">🛡️ 100% Breach-Free Healthcare Guarantee</p>
+                <p className="text-sm mt-1">Pay only if we stop a threat • 90-day trial • $0 risk</p>
+              </div>
+            </div>
           </div>
 
           <div>
