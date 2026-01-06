@@ -235,15 +235,9 @@ export default function EarlyAccess() {
               </div>
               
               <div className="mt-4 p-4 bg-white/10 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <div className="text-left">
-                    <div className="font-bold text-lg">Pilot Partnership Benefits:</div>
-                    <div className="text-sm">✓ 20% discount on all services ✓ Direct founder access ✓ Custom feature development</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-yellow-300 font-bold text-lg">Applications close:</div>
-                    <div className="text-xl font-bold">March 31, 2026</div>
-                  </div>
+                <div className="text-center">
+                  <div className="text-yellow-300 font-bold text-lg">Applications close:</div>
+                  <div className="text-xl font-bold">March 31, 2026</div>
                 </div>
               </div>
               
