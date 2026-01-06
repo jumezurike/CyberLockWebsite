@@ -508,53 +508,6 @@ export default function EarlyAccess() {
                     )}
                   />
 
-                  {/* Free S/HOS²A Cyber Risk Checkup Offer */}
-                  <div className="bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200 rounded-lg p-6">
-                    <div className="flex items-start space-x-3">
-                      <div className="bg-green-500 text-white p-2 rounded-full flex-shrink-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-lg font-bold text-green-800 mb-2">
-                          ✅ FREE S/HOS²A Cyber Risk Checkup for Healthcare Clinics
-                        </h3>
-                        <div className="space-y-2 text-sm text-gray-700">
-                          <div className="flex items-center space-x-2">
-                            <span className="text-blue-600">🔍</span>
-                            <span><strong>Identify hidden risks and compliance gaps</strong> in your EHR systems</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-green-600">💬</span>
-                            <span><strong>Personalized report</strong> showing real HIPAA/EHR vulnerabilities</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <span className="text-purple-600">⚡</span>
-                            <span><strong>30-minute assessment</strong> with immediate actionable insights</span>
-                          </div>
-                        </div>
-                        <div className="mt-3 p-3 bg-white rounded border-l-4 border-green-500">
-                          <p className="text-sm font-medium text-green-800">
-                            🎯 Perfect for clinics, medical practices, and healthcare organizations looking to strengthen their cybersecurity posture
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                        <div className="mt-3 p-3 bg-green-50 rounded border-l-4 border-green-600">
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="text-sm font-bold text-green-800">🛡️ 100% Breach-Free Healthcare Guarantee</p>
-                              <p className="text-xs text-gray-600">Pay only if we stop a threat • 30-day trial • $0 risk</p>
-                            </div>
-                            <div className="bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">
-                              Zero Breach Pilot
-                            </div>
-                          </div>
-                        </div>
-                  
                   <FormField
                     control={form.control}
                     name="investmentLevel"
