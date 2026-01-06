@@ -516,9 +516,9 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
               <Button 
                 className="bg-secondary hover:bg-secondary/90"
                 onClick={() => {
-                  resetModal();
-                  document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
+                  window.open('https://cal.com/cyberlockx/free-hos2a-cyber-risk-checkup-consultation', '_blank');
                 }}
+                data-testid="button-schedule-consultation"
               >
                 Schedule Free Consultation
               </Button>
