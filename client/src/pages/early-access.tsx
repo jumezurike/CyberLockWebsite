@@ -198,41 +198,59 @@ export default function EarlyAccess() {
               </div>
               
               <h2 className="text-2xl font-bold mb-3">Only 25 Pilot Partner Slots Available</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                <div className="bg-white/10 rounded-lg p-4">
-                  <div className="font-bold text-yellow-300 text-lg mb-1">🏥 Healthcare Pilot Partner</div>
-                  <div className="text-white font-semibold mb-2">15 slots</div>
-                  <div className="text-white/80 text-xs mb-2">For: Medical practices, clinics, hospitals</div>
-                  <ul className="text-white/90 text-xs space-y-1">
-                    <li>• 20% discount on all services</li>
-                    <li>• Deploy our live SOS²A AI Audit Engine</li>
-                    <li>• Co-design features for clinical workflows</li>
-                    <li>• Direct founder access</li>
-                  </ul>
-                </div>
-                <div className="bg-white/10 rounded-lg p-4">
-                  <div className="font-bold text-yellow-300 text-lg mb-1">🏢 Enterprise Security Pilot Partner</div>
-                  <div className="text-white font-semibold mb-2">5 slots</div>
-                  <div className="text-white/80 text-xs mb-2">For: Tech firms, MSPs, large enterprises</div>
-                  <ul className="text-white/90 text-xs space-y-1">
-                    <li>• All Healthcare Partner benefits</li>
-                    <li>• Priority integration for your tech stack</li>
-                    <li>• Influence on core platform architecture</li>
-                    <li>• Potential revenue share on joint solutions</li>
-                    <li>• Custom feature development</li>
-                  </ul>
-                </div>
-                <div className="bg-white/10 rounded-lg p-4">
-                  <div className="font-bold text-yellow-300 text-lg mb-1">💡 Strategic Investor Partner</div>
-                  <div className="text-white font-semibold mb-2">5 slots</div>
-                  <div className="text-white/80 text-xs mb-2">For: Angels & VCs funding integration & growth</div>
-                  <ul className="text-white/90 text-xs space-y-1">
-                    <li>• All Enterprise Partner benefits (optional)</li>
-                    <li>• Equity stake in CyberLockX Inc.</li>
-                    <li>• Full strategic & due diligence access</li>
-                    <li>• Fund the bridge from audit to auto-remediation</li>
-                  </ul>
-                </div>
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm text-left">
+                  <thead>
+                    <tr className="bg-white/20 text-yellow-300">
+                      <th className="px-4 py-3 font-bold">Partner Tier</th>
+                      <th className="px-4 py-3 font-bold text-center">Slots</th>
+                      <th className="px-4 py-3 font-bold">For Whom</th>
+                      <th className="px-4 py-3 font-bold">Key Partnership Benefits</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr className="bg-white/10 border-b border-white/10">
+                      <td className="px-4 py-4 font-bold text-yellow-300 whitespace-nowrap">🏥 Healthcare Pilot Partner</td>
+                      <td className="px-4 py-4 text-center font-semibold">15</td>
+                      <td className="px-4 py-4 text-white/80">Medical practices, clinics, hospitals</td>
+                      <td className="px-4 py-4">
+                        <ul className="text-white/90 space-y-1">
+                          <li>• 20% discount on all services</li>
+                          <li>• Deploy our live SOS²A AI Audit Engine</li>
+                          <li>• Co-design features for clinical workflows</li>
+                          <li>• Direct founder access</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="bg-white/10 border-b border-white/10">
+                      <td className="px-4 py-4 font-bold text-yellow-300 whitespace-nowrap">🏢 Enterprise Security Pilot Partner</td>
+                      <td className="px-4 py-4 text-center font-semibold">5</td>
+                      <td className="px-4 py-4 text-white/80">Tech firms, MSPs, large enterprises</td>
+                      <td className="px-4 py-4">
+                        <ul className="text-white/90 space-y-1">
+                          <li>• All Healthcare Partner benefits</li>
+                          <li>• Priority integration for your tech stack</li>
+                          <li>• Influence on core platform architecture</li>
+                          <li>• Potential revenue share on joint solutions</li>
+                          <li>• Custom feature development</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr className="bg-white/10">
+                      <td className="px-4 py-4 font-bold text-yellow-300 whitespace-nowrap">💡 Strategic Investor Partner</td>
+                      <td className="px-4 py-4 text-center font-semibold">5</td>
+                      <td className="px-4 py-4 text-white/80">Angels & VCs funding integration & growth</td>
+                      <td className="px-4 py-4">
+                        <ul className="text-white/90 space-y-1">
+                          <li>• All Enterprise Partner benefits (optional)</li>
+                          <li>• Equity stake in CyberLockX Inc.</li>
+                          <li>• Full strategic & due diligence access</li>
+                          <li>• Fund the bridge from audit to auto-remediation</li>
+                        </ul>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
               
               <div className="mt-4 p-4 bg-white/10 rounded-lg">
