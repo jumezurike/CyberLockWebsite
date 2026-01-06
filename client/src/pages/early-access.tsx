@@ -299,6 +299,28 @@ export default function EarlyAccess() {
         </div>
 
         <div className="max-w-4xl mx-auto mt-8">
+          {/* FREE S/HOS²A Cyber Risk Checkup Section */}
+          <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl p-6 shadow-lg mb-8">
+            <h2 className="text-2xl font-bold text-center mb-4">✅ FREE S/HOS²A Cyber Risk Checkup for Healthcare Clinics</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+              <div className="bg-white/10 rounded-lg p-4 text-center">
+                <div className="text-3xl mb-2">🔍</div>
+                <div className="text-sm">Identify hidden risks and compliance gaps in your EHR systems</div>
+              </div>
+              <div className="bg-white/10 rounded-lg p-4 text-center">
+                <div className="text-3xl mb-2">💬</div>
+                <div className="text-sm">Personalized report showing real HIPAA/EHR vulnerabilities</div>
+              </div>
+              <div className="bg-white/10 rounded-lg p-4 text-center">
+                <div className="text-3xl mb-2">⚡</div>
+                <div className="text-sm">30-minute assessment with immediate actionable insights</div>
+              </div>
+            </div>
+            <div className="text-center">
+              <p className="text-lg font-medium">🎯 Perfect for clinics, medical practices, and healthcare organizations looking to strengthen their cybersecurity posture</p>
+            </div>
+          </div>
+
           <div>
             <div className="bg-white rounded-xl shadow-md p-8">
               <h2 className="text-xl font-bold text-primary mb-6">Apply for Early Access</h2>
