@@ -208,7 +208,7 @@ export default function WorkOrdersPage() {
 
           <div className="mt-8 pt-4 border-t text-center text-sm text-gray-500">
             <p>CyberLockX Professional Services</p>
-            <p>Healthcare Apps & Devices Security Hub</p>
+            <p>Healthcare Apps & Devices Security Hub (HASH)</p>
             <p>info@cyberlockx.xyz</p>
           </div>
         </div>

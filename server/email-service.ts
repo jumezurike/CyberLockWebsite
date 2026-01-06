@@ -61,7 +61,7 @@ export async function sendInvitationEmail(email: string, role: string, token: st
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
           <h1 style="color: white; margin: 0; font-size: 28px;">🔐 You're Invited to CyberLockX</h1>
-          <p style="color: #f0f0f0; margin: 10px 0 0 0; font-size: 16px;">Healthcare Apps & Devices Security Hub</p>
+          <p style="color: #f0f0f0; margin: 10px 0 0 0; font-size: 16px;">Healthcare Apps & Devices Security Hub (HASH)</p>
         </div>
         
         <div style="background: white; padding: 40px; border: 1px solid #e0e0e0;">
@@ -110,7 +110,7 @@ export async function sendInvitationEmail(email: string, role: string, token: st
         
         <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
           <p style="margin: 0; color: #666; font-size: 14px;">
-            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub<br>
+            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub (HASH)<br>
             Securing every CLICK!!!
           </p>
         </div>
@@ -198,7 +198,7 @@ export async function sendApprovalNotification(submission: SubmissionEmailData):
         
         <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
           <p style="margin: 0; color: #666; font-size: 14px;">
-            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub<br>
+            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub (HASH)<br>
             Securing every CLICK!!!
           </p>
         </div>
@@ -591,7 +591,7 @@ export async function sendServiceRequestConfirmation(serviceRequest: any): Promi
         <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
           <p style="margin: 0; color: #6c757d; font-size: 14px;">
             <strong>CyberLockX Professional Services</strong><br/>
-            Healthcare Apps & Devices Security Hub<br/>
+            Healthcare Apps & Devices Security Hub (HASH)<br/>
             Securing every CLICK!!!
           </p>
         </div>
@@ -673,7 +673,7 @@ export async function sendOtpCode(email: string, otpCode: string): Promise<boole
         
         <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
           <p style="margin: 0; color: #666; font-size: 14px;">
-            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub<br>
+            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub (HASH)<br>
             Securing every CLICK!!!
           </p>
         </div>
@@ -765,7 +765,7 @@ export async function sendContactNotification(data: ContactNotificationData): Pr
         
         <div style="background: #f8f9fa; padding: 20px; text-align: center; border-top: 1px solid #e0e0e0;">
           <p style="margin: 0; color: #666; font-size: 14px;">
-            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub<br>
+            <strong>CyberLockX</strong> - Healthcare Apps & Devices Security Hub (HASH)<br>
             Manage inquiries at: <a href="https://cyberlockx.xyz/admin/contact-submissions" style="color: #667eea;">Admin Dashboard</a>
           </p>
         </div>
