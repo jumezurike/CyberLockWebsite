@@ -192,7 +192,7 @@ const generatePDFReport = async (
   // Report title
   doc.setFontSize(12);
   doc.setFont("helvetica", "bold");
-  doc.text("NIST CSF 2.0 PRELIMINARY RISK ASSESSMENT", margin, 52);
+  doc.text("FREE S/HOS²A CYBER RISK HEALTH CHECKUP REPORT", margin, 52);
   
   yPos = 70;
   doc.setTextColor(0, 0, 0);
@@ -926,7 +926,7 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-primary">
-            {showReport ? "Your Cyber Risk Assessment Report" : "FREE S/HOS²A Cyber Risk Checkup"}
+            {showReport ? "Free S/HOS²A Cyber Risk Health Checkup Report" : "FREE S/HOS²A Cyber Risk Checkup"}
           </DialogTitle>
         </DialogHeader>
 
