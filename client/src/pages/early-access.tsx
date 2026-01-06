@@ -150,72 +150,126 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     }
   });
 
-  const simpleQuestions = [
+  const assessmentQuestions = [
     {
       id: "govern",
       code: "GV.OC01",
       category: "GOVERN",
-      question: "Do you have a formal, written plan for how your clinic handles patient data security and responds to a cyber incident?"
+      question: "Do you have a formal, written plan for how your clinic handles patient data security and responds to a cyber incident?",
+      options: [
+        { value: 0, label: "No plan exists" },
+        { value: 1, label: "Informal/undocumented procedures" },
+        { value: 2, label: "Basic written plan, not regularly tested" },
+        { value: 3, label: "Comprehensive plan, tested annually" },
+        { value: 4, label: "Fully documented, tested quarterly, staff trained" }
+      ]
     },
     {
       id: "identify",
       code: "ID.AM01",
       category: "IDENTIFY",
-      question: "Do you know exactly all the devices (computers, tablets, servers) and software that have access to your patient records?"
+      question: "Do you know exactly all the devices (computers, tablets, servers) and software that have access to your patient records?",
+      options: [
+        { value: 0, label: "No inventory exists" },
+        { value: 1, label: "Partial list, not maintained" },
+        { value: 2, label: "Complete list, updated occasionally" },
+        { value: 3, label: "Automated inventory, updated weekly" },
+        { value: 4, label: "Real-time asset tracking with risk classification" }
+      ]
     },
     {
       id: "protect",
       code: "PR.DS01",
       category: "PROTECT",
-      question: "Is all sensitive patient data on your devices automatically encrypted?"
+      question: "Is all sensitive patient data on your devices automatically encrypted?",
+      options: [
+        { value: 0, label: "No encryption" },
+        { value: 1, label: "Some data encrypted manually" },
+        { value: 2, label: "Most data encrypted at rest" },
+        { value: 3, label: "All data encrypted at rest and in transit" },
+        { value: 4, label: "End-to-end encryption with key management" }
+      ]
     },
     {
       id: "detect",
       code: "DE.CM01",
       category: "DETECT",
-      question: "Do you have 24/7 active monitoring that alerts you to suspicious activity, or do you usually find out about problems after they happen?"
+      question: "Do you have 24/7 active monitoring that alerts you to suspicious activity, or do you usually find out about problems after they happen?",
+      options: [
+        { value: 0, label: "No monitoring in place" },
+        { value: 1, label: "Basic antivirus only" },
+        { value: 2, label: "Periodic log reviews" },
+        { value: 3, label: "Automated alerts with business-hours response" },
+        { value: 4, label: "24/7 SOC monitoring with immediate response" }
+      ]
     },
     {
       id: "respond",
       code: "RS.RP01",
       category: "RESPOND",
-      question: "If you detected a breach right now, is there a clear, assigned team with steps to contain it and notify patients within the legally required 60-hour window?"
+      question: "If you detected a breach right now, is there a clear, assigned team with steps to contain it and notify patients within the legally required 60-hour window?",
+      options: [
+        { value: 0, label: "No response plan or team" },
+        { value: 1, label: "Informal understanding of who to call" },
+        { value: 2, label: "Written plan, no dedicated team" },
+        { value: 3, label: "Dedicated team, documented procedures" },
+        { value: 4, label: "Tested response team with 60-hour compliance verified" }
+      ]
     },
     {
       id: "recover",
       code: "RC.RP01",
       category: "RECOVER",
-      question: "If you were hit by ransomware today, do you have a guaranteed and tested way to recover your data without paying the hackers?"
+      question: "If you were hit by ransomware today, do you have a guaranteed and tested way to recover your data without paying the hackers?",
+      options: [
+        { value: 0, label: "No backups" },
+        { value: 1, label: "Occasional manual backups" },
+        { value: 2, label: "Regular backups, not tested" },
+        { value: 3, label: "Automated backups, tested quarterly" },
+        { value: 4, label: "Immutable backups with verified recovery < 4 hours" }
+      ]
     }
   ];
 
+  // Score values: 0=0%, 1=4.16%, 2=8.32%, 3=12.48%, 4=16.66% (each question max ~16.66%, total 100%)
+  const getScoreValue = (value: number): number => {
+    const scoreMap: Record<number, number> = {
+      0: 0,
+      1: 4.16,
+      2: 8.32,
+      3: 12.48,
+      4: 16.66
+    };
+    return scoreMap[value] || 0;
+  };
+
   const calculateScore = (): number => {
-    let yesCount = 0;
+    let total = 0;
     Object.values(answers).forEach(a => {
-      if (a === "yes") yesCount++;
+      total += getScoreValue(parseInt(a));
     });
-    return Math.round((yesCount / 6) * 100);
+    return Math.round(total * 100) / 100; // Round to 2 decimal places
   };
 
   const getRecommendations = (): string[] => {
     const recommendations: string[] = [];
     
-    if (answers.govern !== "yes") {
+    if (parseInt(answers.govern) <= 1) {
       recommendations.push("Develop a formal Incident Response Plan aligned with HIPAA requirements");
     }
-    if (answers.identify !== "yes") {
+    if (parseInt(answers.identify) <= 1) {
       recommendations.push("Implement an asset inventory system to track all devices with PHI access");
     }
-    if (answers.protect !== "yes") {
+    if (parseInt(answers.protect) <= 1) {
       recommendations.push("Deploy encryption for all data at rest and in transit to meet HIPAA Safe Harbor");
     }
-    if (answers.detect !== "yes") {
+    if (parseInt(answers.detect) <= 1) {
       recommendations.push("Implement 24/7 security monitoring with automated threat detection");
     }
-    if (answers.respond !== "yes") {
+    if (parseInt(answers.respond) <= 1) {
       recommendations.push("Establish a dedicated incident response team with clear escalation procedures");
     }
-    if (answers.recover !== "yes") {
+    if (parseInt(answers.recover) <= 1) {
       recommendations.push("Deploy immutable backup solutions with regular recovery testing");
     }
     
@@ -255,16 +309,16 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       recommendations
     });
 
-    // Convert yes/no to numeric scores for backend
+    // Submit scores to backend
     submitMutation.mutate({
       ...contactInfo,
-      governScore: answers.govern === "yes" ? 4 : 0,
-      identifyScore: answers.identify === "yes" ? 4 : 0,
-      protectScore: answers.protect === "yes" ? 4 : 0,
-      detectScore: answers.detect === "yes" ? 4 : 0,
-      respondScore: answers.respond === "yes" ? 4 : 0,
-      recoverScore: answers.recover === "yes" ? 4 : 0,
-      totalScore
+      governScore: parseInt(answers.govern) || 0,
+      identifyScore: parseInt(answers.identify) || 0,
+      protectScore: parseInt(answers.protect) || 0,
+      detectScore: parseInt(answers.detect) || 0,
+      respondScore: parseInt(answers.respond) || 0,
+      recoverScore: parseInt(answers.recover) || 0,
+      totalScore: Math.round(totalScore)
     });
 
     setShowReport(true);
@@ -381,7 +435,7 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             {/* 6 Questions */}
             <div className="space-y-4">
               <h3 className="font-semibold">Security Assessment (NIST CSF 2.0)</h3>
-              {simpleQuestions.map((q, index) => (
+              {assessmentQuestions.map((q) => (
                 <div key={q.id} className="border rounded-lg p-4 bg-gray-50">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="bg-primary text-white text-xs font-bold px-2 py-1 rounded">{q.category}</span>
@@ -391,16 +445,16 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                   <RadioGroup 
                     value={answers[q.id]} 
                     onValueChange={(value) => setAnswers(prev => ({ ...prev, [q.id]: value }))}
-                    className="flex gap-6"
+                    className="space-y-2"
                   >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="yes" id={`${q.id}-yes`} />
-                      <Label htmlFor={`${q.id}-yes`} className="cursor-pointer">Yes</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="no" id={`${q.id}-no`} />
-                      <Label htmlFor={`${q.id}-no`} className="cursor-pointer">No</Label>
-                    </div>
+                    {q.options.map((option) => (
+                      <div key={option.value} className="flex items-center space-x-2">
+                        <RadioGroupItem value={option.value.toString()} id={`${q.id}-${option.value}`} />
+                        <Label htmlFor={`${q.id}-${option.value}`} className="cursor-pointer text-sm">
+                          {option.label} <span className="text-gray-400">({getScoreValue(option.value)}%)</span>
+                        </Label>
+                      </div>
+                    ))}
                   </RadioGroup>
                 </div>
               ))}
@@ -423,16 +477,21 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
             {/* Question Results */}
             <div>
-              <h3 className="font-bold text-lg mb-3">Your Answers</h3>
+              <h3 className="font-bold text-lg mb-3">Domain Scores</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {simpleQuestions.map((q) => (
-                  <div key={q.id} className="border rounded-lg p-3 text-center">
-                    <p className="text-xs font-bold text-primary">{q.category}</p>
-                    <p className={`text-xl font-bold ${reportData?.answers[q.id] === "yes" ? 'text-green-600' : 'text-red-600'}`}>
-                      {reportData?.answers[q.id] === "yes" ? "Yes" : "No"}
-                    </p>
-                  </div>
-                ))}
+                {assessmentQuestions.map((q) => {
+                  const score = parseInt(reportData?.answers[q.id] || "0");
+                  const scorePercent = getScoreValue(score);
+                  return (
+                    <div key={q.id} className="border rounded-lg p-3 text-center">
+                      <p className="text-xs font-bold text-primary">{q.category}</p>
+                      <p className={`text-xl font-bold ${score >= 3 ? 'text-green-600' : score >= 2 ? 'text-yellow-600' : 'text-red-600'}`}>
+                        {scorePercent}%
+                      </p>
+                      <p className="text-xs text-gray-500">{score}/4</p>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
