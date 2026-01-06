@@ -253,6 +253,16 @@ export default function EarlyAccess() {
                 </table>
               </div>
               
+              {/* CTA Button to Form */}
+              <div className="mt-6 text-center">
+                <a 
+                  href="#apply-form" 
+                  className="inline-block bg-yellow-400 hover:bg-yellow-500 text-red-800 font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition duration-150 ease-in-out"
+                >
+                  Ready to Secure Your Exclusive Slot?
+                </a>
+              </div>
+              
               <div className="mt-4 p-4 bg-white/10 rounded-lg">
                 <div className="text-center">
                   <div className="text-yellow-300 font-bold text-lg">Applications close:</div>
@@ -330,7 +340,7 @@ export default function EarlyAccess() {
             </div>
           </div>
 
-          <div>
+          <div id="apply-form">
             <div className="bg-white rounded-xl shadow-md p-8">
               <h2 className="text-xl font-bold text-primary mb-6">Apply for the 2026 Pilot Program</h2>
               
