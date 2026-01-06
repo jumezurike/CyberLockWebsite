@@ -81,7 +81,7 @@ function Router() {
           <Route path="/admin/work-orders" component={WorkOrdersPage} />
           <Route path="/admin/service-requests" component={ServiceRequestsPage} />
           <Route path="/admin/contact-submissions" component={ContactSubmissionsPage} />
-          <Route path="/admin/risk-assessments" component={RiskAssessmentsDashboard} />
+          <Route path="/admin/cyberhealth-check" component={RiskAssessmentsDashboard} />
           <Route path="/it-reference" component={ITReference} />
           <Route path="/accept-invitation" component={AcceptInvitation} />
           <Route path="/services" component={ServicesPortal} />
