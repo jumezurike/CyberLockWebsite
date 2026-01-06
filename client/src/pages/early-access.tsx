@@ -713,7 +713,7 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
   const submitMutation = useMutation({
     mutationFn: async (data: RiskAssessmentData) => {
-      return apiRequest('POST', '/api/risk-assessments', data);
+      return apiRequest('POST', '/api/cyberrisk-assessments', data);
     },
     onSuccess: () => {
       console.log("Risk assessment saved successfully");

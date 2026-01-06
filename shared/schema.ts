@@ -507,8 +507,8 @@ export const insertContactSubmissionSchema = createInsertSchema(contactSubmissio
 export type InsertContactSubmission = z.infer<typeof insertContactSubmissionSchema>;
 export type ContactSubmission = typeof contactSubmissions.$inferSelect;
 
-// Risk Assessment (NIST CSF 2.0 based cyber risk checkup)
-export const riskAssessments = pgTable("risk_assessments", {
+// Cyber Risk Health Checkup Assessment (NIST CSF 2.0 based)
+export const cyberRiskAssessments = pgTable("cyberrisk_assessment", {
   id: serial("id").primaryKey(),
   fullName: text("full_name").notNull(),
   email: text("email").notNull(),
@@ -527,13 +527,13 @@ export const riskAssessments = pgTable("risk_assessments", {
   createdAt: timestamp("created_at").defaultNow(),
 });
 
-export const insertRiskAssessmentSchema = createInsertSchema(riskAssessments).omit({
+export const insertCyberRiskAssessmentSchema = createInsertSchema(cyberRiskAssessments).omit({
   id: true,
   createdAt: true,
 });
 
-export type InsertRiskAssessment = z.infer<typeof insertRiskAssessmentSchema>;
-export type RiskAssessment = typeof riskAssessments.$inferSelect;
+export type InsertCyberRiskAssessment = z.infer<typeof insertCyberRiskAssessmentSchema>;
+export type CyberRiskAssessment = typeof cyberRiskAssessments.$inferSelect;
 
 export const insertUserSchema = createInsertSchema(users).pick({
   username: true,

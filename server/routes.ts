@@ -28,7 +28,7 @@ import {
   users,
   customerOtpCodes,
   insertContactSubmissionSchema,
-  insertRiskAssessmentSchema
+  insertCyberRiskAssessmentSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import { eq, and, gt } from "drizzle-orm";
@@ -1007,68 +1007,68 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Risk Assessment API (NIST CSF 2.0 Cyber Risk Checkup)
+  // Cyber Risk Health Checkup API (NIST CSF 2.0 based)
   // -------------------------------------------------------------------------
   
-  // Public endpoint - Create risk assessment
-  app.post("/api/risk-assessments", async (req, res) => {
+  // Public endpoint - Create cyber risk assessment
+  app.post("/api/cyberrisk-assessments", async (req, res) => {
     try {
-      const validatedData = insertRiskAssessmentSchema.parse(req.body);
-      const assessment = await storage.createRiskAssessment(validatedData);
+      const validatedData = insertCyberRiskAssessmentSchema.parse(req.body);
+      const assessment = await storage.createCyberRiskAssessment(validatedData);
       res.status(201).json({ success: true, assessment });
     } catch (error) {
       if (error instanceof ZodError) {
         return res.status(400).json({ error: "Validation failed", details: error.errors });
       }
-      console.error("Error creating risk assessment:", error);
-      res.status(500).json({ error: "Failed to submit risk assessment" });
+      console.error("Error creating cyber risk assessment:", error);
+      res.status(500).json({ error: "Failed to submit cyber risk assessment" });
     }
   });
 
-  // Admin endpoint - Get all risk assessments
-  app.get("/api/risk-assessments", requireAdminAuth, async (req, res) => {
+  // Admin endpoint - Get all cyber risk assessments
+  app.get("/api/cyberrisk-assessments", requireAdminAuth, async (req, res) => {
     try {
-      const assessments = await storage.getAllRiskAssessments();
+      const assessments = await storage.getAllCyberRiskAssessments();
       res.json(assessments);
     } catch (error) {
-      console.error("Error fetching risk assessments:", error);
-      res.status(500).json({ error: "Failed to fetch risk assessments" });
+      console.error("Error fetching cyber risk assessments:", error);
+      res.status(500).json({ error: "Failed to fetch cyber risk assessments" });
     }
   });
 
-  // Admin endpoint - Get single risk assessment
-  app.get("/api/risk-assessments/:id", requireAdminAuth, async (req, res) => {
+  // Admin endpoint - Get single cyber risk assessment
+  app.get("/api/cyberrisk-assessments/:id", requireAdminAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
         return res.status(400).json({ error: "Invalid ID" });
       }
-      const assessment = await storage.getRiskAssessmentById(id);
+      const assessment = await storage.getCyberRiskAssessmentById(id);
       if (!assessment) {
-        return res.status(404).json({ error: "Risk assessment not found" });
+        return res.status(404).json({ error: "Cyber risk assessment not found" });
       }
       res.json(assessment);
     } catch (error) {
-      console.error("Error fetching risk assessment:", error);
-      res.status(500).json({ error: "Failed to fetch risk assessment" });
+      console.error("Error fetching cyber risk assessment:", error);
+      res.status(500).json({ error: "Failed to fetch cyber risk assessment" });
     }
   });
 
-  // Admin endpoint - Delete risk assessment
-  app.delete("/api/risk-assessments/:id", requireAdminAuth, async (req, res) => {
+  // Admin endpoint - Delete cyber risk assessment
+  app.delete("/api/cyberrisk-assessments/:id", requireAdminAuth, async (req, res) => {
     try {
       const id = parseInt(req.params.id);
       if (isNaN(id)) {
         return res.status(400).json({ error: "Invalid ID" });
       }
-      const deleted = await storage.deleteRiskAssessment(id);
+      const deleted = await storage.deleteCyberRiskAssessment(id);
       if (!deleted) {
-        return res.status(404).json({ error: "Risk assessment not found" });
+        return res.status(404).json({ error: "Cyber risk assessment not found" });
       }
-      res.json({ success: true, message: "Risk assessment deleted" });
+      res.json({ success: true, message: "Cyber risk assessment deleted" });
     } catch (error) {
-      console.error("Error deleting risk assessment:", error);
-      res.status(500).json({ error: "Failed to delete risk assessment" });
+      console.error("Error deleting cyber risk assessment:", error);
+      res.status(500).json({ error: "Failed to delete cyber risk assessment" });
     }
   });
 

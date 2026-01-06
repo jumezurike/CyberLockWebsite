@@ -50,17 +50,17 @@ export default function RiskAssessmentsDashboard() {
   const { adminUser, isLoading: authLoading, isAuthenticated, logout } = useAdminAuth();
 
   const { data: assessments = [], isLoading } = useQuery<RiskAssessment[]>({
-    queryKey: ["/api/risk-assessments"],
+    queryKey: ["/api/cyberrisk-assessments"],
     refetchInterval: 30000,
     enabled: isAuthenticated,
   });
 
   const deleteMutation = useMutation({
     mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/risk-assessments/${id}`);
+      await apiRequest("DELETE", `/api/cyberrisk-assessments/${id}`);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/risk-assessments"] });
+      queryClient.invalidateQueries({ queryKey: ["/api/cyberrisk-assessments"] });
       toast({
         title: "Checkup Deleted",
         description: "Cyber health checkup has been permanently removed.",

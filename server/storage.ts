@@ -55,9 +55,9 @@ import {
   contactSubmissions,
   type ContactSubmission,
   type InsertContactSubmission,
-  riskAssessments,
-  type RiskAssessment,
-  type InsertRiskAssessment
+  cyberRiskAssessments,
+  type CyberRiskAssessment,
+  type InsertCyberRiskAssessment
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, and } from "drizzle-orm";
@@ -226,11 +226,11 @@ export interface IStorage {
   updateContactSubmission(id: number, updates: Partial<ContactSubmission>): Promise<ContactSubmission | undefined>;
   deleteContactSubmission(id: number): Promise<boolean>;
 
-  // Risk Assessment operations
-  getAllRiskAssessments(): Promise<RiskAssessment[]>;
-  getRiskAssessmentById(id: number): Promise<RiskAssessment | undefined>;
-  createRiskAssessment(assessment: InsertRiskAssessment): Promise<RiskAssessment>;
-  deleteRiskAssessment(id: number): Promise<boolean>;
+  // Cyber Risk Health Checkup operations
+  getAllCyberRiskAssessments(): Promise<CyberRiskAssessment[]>;
+  getCyberRiskAssessmentById(id: number): Promise<CyberRiskAssessment | undefined>;
+  createCyberRiskAssessment(assessment: InsertCyberRiskAssessment): Promise<CyberRiskAssessment>;
+  deleteCyberRiskAssessment(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1685,25 +1685,25 @@ export class DatabaseStorage implements IStorage {
     return (result.rowCount ?? 0) > 0;
   }
 
-  // Risk Assessment operations
-  async getAllRiskAssessments(): Promise<RiskAssessment[]> {
+  // Cyber Risk Health Checkup operations
+  async getAllCyberRiskAssessments(): Promise<CyberRiskAssessment[]> {
     return await db
       .select()
-      .from(riskAssessments)
-      .orderBy(desc(riskAssessments.createdAt));
+      .from(cyberRiskAssessments)
+      .orderBy(desc(cyberRiskAssessments.createdAt));
   }
 
-  async getRiskAssessmentById(id: number): Promise<RiskAssessment | undefined> {
+  async getCyberRiskAssessmentById(id: number): Promise<CyberRiskAssessment | undefined> {
     const [assessment] = await db
       .select()
-      .from(riskAssessments)
-      .where(eq(riskAssessments.id, id));
+      .from(cyberRiskAssessments)
+      .where(eq(cyberRiskAssessments.id, id));
     return assessment;
   }
 
-  async createRiskAssessment(assessment: InsertRiskAssessment): Promise<RiskAssessment> {
+  async createCyberRiskAssessment(assessment: InsertCyberRiskAssessment): Promise<CyberRiskAssessment> {
     const [newAssessment] = await db
-      .insert(riskAssessments)
+      .insert(cyberRiskAssessments)
       .values({
         ...assessment,
         createdAt: new Date(),
@@ -1712,10 +1712,10 @@ export class DatabaseStorage implements IStorage {
     return newAssessment;
   }
 
-  async deleteRiskAssessment(id: number): Promise<boolean> {
+  async deleteCyberRiskAssessment(id: number): Promise<boolean> {
     const result = await db
-      .delete(riskAssessments)
-      .where(eq(riskAssessments.id, id));
+      .delete(cyberRiskAssessments)
+      .where(eq(cyberRiskAssessments.id, id));
     return (result.rowCount ?? 0) > 0;
   }
 }
