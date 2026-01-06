@@ -19,6 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import jsPDF from "jspdf";
 import { FileDown } from "lucide-react";
+import cyberLockXLogo from "@assets/CyberLockX_Logo_Transp_1767675076085.png";
 
 // Category detailed explanations for PDF report
 const categoryExplanations: Record<string, { title: string; description: string; importance: string; subcategories: string }> = {
@@ -126,9 +127,10 @@ const answerTextLookup: Record<string, Record<number, string>> = {
 };
 
 // Generate PDF report function
-const generatePDFReport = (
+const generatePDFReport = async (
   reportData: { totalScore: number; answers: Record<string, string>; recommendations: string[]; completedAt: string },
-  contactInfo: { fullName: string; email: string; company: string; phone: string; companySize: string; industry: string }
+  contactInfo: { fullName: string; email: string; company: string; phone: string; companySize: string; industry: string },
+  logoDataUrl?: string
 ) => {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -163,52 +165,29 @@ const generatePDFReport = (
   // Add watermark first (behind content)
   addWatermark();
   
-  // Header with prominent CyberLockX Logo
+  // Header with CyberLockX Logo
   doc.setFillColor(30, 64, 175);
   doc.rect(0, 0, pageWidth, 55, 'F');
   
-  // CyberLockX Logo - Shield with lock design
-  const logoX = margin;
-  const logoY = 12;
+  // Add actual logo image
+  if (logoDataUrl) {
+    try {
+      doc.addImage(logoDataUrl, 'PNG', margin, 3, 48, 48);
+    } catch (e) {
+      console.log('Logo image could not be added to PDF');
+    }
+  }
   
-  // Outer shield shape (using polygon approximation)
-  doc.setFillColor(255, 255, 255);
-  doc.circle(logoX + 12, logoY + 12, 14, 'F');
-  
-  // Inner shield
-  doc.setFillColor(30, 64, 175);
-  doc.circle(logoX + 12, logoY + 12, 10, 'F');
-  
-  // Lock body
-  doc.setFillColor(255, 255, 255);
-  doc.roundedRect(logoX + 7, logoY + 10, 10, 8, 1, 1, 'F');
-  
-  // Lock shackle
-  doc.setDrawColor(255, 255, 255);
-  doc.setLineWidth(2);
-  doc.circle(logoX + 12, logoY + 9, 4, 'S');
-  
-  // Cover bottom of shackle
-  doc.setFillColor(30, 64, 175);
-  doc.rect(logoX + 7, logoY + 10, 10, 3, 'F');
-  doc.setFillColor(255, 255, 255);
-  doc.roundedRect(logoX + 7, logoY + 10, 10, 8, 1, 1, 'F');
-  
-  // Keyhole
-  doc.setFillColor(30, 64, 175);
-  doc.circle(logoX + 12, logoY + 13, 1.5, 'F');
-  doc.rect(logoX + 11, logoY + 13, 2, 3, 'F');
-  
-  // Company name - CyberLockX
+  // Company name - CyberLockX (positioned next to logo)
   doc.setTextColor(255, 255, 255);
   doc.setFontSize(28);
   doc.setFont("helvetica", "bold");
-  doc.text("CyberLockX", logoX + 32, 27);
+  doc.text("CyberLockX", margin + 55, 27);
   
   // Tagline
   doc.setFontSize(11);
   doc.setFont("helvetica", "normal");
-  doc.text("Healthcare Cybersecurity Solutions", logoX + 32, 38);
+  doc.text("Healthcare Cybersecurity Solutions", margin + 55, 38);
   
   // Report title
   doc.setFontSize(12);
@@ -1126,13 +1105,30 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             {/* Download PDF Button */}
             <Button 
               className="w-full bg-primary hover:bg-primary/90 flex items-center justify-center gap-2"
-              onClick={() => {
+              onClick={async () => {
                 if (reportData) {
-                  generatePDFReport(reportData, contactInfo);
-                  toast({
-                    title: "Report Downloaded",
-                    description: "Your PDF report has been saved to your downloads folder."
-                  });
+                  // Load logo image and convert to base64
+                  try {
+                    const response = await fetch(cyberLockXLogo);
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onloadend = async () => {
+                      const logoDataUrl = reader.result as string;
+                      await generatePDFReport(reportData, contactInfo, logoDataUrl);
+                      toast({
+                        title: "Report Downloaded",
+                        description: "Your PDF report has been saved to your downloads folder."
+                      });
+                    };
+                    reader.readAsDataURL(blob);
+                  } catch (e) {
+                    // Fallback without logo
+                    await generatePDFReport(reportData, contactInfo);
+                    toast({
+                      title: "Report Downloaded",
+                      description: "Your PDF report has been saved to your downloads folder."
+                    });
+                  }
                 }
               }}
               data-testid="button-download-pdf"
