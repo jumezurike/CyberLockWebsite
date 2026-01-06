@@ -139,7 +139,8 @@ const generatePDFReport = (
   // Helper to add watermark on each page
   const addWatermark = () => {
     doc.saveGraphicsState();
-    doc.setGState(new doc.GState({ opacity: 0.08 }));
+    // @ts-ignore - jsPDF GState type issue
+    doc.setGState(new (doc as any).GState({ opacity: 0.08 }));
     doc.setTextColor(30, 64, 175);
     doc.setFontSize(60);
     doc.setFont("helvetica", "bold");
@@ -162,57 +163,98 @@ const generatePDFReport = (
   // Add watermark first (behind content)
   addWatermark();
   
-  // Header with logo styling
+  // Header with prominent CyberLockX Logo
   doc.setFillColor(30, 64, 175);
-  doc.rect(0, 0, pageWidth, 50, 'F');
+  doc.rect(0, 0, pageWidth, 55, 'F');
   
-  // Logo mark (shield icon representation)
+  // CyberLockX Logo - Shield with lock design
+  const logoX = margin;
+  const logoY = 12;
+  
+  // Outer shield shape (using polygon approximation)
   doc.setFillColor(255, 255, 255);
-  doc.circle(margin + 8, 22, 8, 'F');
+  doc.circle(logoX + 12, logoY + 12, 14, 'F');
+  
+  // Inner shield
   doc.setFillColor(30, 64, 175);
-  doc.circle(margin + 8, 22, 5, 'F');
-  doc.setFillColor(255, 255, 255);
-  doc.circle(margin + 8, 22, 2, 'F');
+  doc.circle(logoX + 12, logoY + 12, 10, 'F');
   
-  // Company name
+  // Lock body
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(logoX + 7, logoY + 10, 10, 8, 1, 1, 'F');
+  
+  // Lock shackle
+  doc.setDrawColor(255, 255, 255);
+  doc.setLineWidth(2);
+  doc.circle(logoX + 12, logoY + 9, 4, 'S');
+  
+  // Cover bottom of shackle
+  doc.setFillColor(30, 64, 175);
+  doc.rect(logoX + 7, logoY + 10, 10, 3, 'F');
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(logoX + 7, logoY + 10, 10, 8, 1, 1, 'F');
+  
+  // Keyhole
+  doc.setFillColor(30, 64, 175);
+  doc.circle(logoX + 12, logoY + 13, 1.5, 'F');
+  doc.rect(logoX + 11, logoY + 13, 2, 3, 'F');
+  
+  // Company name - CyberLockX
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(26);
+  doc.setFontSize(28);
   doc.setFont("helvetica", "bold");
-  doc.text("CyberLockX", margin + 22, 27);
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "normal");
-  doc.text("Healthcare Cybersecurity Solutions", margin + 22, 38);
-  doc.setFontSize(12);
-  doc.text("NIST CSF 2.0 Preliminary Risk Assessment Report", margin, 48);
+  doc.text("CyberLockX", logoX + 32, 27);
   
-  yPos = 65;
+  // Tagline
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "normal");
+  doc.text("Healthcare Cybersecurity Solutions", logoX + 32, 38);
+  
+  // Report title
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("NIST CSF 2.0 PRELIMINARY RISK ASSESSMENT", margin, 52);
+  
+  yPos = 70;
   doc.setTextColor(0, 0, 0);
   
-  // CLIENT INFO BOX - Prominent display
+  // ========== PREPARED FOR SECTION - Very Prominent ==========
+  // Dark blue banner
   doc.setFillColor(30, 64, 175);
-  doc.rect(margin, yPos, pageWidth - margin * 2, 55, 'F');
+  doc.rect(margin, yPos, pageWidth - margin * 2, 18, 'F');
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(9);
-  doc.setFont("helvetica", "normal");
-  doc.text("PREPARED EXCLUSIVELY FOR", margin + 5, yPos + 10);
-  
-  // Client company name - large and prominent
-  doc.setFontSize(18);
-  doc.setFont("helvetica", "bold");
-  doc.text(contactInfo.company, margin + 5, yPos + 25);
-  
-  // Client contact details
   doc.setFontSize(10);
-  doc.setFont("helvetica", "normal");
-  doc.text(`${contactInfo.fullName}`, margin + 5, yPos + 35);
-  doc.text(`${contactInfo.email} | ${contactInfo.phone}`, margin + 5, yPos + 43);
-  doc.text(`${contactInfo.industry} | ${contactInfo.companySize} employees`, margin + 5, yPos + 51);
-  
-  // Date and time on right side
+  doc.setFont("helvetica", "bold");
+  doc.text("PREPARED EXCLUSIVELY FOR", margin + 5, yPos + 12);
   doc.setFontSize(9);
-  doc.text(`Completed: ${reportData.completedAt}`, pageWidth - margin - 55, yPos + 10);
+  doc.setFont("helvetica", "normal");
+  doc.text(`Completed: ${reportData.completedAt}`, pageWidth - margin - 55, yPos + 12);
   
-  yPos += 65;
+  yPos += 18;
+  
+  // Client company name - LARGE and prominent on white background
+  doc.setFillColor(250, 250, 255);
+  doc.rect(margin, yPos, pageWidth - margin * 2, 45, 'F');
+  
+  // Company name - very large
+  doc.setTextColor(30, 64, 175);
+  doc.setFontSize(24);
+  doc.setFont("helvetica", "bold");
+  doc.text(contactInfo.company, margin + 5, yPos + 18);
+  
+  // Contact person
+  doc.setTextColor(0, 0, 0);
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "normal");
+  doc.text(contactInfo.fullName, margin + 5, yPos + 30);
+  
+  // Contact details
+  doc.setFontSize(10);
+  doc.setTextColor(80, 80, 80);
+  doc.text(`${contactInfo.email} | ${contactInfo.phone}`, margin + 5, yPos + 40);
+  doc.text(`${contactInfo.industry} | ${contactInfo.companySize} employees`, pageWidth - margin - 70, yPos + 40);
+  
+  yPos += 55;
   
   // EXECUTIVE SUMMARY
   doc.setFontSize(16);
