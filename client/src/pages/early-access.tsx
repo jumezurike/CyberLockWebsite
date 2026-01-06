@@ -338,6 +338,16 @@ export default function EarlyAccess() {
                 <p className="text-sm mt-1">Pay only if we stop a threat • 90-day trial • $0 risk</p>
               </div>
             </div>
+            
+            {/* CTA Button */}
+            <div className="mt-6 text-center">
+              <a 
+                href="#apply-form" 
+                className="inline-block bg-white hover:bg-gray-100 text-secondary font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition duration-150 ease-in-out"
+              >
+                Claim Your Free Risk Checkup
+              </a>
+            </div>
           </div>
 
           <div id="apply-form">
