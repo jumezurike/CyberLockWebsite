@@ -188,10 +188,17 @@ export default function RoadmapSection() {
             Product Roadmap
           </div>
           <h2 className="text-3xl font-bold font-heading text-primary mb-4">Build Together, Secure Together</h2>
-          <p className="text-lg text-neutral-600 max-w-3xl mx-auto">
-            Join us on our journey to create the most comprehensive secure business application hub.
-            Invest early in our roadmap and receive exclusive benefits.
-          </p>
+          <div className="text-lg text-neutral-600 max-w-4xl mx-auto space-y-4">
+            <p>
+              Join us in pioneering the future of autonomous healthcare security. We are adapting proven, government-grade encryption technology for healthcare, starting by automating costly and manual security audits.
+            </p>
+            <p>
+              Our AI-powered compliance engine is live today. We are now focused on the critical next phase: integrating it with our encryption fabric to not just find risks, but remediate them automatically.
+            </p>
+            <p>
+              We are seeking development partners and raising capital to complete this integration, validate our model with pilot programs, and scale.
+            </p>
+          </div>
         </div>
 
         <div className="space-y-12">
