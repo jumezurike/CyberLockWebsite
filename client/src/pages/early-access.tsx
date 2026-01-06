@@ -486,10 +486,9 @@ export default function EarlyAccess() {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="explorer">Explorer ($5K-10K)</SelectItem>
-                            <SelectItem value="innovator">Innovator ($10K-25K)</SelectItem>
-                            <SelectItem value="visionary">Visionary ($25K-50K)</SelectItem>
-                            <SelectItem value="strategic">Strategic Partner ($50K+)</SelectItem>
+                            <SelectItem value="healthcare">Healthcare Pilot Partner (15 slots)</SelectItem>
+                            <SelectItem value="enterprise">Enterprise Security Pilot Partner (5 slots)</SelectItem>
+                            <SelectItem value="strategic">Strategic Investor Partner (5 slots)</SelectItem>
                             <SelectItem value="undecided">Not sure yet</SelectItem>
                           </SelectContent>
                         </Select>
