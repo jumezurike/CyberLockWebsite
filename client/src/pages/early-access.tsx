@@ -170,9 +170,17 @@ export default function EarlyAccess() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-primary mb-4">Join the CyberLockX Founder's and Partner's Circle</h1>
-          <p className="text-lg text-neutral-600 max-w-3xl mx-auto mb-6">
-            Be among the first to access our revolutionary security products and shape the future of Healthcare cybersecurity.
-          </p>
+          <div className="text-lg text-neutral-600 max-w-3xl mx-auto mb-6 space-y-4">
+            <p>
+              Be among the first to pioneer autonomous healthcare security. We are productizing government-grade encryption to solve a foundational problem: automating costly and manual security audits.
+            </p>
+            <p>
+              Our live AI engine finds compliance risks. We are now building the integrated system that automatically fixes them.
+            </p>
+            <p>
+              Join our Founders and Partners Circle to access revolutionary products, co-develop the solution, and scale with us from the ground up.
+            </p>
+          </div>
           
           {/* Limited 2025 Pilot Slots Section */}
           <div className="max-w-4xl mx-auto">
