@@ -195,9 +195,6 @@ export default function RoadmapSection() {
             <p>
               Our AI-powered compliance engine is live today. We are now focused on the critical next phase: integrating it with our encryption fabric to not just find risks, but remediate them automatically.
             </p>
-            <p>
-              We are seeking development partners and raising capital to complete this integration, validate our model with pilot programs, and scale.
-            </p>
           </div>
         </div>
 
