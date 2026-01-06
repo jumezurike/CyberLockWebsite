@@ -190,7 +190,7 @@ export default function EarlyAccess() {
                   LIMITED TIME
                 </div>
                 <div className="bg-white text-red-700 px-4 py-2 rounded-lg font-bold text-lg">
-                  🔥 2025 PILOT SLOTS
+                  🔥 2026 PILOT SLOTS
                 </div>
                 <div className="bg-yellow-400 text-red-800 px-3 py-1 rounded-full text-sm font-bold animate-pulse">
                   EXCLUSIVE
