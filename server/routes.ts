@@ -27,7 +27,8 @@ import {
   insertCystPhotoSchema,
   users,
   customerOtpCodes,
-  insertContactSubmissionSchema
+  insertContactSubmissionSchema,
+  insertRiskAssessmentSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 import { eq, and, gt } from "drizzle-orm";
@@ -1003,6 +1004,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting contact submission:", error);
       res.status(500).json({ error: "Failed to delete contact submission" });
+    }
+  });
+
+  // Risk Assessment API (NIST CSF 2.0 Cyber Risk Checkup)
+  // -------------------------------------------------------------------------
+  
+  // Public endpoint - Create risk assessment
+  app.post("/api/risk-assessments", async (req, res) => {
+    try {
+      const validatedData = insertRiskAssessmentSchema.parse(req.body);
+      const assessment = await storage.createRiskAssessment(validatedData);
+      res.status(201).json({ success: true, assessment });
+    } catch (error) {
+      if (error instanceof ZodError) {
+        return res.status(400).json({ error: "Validation failed", details: error.errors });
+      }
+      console.error("Error creating risk assessment:", error);
+      res.status(500).json({ error: "Failed to submit risk assessment" });
+    }
+  });
+
+  // Admin endpoint - Get all risk assessments
+  app.get("/api/risk-assessments", requireAdminAuth, async (req, res) => {
+    try {
+      const assessments = await storage.getAllRiskAssessments();
+      res.json(assessments);
+    } catch (error) {
+      console.error("Error fetching risk assessments:", error);
+      res.status(500).json({ error: "Failed to fetch risk assessments" });
     }
   });
 

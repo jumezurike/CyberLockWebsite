@@ -54,7 +54,10 @@ import {
   type InsertCystPhoto,
   contactSubmissions,
   type ContactSubmission,
-  type InsertContactSubmission
+  type InsertContactSubmission,
+  riskAssessments,
+  type RiskAssessment,
+  type InsertRiskAssessment
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, sql, desc, and } from "drizzle-orm";
@@ -222,6 +225,11 @@ export interface IStorage {
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
   updateContactSubmission(id: number, updates: Partial<ContactSubmission>): Promise<ContactSubmission | undefined>;
   deleteContactSubmission(id: number): Promise<boolean>;
+
+  // Risk Assessment operations
+  getAllRiskAssessments(): Promise<RiskAssessment[]>;
+  getRiskAssessmentById(id: number): Promise<RiskAssessment | undefined>;
+  createRiskAssessment(assessment: InsertRiskAssessment): Promise<RiskAssessment>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1674,6 +1682,33 @@ export class DatabaseStorage implements IStorage {
       .delete(contactSubmissions)
       .where(eq(contactSubmissions.id, id));
     return (result.rowCount ?? 0) > 0;
+  }
+
+  // Risk Assessment operations
+  async getAllRiskAssessments(): Promise<RiskAssessment[]> {
+    return await db
+      .select()
+      .from(riskAssessments)
+      .orderBy(desc(riskAssessments.createdAt));
+  }
+
+  async getRiskAssessmentById(id: number): Promise<RiskAssessment | undefined> {
+    const [assessment] = await db
+      .select()
+      .from(riskAssessments)
+      .where(eq(riskAssessments.id, id));
+    return assessment;
+  }
+
+  async createRiskAssessment(assessment: InsertRiskAssessment): Promise<RiskAssessment> {
+    const [newAssessment] = await db
+      .insert(riskAssessments)
+      .values({
+        ...assessment,
+        createdAt: new Date(),
+      })
+      .returning();
+    return newAssessment;
   }
 }
 
