@@ -207,7 +207,7 @@ const generatePDFReport = async (
   doc.text("PREPARED EXCLUSIVELY FOR", margin + 5, yPos + 12);
   doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.text(`Completed: ${reportData.completedAt}`, pageWidth - margin - 55, yPos + 12);
+  doc.text(`Completed: ${reportData.completedAt}`, pageWidth - margin - 75, yPos + 12);
   
   yPos += 18;
   
