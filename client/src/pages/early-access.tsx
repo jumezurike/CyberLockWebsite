@@ -19,7 +19,7 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
 import jsPDF from "jspdf";
 import { FileDown } from "lucide-react";
-import cyberLockXLogo from "@assets/CyberLockX_Logo_Transp_1767675076085.png";
+import cyberLockXLogo from "@assets/CyberLockX_Logo_Transp-report_1767679456789.png";
 
 // Category detailed explanations for PDF report
 const categoryExplanations: Record<string, { title: string; description: string; importance: string; subcategories: string }> = {
