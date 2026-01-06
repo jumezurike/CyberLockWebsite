@@ -17,6 +17,307 @@ import { Link } from "wouter";
 import { generateInvestorBrief } from "@/lib/investor-brief-generator";
 import { useMutation } from "@tanstack/react-query";
 import { apiRequest } from "@/lib/queryClient";
+import jsPDF from "jspdf";
+import { FileDown } from "lucide-react";
+
+// Category detailed explanations for PDF report
+const categoryExplanations: Record<string, { title: string; description: string; importance: string; subcategories: string }> = {
+  govern: {
+    title: "GOVERN (GV)",
+    description: "Governance establishes and monitors your organization's cybersecurity risk management strategy, expectations, and policy. This is the foundation that guides all other security activities.",
+    importance: "Without proper governance, security efforts become fragmented and reactive. Strong governance ensures leadership accountability, clear policies, and alignment with business objectives.",
+    subcategories: "This category expands into 18 subcategories covering Organizational Context, Risk Management Strategy, Roles & Responsibilities, Policy, Oversight, and Cybersecurity Supply Chain Risk Management."
+  },
+  identify: {
+    title: "IDENTIFY (ID)",
+    description: "Identify helps you understand your current cybersecurity posture by cataloging assets, business environment, governance structures, and potential risks.",
+    importance: "You cannot protect what you don't know exists. Asset management gaps are the #1 cause of undetected breaches in healthcare. Complete visibility is essential for HIPAA compliance.",
+    subcategories: "This category expands into 17 subcategories covering Asset Management, Business Environment, Governance, Risk Assessment, and Risk Management Strategy."
+  },
+  protect: {
+    title: "PROTECT (PR)",
+    description: "Protect develops and implements appropriate safeguards to ensure delivery of critical services and limit the impact of potential cybersecurity incidents.",
+    importance: "Protection controls are your first line of defense. For healthcare, this includes encryption (HIPAA Safe Harbor), access controls, and staff security awareness training.",
+    subcategories: "This category expands into 22 subcategories covering Identity Management & Access Control, Awareness & Training, Data Security, Information Protection, and Platform Security."
+  },
+  detect: {
+    title: "DETECT (DE)",
+    description: "Detect develops and implements activities to identify the occurrence of a cybersecurity event in a timely manner.",
+    importance: "The average time to detect a healthcare breach is 287 days. Faster detection means smaller breaches, lower costs, and reduced regulatory penalties. 24/7 monitoring is critical.",
+    subcategories: "This category expands into 18 subcategories covering Anomalies & Events, Security Continuous Monitoring, and Detection Processes."
+  },
+  respond: {
+    title: "RESPOND (RS)",
+    description: "Respond develops and implements activities to take action regarding a detected cybersecurity incident to contain its impact.",
+    importance: "HIPAA requires breach notification within 60 hours of discovery. A tested incident response plan ensures you meet this deadline and minimize damage to patients and reputation.",
+    subcategories: "This category expands into 16 subcategories covering Response Planning, Communications, Analysis, Mitigation, and Improvements."
+  },
+  recover: {
+    title: "RECOVER (RC)",
+    description: "Recover develops and implements activities to maintain resilience and restore any capabilities or services impaired by a cybersecurity incident.",
+    importance: "Ransomware attacks on healthcare increased 94% in 2023. Without tested, immutable backups and a recovery plan, you risk extended downtime, patient harm, and ransom payments.",
+    subcategories: "This category expands into 17 subcategories covering Recovery Planning, Improvements, and Communications."
+  }
+};
+
+// Score interpretation helper
+const getScoreInterpretation = (score: number): { level: string; meaning: string; color: string } => {
+  if (score === 0) return { level: "Not Implemented", meaning: "Critical gap - immediate action required. This represents significant compliance and security risk.", color: "#DC2626" };
+  if (score === 1) return { level: "Initial/Ad Hoc", meaning: "Informal practices exist but are inconsistent. High risk of gaps and failures under pressure.", color: "#EA580C" };
+  if (score === 2) return { level: "Developing", meaning: "Basic processes are documented but not consistently followed or tested. Moderate risk.", color: "#CA8A04" };
+  if (score === 3) return { level: "Defined", meaning: "Processes are documented, tested, and followed. Good foundation but room for improvement.", color: "#16A34A" };
+  return { level: "Managed/Optimized", meaning: "Mature, continuously improved processes with metrics and automation. Industry best practice.", color: "#059669" };
+};
+
+// Generate PDF report function
+const generatePDFReport = (
+  reportData: { totalScore: number; answers: Record<string, string>; recommendations: string[] },
+  contactInfo: { fullName: string; email: string; company: string; phone: string; companySize: string; industry: string }
+) => {
+  const doc = new jsPDF();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const margin = 20;
+  let yPos = 20;
+
+  // Header
+  doc.setFillColor(30, 64, 175); // Primary blue
+  doc.rect(0, 0, pageWidth, 40, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(22);
+  doc.setFont("helvetica", "bold");
+  doc.text("CyberLockX Security Risk Assessment", margin, 25);
+  doc.setFontSize(11);
+  doc.setFont("helvetica", "normal");
+  doc.text("NIST CSF 2.0 Preliminary Analysis Report", margin, 35);
+
+  // Reset text color
+  doc.setTextColor(0, 0, 0);
+  yPos = 55;
+
+  // Contact Info Section
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("Assessment Details", margin, yPos);
+  yPos += 8;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text(`Organization: ${contactInfo.company}`, margin, yPos);
+  yPos += 6;
+  doc.text(`Contact: ${contactInfo.fullName} | ${contactInfo.email} | ${contactInfo.phone}`, margin, yPos);
+  yPos += 6;
+  doc.text(`Industry: ${contactInfo.industry} | Size: ${contactInfo.companySize}`, margin, yPos);
+  yPos += 6;
+  doc.text(`Assessment Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, margin, yPos);
+  yPos += 15;
+
+  // Overall Score with Pie Chart
+  doc.setFillColor(245, 245, 245);
+  doc.rect(margin, yPos, pageWidth - margin * 2, 50, 'F');
+  
+  // Draw pie chart
+  const centerX = margin + 35;
+  const centerY = yPos + 25;
+  const radius = 18;
+  const scorePercent = reportData.totalScore / 100;
+  
+  // Background circle (remaining)
+  doc.setFillColor(220, 220, 220);
+  doc.circle(centerX, centerY, radius, 'F');
+  
+  // Score arc (filled portion)
+  if (scorePercent > 0) {
+    const scoreColor = reportData.totalScore >= 70 ? [22, 163, 74] : reportData.totalScore >= 40 ? [202, 138, 4] : [220, 38, 38];
+    doc.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
+    
+    // Draw pie slice using multiple small triangles
+    const startAngle = -Math.PI / 2;
+    const endAngle = startAngle + (2 * Math.PI * scorePercent);
+    const segments = Math.ceil(scorePercent * 36);
+    
+    for (let i = 0; i < segments; i++) {
+      const angle1 = startAngle + (i / 36) * 2 * Math.PI;
+      const angle2 = startAngle + ((i + 1) / 36) * 2 * Math.PI;
+      if (angle2 > endAngle) break;
+      
+      const x1 = centerX + radius * Math.cos(angle1);
+      const y1 = centerY + radius * Math.sin(angle1);
+      const x2 = centerX + radius * Math.cos(angle2);
+      const y2 = centerY + radius * Math.sin(angle2);
+      
+      doc.triangle(centerX, centerY, x1, y1, x2, y2, 'F');
+    }
+  }
+  
+  // Center circle (donut hole)
+  doc.setFillColor(245, 245, 245);
+  doc.circle(centerX, centerY, 10, 'F');
+  
+  // Score text inside donut
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0, 0, 0);
+  doc.text(`${Math.round(reportData.totalScore)}%`, centerX - 6, centerY + 3);
+  
+  // Score label
+  doc.setFontSize(16);
+  doc.setFont("helvetica", "bold");
+  const overallLabel = reportData.totalScore >= 70 ? "GOOD" : reportData.totalScore >= 40 ? "NEEDS IMPROVEMENT" : "CRITICAL";
+  doc.text(`Overall Security Score: ${Math.round(reportData.totalScore)}%`, margin + 70, yPos + 20);
+  doc.setFontSize(12);
+  doc.text(overallLabel, margin + 70, yPos + 32);
+  doc.setFontSize(9);
+  doc.setFont("helvetica", "normal");
+  doc.text("Based on NIST Cybersecurity Framework 2.0 preliminary assessment", margin + 70, yPos + 42);
+  
+  yPos += 60;
+
+  // Category Breakdown
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.text("Domain Analysis", margin, yPos);
+  yPos += 10;
+
+  const categories = ['govern', 'identify', 'protect', 'detect', 'respond', 'recover'];
+  
+  categories.forEach((catId) => {
+    const score = parseInt(reportData.answers[catId] || "0");
+    const scorePercent = score === 0 ? 0 : score === 1 ? 4.16 : score === 2 ? 8.32 : score === 3 ? 12.48 : 16.66;
+    const interpretation = getScoreInterpretation(score);
+    const explanation = categoryExplanations[catId];
+    
+    // Check if we need a new page
+    if (yPos > 240) {
+      doc.addPage();
+      yPos = 20;
+    }
+    
+    // Category header with score bar
+    doc.setFillColor(240, 240, 240);
+    doc.rect(margin, yPos, pageWidth - margin * 2, 35, 'F');
+    
+    doc.setFontSize(11);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(30, 64, 175);
+    doc.text(explanation.title, margin + 5, yPos + 8);
+    
+    // Score indicator
+    const hexColor = interpretation.color;
+    const r = parseInt(hexColor.slice(1, 3), 16);
+    const g = parseInt(hexColor.slice(3, 5), 16);
+    const b = parseInt(hexColor.slice(5, 7), 16);
+    doc.setFillColor(r, g, b);
+    doc.rect(pageWidth - margin - 45, yPos + 3, 40, 10, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(9);
+    doc.text(`${scorePercent.toFixed(2)}%`, pageWidth - margin - 40, yPos + 10);
+    
+    // Score bar
+    doc.setFillColor(220, 220, 220);
+    doc.rect(margin + 5, yPos + 14, pageWidth - margin * 2 - 10, 4, 'F');
+    doc.setFillColor(r, g, b);
+    doc.rect(margin + 5, yPos + 14, (pageWidth - margin * 2 - 10) * (score / 4), 4, 'F');
+    
+    // Interpretation
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.text(`Level: ${interpretation.level}`, margin + 5, yPos + 25);
+    doc.setFont("helvetica", "normal");
+    doc.text(interpretation.meaning.substring(0, 100), margin + 5, yPos + 31);
+    
+    yPos += 40;
+    
+    // Description (if space allows)
+    if (yPos < 230) {
+      doc.setFontSize(8);
+      doc.setTextColor(80, 80, 80);
+      const descLines = doc.splitTextToSize(explanation.description, pageWidth - margin * 2 - 10);
+      doc.text(descLines, margin + 5, yPos);
+      yPos += descLines.length * 4 + 5;
+      
+      // Subcategories note
+      doc.setFont("helvetica", "italic");
+      doc.text(explanation.subcategories, margin + 5, yPos);
+      yPos += 10;
+    }
+  });
+
+  // New page for recommendations
+  doc.addPage();
+  yPos = 20;
+  
+  // Recommendations section
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.setTextColor(0, 0, 0);
+  doc.text("Priority Recommendations", margin, yPos);
+  yPos += 12;
+  
+  reportData.recommendations.forEach((rec, index) => {
+    doc.setFillColor(254, 242, 242);
+    doc.rect(margin, yPos, pageWidth - margin * 2, 15, 'F');
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(185, 28, 28);
+    doc.text(`${index + 1}.`, margin + 5, yPos + 10);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(0, 0, 0);
+    const recLines = doc.splitTextToSize(rec, pageWidth - margin * 2 - 20);
+    doc.text(recLines, margin + 15, yPos + 10);
+    yPos += 20;
+  });
+  
+  yPos += 10;
+  
+  // Next Steps
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.text("Next Steps: Full HOS²A Assessment", margin, yPos);
+  yPos += 10;
+  
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  const nextStepsText = [
+    "This preliminary assessment covers 6 high-level questions from the NIST CSF 2.0 framework.",
+    "The complete HOS²A (Healthcare Organizational and System Security Analysis) assessment",
+    "expands this analysis across all 118 subcategories, providing:",
+    "",
+    "• Detailed gap analysis across all 6 NIST CSF 2.0 functions",
+    "• HIPAA compliance mapping and risk quantification",
+    "• Custom remediation roadmap with prioritized actions",
+    "• Cost-benefit analysis using RASBITA methodology",
+    "• Executive-ready compliance documentation"
+  ];
+  
+  nextStepsText.forEach((line) => {
+    doc.text(line, margin, yPos);
+    yPos += 6;
+  });
+  
+  yPos += 15;
+  
+  // CTA Box
+  doc.setFillColor(30, 64, 175);
+  doc.rect(margin, yPos, pageWidth - margin * 2, 35, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "bold");
+  doc.text("Ready to secure your organization?", margin + 10, yPos + 12);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text("Schedule your free 1-hour consultation:", margin + 10, yPos + 22);
+  doc.setTextColor(200, 230, 255);
+  doc.text("https://cal.com/cyberlockx/cybersecurity-consultation", margin + 10, yPos + 30);
+  
+  // Footer
+  doc.setTextColor(128, 128, 128);
+  doc.setFontSize(8);
+  doc.text("CyberLockX | info@cyberlockx.xyz | www.cyberlockx.com", margin, 285);
+  doc.text("This report is confidential and intended for the named recipient only.", pageWidth - margin - 80, 285);
+
+  // Save PDF
+  doc.save(`CyberLockX-Risk-Assessment-${contactInfo.company.replace(/\s+/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`);
+};
 
 // NIST CSF 2.0 Risk Assessment Schema
 const riskAssessmentSchema = z.object({
@@ -509,6 +810,24 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
                 ))}
               </ul>
             </div>
+
+            {/* Download PDF Button */}
+            <Button 
+              className="w-full bg-primary hover:bg-primary/90 flex items-center justify-center gap-2"
+              onClick={() => {
+                if (reportData) {
+                  generatePDFReport(reportData, contactInfo);
+                  toast({
+                    title: "Report Downloaded",
+                    description: "Your PDF report has been saved to your downloads folder."
+                  });
+                }
+              }}
+              data-testid="button-download-pdf"
+            >
+              <FileDown className="w-4 h-4" />
+              Download Full PDF Report
+            </Button>
 
             {/* CTA */}
             <div className="bg-secondary/10 rounded-lg p-4 text-center">
