@@ -862,8 +862,8 @@ export default function EarlyAccess() {
               </div>
             </div>
             
-            {/* CTA Button */}
-            <div className="mt-6 text-center">
+            {/* CTA Buttons */}
+            <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button 
                 onClick={() => setIsRiskCheckupOpen(true)}
                 className="inline-block bg-white hover:bg-gray-100 text-secondary font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition duration-150 ease-in-out cursor-pointer"
@@ -871,6 +871,15 @@ export default function EarlyAccess() {
               >
                 Claim Your Free Risk Checkup
               </button>
+              <a 
+                href="https://cal.com/cyberlockx/cybersecurity-consultation?overlayCalendar=true"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-lg text-lg shadow-lg transition duration-150 ease-in-out"
+                data-testid="link-general-consultation"
+              >
+                Book a Consultation
+              </a>
             </div>
           </div>
 
