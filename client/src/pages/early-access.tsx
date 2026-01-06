@@ -175,7 +175,7 @@ export default function EarlyAccess() {
               Be among the first to pioneer autonomous healthcare security. We are productizing government-grade encryption to solve a foundational problem: automating costly and manual security audits.
             </p>
             <p>
-              Our live AI engine finds compliance risks. We are now building the integrated system that automatically fixes them.
+              We are now building the integrated system that automatically fixes them.
             </p>
             <p>
               Join our Founders and Partners Circle to access revolutionary products, co-develop the solution, and scale with us from the ground up.
