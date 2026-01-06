@@ -19,10 +19,19 @@ const formSchema = z.object({
   phone: z.string().min(10, { message: "Please enter a valid phone number." }),
   companySize: z.string(),
   industry: z.string(),
+  otherIndustry: z.string().optional(),
   interestedIn: z.array(z.string()).min(1, { message: "Please select at least one product." }),
   investmentLevel: z.string(),
   additionalInfo: z.string().optional(),
   privacyPolicy: z.boolean().refine(val => val === true, { message: "You must agree to the privacy policy." })
+}).refine((data) => {
+  if (data.industry === "other" && (!data.otherIndustry || data.otherIndustry.trim() === "")) {
+    return false;
+  }
+  return true;
+}, {
+  message: "Please specify your industry",
+  path: ["otherIndustry"]
 });
 
 type FormData = z.infer<typeof formSchema>;
@@ -42,12 +51,15 @@ export default function EarlyAccess() {
       phone: "",
       companySize: "",
       industry: "",
+      otherIndustry: "",
       interestedIn: [],
       investmentLevel: "",
       additionalInfo: "",
       privacyPolicy: false
     }
   });
+
+  const selectedIndustry = form.watch("industry");
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);
@@ -376,6 +388,22 @@ export default function EarlyAccess() {
                       )}
                     />
                   </div>
+                  
+                  {selectedIndustry === "other" && (
+                    <FormField
+                      control={form.control}
+                      name="otherIndustry"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Please specify your industry</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter your industry" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
                   
                   <FormField
                     control={form.control}
