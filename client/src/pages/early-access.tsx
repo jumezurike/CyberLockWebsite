@@ -119,10 +119,9 @@ const nistQuestions = [
   }
 ];
 
-// Risk Assessment Modal Component
+// Simple Risk Assessment Modal Component - 6 Questions with Yes/No answers
 function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { toast } = useToast();
-  const [step, setStep] = useState(1);
   const [contactInfo, setContactInfo] = useState({
     fullName: "",
     email: "",
@@ -131,12 +130,11 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     companySize: "",
     industry: ""
   });
-  const [answers, setAnswers] = useState<Record<string, number>>({});
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showReport, setShowReport] = useState(false);
   const [reportData, setReportData] = useState<{
     totalScore: number;
-    scores: Record<string, number>;
-    maturityLevels: Record<string, string>;
+    answers: Record<string, string>;
     recommendations: string[];
   } | null>(null);
 
@@ -152,100 +150,120 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
     }
   });
 
-  const calculateScore = () => {
-    const totalPossible = 24; // 6 questions × 4 max points
-    const totalEarned = Object.values(answers).reduce((sum, val) => sum + val, 0);
-    return Math.round((totalEarned / totalPossible) * 100);
+  const simpleQuestions = [
+    {
+      id: "govern",
+      code: "GV.OC01",
+      category: "GOVERN",
+      question: "Do you have a formal, written plan for how your clinic handles patient data security and responds to a cyber incident?"
+    },
+    {
+      id: "identify",
+      code: "ID.AM01",
+      category: "IDENTIFY",
+      question: "Do you know exactly all the devices (computers, tablets, servers) and software that have access to your patient records?"
+    },
+    {
+      id: "protect",
+      code: "PR.DS01",
+      category: "PROTECT",
+      question: "Is all sensitive patient data on your devices automatically encrypted?"
+    },
+    {
+      id: "detect",
+      code: "DE.CM01",
+      category: "DETECT",
+      question: "Do you have 24/7 active monitoring that alerts you to suspicious activity, or do you usually find out about problems after they happen?"
+    },
+    {
+      id: "respond",
+      code: "RS.RP01",
+      category: "RESPOND",
+      question: "If you detected a breach right now, is there a clear, assigned team with steps to contain it and notify patients within the legally required 60-hour window?"
+    },
+    {
+      id: "recover",
+      code: "RC.RP01",
+      category: "RECOVER",
+      question: "If you were hit by ransomware today, do you have a guaranteed and tested way to recover your data without paying the hackers?"
+    }
+  ];
+
+  const calculateScore = (): number => {
+    let yesCount = 0;
+    Object.values(answers).forEach(a => {
+      if (a === "yes") yesCount++;
+    });
+    return Math.round((yesCount / 6) * 100);
   };
 
-  const getMaturityLevel = (score: number): string => {
-    if (score === 0) return "Critical Gap";
-    if (score === 1) return "Initial";
-    if (score === 2) return "Developing";
-    if (score === 3) return "Defined";
-    return "Optimized";
-  };
-
-  const getRecommendations = (scores: Record<string, number>): string[] => {
+  const getRecommendations = (): string[] => {
     const recommendations: string[] = [];
     
-    if (scores.govern <= 1) {
+    if (answers.govern !== "yes") {
       recommendations.push("Develop a formal Incident Response Plan aligned with HIPAA requirements");
     }
-    if (scores.identify <= 1) {
-      recommendations.push("Implement an automated asset inventory system to track all devices with PHI access");
+    if (answers.identify !== "yes") {
+      recommendations.push("Implement an asset inventory system to track all devices with PHI access");
     }
-    if (scores.protect <= 1) {
+    if (answers.protect !== "yes") {
       recommendations.push("Deploy encryption for all data at rest and in transit to meet HIPAA Safe Harbor");
     }
-    if (scores.detect <= 1) {
+    if (answers.detect !== "yes") {
       recommendations.push("Implement 24/7 security monitoring with automated threat detection");
     }
-    if (scores.respond <= 1) {
+    if (answers.respond !== "yes") {
       recommendations.push("Establish a dedicated incident response team with clear escalation procedures");
     }
-    if (scores.recover <= 1) {
+    if (answers.recover !== "yes") {
       recommendations.push("Deploy immutable backup solutions with regular recovery testing");
     }
     
     if (recommendations.length === 0) {
-      recommendations.push("Your security posture is strong. Consider advanced threat hunting and red team exercises.");
+      recommendations.push("Your security posture is strong! Consider advanced threat hunting and red team exercises.");
     }
     
     return recommendations;
   };
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (contactInfo.fullName && contactInfo.email && contactInfo.company && 
-        contactInfo.phone && contactInfo.companySize && contactInfo.industry) {
-      setStep(2);
-    } else {
+    
+    if (!contactInfo.fullName || !contactInfo.email || !contactInfo.company || 
+        !contactInfo.phone || !contactInfo.companySize || !contactInfo.industry) {
       toast({
-        title: "Please fill all fields",
-        description: "All contact information fields are required.",
+        title: "Please fill all contact fields",
         variant: "destructive"
       });
+      return;
     }
-  };
 
-  const handleQuestionAnswer = (questionId: string, value: number) => {
-    setAnswers(prev => ({ ...prev, [questionId]: value }));
-  };
-
-  const handleGenerateReport = () => {
     if (Object.keys(answers).length < 6) {
       toast({
-        title: "Please answer all questions",
-        description: "All 6 questions must be answered to generate your report.",
+        title: "Please answer all 6 questions",
         variant: "destructive"
       });
       return;
     }
 
     const totalScore = calculateScore();
-    const maturityLevels: Record<string, string> = {};
-    nistQuestions.forEach(q => {
-      maturityLevels[q.id] = getMaturityLevel(answers[q.id] || 0);
-    });
-    const recommendations = getRecommendations(answers);
+    const recommendations = getRecommendations();
 
     setReportData({
       totalScore,
-      scores: answers,
-      maturityLevels,
+      answers,
       recommendations
     });
 
-    // Submit to backend
+    // Convert yes/no to numeric scores for backend
     submitMutation.mutate({
       ...contactInfo,
-      governScore: answers.govern || 0,
-      identifyScore: answers.identify || 0,
-      protectScore: answers.protect || 0,
-      detectScore: answers.detect || 0,
-      respondScore: answers.respond || 0,
-      recoverScore: answers.recover || 0,
+      governScore: answers.govern === "yes" ? 4 : 0,
+      identifyScore: answers.identify === "yes" ? 4 : 0,
+      protectScore: answers.protect === "yes" ? 4 : 0,
+      detectScore: answers.detect === "yes" ? 4 : 0,
+      respondScore: answers.respond === "yes" ? 4 : 0,
+      recoverScore: answers.recover === "yes" ? 4 : 0,
       totalScore
     });
 
@@ -253,7 +271,6 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   };
 
   const resetModal = () => {
-    setStep(1);
     setContactInfo({ fullName: "", email: "", company: "", phone: "", companySize: "", industry: "" });
     setAnswers({});
     setShowReport(false);
@@ -262,14 +279,14 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   };
 
   const getScoreColor = (score: number): string => {
-    if (score < 40) return "text-red-600";
-    if (score < 70) return "text-yellow-600";
+    if (score < 50) return "text-red-600";
+    if (score < 80) return "text-yellow-600";
     return "text-green-600";
   };
 
   const getScoreLabel = (score: number): string => {
-    if (score < 40) return "Critical Risk";
-    if (score < 70) return "Needs Improvement";
+    if (score < 50) return "Critical Risk";
+    if (score < 80) return "Needs Improvement";
     return "Good Posture";
   };
 
@@ -278,190 +295,142 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-primary">
-            {showReport ? "Your Cyber Risk Assessment Report" : step === 1 ? "FREE S/HOS²A Cyber Risk Checkup" : "NIST CSF 2.0 Assessment Questions"}
+            {showReport ? "Your Cyber Risk Assessment Report" : "FREE S/HOS²A Cyber Risk Checkup"}
           </DialogTitle>
         </DialogHeader>
 
         {!showReport ? (
-          <>
-            {step === 1 && (
-              <form onSubmit={handleContactSubmit} className="space-y-4">
-                <p className="text-sm text-gray-600 mb-4">
-                  Complete this quick assessment to receive your personalized cyber risk score based on NIST CSF 2.0 framework.
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="fullName">Full Name</Label>
-                    <Input
-                      id="fullName"
-                      data-testid="input-fullName"
-                      placeholder="John Smith"
-                      value={contactInfo.fullName}
-                      onChange={(e) => setContactInfo(prev => ({ ...prev, fullName: e.target.value }))}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="email">Email Address</Label>
-                    <Input
-                      id="email"
-                      data-testid="input-email"
-                      type="email"
-                      placeholder="john@company.com"
-                      value={contactInfo.email}
-                      onChange={(e) => setContactInfo(prev => ({ ...prev, email: e.target.value }))}
-                      required
-                    />
-                  </div>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <p className="text-sm text-gray-600">
+              Answer 6 quick questions based on NIST CSF 2.0 to receive your personalized cyber risk score.
+            </p>
+            
+            {/* Contact Info */}
+            <div className="space-y-4 border-b pb-6">
+              <h3 className="font-semibold">Your Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="fullName">Full Name</Label>
+                  <Input
+                    id="fullName"
+                    placeholder="John Smith"
+                    value={contactInfo.fullName}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, fullName: e.target.value }))}
+                  />
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="company">Company Name</Label>
-                    <Input
-                      id="company"
-                      data-testid="input-company"
-                      placeholder="Acme Inc."
-                      value={contactInfo.company}
-                      onChange={(e) => setContactInfo(prev => ({ ...prev, company: e.target.value }))}
-                      required
-                    />
-                  </div>
-                  <div>
-                    <Label htmlFor="phone">Phone Number</Label>
-                    <Input
-                      id="phone"
-                      data-testid="input-phone"
-                      placeholder="+1 (123) 456-7890"
-                      value={contactInfo.phone}
-                      onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
-                      required
-                    />
-                  </div>
+                <div>
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="john@company.com"
+                    value={contactInfo.email}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, email: e.target.value }))}
+                  />
                 </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <Label htmlFor="companySize">Company Size</Label>
-                    <Select 
-                      value={contactInfo.companySize} 
-                      onValueChange={(value) => setContactInfo(prev => ({ ...prev, companySize: value }))}
-                    >
-                      <SelectTrigger data-testid="select-companySize">
-                        <SelectValue placeholder="Select company size" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="1-10">1-10 employees</SelectItem>
-                        <SelectItem value="11-50">11-50 employees</SelectItem>
-                        <SelectItem value="51-200">51-200 employees</SelectItem>
-                        <SelectItem value="201-500">201-500 employees</SelectItem>
-                        <SelectItem value="500+">500+ employees</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div>
-                    <Label htmlFor="industry">Industry</Label>
-                    <Select 
-                      value={contactInfo.industry} 
-                      onValueChange={(value) => setContactInfo(prev => ({ ...prev, industry: value }))}
-                    >
-                      <SelectTrigger data-testid="select-industry">
-                        <SelectValue placeholder="Select industry" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="medical-practice">Medical Practice</SelectItem>
-                        <SelectItem value="clinic">Clinic</SelectItem>
-                        <SelectItem value="hospital">Hospital</SelectItem>
-                        <SelectItem value="health-tech">Health Tech</SelectItem>
-                        <SelectItem value="pharmacy">Pharmacy</SelectItem>
-                        <SelectItem value="dental">Dental Practice</SelectItem>
-                        <SelectItem value="mental-health">Mental Health</SelectItem>
-                        <SelectItem value="other-healthcare">Other Healthcare</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div>
+                  <Label htmlFor="company">Company Name</Label>
+                  <Input
+                    id="company"
+                    placeholder="Acme Inc."
+                    value={contactInfo.company}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, company: e.target.value }))}
+                  />
                 </div>
-
-                <Button type="submit" className="w-full" data-testid="button-continue">
-                  Continue to Assessment
-                </Button>
-              </form>
-            )}
-
-            {step === 2 && (
-              <div className="space-y-6">
-                <div className="flex items-center justify-between mb-4">
-                  <span className="text-sm text-gray-600">Questions answered: {Object.keys(answers).length}/6</span>
-                  <Progress value={(Object.keys(answers).length / 6) * 100} className="w-32" />
+                <div>
+                  <Label htmlFor="phone">Phone Number</Label>
+                  <Input
+                    id="phone"
+                    placeholder="+1 (123) 456-7890"
+                    value={contactInfo.phone}
+                    onChange={(e) => setContactInfo(prev => ({ ...prev, phone: e.target.value }))}
+                  />
                 </div>
-
-                {nistQuestions.map((q, index) => (
-                  <div key={q.id} className="border rounded-lg p-4 bg-gray-50">
-                    <div className="flex items-start gap-2 mb-3">
-                      <span className="bg-primary text-white text-xs font-bold px-2 py-1 rounded">{q.category}</span>
-                      <span className="text-xs text-gray-500">({q.code})</span>
-                    </div>
-                    <p className="font-medium text-gray-800 mb-3">{q.question}</p>
-                    
-                    <RadioGroup 
-                      value={answers[q.id]?.toString()} 
-                      onValueChange={(value) => handleQuestionAnswer(q.id, parseInt(value))}
-                    >
-                      {q.options.map((option) => (
-                        <div key={option.value} className="flex items-center space-x-2 py-1">
-                          <RadioGroupItem 
-                            value={option.value.toString()} 
-                            id={`${q.id}-${option.value}`}
-                            data-testid={`radio-${q.id}-${option.value}`}
-                          />
-                          <Label htmlFor={`${q.id}-${option.value}`} className="text-sm cursor-pointer">
-                            {option.label}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-                  </div>
-                ))}
-
-                <div className="flex gap-4">
-                  <Button variant="outline" onClick={() => setStep(1)} className="flex-1" data-testid="button-back">
-                    Back
-                  </Button>
-                  <Button 
-                    onClick={handleGenerateReport} 
-                    className="flex-1 bg-secondary hover:bg-secondary/90"
-                    disabled={Object.keys(answers).length < 6}
-                    data-testid="button-generate-report"
-                  >
-                    Generate My Report
-                  </Button>
+                <div>
+                  <Label>Company Size</Label>
+                  <Select value={contactInfo.companySize} onValueChange={(v) => setContactInfo(prev => ({ ...prev, companySize: v }))}>
+                    <SelectTrigger><SelectValue placeholder="Select company size" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1-10">1-10 employees</SelectItem>
+                      <SelectItem value="11-50">11-50 employees</SelectItem>
+                      <SelectItem value="51-200">51-200 employees</SelectItem>
+                      <SelectItem value="201-500">201-500 employees</SelectItem>
+                      <SelectItem value="500+">500+ employees</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label>Industry</Label>
+                  <Select value={contactInfo.industry} onValueChange={(v) => setContactInfo(prev => ({ ...prev, industry: v }))}>
+                    <SelectTrigger><SelectValue placeholder="Select industry" /></SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="medical-practice">Medical Practice</SelectItem>
+                      <SelectItem value="clinic">Clinic</SelectItem>
+                      <SelectItem value="hospital">Hospital</SelectItem>
+                      <SelectItem value="health-tech">Health Tech</SelectItem>
+                      <SelectItem value="pharmacy">Pharmacy</SelectItem>
+                      <SelectItem value="dental">Dental Practice</SelectItem>
+                      <SelectItem value="mental-health">Mental Health</SelectItem>
+                      <SelectItem value="other-healthcare">Other Healthcare</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-            )}
-          </>
+            </div>
+
+            {/* 6 Questions */}
+            <div className="space-y-4">
+              <h3 className="font-semibold">Security Assessment (NIST CSF 2.0)</h3>
+              {simpleQuestions.map((q, index) => (
+                <div key={q.id} className="border rounded-lg p-4 bg-gray-50">
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="bg-primary text-white text-xs font-bold px-2 py-1 rounded">{q.category}</span>
+                    <span className="text-xs text-gray-500">({q.code})</span>
+                  </div>
+                  <p className="text-sm font-medium text-gray-800 mb-3">{q.question}</p>
+                  <RadioGroup 
+                    value={answers[q.id]} 
+                    onValueChange={(value) => setAnswers(prev => ({ ...prev, [q.id]: value }))}
+                    className="flex gap-6"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="yes" id={`${q.id}-yes`} />
+                      <Label htmlFor={`${q.id}-yes`} className="cursor-pointer">Yes</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="no" id={`${q.id}-no`} />
+                      <Label htmlFor={`${q.id}-no`} className="cursor-pointer">No</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+              ))}
+            </div>
+
+            <Button type="submit" className="w-full bg-secondary hover:bg-secondary/90">
+              Get My Risk Score
+            </Button>
+          </form>
         ) : (
           <div className="space-y-6">
             {/* Overall Score */}
             <div className="text-center p-6 bg-gradient-to-r from-primary to-primary/80 rounded-xl text-white">
-              <p className="text-sm opacity-90 mb-2">Your Overall Cyber Risk Score</p>
-              <p className={`text-6xl font-bold ${reportData?.totalScore && reportData.totalScore >= 70 ? 'text-green-300' : reportData?.totalScore && reportData.totalScore >= 40 ? 'text-yellow-300' : 'text-red-300'}`}>
+              <p className="text-sm opacity-90 mb-2">Your Cyber Risk Score</p>
+              <p className={`text-6xl font-bold ${reportData?.totalScore && reportData.totalScore >= 80 ? 'text-green-300' : reportData?.totalScore && reportData.totalScore >= 50 ? 'text-yellow-300' : 'text-red-300'}`}>
                 {reportData?.totalScore}%
               </p>
               <p className="text-lg mt-2">{getScoreLabel(reportData?.totalScore || 0)}</p>
             </div>
 
-            {/* Domain Breakdown */}
+            {/* Question Results */}
             <div>
-              <h3 className="font-bold text-lg mb-3">NIST CSF 2.0 Domain Scores</h3>
+              <h3 className="font-bold text-lg mb-3">Your Answers</h3>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-                {nistQuestions.map((q) => (
+                {simpleQuestions.map((q) => (
                   <div key={q.id} className="border rounded-lg p-3 text-center">
                     <p className="text-xs font-bold text-primary">{q.category}</p>
-                    <p className={`text-2xl font-bold ${getScoreColor((reportData?.scores[q.id] || 0) * 25)}`}>
-                      {(reportData?.scores[q.id] || 0)}/4
+                    <p className={`text-xl font-bold ${reportData?.answers[q.id] === "yes" ? 'text-green-600' : 'text-red-600'}`}>
+                      {reportData?.answers[q.id] === "yes" ? "Yes" : "No"}
                     </p>
-                    <p className="text-xs text-gray-600">{reportData?.maturityLevels[q.id]}</p>
                   </div>
                 ))}
               </div>
@@ -485,22 +454,18 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
             {/* CTA */}
             <div className="bg-secondary/10 rounded-lg p-4 text-center">
               <p className="font-bold text-primary mb-2">Ready to close your security gaps?</p>
-              <p className="text-sm text-gray-600 mb-4">
-                Schedule a free consultation with our healthcare security experts to develop your remediation roadmap.
-              </p>
               <Button 
                 className="bg-secondary hover:bg-secondary/90"
                 onClick={() => {
                   resetModal();
                   document.getElementById('apply-form')?.scrollIntoView({ behavior: 'smooth' });
                 }}
-                data-testid="button-schedule-consultation"
               >
                 Schedule Free Consultation
               </Button>
             </div>
 
-            <Button variant="outline" onClick={resetModal} className="w-full" data-testid="button-close-report">
+            <Button variant="outline" onClick={resetModal} className="w-full">
               Close Report
             </Button>
           </div>
