@@ -132,8 +132,22 @@ const generatePDFReport = (
 ) => {
   const doc = new jsPDF();
   const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 20;
   let yPos = 20;
+
+  // Helper to add watermark on each page
+  const addWatermark = () => {
+    doc.saveGraphicsState();
+    doc.setGState(new doc.GState({ opacity: 0.08 }));
+    doc.setTextColor(30, 64, 175);
+    doc.setFontSize(60);
+    doc.setFont("helvetica", "bold");
+    // Rotate and center the watermark
+    const watermarkText = "CYBERLOCKX";
+    doc.text(watermarkText, pageWidth / 2 - 55, pageHeight / 2, { angle: 45 });
+    doc.restoreGraphicsState();
+  };
 
   // Helper to add footer on each page
   const addFooter = () => {
@@ -141,45 +155,64 @@ const generatePDFReport = (
     doc.setFontSize(8);
     doc.text("CyberLockX | info@cyberlockx.xyz | www.cyberlockx.com", margin, 285);
     doc.text("CONFIDENTIAL", pageWidth - margin - 25, 285);
+    addWatermark();
   };
 
   // ===================== PAGE 1: COVER & EXECUTIVE SUMMARY =====================
-  // Header
-  doc.setFillColor(30, 64, 175);
-  doc.rect(0, 0, pageWidth, 45, 'F');
-  doc.setTextColor(255, 255, 255);
-  doc.setFontSize(24);
-  doc.setFont("helvetica", "bold");
-  doc.text("CyberLockX", margin, 25);
-  doc.setFontSize(12);
-  doc.setFont("helvetica", "normal");
-  doc.text("NIST CSF 2.0 Preliminary Risk Assessment Report", margin, 38);
+  // Add watermark first (behind content)
+  addWatermark();
   
-  yPos = 60;
+  // Header with logo styling
+  doc.setFillColor(30, 64, 175);
+  doc.rect(0, 0, pageWidth, 50, 'F');
+  
+  // Logo mark (shield icon representation)
+  doc.setFillColor(255, 255, 255);
+  doc.circle(margin + 8, 22, 8, 'F');
+  doc.setFillColor(30, 64, 175);
+  doc.circle(margin + 8, 22, 5, 'F');
+  doc.setFillColor(255, 255, 255);
+  doc.circle(margin + 8, 22, 2, 'F');
+  
+  // Company name
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(26);
+  doc.setFont("helvetica", "bold");
+  doc.text("CyberLockX", margin + 22, 27);
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text("Healthcare Cybersecurity Solutions", margin + 22, 38);
+  doc.setFontSize(12);
+  doc.text("NIST CSF 2.0 Preliminary Risk Assessment Report", margin, 48);
+  
+  yPos = 65;
   doc.setTextColor(0, 0, 0);
   
-  // Report Info Box
-  doc.setFillColor(245, 247, 250);
-  doc.rect(margin, yPos, pageWidth - margin * 2, 45, 'F');
-  doc.setFontSize(10);
-  doc.setFont("helvetica", "bold");
-  doc.text("PREPARED FOR:", margin + 5, yPos + 10);
+  // CLIENT INFO BOX - Prominent display
+  doc.setFillColor(30, 64, 175);
+  doc.rect(margin, yPos, pageWidth - margin * 2, 55, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(9);
   doc.setFont("helvetica", "normal");
-  doc.text(`${contactInfo.company}`, margin + 45, yPos + 10);
-  doc.setFont("helvetica", "bold");
-  doc.text("CONTACT:", margin + 5, yPos + 20);
-  doc.setFont("helvetica", "normal");
-  doc.text(`${contactInfo.fullName} | ${contactInfo.email}`, margin + 35, yPos + 20);
-  doc.setFont("helvetica", "bold");
-  doc.text("INDUSTRY:", margin + 5, yPos + 30);
-  doc.setFont("helvetica", "normal");
-  doc.text(`${contactInfo.industry} | ${contactInfo.companySize} employees`, margin + 35, yPos + 30);
-  doc.setFont("helvetica", "bold");
-  doc.text("DATE:", margin + 5, yPos + 40);
-  doc.setFont("helvetica", "normal");
-  doc.text(`${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, margin + 25, yPos + 40);
+  doc.text("PREPARED EXCLUSIVELY FOR", margin + 5, yPos + 10);
   
-  yPos += 55;
+  // Client company name - large and prominent
+  doc.setFontSize(18);
+  doc.setFont("helvetica", "bold");
+  doc.text(contactInfo.company, margin + 5, yPos + 25);
+  
+  // Client contact details
+  doc.setFontSize(10);
+  doc.setFont("helvetica", "normal");
+  doc.text(`${contactInfo.fullName}`, margin + 5, yPos + 35);
+  doc.text(`${contactInfo.email} | ${contactInfo.phone}`, margin + 5, yPos + 43);
+  doc.text(`${contactInfo.industry} | ${contactInfo.companySize} employees`, margin + 5, yPos + 51);
+  
+  // Date on right side
+  doc.setFontSize(9);
+  doc.text(`Report Date: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, pageWidth - margin - 60, yPos + 10);
+  
+  yPos += 65;
   
   // EXECUTIVE SUMMARY
   doc.setFontSize(16);
