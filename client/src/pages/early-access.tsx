@@ -142,10 +142,7 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
 
   const submitMutation = useMutation({
     mutationFn: async (data: RiskAssessmentData) => {
-      return apiRequest('/api/risk-assessments', {
-        method: 'POST',
-        body: JSON.stringify(data),
-      });
+      return apiRequest('POST', '/api/risk-assessments', data);
     },
     onSuccess: () => {
       console.log("Risk assessment saved successfully");
@@ -277,7 +274,7 @@ function RiskCheckupModal({ isOpen, onClose }: { isOpen: boolean; onClose: () =>
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={resetModal}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && resetModal()}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold text-primary">
