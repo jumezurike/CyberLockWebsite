@@ -62,15 +62,15 @@ export default function RiskAssessmentsDashboard() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/risk-assessments"] });
       toast({
-        title: "Assessment Deleted",
-        description: "Risk assessment has been permanently removed.",
+        title: "Checkup Deleted",
+        description: "Cyber health checkup has been permanently removed.",
       });
       setDeleteConfirmId(null);
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to delete assessment",
+        description: error instanceof Error ? error.message : "Failed to delete checkup",
         variant: "destructive",
       });
     },
@@ -110,8 +110,8 @@ export default function RiskAssessmentsDashboard() {
               </Button>
             </Link>
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Risk Assessment Reports</h1>
-              <p className="text-gray-600">View and manage S/HOS²A Cyber Risk Health Checkup submissions</p>
+              <h1 className="text-3xl font-bold text-gray-900">Free HOS²A Cyber Health Checkup Reports</h1>
+              <p className="text-gray-600">View and manage completed cyber health checkup submissions</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -132,7 +132,7 @@ export default function RiskAssessmentsDashboard() {
                 <Shield className="w-8 h-8 text-primary" />
                 <div>
                   <p className="text-2xl font-bold" data-testid="text-total-count">{assessments.length}</p>
-                  <p className="text-sm text-gray-600">Total Assessments</p>
+                  <p className="text-sm text-gray-600">Total Checkups</p>
                 </div>
               </div>
             </CardContent>
@@ -180,7 +180,7 @@ export default function RiskAssessmentsDashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle>All Risk Assessments</CardTitle>
+            <CardTitle>All Cyber Health Checkups</CardTitle>
           </CardHeader>
           <CardContent>
             {isLoading ? (
@@ -190,7 +190,7 @@ export default function RiskAssessmentsDashboard() {
             ) : assessments.length === 0 ? (
               <div className="text-center py-12 text-gray-500">
                 <Shield className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                <p>No risk assessments have been submitted yet.</p>
+                <p>No cyber health checkups have been submitted yet.</p>
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -269,7 +269,7 @@ export default function RiskAssessmentsDashboard() {
       <Dialog open={!!selectedAssessment} onOpenChange={() => setSelectedAssessment(null)}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Risk Assessment Details</DialogTitle>
+            <DialogTitle>Cyber Health Checkup Details</DialogTitle>
             <DialogDescription>
               Full details for {selectedAssessment?.company}
             </DialogDescription>
@@ -370,7 +370,7 @@ export default function RiskAssessmentsDashboard() {
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete this risk assessment? This action cannot be undone.
+              Are you sure you want to delete this cyber health checkup? This action cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-end gap-4 mt-4">
