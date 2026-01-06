@@ -230,6 +230,7 @@ export interface IStorage {
   getAllRiskAssessments(): Promise<RiskAssessment[]>;
   getRiskAssessmentById(id: number): Promise<RiskAssessment | undefined>;
   createRiskAssessment(assessment: InsertRiskAssessment): Promise<RiskAssessment>;
+  deleteRiskAssessment(id: number): Promise<boolean>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -1709,6 +1710,13 @@ export class DatabaseStorage implements IStorage {
       })
       .returning();
     return newAssessment;
+  }
+
+  async deleteRiskAssessment(id: number): Promise<boolean> {
+    const result = await db
+      .delete(riskAssessments)
+      .where(eq(riskAssessments.id, id));
+    return (result.rowCount ?? 0) > 0;
   }
 }
 
