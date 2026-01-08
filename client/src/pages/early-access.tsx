@@ -143,13 +143,13 @@ const generatePDFReport = async (
   const addWatermark = () => {
     doc.saveGraphicsState();
     // @ts-ignore - jsPDF GState type issue
-    doc.setGState(new (doc as any).GState({ opacity: 0.08 }));
+    doc.setGState(new (doc as any).GState({ opacity: 0.04 }));
     doc.setTextColor(30, 64, 175);
-    doc.setFontSize(60);
-    doc.setFont("helvetica", "bold");
+    doc.setFontSize(30);
+    doc.setFont("helvetica", "normal");
     // Rotate and center the watermark
     const watermarkText = "CYBERLOCKX";
-    doc.text(watermarkText, pageWidth / 2 - 55, pageHeight / 2, { angle: 45 });
+    doc.text(watermarkText, pageWidth / 2 - 28, pageHeight / 2, { angle: 45 });
     doc.restoreGraphicsState();
   };
 
