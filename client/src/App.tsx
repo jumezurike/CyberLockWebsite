@@ -76,6 +76,7 @@ function Router() {
           <Route path="/assessment-workflow" component={AssessmentWorkflowPage} />
           <Route path="/color-demo" component={ColorDemo} />
           <Route path="/early-access" component={EarlyAccess} />
+          <Route path="/free-cyber-health-checkup" component={EarlyAccess} />
           <Route path="/admin/early-access" component={EarlyAccessDashboard} />
           <Route path="/admin/analytics" component={AnalyticsDashboard} />
           <Route path="/admin/work-orders" component={WorkOrdersPage} />
