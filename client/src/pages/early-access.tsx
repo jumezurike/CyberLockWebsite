@@ -20,6 +20,7 @@ import { apiRequest } from "@/lib/queryClient";
 import jsPDF from "jspdf";
 import { FileDown } from "lucide-react";
 import cyberLockXLogo from "@assets/CyberLockX_Logo_Transp-report_1767679456789.png";
+import QRCode from "qrcode";
 
 // Category detailed explanations for PDF report
 const categoryExplanations: Record<string, { title: string; description: string; importance: string; subcategories: string }> = {
@@ -583,6 +584,33 @@ const generatePDFReport = async (
   doc.setTextColor(30, 64, 175);
   doc.setFontSize(11);
   doc.text("Book Now: https://cal.com/cyberlockx/cybersecurity-consultation", margin, yPos);
+  
+  // Generate and add QR code for booking consultation
+  try {
+    const qrCodeDataUrl = await QRCode.toDataURL('https://cal.com/cyberlockx/cybersecurity-consultation', {
+      width: 300,
+      margin: 2,
+      color: {
+        dark: '#1E40AF',
+        light: '#FFFFFF'
+      }
+    });
+    
+    yPos += 10;
+    
+    // Add QR code centered below the booking link
+    const qrSize = 45;
+    const qrX = (pageWidth - qrSize) / 2;
+    doc.addImage(qrCodeDataUrl, 'PNG', qrX, yPos, qrSize, qrSize);
+    
+    // Add instruction text below QR code
+    yPos += qrSize + 5;
+    doc.setFontSize(9);
+    doc.setTextColor(80, 80, 80);
+    doc.text("Scan to schedule your free consultation", pageWidth / 2, yPos, { align: 'center' });
+  } catch (e) {
+    console.log('QR code could not be generated');
+  }
   
   addFooter();
 
