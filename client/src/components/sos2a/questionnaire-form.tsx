@@ -1794,6 +1794,25 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     />
                   </div>
                 </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-4 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
               </TabsContent>
               
               {/* 2. Infrastructure Mode of Operation Tab */}
@@ -2675,7 +2694,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                 </div>
                 
                 {/* Navigation Buttons */}
-                <div className="flex justify-between items-center pt-6 border-t">
+                <div className="flex justify-between items-center pt-4 border-t">
                   <Button
                     type="button"
                     variant="outline"
