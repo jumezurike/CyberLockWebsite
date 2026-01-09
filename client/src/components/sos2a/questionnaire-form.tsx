@@ -2229,7 +2229,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
               </TabsContent>
               
               {/* 4. Baseline Configuration Tab */}
-              <TabsContent value="baseline" className="space-y-6">
+              <TabsContent value="baseline">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">4. Baseline Configuration</h3>
                   <p className="text-sm text-muted-foreground mb-4">
@@ -2694,7 +2694,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                 </div>
                 
                 {/* Navigation Buttons */}
-                <div className="flex justify-between items-center pt-4 border-t">
+                <div className="flex justify-between items-center mt-4 pt-4 border-t">
                   <Button
                     type="button"
                     variant="outline"
