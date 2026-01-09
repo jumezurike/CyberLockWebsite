@@ -96,6 +96,18 @@ CyberLockX is an advanced cybersecurity platform providing comprehensive digital
 - **Flow Process Documentation**: End-to-end user journeys, state machines, and business process flows
 - **Quick Reference Guides**: Testing credentials, troubleshooting, and support contact information
 
+## Pending Work Items (PRP 3.0 Tracked)
+
+### RASBITA Company Name Handling (January 9, 2026)
+- **Status**: Implemented, to be revisited
+- **Checkpoint**: `0ded1e780bdb75cc801dee390dcce2c3d45bbebb`
+- **Changes Made**:
+  - Added company name input field to `/rasbita-governance` page
+  - Fixed PDF export to display company.name instead of [object Object]
+  - Added URL parameter integration for SOS²A → RASBITA-RGM company data sharing
+- **Files Modified**: `pdf-export.tsx`, `rasbita-governance.tsx`, `rasbita-report.tsx`
+- **Notes**: 25 pre-existing LSP warnings in pdf-export.tsx - runtime functionality works correctly, type safety improvements deferred
+
 ## External Dependencies
 - **Mailgun**: For sending professional HTML email notifications and status updates (e.g., partnership application approvals).
 - **PostgreSQL**: Used as the database for storing system data, including visitor sessions, page views, and partnership applications.
