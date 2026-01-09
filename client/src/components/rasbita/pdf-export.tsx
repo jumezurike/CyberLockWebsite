@@ -34,7 +34,9 @@ export function PdfExport({ report }: PdfExportProps) {
       // Report meta information
       doc.setFontSize(12);
       doc.setTextColor(0, 0, 0);
-      doc.text(`Company: ${report.company || 'N/A'}`, 14, 30);
+      const companyObj = report.company as { name?: string } | undefined;
+      const companyName = companyObj?.name || 'N/A';
+      doc.text(`Company: ${companyName}`, 14, 30);
       doc.text(`Incident: ${report.title || 'N/A'}`, 14, 37);
       doc.text(`Date: ${new Date(report.createdAt || new Date()).toLocaleDateString()}`, 14, 44);
       doc.text(`Category: ${report.incidentCategory || 'N/A'}`, 14, 51);
@@ -47,9 +49,10 @@ export function PdfExport({ report }: PdfExportProps) {
       doc.text("Risk Score", 16, 64);
       doc.setFont("helvetica", "normal");
       
-      const riskScore = parseFloat(report.overallRiskScore || "0");
-      let riskColor;
-      let riskLevel;
+      const riskScoreValue = report.overallRiskScore;
+      const riskScore = riskScoreValue ? parseFloat(String(riskScoreValue)) : 0;
+      let riskColor: [number, number, number];
+      let riskLevel: string;
       
       if (riskScore > 46) {
         riskColor = [220, 53, 69]; // Red
@@ -65,7 +68,7 @@ export function PdfExport({ report }: PdfExportProps) {
         riskLevel = "P4 - Low";
       }
       
-      doc.setTextColor(...riskColor);
+      doc.setTextColor(riskColor[0], riskColor[1], riskColor[2]);
       doc.text(`${riskScore.toFixed(1)} - ${riskLevel}`, 100, 64);
       doc.setTextColor(0, 0, 0);
       

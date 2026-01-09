@@ -1209,7 +1209,7 @@ export default function RasbitaReportPage() {
                         </p>
                         <div className="mt-2">
                           <a 
-                            href="/rasbita-governance" 
+                            href={`/rasbita-governance${report.company?.name ? `?company=${encodeURIComponent(report.company.name)}` : ''}`}
                             className="inline-flex items-center gap-1.5 text-xs font-medium bg-purple-700 text-white px-2.5 py-1.5 rounded hover:bg-purple-800 transition-colors"
                           >
                             <AlertOctagon className="h-3.5 w-3.5" />

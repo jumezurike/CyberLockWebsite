@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import GovernanceAndManagementAssessment, { GovernanceScores } from "@/components/rasbita/governance-and-management-assessment";
 import { RasbitaReport } from '@/lib/sos2a-types';
 import { useToast } from "@/hooks/use-toast";
 import { apiRequest } from "@/lib/queryClient";
 import { PdfExport } from '@/components/rasbita/pdf-export';
-import { FileText, AlertCircle, AlertTriangle, AlertOctagon, CheckCircle, Info } from 'lucide-react';
+import { FileText, AlertCircle, AlertTriangle, AlertOctagon, CheckCircle, Info, Building2 } from 'lucide-react';
 
 // Helper function to get tier label text based on score
 function getTierLabel(score: number | null): string {
@@ -61,10 +63,11 @@ function getTierDescription(score: number | null, type: "governance" | "manageme
 export default function RasbitaGovernance() {
   const { toast } = useToast();
   const [showAssessment, setShowAssessment] = useState(false);
-  const [report, setReport] = useState<RasbitaReport>({
+  const [companyName, setCompanyName] = useState("");
+  const [report, setReport] = useState({
     id: "standalone-gov-assessment",
     title: "Standalone Governance & Management Assessment",
-    company: { name: "Your Organization" },
+    company: { name: "" },
     governanceMaturity: {
       governanceScore: 0,
       managementScore: 0,
@@ -73,6 +76,28 @@ export default function RasbitaGovernance() {
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString()
   });
+  
+  // Check for company name from URL params (integration with SOS²A)
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const companyFromUrl = urlParams.get('company');
+    if (companyFromUrl) {
+      setCompanyName(decodeURIComponent(companyFromUrl));
+      setReport(prev => ({
+        ...prev,
+        company: { ...prev.company, name: decodeURIComponent(companyFromUrl) }
+      }));
+    }
+  }, []);
+  
+  // Update report when company name changes
+  const handleCompanyNameChange = (value: string) => {
+    setCompanyName(value);
+    setReport(prev => ({
+      ...prev,
+      company: { ...prev.company, name: value }
+    }));
+  };
   
   // When assessment is completed
   const handleGovernanceComplete = (scores: GovernanceScores) => {
@@ -234,10 +259,26 @@ export default function RasbitaGovernance() {
                 </div>
               </div>
             </CardContent>
-            <CardFooter>
+            <CardFooter className="flex-col gap-4">
+              <div className="w-full space-y-2">
+                <Label htmlFor="companyName" className="flex items-center gap-2 text-gray-700">
+                  <Building2 className="h-4 w-4" />
+                  Organization / Company Name
+                </Label>
+                <Input
+                  id="companyName"
+                  type="text"
+                  placeholder="Enter your organization name"
+                  value={companyName}
+                  onChange={(e) => handleCompanyNameChange(e.target.value)}
+                  className="w-full"
+                />
+                <p className="text-xs text-gray-500">This name will appear on your assessment report</p>
+              </div>
               <Button 
                 onClick={() => setShowAssessment(true)}
                 className="w-full bg-chart-4 hover:bg-chart-4/90"
+                disabled={!companyName.trim()}
               >
                 Start RASBITA™ GOV & MGNT Assessment
               </Button>
@@ -356,7 +397,7 @@ export default function RasbitaGovernance() {
                   </Button>
                   
                   <div className="flex items-center gap-3 w-full md:w-auto">
-                    <PdfExport report={report} />
+                    <PdfExport report={report as unknown as Parameters<typeof PdfExport>[0]['report']} />
                     <Button 
                       variant="outline"
                       className="flex items-center gap-2"
