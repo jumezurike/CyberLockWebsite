@@ -1471,7 +1471,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
 
   return (
     <Card className="w-full">
-      <CardContent className="p-6">
+      <CardContent className="p-6 pb-2">
         {/* SOS2A Workflow Progress Header */}
         <div className="mb-6 p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg border">
           <div className="flex items-center justify-between mb-3">
