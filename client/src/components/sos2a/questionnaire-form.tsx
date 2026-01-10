@@ -1538,7 +1538,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
         </div>
 
           <Form {...form}>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <form onSubmit={handleSubmit}>
               <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
