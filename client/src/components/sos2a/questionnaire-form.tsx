@@ -1471,7 +1471,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
 
   return (
     <Card className="w-full">
-      <CardContent className="p-6 pb-0">
+      <CardContent className="p-6 pb-4">
         {/* SOS2A Workflow Progress Header */}
         <div className="mb-6 p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg border">
           <div className="flex items-center justify-between mb-3">
@@ -1538,7 +1538,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
         </div>
 
           <Form {...form}>
-            <form onSubmit={handleSubmit} className="space-y-8">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6">
               <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
               <TabsList className="grid grid-cols-4 mb-6">
                 <TabsTrigger value="business">1. Business Info</TabsTrigger>
