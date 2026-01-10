@@ -2229,7 +2229,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
               </TabsContent>
               
               {/* 4. Baseline Configuration Tab */}
-              <TabsContent value="baseline">
+              <TabsContent value="baseline" className="space-y-6">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">4. Baseline Configuration</h3>
                   <p className="text-sm text-muted-foreground mb-4">
@@ -2691,27 +2691,27 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                       </div>
                     </div>
                   </div>
-                  
-                  {/* Navigation Buttons - inside border container */}
-                  <div className="flex justify-between items-center mt-6 pt-4 border-t">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={prevTab}
-                      disabled={currentTab === tabOrder[0]}
-                    >
-                      <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
-                      Previous Step
-                    </Button>
-                    <Button
-                      type="button"
-                      onClick={nextTab}
-                      disabled={currentTab === tabOrder[tabOrder.length - 1]}
-                    >
-                      Next Step
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  </div>
+                </div>
+                
+                {/* Navigation Buttons - outside border container */}
+                <div className="flex justify-between items-center pt-4 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
                 </div>
               </TabsContent>
               
