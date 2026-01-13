@@ -220,18 +220,18 @@ const generatePDFReport = async (
   doc.setTextColor(30, 64, 175);
   doc.setFontSize(24);
   doc.setFont("helvetica", "bold");
-  doc.text(contactInfo.company, margin + 5, yPos + 18);
+  doc.text(contactInfo.company, margin, yPos + 18);
   
   // Contact person
   doc.setTextColor(0, 0, 0);
   doc.setFontSize(12);
   doc.setFont("helvetica", "normal");
-  doc.text(contactInfo.fullName, margin + 5, yPos + 30);
+  doc.text(contactInfo.fullName, margin, yPos + 30);
   
   // Contact details
   doc.setFontSize(10);
   doc.setTextColor(80, 80, 80);
-  doc.text(`${contactInfo.email} | ${contactInfo.phone}`, margin + 5, yPos + 40);
+  doc.text(`${contactInfo.email} | ${contactInfo.phone}`, margin, yPos + 40);
   doc.text(`${contactInfo.industry} | ${contactInfo.companySize} employees`, pageWidth - margin - 70, yPos + 40);
   
   yPos += 55;
