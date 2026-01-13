@@ -2694,23 +2694,19 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                 </div>
                 
                 {/* Navigation Buttons */}
-                <div className="flex justify-between items-center pt-6 border-t">
+                <div className="flex justify-between">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={prevTab}
-                    disabled={currentTab === tabOrder[0]}
                   >
-                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
                     Previous Step
                   </Button>
-                  <Button
+                  <Button 
                     type="button"
                     onClick={nextTab}
-                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
                   >
                     Next Step
-                    <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </div>
               </TabsContent>
