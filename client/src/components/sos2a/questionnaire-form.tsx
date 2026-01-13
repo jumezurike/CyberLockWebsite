@@ -2229,8 +2229,8 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
               </TabsContent>
               
               {/* 4. Baseline Configuration Tab */}
-              <TabsContent value="baseline" className="flex flex-col gap-6">
-                <div className="border rounded-md p-4 flex-1">
+              <TabsContent value="baseline" className="space-y-6">
+                <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-4">4. Baseline Configuration</h3>
                   <p className="text-sm text-muted-foreground mb-4">
                     Define your organization's baseline security configuration and measures.
@@ -2694,12 +2694,13 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                 </div>
                 
                 {/* Navigation Buttons */}
-                <div className="flex justify-between mt-auto">
+                <div className="flex justify-between items-center pt-6 border-t">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={prevTab}
                   >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
                     Previous Step
                   </Button>
                   <Button 
@@ -2707,6 +2708,7 @@ VEN001,Tech Support,Inc.,support@techsupport.example.com,Technical Support,Exter
                     onClick={nextTab}
                   >
                     Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
                   </Button>
                 </div>
               </TabsContent>
