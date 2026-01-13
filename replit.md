@@ -98,6 +98,15 @@ CyberLockX is an advanced cybersecurity platform providing comprehensive digital
 
 ## Pending Work Items (PRP 3.0 Tracked)
 
+### SOS²A Tab 4 Whitespace Fix (January 13, 2026)
+- **Status**: Resolved
+- **Checkpoint**: `18b68eec76871fc0befa24a89c58296ac68739ff`
+- **Root Cause**: The `questionnaire-container` wrapper in `sos2a-tool.tsx` had no background styling. When Tab 4's content was shorter than viewport height, the page gradient (`min-h-screen bg-gradient-to-br from-slate-50 to-slate-100`) became visible below the content.
+- **Solution**: Added flex container with minimum viewport height and opaque background to questionnaire wrapper:
+  - `className="questionnaire-container flex flex-col min-h-[calc(100vh-12rem)] bg-white shadow-sm border rounded-xl p-6"`
+- **Files Modified**: `sos2a-tool.tsx`, `questionnaire-form.tsx`
+- **Notes**: Also aligned Tab 4 structure with other tabs (space-y-6, pt-6 border-t navigation)
+
 ### RASBITA Company Name Handling (January 9, 2026)
 - **Status**: Implemented, to be revisited
 - **Checkpoint**: `0ded1e780bdb75cc801dee390dcce2c3d45bbebb`
