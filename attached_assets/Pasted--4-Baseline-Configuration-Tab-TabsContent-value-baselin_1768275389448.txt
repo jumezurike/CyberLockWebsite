@@ -1,0 +1,667 @@
+{/* 4. Baseline Configuration Tab */}
+              <TabsContent value="baseline" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">4. Baseline Configuration</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Define your organization's baseline security configuration and measures.
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Basic Security Measures</h4>
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="securityMeasures"
+                          render={() => (
+                            <FormItem>
+                              <div className="mb-4">
+                                <FormLabel>Current Security Measures</FormLabel>
+                                <FormDescription>
+                                  Select all security measures currently implemented
+                                </FormDescription>
+                              </div>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {securityMeasureOptions.map((option) => (
+                                  <FormField
+                                    key={option.id}
+                                    control={form.control}
+                                    name="securityMeasures"
+                                    render={({ field }) => {
+                                      return (
+                                        <FormItem
+                                          key={option.id}
+                                          className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                                        >
+                                          <FormControl>
+                                            <Checkbox
+                                              checked={field.value?.includes(option.id)}
+                                              onCheckedChange={(checked) => {
+                                                return checked
+                                                  ? field.onChange([...field.value, option.id])
+                                                  : field.onChange(
+                                                    field.value?.filter(
+                                                      (value) => value !== option.id
+                                                    )
+                                                  );
+                                              }}
+                                            />
+                                          </FormControl>
+                                          <FormLabel className="font-normal">
+                                            {option.label}
+                                          </FormLabel>
+                                        </FormItem>
+                                      );
+                                    }}
+                                  />
+                                ))}
+                              </div>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Configuration Management</h4>
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="configurationManagement"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Configuration Management Approach</FormLabel>
+                              <FormDescription className="mb-2">
+                                How does your organization manage and maintain secure configurations across systems?
+                              </FormDescription>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select configuration management approach" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="ad-hoc">Ad-hoc (No formal configuration management)</SelectItem>
+                                  <SelectItem value="documented">Documented configurations</SelectItem>
+                                  <SelectItem value="automated">Automated configuration management</SelectItem>
+                                  <SelectItem value="compliance-driven">Compliance-driven configuration</SelectItem>
+                                  <SelectItem value="continuous">Continuous configuration validation</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormDescription className="mt-2">
+                                An effective configuration management process ensures consistent application of security settings across all systems.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="configBaseline"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Configuration Baseline Status</FormLabel>
+                              <FormDescription className="mb-2">
+                                What level of configuration baseline management does your organization maintain?
+                              </FormDescription>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select baseline configuration status" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="none">No formal baseline configurations</SelectItem>
+                                  <SelectItem value="documented">Documented Configuration Baseline</SelectItem>
+                                  <SelectItem value="reviewed">Regular Configuration Review</SelectItem>
+                                  <SelectItem value="automated">Automated Configuration Management</SelectItem>
+                                  <SelectItem value="continuous">Continuous Compliance Monitoring</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormDescription className="mt-2">
+                                Configuration baselines define the secure state all systems should maintain.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="operatingSystems"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Operating Systems</FormLabel>
+                              <FormDescription className="mb-2">
+                                Select the operating systems used in your environment
+                              </FormDescription>
+                              <div className="border rounded-md p-4 max-h-80 overflow-y-auto">
+                                <div className="space-y-6">
+                                  {/* Windows OS Section */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Windows</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Windows Server" || os.category === "Windows Client")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Linux Distributions */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Linux Distributions</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => 
+                                          os.category === "Red Hat Family" || 
+                                          os.category === "Debian Family" || 
+                                          os.category === "SUSE Family" || 
+                                          os.category === "Other Linux"
+                                        )
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Unix-Based OS */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2 flex items-center gap-2">
+                                      Unix-Based OS 
+                                      <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2 py-1 rounded-full border border-blue-200">
+                                        includes macOS
+                                      </span>
+                                    </h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Unix-Based OS")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Cloud/Container OS */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Cloud/Container OS</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Cloud/Container OS")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Network/Embedded OS & Mobile OS */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Network/Embedded OS & Mobile</h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Network/Embedded OS" || os.category === "Mobile OS")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                  
+                                  {/* Legacy/Other OS Section */}
+                                  <div>
+                                    <h4 className="text-md font-medium mb-2">Legacy/Other Operating Systems</h4>
+                                    <div className="grid grid-cols-1 gap-3">
+                                      {operatingSystemOptions
+                                        .filter(os => os.category === "Legacy/Other")
+                                        .map(os => (
+                                          <FormItem key={os.id} className="flex items-center space-x-2">
+                                            <FormControl>
+                                              <Checkbox
+                                                checked={field.value?.includes(os.id)}
+                                                onCheckedChange={(checked) => {
+                                                  const newValues = handleOsCheckboxChange(field.value, os, checked === true);
+                                                  field.onChange(newValues);
+                                                }}
+                                              />
+                                            </FormControl>
+                                            <FormLabel className="font-normal text-sm">
+                                              {os.label}
+                                            </FormLabel>
+                                          </FormItem>
+                                        ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <FormDescription className="mt-2">
+                                CIS benchmarks and security configurations will be customized based on your OS selection.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        {/* Custom OS input field that appears when any "Other" OS option is checked */}
+                        {form.watch("showCustomOperatingSystem") && (
+                          <FormField
+                            control={form.control}
+                            name="customOperatingSystem"
+                            render={({ field }) => (
+                              <FormItem className="mt-4">
+                                <FormLabel>Custom Operating System Details</FormLabel>
+                                <FormDescription className="mb-2">
+                                  Please provide details about any custom, legacy, or other operating systems you selected above. 
+                                  Include version numbers, edition information, and any special configurations.
+                                </FormDescription>
+                                <FormControl>
+                                  <Textarea 
+                                    placeholder="Example: 'Other Windows Server' - Windows Server 2003 R2 Standard, still used for legacy application X. 'Other Unix OS' - HP-UX 11i v2 running on critical financial systems." 
+                                    className="min-h-[100px]"
+                                    {...field} 
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        )}
+                      </div>
+                    </div>
+                    
+
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">OS / System Hardening</h4>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        System hardening is critical for protecting applications and systems. Select the hardening approach your organization uses.
+                      </p>
+                      
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="systemHardeningApproach"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>System Hardening Approach</FormLabel>
+                              <FormDescription className="mb-2">
+                                Which system hardening methodology does your organization follow?
+                              </FormDescription>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select system hardening approach" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="none">No formal hardening process</SelectItem>
+                                  <SelectItem value="stig">STIG (Security Technical Implementation Guides)</SelectItem>
+                                  <SelectItem value="scap">SCAP (Security Content Automation Protocol)</SelectItem>
+                                  <SelectItem value="usgcb">USGCB (United States Government Configuration Baseline)</SelectItem>
+                                  <SelectItem value="cis">CIS Hardened Images</SelectItem>
+                                  <SelectItem value="custom">Custom Hardening Process</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormDescription className="mt-2">
+                                System hardening reduces the attack surface by removing unnecessary software, services, users, and configurations.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">CIS Benchmark</h4>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        The Center for Internet Security (CIS) provides secure configuration guidelines.
+                        Select the primary CIS Benchmark for your organization.
+                      </p>
+                      
+                      <div className="space-y-4">
+                        <FormField
+                          control={form.control}
+                          name="primaryCisBenchmark"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Primary CIS Benchmark</FormLabel>
+                              <FormDescription className="mb-2">
+                                Which CIS Benchmark is most relevant to your organization?
+                              </FormDescription>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select primary CIS Benchmark" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="none">No CIS Benchmark implemented</SelectItem>
+                                  <SelectItem value="windows">CIS Windows Benchmark</SelectItem>
+                                  <SelectItem value="linux">CIS Linux Benchmark</SelectItem>
+                                  <SelectItem value="cloud">CIS Cloud Benchmarks</SelectItem>
+                                  <SelectItem value="aws">CIS AWS Benchmark</SelectItem>
+                                  <SelectItem value="azure">CIS Azure Benchmark</SelectItem>
+                                  <SelectItem value="gcp">CIS Google Cloud Benchmark</SelectItem>
+                                  <SelectItem value="kubernetes">CIS Kubernetes Benchmark</SelectItem>
+                                  <SelectItem value="docker">CIS Docker Benchmark</SelectItem>
+                                  <SelectItem value="mobile">CIS Mobile Benchmarks</SelectItem>
+                                  <SelectItem value="network">CIS Network Benchmarks</SelectItem>
+                                  <SelectItem value="hipaa">CIS HIPAA Benchmark</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormDescription className="mt-2">
+                                Your organization may use multiple CIS Benchmarks, but select the most critical one in this dropdown.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormField
+                          control={form.control}
+                          name="cisVersion"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>CIS Implementation Level</FormLabel>
+                              <FormDescription className="mb-2">
+                                Which implementation level has your organization achieved?
+                              </FormDescription>
+                              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                <FormControl>
+                                  <SelectTrigger>
+                                    <SelectValue placeholder="Select implementation level" />
+                                  </SelectTrigger>
+                                </FormControl>
+                                <SelectContent>
+                                  <SelectItem value="none">Not implemented</SelectItem>
+                                  <SelectItem value="level1">Level 1 (Essential)</SelectItem>
+                                  <SelectItem value="level2">Level 2 (Advanced)</SelectItem>
+                                  <SelectItem value="custom">Custom Implementation</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              <FormDescription className="mt-2">
+                                CIS Level 1 provides essential security configurations. Level 2 adds advanced protection for sensitive environments.
+                              </FormDescription>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                        
+                        <FormDescription className="mt-2">
+                          Note: Organizations with compliance requirements should consider industry-specific CIS Benchmarks relevant to their operations.
+                        </FormDescription>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </TabsContent>
+              
+              {/* 4. Security Control vs Framework Tab */}
+              <TabsContent value="security" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">5. Security Control vs Framework</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select security frameworks by domain (Operations, Management, Technology, People).
+                  </p>
+                  
+                  <div className="space-y-6">
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Operations Domain</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {operationalFrameworks.map((framework) => (
+                          <FormField
+                            key={framework.id}
+                            control={form.control}
+                            name="frameworks.operations"
+                            render={({ field }) => (
+                              <FormItem
+                                key={framework.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(framework.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, framework.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== framework.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {framework.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Management Domain</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {managementFrameworks.map((framework) => (
+                          <FormField
+                            key={framework.id}
+                            control={form.control}
+                            name="frameworks.management"
+                            render={({ field }) => (
+                              <FormItem
+                                key={framework.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(framework.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, framework.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== framework.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {framework.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">Technology Domain</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {technologyFrameworks.map((framework) => (
+                          <FormField
+                            key={framework.id}
+                            control={form.control}
+                            name="frameworks.technology"
+                            render={({ field }) => (
+                              <FormItem
+                                key={framework.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(framework.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, framework.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== framework.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {framework.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h4 className="font-medium text-lg border-b pb-2 mb-4">People Domain</h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {peopleFrameworks.map((framework) => (
+                          <FormField
+                            key={framework.id}
+                            control={form.control}
+                            name="frameworks.people"
+                            render={({ field }) => (
+                              <FormItem
+                                key={framework.id}
+                                className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                              >
+                                <FormControl>
+                                  <Checkbox
+                                    checked={field.value?.includes(framework.id)}
+                                    onCheckedChange={(checked) => {
+                                      return checked
+                                        ? field.onChange([...field.value, framework.id])
+                                        : field.onChange(
+                                            field.value?.filter(
+                                              (value) => value !== framework.id
+                                            )
+                                          );
+                                    }}
+                                  />
+                                </FormControl>
+                                <FormLabel className="font-normal">
+                                  {framework.label}
+                                </FormLabel>
+                              </FormItem>
+                            )}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </TabsContent>
