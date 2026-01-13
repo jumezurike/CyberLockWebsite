@@ -1,0 +1,174 @@
+           {/* 2. Infrastructure Mode of Operation Tab */}
+              <TabsContent value="infrastructure" className="space-y-6">
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-4">2. Infrastructure Mode of Operation</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Select the infrastructure and operational modes that apply to your organization.
+                  </p>
+                  
+                  <div className="space-y-4">
+                    <FormField
+                      control={form.control}
+                      name="operationMode"
+                      render={() => (
+                        <FormItem>
+                          <div className="mb-4">
+                            <FormLabel>Connection Type</FormLabel>
+                            <FormDescription>
+                              Select all internet connection types used by your organization
+                            </FormDescription>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {operationModes.map((mode) => (
+                              <FormField
+                                key={mode.id}
+                                control={form.control}
+                                name="operationMode"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={mode.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(mode.id)}
+                                          onCheckedChange={(checked) => {
+                                            const newValue = checked
+                                              ? [...field.value, mode.id]
+                                              : field.value?.filter(
+                                                  (value) => value !== mode.id
+                                                );
+                                            
+                                            // Set the showCustomOperationMode based on whether "other" is selected
+                                            if (mode.id === 'other') {
+                                              form.setValue('showCustomOperationMode', checked);
+                                            }
+                                            
+                                            return field.onChange(newValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {mode.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    {form.watch('showCustomOperationMode') && (
+                      <FormField
+                        control={form.control}
+                        name="customOperationMode"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Other Operation Mode</FormLabel>
+                            <FormDescription className="mb-2">
+                              Please specify the other operation mode(s) used in your environment
+                            </FormDescription>
+                            <FormControl>
+                              <Input placeholder="Enter other operation mode" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    )}
+                    
+                    <FormField
+                      control={form.control}
+                      name="internetPresence"
+                      render={() => (
+                        <FormItem>
+                          <div className="mb-4">
+                            <FormLabel>Internet Presence</FormLabel>
+                            <FormDescription>
+                              Select all that describe your organization's online presence
+                            </FormDescription>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {internetPresenceOptions.map((option) => (
+                              <FormField
+                                key={option.id}
+                                control={form.control}
+                                name="internetPresence"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={option.id}
+                                      className="flex flex-row items-start space-x-3 space-y-0 p-4 border rounded-md"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(option.id)}
+                                          onCheckedChange={(checked) => {
+                                            const newValue = checked
+                                              ? [...field.value, option.id]
+                                              : field.value?.filter(
+                                                  (value) => value !== option.id
+                                                );
+                                            
+                                            // Set the showCustomOperationMode based on whether "other" is selected
+                                            if (option.id === 'other') {
+                                              form.setValue('showCustomOperationMode', checked);
+                                            }
+                                            
+                                            return field.onChange(newValue);
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="font-normal">
+                                        {option.label}
+                                      </FormLabel>
+                                    </FormItem>
+                                  );
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    
+                    {/* Primary Security Concerns section removed as it is redundant - now only in Security Risks & Vulnerabilities tab */}
+                    
+                    {/* Notice about vulnerabilities being moved */}
+                    <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
+                      <h4 className="text-sm font-medium text-blue-800 mb-1">Infrastructure Vulnerabilities</h4>
+                      <p className="text-sm text-blue-700">
+                        Vulnerabilities related to your infrastructure have been moved to the "Security Risks & Vulnerabilities" tab 
+                        for a more comprehensive security assessment.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Navigation Buttons */}
+                <div className="flex justify-between items-center pt-6 border-t">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={prevTab}
+                    disabled={currentTab === tabOrder[0]}
+                  >
+                    <ArrowRight className="h-4 w-4 mr-2 rotate-180" />
+                    Previous Step
+                  </Button>
+                  <Button
+                    type="button"
+                    onClick={nextTab}
+                    disabled={currentTab === tabOrder[tabOrder.length - 1]}
+                  >
+                    Next Step
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Button>
+                </div>
+              </TabsContent>
