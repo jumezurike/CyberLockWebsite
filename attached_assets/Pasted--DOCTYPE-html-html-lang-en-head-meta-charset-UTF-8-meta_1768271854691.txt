@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <title>CyberLockX: Healthcare Apps & Devices Security Hub (HASH)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <meta name="description" content="CyberLockX: Healthcare Apps & Devices Security Hub (HASH) - The only healthcare-focused platform that eliminates threats, automates compliance, and unifies clinical apps/devices—with patented quantum-safe encryption and patient data protection at its core.">
+    <meta name="keywords" content="healthcare security, HOS2A, SOS2A, cybersecurity, healthcare applications, HIPAA compliance, patient data protection, RASBITA, healthcare risk assessment, quantum-safe encryption">
+    
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="CyberLockX: Healthcare Apps & Devices Security Hub (HASH)">
+    <meta property="og:description" content="The only healthcare-focused platform that eliminates threats, automates compliance, and unifies clinical apps/devices—with patented quantum-safe encryption and patient data protection at its core.">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="CyberLockX">
+    
+    <!-- Twitter Card data -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="CyberLockX: Healthcare Apps & Devices Security Hub (HASH)">
+    <meta name="twitter:description" content="The only healthcare-focused platform that eliminates threats, automates compliance, and unifies clinical apps/devices—with patented quantum-safe encryption and patient data protection at its core.">
+    
+    <!-- Theme color for browser chrome -->
+    <meta name="theme-color" content="#1a56db">
+    <script type="module" crossorigin src="/assets/index-oJ9yUDXW.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-BNJZvVwQ.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- This is a replit script which adds a banner on the top of the page when opened in development mode outside the replit environment -->
+    <script type="text/javascript" src="https://replit.com/public/js/replit-dev-banner.js"></script>
+  </body>
+</html>
