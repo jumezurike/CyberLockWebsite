@@ -680,7 +680,7 @@ export default function Sos2aTool() {
       
       {/* Step 1: Inquiry & Questionnaire */}
       {step === 'questionnaire' && (
-        <div className="questionnaire-container bg-white shadow-sm border rounded-xl mx-auto max-w-5xl p-6">
+        <div className="questionnaire-container flex flex-col min-h-[calc(100vh-12rem)] bg-white shadow-sm border rounded-xl mx-auto max-w-5xl p-6">
           <QuestionnaireForm onSubmit={handleQuestionnaireSubmit} />
         </div>
       )}
