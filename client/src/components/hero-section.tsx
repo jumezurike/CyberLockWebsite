@@ -16,7 +16,7 @@ export default function HeroSection() {
               Healthcare Apps & Devices Security Hub (HASH)
             </h2>
             <p className="mb-8 text-neutral-200">
-              A Healthcare AI-native immune system that autonomously secures assets through automated proof-based analysis, self-heals to stop threat actors in real time, and maintains continuous compliance — no consultants, no complications.
+              Healthcare AI-native immune system that autonomously secures assets through automated proof-based analysis, self-heals to stop threat actors in real time, and maintains continuous compliance — no consultants, no complications.
             </p>
             <div className="flex flex-col sm:flex-row gap-4">
               <a href="#demo" className="bg-secondary hover:bg-green-600 text-white py-3 px-6 rounded-md shadow-md transition duration-150 ease-in-out text-center font-medium">
